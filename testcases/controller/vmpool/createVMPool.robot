@@ -9,7 +9,7 @@ Test Setup  Setup
 Test Teardown  Cleanup Provisioning
 
 *** Variables ***
-${organization}=  MobiledgeX
+${organization}=  packet
 ${region}=  US
 
 *** Test Cases ***

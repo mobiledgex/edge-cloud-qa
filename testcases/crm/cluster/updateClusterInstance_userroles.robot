@@ -104,15 +104,20 @@ User shall not be able to Update Cluster Instance as Operator Manager
     Create Org  orgname=${orgname}  orgtype=operator
     Adduser Role  orgname=${orgname}  username=${username1}  role=OperatorManager
 
-    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${orgname}
+    ${org_name_dev}=  Set Variable  ${orgname}_dev
+    Create Org  orgname=${org_name_dev}  orgtype=developer
+    Adduser Role  orgname=${org_name_dev}  username=${username2}  role=DeveloperManager
+
+    ${operator_token}=  Login  username=${username1}  password=${password}
+    ${developer_token}=  Login  username=${username2}  password=${password}
+    
+    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${org_name_dev}  
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${orgname}
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${org_name_dev}
     Log To Console  Done Creating Cluster Instance
 
-    ${user_token}=  Login  username=${username1}  password=${password}
-
-    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')   Update Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=${policy_name_default}  developer_org_name=${orgname}  token=${user_token}
+    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')   Update Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=${policy_name_default}  developer_org_name=${org_name_dev}  token=${operator_token}
 
 
 User shall not be able to Update Cluster Instance as Operator Viewer
@@ -125,15 +130,20 @@ User shall not be able to Update Cluster Instance as Operator Viewer
     Create Org  orgname=${orgname}  orgtype=operator
     Adduser Role  orgname=${orgname}  username=${username1}  role=OperatorViewer
 
-    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${orgname}
+    ${org_name_dev}=  Set Variable  ${orgname}_dev
+    Create Org  orgname=${org_name_dev}  orgtype=developer
+    Adduser Role  orgname=${org_name_dev}  username=${username2}  role=DeveloperManager
+
+    ${operator_token}=  Login  username=${username1}  password=${password}
+    ${developer_token}=  Login  username=${username2}  password=${password}
+
+    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${org_name_dev}
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${orgname}
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${org_name_dev}
     Log To Console  Done Creating Cluster Instance
 
-    ${user_token}=  Login  username=${username1}  password=${password}
-
-    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')   Update Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=${policy_name_default}  developer_org_name=${orgname}  token=${user_token}
+    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')   Update Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=${policy_name_default}  developer_org_name=${orgname}  token=${operator_token}
 
 
 User shall not be able to Update Cluster Instance as Operator Contributor
@@ -146,15 +156,20 @@ User shall not be able to Update Cluster Instance as Operator Contributor
     Create Org  orgname=${orgname}  orgtype=operator
     Adduser Role  orgname=${orgname}  username=${username1}  role=OperatorContributor
 
-    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${orgname}
+    ${org_name_dev}=  Set Variable  ${orgname}_dev
+    Create Org  orgname=${org_name_dev}  orgtype=developer
+    Adduser Role  orgname=${org_name_dev}  username=${username2}  role=DeveloperManager
+
+    ${operator_token}=  Login  username=${username1}  password=${password}
+    ${developer_token}=  Login  username=${username2}  password=${password}
+
+    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${org_name_dev}
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${orgname}
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${org_name_dev}
     Log To Console  Done Creating Cluster Instance
 
-    ${user_token}=  Login  username=${username1}  password=${password}
-
-    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')   Update Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=${policy_name_default}  developer_org_name=${orgname}  token=${user_token}
+    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')   Update Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=${policy_name_default}  developer_org_name=${orgname}  token=${operator_token}
 
 
 *** Keywords ***
@@ -164,6 +179,8 @@ Setup
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
+    ${email2}=  Catenate  SEPARATOR=  ${username}1  +  ${i}  @gmail.com
+    ${username2}=  Catenate  SEPARATOR=  ${username}  1  ${i}
 
     Create Flavor  region=${region}
 
@@ -171,7 +188,12 @@ Setup
     Create user  username=${username1}  password=${password}  email_address=${email1}  
     Unlock User  username=${username1}
 
+    Skip Verify Email
+    Create user  username=${username2}  password=${password}  email_address=${email2}
+    Unlock User  username=${username2}
+
     Set Suite Variable  ${orgname}
     Set Suite Variable  ${username1}
+    Set Suite Variable  ${username2}
 
 

@@ -8,6 +8,8 @@ Test Teardown  Teardown
 
 *** Variables ***
 ${region}=  US
+${username}=   mextester06
+${password}=   ${mextester06_gmail_password}
 
 *** Test Cases ***
 # ECQ-2542
@@ -23,15 +25,15 @@ ClusterInst - error shall be recieved when creating a docker/shared cluster inst
    ...  - create a docker/shared cluster instance on the cloudlet
    ...  - verify proper error is received
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover  token=${tokenop}
+   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared  token=${tokendev}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${tokenop}
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared  token=${tokendev}
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared  token=${tokendev}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
 # ECQ-2543
@@ -47,15 +49,15 @@ ClusterInst - error shall be recieved when creating a docker/dedicated cluster i
    ...  - create a docker/dedicated cluster instance on the cloudlet
    ...  - verify proper error is received
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover  token=${tokenop}
+   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated  token=${tokendev}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${tokenop}
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated  token=${tokendev}
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated  token=${tokendev}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
 # ECQ-2544
@@ -71,19 +73,19 @@ ClusterInst - error shall be recieved when creating a k8s/shared cluster inst wh
    ...  - create a k8s/shared cluster instance on the cloudlet
    ...  - verify proper error is received
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover  token=${tokenop}
+   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared  token=${tokendev}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${tokenop}
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared  token=${tokendev}
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg2}=  Run Keyword And Expect Error  *  Update Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=5 
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg2}=  Run Keyword And Expect Error  *  Update Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=5  token=${tokendev}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg3}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg3}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared  token=${tokendev}
    Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
 # ECQ-2545
@@ -99,19 +101,19 @@ ClusterInst - error shall be recieved when creating a k8s/dedicated cluster inst
    ...  - create a k8s/dedicated cluster instance on the cloudlet
    ...  - verify proper error is received
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover  token=${tokenop}
+   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated  token=${tokendev}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${tokenop}
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated  token=${tokendev}
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg2}=  Run Keyword And Expect Error  *  Update Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=5  
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg2}=  Run Keyword And Expect Error  *  Update Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=5  token=${tokendev}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg3}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg3}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated  token=${tokendev}
    Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
 # ECQ-2546
@@ -127,15 +129,15 @@ ClusterInst - error shall be recieved when creating a docker/shared reservable c
    ...  - create a docker/shared reservable cluster instance on the cloudlet
    ...  - verify proper error is received
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover  token=${tokenop}
+   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared  reservable=${True}  token=${token}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${tokenop}
+   Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared  reservable=${True}  token=${token}
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared  reservable=${True}  token=${token}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
 # ECQ-2547
@@ -151,15 +153,15 @@ ClusterInst - error shall be recieved when creating a docker/dedicated reservabl
    ...  - create a docker/dedicated reservable cluster instance on the cloudlet
    ...  - verify proper error is received
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover  token=${tokenop}
+   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated  reservable=${True}  token=${token}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${tokenop}
+   Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated  reservable=${True}  token=${token}
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated  reservable=${True}  token=${token}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
 # ECQ-2548
@@ -175,19 +177,19 @@ ClusterInst - error shall be recieved when creating a k8s/shared reservable clus
    ...  - create a k8s/shared reservable cluster instance on the cloudlet
    ...  - verify proper error is received
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover  token=${tokenop}
+   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared  reservable=${True}  token=${token}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${tokenop}
+   Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared  reservable=${True}  token=${token}
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg2}=  Run Keyword And Expect Error  *  Update Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=5
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg2}=  Run Keyword And Expect Error  *  Update Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=5  token=${token}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg3}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg3}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared  reservable=${True}  token=${token}
    Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
 # ECQ-2549
@@ -203,36 +205,67 @@ ClusterInst - error shall be recieved when creating a k8s/dedicated reservable c
    ...  - create a k8s/dedicated reservable cluster instance on the cloudlet
    ...  - verify proper error is received
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover  token=${tokenop}
+   ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated  reservable=${True}  token=${token}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${tokenop}
+   Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated  reservable=${True}  token=${token}
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg2}=  Run Keyword And Expect Error  *  Update Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=5
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg2}=  Run Keyword And Expect Error  *  Update Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=5  token=${token}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-   ${error_msg3}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated  reservable=${True}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${tokenop}
+   ${error_msg3}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated  reservable=${True}  token=${token}
    Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
 *** Keywords ***
 Setup
+   ${token}=  Get Super Token
+   Set Suite Variable  ${token}
+
    Create Flavor  region=${region}
 
-   Create Org
+   Create Org  orgtype=operator
+   RestrictedOrg Update
    Create Cloudlet  region=${region} 
 
    ${operator_name}=  Get Default Organization Name
    ${cloudlet_name}=  Get Default Cloudlet Name
    ${flavor_name_default}=  Get Default Flavor Name
+   ${org_name_dev}=  Set Variable  ${operator_name}_dev
+
+   ${epoch}=  Get Time  epoch
+   ${usernameop_epoch}=  Catenate  SEPARATOR=  ${username}  op  ${epoch}
+   ${emailop}=  Catenate  SEPARATOR=  ${username}  op  +  ${epoch}  @gmail.com
+   ${usernamedev_epoch}=  Catenate  SEPARATOR=  ${username}  dev  ${epoch}
+   ${emaildev}=  Catenate  SEPARATOR=  ${username}  dev  +  ${epoch}  @gmail.com
+
+   Create Org  orgname=${org_name_dev}  orgtype=developer
+
+   Skip Verify Email
+   Create User  username=${usernameop_epoch}  password=${password}  email_address=${emailop}
+   Unlock User
+
+   Skip Verify Email
+   Create User  username=${usernamedev_epoch}  password=${password}  email_address=${emaildev}
+   Unlock User
+
+   Adduser Role  username=${usernameop_epoch}  orgname=${operator_name}  role=OperatorManager
+   Adduser Role  username=${usernamedev_epoch}  orgname=${org_name_dev}  role=DeveloperManager
+
+   ${tokenop}=  Login  username=${usernameop_epoch}  password=${password}
+   ${tokendev}=  Login  username=${usernamedev_epoch}  password=${password}
+
    Set Suite Variable  ${flavor_name_default}
    Set Suite Variable  ${operator_name}
    Set Suite Variable  ${cloudlet_name}
+   Set Suite Variable  ${tokendev}
+   Set Suite Variable  ${tokenop}
+   Set Suite Variable  ${org_name_dev}
 
 Teardown
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${tokenop}
    Cleanup Provisioning
 

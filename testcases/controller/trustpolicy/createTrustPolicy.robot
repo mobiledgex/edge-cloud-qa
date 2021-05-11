@@ -376,7 +376,7 @@ Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
 
-   Create Org
+   Create Org  orgtype=operator
 
    ${policy_name}=  Get Default Trust Policy Name
    ${operator_name}=  Get Default Operator Name
