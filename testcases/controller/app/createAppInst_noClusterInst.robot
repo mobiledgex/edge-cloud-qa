@@ -21,8 +21,9 @@ AppInst - User shall not be able to create an AppInst without a ClusterInst
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  use_defaults=${False}   #cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+    Should Contain  ${error_msg}   details = "Invalid organization name"
     #Should Contain  ${error_msg}   details = "Cloudlet operator_key:<>  not ready, state is CloudletStateNotPresent"
-    Should Contain  ${error_msg}   details = "Invalid cluster name"
+    #Should Contain  ${error_msg}   details = "Invalid cluster name"
     #details = "No cluster name specified. Create one first or use "autocluster" as the name to automatically create a ClusterInst"
 
 # ECQ-1327

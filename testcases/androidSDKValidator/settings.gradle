@@ -1,2 +1,0 @@
-rootProject.name='SDK Validator'
-include ':app', ':mel-1.0.8'

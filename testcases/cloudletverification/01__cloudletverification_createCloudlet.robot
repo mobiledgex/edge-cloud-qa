@@ -34,7 +34,7 @@ Platform Type Openstack
    Log To Console  \nCreating Cloudlet ${cloudlet_platform_type} Done
 
 Platform Type Vsphere
-   Create Cloudlet  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  platform_type=${cloudlet_platform_type}  physical_name=${physical_name}  infra_config_flavor_name=${cloudlet_infraconfig_flavorname}  number_dynamic_ips=${cloudlet_numdynamicips}  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  env_vars=${cloudlet_env_vars}
+   Create Cloudlet  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  platform_type=${cloudlet_platform_type}  physical_name=${physical_name}  infra_config_flavor_name=${cloudlet_infraconfig_flavorname}  number_dynamic_ips=${cloudlet_numdynamicips}  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  env_vars=${cloudlet_env_vars}  timeout=${s_timeout}
 
 #Options for platform like GPU if supported
 #   Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  mapping=gpu=${gpu_resource_name}

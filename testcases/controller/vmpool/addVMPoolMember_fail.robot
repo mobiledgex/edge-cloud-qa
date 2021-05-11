@@ -7,7 +7,7 @@ Test Setup  Setup
 Test Teardown  Cleanup Provisioning
 
 *** Variables ***
-${organization}=  MobiledgeX
+${organization}=  packet
 
 *** Test Cases ***
 # ECQ-2341
@@ -38,7 +38,7 @@ AddVMPoolMember - add with same vm name shall return error
    ...  - send AddVMPoolMember twice for same vm name 
    ...  - verify proper error is received
 
-   Create VM Pool  region=US  token=${token}  vm_pool_name=mypoool  org_name=MobiledgeX  use_defaults=False
+   Create VM Pool  region=US  token=${token}  vm_pool_name=mypoool  org_name=packet  use_defaults=False
 
    Add VM Pool Member  region=US  token=${token}  vm_pool_name=mypoool  org_name=${organization}  vm_name=x  external_ip=80.187.128.12  internal_ip=80.187.128.12 
 
@@ -56,7 +56,7 @@ AddVMPoolMember - add without VM name shall return error
    &{vm1}=  Create Dictionary  external_ip=80.187.128.12  internal_ip=80.187.128.12 
    @{vmlist}=  Create List  ${vm1}
 
-   ${error}=  Run Keyword And Expect Error  *  Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  external_ip=80.187.128.12  internal_ip=80.187.128.12 
+   ${error}=  Run Keyword And Expect Error  *  Add VM Pool Member  region=US  token=${token}  org_name=packet  external_ip=80.187.128.12  internal_ip=80.187.128.12 
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Missing VM name"}
@@ -69,9 +69,9 @@ AddVMPoolMember - add without external/internal address shall return error
 
    &{vm1}=  Create Dictionary  name=vm1  
    @{vmlist}=  Create List  ${vm1}
-   Create VM Pool  region=US  token=${token}  vm_pool_name=mypoool  org_name=MobiledgeX  use_defaults=False
+   Create VM Pool  region=US  token=${token}  vm_pool_name=mypoool  org_name=packet  use_defaults=False
 
-   ${error}=  Run Keyword And Expect Error  *  Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm1
+   ${error}=  Run Keyword And Expect Error  *  Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm1
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Missing internal IP for VM: vm1"}
@@ -84,9 +84,9 @@ AddVMPoolMember - add without internal address shall return error
 
    &{vm1}=  Create Dictionary  name=vm1  internal_ip=80.187.128.12
    @{vmlist}=  Create List  ${vm1}
-   Create VM Pool  region=US  token=${token}  org_name=MobiledgeX  vm_list=${vmlist} 
+   Create VM Pool  region=US  token=${token}  org_name=packet  vm_list=${vmlist} 
 
-   ${error}=  Run Keyword And Expect Error  *  Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm1  external_ip=80.187.128.12
+   ${error}=  Run Keyword And Expect Error  *  Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm1  external_ip=80.187.128.12
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Missing internal IP for VM: vm1"}
@@ -102,11 +102,11 @@ AddVMPoolMember - add with duplicate external address shall return error
 
    &{vm1}=  Create Dictionary  name=vm1  internal_ip=80.187.128.12
    @{vmlist}=  Create List  ${vm1}
-   Create VM Pool  region=US  token=${token}  org_name=MobiledgeX  vm_list=${vmlist}
+   Create VM Pool  region=US  token=${token}  org_name=packet  vm_list=${vmlist}
 
-   Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm  external_ip=1.1.1.2  internal_ip=80.187.128.13
+   Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm  external_ip=1.1.1.2  internal_ip=80.187.128.13
 
-   ${error}=  Run Keyword and Expect Error  *  Add VM Pool Member  region=US  org_name=MobiledgeX  vm_name=vm2  external_ip=1.1.1.2  internal_ip=80.187.128.12 
+   ${error}=  Run Keyword and Expect Error  *  Add VM Pool Member  region=US  org_name=packet  vm_name=vm2  external_ip=1.1.1.2  internal_ip=80.187.128.12 
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"VM with same internal IP already exists as part of VM pool"}
@@ -119,13 +119,13 @@ AddVMPoolMember - add with invalid address shall return error
 
    &{vm1}=  Create Dictionary  name=vm1  internal_ip=80.187.128.12
    @{vmlist}=  Create List  ${vm1}
-   Create VM Pool  region=US  token=${token}  vm_pool_name=mypoool  org_name=MobiledgeX  use_defaults=False
+   Create VM Pool  region=US  token=${token}  vm_pool_name=mypoool  org_name=packet  use_defaults=False
 
-   ${error}=  Run Keyword And Expect Error  *  Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm  internal_ip=80.187.128
+   ${error}=  Run Keyword And Expect Error  *  Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm  internal_ip=80.187.128
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Invalid Address: 80.187.128"}
 
-   ${error}=  Run Keyword And Expect Error  *  Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm  external_ip=80.187  internal_ip=80.187.128.1
+   ${error}=  Run Keyword And Expect Error  *  Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm  external_ip=80.187  internal_ip=80.187.128.1
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Invalid Address: 80.187"}
 
