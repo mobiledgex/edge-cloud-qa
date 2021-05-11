@@ -53,10 +53,24 @@ Get the last client app usage metric
 
    [Return]  ${metrics}
 
-Get client app usage metrics with locationtile
-   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+Get the last client cloudlet usage metric
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
 
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  location_tile=2-1990,5343-2  last=1
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  last=1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+Get client app usage metrics with locationtile
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}  ${location_tile}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  location_tile=${location_tile}  last=1
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -71,6 +85,20 @@ Get client app usage metrics with rawdata
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
    ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  raw_data=${True}  last=1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+Get client app usage metrics with deviceinfo
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}  ${device_os}=${None}  ${device_model}=${None}  ${data_network_type}=${None}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  device_os=${device_os}  device_model=${device_model}  data_network_type=${data_network_type}  last=1
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -606,7 +634,7 @@ DeveloperViewer shall be able to get client app usage metrics
 
    [Return]  ${metrics}
 
-OperatorManager shall not be able to get client app usage metrics
+OperatorManager shall be able to get client app usage metrics
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
 
    ${userToken}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
@@ -622,7 +650,7 @@ OperatorManager shall not be able to get client app usage metrics
 
    [Return]  ${metrics}
 
-OperatorContributor shall not be able to get client app usage metrics
+OperatorContributor shall be able to get client app usage metrics
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
 
    ${userToken}=  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
@@ -638,7 +666,7 @@ OperatorContributor shall not be able to get client app usage metrics
 
    [Return]  ${metrics}
 
-OperatorViewer shall not be able to get client app usage metrics
+OperatorViewer shall be able to get client app usage metrics
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
 
    ${userToken}=  Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
