@@ -22,7 +22,7 @@ Metrics shall collect cloudlet ipusage metric
    [Documentation]
    ...  request the last cloudlet ipusage metric
    ...  verify info is correct
-   [Tags]  cloudlet  metrics  openstack
+   [Tags]  cloudlet  metrics  openstack  ipusage
 
    [Setup]  Setup Cloudlet Metrics
 
@@ -43,7 +43,7 @@ Metrics shall collect cloudlet utilization metric
    [Documentation]
    ...  request the last cloudlet ipusage metric
    ...  verify info is correct
-   [Tags]  cloudlet  metrics  openstack
+   [Tags]  cloudlet  metrics  openstack  ipusage
 
    [Setup]  Setup Cloudlet Metrics
 
@@ -1284,7 +1284,7 @@ Metrics shall collect App Memory metrics for IpAccessDedicated/LB/k8s
    [Documentation]
    ...  request App Memory metrics with last=5
    ...  verify info is correct
-   [Tags]  app  k8s  shared  loadbalancer  metrics
+   [Tags]  app  k8s  dedicated  loadbalancer  metrics
 
    ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
