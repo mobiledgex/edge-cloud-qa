@@ -837,6 +837,9 @@ class MexApp(object):
 
     def alert_receiver_slack_message_for_resolved_appinstdown_healthcheckfailrootlboffline_should_be_received(self, alert_receiver_name=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, wait=30):
         self.alert_receiver_slack_message_should_be_received(alert_type='RESOLVED', alert_name='AppInstDown', alert_receiver_name=alert_receiver_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', description='Root Load Balancer is not responding', title='AppInstDown', wait=wait)
+ 
+    def alert_receiver_email_for_firing_cloudletresourceusage_should_be_received(self, email_address, email_password, region=None, alert_type='FIRING', alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, description=None, wait=30):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name='CloudletResourceUsage', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', description=description, wait=wait)
 
     def alert_receiver_email_for_firing_cloudletdown_should_be_received(self, email_address, email_password, region=None, alert_type='FIRING', alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, receiver_type='email', wait=30):
         self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name='CloudletDown', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', receiver_type=receiver_type, wait=wait)
@@ -852,6 +855,9 @@ class MexApp(object):
 
     def alert_receiver_pagerduty_email_for_firing_cloudletdown_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, wait=30):
         self.alert_receiver_email_for_firing_cloudletdown_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='FIRING', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, receiver_type='pagerduty', wait=wait)
+
+    def alert_receiver_slack_message_for_firing_cloudletresourceusage_should_be_received(self, region=None, alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, description=None, wait=30):
+        self.alert_receiver_slack_message_should_be_received(alert_type='FIRING', alert_name='CloudletResourceUsage', alert_receiver_name=alert_receiver_name, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', description=description, title='CloudletResourceUsage', wait=wait)
 
     def alert_receiver_pagerduty_email_for_resolved_cloudletdown_should_be_received(self, email_address, email_password, region=None, alert_receiver_name='PagerDuty ALERT', cloudlet_name=None, operator_org_name=None, wait=30):
         self.alert_receiver_email_for_resolved_cloudletdown_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='RESOLVED', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, wait=wait)

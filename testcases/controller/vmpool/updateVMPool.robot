@@ -22,7 +22,7 @@ UpdateVMPool - shall be able to update without VM list
 
    ${name}=  Generate Random String  length=100
 
-   ${pool_return}=  Create VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX  vm_list=${vmlist} 
+   ${pool_return}=  Create VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=packet  vm_list=${vmlist} 
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${name} 
    Should Be Equal  ${pool_return['data']['vms'][0]['name']}  vm1
@@ -31,7 +31,7 @@ UpdateVMPool - shall be able to update without VM list
 
    @{vmlist_update}=  Create List
 
-   ${update_return}=  Update VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX  vm_list=${vmlist_update} 
+   ${update_return}=  Update VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=packet  vm_list=${vmlist_update} 
 
    Should Be Equal  ${update_return['data']['key']['name']}  ${name}
    Should Be Equal  ${update_return['data']['vms']}  ${None}
@@ -49,7 +49,7 @@ UpdateVMPool - shall be able to update with 1 VM
    &{vm3}=  Create Dictionary  name=vm3  external_ip=80.187.128.13  internal_ip=2.2.2.3
    @{vmlist}=  Create List  ${vm1}  ${vm2}  ${vm3}
 
-   ${pool_return}=  Create VM Pool  region=US  token=${token}  org_name=MobiledgeX  vm_list=${vmlist}
+   ${pool_return}=  Create VM Pool  region=US  token=${token}  org_name=packet  vm_list=${vmlist}
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['vms'][0]['name']}  vm1
@@ -66,7 +66,7 @@ UpdateVMPool - shall be able to update with 1 VM
    &{vm1}=  Create Dictionary  name=vm11  external_ip=80.187.128.111  internal_ip=2.2.2.11
    @{vmlist_update}=  Create List  ${vm1}
 
-   ${update_return}=  Update VM Pool  region=US  token=${token}  vm_pool_name=${pool_name}  org_name=MobiledgeX  vm_list=${vmlist_update}
+   ${update_return}=  Update VM Pool  region=US  token=${token}  vm_pool_name=${pool_name}  org_name=packet  vm_list=${vmlist_update}
 
    Should Be Equal  ${update_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${update_return['data']['vms'][0]['name']}  vm11
@@ -82,7 +82,7 @@ UpdateVMPool - shall be able to update with 10 VMs
    ...  - send UpdateVMPool with 10 VMs
    ...  - verify pool list is correct
 
-   ${pool_return}=  Create VM Pool  region=US  token=${token}  org_name=MobiledgeX
+   ${pool_return}=  Create VM Pool  region=US  token=${token}  org_name=packet
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['vms']}  ${None}
 
@@ -98,7 +98,7 @@ UpdateVMPool - shall be able to update with 10 VMs
    &{vm10}=  Create Dictionary  name=vm10  external_ip=80.187.128.10  internal_ip=2.2.2.10
    @{vmlist}=  Create List  ${vm1}  ${vm2}  ${vm3}  ${vm4}  ${vm5}  ${vm6}  ${vm7}  ${vm8}  ${vm9}  ${vm10}
 
-   ${update_return}=  Update VM Pool  region=US  token=${token}  org_name=MobiledgeX  vm_list=${vmlist}
+   ${update_return}=  Update VM Pool  region=US  token=${token}  org_name=packet  vm_list=${vmlist}
 
    Should Be Equal  ${update_return['data']['vms'][0]['name']}  vm1
    Dictionary Should Not Contain Key  ${update_return['data']['vms'][0]['net_info']}  external_ip
@@ -146,7 +146,7 @@ UpdateVMPool - shall be able to update VM status from free to free
    &{vm3}=  Create Dictionary  name=vm3  external_ip=80.187.128.13  internal_ip=2.2.2.3
    @{vmlist}=  Create List  ${vm1}  ${vm2}  ${vm3}
 
-   ${pool_return}=  Create VM Pool  region=US  token=${token}  org_name=MobiledgeX  vm_list=${vmlist}
+   ${pool_return}=  Create VM Pool  region=US  token=${token}  org_name=packet  vm_list=${vmlist}
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['vms'][0]['name']}  vm1
@@ -165,7 +165,7 @@ UpdateVMPool - shall be able to update VM status from free to free
    &{vm3}=  Create Dictionary  name=vm3  external_ip=80.187.128.13  internal_ip=2.2.2.3  state=VmForceFree 
    @{vmlist_update}=  Create List  ${vm1}  ${vm2}  ${vm3}
 
-   ${update_return}=  Update VM Pool  region=US  token=${token}  vm_pool_name=${pool_name}  org_name=MobiledgeX  vm_list=${vmlist_update}
+   ${update_return}=  Update VM Pool  region=US  token=${token}  vm_pool_name=${pool_name}  org_name=packet  vm_list=${vmlist_update}
 
    Should Be Equal  ${update_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${update_return['data']['vms'][0]['name']}  vm1

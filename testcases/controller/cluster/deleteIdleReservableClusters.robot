@@ -186,7 +186,7 @@ DeleteIdleReservableClusterInst - settings timer cleanup_reservable_auto_cluster
    [Setup]  Settings Setup
    [Teardown]  Settings Teardown
 
-   Update Settings  region=${region}  cleanup_reservable_auto_cluster_idletime=10s
+   Update Settings  region=${region}  cleanup_reservable_auto_cluster_idletime=31s
 
    Create App  region=${region}   app_name=${app_name_default}-1  developer_org_name=${developer_org_name_automation}  deployment=docker  image_type=ImageTypeDocker  image_path=${docker_image}  access_ports=tcp:1
    ${app_inst1}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name_default}-1  auto_delete=${False}
@@ -218,7 +218,7 @@ DeleteIdleReservableClusterInst - settings timer cleanup_reservable_auto_cluster
    Delete App Instance  region=${region}  app_name=${app_name_default}-1  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name_default}-1  cluster_instance_developer_org_name=MobiledgeX
    Delete App Instance  region=${region}  app_name=${app_name_default}-3  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name_default}-3  cluster_instance_developer_org_name=MobiledgeX
 
-   Sleep  15s
+   Sleep  40s
 
    ${cluster_inst1}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
    Length Should Be  ${cluster_inst1}  0

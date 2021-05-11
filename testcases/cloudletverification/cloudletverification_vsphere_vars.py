@@ -52,6 +52,9 @@ cloudlet_external_subnet = 'external-subnet'  # used for cloudlet metrics verifi
 cloudlet_vmimageversion = '4.0.5'
 cloudlet_infraconfig_flavorname = 'x1.medium'
 cloudlet_infraconfig_externalnetworkname = 'DPGAdminQA2'
+cloudlet_rootlb_ram = 'MEX_SHARED_ROOTLB_RAM=4096'
+cloudlet_rootlb_disk = 'MEX_SHARED_ROOTLB_DISK=42'
+cloudlet_rootlb_vcpus = 'MEX_SHARED_ROOTLB_VCPUS=4'
 
 deployment = 'docker'
 
@@ -79,7 +82,7 @@ cloudlet_whitelist_eg = 'MEX_CLOUDLET_FIREWALL_WHITELIST_INGRESS=protocol=tcp,po
 #
 #############################################################
 
-cloudlet_env_vars= f'{cloudlet_datastore},{cloudlet_ext_ip_range},{cloudlet_ext_gateway},{cloudlet_ext_netmask},{cloudlet_ext_vswitch},{cloudlet_ext_netscheme},{cloudlet_ext_network},{cloudlet_image_disk_format},{cloudlet_internal_vswitch},{cloudlet_whitelist_in},{cloudlet_whitelist_eg}'
+cloudlet_env_vars= f'{cloudlet_datastore},{cloudlet_rootlb_ram},{cloudlet_rootlb_disk},{cloudlet_rootlb_vcpus},{cloudlet_ext_ip_range},{cloudlet_ext_gateway},{cloudlet_ext_netmask},{cloudlet_ext_vswitch},{cloudlet_ext_netscheme},{cloudlet_ext_network},{cloudlet_image_disk_format},{cloudlet_internal_vswitch},{cloudlet_whitelist_in},{cloudlet_whitelist_eg}'
 
 
 
