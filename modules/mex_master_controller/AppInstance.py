@@ -168,7 +168,7 @@ class AppInstance(MexOperation):
 
         return appinst_dict
 
-    def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, last=None, start_time=None, end_time=None, raw_data=None, location_tile=None, device_os=None, device_type=None, data_network_type=None, use_defaults=True):
+    def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, last=None, start_time=None, end_time=None, raw_data=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, use_defaults=True):
         metric_dict = {}
 
         if type_dict is not None:
@@ -192,8 +192,8 @@ class AppInstance(MexOperation):
             metric_dict['rawdata'] = raw_data
         if device_os is not None:
             metric_dict['deviceos'] = device_os
-        if device_type is not None:
-            metric_dict['devicetype'] = device_type
+        if device_model is not None:
+            metric_dict['devicemodel'] = device_model
         if data_network_type is not None:
             metric_dict['datanetworktype'] = data_network_type
         if location_tile is not None:
@@ -311,14 +311,14 @@ class AppInstance(MexOperation):
 
         return self.show(token=token, url=self.metrics_client_api_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
-    def get_client_app_metrics(self, method, token=None, region=None, app_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_type=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
+    def get_client_app_metrics(self, method, token=None, region=None, app_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
         app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
         app_inst_metric = app_inst
         if 'key' in app_inst:
             app_inst_metric['appinst'] = app_inst['key']
             del app_inst_metric['key']
 
-        msg_dict = self._build_metrics(type_dict=app_inst_metric, method=method, cell_id=cell_id, selector=selector, last=last, start_time=start_time, end_time=end_time, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_type=device_type, data_network_type=data_network_type)
+        msg_dict = self._build_metrics(type_dict=app_inst_metric, method=method, cell_id=cell_id, selector=selector, last=last, start_time=start_time, end_time=end_time, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_model=device_model, data_network_type=data_network_type)
 
         return self.show(token=token, url=self.metrics_client_app_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
