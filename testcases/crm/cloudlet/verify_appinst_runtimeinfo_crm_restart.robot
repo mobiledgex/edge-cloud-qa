@@ -33,8 +33,8 @@ AppInst show displays runtimeinfo after CRM restart
 
    ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_packet}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  token=${tokenop}
 
-   Create App  region=${region}   app_name=${app_name}  developer_org_name=${org_name_dev}  deployment=docker  image_type=ImageTypeDocker  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  token=${tokendev}
-   ${app_inst}=  Create App Instance  region=${region}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name}  token=${tokendev} 
+   Create App  region=${region}   app_name=${app_name}  developer_org_name=${developer_org_name_automation}  deployment=docker  image_type=ImageTypeDocker  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  token=${tokendev}
+   ${app_inst}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name}  token=${tokendev} 
 
    Dictionary Should Contain Key  ${app_inst['data']}  runtime_info
    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  cluster_instance_developer_org_name=MobiledgeX  token=${tokendev}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=whoami
@@ -53,7 +53,7 @@ AppInst show displays runtimeinfo after CRM restart
    END
    Should Be Equal As Numbers  ${cloudlet_info[0]['data']['state']}  2
 
-   ${app_inst1}=  Show App Instances  region=${region}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name}  token=${tokendev}
+   ${app_inst1}=  Show App Instances  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name}  token=${tokendev}
 
    Dictionary Should Contain Key  ${app_inst1[0]['data']}  runtime_info
    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  cluster_instance_developer_org_name=MobiledgeX  token=${tokendev}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=whoami
@@ -65,10 +65,7 @@ Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
 
-   ${developer_name}=  Get Default Developer Name
    ${cloudlet_name}=  Get Default Cloudlet Name
-   ${org_name}=  Get Default Organization Name
-   ${org_name_dev}=  Set Variable  ${org_name}_dev
    ${app_name}=  Get Default App Name
 
    Create Flavor  region=${region}
@@ -76,30 +73,19 @@ Setup
    ${epoch}=  Get Time  epoch
    ${usernameop_epoch}=  Catenate  SEPARATOR=  ${username}  op  ${epoch}
    ${emailop}=  Catenate  SEPARATOR=  ${username}  op  +  ${epoch}  @gmail.com
-   ${usernamedev_epoch}=  Catenate  SEPARATOR=  ${username}  dev  ${epoch}
-   ${emaildev}=  Catenate  SEPARATOR=  ${username}  dev  +  ${epoch}  @gmail.com
-
-   Create Org  orgname=${org_name_dev}  orgtype=developer
 
    Skip Verify Email
    Create User  username=${usernameop_epoch}  password=${password}  email_address=${emailop}
    Unlock User
 
-   Skip Verify Email
-   Create User  username=${usernamedev_epoch}  password=${password}  email_address=${emaildev}
-   Unlock User
-
    Adduser Role  username=${usernameop_epoch}  orgname=${operator_name_openstack_packet}  role=OperatorManager  
-   Adduser Role  username=${usernamedev_epoch}  orgname=${org_name_dev}  role=DeveloperContributor
 
    ${tokenop}=  Login  username=${usernameop_epoch}  password=${password}
-   ${tokendev}=  Login  username=${usernamedev_epoch}  password=${password}
+   ${tokendev}=  Login  username=dev_contributor_automation  password=${dev_contributor_password_automation}
 
-   Set Suite Variable  ${developer_name}
    Set Suite Variable  ${cloudlet_name}
    Set Suite Variable  ${app_name}
    Set Suite Variable  ${tokenop}
    Set Suite Variable  ${tokendev}
 
-   Set Suite Variable  ${org_name_dev}
 
