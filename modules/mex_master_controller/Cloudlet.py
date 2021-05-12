@@ -422,6 +422,18 @@ class Cloudlet(MexOperation):
 
         return self.show(token=token, url=self.metrics_client_cloudlet_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
+    def get_cloudletusage_metrics(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
+        metric_dict = msg
+        if 'key' in msg:
+            metric_dict['cloudlet'] = msg['key']
+        else:
+            metric_dict = msg
+
+        msg_dict = self._build_metrics(type_dict=metric_dict, selector=selector, last=last, start_time=start_time, end_time=end_time)
+
+        return self.show(token=token, url=self.cloudletusage_metrics_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
+
     def add_cloudlet_resource_mapping(self, token=None, region=None, cloudlet_name=None, operator_org_name=None, mapping=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
 
