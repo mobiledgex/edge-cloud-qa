@@ -57,10 +57,11 @@ CreateCloudletPoolAccess - DeveloperManager shall be able to create a cloudletpo
    Should Be True  ${clen} > 0
 
 # ECQ-3301
-CreateCloudletPoolAccess - DeveloperContributor shall not be able to create a cloudletpool invitation or response or show response/invite/granted/pending
+CreateCloudletPoolAccess - DeveloperContributor shall not be able to create a cloudletpool invitation or response and show response/invite/granted/pending
    [Documentation]
-   ...  - send CreateCloudletPoolAccessInvitation and CreateCloudletPoolAccessResponse and ShowResponse/Invitatation/Granted/Pending for DeveloperContributor user
+   ...  - send CreateCloudletPoolAccessInvitation and CreateCloudletPoolAccessResponse for DeveloperContributor user
    ...  - verify proper error is received
+   ...  - send ShowResponse/Invitatation/Granted/Pending and verify success
 
    [Tags]  CloudletPoolAccess
 
@@ -82,17 +83,33 @@ CreateCloudletPoolAccess - DeveloperContributor shall not be able to create a cl
    Should Contain   ${error2}  code=403
    Should Contain   ${error2}  error={"message":"Forbidden"}
 
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
+#
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Invitation  region=${region}  token=${user_token}
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
 
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Invitation  region=${region}  token=${user_token}
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
+   ${granted}=  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
+   ${glen}=  Get Length  ${granted}
+   Should Be True  ${glen} > 0
+
+   ${pending}=  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
+   ${plen}=  Get Length  ${pending}
+   Should Be True  ${plen} >= 0
+
+   ${invite}=  Show Cloudlet Pool Access Invitation  region=${region}  token=${user_token}
+   ${confirm}=  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
+   ${ilen}=  Get Length  ${invite}
+   ${clen}=  Get Length  ${confirm}
+   Should Be True  ${ilen} > 0
+   Should Be True  ${clen} > 0
 
 # ECQ-3302
-CreateCloudletPoolAccess - DeveloperViewer shall not be able to create a cloudletpool invitation or response or show response/invite/granted/pending
+CreateCloudletPoolAccess - DeveloperViewer shall not be able to create a cloudletpool invitation or response and show response/invite/granted/pending
    [Documentation]
-   ...  - send CreateCloudletPoolAccessResponse and CreateCloudletPoolAccessInvitation and ShowResponse/Invitatation/Granted for DeveloperViewer user
+   ...  - send CreateCloudletPoolAccessResponse and CreateCloudletPoolAccessInvitation DeveloperViewer user
    ...  - verify proper error is received
+   ...  - send ShowResponse/Invitatation/Granted/Pending and verify success
 
    [Tags]  CloudletPoolAccess
 
@@ -114,11 +131,26 @@ CreateCloudletPoolAccess - DeveloperViewer shall not be able to create a cloudle
    Should Contain   ${error2}  code=403
    Should Contain   ${error2}  error={"message":"Forbidden"}
 
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
+#
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Invitation  region=${region}  token=${user_token}
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
 
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Invitation  region=${region}  token=${user_token}
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
+   ${granted}=  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
+   ${glen}=  Get Length  ${granted}
+   Should Be True  ${glen} > 0
+
+   ${pending}=  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
+   ${plen}=  Get Length  ${pending}
+   Should Be True  ${plen} >= 0
+
+   ${invite}=  Show Cloudlet Pool Access Invitation  region=${region}  token=${user_token}
+   ${confirm}=  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
+   ${ilen}=  Get Length  ${invite}
+   ${clen}=  Get Length  ${confirm}
+   Should Be True  ${ilen} > 0
+   Should Be True  ${clen} > 0
 
 # ECQ-3303
 CreateCloudletPoolAccess - OperatorManager shall be able to create a cloudletpool invitation but not response and show response/invite/granted/pending
@@ -197,10 +229,11 @@ CreateCloudletPoolAccess - OperatorContributor shall be able to create a cloudle
    Should Be True  ${clen} >= 0
 
 # ECQ-3305
-CreateCloudletPoolAccess - OperatorViewer shall not be able to create a cloudletpool invitation or response or show response/invite/granted/pending
+CreateCloudletPoolAccess - OperatorViewer shall not be able to create a cloudletpool invitation or response and show response/invite/granted/pending
    [Documentation]
-   ...  - send CreateCloudletPoolAccessResponse and CreateCloudletPoolAccessInvitation and ShowResponse/Invitatation/Granted/Pending for OperatorViewer user
+   ...  - send CreateCloudletPoolAccessResponse and CreateCloudletPoolAccessInvitation for OperatorViewer user
    ...  - verify proper error is received
+   ...  - send ShowResponse/Invitatation/Granted/Pending and verify success
 
    [Tags]  CloudletPoolAccess
 
@@ -222,11 +255,26 @@ CreateCloudletPoolAccess - OperatorViewer shall not be able to create a cloudlet
    Should Contain   ${error2}  code=403
    Should Contain   ${error2}  error={"message":"Forbidden"}
 
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
+#
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Invitation  region=${region}  token=${user_token}
+#   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
 
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Invitation  region=${region}  token=${user_token}
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
+   ${granted}=  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
+   ${glen}=  Get Length  ${granted}
+   Should Be True  ${glen} >= 0
+
+   ${pending}=  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
+   ${plen}=  Get Length  ${pending}
+   Should Be True  ${plen} >= 0
+
+   ${invite}=  Show Cloudlet Pool Access Invitation  region=${region}  token=${user_token}
+   ${confirm}=  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
+   ${ilen}=  Get Length  ${invite}
+   ${clen}=  Get Length  ${confirm}
+   Should Be True  ${ilen} > 0
+   Should Be True  ${clen} >= 0
 
 *** Keywords ***
 Setup
