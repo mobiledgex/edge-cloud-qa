@@ -341,8 +341,8 @@ ShowOrgCloudlet - orgs shall be changed to different pools
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  auto_delete=False
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  developer_org_name=${orgnamedev2}  auto_delete=False
-   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
-   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  developer_org_name=${orgnamedev2}  decision=accept  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False  auto_delete=${False}
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  developer_org_name=${orgnamedev2}  decision=accept  use_defaults=False  auto_delete=${False}
 
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  org_name=${orgname}
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  org_name=${orgname2}
