@@ -39,7 +39,7 @@ DeleteOrg - delete org in use by cloudlet pool invitation/response shall return 
 
    [Tags]  CloudletPoolAccess
 
-   Create Org  orgtype=operator
+   Create Org  orgtype=developer
    Create Cloudlet Pool  region=US  operator_org_name=dmuus  token=${token}
 
    Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_org_name=dmuus  developer_org_name=${org_name}  token=${token}
@@ -47,7 +47,7 @@ DeleteOrg - delete org in use by cloudlet pool invitation/response shall return 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by some cloudletpool invitation or response"}
 
-   Create Cloudlet Pool Access Response  region=${region}  cloudlet_pool_org_name=dmuus  developer_org_name=${org_name}  token=${token}  decision=accept
+   Create Cloudlet Pool Access Response  region=${region}  cloudlet_pool_org_name=dmuus  developer_org_name=${org_name}  token=${token}  decision=accept  auto_delete=${False}
    ${error}=  Run Keyword And Expect Error  *  Delete Org  token=${token}
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by some cloudletpool invitation or response"}
@@ -58,6 +58,10 @@ DeleteOrg - delete org in use by cloudlet pool invitation/response shall return 
    ${error}=  Run Keyword And Expect Error  *  Delete Org  token=${token}
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by some cloudletpool invitation or response"}
+
+   ${error}=  Run Keyword And Expect Error  *  Delete Org  token=${token}  orgname=dmuus
+   Should Contain   ${error}  code=400
+   Should Contain   ${error}  error={"message":"Organization dmuus in use or check failed
 
 *** Keywords ***
 Setup

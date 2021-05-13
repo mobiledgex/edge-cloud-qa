@@ -11,7 +11,7 @@ Test Teardown  Cleanup Provisioning
 *** Variables ***
 ${region}=  US
 ${operator_organization}=  GDDT
-${organization}=  dmuus
+${organization}=  ${developer_org_name_automation}
 
 *** Test Cases ***
 # ECQ-3306
@@ -61,6 +61,20 @@ CreateCloudletPoolAccess - shall be able to create a cloudlet pool access respon
    cloudlet_pool_name=my.pool${epoch}2  decision=reject
    cloudlet_pool_name=MyPool${epoch}2  decision=reject
 
+# ECQ-3400
+CreateCloudletPoolAccess - deleting invitation shall delete the response
+   [Documentation]
+   ...  - send CreateCloudletPoolAccessResponse to an invitation
+   ...  - delete the Invitation
+   ...  - verify response is deleted
+
+   [Tags]  CloudletPoolAccess
+
+   [Template]  CreateDeleteInvitation
+
+   cloudlet_pool_name=my_pool${epoch}pool   decision=accept
+   cloudlet_pool_name=my_pool${epoch}pool2  decision=reject
+   
 *** Keywords ***
 Setup
    ${token}=  Get Super Token
@@ -73,11 +87,11 @@ Setup
    Set Suite Variable  ${epoch}
 
 Create Invitation
-   [Arguments]   ${cloudlet_pool_name}
+   [Arguments]   ${cloudlet_pool_name}  ${delete}=${True}
 
    Create Cloudlet Pool  region=${region}  token=${token}  cloudlet_pool_name=${cloudlet_pool_name}  operator_org_name=${operator_organization}  use_defaults=False
 
-   ${invite_return}=  Create Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=${cloudlet_pool_name}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
+   ${invite_return}=  Create Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=${cloudlet_pool_name}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False  auto_delete=${delete}
 
    Should Be Equal  ${invite_return['CloudletPool']}  ${cloudlet_pool_name}
 
@@ -86,11 +100,11 @@ Create Invitation
    Should Be Equal  ${invite_return['Region']}  ${region}
 
 Create Response
-   [Arguments]   ${cloudlet_pool_name}  ${decision}
+   [Arguments]   ${cloudlet_pool_name}  ${decision}  ${delete}=${True}
 
-   Create Invitation  cloudlet_pool_name=${cloudlet_pool_name}
+   Create Invitation  cloudlet_pool_name=${cloudlet_pool_name}  delete=${delete}
 
-   ${invite_return}=  Create Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=${cloudlet_pool_name}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  decision=${decision}
+   ${invite_return}=  Create Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=${cloudlet_pool_name}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  decision=${decision}  auto_delete=${delete}
 
    Should Be Equal  ${invite_return['CloudletPool']}  ${cloudlet_pool_name}
 
@@ -99,3 +113,18 @@ Create Response
    Should Be Equal  ${invite_return['Region']}  ${region}
    Should Be Equal  ${invite_return['Decision']}  ${decision}
 
+CreateDeleteInvitation
+   [Arguments]   ${cloudlet_pool_name}  ${decision}
+
+   Create Response  ${cloudlet_pool_name}  ${decision}  delete=${False}
+
+   @{resp}=  Show Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=${cloudlet_pool_name}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization} 
+   Should Be Equal  ${resp[0]['CloudletPool']}  ${cloudlet_pool_name}
+   Length Should Be  ${resp}  1 
+
+   Delete Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=${cloudlet_pool_name}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization} 
+
+   @{resp2}=  Show Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=${cloudlet_pool_name}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
+   Length Should Be  ${resp2}  0
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Response not found"}')  Delete Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=${cloudlet_pool_name}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}

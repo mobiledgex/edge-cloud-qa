@@ -224,38 +224,39 @@ UpdateCloudletPool - shall be able to update pool after adding/removing members
    Should Be True  ${pool_return2['data']['updated_at']['seconds']} > ${pool_return['data']['created_at']['seconds']}
    Should Be True  ${pool_return2['data']['updated_at']['nanos']} > 0
 
+# createorgcloudletpool no longer supporte
 # ECQ-2413
-UpdateCloudletPool - shall be able to update after added to org
-   [Documentation]
-   ...  - send CreateCloudletPool
-   ...  - send CreateOrgCloudletPool with the pool
-   ...  - send UpdateCloudletPool
-   ...  - verify pool is correct
-
-   ${orgname}=  Create Org  orgtype=operator
-
-   ${pool_return1}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}
-   Should Be True  ${pool_return1['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
-
-   ${pool_return}=  Create Org Cloudlet Pool  region=${region}  token=${token}  cloudlet_pool_org_name=${organization}  #cloudlet_pool_name=${name}   #use_defaults=False
-
-   Sleep  1s
-
-   @{cloudlet_list}=  Create List  tmocloud-2
-   ${pool_return2}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
-
-   Should Be True  ${pool_return2['data']['created_at']['seconds']} == ${pool_return1['data']['created_at']['seconds']}
-   Should Be True  ${pool_return2['data']['created_at']['nanos']} == ${pool_return1['data']['created_at']['nanos']}
-   Should Be True  ${pool_return2['data']['updated_at']['seconds']} > ${pool_return1['data']['created_at']['seconds']}
-   Should Be True  ${pool_return2['data']['updated_at']['nanos']} > 0
+#UpdateCloudletPool - shall be able to update after added to org
+#   [Documentation]
+#   ...  - send CreateCloudletPool
+#   ...  - send CreateOrgCloudletPool with the pool
+#   ...  - send UpdateCloudletPool
+#   ...  - verify pool is correct
+#
+#   ${orgname}=  Create Org  orgtype=operator
+#
+#   ${pool_return1}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}
+#   Should Be True  ${pool_return1['data']['created_at']['seconds']} > 0
+#   Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
+#   Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
+#
+#   ${pool_return}=  Create Org Cloudlet Pool  region=${region}  token=${token}  cloudlet_pool_org_name=${organization}  #cloudlet_pool_name=${name}   #use_defaults=False
+#
+#   Sleep  1s
+#
+#   @{cloudlet_list}=  Create List  tmocloud-2
+#   ${pool_return2}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
+#
+#   Should Be True  ${pool_return2['data']['created_at']['seconds']} == ${pool_return1['data']['created_at']['seconds']}
+#   Should Be True  ${pool_return2['data']['created_at']['nanos']} == ${pool_return1['data']['created_at']['nanos']}
+#   Should Be True  ${pool_return2['data']['updated_at']['seconds']} > ${pool_return1['data']['created_at']['seconds']}
+#   Should Be True  ${pool_return2['data']['updated_at']['nanos']} > 0
 
 *** Keywords ***
 Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
-
+   Login  username=mexadmin  password=${mexadmin_password}
    ${pool_name}=  Get Default Cloudlet Pool Name
 
    Set Suite Variable  ${pool_name}

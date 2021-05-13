@@ -11,7 +11,7 @@ Test Teardown  Teardown
 *** Variables ***
 ${region}=  US
 ${operator_organization}=  GDDT
-${organization}=  dmuus
+${organization}=  ${developer_org_name_automation}
 
 *** Test Cases ***
 # ECQ-3308
@@ -91,11 +91,12 @@ CreateCloudletPoolAccess - shall be able to show the pending/granted invitations
    ${pending_31}=  Show Cloudlet Pool Access Pending  token=${token}
    Length Should Be  ${pending_31}  ${pending_pre_length}
 
-   Delete Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
-   ${granted_32}=  Show Cloudlet Pool Access Granted  token=${token}
-   Length Should Be  ${granted_32}  ${granted_pre_length}
-   ${pending_32}=  Show Cloudlet Pool Access Pending  token=${token}
-   Length Should Be  ${pending_32}  ${pending_pre_length}
+# response is now deleted when invitation is deleted
+#   Delete Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
+#   ${granted_32}=  Show Cloudlet Pool Access Granted  token=${token}
+#   Length Should Be  ${granted_32}  ${granted_pre_length}
+#   ${pending_32}=  Show Cloudlet Pool Access Pending  token=${token}
+#   Length Should Be  ${pending_32}  ${pending_pre_length}
 
 *** Keywords ***
 Setup
