@@ -47,7 +47,8 @@ CreateCloudletPoolAccessInvitation - mcctl shall handle create failures
       Error: missing required args:  org=${developer_org_name_automation}
       Error: missing required args:  cloudletpoolorg=${operator_name_crm}  org=${developer_org_name_automation}
 
-      Error: Bad Request (400), Specified CloudletPool x org x for region US not found  cloudletpool=x  cloudletpoolorg=x  org=x
+      Error: Bad Request (400), Specified developer organization not found  cloudletpool=x  cloudletpoolorg=dmuus  org=x
+      Error: Bad Request (400), Specified CloudletPool x org x for region US not found  cloudletpool=x  cloudletpoolorg=x  org=${developer_org_name_automation}
 
 # ECQ-3321
 CreateCloudletPoolAccessResponse - mcctl shall be able to create/show/delete/pending/granted response with decision=accept
