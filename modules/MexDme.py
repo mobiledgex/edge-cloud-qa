@@ -113,7 +113,7 @@ class FindCloudletRequest():
 
 
 class StreamEdgeEvent():
-    def __init__(self, session_cookie=None, edge_events_cookie=None, event_type=None, carrier_name=None, latitude=None, longitude=None, samples=None, device_info_data_network_type=None, device_info_os=None, device_info_model=None, device_info_signal_strength=None, use_defaults=True):
+    def __init__(self, session_cookie=None, edge_events_cookie=None, event_type=None, carrier_name=None, latitude=None, longitude=None, samples=None, data_network_type=None, device_os=None, device_model=None, signal_strength=None, use_defaults=True):
         request_dict = {}
         self.session_cookie = session_cookie
         self.edge_events_cookie = edge_events_cookie
@@ -122,10 +122,10 @@ class StreamEdgeEvent():
         self.latitude = latitude
         self.longitude = longitude
         self.samples = samples
-        self.device_info_data_network_type = device_info_data_network_type
-        self.device_info_os = device_info_os
-        self.device_info_model = device_info_model
-        self.device_info_signal_strength = device_info_signal_strength
+        self.device_info_data_network_type = data_network_type
+        self.device_info_os = device_os
+        self.device_info_model = device_model
+        self.device_info_signal_strength = signal_strength
 
         if session_cookie == 'default':
             self.session_cookie = session_cookie_global
@@ -135,8 +135,8 @@ class StreamEdgeEvent():
                 self.session_cookie = session_cookie_global
             if not edge_events_cookie:
                 self.edge_events_cookie = edge_events_cookie_global
-            if not carrier_name:
-                self.carrier_name = shared_variables.operator_name_default
+            #if not carrier_name:
+            #    self.carrier_name = shared_variables.operator_name_default
 
         loc_dict = {}
         if self.latitude is not None:
@@ -146,8 +146,6 @@ class StreamEdgeEvent():
 
         if self.session_cookie is not None:
             request_dict['session_cookie'] = self.session_cookie
-        if self.carrier_name is not None:
-            request_dict['carrier_name'] = self.carrier_name
         if self.edge_events_cookie is not None:
             request_dict['edge_events_cookie'] = self.edge_events_cookie
         if self.event_type is not None:
@@ -161,21 +159,27 @@ class StreamEdgeEvent():
 
             request_dict['samples'] = samples_list
 
-        device_dict = {}
-        if self.device_info_data_network_type:
-            device_dict['data_network_type'] = self.device_info_data_network_type
+        device_static_dict = {}
         if self.device_info_os:
-            device_dict['device_os'] = self.device_info_os
+            device_static_dict['device_os'] = self.device_info_os
         if self.device_info_model:
-            device_dict['device_model'] = self.device_info_model
+            device_static_dict['device_model'] = self.device_info_model
+
+        device_dynamic_dict = {}
+        if self.device_info_data_network_type:
+            device_dynamic_dict['data_network_type'] = self.device_info_data_network_type
         if self.device_info_signal_strength:
-            device_dict['signal_strength'] = int(self.device_info_signal_strength)
+            device_dynamic_dict['signal_strength'] = int(self.device_info_signal_strength)
+        if self.carrier_name is not None:
+            device_dynamic_dict['carrier_name'] = self.carrier_name
 
         if loc_dict:
             request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
 
-        if device_dict:
-            request_dict['device_info'] = appcommon_pb2.DeviceInfo(**device_dict)
+        if device_static_dict:
+            request_dict['device_info_static'] = appcommon_pb2.DeviceInfoStatic(**device_static_dict)
+        if device_dynamic_dict:
+            request_dict['device_info_dynamic'] = appcommon_pb2.DeviceInfoDynamic(**device_dynamic_dict)
 
         self.request = app_client_pb2.ClientEdgeEvent(**request_dict)
 
