@@ -133,6 +133,9 @@ class MexOperation(MexRest):
                 elif url.endswith('cloudletpoolaccessconfirmation/delete'):
                     if str(self.resp.text) != '{"message":"Confirmation deleted"}':
                         raise Exception('ERROR: cloudletpoolaccessconfirmation not deleted successfully:' + str(self.resp_text))
+                elif url.endswith('controller/create'):
+                    if str(self.resp.text) != '{"message":"Controller registered"}':
+                        raise Exception('ERROR: controller not created successfully:' + str(self.resp_text))
                 else:
                     logger.info(f'not checking specific url response for {url}')
                 #elif url.endswith('UpdateCloudlet'):
