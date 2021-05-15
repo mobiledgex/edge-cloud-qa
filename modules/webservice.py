@@ -52,7 +52,7 @@ class WebService() :
 
     def post(self, url, data=None, verify_cert=False, headers=None, files=None, stream=False, connection_timeout=3.05, stream_timeout=60):
         logger.debug(f'url={url} data={data} headers={headers} verify_cert={verify_cert} stream={stream} connection_timeout={connection_timeout}, stream_timeout={stream_timeout}')
-        
+       
         #url_to_use = self._buildUrl(url)
         self.stream_output_bytes = []
         self.stream_output = []
@@ -81,6 +81,8 @@ class WebService() :
         except requests.exceptions.ConnectionError as e:
             if stream and 'Read timed out' in str(e):
                 logging.info(f'Read timeout while steaming:{e}')
+            else:
+                raise Exception(f'POST ConnectionError exception: {e}')
         except Exception as e:
             raise Exception(f'POST exception: {e}')
         

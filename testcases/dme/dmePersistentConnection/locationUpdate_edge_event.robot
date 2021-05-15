@@ -34,36 +34,7 @@ DMEPersistentConnection - Location Update edge event shall return new cloudlet
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
     Should Be Equal  ${cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
 
-    Create DME Persistent Connection  carrier_name=${operator_name_fake}x  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
-
-    ${cloudlet2}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=31  longitude=-91
-
-    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.status}  1  #FIND_FOUND
-    Should Be True  len('${cloudlet2.new_cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet2.new_cloudlet.fqdn}  tmocloud-1.tmus.mobiledgex.net
-    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].proto}  1
-    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].internal_port}  1234
-    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].public_port}  1234
-    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.cloudlet_location.latitude}  31.0
-    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.cloudlet_location.longitude}  -91.0
-
-# ECQ-3346
-DMEPersistentConnection - Location Update edge event without carrier shall return new cloudlet
-    [Documentation]
-    ...  - make DME persistent connection
-    ...  - send Location Update Edge Event with new coord and no carrier
-    ...  - verify response has new cloudlet
-
-    [Tags]  DMEPersistentConnection
-
-    ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
-    ${cloudlet}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=36  longitude=-96
-
-    Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
-    Should Be True  len('${cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
-
-    Create DME Persistent Connection  carrier_name=${operator_name_fake}x  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
+    Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
     ${cloudlet2}=  Send Location Update Edge Event  latitude=31  longitude=-91
 
@@ -76,8 +47,38 @@ DMEPersistentConnection - Location Update edge event without carrier shall retur
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.cloudlet_location.latitude}  31.0
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.cloudlet_location.longitude}  -91.0
 
+# ECQ-3346
+DMEPersistentConnection - Location Update edge event with device info shall return new cloudlet
+    [Documentation]
+    ...  - make DME persistent connection
+    ...  - send Location Update Edge Event with new coord and device info
+    ...  - verify response has new cloudlet
+
+    [Tags]  DMEPersistentConnection
+
+    ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
+    ${cloudlet}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=36  longitude=-96
+
+    Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+    Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+    Should Be Equal  ${cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
+
+    Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96  carrier_name=tmus  data_network_type=5G  device_os=Android  device_model=Google Pixel  signal_strength=65
+
+    ${cloudlet2}=  Send Location Update Edge Event  latitude=31  longitude=-91  carrier_name=tmus  data_network_type=5G  device_os=Android  device_model=Google Pixel  signal_strength=65
+
+
+    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.status}  1  #FIND_FOUND
+    Should Be True  len('${cloudlet2.new_cloudlet.edge_events_cookie}') > 100
+    Should Be Equal  ${cloudlet2.new_cloudlet.fqdn}  tmocloud-1.tmus.mobiledgex.net
+    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].proto}  1
+    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].internal_port}  1234
+    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].public_port}  1234
+    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.cloudlet_location.latitude}  31.0
+    Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.cloudlet_location.longitude}  -91.0
+
 # ECQ-3347
-DMEPersistentConnection - Location Update edge event without carrier/lat/long shall return error
+DMEPersistentConnection - Location Update edge event without lat/long shall return error
     [Documentation]
     ...  - make DME persistent connection
     ...  - send Location Update Edge Event without lat/long
@@ -92,7 +93,7 @@ DMEPersistentConnection - Location Update edge event without carrier/lat/long sh
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
     Should Be Equal  ${cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
 
-    Create DME Persistent Connection  carrier_name=${operator_name_fake}x  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
+    Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
     ${error}=  Run Keyword and Expect Error  *  Send Location Update Edge Event  #latitude=31  longitude=-91
 
@@ -118,9 +119,9 @@ DMEPersistentConnection - Shall be able to make another Persistent Connection af
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
     Should Be Equal  ${cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
 
-    Create DME Persistent Connection  carrier_name=${operator_name_fake}x  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
+    Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
-    ${cloudlet2}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=31  longitude=-91
+    ${cloudlet2}=  Send Location Update Edge Event  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=31  longitude=-91
 
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet2.new_cloudlet.edge_events_cookie}') > 100
@@ -131,9 +132,9 @@ DMEPersistentConnection - Shall be able to make another Persistent Connection af
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.cloudlet_location.latitude}  31.0
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.cloudlet_location.longitude}  -91.0
 
-    Create DME Persistent Connection  carrier_name=${operator_name_fake}x  edge_events_cookie=${cloudlet2.new_cloudlet.edge_events_cookie}  latitude=36  longitude=-96
+    Create DME Persistent Connection  edge_events_cookie=${cloudlet2.new_cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
-    ${cloudlet3}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=36  longitude=-96
+    ${cloudlet3}=  Send Location Update Edge Event  latitude=36  longitude=-96
 
     Should Be Equal As Numbers  ${cloudlet3.new_cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet3.new_cloudlet.edge_events_cookie}') > 100
@@ -167,9 +168,9 @@ DMEPersistentConnection - Location Update edge event shall return public cloudle
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
     Should Be Equal  ${cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
 
-    Create DME Persistent Connection  carrier_name=${operator_name_fake}x  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
+    Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
-    ${cloudlet2}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=37  longitude=-96
+    ${cloudlet2}=  Send Location Update Edge Event  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=37  longitude=-96
 
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet2.new_cloudlet.edge_events_cookie}') > 100
