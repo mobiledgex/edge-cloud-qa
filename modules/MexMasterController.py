@@ -12,6 +12,7 @@ import imaplib
 import email
 import queue
 import sys
+import importlib
 
 from mex_rest import MexRest
 from mex_controller_classes import Organization
@@ -46,6 +47,7 @@ from mex_master_controller.Role import Role
 from mex_master_controller.RequestAppInstLatency import RequestAppInstLatency
 from mex_master_controller.CloudletPoolAccess import CloudletPoolAccess
 from mex_master_controller.RestrictedOrgUpdate import RestrictedOrgUpdate
+from mex_master_controller.Controller import Controller
 
 import shared_variables_mc
 import shared_variables
@@ -208,6 +210,10 @@ class MexMasterController(MexRest):
         self.request_appinst_latency = RequestAppInstLatency(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
         self.cloudlet_pool_access = CloudletPoolAccess(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.restricted_org_update = RestrictedOrgUpdate(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)  
+        self.controller = Controller(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+
+    def reload_defaults(self):
+        importlib.reload(shared_variables)
 
     def find_file(self, filename):
         return str(self._findFile(filename))
@@ -394,7 +400,6 @@ class MexMasterController(MexRest):
 
             try:
                 self.post(url=url, data=payload)
-
                 logger.info('response:\n' + str(self.resp.text))
 
                 self.token = self.decoded_data['token']
@@ -407,7 +412,7 @@ class MexMasterController(MexRest):
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             except Exception as e:
                 self._number_login_requests_fail += 1
-                print('*WARN*', 'queu_obj', self._queue_obj)
+                print('*WARN*', 'queu_obj', self._queue_obj, e)
                 if self._queue_obj:
                     print('*WARN*', 'fail login')
                     self._queue_obj.put({'login_thread':sys.exc_info()})
@@ -427,6 +432,9 @@ class MexMasterController(MexRest):
 
     def login_mexadmin(self):
         return self.login(username=self.admin_username, password=self.admin_password)
+
+    def create_controller(self, region=None, controller_address=None, influxdb_address=None, token=None):
+        return self.controller.create_controller(region=region, controller_address=controller_address, influxdb_address=influxdb_address, token=token)
 
     def create_user(self, username=None, password=None, email_address=None, email_password=None, family_name=None, given_name=None, nickname=None, enable_totp=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         self.username = username
@@ -459,6 +467,9 @@ class MexMasterController(MexRest):
 
     def show_user_role(self, role=None, organization=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.role.role_show(token=token, role=role, organization=organization, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_role_permissions(self, role=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.role.role_perms(token=token, role=role, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def new_password(self, password=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/newpass'
