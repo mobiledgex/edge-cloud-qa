@@ -22,7 +22,7 @@ DMEPersistentConnection - persistent connection without session cookie shall fai
 
    [Tags]  DMEPersistentConnection
 
-   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${None}  carrier_name=${operator_name_fake}  edge_events_cookie=${expired_cookie}  latitude=36  longitude=-96  use_defaults=${False}
+   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${None}  edge_events_cookie=${expired_cookie}  latitude=36  longitude=-96  use_defaults=${False}
 
    Should Contain  ${reply}  status = StatusCode.UNAUTHENTICATED
    Should Contain  ${reply}  details = "VerifyCookie failed: missing cookie" 
@@ -37,7 +37,7 @@ DMEPersistentConnection - persistent connection without edge cookie shall fail
 
    ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
 
-   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${r.session_cookie}  edge_events_cookie=${None}  carrier_name=${operator_name_fake}  latitude=36  longitude=-96  use_defaults=${False}
+   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${r.session_cookie}  edge_events_cookie=${None}  latitude=36  longitude=-96  use_defaults=${False}
 
    Should Contain  ${reply}  status = StatusCode.UNAUTHENTICATED
    Should Contain  ${reply}  details = "VerifyCookie failed: missing cookie"
@@ -50,7 +50,7 @@ DMEPersistentConnection - persistent connection without edge or session cookie s
 
    [Tags]  DMEPersistentConnection
 
-   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${None}  edge_events_cookie=${None}  carrier_name=${operator_name_fake}  latitude=36  longitude=-96  use_defaults=${False}
+   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${None}  edge_events_cookie=${None}  latitude=36  longitude=-96  use_defaults=${False}
 
    Should Contain  ${reply}  status = StatusCode.UNAUTHENTICATED
    Should Contain  ${reply}  details = "VerifyCookie failed: missing cookie"
@@ -63,7 +63,7 @@ DMEPersistentConnection - persistent connection expired session cookie shall fai
 
    [Tags]  DMEPersistentConnection
 
-   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${expired_cookie}  carrier_name=${operator_name_fake}  edge_events_cookie=${expired_cookie}  latitude=36  longitude=-96  use_defaults=${False}
+   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${expired_cookie}  edge_events_cookie=${expired_cookie}  latitude=36  longitude=-96  use_defaults=${False}
 
    Should Contain  ${reply}  status = StatusCode.UNAUTHENTICATED
    Should Contain  ${reply}  details = "token is expired
@@ -78,7 +78,7 @@ DMEPersistentConnection - persistent connection with expired edge cookie shall f
 
    ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
 
-   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${r.session_cookie}  edge_events_cookie=${expired_cookie}  carrier_name=${operator_name_fake}  latitude=36  longitude=-96  use_defaults=${False}
+   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${r.session_cookie}  edge_events_cookie=${expired_cookie}  latitude=36  longitude=-96  use_defaults=${False}
 
    Should Contain  ${reply}  status = StatusCode.UNAUTHENTICATED
    Should Contain  ${reply}  details = "token is expired
@@ -94,7 +94,7 @@ DMEPersistentConnection - persistent connection with edge cookie = session cooki
    # fixed EDGECLOUD-4542 able to create DME persistent connection with edge_event_cookie = session_cookie
    ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
 
-   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${r.session_cookie}  edge_events_cookie=${r.session_cookie}  carrier_name=${operator_name_fake}  latitude=36  longitude=-96  use_defaults=${False}
+   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${r.session_cookie}  edge_events_cookie=${r.session_cookie}  latitude=36  longitude=-96  use_defaults=${False}
 
    Should Contain  ${reply}  status = StatusCode.UNAUTHENTICATED
    Should Contain  ${reply}  details = "No Key data in cookie"
@@ -107,7 +107,7 @@ DMEPersistentConnection - persistent connection with bad session cookie shall fa
 
    [Tags]  DMEPersistentConnection
 
-   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=x  edge_events_cookie=${expired_cookie}  carrier_name=${operator_name_fake}  latitude=36  longitude=-96  use_defaults=${False}
+   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=x  edge_events_cookie=${expired_cookie}  latitude=36  longitude=-96  use_defaults=${False}
 
    Should Contain  ${reply}  status = StatusCode.UNAUTHENTICATED
    Should Contain  ${reply}  details = "token contains an invalid number of segments"
@@ -122,8 +122,21 @@ DMEPersistentConnection - persistent connection with bad edge_events_cookie shal
 
    ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
 
-   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${r.session_cookie}  edge_events_cookie=x  carrier_name=${operator_name_fake}  latitude=36  longitude=-96  use_defaults=${False}
+   ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${r.session_cookie}  edge_events_cookie=x  latitude=36  longitude=-96  use_defaults=${False}
 
    Should Contain  ${reply}  status = StatusCode.UNAUTHENTICATED
    Should Contain  ${reply}  details = "token contains an invalid number of segments"
 
+# ECQ-3401
+DMEPersistentConnection - persistent connection without GPS shall fail
+  [Documentation]
+   ...  - make DME persistent connection without GPS 
+   ...  - verify error is received
+
+   ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
+   ${cloudlet}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=36  longitude=-96
+
+   ${error}=  Run Keyword And Expect Error  *  Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}
+
+   Should Contain  ${error}  status = StatusCode.UNKNOWN
+   Should Contain  ${error}  details = "A valid location is required in EVENT_INIT_CONNECTION - error is rpc error: code = InvalidArgument desc = Missing GpsLocation"

@@ -73,16 +73,6 @@ DMEPersistentConnection - Latency edge event without GPS shall return error
 
     [Tags]  DMEPersistentConnection
 
-    #${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
-    #${cloudlet}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=36  longitude=-96
-#
-#    Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
-#    Should Be True  len('${cloudlet.edge_events_cookie}') > 100
-#
-#    @{samples}=  Create List  ${10.4}  ${4.20}  ${30}  ${440}  ${0.50}  ${6.00}  ${170.45}
-#
-#    Create DME Persistent Connection  carrier_name=${operator_name_fake}x  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
-
     ${error}=  Run Keyword And Expect Error  *  Send Latency Edge Event  carrier_name=${operator_name_fake}  samples=${samples}
 
     Should Contain  ${error}  event_type: EVENT_ERROR
