@@ -42,7 +42,7 @@ Settings - ShowSettings should return the settings
    Should Contain  ${settings}  influx_db_cloudlet_usage_metrics_retention
    Should Contain  ${settings}  influx_db_downsampled_metrics_retention
    Should Contain  ${settings}  influx_db_edge_events_metrics_retention
-   Should Contain  ${settings}  load_balancer_max_port_range
+#   Should Contain  ${settings}  load_balancer_max_port_range
    Should Contain  ${settings}  master_node_flavor
    Should Contain  ${settings}  max_tracked_dme_clients
    Should Contain  ${settings}  shepherd_alert_evaluation_interval
@@ -89,7 +89,8 @@ Settings - UpdateSettings should update the settings
 
    Update Settings  region=${region}  create_app_inst_timeout=1m0s  update_app_inst_timeout=1m0s  delete_app_inst_timeout=1m0s  create_cluster_inst_timeout=1m0s   update_cluster_inst_timeout=1m0s   delete_cluster_inst_timeout=1m0s  create_cloudlet_timeout=1m0s  update_cloudlet_timeout=1m0s
 
-   Update Settings  region=${region}  master_node_flavor=x1.medium  load_balancer_max_port_range=1  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=1h0m0s  influx_db_downsampled_metrics_retention=1h0m0s  influx_db_edge_events_metrics_retention=1h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
+   #Update Settings  region=${region}  master_node_flavor=x1.medium  load_balancer_max_port_range=1  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=1h0m0s  influx_db_downsampled_metrics_retention=1h0m0s  influx_db_edge_events_metrics_retention=1h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
+   Update Settings  region=${region}  master_node_flavor=x1.medium  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=1h0m0s  influx_db_downsampled_metrics_retention=1h0m0s  influx_db_edge_events_metrics_retention=1h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
 
    @{collection_intervals}=  Create List  1s  1s  1s 
    Update Settings  region=${region}  update_trust_policy_timeout=1s  dme_api_metrics_collection_interval=1s  edge_events_metrics_collection_interval=1s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}  cleanup_reservable_auto_cluster_idletime=31s  location_tile_side_length_km=1  appinst_client_cleanup_interval=1h
@@ -115,7 +116,7 @@ Settings - UpdateSettings should update the settings
    Should Be Equal  ${settings_post['delete_cluster_inst_timeout']}  1m0s
 
    Should Be Equal             ${settings_post['master_node_flavor']}            x1.medium 
-   Should Be Equal As Numbers  ${settings_post['load_balancer_max_port_range']}  1  
+#   Should Be Equal As Numbers  ${settings_post['load_balancer_max_port_range']}  1  
    Should Be Equal As Numbers  ${settings_post['max_tracked_dme_clients']}       1  
    Should Be Equal             ${settings_post['chef_client_interval']}          1m0s  
    Should Be Equal             ${settings_post['influx_db_metrics_retention']}   1h0m0s 
@@ -229,11 +230,11 @@ Settings - UpdateSettings with bad parms shall return error
 
    ('code=400', 'error={"message":"Flavor must preexist"}')  master_node_flavor  xx
 
-   ('code=400', 'error={"message":"Load Balancer Max Port Range must be greater than 0"}  load_balancer_max_port_range  0
-   ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=Settings.load_balancer_max_port_range, offset=49"}')  load_balancer_max_port_range  x
-   ('code=400', 'error={"message":"Load Balancer Max Port Range must be greater than 0"}  load_balancer_max_port_range  -1
-   ('code=400', 'error={"message":"Load Balancer Max Port Range must be less than 65536"}')  load_balancer_max_port_range  70000 
-   ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=number 99999999999999999, field=Settings.load_balancer_max_port_range, offset=63"}')  load_balancer_max_port_range  99999999999999999 
+#   ('code=400', 'error={"message":"Load Balancer Max Port Range must be greater than 0"}  load_balancer_max_port_range  0
+#   ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=Settings.load_balancer_max_port_range, offset=49"}')  load_balancer_max_port_range  x
+#   ('code=400', 'error={"message":"Load Balancer Max Port Range must be greater than 0"}  load_balancer_max_port_range  -1
+#   ('code=400', 'error={"message":"Load Balancer Max Port Range must be less than 65536"}')  load_balancer_max_port_range  70000 
+#   ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=number 99999999999999999, field=Settings.load_balancer_max_port_range, offset=63"}')  load_balancer_max_port_range  99999999999999999 
 
    ('code=400', 'error={"message":"Max Tracked Dme Clients must be greater than 0"}')  max_tracked_dme_clients  0
    ('code=400', 'error={"message":"Max Tracked Dme Clients must be greater than 0"}')  max_tracked_dme_clients  -1
@@ -362,7 +363,7 @@ Settings - user shall be able to reset the settings
 
    Should Not Contain          ${settings_post}  master_node_flavor
 
-   Should Be Equal As Numbers  ${settings_post['load_balancer_max_port_range']}                        50
+#   Should Be Equal As Numbers  ${settings_post['load_balancer_max_port_range']}                        50
    Should Be Equal As Numbers  ${settings_post['max_tracked_dme_clients']}                             100
    Should Be Equal             ${settings_post['chef_client_interval']}                                10m0s
    Should Be Equal             ${settings_post['cloudlet_maintenance_timeout']}                        5m0s
