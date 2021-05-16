@@ -14,6 +14,7 @@ Test Timeout  5m
 ${region}=  US
 
 *** Test Cases ***
+# removed checks for load_balancer_max_port_range. It was removed when started restricing the upd/tcp ports to different values
 # ECQ-2984
 Settings - mcctl shall be able to show the settings
    [Documentation]
@@ -32,7 +33,7 @@ Settings - mcctl shall be able to show the settings
    Should Contain  ${settings}  delete_app_inst_timeout
    Should Contain  ${settings}  delete_cluster_inst_timeout
    Should Contain  ${settings}  influx_db_metrics_retention
-   Should Contain  ${settings}  load_balancer_max_port_range
+#   Should Contain  ${settings}  load_balancer_max_port_range
    Should Contain  ${settings}  master_node_flavor
    Should Contain  ${settings}  max_tracked_dme_clients
    Should Contain  ${settings}  shepherd_alert_evaluation_interval
@@ -59,7 +60,9 @@ Settings - mcctl shall be able to update the settings
    Run mcctl  settings update region=${region} shepherdhealthcheckinterval=1s
    Run mcctl  settings update region=${region} autodeployintervalsec=1 autodeployoffsetsec=1 autodeploymaxintervals=1
    Run mcctl  settings update region=${region} createappinsttimeout=1m0s updateappinsttimeout=1m0s deleteappinsttimeout=1m0s createclusterinsttimeout=1m0s updateclusterinsttimeout=1m0s deleteclusterinsttimeout=1m0s
-   Run mcctl  settings update region=${region} masternodeflavor=x1.medium loadbalancermaxportrange=1 maxtrackeddmeclients=1 chefclientinterval=1m0s influxdbmetricsretention=100h0m0s cloudletmaintenancetimeout=1s updatevmpooltimeout=1s
+#   Run mcctl  settings update region=${region} masternodeflavor=x1.medium loadbalancermaxportrange=1 maxtrackeddmeclients=1 chefclientinterval=1m0s influxdbmetricsretention=100h0m0s cloudletmaintenancetimeout=1s updatevmpooltimeout=1s
+   Run mcctl  settings update region=${region} masternodeflavor=x1.medium maxtrackeddmeclients=1 chefclientinterval=1m0s influxdbmetricsretention=100h0m0s cloudletmaintenancetimeout=1s updatevmpooltimeout=1s
+
 
    ${settings_post}=  Run mcctl  settings show region=${region}
 
@@ -80,7 +83,7 @@ Settings - mcctl shall be able to update the settings
    Should Be Equal  ${settings_post['delete_cluster_inst_timeout']}  1m0s
 
    Should Be Equal             ${settings_post['master_node_flavor']}            x1.medium
-   Should Be Equal As Numbers  ${settings_post['load_balancer_max_port_range']}  1
+#   Should Be Equal As Numbers  ${settings_post['load_balancer_max_port_range']}  1
    Should Be Equal As Numbers  ${settings_post['max_tracked_dme_clients']}       1
    Should Be Equal             ${settings_post['chef_client_interval']}          1m0s
    Should Be Equal             ${settings_post['influx_db_metrics_retention']}   100h0m0s
@@ -158,11 +161,11 @@ Settings - mcctl shall handle update settings failures
 
       Flavor must preexist  masternodeflavor=xx
 
-      Load Balancer Max Port Range must be greater than 0  loadbalancermaxportrange=0
-      Unable to parse "loadbalancermaxportrange" value "x" as int: invalid syntax  loadbalancermaxportrange=x
-      Load Balancer Max Port Range must be greater than 0  loadbalancermaxportrange=-1
-      Load Balancer Max Port Range must be less than 65536  loadbalancermaxportrange=70000
-      Unable to parse "loadbalancermaxportrange" value "99999999999999999" as int: value out of range  loadbalancermaxportrange=99999999999999999
+#      Load Balancer Max Port Range must be greater than 0  loadbalancermaxportrange=0
+#      Unable to parse "loadbalancermaxportrange" value "x" as int: invalid syntax  loadbalancermaxportrange=x
+#      Load Balancer Max Port Range must be greater than 0  loadbalancermaxportrange=-1
+#      Load Balancer Max Port Range must be less than 65536  loadbalancermaxportrange=70000
+#      Unable to parse "loadbalancermaxportrange" value "99999999999999999" as int: value out of range  loadbalancermaxportrange=99999999999999999
 
       Max Tracked Dme Clients must be greater than 0  maxtrackeddmeclients=0
       Max Tracked Dme Clients must be greater than 0  maxtrackeddmeclients=-1
@@ -224,7 +227,7 @@ Settings - mcctl shall be able to reset the settings
 
    Should Not Contain          ${settings_post}  master_node_flavor
 
-   Should Be Equal As Numbers  ${settings_post['load_balancer_max_port_range']}  50 
+#   Should Be Equal As Numbers  ${settings_post['load_balancer_max_port_range']}  50 
    Should Be Equal As Numbers  ${settings_post['max_tracked_dme_clients']}       100
    Should Be Equal             ${settings_post['chef_client_interval']}          10m0s
    Should Be Equal             ${settings_post['cloudlet_maintenance_timeout']}  5m0s 
