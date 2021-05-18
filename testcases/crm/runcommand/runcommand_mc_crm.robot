@@ -30,7 +30,7 @@ RunCommand - k8s shared shall return command result on CRM
     ...  verify RunCommand works 
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  flavor_name=${cluster_flavor_name}  deployment=kubernetes  ip_access=IpAccessShared
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  #flavor_name=${cluster_flavor_name}
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
@@ -56,7 +56,7 @@ RunCommand - k8s dedicated shall return command result on CRM
     ...  verify RunCommand works
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  flavor_name=${cluster_flavor_name}  deployment=kubernetes  ip_access=IpAccessDedicated
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  #flavor_name=${cluster_flavor_name}
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
@@ -84,7 +84,7 @@ RunCommand - docker dedicated shall return command result on CRM
     ...  verify RunCommand works
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  flavor_name=${cluster_flavor_name}  deployment=docker  ip_access=IpAccessDedicated
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=docker  ip_access=IpAccessDedicated  #flavor_name=${cluster_flavor_name}
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment=docker  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
@@ -112,7 +112,7 @@ RunCommand - docker shared shall return command result on CRM
     ...  verify RunCommand works
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  flavor_name=${cluster_flavor_name}  deployment=docker  ip_access=IpAccessShared
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=docker  ip_access=IpAccessShared  #flavor_name=${cluster_flavor_name}
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment=docker  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
@@ -141,7 +141,7 @@ RunCommand - docker dedicated idle timeout shall be 30min on CRM
     ...  - verify RunCommand returns back in 30mins which is the idle timeout value
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  flavor_name=${cluster_flavor_name}  deployment=docker  ip_access=IpAccessDedicated
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=docker  ip_access=IpAccessDedicated  #flavor_name=${cluster_flavor_name}
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment=docker  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
