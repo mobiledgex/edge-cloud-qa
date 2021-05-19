@@ -82,7 +82,7 @@ DMEPersistentConnection - Location Update edge event without lat/long shall retu
     [Documentation]
     ...  - make DME persistent connection
     ...  - send Location Update Edge Event without lat/long
-    ...  - verify response has new cloudlet
+    ...  - verify response has proper error
 
     [Tags]  DMEPersistentConnection
 
@@ -99,6 +99,32 @@ DMEPersistentConnection - Location Update edge event without lat/long shall retu
 
     Should Contain  ${error}  event_type: EVENT_ERROR
     Should Contain  ${error}  "Invalid EVENT_LOCATION_UPDATE, invalid location: rpc error: code = InvalidArgument desc = Missing GpsLocation"
+
+# ECQ-3402
+DMEPersistentConnection - Location Update edge event with invalid lat/long shall return error
+    [Documentation]
+    ...  - make DME persistent connection
+    ...  - send Location Update Edge Event with out of range lat/long
+    ...  - verify response has proper error
+
+    [Tags]  DMEPersistentConnection
+
+    ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
+    ${cloudlet}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=31  longitude=-96
+
+    Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+    Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+    Should Be Equal  ${cloudlet.fqdn}  tmocloud-2.dmuus.mobiledgex.net
+
+    Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
+
+    ${error}=  Run Keyword and Expect Error  *  Send Location Update Edge Event  latitude=91  longitude=-91
+    Should Contain  ${error}  event_type: EVENT_ERROR
+    Should Contain  ${error}  "Invalid EVENT_LOCATION_UPDATE, invalid location: rpc error: code = InvalidArgument desc = Invalid GpsLocation"
+
+    ${error2}=  Run Keyword and Expect Error  *  Send Location Update Edge Event  latitude=31  longitude=-181
+    Should Contain  ${error2}  event_type: EVENT_ERROR
+    Should Contain  ${error2}  "Invalid EVENT_LOCATION_UPDATE, invalid location: rpc error: code = InvalidArgument desc = Invalid GpsLocation"
 
 # ECQ-3348
 DMEPersistentConnection - Shall be able to make another Persistent Connection after Location Update edge event
