@@ -281,9 +281,9 @@ DMEPersistentConnection - Latency edge event with device info shall return stati
     ${min}=  Evaluate  min(@{samples})
     ${max}=  Evaluate  max(@{samples})
 
-    Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96  carrier_name=dmuus  data_network_type=6G  device_os=Android  device_model=Google Pixel  signal_strength=65
+    Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96  carrier_name=dmuus  data_network_type=5G  device_os=Android  device_model=Google Pixel  signal_strength=65
 
-    ${latency}=  Send Latency Edge Event  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96  samples=${samples}  carrier_name=dmuus  data_network_type=6G  device_os=Android  device_model=Google Pixel  signal_strength=75
+    ${latency}=  Send Latency Edge Event  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96  samples=${samples}  carrier_name=dmuus  data_network_type=5G  device_os=Android  device_model=Google Pixel  signal_strength=75
 
     ${latency_avg}=  Evaluate  round(${latency.statistics.avg})
     ${latency_std_dev}=  Evaluate  round(${latency.statistics.std_dev})
