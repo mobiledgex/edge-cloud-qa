@@ -135,8 +135,6 @@ class StreamEdgeEvent():
                 self.session_cookie = session_cookie_global
             if not edge_events_cookie:
                 self.edge_events_cookie = edge_events_cookie_global
-            #if not carrier_name:
-            #    self.carrier_name = shared_variables.operator_name_default
 
         loc_dict = {}
         if self.latitude is not None:
@@ -565,6 +563,42 @@ class MexDme(MexGrpc):
 
         if request.event_type != app_client_pb2.ServerEdgeEvent.EVENT_LATENCY_REQUEST:
             raise Exception(f'stream edge event request error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_LATENCY_REQUEST}, got {request}')
+
+    def receive_appinst_health_check_ok_event(self):
+        event = self.receive_edge_event()
+        print('*WARN*', event, event.health_check, event.error_msg)
+        if event.event_type != app_client_pb2.ServerEdgeEvent.EVENT_APPINST_HEALTH:
+            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_APPINST_HEALTH}, got {event}')
+        if event.health_check != appcommon_pb2.HEALTH_CHECK_OK:
+            raise Exception(f'stream edge event error. expected health_check: {appcommon_pb2.HEALTH_CHECK_OK}, got {event}')
+        if event.error_msg:
+            raise Exception(event.error_msg)
+
+        return event.new_cloudlet
+
+    def receive_appinst_health_check_server_fail_event(self):
+        event = self.receive_edge_event()
+        print('*WARN*', event, event.health_check, event.error_msg)
+        if event.event_type != app_client_pb2.ServerEdgeEvent.EVENT_APPINST_HEALTH:
+            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_APPINST_HEALTH}, got {event}')
+        if event.health_check != appcommon_pb2.HEALTH_CHECK_FAIL_SERVER_FAIL:
+            raise Exception(f'stream edge event error. expected health_check: {appcommon_pb2.HEALTH_CHECK_FAIL_SERVER_FAIL}, got {event}')
+        if event.error_msg:
+            raise Exception(event.error_msg)
+
+        return event.new_cloudlet
+
+    def receive_appinst_health_check_rootlb_offline_event(self):
+        event = self.receive_edge_event()
+        print('*WARN*', event, event.health_check, event.error_msg)
+        if event.event_type != app_client_pb2.ServerEdgeEvent.EVENT_APPINST_HEALTH:
+            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_APPINST_HEALTH}, got {event}')
+        if event.health_check != appcommon_pb2.HEALTH_CHECK_FAIL_ROOTLB_OFFLINE:
+            raise Exception(f'stream edge event error. expected health_check: {appcommon_pb2.HEALTH_CHECK_FAIL_ROOTLB_OFFLINE}, got {event}')
+        if event.error_msg:
+            raise Exception(event.error_msg)
+
+        return event.new_cloudlet
 
     def platform_find_cloudlet(self, find_cloudlet_obj=None, **kwargs):
         resp = None
