@@ -140,3 +140,21 @@ DMEPersistentConnection - persistent connection without GPS shall fail
 
    Should Contain  ${error}  status = StatusCode.UNKNOWN
    Should Contain  ${error}  details = "A valid location is required in EVENT_INIT_CONNECTION - error is rpc error: code = InvalidArgument desc = Missing GpsLocation"
+
+# ECQ-3404
+DMEPersistentConnection - persistent connection with invalid GPS shall fail
+  [Documentation]
+   ...  - make DME persistent connection with invalid GPS
+   ...  - verify error is received
+
+   ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
+   ${cloudlet}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=36  longitude=-96
+
+   ${error}=  Run Keyword And Expect Error  *  Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=91  longitude=-96
+   Should Contain  ${error}  status = StatusCode.UNKNOWN
+   Should Contain  ${error}  details = "A valid location is required in EVENT_INIT_CONNECTION - error is rpc error: code = InvalidArgument desc = Invalid GpsLocation"
+
+   ${error2}=  Run Keyword And Expect Error  *  Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-960
+   Should Contain  ${error2}  status = StatusCode.UNKNOWN
+   Should Contain  ${error2}  details = "A valid location is required in EVENT_INIT_CONNECTION - error is rpc error: code = InvalidArgument desc = Invalid GpsLocation"
+
