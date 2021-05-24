@@ -343,15 +343,15 @@ UpdateCloudlet - error shall be received for update to trusted with nontrusted a
    ${appinst}=  Create App Instance  region=${region}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
 
    # update cloudlet with trust policy and remove the policy
-   Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
-   Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${Empty}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${oper}  trust_policy=${policy_name}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${oper}  trust_policy=${Empty}
 
    # create a nontrusted app/appinst on the cloudlet
    ${app}=  Create App  region=${region}  app_name=${app_name}_untrusted
    ${appinst}=  Create App Instance  region=${region}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
 
    # update cloudlet with trust policy
-   ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
+   ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${oper}  trust_policy=${policy_name}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Non trusted app: organization:\\\\"automation_dev_org\\\\" name:\\\\"${app['data']['key']['name']}\\\\" version:\\\\"1.0\\\\" not compatible with trust policy: organization:\\\\"${oper}\\\\" name:\\\\"${policy_name}\\\\" "}')
 
 # ECQ-3393
@@ -396,7 +396,7 @@ UpdateCloudlet - error shall be received for update to trusted with trusted app 
    ${appt}=  Update App  region=${region}  trusted=${True}  required_outbound_connections_list=${tcp1_rulelist}
 
    # update cloudlet with trust policy
-   ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
+   ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  cloudlet_name=${cloudlet['data']['key']['name']}  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection udp:3.1.1.1:1000 for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${app['data']['key']['name']}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
 
 # ECQ-3098
