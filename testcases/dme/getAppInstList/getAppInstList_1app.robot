@@ -15,6 +15,7 @@ ${mobile_latitude}  1
 ${mobile_longitude}  1
 
 *** Test Cases ***
+# ECQ-1055
 GetAppInstList - request shall return 1 app
     [Documentation]
     ...  registerClient
@@ -46,6 +47,16 @@ GetAppInstList - request shall return 1 app
       Length Should Be   ${appfqdns}  1
       Length Should Be   ${appfqdns[0].appinstances}  1
       Length Should Be   ${appfqdns[0].appinstances[0].ports}  1
+
+      ${decoded_edge_cookie}=  Decode Cookie  ${appfqdns[0].appinstances[0].edge_events_cookie}
+
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['latitude']}   ${mobile_latitude}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['longitude']}  ${mobile_longitude}
+      Should Be True  ${decoded_edge_cookie['exp']} - ${decoded_edge_cookie['iat']} == 600
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletname']}  ${dmuus_appinst.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletorg']}  ${dmuus_appinst.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal  ${decoded_edge_cookie['key']['clustername']}  ${dmuus_appinst.key.cluster_inst_key.cluster_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['clusterorg']}  ${dmuus_appinst.key.cluster_inst_key.organization}
 
 *** Keywords ***
 Setup
