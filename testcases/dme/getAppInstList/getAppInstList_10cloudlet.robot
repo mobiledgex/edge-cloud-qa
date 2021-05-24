@@ -105,6 +105,14 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[8].appinstances[0].ports[0].internal_port}  ${azure_appinst.mapped_ports[0].internal_port}
       Should Be Equal             ${appfqdns[8].appinstances[0].ports[0].public_port}    ${azure_appinst.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[8].appinstances[0].ports[0].fqdn_prefix}    ${azure_appinst.mapped_ports[0].fqdn_prefix}
+      ${decoded_edge_cookie}=  Decode Cookie  ${appfqdns[8].appinstances[0].edge_events_cookie}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['latitude']}   ${mobile_latitude}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['longitude']}  ${mobile_longitude}
+      Should Be True  ${decoded_edge_cookie['exp']} - ${decoded_edge_cookie['iat']} == 600
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletname']}  ${azure_appinst.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletorg']}  ${azure_appinst.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal  ${decoded_edge_cookie['key']['clustername']}  ${azure_appinst.key.cluster_inst_key.cluster_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['clusterorg']}  ${azure_appinst.key.cluster_inst_key.organization}
 
       Should Be Equal             ${appfqdns[9].carrier_name}                             ${gcp_appinst.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[9].cloudlet_name}                            ${gcp_appinst.key.cluster_inst_key.cloudlet_key.name}
@@ -118,6 +126,14 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[9].appinstances[0].ports[0].internal_port}  ${gcp_appinst.mapped_ports[0].internal_port}
       Should Be Equal             ${appfqdns[9].appinstances[0].ports[0].public_port}    ${gcp_appinst.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[9].appinstances[0].ports[0].fqdn_prefix}    ${gcp_appinst.mapped_ports[0].fqdn_prefix}
+      ${decoded_edge_cookie}=  Decode Cookie  ${appfqdns[9].appinstances[0].edge_events_cookie}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['latitude']}   ${mobile_latitude}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['longitude']}  ${mobile_longitude}
+      Should Be True  ${decoded_edge_cookie['exp']} - ${decoded_edge_cookie['iat']} == 600
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletname']}  ${gcp_appinst.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletorg']}  ${gcp_appinst.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal  ${decoded_edge_cookie['key']['clustername']}  ${gcp_appinst.key.cluster_inst_key.cluster_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['clusterorg']}  ${gcp_appinst.key.cluster_inst_key.organization}
 
       Should Be Equal             ${appfqdns[6].carrier_name}                             ${dmuus_appinst_1.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[6].cloudlet_name}                            ${dmuus_appinst_1.key.cluster_inst_key.cloudlet_key.name}
@@ -131,6 +147,14 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[6].appinstances[0].ports[0].internal_port}  ${dmuus_appinst_1.mapped_ports[0].internal_port}
       Should Be Equal             ${appfqdns[6].appinstances[0].ports[0].public_port}    ${dmuus_appinst_1.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[6].appinstances[0].ports[0].fqdn_prefix}    ${dmuus_appinst_1.mapped_ports[0].fqdn_prefix}
+      ${decoded_edge_cookie}=  Decode Cookie  ${appfqdns[6].appinstances[0].edge_events_cookie}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['latitude']}   ${mobile_latitude}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['longitude']}  ${mobile_longitude}
+      Should Be True  ${decoded_edge_cookie['exp']} - ${decoded_edge_cookie['iat']} == 600
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletname']}  ${dmuus_appinst_1.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletorg']}  ${dmuus_appinst_1.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal  ${decoded_edge_cookie['key']['clustername']}  ${dmuus_appinst_1.key.cluster_inst_key.cluster_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['clusterorg']}  ${dmuus_appinst_1.key.cluster_inst_key.organization}
 
       Should Be Equal             ${appfqdns[7].carrier_name}                             ${dmuus_appinst_2.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[7].cloudlet_name}                            ${dmuus_appinst_2.key.cluster_inst_key.cloudlet_key.name}
@@ -144,6 +168,14 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[7].appinstances[0].ports[0].internal_port}  ${dmuus_appinst_2.mapped_ports[0].internal_port}
       Should Be Equal             ${appfqdns[7].appinstances[0].ports[0].public_port}    ${dmuus_appinst_2.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[7].appinstances[0].ports[0].fqdn_prefix}    ${dmuus_appinst_2.mapped_ports[0].fqdn_prefix}
+      ${decoded_edge_cookie}=  Decode Cookie  ${appfqdns[7].appinstances[0].edge_events_cookie}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['latitude']}   ${mobile_latitude}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['longitude']}  ${mobile_longitude}
+      Should Be True  ${decoded_edge_cookie['exp']} - ${decoded_edge_cookie['iat']} == 600
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletname']}  ${dmuus_appinst_2.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletorg']}  ${dmuus_appinst_2.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal  ${decoded_edge_cookie['key']['clustername']}  ${dmuus_appinst_2.key.cluster_inst_key.cluster_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['clusterorg']}  ${dmuus_appinst_2.key.cluster_inst_key.organization}
 
       Should Be Equal             ${appfqdns[0].carrier_name}                             ${dmuus_appinst_3.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${dmuus_appinst_3.key.cluster_inst_key.cloudlet_key.name}
@@ -157,6 +189,14 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].internal_port}  ${dmuus_appinst_3.mapped_ports[0].internal_port}
       Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].public_port}    ${dmuus_appinst_3.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].fqdn_prefix}    ${dmuus_appinst_3.mapped_ports[0].fqdn_prefix}
+      ${decoded_edge_cookie}=  Decode Cookie  ${appfqdns[0].appinstances[0].edge_events_cookie}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['latitude']}   ${mobile_latitude}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['longitude']}  ${mobile_longitude}
+      Should Be True  ${decoded_edge_cookie['exp']} - ${decoded_edge_cookie['iat']} == 600
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletname']}  ${dmuus_appinst_3.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletorg']}  ${dmuus_appinst_3.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal  ${decoded_edge_cookie['key']['clustername']}  ${dmuus_appinst_3.key.cluster_inst_key.cluster_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['clusterorg']}  ${dmuus_appinst_3.key.cluster_inst_key.organization}
 
       Should Be Equal             ${appfqdns[1].carrier_name}                             ${dmuus_appinst_4.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[1].cloudlet_name}                            ${dmuus_appinst_4.key.cluster_inst_key.cloudlet_key.name}
@@ -170,6 +210,14 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].internal_port}  ${dmuus_appinst_4.mapped_ports[0].internal_port}
       Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].public_port}    ${dmuus_appinst_4.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].fqdn_prefix}    ${dmuus_appinst_4.mapped_ports[0].fqdn_prefix}
+      ${decoded_edge_cookie}=  Decode Cookie  ${appfqdns[1].appinstances[0].edge_events_cookie}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['latitude']}   ${mobile_latitude}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['longitude']}  ${mobile_longitude}
+      Should Be True  ${decoded_edge_cookie['exp']} - ${decoded_edge_cookie['iat']} == 600
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletname']}  ${dmuus_appinst_4.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletorg']}  ${dmuus_appinst_4.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal  ${decoded_edge_cookie['key']['clustername']}  ${dmuus_appinst_4.key.cluster_inst_key.cluster_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['clusterorg']}  ${dmuus_appinst_4.key.cluster_inst_key.organization}
 
       Should Be Equal             ${appfqdns[2].carrier_name}                             ${dmuus_appinst_5.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[2].cloudlet_name}                            ${dmuus_appinst_5.key.cluster_inst_key.cloudlet_key.name}
@@ -183,6 +231,14 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].internal_port}  ${dmuus_appinst_5.mapped_ports[0].internal_port}
       Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].public_port}    ${dmuus_appinst_5.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].fqdn_prefix}    ${dmuus_appinst_5.mapped_ports[0].fqdn_prefix}
+      ${decoded_edge_cookie}=  Decode Cookie  ${appfqdns[2].appinstances[0].edge_events_cookie}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['latitude']}   ${mobile_latitude}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['longitude']}  ${mobile_longitude}
+      Should Be True  ${decoded_edge_cookie['exp']} - ${decoded_edge_cookie['iat']} == 600
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletname']}  ${dmuus_appinst_5.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletorg']}  ${dmuus_appinst_5.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal  ${decoded_edge_cookie['key']['clustername']}  ${dmuus_appinst_5.key.cluster_inst_key.cluster_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['clusterorg']}  ${dmuus_appinst_5.key.cluster_inst_key.organization}
 
       Should Be Equal             ${appfqdns[3].carrier_name}                             ${dmuus_appinst_6.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[3].cloudlet_name}                            ${dmuus_appinst_6.key.cluster_inst_key.cloudlet_key.name}
@@ -196,6 +252,14 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[3].appinstances[0].ports[0].internal_port}  ${dmuus_appinst_6.mapped_ports[0].internal_port}
       Should Be Equal             ${appfqdns[3].appinstances[0].ports[0].public_port}    ${dmuus_appinst_6.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[3].appinstances[0].ports[0].fqdn_prefix}    ${dmuus_appinst_6.mapped_ports[0].fqdn_prefix}
+      ${decoded_edge_cookie}=  Decode Cookie  ${appfqdns[3].appinstances[0].edge_events_cookie}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['latitude']}   ${mobile_latitude}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['longitude']}  ${mobile_longitude}
+      Should Be True  ${decoded_edge_cookie['exp']} - ${decoded_edge_cookie['iat']} == 600
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletname']}  ${dmuus_appinst_6.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletorg']}  ${dmuus_appinst_6.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal  ${decoded_edge_cookie['key']['clustername']}  ${dmuus_appinst_6.key.cluster_inst_key.cluster_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['clusterorg']}  ${dmuus_appinst_6.key.cluster_inst_key.organization}
 
       Should Be Equal             ${appfqdns[4].carrier_name}                             ${dmuus_appinst_7.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[4].cloudlet_name}                            ${dmuus_appinst_7.key.cluster_inst_key.cloudlet_key.name}
@@ -209,6 +273,14 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[4].appinstances[0].ports[0].internal_port}  ${dmuus_appinst_7.mapped_ports[0].internal_port}
       Should Be Equal             ${appfqdns[4].appinstances[0].ports[0].public_port}    ${dmuus_appinst_7.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[4].appinstances[0].ports[0].fqdn_prefix}    ${dmuus_appinst_7.mapped_ports[0].fqdn_prefix}
+      ${decoded_edge_cookie}=  Decode Cookie  ${appfqdns[4].appinstances[0].edge_events_cookie}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['latitude']}   ${mobile_latitude}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['longitude']}  ${mobile_longitude}
+      Should Be True  ${decoded_edge_cookie['exp']} - ${decoded_edge_cookie['iat']} == 600
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletname']}  ${dmuus_appinst_7.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletorg']}  ${dmuus_appinst_7.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal  ${decoded_edge_cookie['key']['clustername']}  ${dmuus_appinst_7.key.cluster_inst_key.cluster_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['clusterorg']}  ${dmuus_appinst_7.key.cluster_inst_key.organization}
 
       Should Be Equal             ${appfqdns[5].carrier_name}                             ${dmuus_appinst_8.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[5].cloudlet_name}                            ${dmuus_appinst_8.key.cluster_inst_key.cloudlet_key.name}
@@ -222,6 +294,14 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[5].appinstances[0].ports[0].internal_port}  ${dmuus_appinst_8.mapped_ports[0].internal_port}
       Should Be Equal             ${appfqdns[5].appinstances[0].ports[0].public_port}    ${dmuus_appinst_8.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[5].appinstances[0].ports[0].fqdn_prefix}    ${dmuus_appinst_8.mapped_ports[0].fqdn_prefix}
+      ${decoded_edge_cookie}=  Decode Cookie  ${appfqdns[5].appinstances[0].edge_events_cookie}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['latitude']}   ${mobile_latitude}
+      Should Be Equal As Numbers  ${decoded_edge_cookie['key']['location']['longitude']}  ${mobile_longitude}
+      Should Be True  ${decoded_edge_cookie['exp']} - ${decoded_edge_cookie['iat']} == 600
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletname']}  ${dmuus_appinst_8.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['cloudletorg']}  ${dmuus_appinst_8.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal  ${decoded_edge_cookie['key']['clustername']}  ${dmuus_appinst_8.key.cluster_inst_key.cluster_key.name}
+      Should Be Equal  ${decoded_edge_cookie['key']['clusterorg']}  ${dmuus_appinst_8.key.cluster_inst_key.organization}
 
       Length Should Be   ${appfqdns}  10
       Length Should Be   ${appfqdns[0].appinstances}  1
