@@ -391,6 +391,7 @@ class MexDme(MexGrpc):
     def __init__(self, dme_address='127.0.0.1:50051', root_cert='mex-ca.crt', key='localserver.key', client_cert='localserver.crt'):
         self.session_cookie = None
         self._decoded_session_cookie = None
+        self._decoded_edge_events_cookie = None
         self._token_server_uri = None
 
         self.edge_event_queue = queue.SimpleQueue()
@@ -415,6 +416,9 @@ class MexDme(MexGrpc):
 
     def decoded_client_token(self):
         return self._decoded_client_token
+
+    def decoded_edge_events_cookie(self):
+        return self._decoded_edge_events_cookie
 
     def token_server_uri(self):
         return self._token_server_uri
@@ -459,6 +463,8 @@ class MexDme(MexGrpc):
             raise Exception('find cloudlet not found:{}'.format(str(resp)))
 
         edge_events_cookie_global = resp.edge_events_cookie
+
+        self._decoded_edge_events_cookie = jwt.decode(resp.edge_events_cookie, verify=False)
 
         return resp
 
@@ -784,6 +790,9 @@ class MexDme(MexGrpc):
         d = radius * c
 
         return d
+
+    def decode_cookie(self, cookie):
+        return jwt.decode(cookie, verify=False)
 
     def _findFile(self, path):
         for dirname in sys.path:
