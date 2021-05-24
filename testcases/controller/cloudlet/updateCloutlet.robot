@@ -238,7 +238,7 @@ UpdateCloudlet - shall be able to update cloudlet with trust policy
    Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
 
    # update cloudlet with new trust policy
-   ${cloudlet_update}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}_2
+   ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}_2
    Should Be Equal             ${cloudlet_update['data']['trust_policy']}  ${policy_name}_2
    Should Be Equal As Numbers  ${cloudlet_update['data']['trust_policy_state']}  5	
 
@@ -274,7 +274,7 @@ UpdateCloudlet - shall be able to add trust policy to cloudlet
    Should Not Contain             ${cloudlet['data']}  trust_policy
 
    # update cloudlet with new trust policy
-   ${cloudlet_update}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
+   ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
    Should Be Equal             ${cloudlet_update['data']['trust_policy']}  ${policy_name}
    Should Be Equal As Numbers  ${cloudlet_update['data']['trust_policy_state']}  5
 
@@ -311,6 +311,6 @@ UpdateCloudlet - shall be able to remove trust policy from cloudlet
    Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
 
    # update cloudlet with empty trust policy
-   ${cloudlet_update}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${Empty}
+   ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  trust_policy=${Empty}
    Should Not Contain             ${cloudlet_update['data']}  trust_policy
    Should Be Equal As Numbers  ${cloudlet_update['data']['trust_policy_state']}  1
