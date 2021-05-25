@@ -70,7 +70,7 @@ node('jenkinsSlave1'){
             def jobName = jobList1Parallel[i];
             echo "i1=" + jobName
             builds1[jobName] = {
-               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'MasterController', value: mastercontroller), string(name: 'VariableFile', value: variables), string(name: 'DMERest', value: dmerest), string(name: 'DMERestCert', value: dmerestcert)]
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'MasterController', value: mastercontroller), string(name: 'VariableFile', value: variables), string(name: 'DMERest', value: dmerest), string(name: 'DMERestCert', value: dmerestcert), string(name: 'RunFailedOnly', value: runfailedonly)]
 	    }
          }
 
@@ -87,7 +87,7 @@ node('jenkinsSlave1'){
             def jobName = jobList2Parallel[i];
             echo "i1=" + jobName
             builds2[jobName] = {
-               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'MasterController', value: mastercontroller), string(name: 'DMERest', value: dmerest), string(name: 'DMERestCert', value: dmerestcert)]
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'MasterController', value: mastercontroller), string(name: 'DMERest', value: dmerest), string(name: 'DMERestCert', value: dmerestcert), string(name: 'RunFailedOnly', value: runfailedonly)]
 	    }
          }
 
