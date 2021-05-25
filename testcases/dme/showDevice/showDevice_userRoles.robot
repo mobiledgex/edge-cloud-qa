@@ -5,7 +5,7 @@ Library  MexDmeRest     dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
 Library  DateTime
 
-Test Setup      Setup
+#Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
 *** Variables ***
@@ -27,9 +27,11 @@ showDevice - OperatorManager shall be not able to ShowDevice/ShowDeviceReport
 
    ${epoch}=  Get Time  epoch
 
-   ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-   Set Suite Variable  ${orgname}
-   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorManager    token=${user_token}     use_defaults=${False}
+   #${orgname}=  Create Org  token=${user_token}  orgtype=operator
+   #Set Suite Variable  ${orgname}
+   #${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorManager    token=${user_token}     use_defaults=${False}
+
+   ${user_token2}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device         token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device Report  token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
@@ -43,9 +45,11 @@ showDevice - OperatorContributor shall be not able to ShowDevice/ShowDeviceRepor
 
    ${epoch}=  Get Time  epoch
 
-   ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-   Set Suite Variable  ${orgname}
-   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorContributor    token=${user_token}     use_defaults=${False}
+#   ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+#   Set Suite Variable  ${orgname}
+#   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorContributor    token=${user_token}     use_defaults=${False}
+
+   ${user_token2}=  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device         token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device Report  token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
@@ -59,9 +63,11 @@ showDevice - OperatorViewer shall be not able to ShowDevice/ShowDeviceReport
 
    ${epoch}=  Get Time  epoch
 
-   ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-   Set Suite Variable  ${orgname}
-   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorViewer    token=${user_token}     use_defaults=${False}
+#   ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+#   Set Suite Variable  ${orgname}
+#   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorViewer    token=${user_token}     use_defaults=${False}
+
+   ${user_token2}=  Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device         token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device Report  token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
@@ -75,9 +81,11 @@ showDevice - DeveloperManager shall be not able to ShowDevice/ShowDeviceReport
 
    ${epoch}=  Get Time  epoch
 
-   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
-   Set Suite Variable  ${orgname}
-   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperManager    token=${user_token}     use_defaults=${False}
+#   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#   Set Suite Variable  ${orgname}
+#   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperManager    token=${user_token}     use_defaults=${False}
+
+   ${user_token2}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device         token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device Report  token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
@@ -91,9 +99,11 @@ showDevice - DeveloperContributor shall be not able to ShowDevice/ShowDeviceRepo
 
    ${epoch}=  Get Time  epoch
 
-   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
-   Set Suite Variable  ${orgname}
-   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperContributor    token=${user_token}     use_defaults=${False}
+#   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#   Set Suite Variable  ${orgname}
+#   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperContributor    token=${user_token}     use_defaults=${False}
+
+   ${user_token2}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device         token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device Report  token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
@@ -107,9 +117,11 @@ showDevice - DeveloperViewer shall be not able to ShowDevice/ShowDeviceReport
 
    ${epoch}=  Get Time  epoch
 
-   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
-   Set Suite Variable  ${orgname}
-   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperViewer    token=${user_token}     use_defaults=${False}
+#   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#   Set Suite Variable  ${orgname}
+#   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperViewer    token=${user_token}     use_defaults=${False}
+
+   ${user_token2}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device         token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device Report  token=${user_token2}  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}
@@ -124,6 +136,8 @@ showDevice - AdminManager shall be able to ShowDevice/ShowDeviceReport
    [Setup]  Admin Setup
 
    ${epoch}=  Get Time  epoch
+
+   ${admin_token}=  Login  username=${admin_manager_username}  password=${admin_manager_password}
 
    Register Client  developer_org_name=${developer_org_name_automation}  app_name=${app_name_automation}  unique_id=${epoch}  unique_id_type=${platos_org}
 
