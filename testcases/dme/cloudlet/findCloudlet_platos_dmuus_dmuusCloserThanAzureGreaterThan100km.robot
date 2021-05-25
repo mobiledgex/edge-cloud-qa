@@ -86,6 +86,9 @@ FindCloudlet platos - request shall return dmuus with azure cloudlet provisioned
       Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}
 
       ${fqdn}=  Get App Official FQDN  latitude=34  longitude=-96
+      Should Be Equal  ${fqdn.ports[0].proto}  ${dmuus_appinst.mapped_ports[0].proto}
+      Should Be Equal  ${fqdn.ports[0].internal_port}  ${dmuus_appinst.mapped_ports[0].internal_port}
+      Length Should Be  ${fqdn.ports}  1
 
       ${decoded_client_token}=  Decoded Client Token
       Should Be Equal  ${decoded_client_token['AppKey']['organization']}  ${developer_name_default}
