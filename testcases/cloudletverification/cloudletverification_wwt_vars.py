@@ -23,16 +23,49 @@ test_timeout = '32 min'
 # this is the controller region used to run the tests
 region = 'US'
 
+#from automation vars for nightly
+mextester99_gmail_password = 'rfbixqomqidobmcb'
+mextester06_gmail_password = 'thequickbrownfoxjumpedoverthelazydog9$'
+mexadmin_password = 'mexadminfastedgecloudinfra'
+admin_manager_username = 'qaadmin'
+admin_manager_password = mexadmin_password
+admin_manager_email = 'mxdmnqa@gmail.com'
+op_manager_user_automation = 'op_manager_automation'
+op_contributor_user_automation = 'op_contributor_automation'
+op_viewer_user_automation = 'op_viewer_automation'
+dev_manager_user_automation = 'dev_manager_automation'
+dev_contributor_user_automation = 'dev_contributor_automation'
+dev_viewer_user_automation = 'dev_viewer_automation'
+op_manager_password_automation = 'thequickbrownfoxjumpedoverthelazydog9$'
+op_contributor_password_automation = op_manager_password_automation
+op_viewer_password_automation = op_manager_password_automation
+dev_manager_password_automation = op_manager_password_automation
+dev_contributor_password_automation = op_manager_password_automation
+dev_viewer_password_automation = op_manager_password_automation
+
+
 
 # account information qa 
-username_mexadmin = 'mexadmin'
-password_mexadmin = 'mexadminfastedgecloudinfra'
-username_developer = 'andyanderson'
-password_developer = 'mexadminfastedgecloudinfra'
-username_operator = 'andyanderson'
-password_operator = 'mexadminfastedgecloudinfra'
+#username_mexadmin = 'mexadmin'
+#password_mexadmin = 'mexadminfastedgecloudinfra'
+username_mexadmin = admin_manager_username
+password_mexadmin = admin_manager_password
+
+
+#username_developer = 'andyanderson'
+#password_developer = 'mexadminfastedgecloudinfra'
+username_developer = 'cloudletverification_developer'
+password_developer = 'Thequickbrownfoxjumpedoverthelazydog9$'
+
+
+#username_operator = 'andyanderson'
+#password_operator = 'mexadminfastedgecloudinfra'
+username_operator = 'cloudletverification_op_manager'
+password_operator = 'Thequickbrownfoxjumpedoverthelazydog9$'
+
 #developer_organization_name = 'tomdev'
 developer_organization_name = 'MobiledgeX'
+
 
 
 
