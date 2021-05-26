@@ -23,17 +23,42 @@ test_timeout = '32 min'
 # this is the controller region used to run the tests
 region = 'US'
 
+#from automation vars for nightly
+mextester99_gmail_password = 'rfbixqomqidobmcb'
+mextester06_gmail_password = 'thequickbrownfoxjumpedoverthelazydog9$'
+mexadmin_password = 'mexadminfastedgecloudinfra'
+admin_manager_username = 'qaadmin'
+admin_manager_password = mexadmin_password
+admin_manager_email = 'mxdmnqa@gmail.com'
+op_manager_user_automation = 'op_manager_automation'
+op_contributor_user_automation = 'op_contributor_automation'
+op_viewer_user_automation = 'op_viewer_automation'
+dev_manager_user_automation = 'dev_manager_automation'
+dev_contributor_user_automation = 'dev_contributor_automation'
+dev_viewer_user_automation = 'dev_viewer_automation'
+op_manager_password_automation = 'thequickbrownfoxjumpedoverthelazydog9$'
+op_contributor_password_automation = op_manager_password_automation
+op_viewer_password_automation = op_manager_password_automation
+dev_manager_password_automation = op_manager_password_automation
+dev_contributor_password_automation = op_manager_password_automation
+dev_viewer_password_automation = op_manager_password_automation
 
-# account information qa 
-username_mexadmin = 'mexadmin'
-password_mexadmin = 'mexadminfastedgecloudinfra'
-username_developer = 'andyanderson'
-password_developer = 'mexadminfastedgecloudinfra'
-username_operator = 'andyanderson'
-password_operator = 'mexadminfastedgecloudinfra'
+# account information qa
+#username_mexadmin = 'mexadmin'
+#password_mexadmin = 'mexadminfastedgecloudinfra'
+username_mexadmin = admin_manager_username
+password_mexadmin = admin_manager_password
+
+
+username_developer = 'cloudletverification_developer'
+password_developer = 'Thequickbrownfoxjumpedoverthelazydog9$'
+
+
+username_operator = 'cloudletverification_op_manager'
+password_operator = 'Thequickbrownfoxjumpedoverthelazydog9$'
+
 #developer_organization_name = 'tomdev'
 developer_organization_name = 'MobiledgeX'
-
 
 
 # test will create flavors or not.  Requires mexadmin username/password.  Sometimes flavors will be predefined and we wont have permissions to create our own
@@ -66,9 +91,9 @@ cloudlet_nsx_type = 'VCD_NSX_TYPE=NSX-V'
 
 # for VCD qa2org /28
 cloudlet_name = 'automation-qa2-vcd-01'
-#physical_name = 'qa2-lab' pre oauth testing and secret does not have oauth use this for negative testing
-physical_name = 'qa2-lab-oauth'
-cloudlet_vdc_template = 'MEX_VDC_TEMPLATE=mobiledgex-v4.3.2-vcd'
+physical_name = 'qa2-lab' 
+#physical_name = 'qa2-lab-oauth'
+cloudlet_vdc_template = 'MEX_VDC_TEMPLATE=mobiledgex-v4.3.5-vcd'
 cloudlet_mex_catalog =  'MEX_CATALOG=qa2-cat'
 cloudlet_whitelist_in = 'MEX_CLOUDLET_FIREWALL_WHITELIST_EGRESS=protocol=tcp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=udp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=icmp,remotecidr=0.0.0.0/0;protocol=tcp,portrange=22,remotecidr=76.184.227.212/32;protocol=tcp,portrange=22,remotecidr=35.199.188.102/32'
 cloudlet_whitelist_eg = 'MEX_CLOUDLET_FIREWALL_WHITELIST_INGRESS=protocol=tcp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=udp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=icmp,remotecidr=0.0.0.0/0;protocol=tcp,portrange=22,remotecidr=76.184.227.212/32;protocol=tcp,portrange=22,remotecidr=35.199.188.102/32'
@@ -77,11 +102,12 @@ cloudlet_ext_netmask = 'MEX_EXTERNAL_NETWORK_MASK=28'
 #cloudlet_ext_gateway = 'MEX_EXTERNAL_NETWORK_GATEWAY=139.178.87.225'
 cloudlet_ext_network = 'MEX_EXT_NETWORK=external-network-qa2'
 cloudlet_image_disk_format = 'MEX_IMAGE_DISK_FORMAT=vmdk'
-cloudlet_ext_netscheme = 'MEX_NETWORK_SCHEME=cidr=10.102.X.0/24'
+# cloudlet_ext_netscheme = 'MEX_NETWORK_SCHEME=cidr=10.102.X.0/24' NOT NEEDED IN VCD
+cloudlet_vcd_upload_timeout = 'VCD_UPLOAD_RESP_HEADER_TIMEOUT=30'
 
 #vcd format
 #removing envvar=MEX_EXTERNAL_NETWORK_GATEWAY=139.178.87.225 cloudlet_ext_gateway
-cloudlet_env_vars= f'{cloudlet_datastore},{cloudlet_rootlb_ram},{cloudlet_rootlb_disk},{cloudlet_rootlb_vcpus},{cloudlet_ext_netmask},{cloudlet_ext_netscheme},{cloudlet_ext_network},{cloudlet_image_disk_format},{cloudlet_vdc_template},{cloudlet_mex_catalog},{cloudlet_whitelist_in},{cloudlet_whitelist_eg},{cloudlet_nsx_type}'
+cloudlet_env_vars= f'{cloudlet_vcd_upload_timeout},{cloudlet_datastore},{cloudlet_rootlb_ram},{cloudlet_rootlb_disk},{cloudlet_rootlb_vcpus},{cloudlet_ext_netmask},{cloudlet_ext_network},{cloudlet_image_disk_format},{cloudlet_vdc_template},{cloudlet_mex_catalog},{cloudlet_whitelist_in},{cloudlet_whitelist_eg},{cloudlet_nsx_type}'
 
 # docker image used for docker/k8s deployments
 docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
