@@ -448,6 +448,7 @@ User shall be able to access UDP/TCP/HTTP port on VM LB App
    #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['fqdn_prefix']}  ${http_page}
 
    Log To Console  \nChecking if port is alive
+   Sleep  30 s
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
    HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${http_page}
@@ -466,6 +467,7 @@ User shall be able to access UDP/TCP/HTTP port on VM direct App
    #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
 
    Log To Console  \nChecking if port is alive
+   Sleep  30 s
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
    HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${http_page}
