@@ -23,5 +23,5 @@ CreateClusterInst - create a clusterinst with org that doesnot exist should fail
 #    ${body}=  Response Body
 
     Should Contain  ${error}  code=400
-    Should Contain  ${error}  error={"message":"org notexist not found"} 
+    Should Contain  ${error}  error={"message":"Org notexist not found"} 
 
