@@ -95,7 +95,7 @@ DMEPersistentConnection - shall be able to receive appinst health events
 
    # receive the Health Check Server Fail Event with error
    ${finderror}=  Run Keyword and Expect Error  *  Receive Appinst Health Check Server Fail Event
-   Should Be Equal  ${finderror}  Current appinst is unusable, but unable to find any cloudlets - FindStatus is FIND_NOTFOUND
+   Should Be Equal  ${finderror}  Current appinst is unusable. Unable to find any cloudlets doing FindCloudlet - FindStatus is FIND_NOTFOUND
 
    # start the port back to clear the error
    Start TCP Port  ${fqdn_0}  ${cloudlet.ports[0].public_port}
@@ -113,19 +113,19 @@ DMEPersistentConnection - shall be able to receive appinst health events
 
    # receive the Health Check Server Fail Event with new cloudlet
    log to console  waiting for event
-   ${new_cloudlet}=  Receive Appinst Health Check Server Fail Event
-   log to console  ${new_cloudlet.fqdn}
-   Should Be Equal As Numbers  ${new_cloudlet.status}  1  #FIND_FOUND
-   Should Be Equal             ${new_cloudlet.fqdn}  ${appinst2['data']['uri']}
-   Should Be Equal As Numbers  ${new_cloudlet.cloudlet_location.latitude}   ${appinst2['data']['cloudlet_loc']['latitude']}
-   Should Be Equal As Numbers  ${new_cloudlet.cloudlet_location.longitude}  ${appinst2['data']['cloudlet_loc']['longitude']}
-   Should Be Equal As Numbers  ${new_cloudlet.ports[0].proto}  ${appinst2['data']['mapped_ports'][0]['proto']}  #LProtoTCP
-   Should Be Equal As Numbers  ${new_cloudlet.ports[0].internal_port}  ${appinst2['data']['mapped_ports'][0]['internal_port']}
-   Should Be Equal As Numbers  ${new_cloudlet.ports[0].public_port}  ${appinst2['data']['mapped_ports'][0]['public_port']}
-   Should Be Equal As Numbers  ${new_cloudlet.ports[1].proto}  ${appinst2['data']['mapped_ports'][1]['proto']}  #LProtoTCP
-   Should Be Equal As Numbers  ${new_cloudlet.ports[1].internal_port}  ${appinst2['data']['mapped_ports'][1]['internal_port']}
-   Should Be Equal As Numbers  ${new_cloudlet.ports[1].public_port}  ${appinst2['data']['mapped_ports'][1]['public_port']}
-   Should Be True  len('${new_cloudlet.edge_events_cookie}') > 100
+   ${new_cloudlet0}=  Receive Appinst Health Check Server Fail Event
+   log to console  ${new_cloudlet0}
+   Should Be Equal As Numbers  ${new_cloudlet0.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be Equal             ${new_cloudlet0.new_cloudlet.fqdn}  ${appinst2['data']['uri']}
+   Should Be Equal As Numbers  ${new_cloudlet0.new_cloudlet.cloudlet_location.latitude}   ${appinst2['data']['cloudlet_loc']['latitude']}
+   Should Be Equal As Numbers  ${new_cloudlet0.new_cloudlet.cloudlet_location.longitude}  ${appinst2['data']['cloudlet_loc']['longitude']}
+   Should Be Equal As Numbers  ${new_cloudlet0.new_cloudlet.ports[0].proto}  ${appinst2['data']['mapped_ports'][0]['proto']}  #LProtoTCP
+   Should Be Equal As Numbers  ${new_cloudlet0.new_cloudlet.ports[0].internal_port}  ${appinst2['data']['mapped_ports'][0]['internal_port']}
+   Should Be Equal As Numbers  ${new_cloudlet0.new_cloudlet.ports[0].public_port}  ${appinst2['data']['mapped_ports'][0]['public_port']}
+   Should Be Equal As Numbers  ${new_cloudlet0.new_cloudlet.ports[1].proto}  ${appinst2['data']['mapped_ports'][1]['proto']}  #LProtoTCP
+   Should Be Equal As Numbers  ${new_cloudlet0.new_cloudlet.ports[1].internal_port}  ${appinst2['data']['mapped_ports'][1]['internal_port']}
+   Should Be Equal As Numbers  ${new_cloudlet0.new_cloudlet.ports[1].public_port}  ${appinst2['data']['mapped_ports'][1]['public_port']}
+   Should Be True  len('${new_cloudlet0.new_cloudlet.edge_events_cookie}') > 100
 
    # start the port back to clear the error
    Start TCP Port  ${fqdn_0}  ${cloudlet.ports[0].public_port}
@@ -141,18 +141,18 @@ DMEPersistentConnection - shall be able to receive appinst health events
    # receive the Health Check Server Fail Event with new cloudlet
    ${new_cloudlet1}=  Receive Appinst Health Check Rootlb Offline Event
    log to console  ${new_cloudlet1.fqdn}
-   Should Be Equal As Numbers  ${new_cloudlet1.status}  1  #FIND_FOUND
-   Should Be Equal             ${new_cloudlet1.fqdn}  ${appinst2['data']['uri']}
-   Should Be Equal As Numbers  ${new_cloudlet1.cloudlet_location.latitude}   ${appinst2['data']['cloudlet_loc']['latitude']}
-   Should Be Equal As Numbers  ${new_cloudlet1.cloudlet_location.longitude}  ${appinst2['data']['cloudlet_loc']['longitude']}
-   Should Be Equal As Numbers  ${new_cloudlet1.ports[0].proto}  ${appinst2['data']['mapped_ports'][0]['proto']}  #LProtoTCP
-   Should Be Equal As Numbers  ${new_cloudlet1.ports[0].internal_port}  ${appinst2['data']['mapped_ports'][0]['internal_port']}
-   Should Be Equal As Numbers  ${new_cloudlet1.ports[0].public_port}  ${appinst2['data']['mapped_ports'][0]['public_port']}
-   Should Be Equal As Numbers  ${new_cloudlet1.ports[1].proto}  ${appinst2['data']['mapped_ports'][1]['proto']}  #LProtoTCP
-   Should Be Equal As Numbers  ${new_cloudlet1.ports[1].internal_port}  ${appinst2['data']['mapped_ports'][1]['internal_port']}
-   Should Be Equal As Numbers  ${new_cloudlet1.ports[1].public_port}  ${appinst2['data']['mapped_ports'][1]['public_port']}
-   Should Be True  len('${new_cloudlet1.edge_events_cookie}') > 100
-   Should Not Be Equal  ${new_cloudlet.edge_events_cookie}  ${new_cloudlet1.edge_events_cookie}
+   Should Be Equal As Numbers  ${new_cloudlet1.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be Equal             ${new_cloudlet1.new_cloudlet.fqdn}  ${appinst2['data']['uri']}
+   Should Be Equal As Numbers  ${new_cloudlet1.new_cloudlet.cloudlet_location.latitude}   ${appinst2['data']['cloudlet_loc']['latitude']}
+   Should Be Equal As Numbers  ${new_cloudlet1.new_cloudlet.cloudlet_location.longitude}  ${appinst2['data']['cloudlet_loc']['longitude']}
+   Should Be Equal As Numbers  ${new_cloudlet1.new_cloudlet.ports[0].proto}  ${appinst2['data']['mapped_ports'][0]['proto']}  #LProtoTCP
+   Should Be Equal As Numbers  ${new_cloudlet1.new_cloudlet.ports[0].internal_port}  ${appinst2['data']['mapped_ports'][0]['internal_port']}
+   Should Be Equal As Numbers  ${new_cloudlet1.new_cloudlet.ports[0].public_port}  ${appinst2['data']['mapped_ports'][0]['public_port']}
+   Should Be Equal As Numbers  ${new_cloudlet1.new_cloudlet.ports[1].proto}  ${appinst2['data']['mapped_ports'][1]['proto']}  #LProtoTCP
+   Should Be Equal As Numbers  ${new_cloudlet1.new_cloudlet.ports[1].internal_port}  ${appinst2['data']['mapped_ports'][1]['internal_port']}
+   Should Be Equal As Numbers  ${new_cloudlet1.new_cloudlet.ports[1].public_port}  ${appinst2['data']['mapped_ports'][1]['public_port']}
+   Should Be True  len('${new_cloudlet1.new_cloudlet.edge_events_cookie}') > 100
+   Should Not Be Equal  ${new_cloudlet0.new_cloudlet.edge_events_cookie}  ${new_cloudlet1.new_cloudlet.edge_events_cookie}
 
    # start rootlb back to clear the error
    Start Docker Container Rootlb   root_loadbalancer=${clusterlb}
@@ -166,19 +166,19 @@ DMEPersistentConnection - shall be able to receive appinst health events
    # receive the Health Check Server Fail Event with new cloudlet
    ${new_cloudlet2}=  Receive Appinst Health Check Server Fail Event
    log to console  ${new_cloudlet2.fqdn}
-   Should Be Equal As Numbers  ${new_cloudlet2.status}  1  #FIND_FOUND
-   Should Be Equal             ${new_cloudlet2.fqdn}  ${appinst2['data']['uri']}
-   Should Be Equal As Numbers  ${new_cloudlet2.cloudlet_location.latitude}   ${appinst2['data']['cloudlet_loc']['latitude']}
-   Should Be Equal As Numbers  ${new_cloudlet2.cloudlet_location.longitude}  ${appinst2['data']['cloudlet_loc']['longitude']}
-   Should Be Equal As Numbers  ${new_cloudlet2.ports[0].proto}  ${appinst2['data']['mapped_ports'][0]['proto']}  #LProtoTCP
-   Should Be Equal As Numbers  ${new_cloudlet2.ports[0].internal_port}  ${appinst2['data']['mapped_ports'][0]['internal_port']}
-   Should Be Equal As Numbers  ${new_cloudlet2.ports[0].public_port}  ${appinst2['data']['mapped_ports'][0]['public_port']}
-   Should Be Equal As Numbers  ${new_cloudlet2.ports[1].proto}  ${appinst2['data']['mapped_ports'][1]['proto']}  #LProtoTCP
-   Should Be Equal As Numbers  ${new_cloudlet2.ports[1].internal_port}  ${appinst2['data']['mapped_ports'][1]['internal_port']}
-   Should Be Equal As Numbers  ${new_cloudlet2.ports[1].public_port}  ${appinst2['data']['mapped_ports'][1]['public_port']}
-   Should Be True  len('${new_cloudlet2.edge_events_cookie}') > 100
-   Should Not Be Equal  ${new_cloudlet.edge_events_cookie}  ${new_cloudlet2.edge_events_cookie}
-   Should Not Be Equal  ${new_cloudlet1.edge_events_cookie}  ${new_cloudlet2.edge_events_cookie}
+   Should Be Equal As Numbers  ${new_cloudlet2.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be Equal             ${new_cloudlet2.new_cloudlet.fqdn}  ${appinst2['data']['uri']}
+   Should Be Equal As Numbers  ${new_cloudlet2.new_cloudlet.cloudlet_location.latitude}   ${appinst2['data']['cloudlet_loc']['latitude']}
+   Should Be Equal As Numbers  ${new_cloudlet2.new_cloudlet.cloudlet_location.longitude}  ${appinst2['data']['cloudlet_loc']['longitude']}
+   Should Be Equal As Numbers  ${new_cloudlet2.new_cloudlet.ports[0].proto}  ${appinst2['data']['mapped_ports'][0]['proto']}  #LProtoTCP
+   Should Be Equal As Numbers  ${new_cloudlet2.new_cloudlet.ports[0].internal_port}  ${appinst2['data']['mapped_ports'][0]['internal_port']}
+   Should Be Equal As Numbers  ${new_cloudlet2.new_cloudlet.ports[0].public_port}  ${appinst2['data']['mapped_ports'][0]['public_port']}
+   Should Be Equal As Numbers  ${new_cloudlet2.new_cloudlet.ports[1].proto}  ${appinst2['data']['mapped_ports'][1]['proto']}  #LProtoTCP
+   Should Be Equal As Numbers  ${new_cloudlet2.new_cloudlet.ports[1].internal_port}  ${appinst2['data']['mapped_ports'][1]['internal_port']}
+   Should Be Equal As Numbers  ${new_cloudlet2.new_cloudlet.ports[1].public_port}  ${appinst2['data']['mapped_ports'][1]['public_port']}
+   Should Be True  len('${new_cloudlet2.new_cloudlet.edge_events_cookie}') > 100
+   Should Not Be Equal  ${new_cloudlet0.new_cloudlet.edge_events_cookie}  ${new_cloudlet2.new_cloudlet.edge_events_cookie}
+   Should Not Be Equal  ${new_cloudlet1.new_cloudlet.edge_events_cookie}  ${new_cloudlet2.new_cloudlet.edge_events_cookie}
 
    # create persist connection to new cloudlet
    Create DME Persistent Connection  edge_events_cookie=${new_cloudlet2.edge_events_cookie}  latitude=36  longitude=-96
