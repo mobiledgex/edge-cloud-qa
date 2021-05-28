@@ -82,27 +82,27 @@ AppMetrics - get with no token name shall return error
    # cpu
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=cpu  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"no bearer token found"}
+   Should Contain  ${error}  {"message":"No bearer token found"}
 
    # mem
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=mem  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"no bearer token found"}
+   Should Contain  ${error2}  {"message":"No bearer token found"}
 
    # network
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=network  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  last=1  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"no bearer token found"}
+   Should Contain  ${error2}  {"message":"No bearer token found"}
 
    #connections 
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=connections  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  last=1  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"no bearer token found"}
+   Should Contain  ${error2}  {"message":"No bearer token found"}
 
    # disk
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=disk  app_name=automation_api_app  app_version=1.0  last=1  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"no bearer token found"}
+   Should Contain  ${error2}  {"message":"No bearer token found"}
 
 AppMetrics - get with no selector name shall return error
    [Documentation]
@@ -372,20 +372,20 @@ AppMetrics - get without region shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  selector=cpu  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"no region specified"}
+   Should Contain  ${error}  {"message":"No region specified"}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  selector=disk  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"no region specified"}
+   Should Contain  ${error}  {"message":"No region specified"}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  selector=mem  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"no region specified"}
+   Should Contain  ${error}  {"message":"No region specified"}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  selector=connections  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"no region specified"}
+   Should Contain  ${error}  {"message":"No region specified"}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  selector=network  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"no region specified"}
+   Should Contain  ${error}  {"message":"No region specified"}
