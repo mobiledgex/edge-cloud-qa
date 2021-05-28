@@ -36,7 +36,7 @@ ${dme_conn_lat}=  ${cloud11_lat}
 ${dme_conn_long}=  ${cloud11_long}
 
 *** Test Cases ***
-# ECQ-3241
+# ECQ-
 DMEMetrics - Shall be able to get the last DME Client App Latency metric
    [Documentation]
    ...  request DME RegisterClient metrics with last=1
