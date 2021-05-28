@@ -111,7 +111,7 @@ MC - User shall not be able to change their password without a token
 	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}     use_defaults=${False}
 
 	Should Contain    ${error}   Code = 400	
-	Should Contain    ${error}   Body={"message":"no bearer token found"}
+	Should Contain    ${error}   Body={"message":"No bearer token found"}
 	
 
 # ECQ-2752
@@ -123,7 +123,7 @@ MC - User shall not be able to change their password with an empty token
 	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}     token=${EMPTY}    use_defaults=${False}
 
 	Should Contain    ${error}   Code = 400	
-	Should Contain    ${error}   Body={"message":"no bearer token found"}
+	Should Contain    ${error}   Body={"message":"No bearer token found"}
 	
 
 # ECQ-2753
@@ -135,7 +135,7 @@ MC - User shall not be able to change their password with a bad token
 	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}     token=thisisabadtoken     use_defaults=${False}
 
 	Should Contain    ${error}   Code = 401	
-	Should Contain    ${error}   Body={"message":"invalid or expired jwt"}
+	Should Contain    ${error}   Body={"message":"Invalid or expired jwt"}
 	
 	
 # ECQ-2754
@@ -147,7 +147,7 @@ MC - User shall not be able to change their password with an expired token
 	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}     token=${expToken}     use_defaults=${False}
 
 	Should Contain    ${error}   Code = 401	
-	Should Contain    ${error}   Body={"message":"invalid or expired jwt"}
+	Should Contain    ${error}   Body={"message":"Invalid or expired jwt"}
 	
 
 # ECQ-2755

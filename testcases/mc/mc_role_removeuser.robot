@@ -126,7 +126,7 @@ MC - Remove a user role from a user with a bad token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  401	
-	Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal             ${body}         {"message":"Invalid or expired jwt"}
 
 
 
