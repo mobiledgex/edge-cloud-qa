@@ -147,7 +147,7 @@ MC - User with invalid json shall not be able to login
    ${body}=         Response Body
 
    Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Invalid POST data, unexpected EOF"}
+   Should Be Equal             ${body}         {"message":"Invalid POST data, code=400, message=unexpected EOF"}
 
 # ECQ-3290
 MC - User with wrong parm name shall not be able to login
