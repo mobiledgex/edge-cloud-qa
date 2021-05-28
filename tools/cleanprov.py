@@ -281,7 +281,11 @@ def clean_cloudlet():
                      print(f'deleting {name}')
                      mc.delete_cloudlet(region=region, token=mc.super_token, cloudlet_name=name, operator_org_name=org, use_defaults=False)
                   except Exception as e:
-                     print(f'error deleting {name}, {e}.continuing to next item')
+                     print(f'error deleting, {e}.trying with override')
+                     try:
+                        mc.delete_cloudlet(region=region, token=mc.super_token, cloudlet_name=name, operator_org_name=org, use_defaults=False, crm_override='IgnoreCrmAndTransientState')
+                     except Exception as e:
+                        print(f'error deleting {name}, {e}.continuing to next item')
                else:
                   print(f'keeping {name} since doesnt match keypattern={key_pattern}')
 
