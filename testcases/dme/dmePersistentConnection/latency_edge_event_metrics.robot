@@ -35,7 +35,7 @@ ${dme_conn_lat}=  ${cloud1_lat}
 ${dme_conn_long}=  ${cloud1_long}
 
 *** Test Cases ***
-# ECQ-3241
+# ECQ-
 DMEMetrics - Shall be able to get the last DME Client App Latency metric
    [Documentation]
    ...  request DME RegisterClient metrics with last=1
@@ -250,7 +250,8 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with deviceo
    ...  request DME RegisterClient metrics with last=1
    ...  verify info is correct
 
-   ${metrics}=  Get client app usage metrics with deviceinfo   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo  device_os=${device_os}
+   #${metrics}=  Get client app usage metrics with deviceinfo   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo  device_os=${device_os}
+   ${metrics}=  Get client app usage metrics with deviceinfo   developer_org_name=${developer_org_name_automation}  selector=deviceinfo  device_os=${device_os}
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}  
 
@@ -265,7 +266,8 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with devicem
    ...  request DME RegisterClient metrics with last=1
    ...  verify info is correct
 
-   ${metrics}=  Get client app usage metrics with deviceinfo   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo  device_model=${device_model}
+   #${metrics}=  Get client app usage metrics with deviceinfo   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo  device_model=${device_model}
+   ${metrics}=  Get client app usage metrics with deviceinfo   developer_org_name=${developer_org_name_automation}  selector=deviceinfo  device_model=${device_model}
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
@@ -280,7 +282,8 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with datanet
    ...  request DME RegisterClient metrics with last=1
    ...  verify info is correct
 
-   ${metrics}=  Get client app usage metrics with deviceinfo   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo  data_network_type=${data_network_type}
+   #${metrics}=  Get client app usage metrics with deviceinfo   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo  data_network_type=${data_network_type}
+   ${metrics}=  Get client app usage metrics with deviceinfo   developer_org_name=${developer_org_name_automation}  selector=deviceinfo  data_network_type=${data_network_type}
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
@@ -295,7 +298,8 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with all dev
    ...  request DME RegisterClient metrics with last=1
    ...  verify info is correct
 
-   ${metrics}=  Get client app usage metrics with deviceinfo   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo  device_os=${device_os}  device_model=${device_model}  data_network_type=${data_network_type}
+   #${metrics}=  Get client app usage metrics with deviceinfo   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo  device_os=${device_os}  device_model=${device_model}  data_network_type=${data_network_type}
+   ${metrics}=  Get client app usage metrics with deviceinfo   developer_org_name=${developer_org_name_automation}  selector=deviceinfo  device_os=${device_os}  device_model=${device_model}  data_network_type=${data_network_type}
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
@@ -403,7 +407,7 @@ DMEMetrics - OperatorManager shall be able to get DME Client App DeviceInfo metr
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet1}  numsessions=2
+   #DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet1}  numsessions=2
    DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
@@ -429,8 +433,8 @@ DMEMetrics - OperatorContributor shall be able to get DME Client App DeviceInfo 
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  numsessions=2
+   #DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  numsessions=2
+   #DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  numsessions=2
    DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
@@ -456,8 +460,8 @@ DMEMetrics - OperatorViewer shall be able to get DME Client App DeviceInfo metri
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  numsessions=2
+   #DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  numsessions=2
+   #DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  numsessions=2
    DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
@@ -491,6 +495,8 @@ Setup
 
     @{cloudlet_list}=  Create List  tmocloud-2
     ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_list=${cloudlet_list}
+    Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}
+    Create Cloudlet Pool Access Response    region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}  decision=accept
 
     Create App  region=${region}  app_name=${app_name}1  access_ports=tcp:1
     Create App Instance  region=${region}  app_name=${app_name}1  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
@@ -543,14 +549,12 @@ Setup
     ${lu}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud2_lat}  longitude=${cloud2_long}  signal_strength=${signal_strength}  data_network_type=${data_network_type}
     Should Be Equal As Numbers  ${lu.new_cloudlet.status}  1  #FIND_FOUND
     Should Be Equal  ${lu.new_cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
-    # this one will be ignored in stats since it is the same gps and carrier
-    #${lu2}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud2_lat}  longitude=${cloud2_long}  signal_strength=${signal_strength}  data_network_type=${data_network_type}
-    #Should Be Equal As Numbers  ${lu2.new_cloudlet.status}  1  #FIND_FOUND
-    #Should Be Equal  ${lu2.new_cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
+    Create DME Persistent Connection  carrier_name=${carrier_name}  session_cookie=${r1.session_cookie}  edge_events_cookie=${lu.new_cloudlet.edge_events_cookie}  latitude=${cloud2_lat}  longitude=${cloud2_long}  device_os=${device_os}  device_model=${device_model}  signal_strength=${signal_strength}  data_network_type=${data_network_type}
     # this should increment numsessions to 2 since the gps is different
     ${lu3}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud1_long}  signal_strength=${signal_strength}  data_network_type=${data_network_type}
     Should Be Equal As Numbers  ${lu3.new_cloudlet.status}  1  #FIND_FOUND
     Should Be Equal  ${lu3.new_cloudlet.fqdn}  tmocloud-1.tmus.mobiledgex.net
+    Create DME Persistent Connection  carrier_name=${carrier_name}  session_cookie=${r1.session_cookie}  edge_events_cookie=${lu3.new_cloudlet.edge_events_cookie}  latitude=${cloud1_lat}  longitude=${cloud1_long}  device_os=${device_os}  device_model=${device_model}  signal_strength=${signal_strength}  data_network_type=${data_network_type}
     # this should increment numsessions to 3 since back to previous cloudlet
     ${lu4}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud2_lat}  longitude=${cloud2_long}  signal_strength=${signal_strength_2}  data_network_type=${data_network_type}
     Should Be Equal As Numbers  ${lu4.new_cloudlet.status}  1  #FIND_FOUND
@@ -771,18 +775,26 @@ DeviceInfo Values Should Be Correct
    FOR  ${i}  IN RANGE  0  ${count}
       #Length Should Be  ${metrics['data'][0]['Series'][${i}]['values']}  2
       ${len}=  Get Length  ${metrics['data'][0]['Series'][${i}]['values']}
-      Should Be True  ${len} == 1 or ${len} == 2
+      #Should Be True  ${len} == 1 or ${len} == 2
+      Should Be True  ${len} >= 1
    END
 
 App Should Be Found
-   [Arguments]  ${app_name}  ${cloudlet_name}  ${metrics}
+   [Arguments]  ${app_name}  ${cloudlet_name}  ${metrics}  ${numsessions}=${None}
 
    ${metric_found}=  Set Variable  ${None}
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
       FOR  ${v}  IN  @{m['values']}
           IF  '${v[1]}' == '${app_name}' and '${v[6]}' == '${cloudlet_name}'
-              ${metric_found}=  Set Variable  ${v}
-              Exit For Loop
+              IF  ${numsessions} != ${None}
+                  IF  ${v[11]} == ${numsessions}
+                      ${metric_found}=  Set Variable  ${v}
+                      Exit For Loop
+                  END
+              ELSE
+                  ${metric_found}=  Set Variable  ${v} 
+                  Exit For Loop
+              END
           END
           Exit For Loop If  ${metric_found} != ${None}
       END
@@ -838,7 +850,7 @@ Latency App Should Be Found
 DeviceInfo App Should Be Found
    [Arguments]  ${app_name}  ${metrics}  ${cloudlet}=${cloudlet2}  ${numsessions}=1  ${raw}=${False}
 
-   ${metric_found}=  App Should Be Found  ${app_name}  ${cloudlet}  ${metrics}
+   ${metric_found}=  App Should Be Found  ${app_name}  ${cloudlet}  ${metrics}  ${numsessions}
 
    Should Be Equal  ${metric_found[1]}  ${app_name}
    Should Be Equal  ${metric_found[2]}  ${developer_org_name_automation}
