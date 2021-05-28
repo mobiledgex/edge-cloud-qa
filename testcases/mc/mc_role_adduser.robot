@@ -368,7 +368,7 @@ MC - Assign a user role to a user without a token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"no bearer token found"}
+	Should Be Equal             ${body}         {"message":"No bearer token found"}
 
 # ECQ-3378
 MC - Assign a user role to a user with an empty token
@@ -382,7 +382,7 @@ MC - Assign a user role to a user with an empty token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"no bearer token found"}
+	Should Be Equal             ${body}         {"message":"No bearer token found"}
 
 # ECQ-3379
 MC - Assign a user role to a user with a bad token
@@ -396,7 +396,7 @@ MC - Assign a user role to a user with a bad token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  401	
-	Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal             ${body}         {"message":"Invalid or expired jwt"}
 
 # ECQ-3380
 MC - Assign a user role to a user with an expired token
@@ -410,7 +410,7 @@ MC - Assign a user role to a user with an expired token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  401	
-	Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal             ${body}         {"message":"Invalid or expired jwt"}
 
 *** Keywords ***
 Setup

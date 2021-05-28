@@ -33,7 +33,7 @@ CreateCloudlet with an invalid operator
         ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Run Keyword And Expect Error  ('code=400', 'error={"message":"org mcixx not found"}')  Create Cloudlet	cloudlet_name=${cldlet}  region=${region}   token=${token}    operator_org_name=mcixx     number_dynamic_ips=2      latitude=35.0     longitude=-96.0    use_defaults=False
+	Run Keyword And Expect Error  ('code=400', 'error={"message":"Org mcixx not found"}')  Create Cloudlet	cloudlet_name=${cldlet}  region=${region}   token=${token}    operator_org_name=mcixx     number_dynamic_ips=2      latitude=35.0     longitude=-96.0    use_defaults=False
 
 	#[Teardown]	Cleanup provisioning
 

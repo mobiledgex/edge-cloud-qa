@@ -22,8 +22,8 @@ CreateAlertReceiver - missing/invalid/empty parms shall return error
    [Template]  Fail Create Alert Receiver
 
    # no/invalid token
-   ('code\=400', 'error\={"message":"no bearer token found"}')   use_defaults=${False}  
-   ('code\=401', 'error\={"message":"invalid or expired jwt"}')  token=xx  use_defaults=${False}
+   ('code\=400', 'error\={"message":"No bearer token found"}')   use_defaults=${False}  
+   ('code\=401', 'error\={"message":"Invalid or expired jwt"}')  token=xx  use_defaults=${False}
 
    # no parms
    ('code\=400', 'error\={"message":"Receiver name has to be specified"}')  token=${super_token}  use_defaults=${False}
