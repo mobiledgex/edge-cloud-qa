@@ -33,7 +33,7 @@ CreateOperatorCode - create without region shall return error
     ${error}=  Run Keyword And Expect Error  *    Create Operator Code  operator_org_name=${operator_name}  code=${code}
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"no region specified"}
+   Should Contain   ${error}  error={"message":"No region specified"}
 
 CreateOperatorCode - create without code shall return error
    [Documentation]

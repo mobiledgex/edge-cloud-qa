@@ -226,7 +226,7 @@ MC - Shall not be able to create an org without a token
 	
 	Should Be Equal As Numbers   ${status_code}  400	
 	#Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
-        Should Be Equal              ${body}  {"message":"no bearer token found"}
+        Should Be Equal              ${body}  {"message":"No bearer token found"}
 
 # ECQ-1293
 MC - Shall not be able to create an org with an empty token	
@@ -239,7 +239,7 @@ MC - Shall not be able to create an org with an empty token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  400	
-	Should Be Equal              ${body}         {"message":"no bearer token found"}
+	Should Be Equal              ${body}         {"message":"No bearer token found"}
 
 # ECQ-1620
 MC - Shall not be able to create an org with a bad token	
@@ -252,7 +252,7 @@ MC - Shall not be able to create an org with a bad token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  401	
-	Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal              ${body}         {"message":"Invalid or expired jwt"}
 
 # ECQ-1621
 MC - Shall not be able to create an org with an expired token	
@@ -265,7 +265,7 @@ MC - Shall not be able to create an org with an expired token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  401	
-	Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal              ${body}         {"message":"Invalid or expired jwt"}
 
 *** Keywords ***
 Setup
