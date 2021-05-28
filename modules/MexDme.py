@@ -20,7 +20,7 @@ import loc_pb2
 import appcommon_pb2
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
-logger = logging.getLogger('mex_dme')
+logger = logging.getLogger(__name__)
 
 auth_token_global = None
 session_cookie_global = None
@@ -395,6 +395,7 @@ class MexDme(MexGrpc):
         self._token_server_uri = None
 
         self.edge_event_queue = queue.SimpleQueue()
+        print('*WARN*', 'init', self.edge_event_queue)
         self.edge_event_stream = None
 
         self.client_token = None
@@ -473,6 +474,7 @@ class MexDme(MexGrpc):
 
         self.edge_event_stream = None
         self.edge_event_queue = queue.SimpleQueue()
+        print('*WARN*', 'create', self.edge_event_queue)
 
         if not client_edge_event_obj:
             kwargs['event_type'] = 1
@@ -484,12 +486,14 @@ class MexDme(MexGrpc):
         logger.info('stream created')
         self.edge_event_queue.put(request)
         logger.info('stream in queue')
-
+        print('*WARN*',self.edge_event_queue)
         try:
             response = next(self.edge_event_stream)
         except Exception as e:
             self.edge_event_stream = None
             self.edge_event_queue = queue.SimpleQueue()
+            print('*WARN*', 'except', self.edge_event_queue)
+
             raise Exception(e)
 
         logger.info(f'response={response}')
@@ -505,7 +509,7 @@ class MexDme(MexGrpc):
             request = StreamEdgeEvent(**kwargs).request
 
         logger.info('terminate dme persistent connection on {}. \n\t{}'.format(self.address, str(request).replace('\n', '\n\t')))
-
+        print('*WARN*',request, self.edge_event_queue)
         self.edge_event_queue.put(request)
 
         try:
@@ -580,7 +584,7 @@ class MexDme(MexGrpc):
         if event.error_msg:
             raise Exception(event.error_msg)
 
-        return event.new_cloudlet
+        return event
 
     def receive_appinst_health_check_server_fail_event(self):
         event = self.receive_edge_event()
@@ -592,7 +596,7 @@ class MexDme(MexGrpc):
         if event.error_msg:
             raise Exception(event.error_msg)
 
-        return event.new_cloudlet
+        return event
 
     def receive_appinst_health_check_rootlb_offline_event(self):
         event = self.receive_edge_event()
@@ -604,7 +608,73 @@ class MexDme(MexGrpc):
         if event.error_msg:
             raise Exception(event.error_msg)
 
-        return event.new_cloudlet
+        return event
+
+    def receive_cloudlet_maintenance_event(self, state=None):
+        event = self.receive_edge_event()
+
+        if event.event_type != app_client_pb2.ServerEdgeEvent.EVENT_CLOUDLET_MAINTENANCE:
+            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_CLOUDLET_MAINTENANCE}, got {event}')
+        if state:
+            if state == 'FAILOVER_REQUESTED':
+                if event.maintenance_state != appcommon_pb2.FAILOVER_REQUESTED:
+                    raise Exception(f'stream edge event error. expected maintenance_state: {appcommon_pb2.FAILOVER_REQUESTED}, got {event}')
+            elif state == 'CRM_REQUESTED':
+                if event.maintenance_state != appcommon_pb2.CRM_REQUESTED:
+                    raise Exception(f'stream edge event error. expected maintenance_state: {appcommon_pb2.CRM_REQUESTED}, got {event}')
+            elif state == 'UNDER_MAINTENANCE':
+                if event.maintenance_state != appcommon_pb2.UNDER_MAINTENANCE:
+                    raise Exception(f'stream edge event error. expected maintenance_state: {appcommon_pb2.UNDER_MAINTENANCE}, got {event}')
+            elif state == 'NORMAL_OPERATION_INIT':
+                if event.maintenance_state != appcommon_pb2.NORMAL_OPERATION_INIT:
+                    raise Exception(f'stream edge event error. expected maintenance_state: {appcommon_pb2.NORMAL_OPERATION_INIT}, got {event}')
+            elif state == 'NORMAL_OPERATION':
+                if event.maintenance_state:  # cant currently check the value since it is 0 and 0 doesnt show
+                    raise Exception(f'stream edge event error. expected maintenance_state: {appcommon_pb2.NORMAL_OPERATION}, got {event}')
+            else:
+                raise Exception(f'stream edge event error. expected unknown maintenance_state, got {event}')
+        else:
+            logger.info('not checking maintenance state')
+        if event.error_msg:
+            raise Exception(event.error_msg)
+
+        return event
+
+    def receive_cloudlet_state_event(self, state=None):
+        event = self.receive_edge_event()
+
+        if event.event_type != app_client_pb2.ServerEdgeEvent.EVENT_CLOUDLET_STATE:
+            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_CLOUDLET_MAINTENANCE}, got {event}')
+        if state:
+            if state == 'CloudletStateUnknown' or state == 'CLOUDLET_STATE_UNKNOWN':
+                if event.cloudlet_state:  # cant currently check the value since it is 0 and 0 doesnt show
+                    raise Exception(f'stream edge event error. expected state: {appcommon_pb2.CLOUDLET_STATE_UNKNOWN}, got {event}')
+            elif state == 'CloudletStateErrors' or state == 'CLOUDLET_STATE_ERRORS':
+                if event.cloudlet_state != appcommon_pb2.CLOUDLET_STATE_ERRORS:
+                    raise Exception(f'stream edge event error. expected state: {appcommon_pb2.CLOUDLET_STATE_ERRORS}, got {event}')
+            elif state == 'CloudletStateOffline' or state == 'CLOUDLET_STATE_OFFLINE':
+                if event.cloudlet_state != appcommon_pb2.CLOUDLET_STATE_OFFLINE:
+                    raise Exception(f'stream edge event error. expected state: {appcommon_pb2.CLOUDLET_STATE_OFFLINE}, got {event}')
+            elif state == 'CloudletStateNotPresent' or state == 'CLOUDLET_STATE_NOT_PRESENT':
+                if event.cloudlet_state != appcommon_pb2.CLOUDLET_STATE_NOT_PRESENT:
+                    raise Exception(f'stream edge event error. expected state: {appcommon_pb2.CLOUDLET_STATE_NOT_PRESENT}, got {event}')
+            elif state == 'CloudletStateInit' or state == 'CLOUDLET_STATE_INIT':
+                if event.cloudlet_state != appcommon_pb2.CLOUDLET_STATE_INIT:
+                    raise Exception(f'stream edge event error. expected state: {appcommon_pb2.CLOUDLET_STATE_INIT}, got {event}')
+            elif state == 'CloudletStateUpgrade' or state == 'CLOUDLET_STATE_UPGRADE':
+                if event.cloudlet_state != appcommon_pb2.CLOUDLET_STATE_UPGRADE:
+                    raise Exception(f'stream edge event error. expected state: {appcommon_pb2.CLOUDLET_STATE_UPGRADE}, got {event}')
+            elif state == 'CloudletStateNeedSync' or state == 'CLOUDLET_STATE_NEED_SYNC':
+                if event.cloudlet_state != appcommon_pb2.CLOUDLET_STATE_NEED_SYNC:
+                    raise Exception(f'stream edge event error. expected state: {appcommon_pb2.CLOUDLET_STATE_NEED_SYNC}, got {event}')
+            else:
+                raise Exception(f'stream edge event error. expected unknown state, got {event}')
+        else:
+            logger.info('not checking state')
+        if event.error_msg:
+            raise Exception(event.error_msg)
+
+        return event
 
     def platform_find_cloudlet(self, find_cloudlet_obj=None, **kwargs):
         resp = None
