@@ -6,7 +6,7 @@ Library  Collections
 Library  DateTime
 
 Test Setup  Setup
-#Test Teardown  Cleanup Provisioning
+Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${organization}=  tmus
@@ -33,6 +33,8 @@ CreateCloudletPoolAccess - OperatorManager shall be able to see developer cluste
    ${c}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name_fake}  developer_org_name=${devorg1}
    ${ac}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_name=autocluster33
    ${ap}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
+   ${publicc}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=tmocloud-2  developer_org_name=${devorg1}
+   ${publica}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=tmocloud-2  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
  
    @{pools}=  Show Cloudlet Pool  region=${region}  token=${op_token}  use_defaults=${False}
    @{cloudlet_list}=  Get Cloudlets From Pools  ${pools}
@@ -76,6 +78,8 @@ CreateCloudletPoolAccess - OperatorContributor shall be able to see developer cl
    ${c}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name_fake}  developer_org_name=${devorg1}
    ${ac}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_name=autocluster33
    ${ap}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
+   ${publicc}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=tmocloud-2  developer_org_name=${devorg1}
+   ${publica}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=tmocloud-2  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
 
    @{pools}=  Show Cloudlet Pool  region=${region}  token=${opcon_token}  use_defaults=${False}
    @{cloudlet_list}=  Get Cloudlets From Pools  ${pools}
@@ -119,6 +123,8 @@ CreateCloudletPoolAccess - OperatorViewer shall be able to see developer cluster
    ${c}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name_fake}  developer_org_name=${devorg1}
    ${ac}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_name=autocluster33
    ${ap}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
+   ${publicc}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=tmocloud-2  developer_org_name=${devorg1}
+   ${publica}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=tmocloud-2  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
 
    @{pools}=  Show Cloudlet Pool  region=${region}  token=${opview_token}  use_defaults=${False}
    @{cloudlet_list}=  Get Cloudlets From Pools  ${pools}
