@@ -84,28 +84,28 @@ Get client app usage metrics with locationtile
 Get client app usage metrics with rawdata
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  raw_data=${True}  last=1
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  raw_data=${True}  #last=1
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  1
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
 
    [Return]  ${metrics}
 
 Get client app usage metrics with deviceinfo
-   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}  ${device_os}=${None}  ${device_model}=${None}  ${data_network_type}=${None}
+   [Arguments]  ${developer_org_name}  ${selector}  ${app_name}=${None}  ${app_version}=${None}  ${device_os}=${None}  ${device_model}=${None}  ${data_network_type}=${None}
 
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  device_os=${device_os}  device_model=${device_model}  data_network_type=${data_network_type}  last=1
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  device_os=${device_os}  device_model=${device_model}  data_network_type=${data_network_type}  last=20
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  1
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
 
    [Return]  ${metrics}
 	
@@ -542,7 +542,7 @@ Get client app usage metrics with starttime and endtime and last
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and 1st and last timestamp
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}  last=1
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}  last=10
    #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -591,14 +591,14 @@ DeveloperManager shall be able to get client app usage metrics
 
    ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
 
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1  token=${userToken}
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  token=${userToken}
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  1
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
 
    [Return]  ${metrics}
 
@@ -607,14 +607,14 @@ DeveloperContributor shall be able to get client app usage metrics
 
    ${userToken}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1  token=${userToken}
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  token=${userToken}
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  1
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
 
    [Return]  ${metrics}
 
@@ -623,14 +623,14 @@ DeveloperViewer shall be able to get client app usage metrics
 
    ${userToken}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
 
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1  token=${userToken}
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  token=${userToken}
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  1
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
 
    [Return]  ${metrics}
 
@@ -639,14 +639,14 @@ OperatorManager shall be able to get client app usage metrics
 
    ${userToken}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
 
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  last=1  token=${userToken}
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  token=${userToken}
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  1
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
 
    [Return]  ${metrics}
 
@@ -655,14 +655,14 @@ OperatorContributor shall be able to get client app usage metrics
 
    ${userToken}=  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
 
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  last=1  token=${userToken}
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  token=${userToken}
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  1
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
 
    [Return]  ${metrics}
 
@@ -671,14 +671,14 @@ OperatorViewer shall be able to get client app usage metrics
 
    ${userToken}=  Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
 
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  last=1  token=${userToken}
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  token=${userToken}
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  1
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
 
    [Return]  ${metrics}
 
