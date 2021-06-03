@@ -148,6 +148,17 @@ User shall be able to create VM deployment with md5 argument on openstack
 
    @{sec_groups}=  Split To Lines  ${server_show['security_groups']}
    Length Should Be  ${sec_groups}  2
+
+# ECQ-3430
+User shall be able to create VM/LB deployment without ports
+    [Documentation]
+    ...  - deploy VM app with a Load Balancer without ports
+    ...  - verify appinst mapped ports is empty
+
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=${Empty}   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
+
+    Should Be Equal  ${app_inst['data']['mapped_ports']}  ${None}
  
 *** Keywords ***
 Setup
