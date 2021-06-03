@@ -99,7 +99,7 @@ RunConsole - shall return error with bad token
 
     ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=tmus  cloudlet_name=tmocloud-1  token=xx  command=ls
 
-    Should Contain  ${error}  ('code=401', 'error={"message":"invalid or expired jwt"}')
+    Should Contain  ${error}  ('code=401', 'error={"message":"Invalid or expired jwt"}')
 
 # ECQ-2082
 RunConsole - shall return error without token
@@ -111,7 +111,7 @@ RunConsole - shall return error without token
 
     ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=tmus  cloudlet_name=tmocloud-1  command=ls  use_defaults=${False}
 
-    Should Contain  ${error}  ('code=400', 'error={"message":"no bearer token found"}')
+    Should Contain  ${error}  ('code=400', 'error={"message":"No bearer token found"}')
 
 # ECQ-2083
 RunConsole - shall return error with non-vm app
