@@ -23,7 +23,7 @@ DeleteTrustPolicy - delete without region shall return error
 
    [Tags]  TrustPolicy
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no region specified"}')  Delete Trust Policy  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No region specified"}')  Delete Trust Policy  token=${token}  use_defaults=${False}
 
 # ECQ-2997
 DeleteTrustPolicy - delete without token shall return error
@@ -33,7 +33,7 @@ DeleteTrustPolicy - delete without token shall return error
 
    [Tags]  TrustPolicy
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Delete Trust Policy  region=${region}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Delete Trust Policy  region=${region}  use_defaults=${False}
 
 # ECQ-2998
 DeleteTrustPolicy - delete without parms shall return error

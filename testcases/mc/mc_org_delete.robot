@@ -34,7 +34,7 @@ MC - Delete an org that doesn't exist with admin token
 	Run Keyword and Expect Error  *    Delete Org     orgname=madeuporgnname    token=${adminToken}     use_defaults=${False}
 	${body}=         Response Body
 	
-	Should Be Equal              ${body}         {"message":"org madeuporgnname not found"}
+	Should Be Equal              ${body}         {"message":"Org madeuporgnname not found"}
 
 
 # ECQ-2783
@@ -62,7 +62,7 @@ MC - Delete an org without a token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  400	
-	Should Be Equal              ${body}         {"message":"no bearer token found"}
+	Should Be Equal              ${body}         {"message":"No bearer token found"}
 
 
 # ECQ-2785
@@ -76,7 +76,7 @@ MC - Delete an org with an empty token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  400	
-	Should Be Equal              ${body}         {"message":"no bearer token found"}
+	Should Be Equal              ${body}         {"message":"No bearer token found"}
 
 
 # ECQ-2786
@@ -90,7 +90,7 @@ MC - Delete an org with a bad token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  401	
-	Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal              ${body}         {"message":"Invalid or expired jwt"}
 
 
 # ECQ-2787
@@ -104,7 +104,7 @@ MC - Delete an org with an expired token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  401	
-	Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal              ${body}         {"message":"Invalid or expired jwt"}
 
 
 # ECQ-2788
