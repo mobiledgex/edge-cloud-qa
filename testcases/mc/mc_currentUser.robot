@@ -78,7 +78,7 @@ MC - User with no token shall not be able to get current status
     ...  - request user/current without token
     ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Get Current User  use_defaults=${False}
+   ${error_msg}=  Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Get Current User  use_defaults=${False}
 
 # ECQ-2932
 MC - User with an empty token shall not be able to get current status
@@ -86,7 +86,7 @@ MC - User with an empty token shall not be able to get current status
     ...  - request user/current with an empty token
     ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Get Current User   token=${EMPTY}    use_defaults=${False}
+   ${error_msg}=  Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Get Current User   token=${EMPTY}    use_defaults=${False}
 
 # ECQ-2933
 MC - User with bad token1 shall not be able to get current status
@@ -95,7 +95,7 @@ MC - User with bad token1 shall not be able to get current status
     ...  - verify correct error msg is received
 
    #this token came from verifyLocation testscases
-   ${error_msg}=  Run Keyword and Expect Error  ('code=401', 'error={"message":"invalid or expired jwt"}')  Get Current User  token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQzMjUxMzIsImlhdCI6MTU1NDIzODczMiwia2V5Ijp7InBlZXJpcCI6IjEwLjEzOC4wLjkiLCJkZXZuYW1lIjoiZGV2ZWxvcGVyMTU1NDIzODczMC04ODU0MDkiLCJhcHBuYW1lIjoiYXBwMTU1NDIzODczMC04ODU0MDkiLCJhcHB2ZXJzIjoiMS4wIiwia2lkIjo2fX0.oehfMCQiukTxbYtq0xa4C-XSji_BJhTp7zLDjZk_WlWPSM0uyyt1Ul0UhkCR-7e8XWLJvqaFjzmuPRxjiN0ruw
+   ${error_msg}=  Run Keyword and Expect Error  ('code=401', 'error={"message":"Invalid or expired jwt"}')  Get Current User  token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQzMjUxMzIsImlhdCI6MTU1NDIzODczMiwia2V5Ijp7InBlZXJpcCI6IjEwLjEzOC4wLjkiLCJkZXZuYW1lIjoiZGV2ZWxvcGVyMTU1NDIzODczMC04ODU0MDkiLCJhcHBuYW1lIjoiYXBwMTU1NDIzODczMC04ODU0MDkiLCJhcHB2ZXJzIjoiMS4wIiwia2lkIjo2fX0.oehfMCQiukTxbYtq0xa4C-XSji_BJhTp7zLDjZk_WlWPSM0uyyt1Ul0UhkCR-7e8XWLJvqaFjzmuPRxjiN0ruw
 
 # ECQ-2934
 MC - User with bad token2 shall not be able to get current status
@@ -103,7 +103,7 @@ MC - User with bad token2 shall not be able to get current status
     ...  - request user/current with token=xx
     ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  ('code=401', 'error={"message":"invalid or expired jwt"}')  Get Current User  token=xx
+   ${error_msg}=  Run Keyword and Expect Error  ('code=401', 'error={"message":"Invalid or expired jwt"}')  Get Current User  token=xx
 
 # ECQ-2935
 MC - User with expired token shall not be able to get current status of superuser
@@ -114,7 +114,7 @@ MC - User with expired token shall not be able to get current status of superuse
    # gen 10am 4/4 {"token":"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ0NzY2OTcsImlhdCI6MTU1NDM5MDI5NywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.PsVVex66xzIL3ebqSy9gQnN2rBykCETuwihnAAxsPk_9vwp6fpW0mD2vdvgTALY08Eq--N_ZNoguPNHXc8h5AQ"}
 
    ${token}=  Set Variable  eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ0NzY2OTcsImlhdCI6MTU1NDM5MDI5NywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.PsVVex66xzIL3ebqSy9gQnN2rBykCETuwihnAAxsPk_9vwp6fpW0mD2vdvgTALY08Eq--N_ZNoguPNHXc8h5AQ	
-   ${error_msg}=  Run Keyword and Expect Error  ('code=401', 'error={"message":"invalid or expired jwt"}')  Get Current User  token=${token}
+   ${error_msg}=  Run Keyword and Expect Error  ('code=401', 'error={"message":"Invalid or expired jwt"}')  Get Current User  token=${token}
 
 # ECQ-2936
 MC - User with expired token shall not be able to get current status of newuser
@@ -124,7 +124,7 @@ MC - User with expired token shall not be able to get current status of newuser
 
     # created 10am4/4 {"token":"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ0NzY0MTEsImlhdCI6MTU1NDM5MDAxMSwidXNlcm5hbWUiOiJuYW1lMTU1NDM5MDAxMS4yMDMyOTI4Iiwia2lkIjoyfQ.zs0z3rKlFzYbm7TfmuU5PpsnnF7LpotwfZh9Rb_Ym_LTpXciaBckPstBk_z64yHDV0hvh2mjLtbUp-4OVlOrNg"}
    ${token}=  Set Variable  eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ0NzY0MTEsImlhdCI6MTU1NDM5MDAxMSwidXNlcm5hbWUiOiJuYW1lMTU1NDM5MDAxMS4yMDMyOTI4Iiwia2lkIjoyfQ.zs0z3rKlFzYbm7TfmuU5PpsnnF7LpotwfZh9Rb_Ym_LTpXciaBckPstBk_z64yHDV0hvh2mjLtbUp-4OVlOrNg	
-   ${error_msg}=  Run Keyword and Expect Error  ('code=401', 'error={"message":"invalid or expired jwt"}')  Get Current User  token=${token}
+   ${error_msg}=  Run Keyword and Expect Error  ('code=401', 'error={"message":"Invalid or expired jwt"}')  Get Current User  token=${token}
 
 # ECQ-2928
 MC - User shall be able to update current metadata

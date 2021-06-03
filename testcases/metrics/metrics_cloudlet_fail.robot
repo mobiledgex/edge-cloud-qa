@@ -68,12 +68,12 @@ CloudletMetrics - get with no token name shall return error
    # utilization
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  region=US  selector=utilization  last=1  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"no bearer token found"} 
+   Should Contain  ${error}  {"message":"No bearer token found"}
 
    # ipusage
    ${error2}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  region=US  selector=ipusage  last=1  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"no bearer token found"}
+   Should Contain  ${error2}  {"message":"No bearer token found"}
 
 CloudletMetrics - get with no selector name shall return error
    [Documentation]
@@ -219,10 +219,10 @@ CloudletMetrics - get without region shall return error
    # utilization
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"no region specified"}
+   Should Contain  ${error}  {"message":"No region specified"}
 
    # ipusage
    ${error2}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=ipusage  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"no region specified"}
+   Should Contain  ${error2}  {"message":"No region specified"}
 
