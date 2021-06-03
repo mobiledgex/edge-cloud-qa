@@ -1,8 +1,9 @@
 *** Settings ***
 Documentation   MasterController Org Create as Admin
 	
-Library		MexMasterController   mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
-Library         DateTime
+Library	 MexMasterController   mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  DateTime
+Library  String 
 
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
@@ -226,7 +227,7 @@ MC - Shall not be able to create an org without a token
 	
 	Should Be Equal As Numbers   ${status_code}  400	
 	#Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
-        Should Be Equal              ${body}  {"message":"no bearer token found"}
+        Should Be Equal              ${body}  {"message":"No bearer token found"}
 
 # ECQ-1293
 MC - Shall not be able to create an org with an empty token	
@@ -239,7 +240,7 @@ MC - Shall not be able to create an org with an empty token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  400	
-	Should Be Equal              ${body}         {"message":"no bearer token found"}
+	Should Be Equal              ${body}         {"message":"No bearer token found"}
 
 # ECQ-1620
 MC - Shall not be able to create an org with a bad token	
@@ -252,7 +253,7 @@ MC - Shall not be able to create an org with a bad token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  401	
-	Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal              ${body}         {"message":"Invalid or expired jwt"}
 
 # ECQ-1621
 MC - Shall not be able to create an org with an expired token	
@@ -265,7 +266,21 @@ MC - Shall not be able to create an org with an expired token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  401	
-	Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal              ${body}         {"message":"Invalid or expired jwt"}
+
+# ECQ-3427
+MC - Shall not be able to create an org that is too long
+        [Documentation]
+        ...  - create an org with a name that is too long
+        ...  - verify the correct error message is returned
+
+        ${rand_org}=  Generate Random String  91
+        ${org}=   Run Keyword and Expect Error  *   Create Org    orgname=${rand_org}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${adminToken}      use_defaults=${False}
+        ${status_code}=  Response Status Code
+        ${body}=         Response Body
+
+        Should Be Equal As Numbers   ${status_code}  400
+        Should Be Equal              ${body}         {"message":"Name too long"}
 
 *** Keywords ***
 Setup
