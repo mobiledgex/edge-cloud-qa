@@ -411,7 +411,7 @@ showDeviceReport - request with bad token
 
       ${error}=  Run Keyword And Expect Error  *  Show Device Report  region=${region}  unique_id=1234  unique_id_type=abcdplatos  use_defaults=${False}
       #Should Be Equal  ${error}  ('code=400', 'error={"message":"no bearer token found"}')
-      Should Contain  ${error}  no bearer token found
+      Should Contain  ${error}  No bearer token found
 
 #ECQ-2140
 showDeviceReport - request token error jwt
@@ -424,7 +424,7 @@ showDeviceReport - request token error jwt
 
       ${error}=  Run Keyword And Expect Error  *  Show Device Report  region=${region}  unique_id=1234  unique_id_type=abcd  token=xx  use_defaults=${False}
       #Should Be Equal  ${error}  ('code=401', 'error={"message":"invalid or expired jwt"}')
-      Should Contain  ${error}  ('code=401', 'error={"message":"invalid or expired jwt"}')
+      Should Contain  ${error}  ('code=401', 'error={"message":"Invalid or expired jwt"}')
 
 *** Keywords ***
 

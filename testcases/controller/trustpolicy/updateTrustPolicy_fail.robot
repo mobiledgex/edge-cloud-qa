@@ -29,7 +29,7 @@ UpdateTrustPolicy - update without region shall return error
 
    [Tags]  TrustPolicy
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no region specified"}')  Update Trust Policy  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No region specified"}')  Update Trust Policy  token=${token}  use_defaults=${False}
 
 # ECQ-3033
 UpdateTrustPolicy - update without token shall return error
@@ -39,7 +39,7 @@ UpdateTrustPolicy - update without token shall return error
 
    [Tags]  TrustPolicy
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Update Trust Policy  region=${region}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Update Trust Policy  region=${region}  use_defaults=${False}
 
 # ECQ-3034
 UpdateTrustPolicy - update without parms shall return error

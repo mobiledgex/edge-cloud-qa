@@ -25,7 +25,7 @@ MC - Delete a user without a token
    ...  - delete a user without a token
    ...  - verify the correct error message is returned
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Delete User     username=myuser     use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Delete User     username=myuser     use_defaults=${False}
 
 # ECQ-3269
 MC - Delete a user with an empty token
@@ -33,7 +33,7 @@ MC - Delete a user with an empty token
    ...  - delete a user with an empty token
    ...  - verify the correct error message is returned
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Delete User    username=myuser      token=${EMPTY}      use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Delete User    username=myuser      token=${EMPTY}      use_defaults=${False}
 
 # ECQ-3270
 MC - Delete a user with a bad token
@@ -41,7 +41,7 @@ MC - Delete a user with a bad token
    ...  - delete a user with a bad token
    ...  - verify the correct error message is returned
 
-   Run Keyword and Expect Error  ('code=401', 'error={"message":"invalid or expired jwt"}')  Delete User    username=myuser      token=thisisabadtoken      use_defaults=${False}
+   Run Keyword and Expect Error  ('code=401', 'error={"message":"Invalid or expired jwt"}')  Delete User    username=myuser      token=thisisabadtoken      use_defaults=${False}
 
 # ECQ-3271
 MC - Delete a user with an expired token
@@ -49,7 +49,7 @@ MC - Delete a user with an expired token
    ...  - delete a user with an expired token
    ...  - verify the correct error message is returned
 
-   Run Keyword and Expect Error  ('code=401', 'error={"message":"invalid or expired jwt"}')  Delete User    username=myuser       token=${expToken}      use_defaults=${False}
+   Run Keyword and Expect Error  ('code=401', 'error={"message":"Invalid or expired jwt"}')  Delete User    username=myuser       token=${expToken}      use_defaults=${False}
 	
 *** Keywords ***
 Setup

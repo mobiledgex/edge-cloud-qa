@@ -28,7 +28,7 @@ CreateTrustPolicy - create without region shall return error
 
    [Tags]  TrustPolicy
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no region specified"}')  Create Trust Policy  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No region specified"}')  Create Trust Policy  token=${token}  use_defaults=${False}
 
 # ECQ-3019
 CreateTrustPolicy - create without token shall return error
@@ -38,7 +38,7 @@ CreateTrustPolicy - create without token shall return error
 
    [Tags]  TrustPolicy
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Create Trust Policy  region=${region}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Create Trust Policy  region=${region}  use_defaults=${False}
 
 # ECQ-3020
 CreateTrustPolicy - create without parms shall return error
@@ -68,7 +68,7 @@ CreateTrustPolicy - create with unknown org name shall return error
 
    [Tags]  TrustPolicy
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"org xxxx not found"}')  Create Trust Policy  operator_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org xxxx not found"}')  Create Trust Policy  operator_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-3023
 CreateTrustPolicy - create without org name shall return error
