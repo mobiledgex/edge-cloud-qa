@@ -50,7 +50,7 @@ CreateAutoScalePolicy - mcctl shall handle create failures
       Error: Bad Request (400), Scale down CPU threshold must be between 0 and 100  cluster-org=${developer}  name=${recv_name}  minnodes=1  maxnodes=2  scaleupcputhresh=50  scaledowncputhresh=101
       Error: Bad Request (400), Scale up CPU threshold must be between 0 and 100  cluster-org=${developer}  name=${recv_name}  minnodes=1  maxnodes=2  scaleupcputhresh=101  scaledowncputhresh=50
       * Unable to parse "triggertimesec" value "9999999999" as uint: value out of range  cluster-org=${developer}  name=${recv_name}  minnodes=1  maxnodes=2  scaleupcputhresh=80  scaledowncputhresh=50  triggertimesec=9999999999
-      Error: Bad Request (400), org Mobiledge not found  cluster-org=Mobiledge  name=${recv_name}  minnodes=1  maxnodes=2  scaleupcputhresh=80  scaledowncputhresh=50
+      Error: Bad Request (400), Org Mobiledge not found  cluster-org=Mobiledge  name=${recv_name}  minnodes=1  maxnodes=2  scaleupcputhresh=80  scaledowncputhresh=50
 
 UpdateAutoScalePolicy - mcctl shall handle update policy
    [Documentation]

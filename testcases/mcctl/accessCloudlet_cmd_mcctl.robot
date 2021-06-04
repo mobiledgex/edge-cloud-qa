@@ -78,7 +78,7 @@ AccessCloudlet - mcctl shall handle error messages
       Error: Bad Request (400), Too many nodes matched                       region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack} node-type=  command=exit
       Error: unable to fetch access URL                                      region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=  node-type=sharedrootlb  command=exit
       Error: Bad Request (400), No run command specified                     region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}
-      Error: Bad Request (400), region "ZZ" not found                        region=ZZ            cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  command=exit
+      Error: Bad Request (400), Region "ZZ" not found                        region=ZZ            cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  command=exit
       Error: arg "Error:" not name=val format                                region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  command= exit
 
 
