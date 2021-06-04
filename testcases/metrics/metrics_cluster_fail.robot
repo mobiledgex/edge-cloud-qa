@@ -149,27 +149,27 @@ ClusterMetrics - get with invalid start time shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=cpu  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""} 
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""} 
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=disk  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=mem  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=tcp  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=udp  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=network  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
 ClusterMetrics - get with invalid end time shall return error
    [Documentation]
@@ -180,27 +180,27 @@ ClusterMetrics - get with invalid end time shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=cpu  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=disk  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=mem  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=tcp  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=udp  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=network  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
 ClusterMetrics - get with invalid start/end time shall return error
    [Documentation]
@@ -211,27 +211,27 @@ ClusterMetrics - get with invalid start/end time shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=cpu  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=disk  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=mem  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=tcp  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=udp  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=network  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
 ClusterMetrics - get with invalid last shall return error
    [Documentation]
@@ -242,27 +242,27 @@ ClusterMetrics - get with invalid last shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=cpu  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=Unmarshal type error: expected=int, got=string, field=Last, offset=
+   Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=disk  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=Unmarshal type error: expected=int, got=string, field=Last, offset=
+   Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=mem  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=Unmarshal type error: expected=int, got=string, field=Last, offset=
+   Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=tcp  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=Unmarshal type error: expected=int, got=string, field=Last, offset=
+   Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=udp  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=Unmarshal type error: expected=int, got=string, field=Last, offset=
+   Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=network  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: code=400, message=Unmarshal type error: expected=int, got=string, field=Last, offset=
+   Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
 
 ClusterMetrics - get with cluster not found shall return an empty list
    [Documentation]
