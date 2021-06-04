@@ -54,10 +54,10 @@ UpdateConfig - mcctl shall handle update failures
 	[Template]  Fail Update Config Via mcctl
 	Unable to parse "locknewaccounts" value "any" as bool: invalid syntax, valid values are true, false  locknewaccounts=any
 	Unable to parse "skipverifyemail" value "any" as bool: invalid syntax, valid values are true, false  skipverifyemail=any
-	Error: unmarshal err on locknewaccounts, 1, bool, yaml: unmarshal errors:  locknewaccounts=1
-	Error: unmarshal err on locknewaccounts, 0, bool, yaml: unmarshal errors:  locknewaccounts=0
-	Error: unmarshal err on skipverifyemail, 1, bool, yaml: unmarshal errors:  skipverifyemail=1
-	Error: unmarshal err on skipverifyemail, 0, bool, yaml: unmarshal errors:  skipverifyemail=0
+	Error: unmarshal err on locknewaccounts (StructNamespace), 1, bool, yaml: unmarshal errors:  locknewaccounts=1
+	Error: unmarshal err on locknewaccounts (StructNamespace), 0, bool, yaml: unmarshal errors:  locknewaccounts=0
+	Error: unmarshal err on skipverifyemail (StructNamespace), 1, bool, yaml: unmarshal errors:  skipverifyemail=1
+	Error: unmarshal err on skipverifyemail (StructNamespace), 0, bool, yaml: unmarshal errors:  skipverifyemail=0
 	Bad Request (400), Admin password min crack time must be greater than password min crack time  passwordmincracktimesec=63072001
 	Bad Request (400), Admin password min crack time must be greater than password min crack time  adminpasswordmincracktimesec=2591999
 
