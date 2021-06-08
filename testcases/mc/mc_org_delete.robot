@@ -34,7 +34,7 @@ MC - Delete an org that doesn't exist with admin token
 	Run Keyword and Expect Error  *    Delete Org     orgname=madeuporgnname    token=${adminToken}     use_defaults=${False}
 	${body}=         Response Body
 	
-	Should Be Equal              ${body}         {"message":"org madeuporgnname not found"}
+	Should Be Equal              ${body}         {"message":"Org madeuporgnname not found"}
 
 
 # ECQ-2783
@@ -62,7 +62,7 @@ MC - Delete an org without a token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  400	
-	Should Be Equal              ${body}         {"message":"no bearer token found"}
+	Should Be Equal              ${body}         {"message":"No bearer token found"}
 
 
 # ECQ-2785
@@ -76,7 +76,7 @@ MC - Delete an org with an empty token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  400	
-	Should Be Equal              ${body}         {"message":"no bearer token found"}
+	Should Be Equal              ${body}         {"message":"No bearer token found"}
 
 
 # ECQ-2786
@@ -90,7 +90,7 @@ MC - Delete an org with a bad token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  401	
-	Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal              ${body}         {"message":"Invalid or expired jwt"}
 
 
 # ECQ-2787
@@ -104,7 +104,7 @@ MC - Delete an org with an expired token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  401	
-	Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal              ${body}         {"message":"Invalid or expired jwt"}
 
 
 # ECQ-2788
@@ -113,14 +113,14 @@ MC - Delete an org with another user assigned to the org with the admin token
 	...  delete an org with a user assigned with the admin token
 	...  verify the correct error message is returned
 
-        ${user_role}=  Get Roletype
+        #${user_role}=  Get Roletype
 	${epoch}=  Get Time  epoch
         ${email2}=  Catenate  SEPARATOR=  user  +  ${epoch}  @gmail.com
 	${username2}=  Catenate  SEPARATOR=  user  ${epoch}
 	${orgname}=   Catenate  SEPARATOR=   org   ${epoch}
 	Create Org    orgname=${orgname}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${userToken}    use_defaults=${False}   auto_delete=${False}
 	Create User      username=${username2}     password=${password}     email_address=${email2}
-        Adduser Role     orgname=${orgname}      username=${username2}     role=${user_role}      token=${userToken}      use_defaults=${False}
+        Adduser Role     orgname=${orgname}      username=${username2}     role=DeveloperContributor      token=${userToken}      use_defaults=${False}
 	Delete Org    orgname=${orgname}    token=${adminToken}      use_defaults=${False}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
@@ -134,14 +134,14 @@ MC - Delete an org with another user assigned to the org with the org manager to
 	...  delete an org with a user assigned with the user token
 	...  verify the correct error message is returned
 
-        ${user_role}=  Get Roletype
+        #${user_role}=  Get Roletype
 	${epoch}=  Get Time  epoch
         ${email2}=  Catenate  SEPARATOR=  user  +  ${epoch}  @gmail.com
 	${username2}=  Catenate  SEPARATOR=  user  ${epoch}
 	${orgname}=   Catenate  SEPARATOR=   org   ${epoch}
 	Create Org    orgname=${orgname}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${userToken}    use_defaults=${False}   auto_delete=${False}
 	Create User      username=${username2}     password=${password}     email_address=${email2}
-        Adduser Role     orgname=${orgname}       username=${username2}     role=${user_role}      token=${userToken}      use_defaults=${False}
+        Adduser Role     orgname=${orgname}       username=${username2}     role=DeveloperContributor      token=${userToken}      use_defaults=${False}
 	Delete Org    orgname=${orgname}    token=${userToken}      use_defaults=${False}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
@@ -219,9 +219,9 @@ MC - Verify an org can not be deleted while an associated cluster inst exists
 	${username2}=  Catenate  SEPARATOR=  user  ${epoch}
 	${orgname}=   Catenate  SEPARATOR=   org   ${epoch}
 	${cluster_name}=  Catenate  SEPARATOR=   cluster   ${epoch}
-	${message}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some ClusterInst"}
-	${message2}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some AppInst, ClusterInst"}
-	${message3}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some App, AppInst, ClusterInst"}
+	${message}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some ClusterInst
+	${message2}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some AppInst, ClusterInst
+	${message3}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some App, AppInst, ClusterInst
 	Create User       username=${username2}     password=${password}     email_address=${email2}   auto_delete=${False} 
 	Unlock User
 	${user2Token}=   Login    username=${username2}    password=${password}
@@ -259,9 +259,9 @@ MC - Verify an org can not be deleted while an associated app exists
 	${orgname}=   Catenate  SEPARATOR=   org   ${epoch}
 	${cluster_name}=  Catenate  SEPARATOR=   cluster   ${epoch}
 	${appname}=  Catenate  SEPARATOR=   app   ${epoch}
-	${message}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some ClusterInst"}
-	${message2}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some AppInst, ClusterInst"}
-	${message3}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some App, AppInst, ClusterInst"}
+	${message}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some ClusterInst
+	${message2}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some AppInst, ClusterInst
+	${message3}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some App, AppInst, ClusterInst
 	Create User       username=${username2}     password=${password}     email_address=${email2}   auto_delete=${False} 
 	Unlock User
 	${user2Token}=   Login    username=${username2}    password=${password}
@@ -302,7 +302,8 @@ MC - Verify an org can not be deleted while an associated app instance exists
 	${orgname}=   Catenate  SEPARATOR=   org   ${epoch}
 	${cluster_name}=  Catenate  SEPARATOR=   cluster   ${epoch}
 	${appname}=  Catenate  SEPARATOR=   app   ${epoch}
-	${message}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some App, AppInst, ClusterInst"}
+	#${message}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some App, AppInst, ClusterInst"}
+        ${message}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some App, AppInst, ClusterInst
 	Create User       username=${username2}     password=${password}     email_address=${email2}   auto_delete=${False} 
 	Unlock User
 	${user2Token}=   Login    username=${username2}    password=${password}
@@ -314,7 +315,8 @@ MC - Verify an org can not be deleted while an associated app instance exists
 
 	Run Keyword and Expect Error  *  Delete Org   orgname=${orgname}   token=${adminToken}      use_defaults=${False}
 	${body}=          Response Body
-	Should Be Equal              ${body}         ${message}
+	#Should Be Equal              ${body}         ${message}
+        Should Contain              ${body}         ${message}
 
         ${rsp}=  Delete App Instance  token=${user2Token}  region=US  app_name=${appname}  app_version=1.0  developer_org_name=${orgname}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  cloudlet_name=tmocloud-1  operator_org_name=tmus  use_defaults=${False}
         ${rsp}=  Delete App  region=US  app_name=${appname}  app_version=1.0  developer_org_name=${orgname}
@@ -340,7 +342,7 @@ Setup
 #	Unlock User
 #	${userToken}=  Login  username=${username}  password=${password}
         ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
-	Create Org    orgname=${orgname}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${userToken}    use_defaults=${False}
+#	Create Org    orgname=${orgname}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${userToken}    use_defaults=${False}
 	Set Suite Variable  ${adminToken}
 	Set Suite Variable  ${userToken}
 	
