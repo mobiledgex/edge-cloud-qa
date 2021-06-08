@@ -222,7 +222,7 @@ class Cloudlet(MexOperation):
 
         return cloudlet_dict
 
-    def _build_metrics(self, type_dict=None, selector=None, method=None, last=None, start_time=None, end_time=None, raw_data=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, use_defaults=True):
+    def _build_metrics(self, type_dict=None, selector=None, method=None, last=None, start_time=None, end_time=None, raw_data=None, location_tile=None, device_os=None, device_model=None, device_carrier=None, data_network_type=None, use_defaults=True):
         metric_dict = {}
         if type_dict is not None:
             metric_dict.update(type_dict)
@@ -245,6 +245,8 @@ class Cloudlet(MexOperation):
             metric_dict['deviceos'] = device_os
         if device_model is not None:
             metric_dict['devicemodel'] = device_model
+        if device_carrier is not None:
+            metric_dict['devicecarrier'] = device_carrier
         if data_network_type is not None:
             metric_dict['datanetworktype'] = data_network_type
         if location_tile is not None:
@@ -411,14 +413,14 @@ class Cloudlet(MexOperation):
 
         return self.show(token=token, url=self.metrics_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
-    def get_client_cloudlet_metrics(self, method, token=None, region=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
+    def get_client_cloudlet_metrics(self, method, token=None, region=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_model=None, device_carrier=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
         metric_dict = msg
         if 'key' in msg:
             metric_dict['cloudlet'] = msg['key']
             del metric_dict['key']
 
-        msg_dict = self._build_metrics(type_dict=metric_dict, selector=selector, last=last, start_time=start_time, end_time=end_time, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_model=device_model, data_network_type=data_network_type)
+        msg_dict = self._build_metrics(type_dict=metric_dict, selector=selector, last=last, start_time=start_time, end_time=end_time, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_model=device_model, device_carrier=device_carrier, data_network_type=data_network_type)
 
         return self.show(token=token, url=self.metrics_client_cloudlet_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
