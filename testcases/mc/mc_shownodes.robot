@@ -70,7 +70,7 @@ Controller Should Exist
       ${num_properties}=  Evaluate  ${num_properties}+1
    END 
    Should Be True  ${num_properties} > 0
-   Run keyword if  ${num_found}!=${2}  fail  Controllers Not Found
+   Run keyword if  ${num_found}!=${1}  fail  Controllers Not Found
 
 Verify Controller
    [Arguments]  ${node}
