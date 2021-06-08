@@ -137,6 +137,8 @@ MC - Verify the SkipVerifyEmail change works
 	...  verify SkipVerifyEmail is set to True
 	...  verif a new user can login without verifying the email address
 
+        [Tags]  Email
+
         ${epoch}=  Get Time  epoch
         ${email}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
         ${newuser}=  Catenate  SEPARATOR=  ${username}  ${epoch}
@@ -188,6 +190,8 @@ MC - Verify the LocknewAccounts change works
 	...  verify LocknewAccounts is set to True
 	...  create a new user and verify login without unlocking the account fails
 	...  unlock the new user and verify login is successful 
+
+        [Tags]  Email
 
         ${epoch}=  Get Time  epoch
         ${email}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
