@@ -91,7 +91,7 @@ CreateCloudletPoolAccess - DeveloperContributor shall not be able to create a cl
 
    ${granted}=  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
    ${glen}=  Get Length  ${granted}
-   Should Be True  ${glen} > 0
+   Should Be True  ${glen} >= 0
 
    ${pending}=  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
    ${plen}=  Get Length  ${pending}
@@ -101,8 +101,8 @@ CreateCloudletPoolAccess - DeveloperContributor shall not be able to create a cl
    ${confirm}=  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
    ${ilen}=  Get Length  ${invite}
    ${clen}=  Get Length  ${confirm}
-   Should Be True  ${ilen} > 0
-   Should Be True  ${clen} > 0
+   Should Be True  ${ilen} >= 0
+   Should Be True  ${clen} >= 0
 
 # ECQ-3302
 CreateCloudletPoolAccess - DeveloperViewer shall not be able to create a cloudletpool invitation or response and show response/invite/granted/pending
@@ -139,7 +139,7 @@ CreateCloudletPoolAccess - DeveloperViewer shall not be able to create a cloudle
 
    ${granted}=  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
    ${glen}=  Get Length  ${granted}
-   Should Be True  ${glen} > 0
+   Should Be True  ${glen} >= 0
 
    ${pending}=  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
    ${plen}=  Get Length  ${pending}
@@ -149,8 +149,8 @@ CreateCloudletPoolAccess - DeveloperViewer shall not be able to create a cloudle
    ${confirm}=  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
    ${ilen}=  Get Length  ${invite}
    ${clen}=  Get Length  ${confirm}
-   Should Be True  ${ilen} > 0
-   Should Be True  ${clen} > 0
+   Should Be True  ${ilen} >= 0
+   Should Be True  ${clen} >= 0
 
 # ECQ-3303
 CreateCloudletPoolAccess - OperatorManager shall be able to create a cloudletpool invitation but not response and show response/invite/granted/pending
@@ -273,7 +273,7 @@ CreateCloudletPoolAccess - OperatorViewer shall not be able to create a cloudlet
    ${confirm}=  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
    ${ilen}=  Get Length  ${invite}
    ${clen}=  Get Length  ${confirm}
-   Should Be True  ${ilen} > 0
+   Should Be True  ${ilen} >= 0
    Should Be True  ${clen} >= 0
 
 *** Keywords ***
