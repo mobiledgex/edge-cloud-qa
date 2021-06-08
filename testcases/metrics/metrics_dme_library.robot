@@ -81,6 +81,20 @@ Get client app usage metrics with locationtile
 
    [Return]  ${metrics}
 
+Get client cloudlet usage metrics with locationtile
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}  ${location_tile}
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  location_tile=${location_tile}  last=1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
 Get client app usage metrics with rawdata
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
@@ -95,10 +109,38 @@ Get client app usage metrics with rawdata
 
    [Return]  ${metrics}
 
+Get client cloudlet usage metrics with rawdata
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  raw_data=${True}  #last=1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
 Get client app usage metrics with deviceinfo
    [Arguments]  ${developer_org_name}  ${selector}  ${app_name}=${None}  ${app_version}=${None}  ${device_os}=${None}  ${device_model}=${None}  ${data_network_type}=${None}
 
    ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  device_os=${device_os}  device_model=${device_model}  data_network_type=${data_network_type}  last=20
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+Get client Cloudlet usage metrics with deviceinfo
+   [Arguments]  ${operator_org_name}  ${selector}  ${cloudlet_name}=${None}  ${device_os}=${None}  ${device_model}=${None}  ${device_carrier}=${None}
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  device_os=${device_os}  device_model=${device_model}  device_carrier=${device_carrier}  last=20
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -182,6 +224,17 @@ Get all client app usage metrics
 
    [Return]  ${metrics}
 
+Get all client cloudlet usage metrics
+   [Arguments]  ${cloudlet_name}=${None}  ${operator_org_name}=${None}  ${selector}=${None}
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   [Return]  ${metrics}
+
 Get more dme metrics than exist on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
@@ -255,6 +308,27 @@ Get client app usage metrics with starttime
 
    [Return]  ${metrics}
 
+Get client cloudlet usage metrics with starttime
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   # get last metric and set starttime = 2 mins earlier
+   ${metricspre}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  last=1
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${start}=  Evaluate  ${epochpre} - 600
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and 1st and last timestamp
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_time=${start_date}
+   #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   [Return]  ${metrics}
+
 Get dme metrics with endtime on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
@@ -295,6 +369,27 @@ Get client app usage metrics with endtime
 
    # get readings and 1st and last timestamp
    ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  end_time=${end_date}
+   #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   [Return]  ${metrics}
+
+Get client cloudlet usage metrics with endtime
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   # get last metric and set starttime = 2 mins earlier
+   ${metricspre}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  last=1
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${end}=  Evaluate  ${epochpre} + 180
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and 1st and last timestamp
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  end_time=${end_date}
    #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -488,6 +583,29 @@ Get client app usage metrics with starttime and endtime
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
    [Return]  ${metrics}
+
+Get client cloudlet usage metrics with starttime and endtime
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   # get last metric and set starttime = 2 mins earlier
+   ${metricspre}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  last=1
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${start}=  Evaluate  ${epochpre} - 900
+   ${end}=  Evaluate  ${epochpre} + 120
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and 1st and last timestamp
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_time=${start_date}  end_time=${end_date}
+   #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   [Return]  ${metrics}
 	
 Get dme metrics with starttime and endtime and last on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
@@ -550,6 +668,29 @@ Get client app usage metrics with starttime and endtime and last
 
    [Return]  ${metrics}
 
+Get client cloudlet usage metrics with starttime and endtime and last
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   # get last metric and set starttime = 2 mins earlier
+   ${metricspre}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  last=1
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${start}=  Evaluate  ${epochpre} - 900
+   ${end}=  Evaluate  ${epochpre} + 120
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and 1st and last timestamp
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_time=${start_date}  end_time=${end_date}  last=10
+   #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   [Return]  ${metrics}
+
 DeveloperManager shall be able to get dme metrics
    [Arguments]  ${username}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
@@ -602,6 +743,13 @@ DeveloperManager shall be able to get client app usage metrics
 
    [Return]  ${metrics}
 
+DeveloperManager shall not be able to get client cloudlet usage metrics
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
+
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  token=${userToken}
+
 DeveloperContributor shall be able to get client app usage metrics
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
@@ -617,6 +765,13 @@ DeveloperContributor shall be able to get client app usage metrics
    #Should Be Equal As Integers  ${num_readings}  1
 
    [Return]  ${metrics}
+
+DeveloperContributor shall not be able to get client cloudlet usage metrics
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
+
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  token=${userToken}
 
 DeveloperViewer shall be able to get client app usage metrics
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
@@ -634,12 +789,35 @@ DeveloperViewer shall be able to get client app usage metrics
 
    [Return]  ${metrics}
 
+DeveloperViewer shall not be able to get client cloudlet usage metrics
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
+
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  token=${userToken}
+
 OperatorManager shall be able to get client app usage metrics
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
 
    ${userToken}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
 
    ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  token=${userToken}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+OperatorManager shall be able to get client cloudlet usage metrics
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  token=${userToken}
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -666,6 +844,22 @@ OperatorContributor shall be able to get client app usage metrics
 
    [Return]  ${metrics}
 
+OperatorContributor shall be able to get client cloudlet usage metrics
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_org_name}  token=${userToken}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
 OperatorViewer shall be able to get client app usage metrics
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
 
@@ -679,6 +873,19 @@ OperatorViewer shall be able to get client app usage metrics
 
    #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    #Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+OperatorViewer shall be able to get client cloudlet usage metrics
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_org_name}  token=${userToken}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
    [Return]  ${metrics}
 
