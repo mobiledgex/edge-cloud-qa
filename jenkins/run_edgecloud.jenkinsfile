@@ -13,7 +13,7 @@ def jobListOwaspZAP=["OWASP ZAP"]
 def jobListNmapScanning=["nmap scanning"]
 def jobListImageScanning=["Image Scanning"]
 def jobListConsole=["runConsoleTests"]
-def jobListRunFailed = ["runControllerTests", "runDMETests", "runAccountTests", "runUserRoleTests", "runUserTests", "runMCConfigsTests", "runOrganizationTests"]
+def jobListRunFailed = ["runControllerTests", "runDMETests", "runAccountTests", "runUserRoleTests", "runUserTests", "runMCConfigsTests", "runOrganizationTests", "runCloudletPoolAllTests"]
 
 builds1 = [:]
 builds2 = [:]
