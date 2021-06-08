@@ -20,7 +20,7 @@ RemoveVMPoolMember - remove without region shall return error
    ${error}=  Run Keyword And Expect Error  *   Remove VM Pool Member  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"no region specified"}
+   Should Contain   ${error}  error={"message":"No region specified"}
 
 # ECQ-2358
 RemoveVMPoolMember - remove without parameters shall return error

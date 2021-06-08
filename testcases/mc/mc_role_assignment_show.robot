@@ -56,7 +56,7 @@ MC - User shall not be able to show role assignments without a token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"no bearer token found"}
+	Should Be Equal             ${body}         {"message":"No bearer token found"}
 
 # ECQ-3384
 MC - User shall not be able to show role assignments with an empty token
@@ -71,7 +71,7 @@ MC - User shall not be able to show role assignments with an empty token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"no bearer token found"}
+	Should Be Equal             ${body}         {"message":"No bearer token found"}
 
 # ECQ-3385
 MC - User shall not be able to show role assignments with a bad token
@@ -86,7 +86,7 @@ MC - User shall not be able to show role assignments with a bad token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  401	
-	Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal             ${body}         {"message":"Invalid or expired jwt"}
 
 # ECQ-3386
 MC - User shall not be able to show role assignments with an expired token
@@ -101,7 +101,7 @@ MC - User shall not be able to show role assignments with an expired token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  401	
-        Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+        Should Be Equal             ${body}         {"message":"Invalid or expired jwt"}
 	
 *** Keywords ***
 Setup
