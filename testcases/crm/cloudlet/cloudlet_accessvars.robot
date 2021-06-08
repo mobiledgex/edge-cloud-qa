@@ -7,8 +7,8 @@ Test Timeout   25 min
 Test Teardown  Cleanup Provisioning
 
 *** Variables ***
-${cloudlet_name_openstack_accessvars}  testreportcl1
-${operator_name_openstack_accessvars}  reportorg1
+${cloudlet_name_openstack_accessvars}  automationAccessvarsCloudlet
+${operator_name_openstack_accessvars}  andyoporg
 ${physical_name_openstack_accessvars}  hamburg
 
 #${openrc_data}=  OS_AUTH_URL=https://fraedgecloud.telekom.de:5000/v3\nOS_PROJECT_ID=5c2443f40baf42548de46ad87fe21674\nOS_PROJECT_NAME=mex\nOS_USER_DOMAIN_NAME=Default\nOS_PROJECT_DOMAIN_ID=default\nOS_USERNAME=mexadmin\nOS_PASSWORD=ED2%jdB7-Ef]b8^x\nOS_REGION_NAME=RegionOne\nOS_INTERFACE=public\nOS_IDENTITY_API_VERSION=3\n
