@@ -70,6 +70,8 @@ MC - shall be able to show user by org
     ...  - send user show with org
     ...  - verify returned info is correct
 
+   [Setup]  Setup
+   [Teardown]  Cleanup Provisioning
    [Template]  Show User by Org Should Return Correct Users
 
    tmus
@@ -150,6 +152,8 @@ Setup
    
    ${username1}=  Set Variable  user1_${time}
    ${username2}=  Set Variable  user2_${time}
+
+   Skip Verify Email
 
    Create User  username=${username1}   password=${mextester06_gmail_password}   email_address=${username1}@xy.com  family_name=${username1}_familyname  given_name=${username1}_givenname  nickname=${username1}_nickname  
    Create User  username=${username2}   password=${mextester06_gmail_password}   email_address=${username2}@xy.com  family_name=${username2}_familyname  given_name=${username2}_givenname  nickname=${username2}_nickname  enable_totp=${True}
