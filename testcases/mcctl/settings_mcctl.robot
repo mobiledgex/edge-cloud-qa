@@ -123,7 +123,7 @@ Settings - mcctl shall handle update settings failures
       Shepherd Health Check Interval must be greater than 0                                                 shepherdhealthcheckinterval=0s
 
       Unable to parse "autodeployintervalsec" value "x" as float64: invalid syntax  autodeployintervalsec=x
-      Unmarshal type error: expected=int32, got=number 9999999999999999999, field=Settings.shepherd_health_check_retries, offset=66"}')  autodeployintervalsec=9999999999999999999
+      #Unmarshal type error: expected=int32, got=number 9999999999999999999, field=Settings.shepherd_health_check_retries, offset=66"}')  autodeployintervalsec=9999999999999999999
       Auto Deploy Interval Sec must be greater than 0  autodeployintervalsec=0
 
       Unable to parse "autodeploymaxintervals" value "x" as uint: invalid syntax                        autodeploymaxintervals=x

@@ -8,7 +8,7 @@ Library  String
 Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
 
-Test Timeout  2m
+Test Timeout  5m
 
 *** Variables ***
 ${region}=  US
