@@ -492,19 +492,20 @@ AppInst - user shall be to add multiple UDP public ports
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     FOR  ${index}  IN RANGE  0  100
-    \   ${app_name}=  Catenate  SEPARATOR=-  ${app_default}  ${index}
-    \   Create App  app_name=${app_name}  access_ports=udp:1
-    \   ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+       ${app_name}=  Catenate  SEPARATOR=-  ${app_default}  ${index}
+       Create App  app_name=${app_name}  access_ports=udp:1
+       ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
-    \   
-    \   ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_name}  ${version}  -  udp  .
-    \   ${public_port}=  Evaluate  10000 + ${index}
-    \   # verify app1 uses port 1
-    \   Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
-    \   Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    ${public_port}
-    \   Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
-    \   Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
-    \   Length Should Be   ${appInst_1.mapped_ports}  1
+       
+       ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_name}  ${version}  -  udp  .
+       ${public_port}=  Evaluate  10000 + ${index}
+       # verify app1 uses port 1
+       Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
+       Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    ${public_port}
+       Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
+       Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+       Length Should Be   ${appInst_1.mapped_ports}  1
+    END
 
 AppInst - user shall not be able to allocate public port udp:22
     [Documentation]
