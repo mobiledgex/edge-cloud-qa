@@ -23,7 +23,7 @@ class User(MexOperation):
         self.update_url = '/auth/user/update'
         self.update_restricted_url = '/auth/restricted/user/update'
 
-    def _build(self, username=None, password=None, email_address=None, metadata=None, locked=None, family_name=None, given_name=None, nickname=None, enable_totp=None, role=None, organization=None, use_defaults=True):
+    def _build(self, username=None, password=None, email_address=None, metadata=None, locked=None, family_name=None, given_name=None, nickname=None, enable_totp=None, email_verified=None, role=None, organization=None, use_defaults=True):
         if username == 'default':
             username = shared_variables_mc.username_default
             
@@ -54,7 +54,9 @@ class User(MexOperation):
         if nickname is not None:
             user_dict['nickname'] = nickname
         if enable_totp is not None:
-            user_dict['enabletotp'] = enable_totp
+            user_dict['enableTOTP'] = enable_totp
+        if email_verified is not None:
+            user_dict['EmailVerified'] = email_verified
         if role is not None:
             user_dict['role'] = role
         if organization is not None:
@@ -120,8 +122,8 @@ class User(MexOperation):
         return self.create(token=None, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=None, json_data=json_data, use_defaults=False, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=None, stream_timeout=None)
 
 
-    def show_user(self, token=None, username=None, email_address=None, given_name=None, family_name=None, nickname=None, role=None, organization=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(username=username, email_address=email_address, given_name=given_name, family_name=family_name, nickname=nickname, role=role, organization=organization, use_defaults=use_defaults)
+    def show_user(self, token=None, username=None, email_address=None, given_name=None, family_name=None, nickname=None, role=None, organization=None, locked=None, enable_totp=None, email_verified=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(username=username, email_address=email_address, given_name=given_name, family_name=family_name, nickname=nickname, role=role, organization=organization, locked=locked, enable_totp=enable_totp, email_verified=email_verified, use_defaults=use_defaults)
         msg_dict = msg
 
         return self.show(token=token, url=self.show_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)

@@ -803,14 +803,14 @@ class MexApp(object):
             output = rb.run_command_on_node(node, cmd)
             logger.info(f'cmd output={output}')
             logging.info('ping successful')
-        except:
-            raise Exception('ping failed')
+        except Exception as e:
+            raise Exception(f'ping failed: {e}')
 
     def node_should_not_ping_server(self, root_loadbalancer, node, server):
         try:
             self.node_should_ping_server(root_loadbalancer, node, server)
-        except:
-            logging.info('ping not successful')
+        except Exception as e:
+            logging.info(f'ping not successful: as {e}')
             return
 
         raise Exception('ping is successful')
@@ -858,7 +858,7 @@ class MexApp(object):
 
     def alert_receiver_slack_message_for_resolved_appinstdown_healthcheckfailrootlboffline_should_be_received(self, alert_receiver_name=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, wait=30):
         self.alert_receiver_slack_message_should_be_received(alert_type='RESOLVED', alert_name='AppInstDown', alert_receiver_name=alert_receiver_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', description='Root Load Balancer is not responding', title='AppInstDown', wait=wait)
- 
+
     def alert_receiver_email_for_firing_cloudletresourceusage_should_be_received(self, email_address, email_password, region=None, alert_type='FIRING', alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, description=None, wait=30):
         self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name='CloudletResourceUsage', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', description=description, wait=wait)
 
