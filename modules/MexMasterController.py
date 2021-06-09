@@ -443,8 +443,8 @@ class MexMasterController(MexRest):
 
         return self.user.create_user(username=username, password=password, email_address=email_address, email_password=email_password, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, server=server, email_check=email_check, auto_delete=auto_delete, use_defaults=use_defaults, use_thread=use_thread)
 
-    def show_user(self,  username=None, email_address=None, family_name=None, given_name=None, nickname=None, role=None, organization=None, token=None, json_data=None, use_defaults=True):
-        return self.user.show_user(token=token, username=username, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, role=role, organization=organization, json_data=json_data, use_defaults=use_defaults)
+    def show_user(self,  username=None, email_address=None, family_name=None, given_name=None, nickname=None, role=None, organization=None, locked=None, enable_totp=None, email_verified=None, token=None, json_data=None, use_defaults=True):
+        return self.user.show_user(token=token, username=username, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, role=role, organization=organization, locked=locked, enable_totp=enable_totp, email_verified=email_verified, json_data=json_data, use_defaults=use_defaults)
 
     def get_current_user(self, token=None, json_data=None, use_defaults=True):
         return self.user.current_user(token=token, json_data=json_data, use_defaults=use_defaults)
@@ -1159,6 +1159,13 @@ class MexMasterController(MexRest):
     def delete_idle_reservable_cluster_instances(self, token=None, region=None, idle_time=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cluster_instance.delete_idle_clusters(token=token, region=region, idle_time=idle_time, use_defaults=use_defaults, use_thread=use_thread)
 
+    def cluster_instance_should_exist(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, use_defaults=False):
+            clusterinstance = self.cluster_instance.show_cluster_instance(token=token, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, use_defaults=use_defaults, use_thread=use_thread)
+            if clusterinstance:
+                return clusterinstance
+            else:
+                raise Exception(f'cluster instance does NOT exist.')
+
     def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         """ Send region CreateApp
         """
@@ -1406,8 +1413,8 @@ class MexMasterController(MexRest):
     def get_client_app_usage_metrics(self, token=None, region=None, method=None, app_name=None, developer_org_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.get_client_app_metrics(method=method, token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, selector=selector, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_model=device_model, data_network_type=data_network_type, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def get_client_cloudlet_usage_metrics(self, token=None, region=None, method=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.cloudlet.get_client_cloudlet_metrics(method=method, token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, selector=selector, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_model=device_model, data_network_type=data_network_type, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def get_client_cloudlet_usage_metrics(self, token=None, region=None, method=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_model=None, device_carrier=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.get_client_cloudlet_metrics(method=method, token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, selector=selector, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_model=device_model, device_carrier=device_carrier, data_network_type=data_network_type, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def get_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.get_api_metrics(method='FindCloudlet', token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
