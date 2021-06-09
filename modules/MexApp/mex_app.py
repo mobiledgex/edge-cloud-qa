@@ -794,6 +794,27 @@ class MexApp(object):
 
         return output_dict
 
+    def node_should_ping_server(self, root_loadbalancer, node, server):
+        rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
+
+        cmd = f'ping -c 5 {server}'
+
+        try:
+            output = rb.run_command_on_node(node, cmd)
+            logger.info(f'cmd output={output}')
+            logging.info('ping successful')
+        except:
+            raise Exception('ping failed')
+
+    def node_should_not_ping_server(self, root_loadbalancer, node, server):
+        try:
+            self.node_should_ping_server(root_loadbalancer, node, server)
+        except:
+            logging.info('ping not successful')
+            return
+
+        raise Exception('ping is successful')
+
     def alert_receiver_email_should_be_received(self, email_address, email_password, alert_receiver_name, alert_type, alert_name, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, status=None, scope=None, description=None, title=None, receiver_type=None, pagerduty_status=None, wait=30):
         return self.alert_receiver.verify_email(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name=alert_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status=status, port=port, scope=scope, description=description, title=title, receiver_type=receiver_type, pagerduty_status=pagerduty_status, wait=wait)
 
