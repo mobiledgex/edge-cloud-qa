@@ -76,7 +76,7 @@ DMEPersistentConnection - Latency edge event without GPS shall return error
     ${error}=  Run Keyword And Expect Error  *  Send Latency Edge Event  carrier_name=${operator_name_fake}  samples=${samples}
 
     Should Contain  ${error}  event_type: EVENT_ERROR
-    Should Contain  ${error}  "No location in EVENT_LATENCY_SAMPLES, error is: rpc error: code = InvalidArgument desc = Missing GpsLocation"
+    Should Contain  ${error}  "Invalid EVENT_LATENCY_SAMPLES, invalid location: rpc error: code = InvalidArgument desc = Missing GpsLocation"
 
 # ECQ-3403
 DMEPersistentConnection - Latency edge event with invalid GPS shall return error
@@ -87,12 +87,12 @@ DMEPersistentConnection - Latency edge event with invalid GPS shall return error
 
     [Tags]  DMEPersistentConnection
 
-    # EDGECLOUD-4963 incorrect error message when sending edge event latency samples with invalid GPS
+    # EDGECLOUD-4963 incorrect error message when sending edge event latency samples with invalid GPS - fixed/closed
 
     ${error}=  Run Keyword And Expect Error  *  Send Latency Edge Event  carrier_name=${operator_name_fake}  samples=${samples}  latitude=91  longitude=-91
 
     Should Contain  ${error}  event_type: EVENT_ERROR
-    Should Contain  ${error}  "No location in EVENT_LATENCY_SAMPLES, error is: rpc error: code = InvalidArgument desc = Missing GpsLocation"
+    Should Contain  ${error}  "Invalid EVENT_LATENCY_SAMPLES, invalid location: rpc error: code = InvalidArgument desc = Invalid GpsLocation" 
 
 *** Keywords ***
 Setup
