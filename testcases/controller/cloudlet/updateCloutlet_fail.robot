@@ -3,7 +3,7 @@
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         String
 
-Test Teardown  Cleanup Provisioning
+#Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001
@@ -420,6 +420,25 @@ UpdateCloudlet - update with trust policy on non-openstack shall return error
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_GCP"}')     Update Cloudlet  region=US  cloudlet_name=automationGcpCentralCloudlet  operator_org_name=gcp  trust_policy=${policy_return['data']['key']['name']}  use_defaults=${False}
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_VM_POOL"}')     Update Cloudlet  region=EU  cloudlet_name=automationVMPoolCloudlet  operator_org_name=GDDT  trust_policy=${policy_return['data']['key']['name']}  use_defaults=${False}
+
+# ECQ-3480
+UpdateCloudlet - update to maintenance mode when already in maintenance mode shall return error
+   [Documentation]
+   ...  - put cloudlet in maintenance mode
+   ...  - send UpdateCloudlet with MaintenanceStart and MaintenanceStartNoFailover
+   ...  - verify error is returned
+
+   Create Org  orgtype=operator
+   RestrictedOrg Update
+   ${cloudlet}=  Create Cloudlet  region=${region}
+
+   Sleep  1s
+
+   ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${cloudlet['data']['key']['organization']}  cloudlet_name=${cloudlet['data']['key']['name']}  maintenance_state=MaintenanceStart  use_defaults=False
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cloudlet must be in NormalOperation before starting maintenance"}')  Update Cloudlet  region=${region}  operator_org_name=${cloudlet['data']['key']['organization']}  cloudlet_name=${cloudlet['data']['key']['name']}  maintenance_state=MaintenanceStart  use_defaults=False
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cloudlet must be in NormalOperation before starting maintenance"}')  Update Cloudlet  region=${region}  operator_org_name=${cloudlet['data']['key']['organization']}  cloudlet_name=${cloudlet['data']['key']['name']}  maintenance_state=MaintenanceStartNoFailover  use_defaults=False
 
 *** Keywords ***
 Setup
