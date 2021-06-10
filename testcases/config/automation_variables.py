@@ -3,7 +3,7 @@ test_timeout_crm1 = '40 min'
 
 cloudlet_name_azure = 'automationAzureCentralCloudlet'
 cloudlet_name_gcp = 'automationGcpCentralCloudlet'
-#cloudlet_name_openstack = 'automationHamburgCloudlet'
+# cloudlet_name_openstack = 'automationHamburgCloudlet'
 cloudlet_name_openstack = 'automationHamburgCloudlet'
 cloudlet_name_openstack_shared = 'automationHamburgCloudlet'
 cloudlet_name_openstack_dedicated = 'automationHamburgCloudlet'
@@ -62,9 +62,11 @@ qcow_centos_openstack_image = 'server_ping_threaded_centos7'
 qcow_gpu_ubuntu16_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/ubuntu16_nvidia_gpu.qcow2#md5:ebefc158437895d0399802dac66b2f4f'
 qcow_centos_image_nocloudinit = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7_nocloudinit.qcow2#md5:1e0f1567f87c5867e4cd999a9a3eec3a'
 
+server_ping_threaded_cloudconfig = 'http://35.199.188.102/apps/server_ping_threaded_cloudconfig.yml'
+
 helm_image = 'https://resources.gigaspaces.com/helm-charts:gigaspaces/insightedge'
 
-#vm_console_address =  'https://hamedgecloud.telekom.de:6080/vnc_auto.html'
+# vm_console_address =  'https://hamedgecloud.telekom.de:6080/vnc_auto.html'
 vm_console_address =  'https://bonnedgecloud.telekom.de:6080/vnc_auto.html'
 
 mextester99_gmail_password = 'rfbixqomqidobmcb'
@@ -103,8 +105,8 @@ gpu_client_image = '3_bodies.png'
 # alert receiver
 slack_channel = '#qa-alertreceiver'
 slack_api_url = 'https://hooks.slack.com/services/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'
-#pagerduty_key = 'R012YDFZXKFQ4OTD0TDE9JNYM1Y2M97I'
-#pagerduty_key = '8048c9a8e470430dc0ad9605c7fb00a0'  # free account
+# pagerduty_key = 'R012YDFZXKFQ4OTD0TDE9JNYM1Y2M97I'
+# pagerduty_key = '8048c9a8e470430dc0ad9605c7fb00a0'  # free account
 pagerduty_key = 'd1bdad0245364905c0e25090ce357f30'  # paid account
 
 trust_policy_server = '35.199.188.102'
