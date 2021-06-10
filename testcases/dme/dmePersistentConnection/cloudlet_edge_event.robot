@@ -41,18 +41,20 @@ DmePersistentConnetion - cloudlet in maintenance mode shall not return a new clo
    Sleep  1s
 
    Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation  
-   Receive Cloudlet Maintenance Event  #state=NORMAL_OPERATION_INIT
+   Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION_INIT
    Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
 
+   Sleep  1s
+
    Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover
-   Receive Cloudlet Maintenance Event  #state=CRM_REQUESTED
+   Receive Cloudlet Maintenance Event  state=CRM_REQUESTED
    ${error2}=  Run Keyword and Expect Error  *  Receive Cloudlet Maintenance Event  state=UNDER_MAINTENANCE
    Should Be Equal  ${error2}  Current appinst is unusable. Unable to find any cloudlets doing FindCloudlet - FindStatus is FIND_NOTFOUND
 
    Sleep  1s
 
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
-   Receive Cloudlet Maintenance Event  #state=NORMAL_OPERATION_INIT
+   Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION_INIT
    Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
 
 # ECQ-3423
@@ -89,11 +91,13 @@ DmePersistentConnetion - cloudlet in maintenance mode shall return new cloudlet
    Sleep  1s
 
    Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
-   Receive Cloudlet Maintenance Event  #state=NORMAL_OPERATION_INIT
+   Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION_INIT
    Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
 
+   Sleep  1s
+
    Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover
-   Receive Cloudlet Maintenance Event  #state=CRM_REQUESTED
+   Receive Cloudlet Maintenance Event  state=CRM_REQUESTED
    ${cloud2}=  Receive Cloudlet Maintenance Event  state=UNDER_MAINTENANCE
    Should Be Equal As Numbers  ${cloud2.new_cloudlet.status}  1  #FIND_FOUND
    Should Be True  len('${cloud2.new_cloudlet.edge_events_cookie}') > 100
@@ -107,7 +111,7 @@ DmePersistentConnetion - cloudlet in maintenance mode shall return new cloudlet
    Sleep  1s
 
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
-   Receive Cloudlet Maintenance Event  #state=NORMAL_OPERATION_INIT
+   Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION_INIT
    Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
 
 # ECQ-3424
