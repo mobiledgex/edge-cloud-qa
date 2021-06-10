@@ -25,6 +25,7 @@ UpdateCloudlet - operator manager shall be able to put cloudlet in maintenance m
    Adduser Role   orgname=${operator}   username=${epochusername2}  role=OperatorManager   token=${user_token}
 
    Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStart
+   Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
    Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover  
    Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation 
 
@@ -37,6 +38,7 @@ UpdateCloudlet - operator contributor shall be able to put cloudlet in maintenan
    Adduser Role   orgname=${operator}   username=${epochusername2}  role=OperatorContributor   token=${user_token}
 
    Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStart
+   Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
    Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover
    Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
 
