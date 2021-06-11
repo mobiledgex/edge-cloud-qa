@@ -28,6 +28,10 @@ CreateCloudlet - mcctl shall be able to create/show/delete cloudlet
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  trustpolicy=${trustpolicy_name} 
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  trustpolicy=
 
+      # kafka
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkacluster=x
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkacluster=cluster  kafkauser=user  kafkapassword=password
+
 # ECQ-3086
 CreateCloudlet - mcctl shall handle create failures
    [Documentation]
@@ -41,6 +45,14 @@ CreateCloudlet - mcctl shall handle create failures
       # trusted
       Error: OK (200), TrustPolicy x for organization dmuus not found  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  trustpolicy=x
 
+      # kafka
+      Error: OK (200), Must specify both kafka username and password, or neither  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkacluster=cluster  kafkauser=user
+      Error: OK (200), Must specify both kafka username and password, or neither  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkacluster=cluster  kafkapassword=password
+      Error: OK (200), xxxx  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkauser=user  kafkapassword=password
+      Error: OK (200), xxxx  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkacluster=${Empty}  kafkauser=user  kafkapassword=password
+      Error: OK (200), Must specify both kafka username and password, or neither  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkauser=user 
+      Error: OK (200), Must specify both kafka username and password, or neither  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkapassword=password
+
 # ECQ-3087
 UpdateCloudlet - mcctl shall handle update cloudlet 
    [Documentation]
@@ -51,8 +63,13 @@ UpdateCloudlet - mcctl shall handle update cloudlet
    [Teardown]  Update Teardown
 
    [Template]  Success Update/Show Cloudlet Via mcctl
+      # trusted
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  trustpolicy=${trustpolicy_name} 
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  trustpolicy=
+
+      # kafka
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  kafkacluster=x
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  kafkacluster=cluster  kafkauser=user  kafkapassword=password
  
 *** Keywords ***
 Setup
@@ -71,7 +88,8 @@ Success Create/Show/Delete Cloudlet Via mcctl
    &{parms_copy}=  Set Variable  ${parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
-   Remove From Dictionary  ${parms_copy}  deploymentmanifest
+   Remove From Dictionary  ${parms_copy}  kafkapassword
+   Remove From Dictionary  ${parms_copy}  kafkauser
    ${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
  
    Run mcctl  cloudlet create region=${region} ${parmss} --debug  version=${version}
@@ -85,10 +103,20 @@ Success Create/Show/Delete Cloudlet Via mcctl
    Should Be Equal As Numbers  ${show[0]['num_dynamic_ips']}        ${parms['numdynamicips']}
    Should Be Equal As Numbers  ${show[0]['state']}                  5
 
-   Run Keyword If  'trustpolicy' in ${parms} and '${parms['trustpolicy']}' != '${Empty}'  Should Be Equal  ${show[0]['trust_policy']}  ${parms['trustpolicy']} 
-   ...  ELSE  Should Not Contain  ${show[0]}  trust_policy
-   Run Keyword If  'trustpolicy' in ${parms} and '${parms['trustpolicy']}' != '${Empty}'  Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  5
- 
+   IF  'trustpolicy' in ${parms}
+      IF  '${parms['trustpolicy']}' != '${Empty}'
+         Should Be Equal  ${show[0]['trust_policy']}  ${parms['trustpolicy']}
+         Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  5
+      END
+   ELSE
+      Should Not Contain  ${show[0]}  trust_policy
+      Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  1
+   END
+
+   IF  'kafkacluster' in ${parms}
+      Should Be Equal  ${show[0]['kafka_cluster']}  ${parms['kafkacluster']}
+   END
+
 Update Setup
    #${cloudlet_name}=  Get Default Cloudlet Name
 
@@ -103,20 +131,33 @@ Update Teardown
 
 Success Update/Show Cloudlet Via mcctl
    [Arguments]  &{parms}
+   &{parms_copy}=  Set Variable  ${parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
+   Remove From Dictionary  ${parms_copy}  kafkapassword
+   Remove From Dictionary  ${parms_copy}  kafkauser
+   ${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
 
    Run mcctl  cloudlet update region=${region} ${parmss}  version=${version}
-   ${show}=  Run mcctl  cloudlet show region=${region} ${parmss}  version=${version}
+   ${show}=  Run mcctl  cloudlet show region=${region} ${parmss_modify}  version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['cloudlet']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['cloudlet-org']}
    Should Be Equal As Numbers  ${show[0]['state']}                  5
 
-   Run Keyword If  'trustpolicy' in ${parms} and '${parms['trustpolicy']}' != '${Empty}'  Should Be Equal  ${show[0]['trust_policy']}  ${parms['trustpolicy']}
-   ...  ELSE  Should Not Contain  ${show[0]}  trust_policy
-   Run Keyword If  'trustpolicy' in ${parms} and '${parms['trustpolicy']}' != '${Empty}'  Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  5
-   ...  ELSE  Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  1
+   IF  'trustpolicy' in ${parms}
+      IF  '${parms['trustpolicy']}' != '${Empty}'
+         Should Be Equal  ${show[0]['trust_policy']}  ${parms['trustpolicy']}
+         Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  5
+      END
+   ELSE
+      Should Not Contain  ${show[0]}  trust_policy
+      Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  1
+   END
+
+   IF  'kafkacluster' in ${parms}
+      Should Be Equal  ${show[0]['kafka_cluster']}  ${parms['kafkacluster']}
+   END
 
 Fail Create Cloudlet Via mcctl
    [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
