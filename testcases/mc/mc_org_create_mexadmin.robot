@@ -274,13 +274,42 @@ MC - Shall not be able to create an org that is too long
         ...  - create an org with a name that is too long
         ...  - verify the correct error message is returned
 
-        ${rand_org}=  Generate Random String  91
+        ${rand_org}=  Generate Random String  60
         ${org}=   Run Keyword and Expect Error  *   Create Org    orgname=${rand_org}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${adminToken}      use_defaults=${False}
         ${status_code}=  Response Status Code
         ${body}=         Response Body
 
         Should Be Equal As Numbers   ${status_code}  400
         Should Be Equal              ${body}         {"message":"Name too long"}
+
+# ECQ-3487
+MC - Shall not be able to create a long org name
+        [Documentation]
+        ...  - create an org with a long name as mexadmin
+        ...  - verify org is created
+
+        ${rand_org1}=  Generate Random String  59
+        ${rand_org2}=  Generate Random String  59
+
+        Create Org    orgname=${rand_org1}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${adminToken}      use_defaults=${False}
+
+        ${org}=  Show Organizations   org_name=${rand_org1}  token=${adminToken}
+        Should Be Equal       ${org[0]["Name"]}                   ${rand_org1}
+        Should Be Equal       ${org[0]["Type"]}                   developer
+        Should Be Equal       ${org[0]["Address"]}                222 somewhere dr
+        Should Be Equal       ${org[0]["Phone"]}                  111-222-3333
+        Convert Date          ${org[0]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+        Convert Date          ${org[0]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+
+        Create Org    orgname=${rand_org2}    orgtype=operator    address=222 somewhere dr    phone=111-222-3333     token=${adminToken}      use_defaults=${False}
+
+        ${org2}=  Show Organizations   org_name=${rand_org2}  token=${adminToken}
+        Should Be Equal       ${org2[0]["Name"]}                   ${rand_org2}
+        Should Be Equal       ${org2[0]["Type"]}                   operator
+        Should Be Equal       ${org2[0]["Address"]}                222 somewhere dr
+        Should Be Equal       ${org2[0]["Phone"]}                  111-222-3333
+        Convert Date          ${org2[0]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+        Convert Date          ${org2[0]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
 *** Keywords ***
 Setup
