@@ -49,6 +49,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStart
 
    Sleep  1s
 
+   Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation      use_defaults=False
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStart     use_defaults=False
 
    Should Be Equal As Integers  ${ret2['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
@@ -71,6 +72,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNo
 
    Sleep  1s
 
+   Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation      use_defaults=False
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover      use_defaults=False
 
    Should Be Equal As Integers  ${ret2['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
@@ -93,6 +95,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNo
    Should Be True  ${ret['data']['updated_at']['seconds']} > ${created_secs}
    Should Be True  ${ret['data']['updated_at']['nanos']} > 0
 
+   Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation      use_defaults=False
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStart     use_defaults=False
 
    Should Be Equal As Integers  ${ret2['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
