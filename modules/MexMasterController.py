@@ -48,6 +48,7 @@ from mex_master_controller.RequestAppInstLatency import RequestAppInstLatency
 from mex_master_controller.CloudletPoolAccess import CloudletPoolAccess
 from mex_master_controller.RestrictedOrgUpdate import RestrictedOrgUpdate
 from mex_master_controller.Controller import Controller
+from mex_master_controller.Org import Org
 
 import shared_variables_mc
 import shared_variables
@@ -211,6 +212,7 @@ class MexMasterController(MexRest):
         self.cloudlet_pool_access = CloudletPoolAccess(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.restricted_org_update = RestrictedOrgUpdate(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)  
         self.controller = Controller(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.org = Org(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -681,45 +683,18 @@ class MexMasterController(MexRest):
                 raise Exception("error creating organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             return self.organization_name
 
-    def show_organizations(self, token=None, use_defaults=True, use_thread=False):
-        url = self.root_url + '/auth/org/show'
+    def show_organizations(self, token=None, org_name=None, org_type=None, address=None, phone=None, public_images=None, delete_in_progress=None, edgebox_only=None, json_data=None, use_defaults=False, use_thread=False):
+        if use_defaults:
+            if org_name is None:
+                org_name = self.organization_name
+            if org_type is None:
+                org_type = self.orgtype
+            if address is None:
+                address = self.address
+            if phone is None:
+                phone = self.phone
 
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        def send_message():
-            self._number_showorg_requests += 1
-
-            try:
-                self.post(url=url, bearer=token)
-
-                logger.info('response:\n' + str(self.resp.text))
-
-                respText = str(self.resp.text)
-
-                if str(self.resp.status_code) != '200':
-                    self._number_showorg_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            except Exception as e:
-                self._number_showorg_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            self._number_showorg_requests_success += 1
-
-
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            if str(self.resp.text) != '[]':
-                match = re.search('.*Name.*Type.*Address.*Phone.*CreatedAt.*UpdatedAt.*', str(self.resp.text))
-                # print('*WARN*',match)
-                if not match:
-                    raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            return self.decoded_data
-
+        return self.org.show_org(token=token, org_name=org_name, org_type=org_type, address=address, phone=phone, public_images=public_images, delete_in_progress=delete_in_progress, edgebox_only=edgebox_only, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def delete_org(self, orgname=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/org/delete'
