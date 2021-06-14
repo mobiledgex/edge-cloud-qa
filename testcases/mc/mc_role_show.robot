@@ -38,7 +38,7 @@ MC - User shall be able to show roles
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers  ${status_code}  200	
-	Should Be Equal             ${body}         ["AdminContributor","AdminManager","AdminViewer","DeveloperContributor","DeveloperManager","DeveloperViewer","OperatorContributor","OperatorManager","OperatorViewer"]
+	Should Be Equal             ${body}         ["BillingManager","DeveloperContributor","DeveloperManager","DeveloperViewer","OperatorContributor","OperatorManager","OperatorViewer"]
 
 # ECQ-3368
 MC - User shall not be able to show roles without a token
