@@ -17,7 +17,7 @@ class App(MexOperation):
         self.show_url = '/auth/ctrl/ShowApp'
         self.update_url = '/auth/ctrl/UpdateApp'
 
-    def _build(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], include_fields=False, use_defaults=True):
+    def _build(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], allow_serverless=None, serverless_config_vcpus=None, serverless_config_ram=None, serverless_config_min_replicas=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
         _app_name_field_number = "2.2"
@@ -150,6 +150,18 @@ class App(MexOperation):
             app_dict['trusted'] = trusted
             _fields_list.append(_trusted_field_number)
 
+        serverless_dict = {}
+        if allow_serverless:
+            app_dict['allow_serverless'] = allow_serverless
+        if serverless_config_vcpus is not None:
+            serverless_dict['vcpus'] = float(serverless_config_vcpus)
+        if serverless_config_ram is not None:
+            serverless_dict['ram'] = int(serverless_config_ram)
+        if serverless_config_min_replicas is not None:
+            serverless_dict['min_replicas'] = int(serverless_config_min_replicas)
+        if serverless_dict:
+            app_dict['serverless_config'] = serverless_dict 
+ 
         rule_dict_list = []
         for rule in required_outbound_connections_list:
             rule_dict = {}
@@ -183,8 +195,8 @@ class App(MexOperation):
 
         return app_dict
 
-    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path, md5=md5, cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policies=auto_prov_policies, access_type=access_type, configs_kind=configs_kind, configs_config=configs_config, skip_hc_ports=skip_hc_ports, trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, use_defaults=use_defaults)
+    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], allow_serverless=None, serverless_config_vcpus=None, serverless_config_ram=None, serverless_config_min_replicas=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path, md5=md5, cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policies=auto_prov_policies, access_type=access_type, configs_kind=configs_kind, configs_config=configs_config, skip_hc_ports=skip_hc_ports, trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, allow_serverless=allow_serverless, serverless_config_vcpus=serverless_config_vcpus, serverless_config_ram=serverless_config_ram, serverless_config_min_replicas=serverless_config_min_replicas, use_defaults=use_defaults)
         msg_dict = {'app': msg}
 
         msg_dict_delete = None
