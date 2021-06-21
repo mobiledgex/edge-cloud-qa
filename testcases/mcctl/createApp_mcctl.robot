@@ -109,6 +109,11 @@ CreateApp - mcctl shall be able to create/show/delete app
       #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=icmp  requiredoutboundconnections:1.remoteip=1.1.1.1  
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=tcp  requiredoutboundconnections:1.remoteip=1.1.1.1  requiredoutboundconnections:1.port=2
 
+      # serverless
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${False}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=2  serverlessconfig.minreplicas=3
+
 # ECQ-2890
 CreateApp - mcctl shall handle create failures
    [Documentation]
@@ -198,6 +203,17 @@ CreateApp - mcctl shall handle create failures
       Error: Bad Request (400), Remote port out of range: 0   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1
       Error: Bad Request (400), Invalid remote IP:  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=  # remove the ports
 
+      # serverless
+      Error: Bad Request (400), Serverless config vcpus cannot be less than 0.001  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}
+      Error: Bad Request (400), Serverless config vcpus cannot be less than 0.001  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=.000001  serverlessconfig.ram=2  serverlessconfig.minreplicas=3
+      Error: Bad Request (400), Serverless config cannot be specified without allow serverless true  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${False}  serverlessconfig.vcpus=.000001  serverlessconfig.ram=2  serverlessconfig.minreplicas=3
+      Error: Bad Request (400), Serverless config cannot be specified without allow serverless true  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  serverlessconfig.vcpus=.01  serverlessconfig.ram=2  serverlessconfig.minreplicas=3
+      Unable to parse "serverlessconfig.minreplicas" value "x" as uint: invalid syntax  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  allowserverless=${True}  serverlessconfig.vcpus=.01  serverlessconfig.ram=2  serverlessconfig.minreplicas=x
+      Unable to parse "serverlessconfig.vcpus" value "x" as float64: invalid syntax  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=x  serverlessconfig.ram=2  serverlessconfig.minreplicas=1
+      Unable to parse "serverlessconfig.ram" value "x" as uint: invalid syntax  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=x  serverlessconfig.minreplicas=1
+      Unable to parse "serverlessconfig.minreplicas" value "-1" as uint  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=1  serverlessconfig.minreplicas=-1
+      Serverless config vcpus cannot be less than 0.001  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=-1  serverlessconfig.ram=2  serverlessconfig.minreplicas=1
+      Unable to parse "serverlessconfig.ram" value "-1" as uint  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=-1  serverlessconfig.minreplicas=1
 
 # ECQ-2829
 UpdateApp - mcctl shall handle update app 
@@ -324,6 +340,17 @@ Success Create/Show/Delete App Via mcctl
    Run Keyword If  'requiredoutboundconnections:1.remoteip' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][1]['remote_ip']}  ${parms['requiredoutboundconnections:1.remoteip']}
    Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][1]}  port
    Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][1]['port']}  ${parms['requiredoutboundconnections:1.port']}
+
+   IF  'allowserverless' in ${parms}
+      IF  ${parms['allowserverless']} == ${True}
+         Should Be Equal  ${show[0]['allow_serverless']}  ${True}
+         IF  'serverlessconfig.vcpus' in ${parms}
+            Should Be Equal As Numbers  ${show[0]['serverless_config']['vcpus']}  ${parms['serverlessconfig.vcpus']}
+            Should Be Equal As Numbers  ${show[0]['serverless_config']['ram']}  ${parms['serverlessconfig.ram']}
+            Should Be Equal As Numbers  ${show[0]['serverless_config']['min_replicas']}  ${parms['serverlessconfig.minreplicas']}
+         END
+      END
+   END
 
 Update Setup
    ${app_name}=  Get Default App Name
