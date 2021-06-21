@@ -41,6 +41,15 @@ CreateApp - Create shall fail for port out of range on k8s access_type=loadbalan
     ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=udp:23-5023,udp:623-10123,tcp:1  deployment=kubernetes  access_type=loadbalancer
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Not allowed to specify more than 10000 udp ports"}')
 
+# ECQ-3500
+CreateApp - Create shall fail for UDP port out of range on k8s access_type=loadbalancer
+    [Documentation]
+    ...  - create a k8s loadbalancer app with UDP port range greater than max
+    ...  - verify proper error is returned
+
+    ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=udp:23-1023  deployment=kubernetes  access_type=loadbalancer
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid deployment manifest, Kubernetes deployment not allowed to specify more than 1000 udp ports"}')
+
 # ECQ-2100
 CreateApp - Create shall fail for port out of range on docker access_type=loadbalancer
     [Documentation]
@@ -138,6 +147,17 @@ UpdateApp - Update shall fail for port out of range on k8s access_type=loadbalan
 
     ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=udp:23-5074,udp:575-10174,tcp:1 
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Not allowed to specify more than 10000 udp ports"}')
+
+# ECQ-3501
+UpdateApp - Update shall fail for UDP port out of range on k8s access_type=loadbalancer
+    [Documentation]
+    ...  - update a k8s loadbalancer app with UDP port range greater than max
+    ...  - verify proper error is returned
+
+    Create App  region=US  access_ports=tcp:1-5  deployment=kubernetes  access_type=loadbalancer
+
+    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=udp:1-1001
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid deployment manifest, Kubernetes deployment not allowed to specify more than 1000 udp ports"}')
 
 # ECQ-2104
 UpdateApp - Update shall fail for port out of range on docker access_type=loadbalancer
