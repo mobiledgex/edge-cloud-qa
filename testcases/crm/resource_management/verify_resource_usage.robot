@@ -160,10 +160,10 @@ Controller throws proper error and displays correct resource usage/metrics data 
    ${metrics}=  Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  selector=resourceusage  last=2  token=${tokenop}
 
    Length Should Be  ${metrics['data'][0]['Series'][0]['values']}   1
-   Length Should Be  ${metrics['data'][0]['Series'][0]['columns']}  10
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][7]}    4
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][8]}    14336
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][9]}    8
+   Length Should Be  ${metrics['data'][0]['Series'][0]['columns']}  9
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][6]}    4
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][7]}    14336
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][8]}    8
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cluster_name=${cluster_name}1  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor}  token=${tokendev}
    Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available: required Instances is 1 but only 0 out of 4 is available"}
@@ -315,10 +315,10 @@ Verify ResourceUsage Metrics
    ${metrics}=  Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  selector=resourceusage  last=2  token=${tokenop}
 
    Length Should Be  ${metrics['data'][0]['Series'][0]['values']}   ${length}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][7]}    ${instances}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][8]}    ${ram}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][9]}    ${vcpu}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][6]}    ${instances}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][7]}    ${ram}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][8]}    ${vcpu}
 
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][7]}    ${default_instances}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][8]}    ${default_ram}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][9]}    ${default_vcpus}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][6]}    ${default_instances}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][7]}    ${default_ram}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][8]}    ${default_vcpus}
