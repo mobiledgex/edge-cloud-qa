@@ -1,2 +1,0 @@
-include ':app', ':mel-1.0.11'
-rootProject.name = "melValidator"
