@@ -74,7 +74,7 @@ namespace RestSample
         //static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
         //QA env
         static string carrierName = "TDG";
-        static string orgName = "MobiledgeX";
+        static string orgName = "automation_dev_org";
         static string appName = "automation-sdk-porttest";
         static string appVers = "1.0";
         static string host = "eu-qa.dme.mobiledgex.net";
