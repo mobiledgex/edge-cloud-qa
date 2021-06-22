@@ -78,7 +78,7 @@ namespace RestSample
         static string carrierName = "TDG";
 
         // QA env
-        static string orgName = "MobiledgeX";
+        static string orgName = "automation_dev_org";
         static string appName = "automation-sdk-porttest";
         static string appVersion = "1.0";
 
