@@ -15,7 +15,7 @@ Test Timeout  5m
 ${region}=  US
 ${developer}=  MobiledgeX
 
-${version}=  2021-06-21
+${version}=  latest
 
 *** Test Cases ***
 # ECQ-3488
