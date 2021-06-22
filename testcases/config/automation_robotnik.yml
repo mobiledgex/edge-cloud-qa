@@ -1,0 +1,2160 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fms-db-credentials
+type: Opaque
+data:
+  username: dGVzdA==
+  password: dGVzdHBhc3M=
+  database: dGVzdA==
+  root.password: dGVzdA==
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fms-env-configmap
+data:
+  # master uri
+  master_uri.ros: http://fms-ros-master-service:11311
+
+  # database service
+  services.database: fms-db
+
+  # robots
+  fms.robot.max: "2"
+
+  # parameters
+  fms.map.frame: rb1_base_map
+  fms.map.file: "maps/decenter/decenter.yaml"
+  fms.node.graph.file: "graphs/test_graph.xml"
+  fms.web.socket.port: "30090"
+  fms.web.php.server: "localhost"
+  fms.web.map.topic: "/map"
+  fms.web.map.frame: "rb1_base_map"
+  fms.web.namespace: "/rb1_base"
+  fms.web.has.camera: "false"
+
+  mqtt.host: mqtt-broker-service
+  mqtt.port: "1883"
+  mqtt.protocol: "4"
+  mqtt.keepalive: "60"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fms-robot-1-env-configmap
+data:
+
+  fms.rlc.status.topic.mqtt: /robot_local_control/state
+  fms.rlc.status.topic.ros: /robot_local_control/state
+  fms.robot.id: '0'
+  fms.robot.local.namespace: rb1_base
+  fms.robot.name: robot_0
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fms-robot-2-env-configmap
+data:
+
+  fms.robot.local.namespace: rb1_base
+  fms.robot.name: robot_1
+  fms.robot.id: "1"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mosquitto-cfg-file-configmap
+data:
+  mosquitto.conf: |
+    port 1883
+    protocol mqtt
+    listener 9001 0.0.0.0
+    protocol websockets
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: test-fms-node-graph-cfg
+  namespace: default
+data:
+  test_graph.xml: |
+    <CGraph>
+      <m_NodeList>
+
+        <CNode>
+          <m_iNumber>100</m_iNumber>
+          <m_Position>
+            <X>-0.3</X>
+            <Y>0.2</Y>
+            <Z>0.0</Z>
+            <Theta>3.03</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-100-R</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>300</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>111</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>300</m_iNumber>
+          <m_Position>
+            <X>-0.3</X>
+            <Y>0.2</Y>
+            <Z>0.0</Z>
+            <Theta>0.00</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-300-L</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>100</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>301</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>101</m_iNumber>
+          <m_Position>
+            <X>2.3</X>
+            <Y>0.6</Y>
+            <Z>0.0</Z>
+            <Theta>-3.14</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-101-R</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>201</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>301</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>401</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>100</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>201</m_iNumber>
+          <m_Position>
+            <X>2.3</X>
+            <Y>0.6</Y>
+            <Z>0.0</Z>
+            <Theta>-1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-201-U</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>301</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>401</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>101</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>202</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>301</m_iNumber>
+          <m_Position>
+            <X>2.3</X>
+            <Y>0.6</Y>
+            <Z>0.0</Z>
+            <Theta>0.0</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-301-L</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>401</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>101</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>201</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>401</m_iNumber>
+          <m_Position>
+            <X>2.3</X>
+            <Y>0.6</Y>
+            <Z>0.0</Z>
+            <Theta>1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_bWaitEndGoto>1</m_bWaitEndGoto>
+          <m_sName>Node G-401-D</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>101</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>201</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>301</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>601</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>601</m_iNumber>
+          <m_Position>
+            <X>2.15</X>
+            <Y>1.8</Y>
+            <Z>1.0</Z>
+            <Theta>0.0</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_bUnload>1</m_bUnload>
+          <m_sName>Node U-601</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>701</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>701</m_iNumber>
+          <m_Position>
+            <!--
+            <X>2.15</X>
+            <Y>1.8</Y>
+            -->
+            <X>2.3</X>
+            <Y>0.6</Y>
+            <Z>0.0</Z>
+            <Theta>NAN</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_bDoNothing>1</m_bDoNothing>
+          <m_sName>Node S-701</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>201</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>202</m_iNumber>
+          <m_Position>
+            <X>2.3</X>
+            <Y>-0.4</Y>
+            <Z>0.0</Z>
+            <Theta>-1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-202-U</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>402</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>203</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>402</m_iNumber>
+          <m_Position>
+            <X>2.3</X>
+            <Y>-0.4</Y>
+            <Z>0.0</Z>
+            <Theta>1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_bWaitEndGoto>1</m_bWaitEndGoto>
+          <m_sName>Node G-402-D</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>202</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>401</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>203</m_iNumber>
+          <m_Position>
+            <X>2.5</X>
+            <Y>-2.2</Y>
+            <Z>0.0</Z>
+            <Theta>-1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-203-U</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>403</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>204</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>403</m_iNumber>
+          <m_Position>
+            <X>2.5</X>
+            <Y>-1.5</Y>
+            <Z>0.0</Z>
+            <Theta>1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-403-D</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>203</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>402</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>204</m_iNumber>
+          <m_Position>
+            <X>2.5</X>
+            <Y>-3.0</Y>
+            <Z>0.0</Z>
+            <Theta>-1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-204-U</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>404</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>205</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>404</m_iNumber>
+          <m_Position>
+            <X>2.5</X>
+            <Y>-3.0</Y>
+            <Z>0.0</Z>
+            <Theta>1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-404-D</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>204</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>403</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>105</m_iNumber>
+          <m_Position>
+            <X>2.6</X>
+            <Y>-4.0</Y>
+            <Z>0.0</Z>
+            <Theta>3.0</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-105-R</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>205</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>305</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>405</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>106</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>205</m_iNumber>
+          <m_Position>
+            <X>2.6</X>
+            <Y>-4.0</Y>
+            <Z>0.0</Z>
+            <Theta>-1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-205-U</m_sName>
+          <m_bWaitEndGoto>1</m_bWaitEndGoto>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>305</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>405</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>105</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>505</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>305</m_iNumber>
+          <m_Position>
+            <X>2.6</X>
+            <Y>-4.0</Y>
+            <Z>0.0</Z>
+            <Theta>0.1</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-305-L</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>405</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>105</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>205</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>405</m_iNumber>
+          <m_Position>
+            <X>2.6</X>
+            <Y>-4.0</Y>
+            <Z>0.0</Z>
+            <Theta>1.62</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-405-D</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>105</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>205</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>305</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>404</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>505</m_iNumber>
+          <m_Position>
+            <!--
+            <X>2.8</X>
+            <Y>-4.8</Y>
+            -->
+            <X>2.6</X>
+            <Y>-4.0</Y>
+            <Z>1.0</Z>
+            <Theta>0.0</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_bLoad>1</m_bLoad>
+          <m_sName>Node L-505</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>705</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>705</m_iNumber>
+          <m_Position>
+            <!--
+            <X>2.8</X>
+            <Y>-4.8</Y>
+            -->
+            <X>2.6</X>
+            <Y>-4.0</Y>
+            <Z>0.0</Z>
+            <Theta>NAN</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_bDoNothing>1</m_bDoNothing>
+          <m_sName>Node S-705</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>405</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>106</m_iNumber>
+          <m_Position>
+            <X>0.4</X>
+            <Y>-4.3</Y>
+            <Z>0.0</Z>
+            <Theta>3.1416</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-106-R</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>306</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>107</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>306</m_iNumber>
+          <m_Position>
+            <X>0.4</X>
+            <Y>-4.3</Y>
+            <Z>0.0</Z>
+            <Theta>0.0</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-306-L</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>106</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>305</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>107</m_iNumber>
+          <m_Position>
+            <X>-2.7</X>
+            <Y>-4.7</Y>
+            <Z>0.0</Z>
+            <Theta>3.1416</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-107-R</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>207</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>307</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>407</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>207</m_iNumber>
+          <m_Position>
+            <X>-2.7</X>
+            <Y>-4.7</Y>
+            <Z>0.0</Z>
+            <Theta>-1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-207-U</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>307</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>407</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>107</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>307</m_iNumber>
+          <m_Position>
+            <X>-2.7</X>
+            <Y>-4.7</Y>
+            <Z>0.0</Z>
+            <Theta>0.0</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-307-L</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>407</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>107</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>207</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>306</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>407</m_iNumber>
+          <m_Position>
+            <X>-2.7</X>
+            <Y>-4.7</Y>
+            <Z>0.0</Z>
+            <Theta>1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-407-D</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>107</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>207</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>307</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>408</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>208</m_iNumber>
+          <m_Position>
+            <X>-2.8</X>
+            <Y>-3.3</Y>
+            <Z>0.0</Z>
+            <Theta>-1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-208-U</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>408</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>207</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>408</m_iNumber>
+          <m_Position>
+            <X>-2.8</X>
+            <Y>-3.3</Y>
+            <Z>0.0</Z>
+            <Theta>1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-408-D</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>208</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>409</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>209</m_iNumber>
+          <m_Position>
+            <X>-2.9</X>
+            <Y>-2.5</Y>
+            <Z>0.0</Z>
+            <Theta>-1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-209-U</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>409</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>208</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>409</m_iNumber>
+          <m_Position>
+            <X>-2.9</X>
+            <Y>-2.5</Y>
+            <Z>0.0</Z>
+            <Theta>1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-409-D</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>209</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>410</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>210</m_iNumber>
+          <m_Position>
+            <X>-3.0</X>
+            <Y>-1.3</Y>
+            <Z>0.0</Z>
+            <Theta>-1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-210-U</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>410</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>209</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>410</m_iNumber>
+          <m_Position>
+            <X>-3.0</X>
+            <Y>-1.3</Y>
+            <Z>0.0</Z>
+            <Theta>1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-410-D</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>210</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>411</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>111</m_iNumber>
+          <m_Position>
+            <X>-3.1</X>
+            <Y>-0.17</Y>
+            <Z>0.0</Z>
+            <Theta>3.1416</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-111-R</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>211</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>311</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>411</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>211</m_iNumber>
+          <m_Position>
+            <X>-3.1</X>
+            <Y>-0.17</Y>
+            <Z>0.0</Z>
+            <Theta>-1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-211-U</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>311</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>411</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>111</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>210</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>311</m_iNumber>
+          <m_Position>
+            <X>-3.1</X>
+            <Y>-0.17</Y>
+            <Z>0.0</Z>
+            <Theta>0.0</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-311-L</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>411</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>111</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>211</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>300</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+        <CNode>
+          <m_iNumber>411</m_iNumber>
+          <m_Position>
+            <X>-3.1</X>
+            <Y>-0.17</Y>
+            <Z>0.0</Z>
+            <Theta>1.57</Theta>
+            <Frame>rb1_base_map</Frame>
+          </m_Position>
+          <m_bStop>1</m_bStop>
+          <m_sName>Node G-411-D</m_sName>
+          <m_ArcList>
+            <CArc>
+              <m_iNodeDst>111</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>211</m_iNodeDst>
+            </CArc>
+            <CArc>
+              <m_iNodeDst>311</m_iNodeDst>
+            </CArc>
+          </m_ArcList>
+        </CNode>
+
+      </m_NodeList>
+    </CGraph>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fms-db
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: mysql
+      port: 3306
+      protocol: TCP
+  selector:
+    app: fms-db-pod
+    group: fms-group
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mqtt-bridge-cfg-files-configmap
+data:
+  mqtt_params_robot.yaml: |
+    ---
+    mqtt:
+      client:
+        protocol: $(arg mqtt_protocol)      # MQTTv311
+      connection:
+        host: $(arg mqtt_host)
+        port: $(arg mqtt_port)
+        keepalive: $(arg mqtt_keepalive)
+      private_path: device/001
+    serializer: json:dumps
+    deserializer: json:loads
+    bridge:
+      # topics
+      # RLC status
+      - factory: mqtt_bridge.bridge:RosToMqttBridge
+        msg_type: robot_local_control_msgs.msg:Status
+        topic_from: /$(arg id_robot)$(arg ros_topic)
+        topic_to: ros$(arg mqtt_topic)/robot_$(arg fms_id)
+        latched: true
+        qos: 2
+      # Services
+      - factory: mqtt_bridge.bridge:DynamicBridgeServer
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+      # # image enabler
+      # - factory: mqtt_bridge.bridge:LocalServiceProxy
+      #   control_topic: '__dynamic_server_robot_$(arg fms_id)'
+      #   local_server: /$(arg id_robot)/image_provider/comm_enable
+      #   remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/image_provider/comm_enable
+      #   srv_type: std_srvs.srv:SetBool
+      # # set led signals
+      # - factory: mqtt_bridge.bridge:LocalServiceProxy
+      #   control_topic: '__dynamic_server_robot_$(arg fms_id)'
+      #   local_server: /$(arg id_robot)/leds_driver/set_signal
+      #   remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/leds_driver/set_signal
+      #   srv_type: robotnik_signal_msgs.srv:SetSignal
+      # # clear leds signal
+      # - factory: mqtt_bridge.bridge:LocalServiceProxy
+      #   control_topic: '__dynamic_server_robot_$(arg fms_id)'
+      #   local_server: /$(arg id_robot)/leds_driver/clear_signals
+      #   remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/leds_driver/clear_signals
+      #   srv_type: std_srvs.srv:Trigger
+      # # set digital outputs
+      # - factory: mqtt_bridge.bridge:LocalServiceProxy
+      #   control_topic: '__dynamic_server_robot_$(arg fms_id)'
+      #   local_server: /$(arg id_robot)/robotnik_base_hw/set_digital_output
+      #   remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robotnik_base_hw/set_digital_output
+      #   srv_type: robotnik_msgs.srv:set_digital_output
+      # GoToComponent
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/GoToComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/GoToComponent/add
+        srv_type: robot_local_control_msgs.srv:GoToPetition
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/GoToComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/GoToComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/GoToComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/GoToComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      # PickComponent
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/PickComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PickComponent/add
+        srv_type: robot_local_control_msgs.srv:PickPetition
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/PickComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PickComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/PickComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PickComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      # PlaceComponent
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/PlaceComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PlaceComponent/add
+        srv_type: robot_local_control_msgs.srv:PlacePetition
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/PlaceComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PlaceComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/PlaceComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PlaceComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      # ChargeComponent
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/ChargeComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/ChargeComponent/add
+        srv_type: robot_local_control_msgs.srv:ChargePetition
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/ChargeComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/ChargeComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/ChargeComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/ChargeComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      # UnchargeComponent
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/UnchargeComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/UnchargeComponent/add
+        srv_type: robot_local_control_msgs.srv:UnchargePetition
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/UnchargeComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/UnchargeComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/UnchargeComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/UnchargeComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      # MoveComponent
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/MoveComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/MoveComponent/add
+        srv_type: robot_local_control_msgs.srv:MovePetition
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/MoveComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/MoveComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:LocalServiceProxy
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /$(arg id_robot)/robot_local_control/NavigationComponent/MoveComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/MoveComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+
+  mqtt_params_fms_robot.yaml: |
+    ---
+    mqtt:
+      client:
+        protocol: $(arg mqtt_protocol)      # MQTTv311
+      connection:
+        host: $(arg mqtt_host)
+        port: $(arg mqtt_port)
+        keepalive: $(arg mqtt_keepalive)
+      private_path: device/001
+    serializer: json:dumps
+    deserializer: json:loads
+    bridge:
+      # topics
+      - factory: mqtt_bridge.bridge:MqttToRosBridge
+        msg_type: robot_local_control_msgs.msg:Status
+        topic_from: ros$(arg mqtt_topic)/robot_$(arg fms_id)
+        topic_to: /robot_$(arg fms_id)/$(arg robot_namespace)$(arg ros_topic)
+        latched: true
+        qos: 2
+      # Services
+      # - factory: mqtt_bridge.bridge:DynamicBridgeServer
+      #   control_topic: '__dynamic_server_robot_$(arg fms_id)'
+      # # image enabler
+      # - factory: mqtt_bridge.bridge:RemoteService
+      #   control_topic: '__dynamic_server_robot_$(arg fms_id)'
+      #   local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/image_provider/comm_enable
+      #   remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/image_provider/comm_enable
+      #   srv_type: std_srvs.srv:SetBool
+      # # led set signal
+      # - factory: mqtt_bridge.bridge:RemoteService
+      #   control_topic: '__dynamic_server_robot_$(arg fms_id)'
+      #   local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/leds_driver/set_signal
+      #   remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/leds_driver/set_signal
+      #   srv_type: robotnik_signal_msgs.srv:SetSignal
+      # # clear leds signal
+      # - factory: mqtt_bridge.bridge:RemoteService
+      #   control_topic: '__dynamic_server_robot_$(arg fms_id)'
+      #   local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/leds_driver/clear_signals
+      #   remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/leds_driver/clear_signals
+      #   srv_type: std_srvs.srv:Trigger
+      # # set digital outputs
+      # - factory: mqtt_bridge.bridge:RemoteService
+      #   control_topic: '__dynamic_server_robot_$(arg fms_id)'
+      #   local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robotnik_base_hw/set_digital_output
+      #   remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robotnik_base_hw/set_digital_output
+      #   srv_type: robotnik_msgs.srv:set_digital_output
+      # GoToComponent
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/GoToComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/GoToComponent/add
+        srv_type: robot_local_control_msgs.srv:GoToPetition
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/GoToComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/GoToComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/GoToComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/GoToComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      # PickComponent
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/PickComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PickComponent/add
+        srv_type: robot_local_control_msgs.srv:PickPetition
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/PickComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PickComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/PickComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PickComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      # PlaceComponent
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/PlaceComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PlaceComponent/add
+        srv_type: robot_local_control_msgs.srv:PlacePetition
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/PlaceComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PlaceComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/PlaceComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/PlaceComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      # ChargeComponent
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/ChargeComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/ChargeComponent/add
+        srv_type: robot_local_control_msgs.srv:ChargePetition
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/ChargeComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/ChargeComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/ChargeComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/ChargeComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      # UnchargeComponent
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/UnchargeComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/UnchargeComponent/add
+        srv_type: robot_local_control_msgs.srv:UnchargePetition
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/UnchargeComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/UnchargeComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/UnchargeComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/UnchargeComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      # MoveComponent
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/MoveComponent/add
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/MoveComponent/add
+        srv_type: robot_local_control_msgs.srv:MovePetition
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/MoveComponent/cancel
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/MoveComponent/cancel
+        srv_type: procedures_msgs.srv:ProcedureQuery
+      - factory: mqtt_bridge.bridge:RemoteService
+        control_topic: '__dynamic_server_robot_$(arg fms_id)'
+        local_server: /robot_$(arg fms_id)/$(arg robot_namespace)/robot_local_control/NavigationComponent/MoveComponent/query_state
+        remote_server: /mqtt_srv_bridge/robot_$(arg fms_id)/robot_local_control/NavigationComponent/MoveComponent/query_state
+        srv_type: procedures_msgs.srv:ProcedureQuery
+  bringup_robot.launch: |
+    <?xml version="1.0" ?>
+    <launch>
+
+        <!-- MQTT connection arguments -->
+        <arg
+            name="mqtt_host"
+            default="$(optenv MQTT_HOST localhost)"
+        />
+        <arg
+            name="mqtt_port"
+            default="$(optenv MQTT_PORT 1883)"
+        />
+        <arg
+            name="mqtt_protocol"
+            default="$(optenv MQTT_PROTOCOL 4)"
+        />
+        <arg
+            name="mqtt_keepalive"
+            default="$(optenv MQTT_KEEPALIVE 60)"
+        />
+        <arg
+            name="id_robot"
+            default="$(optenv ROBOT_ID rb1_base)"
+        />
+        <arg
+            name="fms_id"
+            default="$(optenv ROBOT_FMS_ID 0)"
+        />
+        <arg
+            name="node_name"
+            default="$(optenv NODE_NAME mqtt_bridge_client)"
+        />
+        <!-- Topic Arguments -->
+        <arg
+            name="mqtt_topic"
+            default="$(optenv MQTT_TOPIC /robot_local_control/state)"
+        />
+
+      <!-- Ros topic without prefix Topic Arguments -->
+        <arg
+            name="ros_topic"
+            default="$(optenv RLC_TOPIC /robot_local_control/state)"
+        />
+
+        <arg
+            name="mqtt_config_file"
+            default="$(optenv MQTT_CONFIG_FILE mqtt_params.yaml)"
+        />
+
+        <!-- launch mqtt bridge -->
+        <group ns="$(arg id_robot)">
+            <node
+                name="$(arg node_name)"
+                pkg="mqtt_bridge"
+                type="mqtt_bridge_node.py"
+                output="screen"
+            >
+                <rosparam
+                    command="load"
+                    file="$(find rlc2mqtt)/config/$(arg mqtt_config_file)"
+                    subst_value="true"
+                />
+            </node>
+        </group>
+    </launch>
+
+  bringup_fms.launch: |
+    <?xml version="1.0" ?>
+    <launch>
+
+        <!-- MQTT connection arguments -->
+        <arg
+            name="mqtt_host"
+            default="$(optenv MQTT_HOST localhost)"
+        />
+        <arg
+            name="mqtt_port"
+            default="$(optenv MQTT_PORT 1883)"
+        />
+        <arg
+            name="mqtt_protocol"
+            default="$(optenv MQTT_PROTOCOL 4)"
+        />
+        <arg
+            name="mqtt_keepalive"
+            default="$(optenv MQTT_KEEPALIVE 60)"
+        />
+        <arg
+            name="fms_id"
+            default="$(optenv ROBOT_FMS_ID 0)"
+        />
+        <arg
+            name="id_robot"
+            default="$(optenv ROBOT_ID robot_0)"
+        />
+        <arg
+            name="robot_namespace"
+            default="$(optenv ROBOT_NAMESPACE rb1_base)"
+        />
+        <arg
+            name="prefix"
+            default="/robot_$(arg fms_id)/$(arg robot_namespace)"
+        />
+        <arg
+            name="node_name"
+            default="$(optenv NODE_NAME mqtt_bridge_client)"
+        />
+        <!-- Topic Arguments -->
+        <arg
+            name="mqtt_topic"
+            default="$(optenv MQTT_TOPIC /robot_local_control/state)"
+        />
+
+      <!-- Ros topic without prefix Topic Arguments -->
+        <arg
+            name="ros_topic"
+            default="$(optenv RLC_TOPIC /robot_local_control/state)"
+        />
+
+        <arg
+            name="mqtt_config_file"
+            default="$(optenv MQTT_CONFIG_FILE mqtt_params.yaml)"
+        />
+
+        <!-- launch mqtt bridge -->
+        <group ns="$(arg prefix)">
+            <node
+                name="$(arg node_name)"
+                pkg="mqtt_bridge"
+                type="mqtt_bridge_node.py"
+                output="screen"
+            >
+                <rosparam
+                    command="load"
+                    file="$(find rlc2mqtt)/config/$(arg mqtt_config_file)"
+                    subst_value="true"
+                />
+            </node>
+        </group>
+    </launch>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fms-ros-master-service
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: ros
+      port: 11311
+      protocol: TCP
+  selector:
+    app: ros-master-pod
+    group: fms-group
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fms-ros-websocket-service
+spec:
+  type: LoadBalancer
+  ports:
+    - name: rosws
+      port: 30090
+      targetPort: 30090
+      # nodePort: 30090
+      protocol: TCP
+  selector:
+    app: fms-ros-pod
+    group: fms-group
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fms-webserver-publish-http
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      # nodePort: 30180
+      protocol: TCP
+  selector:
+    app: fms-webserver-pod
+    group: fms-group
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt-broker-service
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: default
+      port: 1883
+      protocol: TCP
+    - name: websocket
+      port: 9001
+      protocol: TCP
+  selector:
+    app: mqtt-broker-pod
+    group: fms-group
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt-broker-external-service
+spec:
+  type: LoadBalancer
+  ports:
+    - name: default
+      port: 1883
+      protocol: TCP
+    - name: websocket
+      port: 9001
+      protocol: TCP
+  selector:
+    app: mqtt-broker-pod
+    group: fms-group
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fms-database
+  labels:
+    app: fms-db-pod
+    group: fms-group
+spec:
+  selector:
+    matchLabels:
+      app: fms-db-pod
+      group: fms-group
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: fms-db-pod
+        group: fms-group
+    spec:
+      # volumes:
+      #   - name: fms-database-persistent-storage
+      #     persistentVolumeClaim:
+      #       claimName: fms-database-pv-claim
+      containers:
+        - name: db-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/mariadb:10.4.16
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: fms-db-credentials
+                  key: root.password
+          # volumeMounts:
+          #   - name: fms-database-persistent-storage
+          #     mountPath: /var/lib/mysql
+          startupProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  mysqladmin status -uroot -p"${MYSQL_ROOT_PASSWORD}"
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  mysqladmin status -uroot -p"${MYSQL_ROOT_PASSWORD}"
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  mysqladmin status -uroot -p$MYSQL_ROOT_PASSWORD
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+
+#/usr/bin/mysqladmin -u root password pass
+#mysql -u root -ppass mysql
+#GRANT ALL ON *.* to root@'%' IDENTIFIED BY 'pass';
+#FLUSH PRIVILEGES;
+### user robotnik need to be created
+#GRANT ALL ON *.* to robotnik@'%' IDENTIFIED BY 'R0b0tn1k';
+#mysql -u test -ptestpass -h fms-db robotnik </tmp/robotnik.sql---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fms-ros-master
+  labels:
+    app: ros-master-pod
+    group: fms-group
+spec:
+  selector:
+    matchLabels:
+      app: ros-master-pod
+      group: fms-group
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ros-master-pod
+        group: fms-group
+    spec:
+      containers:
+        - name: ros-master-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/alpine-ros:kinetic-ros-core
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          args:
+            - roscore
+          ports:
+            - containerPort: 11311
+              name: rosmasterport
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fms-ros
+  labels:
+    app: fms-ros-pod
+    group: fms-group
+spec:
+  selector:
+    matchLabels:
+      app: fms-ros-pod
+      group: fms-group
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: fms-ros-pod
+        group: fms-group
+    spec:
+      volumes:
+        - name: test-fms-node-graph-configmap-volume
+          configMap:
+            name: test-fms-node-graph-cfg
+      initContainers:
+        - name: ros-test-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/alpine-ros:kinetic-ros-core
+          command:
+            - /bin/bash
+            - '-c'
+          args:
+            - >
+              source /usr/ros/kinetic/setup.bash && for i in {1..1000};
+              do rosnode ping -c1 /rosout | grep -q -E
+              time=[0-9]+\(.[0-9]+\)?ms; if [ $? -eq 0 ]; then exit 0;
+              fi; sleep 0.25; done; exit 1
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+        - name: db-test-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/mariadb:10.4.16
+          command:
+            - /bin/sh
+            - '-c'
+          args:
+            - >
+              for i in $(seq 1 1000); do mysql -h${MYSQL_HOSTNAME}
+              -uroot -p${MYSQL_ROOT_PASSWORD} -e "SELECT 1"; if [ $? -eq
+              0 ]; then exit 0; fi; echo "connection failed" sleep 0.5;
+              done; exit 1
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: fms-db-credentials
+                  key: root.password
+            - name: MYSQL_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: services.database
+        - name: db-check-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/mariadb:10.4.16
+          command:
+            - /bin/sh
+            - '-c'
+          args:
+            - >
+              for i in $(seq 1 1000); do mysql -h${MYSQL_HOSTNAME}
+              -u${DB_USERNAME} -p${DB_PASS} -D${DB_DATABASE} -e "SELECT
+              1"; if [ $? -eq 0 ]; then exit 0; fi; echo "connection
+              failed" sleep 0.5; done; exit 1
+          env:
+            - name: MYSQL_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: services.database
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: fms-db-credentials
+                  key: username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: fms-db-credentials
+                  key: password
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: fms-db-credentials
+                  key: database
+      containers:
+        - name: alarm-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:base-1.3.0
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROS_BU_LAUNCH
+              value: robotnik_alarm_monitor.launch
+        - name: database-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:base-1.3.0
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROS_BU_LAUNCH
+              value: robotnik_fms_ddbb_manager.launch
+        - name: dispatcher-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:base-1.3.0
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROS_BU_LAUNCH
+              value: robotnik_fms_dispatcher.launch
+            - name: MAX_ROBOTS
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.robot.max
+            - name: ROBOT_1_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-robot-1-env-configmap
+                  key: fms.robot.name
+            - name: ROBOT_2_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-robot-2-env-configmap
+                  key: fms.robot.name
+        - name: mapserver-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:base-1.3.0
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROS_BU_LAUNCH
+              value: robotnik_fms_map_server.launch
+            - name: MAP_FRAME
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.map.frame
+            - name: MAP_FILE
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.map.file
+        - name: metaplanner-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:base-1.3.0
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROS_BU_LAUNCH
+              value: robotnik_fms_metaplanner.launch
+        - name: planner-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:base-1.3.0
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROS_BU_LAUNCH
+              value: robotnik_fms_planner.launch
+            - name: MAX_ROBOTS
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.robot.max
+        - name: routes-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:base-1.3.0
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROS_BU_LAUNCH
+              value: robotnik_fms_routes.launch
+            - name: ROBOT_1_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-robot-1-env-configmap
+                  key: fms.robot.name
+            - name: ROBOT_2_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-robot-2-env-configmap
+                  key: fms.robot.name
+            - name: MAX_ROBOTS
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.robot.max
+            - name: GRAPH_FILE
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.node.graph.file
+          volumeMounts:
+            - name: test-fms-node-graph-configmap-volume
+              mountPath: >-
+                /home/ros/catkin_ws/install/share/robotnik_fms_bringup/config/graphs/test_graph.xml
+              subPath: test_graph.xml
+        - name: tco-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:base-1.3.0
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROS_BU_PKG
+              value: TCO_arraymarkers
+            - name: ROS_BU_LAUNCH
+              value: TCO_arraymarkers.launch
+        - name: websocket-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:base-1.3.0
+          ports:
+            - name: rosjsport
+              containerPort: 30090
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROS_BU_LAUNCH
+              value: web_launch.launch
+            - name: WS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.web.socket.port
+            - name: NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.web.namespace
+            - name: MAP_FRAME
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.web.map.frame
+            - name: MAP_TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.web.map.topic
+            - name: HAS_CAMERA
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.web.has.camera
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fms-webserver
+  labels:
+    app: fms-webserver-pod
+    group: fms-group
+spec:
+  selector:
+    matchLabels:
+      app: fms-webserver-pod
+      group: fms-group
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: fms-webserver-pod
+        group: fms-group
+    spec:
+      containers:
+        - name: phpserver-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:php-server-1.3.0
+          env:
+            - name: WS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.web.socket.port
+        - name: webserver-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:web-server-1.3.0
+          ports:
+            - name: webserver
+              containerPort: 80
+          env:
+            - name: WS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.web.socket.port
+            - name: PHP_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.web.php.server
+            - name: GLOBAL_FRAME
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.web.map.frame
+            - name: MAP_TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: fms.web.map.topic
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-broker
+  labels:
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt-broker-pod
+      group: fms-group
+  template:
+    metadata:
+      labels:
+        app: mqtt-broker-pod
+        group: fms-group
+    spec:
+      volumes:
+        - name: mosquitto-cfg-file-configmap-vol
+          configMap:
+            name: mosquitto-cfg-file-configmap
+      containers:
+        - name: mosquitto-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/eclipse-mosquitto:1.6.12
+          ports:
+            - name: default
+              containerPort: 1883
+              protocol: TCP
+            - name: websocket
+              containerPort: 9001
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: default
+          readinessProbe:
+            tcpSocket:
+              port: default
+          volumeMounts:
+            - name: mosquitto-cfg-file-configmap-vol
+              mountPath: /mosquitto/config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fms-ros-robot-1
+  labels:
+    app: fms-ros-robot-1-pod
+    group: fms-group
+spec:
+  selector:
+    matchLabels:
+      app: fms-ros-robot-1-pod
+      group: fms-group
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: fms-ros-robot-1-pod
+        group: fms-group
+    spec:
+      volumes:
+        - name: mqtt-srv-param-configmap-volume
+          configMap:
+            name: mqtt-bridge-cfg-files-configmap
+      initContainers:
+        - name: ros-test-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/alpine-ros:kinetic-ros-core
+          command:
+            - /bin/bash
+            - '-c'
+          args:
+            - >
+              source /usr/ros/kinetic/setup.bash && for i in {1..1000};
+              do rosnode ping -c1 /rosout | grep -q -E
+              time=[0-9]+\(.[0-9]+\)?ms; if [ $? -eq 0 ]; then exit 0;
+              fi; sleep 0.25; done; exit 1
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
+        - name: mosquitto-test-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/eclipse-mosquitto:1.6.12
+          command:
+            - /bin/sh
+            - '-c'
+          args:
+            - >
+              for i in $(seq 1 1000); do mosquitto_sub -E -t '#' -h
+              $MQTT_HOST -p $MQTT_PORT; if [ $? -eq 0 ]; then exit 0;
+              fi; sleep 0.25; done; exit 1
+          env:
+            - name: MQTT_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: mqtt.host
+            - name: MQTT_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: mqtt.port
+
+      containers:
+        - name: robot-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/robotnik_fms:base-1.3.0
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROS_BU_LAUNCH
+              value: robotnik_fms_robot.launch
+            - name: ROBOT_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-robot-1-env-configmap
+                  key: fms.robot.name
+            - name: FMS_ROBOT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-robot-1-env-configmap
+                  key: fms.robot.id
+            - name: ROBOT_LOCAL_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-robot-1-env-configmap
+                  key: fms.robot.local.namespace
+        - name: mqtt2ros-container
+          image: >-
+            docker.mobiledgex.net/robotnik/images/rlc2:mqtt-2.0.0
+          env:
+            - name: ROS_MASTER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: master_uri.ros
+            - name: ROS_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROBOT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-robot-1-env-configmap
+                  key: fms.robot.name
+            - name: ROBOT_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-robot-1-env-configmap
+                  key: fms.robot.local.namespace
+            - name: MQTT_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: mqtt.host
+            - name: MQTT_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: mqtt.port
+            - name: MQTT_KEEPALIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: mqtt.keepalive
+            - name: MQTT_PROTOCOL
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-env-configmap
+                  key: mqtt.protocol
+            - name: MQTT_TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-robot-1-env-configmap
+                  key: fms.rlc.status.topic.mqtt
+            - name: RLC_TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  name: fms-robot-1-env-configmap
+                  key: fms.rlc.status.topic.ros
+            - name: MQTT_CONFIG_FILE
+              value: mqtt_params_fms_robot.yaml
+            - name: ROS_BU_LAUNCH
+              value: bringup_fms.launch
+          volumeMounts:
+            - name: mqtt-srv-param-configmap-volume
+              mountPath: >-
+                /home/ros/catkin_ws/install/share/rlc2mqtt/config/mqtt_params_fms_robot.yaml
+              subPath: mqtt_params_fms_robot.yaml
