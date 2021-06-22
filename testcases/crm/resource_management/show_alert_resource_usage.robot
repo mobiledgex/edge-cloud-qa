@@ -13,11 +13,11 @@ Test Teardown  Cleanup Provisioning
 Test Timeout    ${test_timeout_crm1}
 
 *** Variables ***
-${region}=  EU
+${region}=  US
 ${developer}=  mobiledgex
 
-${operator_name_openstack}  TDG
-${physical_name_openstack}  munich
+${operator_name_openstack_packet}  packet
+${physical_name_openstack_packet}  packet
 
 ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:9.0
 ${qcow_centos_image}  https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7.qcow2#md5:8d8f9c268fd419b16084c9ba054b483a
@@ -46,14 +46,14 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
 
 
    # create cloudlet with resource quotas
-   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  token=${tokenop}  auto_delete=False
+   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_packet}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  token=${tokenop}  auto_delete=False
 
    Should Be Equal As Numbers   ${cloudlet1['data']['default_resource_alert_threshold']}  80
 
    Verify Resource Usage  2  8192  4  CurrentUsage
    Verify Resource Usage  4  14336  8  MaxQuota
   
-   ${cloudlet_info}=   Show Cloudlet Info  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  token=${tokenop}
+   ${cloudlet_info}=   Show Cloudlet Info  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  token=${tokenop}
 
    ${openstack_limits}=  Get Limits
    Log to Console  ${openstack_limits}
@@ -64,19 +64,18 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][1]['value']}              ${openstack_limits['totalCoresUsed']}
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][1]['infra_max_value']}    ${openstack_limits['maxTotalCores']}
 
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][2]['value']}              ${openstack_limits['totalGigabytesUsed']}
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][2]['infra_max_value']}    ${openstack_limits['maxTotalVolumeGigabytes']}
+   #Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][2]['infra_max_value']}    ${openstack_limits['maxTotalVolumeGigabytes']}
 
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][3]['value']}              ${openstack_limits['totalInstancesUsed']}
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][3]['infra_max_value']}    ${openstack_limits['maxTotalInstances']}
+   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][2]['value']}              ${openstack_limits['totalInstancesUsed']}
+   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][2]['infra_max_value']}    ${openstack_limits['maxTotalInstances']}
 
 
    ${ram_inframaxvalue}=    Set Variable  ${cloudlet_info[0]['data']['resources_snapshot']['info'][0]['infra_max_value']}
    ${cores_inframaxvalue}=  Set Variable  ${cloudlet_info[0]['data']['resources_snapshot']['info'][1]['infra_max_value']}
-   ${disk_inframaxvalue}=   Set Variable  ${cloudlet_info[0]['data']['resources_snapshot']['info'][2]['infra_max_value']}
-   ${inst_inframaxvalue}=   Set Variable  ${cloudlet_info[0]['data']['resources_snapshot']['info'][3]['infra_max_value']}
+   #${disk_inframaxvalue}=   Set Variable  ${cloudlet_info[0]['data']['resources_snapshot']['info'][2]['infra_max_value']}
+   ${inst_inframaxvalue}=   Set Variable  ${cloudlet_info[0]['data']['resources_snapshot']['info'][2]['infra_max_value']}
 
-   Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  token=${tokendev}  auto_delete=False
+   Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  token=${tokendev}  auto_delete=False
    Verify Resource Usage   4  14336  8  CurrentUsage
    Verify Resource Usage   ${inst_inframaxvalue}  ${ram_inframaxvalue}  ${cores_inframaxvalue}  MaxInfra 
 
@@ -101,7 +100,7 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
    @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}
 
    # update cloudlet with resource quotas
-   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
+   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
 
    Sleep  60s
    ${alert1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 75% of RAM is used  token=${tokenop}
@@ -133,7 +132,7 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
    @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}
 
    # update cloudlet with resource quotas
-   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
+   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
 
    ${ram_alert_threshold}=  Set Variable  ${cloudlet1['data']['resource_quotas'][0]['alert_threshold']}
    ${vcpu_alert_threshold}=  Set Variable  ${cloudlet1['data']['resource_quotas'][1]['alert_threshold']}
@@ -156,8 +155,8 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
    Should Not Be Empty  ${alert4[0]['data']}
 
    #Alerts should be removed after cloudlet is deleted
-   Delete Cluster Instance  region=${region}  developer_org_name=${org_name_dev}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  token=${tokendev}
-   Delete Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  token=${tokenop}
+   Delete Cluster Instance  region=${region}  developer_org_name=${org_name_dev}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokendev}
+   Delete Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
    Sleep  10s
    ${alert1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  token=${tokenop}
    Should Be Empty  ${alert1}
@@ -192,7 +191,7 @@ Setup
    Create User  username=${usernamedev_epoch}  password=${password}  email_address=${emaildev}
    Unlock User
 
-   Adduser Role  username=${usernameop_epoch}  orgname=${operator_name_openstack}  role=OperatorManager  
+   Adduser Role  username=${usernameop_epoch}  orgname=${operator_name_openstack_packet}  role=OperatorManager  
    Adduser Role  username=${usernamedev_epoch}  orgname=${org_name_dev}  role=DeveloperContributor
 
    ${tokenop}=  Login  username=${usernameop_epoch}  password=${password}
@@ -213,7 +212,7 @@ Verify Resource Usage
    [Arguments]   ${instances}  ${ram}  ${vcpu}  ${type}
 
    @{resource_list}=  Create List  ${instances}  ${ram}  ${vcpu}
-   ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  token=${tokenop}
+   ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
    log to console  ${resource_usage}
 
    Run Keyword If  '${type}' == 'CurrentUsage'   Verify Current Usage  ${resource_list}  ${resource_usage}
@@ -224,23 +223,23 @@ Verify Current Usage
    [Arguments]  ${resourcelist}  ${resourceusage}
 
    #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[0]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[1]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${resourcelist[2]}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[2]}            #vCPUs
 
 Verify Infra Limits
    [Arguments]  ${resourcelist}  ${resourceusage}
 
    #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['infra_max_value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['infra_max_value']}  ${resourcelist[0]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['infra_max_value']}  ${resourcelist[1]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['infra_max_value']}  ${resourcelist[2]}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['infra_max_value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['infra_max_value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['infra_max_value']}  ${resourcelist[2]}            #vCPUs
 
 Verify Quota Limits
    [Arguments]  ${resourcelist}  ${resourceusage}
 
    #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['quota_max_value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[0]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[1]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['quota_max_value']}  ${resourcelist[2]}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['quota_max_value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[2]}            #vCPUs
 

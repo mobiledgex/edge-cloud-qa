@@ -73,20 +73,26 @@ DMEPersistentConnection - Latency edge event without GPS shall return error
 
     [Tags]  DMEPersistentConnection
 
-    #${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
-    #${cloudlet}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=36  longitude=-96
-#
-#    Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
-#    Should Be True  len('${cloudlet.edge_events_cookie}') > 100
-#
-#    @{samples}=  Create List  ${10.4}  ${4.20}  ${30}  ${440}  ${0.50}  ${6.00}  ${170.45}
-#
-#    Create DME Persistent Connection  carrier_name=${operator_name_fake}x  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
-
     ${error}=  Run Keyword And Expect Error  *  Send Latency Edge Event  carrier_name=${operator_name_fake}  samples=${samples}
 
     Should Contain  ${error}  event_type: EVENT_ERROR
-    Should Contain  ${error}  "No location in EVENT_LATENCY_SAMPLES, error is: rpc error: code = InvalidArgument desc = Missing GpsLocation"
+    Should Contain  ${error}  "Invalid EVENT_LATENCY_SAMPLES, invalid location: rpc error: code = InvalidArgument desc = Missing GpsLocation"
+
+# ECQ-3403
+DMEPersistentConnection - Latency edge event with invalid GPS shall return error
+    [Documentation]
+    ...  - make DME persistent connection
+    ...  - send Latency Edge Event with out of range lat/long
+    ...  - verify error is returned
+
+    [Tags]  DMEPersistentConnection
+
+    # EDGECLOUD-4963 incorrect error message when sending edge event latency samples with invalid GPS - fixed/closed
+
+    ${error}=  Run Keyword And Expect Error  *  Send Latency Edge Event  carrier_name=${operator_name_fake}  samples=${samples}  latitude=91  longitude=-91
+
+    Should Contain  ${error}  event_type: EVENT_ERROR
+    Should Contain  ${error}  "Invalid EVENT_LATENCY_SAMPLES, invalid location: rpc error: code = InvalidArgument desc = Invalid GpsLocation" 
 
 *** Keywords ***
 Setup

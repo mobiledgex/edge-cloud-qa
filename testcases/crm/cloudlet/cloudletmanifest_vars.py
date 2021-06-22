@@ -4,14 +4,14 @@ manifest_1 =  """manifestitems:
     from the link
   contenttype: url
   contentsubtype: none
-  content: https://artifactory-qa.mobiledgex.net/artifactory/baseimages/mobiledgex-v4.3.2.qcow2"""
+  content: https://artifactory-qa.mobiledgex.net/artifactory/baseimages/mobiledgex-v4.4.3.qcow2"""
 
 manifest_2 = """- id: 2
   title: Execute the following command to upload the image to your glance store
   contenttype: command
   contentsubtype: none
-  content: openstack image create mobiledgex-v4.3.2 --disk-format qcow2 --container-format
-    bare --shared --file mobiledgex-v4.3.2.qcow2"""
+  content: openstack image create mobiledgex-v4.4.3 --disk-format qcow2 --container-format
+    bare --shared --file mobiledgex-v4.4.3.qcow2"""
 
 manifest_3 = """- id: 3
   title: Download the manifest template

@@ -28,7 +28,7 @@ CreateTrustPolicy - create without region shall return error
 
    [Tags]  TrustPolicy
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no region specified"}')  Create Trust Policy  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No region specified"}')  Create Trust Policy  token=${token}  use_defaults=${False}
 
 # ECQ-3019
 CreateTrustPolicy - create without token shall return error
@@ -38,7 +38,7 @@ CreateTrustPolicy - create without token shall return error
 
    [Tags]  TrustPolicy
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Create Trust Policy  region=${region}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Create Trust Policy  region=${region}  use_defaults=${False}
 
 # ECQ-3020
 CreateTrustPolicy - create without parms shall return error
@@ -68,7 +68,7 @@ CreateTrustPolicy - create with unknown org name shall return error
 
    [Tags]  TrustPolicy
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"org xxxx not found"}')  Create Trust Policy  operator_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org xxxx not found"}')  Create Trust Policy  operator_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-3023
 CreateTrustPolicy - create without org name shall return error
@@ -140,12 +140,12 @@ CreateTrustPolicy - create with invalid minport shall return error
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=x  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
    ${error}=  Run Keyword and Expect Error  *   Create Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
-   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: code=400, message=Unmarshal type error: expected=uint32, got=string, field=TrustPolicy.outbound_security_rules.port_range_min, offset
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=string, field=TrustPolicy.outbound_security_rules.port_range_min, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=-1  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
    ${error}=  Run Keyword and Expect Error  *  Create Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
-   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: code=400, message=Unmarshal type error: expected=uint32, got=number -1, field=TrustPolicy.outbound_security_rules.port_range_min, offset
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=number -1, field=TrustPolicy.outbound_security_rules.port_range_min, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=65536  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
@@ -162,12 +162,12 @@ CreateTrustPolicy - create with invalid maxport shall return error
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=x  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
    ${error}=  Run Keyword and Expect Error  *  Create Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
-   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: code=400, message=Unmarshal type error: expected=uint32, got=string, field=TrustPolicy.outbound_security_rules.port_range_max, offset
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=string, field=TrustPolicy.outbound_security_rules.port_range_max, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=-1  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
    ${error}=  Run Keyword and Expect Error  *  Create Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
-   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: code=400, message=Unmarshal type error: expected=uint32, got=number -1, field=TrustPolicy.outbound_security_rules.port_range_max, offset
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=number -1, field=TrustPolicy.outbound_security_rules.port_range_max, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=65536  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}

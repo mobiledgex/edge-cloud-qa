@@ -33,7 +33,7 @@ CreateCloudlet with an invalid operator
         ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Run Keyword And Expect Error  ('code=400', 'error={"message":"org mcixx not found"}')  Create Cloudlet	cloudlet_name=${cldlet}  region=${region}   token=${token}    operator_org_name=mcixx     number_dynamic_ips=2      latitude=35.0     longitude=-96.0    use_defaults=False
+	Run Keyword And Expect Error  ('code=400', 'error={"message":"Org mcixx not found"}')  Create Cloudlet	cloudlet_name=${cldlet}  region=${region}   token=${token}    operator_org_name=mcixx     number_dynamic_ips=2      latitude=35.0     longitude=-96.0    use_defaults=False
 
 	#[Teardown]	Cleanup provisioning
 
@@ -189,15 +189,26 @@ CreateCloudlet - create with trust policy on non-openstack shall return error
    ${policy_return}=  Create Trust Policy  region=${region}  operator_org_name=${oper}  rule_list=${rulelist}
    Create Flavor  region=US
 
-   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_AZURE","code":400}}')    Create Cloudlet  region=US  platform_type=PlatformTypeAzure  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
-   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_GCP","code":400}}')      Create Cloudlet  region=US  platform_type=PlatformTypeGCP  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
-   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_EDGEBOX","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeEdgebox  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
-   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_VSPHERE","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeVsphere  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
-   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_AWS_EKS","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeAwsEks  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
-   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_AWS_EC2","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeAwsEc2  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_AZURE"}')    Create Cloudlet  region=US  platform_type=PlatformTypeAzure  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_GCP"}')      Create Cloudlet  region=US  platform_type=PlatformTypeGCP  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_EDGEBOX"}')  Create Cloudlet  region=US  platform_type=PlatformTypeEdgebox  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_VSPHERE"}')  Create Cloudlet  region=US  platform_type=PlatformTypeVsphere  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_AWS_EKS"}')  Create Cloudlet  region=US  platform_type=PlatformTypeAwsEks  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_AWS_EC2"}')  Create Cloudlet  region=US  platform_type=PlatformTypeAwsEc2  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
 
    Create VM Pool  region=${region}  vm_pool_name=${policy_return['data']['key']['name']}_pool  org_name=${oper}  #use_defaults=False
-   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_VM_POOL","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeVmPool  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}  vm_pool=${policy_return['data']['key']['name']}_pool
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_VM_POOL"}')  Create Cloudlet  region=US  platform_type=PlatformTypeVmPool  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}  vm_pool=${policy_return['data']['key']['name']}_pool
+
+# ECQ-3358
+CreateCloudlet - create with developer org shall return error
+   [Documentation]
+   ...  - create developer org
+   ...  - send CreateCloudlet with developer org
+   ...  - verify error is returned
+
+   ${org}=  Create Org  orgtype=developer
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Create Cloudlet  region=US  operator_org_name=${org}  latitude=1  longitude=1  number_dynamic_ips=1 
 
 ** Keywords **
 Setup

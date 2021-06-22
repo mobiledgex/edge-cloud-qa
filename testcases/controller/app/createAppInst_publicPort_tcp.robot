@@ -622,22 +622,23 @@ AppInst - user shall be to add multiple TCP public ports
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
     FOR  ${index}  IN RANGE  0  100
-    \   ${epoch_time_multi}=  Get Time  epoch
-    \   ${app_name}=  Catenate  SEPARATOR=-  ${app_default}  ${index}
-    \   Create App  app_name=${app_name}  access_ports=tcp:1
-    \   ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+       ${epoch_time_multi}=  Get Time  epoch
+       ${app_name}=  Catenate  SEPARATOR=-  ${app_default}  ${index}
+       Create App  app_name=${app_name}  access_ports=tcp:1
+       ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
-    \   
-    \   ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_name}  ${version}  -  tcp  .
-    \   ${public_port}=  Evaluate  10000 + ${index}
-    \   # verify app1 uses port 1
-    \   Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
-    \   Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    ${public_port}
-    \   Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          1  #LProtoTCP
-    \   Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
-    \   Length Should Be   ${appInst_1.mapped_ports}  1
-    \   Run Keyword Unless  (${epoch_time_multi}-90) < ${appInst_1.created_at.seconds} < (${epoch_time_multi}+90)  Fail  # verify created_at is within 1 minute
-    \   Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
+       
+       ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_name}  ${version}  -  tcp  .
+       ${public_port}=  Evaluate  10000 + ${index}
+       # verify app1 uses port 1
+       Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
+       Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    ${public_port}
+       Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          1  #LProtoTCP
+       Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+       Length Should Be   ${appInst_1.mapped_ports}  1
+       Run Keyword Unless  (${epoch_time_multi}-90) < ${appInst_1.created_at.seconds} < (${epoch_time_multi}+90)  Fail  # verify created_at is within 1 minute
+       Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
+    END
 
 AppInst - user shall not be able to allocate public port tcp:22
     [Documentation]
@@ -756,7 +757,7 @@ AppInst - User shall be able to add/delete dedicated/shared app/appInst with sam
 
     # verify app2 uses port 1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    1
+    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          1  #LProtoTCP
     #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1

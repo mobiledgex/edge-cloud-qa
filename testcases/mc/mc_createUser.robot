@@ -23,9 +23,11 @@ MC - User shall be able to create a new user
 	...  verify info is correct
 	...  delete the user
 	...  ECQ-2715
-	
-	@{usernames}=  Create List  1  a  _username  123lkjsdfh12jsd12  MYNAME  a-----   dlfjoiwefmsifqwleko23kjsdlijalskdfjqoiwjlkadsjfoiajlrejqwoiejalksdjfoiqwjflkajsdoifjqwiojfaoifjaiosjfiwjefoiajsdflkajlfkjaskldfjaoijfalksdjfoiajsdflkjasoifjasdlkjfalisjdfklajsdflkajsflkajsflkj  my_username
-	
+
+        ${long_name}  Generate Random String   59
+	#@{usernames}=  Create List  1  a  _username  123lkjsdfh12jsd12  MYNAME  a-----   dlfjoiwefmsifqwleko23kjsdlijalskdfjqoiwjlkadsjfoiajlrejqwoiejalksdjfoiqwjflkajsdoifjqwiojfaoifjaiosjfiwjefoiajsdflkajlfkjaskldfjaoijfalksdjfoiajsdflkjasoifjasdlkjfalisjdfklajsdflkajsflkajsflkj  my_username
+        @{usernames}=  Create List  1  a  _username  123lkjsdfh12jsd12  MYNAME  a-----  ${long_name}  my_username
+
 	FOR  ${name}  IN  @{usernames}
 	  ${email}=  Catenate  SEPARATOR=  ${name}  @auto.com
 	  ${username}=   Set Variable   ${name}
@@ -227,6 +229,8 @@ MC - User shall be able to create a new user with all TLDs
         ...  - unlock user
         ...  - login user
         ...  - delete the user
+
+        [Tags]  TLDs
 
         Login Mexadmin  # login again as mexadmin since running the suite logs in as anothe user once it gets here
 

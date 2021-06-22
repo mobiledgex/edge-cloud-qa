@@ -358,13 +358,14 @@ Setup
    ${adminuser}=   Catenate  SEPARATOR=  ${username}  ${epoch}  01	
    ${adminuseremail}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  01  @gmail.com
 
-   Skip Verify Email   skip_verify_email=False
+   #Skip Verify Email   skip_verify_email=False
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}    email_check=True
    Unlock User
-   Verify Email  email_address=${emailepoch}
+   #Verify Email  email_address=${emailepoch}
    ${userToken}=  Login  username=${epochusername}  password=${password}
+   Verify Email Via MC  token=${userToken}
 
-   Skip Verify Email
+   #Skip Verify Email
    Create User  username=${adminuser}   password=${userpass}   email_address=${adminuseremail}    email_check=False
    Unlock User
 #   Verify Email  email_address=${adminuseremail}

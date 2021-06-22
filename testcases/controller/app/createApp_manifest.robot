@@ -16,6 +16,8 @@ ${docker_image}  docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded
 ${manifest}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml 
 ${manifest_different_ports}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_different_ports.yml
 ${manifest_artifactory_invalid}  https://artifactory-qa.mobiledgex.net/artifactory/epo-org1588686922/postgres_redis_compose.zip
+${manifest_clusterip}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_clusterip.yml
+${manifest_iav}  http://35.199.188.102/apps/automation_iav_customer_manifest.yml
 
 *** Test Cases ***
 #ECQ-1355
@@ -109,7 +111,7 @@ CreateApp - error shall be received with deployment=kubernetes and tcp accesspor
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:1  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:1 defined in AccessPorts but missing from kubernetes manifest"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:1 defined in AccessPorts but missing from kubernetes manifest in a LoadBalancer service"
 
 #ECQ-1463
 CreateApp - error shall be received with deployment=kubernetes and udp accessport/manifest mismatch
@@ -120,7 +122,7 @@ CreateApp - error shall be received with deployment=kubernetes and udp accesspor
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=udp:1  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port udp:1 defined in AccessPorts but missing from kubernetes manifest"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port udp:1 defined in AccessPorts but missing from kubernetes manifest in a LoadBalancer service"
 
 #ECQ-1464
 CreateApp - error shall be received with deployment=kubernetes and tcp/udp accessport/manifest mismatch
@@ -131,7 +133,7 @@ CreateApp - error shall be received with deployment=kubernetes and tcp/udp acces
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2,udp:1  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2,udp:1 defined in AccessPorts but missing from kubernetes manifest"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2,udp:1 defined in AccessPorts but missing from kubernetes manifest in a LoadBalancer service"
 
 #ECQ-1465
 CreateApp - error shall be received with deployment=kubernetes and tcp and udp accessport/manifest mismatch
@@ -142,7 +144,7 @@ CreateApp - error shall be received with deployment=kubernetes and tcp and udp a
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:1  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port udp:1 defined in AccessPorts but missing from kubernetes manifest"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port udp:1 defined in AccessPorts but missing from kubernetes manifest in a LoadBalancer service"
 
 #ECQ-1466
 CreateApp - error shall be received with deployment=kubernetes and udp and tcp accessport/manifest mismatch
@@ -153,7 +155,7 @@ CreateApp - error shall be received with deployment=kubernetes and udp and tcp a
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=udp:2015,tcp:1  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:1 defined in AccessPorts but missing from kubernetes manifest"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:1 defined in AccessPorts but missing from kubernetes manifest in a LoadBalancer service"
 
 #ECQ-1467
 CreateApp - error shall be received with deployment=kubernetes and udp range accessport/manifest mismatch
@@ -164,7 +166,7 @@ CreateApp - error shall be received with deployment=kubernetes and udp range acc
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=udp:2014-2018  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port udp:2014,udp:2016,udp:2017,udp:2018 defined in AccessPorts but missing from kubernetes manifest"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port udp:2014,udp:2016,udp:2017,udp:2018 defined in AccessPorts but missing from kubernetes manifest in a LoadBalancer service"
 
 #ECQ-1468
 CreateApp - error shall be received with deployment=kubernetes and tcp range accessport/manifest mismatch
@@ -175,7 +177,7 @@ CreateApp - error shall be received with deployment=kubernetes and tcp range acc
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2014-2018  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2014,tcp:2015,tcp:2017,tcp:2018 defined in AccessPorts but missing from kubernetes manifest"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2014,tcp:2015,tcp:2017,tcp:2018 defined in AccessPorts but missing from kubernetes manifest in a LoadBalancer service"
 
 #ECQ-1469
 CreateApp - error shall be received with deployment=kubernetes and tcp/udp range accessport/manifest mismatch
@@ -186,37 +188,38 @@ CreateApp - error shall be received with deployment=kubernetes and tcp/udp range
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2014-2018,udp:2014-2018  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2014,tcp:2015,tcp:2017,tcp:2018,udp:2014,udp:2016,udp:2017,udp:2018 defined in AccessPorts but missing from kubernetes manifest"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2014,tcp:2015,tcp:2017,tcp:2018,udp:2014,udp:2016,udp:2017,udp:2018 defined in AccessPorts but missing from kubernetes manifest in a LoadBalancer service"
 
+# http unsupported
 #ECQ-1470
-CreateApp - error shall be received with deployment=kubernetes and http accessport/manifest mismatch
-    [Documentation]
-    ...  create k8s app with access_ports=http:2015 but doenst exist in manifest
-    ...  verify error is received
-
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=http:2015  deployment_manifest=${manifest}
-
-    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2015 defined in AccessPorts but missing from kubernetes manifest"
-
-#ECQ-1471
-CreateApp - error shall be received with deployment=kubernetes and http range accessport/manifest mismatch
-    [Documentation]
-    ...  create k8s app with access_ports=http:[range] but doenst exist in manifest
-    ...  verify error is received
-
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=http:2014-2018  deployment_manifest=${manifest}
-
-    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid deployment manifest, Port range not allowed for HTTP"
-
-#ECQ-1472
-CreateApp - http shall map to tcp with deployment=kubernetes and manifest
-    [Documentation]
-    ...  create k8s app with access_ports=http and manifest
-    ...  verify app is created
-    
-    Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=http:2016  deployment_manifest=${manifest}
+#CreateApp - error shall be received with deployment=kubernetes and http accessport/manifest mismatch
+#    [Documentation]
+#    ...  create k8s app with access_ports=http:2015 but doenst exist in manifest
+#    ...  verify error is received
+#
+#    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=http:2015  deployment_manifest=${manifest}
+#
+#    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+#    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2015 defined in AccessPorts but missing from kubernetes manifest"
+#
+##ECQ-1471
+#CreateApp - error shall be received with deployment=kubernetes and http range accessport/manifest mismatch
+#    [Documentation]
+#    ...  create k8s app with access_ports=http:[range] but doenst exist in manifest
+#    ...  verify error is received
+#
+#    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=http:2014-2018  deployment_manifest=${manifest}
+#
+#    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+#    Should Contain  ${error_msg}   details = "Invalid deployment manifest, Port range not allowed for HTTP"
+#
+##ECQ-1472
+#CreateApp - http shall map to tcp with deployment=kubernetes and manifest
+#    [Documentation]
+#    ...  create k8s app with access_ports=http and manifest
+#    ...  verify app is created
+#    
+#    Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=http:2016  deployment_manifest=${manifest}
 
 #ECQ-2159
 CreateApp - error shall be received with deployment=kubernetes and invalid artifactory manifest
@@ -224,7 +227,7 @@ CreateApp - error shall be received with deployment=kubernetes and invalid artif
     ...  create k8s app with a manifest with an artifactory url that doenst exist  
     ...  verify error is received
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=http:2014-2018  deployment_manifest=${manifest_artifactory_invalid}
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2014-2018  deployment_manifest=${manifest_artifactory_invalid}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Cannot get manifest from ${manifest_artifactory_invalid}, Invalid URL: ${manifest_artifactory_invalid}, Not Found"
@@ -267,13 +270,33 @@ CreateApp - user shall be to create with deployment=kubernetes and externalport 
 # ECQ-3294
 CreateApp - error shall be received with deployment=helm and deployment manifest
     [Documentation]
-    ...  - create helm app with a deployment manifest
+    ...  - create app with a deployment manifest
     ...  - verify error is received
 
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeHelm  deployment=helm  image_path=${docker_image}  access_ports=tcp:2014-2018  deployment_manifest=${manifest_artifactory_invalid}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Manifest is not used for Helm deployments. Use config files for customizations"
+
+# ECQ-3391
+CreateApp - error shall be received with deployment=k8s and ClusterIP deployment manifest
+    [Documentation]
+    ...  - create k8s app with a deployment manifest with type=ClusterIP
+    ...  - verify error is received
+
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:2015  deployment_manifest=${manifest_clusterip}
+
+    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2016 defined in AccessPorts but missing from kubernetes manifest in a LoadBalancer service"
+
+# ECQ-3394
+CreateApp - shall be able to create with deployment=k8s and IAV customer manifest
+    [Documentation]
+    ...  - create k8s app with a customer IAV deployment manifest
+    ...  - verify success
+
+    ${app}=  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8989  deployment_manifest=${manifest_iav}
+    Should Contain  ${app.deployment_manifest}  gh-configmap.yml
 
 *** Keywords ***
 Setup

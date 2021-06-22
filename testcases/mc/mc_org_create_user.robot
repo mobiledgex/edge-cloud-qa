@@ -3,6 +3,7 @@ Documentation   MasterController Org Create by User
 	
 Library		MexMasterController   mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         DateTime
+Library         String 
 
 Test Setup	Setup
 Test Teardown	Teardown
@@ -182,6 +183,49 @@ MC - User shall not be able to create an org named mobiledgex
         Should Be Equal As Numbers   ${status_code}  400
         Should Be Equal              ${body}         {"message":"Not authorized to create reserved org MobiledgeX"}
 
+# ECQ-3428
+MC - User shall not be able to create an org that is too long
+        [Documentation]
+        ...  - create an org with a name that is too long as a user
+        ...  - verify the correct error message is returned
+
+        ${rand_org}=  Generate Random String  60
+        ${org}=   Run Keyword and Expect Error  *   Create Org    orgname=${rand_org}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${userToken}      use_defaults=${False}
+        ${status_code}=  Response Status Code
+        ${body}=         Response Body
+
+        Should Be Equal As Numbers   ${status_code}  400
+        Should Be Equal              ${body}         {"message":"Name too long"}
+
+# ECQ-3486
+MC - User shall not be able to create a long org name
+        [Documentation]
+        ...  - create an org with a long name as a user
+        ...  - verify org is created
+
+        ${rand_org1}=  Generate Random String  59
+        ${rand_org2}=  Generate Random String  59
+
+        Create Org    orgname=${rand_org1}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${userToken}      use_defaults=${False}
+
+        ${org}=  Show Organizations   org_name=${rand_org1}  token=${userToken}
+        Should Be Equal       ${org[0]["Name"]}                   ${rand_org1}
+        Should Be Equal       ${org[0]["Type"]}                   developer
+        Should Be Equal       ${org[0]["Address"]}                222 somewhere dr
+        Should Be Equal       ${org[0]["Phone"]}                  111-222-3333
+        Convert Date          ${org[0]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+        Convert Date          ${org[0]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+
+        Create Org    orgname=${rand_org2}    orgtype=operator    address=222 somewhere dr    phone=111-222-3333     token=${userToken}      use_defaults=${False}
+
+        ${org2}=  Show Organizations   org_name=${rand_org2}  token=${userToken}
+        Should Be Equal       ${org2[0]["Name"]}                   ${rand_org2}
+        Should Be Equal       ${org2[0]["Type"]}                   operator 
+        Should Be Equal       ${org2[0]["Address"]}                222 somewhere dr
+        Should Be Equal       ${org2[0]["Phone"]}                  111-222-3333
+        Convert Date          ${org2[0]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+        Convert Date          ${org2[0]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+
 *** Keywords ***
 Setup
    #${epoch}=  Get Time  epoch
@@ -190,17 +234,19 @@ Setup
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
-   Skip Verify Email   skip_verify_email=False
+   Skip Verify Email   #skip_verify_email=False
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}   email_check=True
    Unlock User
-   Verify Email  email_address=${emailepoch}
+   #Verify Email  email_address=${emailepoch}
 
    ${userToken}=  Login  username=${epochusername}  password=${password}
+
+#   Verify Email Via MC  token=${userToken}
 	
    Set Suite Variable  ${userToken}
 
 Teardown
-   Skip Verify Email   skip_verify_email=True
+   #Skip Verify Email   skip_verify_email=True
    Cleanup Provisioning
 
 Verify Dev Org

@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   MasterController New User Login
+Documentation   MasterController Show Role Assignments
 
 Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
@@ -7,15 +7,16 @@ Test Setup	Setup
 Test Teardown	Cleanup Provisioning
 
 *** Variables ***
-${password}=   mex1234567
+${password}=   ${dev_manager_password_automation}
 ${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlhdCI6MTU1NDc2MjYyNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.7hM7102kjgrAAbWWvpdJwg3PcNWd7td6D6QSxcvB6gswJUOMeoD5EvpzYnHjdHnbm4uJ7BlnHEOVr4yltZb1Rw
 
 
 *** Test Cases ***
+# ECQ-3381
 MC - Admin user shall be able to show role assignments
 	[Documentation]
-	...  admin user can show role assignments 
-	...  verify the roles returned
+	...  - admin user can show role assignments 
+	...  - verify the roles returned
 
 	${roles}=  Show Role Assignment   token=${adminToken}
 	${status_code}=  Response Status Code
@@ -26,37 +27,43 @@ MC - Admin user shall be able to show role assignments
 	Should Contain              ${body}         "username"
 	Should Contain              ${body}         "role"
 
+# ECQ-3382
 MC - User shall be able to show role assignments
 	[Documentation]
-	...  user can show roles 
-	...  verify the roles returned
+	...  - user can show roles 
+	...  - verify the roles returned
 
+        ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
 	${roles}=  Show Role Assignment   token=${userToken}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers  ${status_code}  200	
-	Should Contain              ${body}         []
+        Should Contain              ${body}         "org"
+        Should Contain              ${body}         "username"
+        Should Contain              ${body}         "role"
 
+# ECQ-3383
 MC - User shall not be able to show role assignments without a token
 	[Documentation]
-	...  create a new user and show roles without a token
-	...  verify the correct error is returned
-	...  delete users after test completes
+	...  - create a new user and show roles without a token
+	...  - verify the correct error is returned
+	...  - delete users after test completes
 
 	${error_msg}=  Run Keyword and Expect Error  *  Show Role Assignment   use_defaults=${False}
 
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 
-	Should Be Equal As Numbers  ${status_code}  401	
-	Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal As Numbers  ${status_code}  400	
+	Should Be Equal             ${body}         {"message":"No bearer token found"}
 
+# ECQ-3384
 MC - User shall not be able to show role assignments with an empty token
 	[Documentation]
-	...  create a new user and show roles with an empty token 
-	...  verify the correct error is returned
-	...  delete users after test completes
+	...  - create a new user and show roles with an empty token 
+	...  - verify the correct error is returned
+	...  - delete users after test completes
 
 	${error_msg}=  Run Keyword and Expect Error  *  Show Role Assignment    token=${EMPTY}    use_defaults=${False}
 
@@ -64,13 +71,14 @@ MC - User shall not be able to show role assignments with an empty token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"no token found"}
+	Should Be Equal             ${body}         {"message":"No bearer token found"}
 
+# ECQ-3385
 MC - User shall not be able to show role assignments with a bad token
 	[Documentation]
-	...  create a new user and show roles with a bad token 
-	...  verify the correct error is returned
-	...  delete users after test completes
+	...  - create a new user and show roles with a bad token 
+	...  - verify the correct error is returned
+	...  - delete users after test completes
 
 	${error_msg}=  Run Keyword and Expect Error  *  Show Role Assignment   token=thisisabadtoken     use_defaults=${False}
 
@@ -78,13 +86,14 @@ MC - User shall not be able to show role assignments with a bad token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  401	
-	Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal             ${body}         {"message":"Invalid or expired jwt"}
 
+# ECQ-3386
 MC - User shall not be able to show role assignments with an expired token
 	[Documentation]
-	...  create a new user and show roles with an expired token 
-	...  verify the correct error is returned
-	...  delete users after test completes
+	...  - create a new user and show roles with an expired token 
+	...  - verify the correct error is returned
+	...  - delete users after test completes
 
 	${error_msg}=  Run Keyword and Expect Error  *  Show Role Assignment   token=${expToken}     use_defaults=${False}
 
@@ -92,13 +101,12 @@ MC - User shall not be able to show role assignments with an expired token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  401	
-
-
+        Should Be Equal             ${body}         {"message":"Invalid or expired jwt"}
 	
 *** Keywords ***
 Setup
-	${adminToken}=   Login
-	Create User  username=myuser   password=${password}   email=xy@xy.com
-	${userToken}=  Login  username=myuser  password=${password}
+	${adminToken}=  Get Super Token 
+	#Create User  username=myuser   password=${password}   email_address=xy@xy.com
+	#${userToken}=  Login  username=myuser  password=${password}
         Set Suite Variable  ${adminToken}
-	Set Suite Variable  ${userToken}
+	#Set Suite Variable  ${userToken}

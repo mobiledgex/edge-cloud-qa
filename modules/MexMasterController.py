@@ -12,6 +12,7 @@ import imaplib
 import email
 import queue
 import sys
+import importlib
 
 from mex_rest import MexRest
 from mex_controller_classes import Organization
@@ -47,6 +48,8 @@ from mex_master_controller.RequestAppInstLatency import RequestAppInstLatency
 from mex_master_controller.CloudletPoolAccess import CloudletPoolAccess
 from mex_master_controller.RestrictedOrgUpdate import RestrictedOrgUpdate
 from mex_master_controller.BillingOrg import BillingOrg
+from mex_master_controller.Controller import Controller
+from mex_master_controller.Org import Org
 
 import shared_variables_mc
 import shared_variables
@@ -242,6 +245,40 @@ class MexMasterController(MexRest):
                                                          token=self.token, super_token=self.super_token)
         self.billingorg = BillingOrg(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token,
                                      super_token=self.super_token)
+        self.flavor = Flavor(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.app = App(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.app_instance = AppInstance(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
+        self.cluster_instance = ClusterInstance(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
+        self.cloudlet = Cloudlet(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.cloudlet_pool = CloudletPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.cloudlet_pool_member = CloudletPoolMember(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.org_cloudlet_pool = OrgCloudletPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.org_cloudlet = OrgCloudlet(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.operatorcode = OperatorCode(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.trust_policy = TrustPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.run_cmd = RunCommand(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.showdevice = ShowDevice(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.showdevicereport = ShowDeviceReport(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.autoprov_policy = AutoProvisioningPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.rundebug = RunDebug(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.config = Config(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.vm_pool = VMPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.verify_email_mc = VerifyEmail(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.alert_receiver = AlertReceiver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.alert = Alert(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.user = User(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
+        self.stream = Stream(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.settings = Settings(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.role = Role(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
+        self.request_appinst_latency = RequestAppInstLatency(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
+        self.cloudlet_pool_access = CloudletPoolAccess(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.restricted_org_update = RestrictedOrgUpdate(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)  
+        self.controller = Controller(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.org = Org(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+
+    def reload_defaults(self):
+        importlib.reload(shared_variables)
 
     def find_file(self, filename):
         return str(self._findFile(filename))
@@ -430,7 +467,6 @@ class MexMasterController(MexRest):
 
             try:
                 self.post(url=url, data=payload)
-
                 logger.info('response:\n' + str(self.resp.text))
 
                 self.token = self.decoded_data['token']
@@ -444,7 +480,7 @@ class MexMasterController(MexRest):
                         self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             except Exception as e:
                 self._number_login_requests_fail += 1
-                print('*WARN*', 'queu_obj', self._queue_obj)
+                print('*WARN*', 'queu_obj', self._queue_obj, e)
                 if self._queue_obj:
                     print('*WARN*', 'fail login')
                     self._queue_obj.put({'login_thread': sys.exc_info()})
@@ -468,6 +504,11 @@ class MexMasterController(MexRest):
     def create_user(self, username=None, password=None, email_address=None, email_password=None, family_name=None,
                     given_name=None, nickname=None, enable_totp=None, server='imap.gmail.com', email_check=False,
                     json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+
+    def create_controller(self, region=None, controller_address=None, influxdb_address=None, token=None):
+        return self.controller.create_controller(region=region, controller_address=controller_address, influxdb_address=influxdb_address, token=token)
+
+    def create_user(self, username=None, password=None, email_address=None, email_password=None, family_name=None, given_name=None, nickname=None, enable_totp=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         self.username = username
         self.password = password
         self.email_address = email_address
@@ -482,6 +523,8 @@ class MexMasterController(MexRest):
         return self.user.show_user(token=token, username=username, email_address=email_address, family_name=family_name,
                                    given_name=given_name, nickname=nickname, role=role, organization=organization,
                                    json_data=json_data, use_defaults=use_defaults)
+    def show_user(self,  username=None, email_address=None, family_name=None, given_name=None, nickname=None, role=None, organization=None, locked=None, enable_totp=None, email_verified=None, token=None, json_data=None, use_defaults=True):
+        return self.user.show_user(token=token, username=username, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, role=role, organization=organization, locked=locked, enable_totp=enable_totp, email_verified=email_verified, json_data=json_data, use_defaults=use_defaults)
 
     def get_current_user(self, token=None, json_data=None, use_defaults=True):
         return self.user.current_user(token=token, json_data=json_data, use_defaults=use_defaults)
@@ -510,6 +553,9 @@ class MexMasterController(MexRest):
                        use_thread=False):
         return self.role.role_show(token=token, role=role, organization=organization, json_data=json_data,
                                    use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_role_permissions(self, role=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.role.role_perms(token=token, role=role, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def new_password(self, password=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/newpass'
@@ -575,6 +621,10 @@ class MexMasterController(MexRest):
                 raise Exception(
                     "error showing roles. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(
                         self.resp.text).rstrip())
+
+            #if str(self.resp.text) != '["AdminContributor","AdminManager","AdminViewer","DeveloperContributor","DeveloperManager","DeveloperViewer","OperatorContributor","OperatorManager","OperatorViewer"]':
+            #if '"AdminContributor","AdminManager","AdminViewer","BillingManager","DeveloperContributor","DeveloperManager","DeveloperViewer","OperatorContributor","OperatorManager","OperatorViewer"' not in str(self.resp.text):
+            #    raise Exception("error showing roles. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             return str(self.resp.text)
 
     def show_role_assignment(self, token=None, json_data=None, use_defaults=True, use_thread=False,
@@ -788,6 +838,20 @@ class MexMasterController(MexRest):
                     raise Exception("error showing organization. responseCode = " + str(
                         self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             return self.decoded_data
+
+
+    def show_organizations(self, token=None, org_name=None, org_type=None, address=None, phone=None, public_images=None, delete_in_progress=None, edgebox_only=None, json_data=None, use_defaults=False, use_thread=False):
+        if use_defaults:
+            if org_name is None:
+                org_name = self.organization_name
+            if org_type is None:
+                org_type = self.orgtype
+            if address is None:
+                address = self.address
+            if phone is None:
+                phone = self.phone
+
+        return self.org.show_org(token=token, org_name=org_name, org_type=org_type, address=address, phone=phone, public_images=public_images, delete_in_progress=delete_in_progress, edgebox_only=edgebox_only, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def delete_org(self, orgname=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/org/delete'
@@ -1346,12 +1410,29 @@ class MexMasterController(MexRest):
                    official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None,
                    configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[],
                    json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+
+            self.cluster_instance.delete_cluster_instance(token=self.token, region=region, cluster_name=cluster['data']['key']['cluster_key']['name'], developer_org_name=cluster['data']['key']['organization'], cloudlet_name=cloudlet_name, operator_org_name=cluster['data']['key']['cloudlet_key']['organization'], crm_override=crm_override, use_defaults=False)
+
+    def delete_idle_reservable_cluster_instances(self, token=None, region=None, idle_time=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cluster_instance.delete_idle_clusters(token=token, region=region, idle_time=idle_time, use_defaults=use_defaults, use_thread=use_thread)
+
+    def cluster_instance_should_exist(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, use_defaults=False):
+            clusterinstance = self.cluster_instance.show_cluster_instance(token=token, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, use_defaults=use_defaults, use_thread=use_thread)
+            if clusterinstance:
+                return clusterinstance
+            else:
+                raise Exception(f'cluster instance does NOT exist.')
+
+    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], allow_serverless=None, serverless_config_vcpus=None, serverless_config_ram=None, serverless_config_min_replicas=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         """ Send region CreateApp
         """
         if developer_org_name is None:
             if self.organization_name:
                 developer_org_name = self.organization_name
                 cluster_instance_developer_name = self.organization_name
+
+ 
+        return self.app.create_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policies=auto_prov_policies, access_type=access_type, configs_kind=configs_kind, configs_config=configs_config, skip_hc_ports=skip_hc_ports,  trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, allow_serverless=allow_serverless, serverless_config_vcpus=serverless_config_vcpus, serverless_config_ram=serverless_config_ram, serverless_config_min_replicas=serverless_config_min_replicas, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
         return self.app.create_app(token=token, region=region, app_name=app_name, app_version=app_version,
                                    ip_access=ip_access, access_ports=access_ports, image_type=image_type,
@@ -1831,6 +1912,22 @@ class MexMasterController(MexRest):
 
     def show_cloudletrefs(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None,
                           use_defaults=False, use_thread=False):
+    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, static_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, container_version=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, timeout=600, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet.create_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, static_ips=static_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, container_version=container_version, override_policy_container_version=override_policy_container_version, deployment_local=deployment_local, notify_server_address=notify_server_address, crm_override=crm_override, infra_api_access=infra_api_access, infra_config_flavor_name=infra_config_flavor_name, infra_config_external_network_name=infra_config_external_network_name, trust_policy=trust_policy, deployment_type=deployment_type, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, stream_timeout=timeout, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def delete_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.delete_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_cloudlet(self, token=None, region=None,  operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, trust_policy=None, resource_list=None, default_resource_alert_threshold=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.update_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, maintenance_state=maintenance_state, trust_policy=trust_policy, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_resource_usage(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, infra_usage=False, json_data=None, use_defaults=False, use_thread=False):
+        return self.cloudlet.get_resource_usage(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, infra_usage=infra_usage, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_resourcequota_props(self, token=None, region=None, operator_org_name=None, platform_type=None, json_data=None, use_defaults=False, use_thread=False):
+        return self.cloudlet.get_resourcequota_props(token=token, region=region, operator_org_name=operator_org_name, platform_type=platform_type, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_cloudletrefs(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=False, use_thread=False):
         if token is None:
             token = self.super_token
 
@@ -1956,6 +2053,26 @@ class MexMasterController(MexRest):
                                                                   cloudlet_name=cloudlet_name, uuid=unique_id,
                                                                   uuid_type=unique_id_type, json_data=json_data,
                                                                   use_defaults=use_defaults, use_thread=use_thread)
+
+        return self.app_instance.get_app_metrics(token=token, region=region, app_name=app_name, app_version=app_version, cluster_instance_name=cluster_instance_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_dme_metrics(self, token=None, region=None, method=None, app_name=None, developer_org_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_api_metrics(method=method, token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_client_app_usage_metrics(self, token=None, region=None, method=None, app_name=None, developer_org_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_client_app_metrics(method=method, token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, selector=selector, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_model=device_model, data_network_type=data_network_type, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_client_cloudlet_usage_metrics(self, token=None, region=None, method=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_model=None, device_carrier=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.get_client_cloudlet_metrics(method=method, token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, selector=selector, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_model=device_model, device_carrier=device_carrier, data_network_type=data_network_type, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_api_metrics(method='FindCloudlet', token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_register_client_api_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_api_metrics(method='RegisterClient', token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_app_instance_client_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, unique_id=None, unique_id_type=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.show_app_instance_client_metrics(token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, uuid=unique_id, uuid_type=unique_id_type, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def get_show_app_instance_client_metrics_output(self):
         return self.app_instance.get_show_app_instance_client_metrics()
@@ -2246,6 +2363,53 @@ class MexMasterController(MexRest):
                                                                               use_defaults=use_defaults,
                                                                               auto_delete=auto_delete,
                                                                               use_thread=use_thread)
+    def create_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, cloudlet_list=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool.create_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, operator_org_name=operator_org_name, cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, cloudlet_list=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet_pool.show_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, cloudlet_list=cloudlet_list, operator_org_name=operator_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet_pool.delete_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, operator_org_name=operator_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, cloudlet_list=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool.update_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, operator_org_name=operator_org_name, cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def create_org_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, cloudlet_pool_org_name=None, org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.org_cloudlet_pool.create_org_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, cloudlet_pool_org_name=cloudlet_pool_org_name, org_name=org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_org_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.org_cloudlet_pool.show_org_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, org_name=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_org_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, cloudlet_pool_org_name=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.org_cloudlet_pool.delete_org_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, cloudlet_pool_org_name=cloudlet_pool_org_name, org_name=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_org_cloudlet(self, token=None, region=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.org_cloudlet.show_org_cloudlet(token=token, region=region, org_name=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_cloudlet_pool_access_invitation(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool_access.create_cloudlet_pool_access_invitation(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def delete_cloudlet_pool_access_invitation(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool_access.delete_cloudlet_pool_access_invitation(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def create_cloudlet_pool_access_response(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, decision=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool_access.create_cloudlet_pool_access_response(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, decision=decision, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def delete_cloudlet_pool_access_response(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool_access.delete_cloudlet_pool_access_response(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_cloudlet_pool_access_granted(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool_access.show_cloudlet_pool_access_granted(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_cloudlet_pool_access_pending(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool_access.show_cloudlet_pool_access_pending(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_cloudlet_pool_access_response(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool_access.show_cloudlet_pool_access_response(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_cloudlet_pool_access_invitation(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool_access.show_cloudlet_pool_access_invitation(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
     def get_public_cloudlets(self, region=None):
         all_cloudlets = self.show_cloudlets(token=self.super_token, region=region, use_defaults=False)
@@ -2497,6 +2661,62 @@ class MexMasterController(MexRest):
                                             cloudlet_name=cloudlet_name, operator_org_name=operator_org_name,
                                             command=command, token=token, json_data=json_data,
                                             use_defaults=use_defaults, use_thread=use_thread)
+
+        return self.vm_pool.vm_should_not_be_in_use(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_name=vm_name)
+
+    def create_trust_policy(self, token=None, region=None, policy_name=None, operator_org_name=None, rule_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.trust_policy.create_trust_policy(token=token, region=region, policy_name=policy_name, operator_org_name=operator_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_trust_policy(self, token=None, region=None, policy_name=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.trust_policy.show_trust_policy(token=token, region=region, policy_name=policy_name, operator_org_name=operator_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_trust_policy(self, token=None, region=None, policy_name=None, operator_org_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
+        return self.trust_policy.delete_trust_policy(token=token, region=region, policy_name=policy_name, operator_org_name=operator_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_trust_policy(self, token=None, region=None, policy_name=None, operator_org_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
+        return self.trust_policy.update_trust_policy(token=token, region=region, policy_name=policy_name, operator_org_name=operator_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, email_address=None, pagerduty_integration_key=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, app_cloudlet_name=None, app_cloudlet_org=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.alert_receiver.create_alert_receiver(token=token, region=region, receiver_name=receiver_name, type=type, severity=severity, email_address=email_address, pagerduty_integration_key=pagerduty_integration_key, slack_channel=slack_channel, slack_api_url=slack_api_url, app_name=app_name, app_version=app_version, app_cloudlet_name=app_cloudlet_name, app_cloudlet_org=app_cloudlet_org, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name,  developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_alert_receivers(self, token=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, user=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.alert_receiver.show_alert_receiver(token=token, receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name,  developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, user=user, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def delete_alert_receiver(self, token=None, receiver_name=None, type=None, severity=None, user=None, developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.alert_receiver.delete_alert_receiver(token=token, receiver_name=receiver_name, type=type, severity=severity, user=user, developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+    
+    def show_alerts(self, token=None, alert_name=None, region=None, app_name=None,  app_version=None,  developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, warning=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.alert.show_alert(token=token, alert_name=alert_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, port=port, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, scope=scope, warning=warning, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None,undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.autoprov_policy.create_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count,undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.autoprov_policy.show_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.autoprov_policy.delete_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.autoprov_policy.update_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count, undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def add_auto_provisioning_policy_cloudlet(self, token=None, region=None, policy_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.autoprov_policy.add_autoprov_policy_cloudlet(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def remove_auto_provisioning_policy_cloudlet(self, token=None, region=None, policy_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.autoprov_policy.remove_autoprov_policy_cloudlet(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_device(self, token=None, region=None, unique_id=None, unique_id_type=None, first_seen_seconds=None, first_seen_nanos=None, last_seen_seconds=None, last_seen_nanos=None, notify_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.showdevice.show_device(token=token, region=region, unique_id=unique_id, unique_id_type=unique_id_type, first_seen_seconds=first_seen_seconds, first_seen_nanos=first_seen_nanos, last_seen_seconds=last_seen_seconds, last_seen_nanos=last_seen_nanos, notify_id=notify_id, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_device_report(self, token=None, region=None, unique_id=None, unique_id_type=None, begin_seconds=None, begin_nanos=None, end_seconds=None, end_nanos=None, notify_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.showdevicereport.show_device_report(token=token, region=region, unique_id=unique_id, unique_id_type=unique_id_type, begin_seconds=begin_seconds, begin_nanos=begin_nanos, end_seconds=end_seconds, end_nanos=end_nanos, notify_id=notify_id, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def run_debug(self, timeout=None, node_name=None, node_type=None, region=None, cloudlet_name=None, operator_org_name=None, args=None, command=None, pretty=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.rundebug.run_debug(timeout=timeout, node_name=node_name, node_type=node_type, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, args=args, command=command, pretty=pretty, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def access_cloudlet(self, region=None, node_name=None, node_type=None, cloudlet_name=None, operator_org_name=None, command=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.run_cmd.access_cloudlet(node_name=node_name, node_type=node_type, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, command=command, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def show_config(self, token=None, use_defaults=True, use_thread=False):
         if token is None:

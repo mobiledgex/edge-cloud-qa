@@ -3,7 +3,7 @@
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         String
 
-Test Teardown  Cleanup Provisioning
+#Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001
@@ -120,7 +120,7 @@ UpdateCloudlet with a numdynamicips 2323232232323
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	 region=${region}  operator_org_name=${oper}   cloudlet_name=${cldlet}    number_dynamic_ips=2323232232323        use_defaults=False
 
-	Should Contain  ${error_msg}   Invalid data: code=400, message=Unmarshal type error: expected=int32, got=number 2323232232323, field=Cloudlet.num_dynamic_ips, offset=101
+	Should Contain  ${error_msg}   Invalid data: Unmarshal type error: expected=int32, got=number 2323232232323, field=Cloudlet.num_dynamic_ips, offset=101
 
 # ECQ-943
 UpdateCloudlet with a ipsupport of -1
@@ -280,7 +280,7 @@ UpdateCloudlet with staticips of 6
 	${staticips}    Convert To Integer 	6
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	  region=${region}  operator_org_name=${oper}     cloudlet_name=${cldlet}     static_ips=${staticips}       use_defaults=False
-        Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid data: code=400, message=Unmarshal type error: expected=string, got=number, field=Cloudlet.static_ips, offset=84"}')
+        Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=string, got=number, field=Cloudlet.static_ips, offset=84"}')
 	#Should Contain Any  ${error_msg}   TypeError: 6 has type int, but expected one of: bytes, unicode    TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.static_ips 
         #Should Contain  ${error_msg}  TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.static_ips
 
@@ -343,16 +343,61 @@ UpdateCloudlet - error shall be received for update to trusted with nontrusted a
    ${appinst}=  Create App Instance  region=${region}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
 
    # update cloudlet with trust policy and remove the policy
-   Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
-   Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${Empty}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${oper}  trust_policy=${policy_name}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${oper}  trust_policy=${Empty}
 
    # create a nontrusted app/appinst on the cloudlet
    ${app}=  Create App  region=${region}  app_name=${app_name}_untrusted
    ${appinst}=  Create App Instance  region=${region}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
 
    # update cloudlet with trust policy
-   ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
+   ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${oper}  trust_policy=${policy_name}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Non trusted app: organization:\\\\"automation_dev_org\\\\" name:\\\\"${app['data']['key']['name']}\\\\" version:\\\\"1.0\\\\" not compatible with trust policy: organization:\\\\"${oper}\\\\" name:\\\\"${policy_name}\\\\" "}')
+
+# ECQ-3393
+UpdateCloudlet - error shall be received for update to trusted with trusted app and mismatched policy
+   [Documentation]
+   ...  - create a trust policy
+   ...  - send CreateCloudlet without policy
+   ...  - create a trusted app/appinst on the cloudlet
+   ...  - send UpdateCloudlet with trust policy that doesnt match the app required connections
+   ...  - verify error is received
+
+   [Tags]  TrustPolicy
+
+   Create Flavor  region=${region}
+
+   ${policy_name}=  Get Default Trust Policy Name
+   ${app_name}=  Get Default App Name
+
+   # create a trust policy
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
+   @{rulelist}=  Create List  ${rule1}
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${oper}
+   Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}  ${oper}
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+   Should Be Equal As Numbers  ${numrules}  1
+
+   # create cloudlet without trust policy
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${oper}
+   Should Not Contain  ${cloudlet['data']}  trust_policy
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  1
+
+   # create a trusted app/appinst on the cloudlet
+   &{rule1}=  Create Dictionary  protocol=udp  port=1000  remote_ip=3.1.1.1
+   @{tcp1_rulelist}=  Create List  ${rule1}
+   ${app}=  Create App  region=${region}
+   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
+   ${appt}=  Update App  region=${region}  trusted=${True}  required_outbound_connections_list=${tcp1_rulelist}
+
+   # update cloudlet with trust policy
+   ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  cloudlet_name=${cloudlet['data']['key']['name']}  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection udp:3.1.1.1:1000 for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${app['data']['key']['name']}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
 
 # ECQ-3098
 UpdateCloudlet - update with trust policy on non-openstack shall return error
@@ -375,6 +420,25 @@ UpdateCloudlet - update with trust policy on non-openstack shall return error
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_GCP"}')     Update Cloudlet  region=US  cloudlet_name=automationGcpCentralCloudlet  operator_org_name=gcp  trust_policy=${policy_return['data']['key']['name']}  use_defaults=${False}
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_VM_POOL"}')     Update Cloudlet  region=EU  cloudlet_name=automationVMPoolCloudlet  operator_org_name=TDG  trust_policy=${policy_return['data']['key']['name']}  use_defaults=${False}
+
+# ECQ-3480
+UpdateCloudlet - update to maintenance mode when already in maintenance mode shall return error
+   [Documentation]
+   ...  - put cloudlet in maintenance mode
+   ...  - send UpdateCloudlet with MaintenanceStart and MaintenanceStartNoFailover
+   ...  - verify error is returned
+
+   Create Org  orgtype=operator
+   RestrictedOrg Update
+   ${cloudlet}=  Create Cloudlet  region=${region}
+
+   Sleep  1s
+
+   ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${cloudlet['data']['key']['organization']}  cloudlet_name=${cloudlet['data']['key']['name']}  maintenance_state=MaintenanceStart  use_defaults=False
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cloudlet must be in NormalOperation before starting maintenance"}')  Update Cloudlet  region=${region}  operator_org_name=${cloudlet['data']['key']['organization']}  cloudlet_name=${cloudlet['data']['key']['name']}  maintenance_state=MaintenanceStart  use_defaults=False
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cloudlet must be in NormalOperation before starting maintenance"}')  Update Cloudlet  region=${region}  operator_org_name=${cloudlet['data']['key']['organization']}  cloudlet_name=${cloudlet['data']['key']['name']}  maintenance_state=MaintenanceStartNoFailover  use_defaults=False
 
 *** Keywords ***
 Setup

@@ -65,7 +65,7 @@ node('jenkinsSlave1'){
             def jobName = jobList1Parallel[i];
             echo "i1=" + jobName
             builds1[jobName] = {
-               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'MasterController', value: mastercontroller), string(name: 'VariableFile', value: variablefile)]
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'MasterController', value: mastercontroller), string(name: 'VariableFile', value: variablefile), string(name: 'RunFailedOnly', value: runfailedonly)]
             }
          }
 

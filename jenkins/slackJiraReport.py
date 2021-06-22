@@ -4,6 +4,11 @@ import argparse
 import json
 import logging
 import sys
+import html
+import os
+import datetime
+import time
+import matplotlib.pyplot as plt
 
 import zapi
 import jiraapi
@@ -39,9 +44,14 @@ summary_only = args.summaryonly
 slack = args.slack
 cycle_summary = args.cyclesummary
 
+timings_output_file = f'/tmp/timings_{cycle_name}.html'
+timings_html_file = f'/var/www/html/timings/timings_{cycle_name}.html'
+timings_url = f'http://40.122.108.233/timings/timings_{cycle_name}.html'
+
+logger = logging.getLogger(__name__)
 logging.basicConfig(
     level=logging.DEBUG,
-    format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
+    format="%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s - - %(message)s")
 logging.getLogger('urllib3').setLevel(logging.ERROR)
 logging.getLogger('zapi').setLevel(logging.DEBUG)
 
@@ -73,10 +83,13 @@ def build_report_blocks():
     wip_string = f'*Total WIP:* <{wip_url}|{total_wip}>   {wip_perc}%'
     blocked_string = f'*Total Blocked:* <{blocked_url}|{total_blocked}>   {blocked_perc}%'
 
+    exec_time_string = None
     if job_duration > 0:
-        blocked_string += f'>*Execution Time:* {round(job_duration/1000/60/60, 2)} hrs\n'
+        exec_time_string = f'*Execution Time:* <{timings_url}|{round(job_duration/1000/60/60, 2)}> hrs\n'
 
     report_text = f'{total_string}\\n{pass_string}\\n{fail_string}\\n{unexec_string}\\n{wip_string}\\n{blocked_string}'
+    if exec_time_string:
+        report_text += f'\\n{exec_time_string}'
     if report_warning:
         report_text += f'\\n{report_warning}'
     print(report_text)
@@ -103,9 +116,87 @@ def build_report_blocks():
     return block
 
 
+def create_graph(time_dict):
+    start_sorted_dict = dict(sorted(time_dict.items(), key=lambda item: item[1]['start_time'], reverse=False))
+    end_sorted_dict = dict(sorted(time_dict.items(), key=lambda item: item[1]['end_time'], reverse=True))
+
+    start_dict_list = list(start_sorted_dict.values())
+    end_dict_list = list(end_sorted_dict.values())
+    reg_start = start_dict_list[0]['start_time']
+    reg_end = end_dict_list[0]['end_time']
+    reg_start_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(reg_start))
+    reg_end_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(reg_end))
+    num_tests = len(start_dict_list)
+
+    logger.info(f'graph starttime={reg_start_date} {reg_start} endtime={reg_end_date} {reg_end} num_tests={num_tests}')
+
+#    fig, gnt = plt.subplots()
+#    gnt.set_ylim(0, num_tests)
+#    gnt.set_xlim(reg_start, reg_end)
+#    gnt.set_xlabel('Regression time')
+#    gnt.set_ylabel('Test')
+#
+#    gnt.set_xticks([reg_start, reg_end])
+#    gnt.set_xticklabels([reg_start_date, reg_end_date])
+#
+#    gnt.set_yticks([1, num_tests])
+#    gnt.set_yticklabels(['1', str(num_tests)])
+#
+#    counter = 0
+#    for key in start_sorted_dict:
+#        if start_sorted_dict[key]["duration"] > 0:
+#            print(f'broken_barh {start_sorted_dict[key]["start_time"]} {start_sorted_dict[key]["duration"]} {counter}')
+#            gnt.broken_barh([(start_sorted_dict[key]["start_time"], start_sorted_dict[key]["duration"])], (counter, 1), facecolors =('tab:orange'))
+#        counter += 1
+
+    x = []
+    y = []
+    sizes = []
+    counter = 0
+    for key in start_sorted_dict:
+        if start_sorted_dict[key]["duration"] > 0:
+            x.append(start_sorted_dict[key]["start_time"] + start_sorted_dict[key]["duration"] / 2)
+            sizes.append(start_sorted_dict[key]["duration"])
+            y.append(counter)
+            counter += 1
+    plt.scatter(x, y, s=sizes)
+
+    plt.savefig("gantt1.png")
+
+
+def write_exec_time_file(time_dict_string):
+    time_dict = {}
+
+    with open('time_dict.txt', "w") as file1:
+        for comment in time_dict_string:
+            # print(f'fffffff "{comment}": "{time_dict_string}", ')
+            # print(f'fffffff "{comment}" "{time_dict_string[comment]}"')
+            file1.write(f'"{comment}": "{time_dict_string[comment]}", ')
+
+            comment_dict = json.loads(html.unescape(time_dict_string[comment]))
+            time_dict[comment] = comment_dict
+
+    time_sorted_dict = dict(sorted(time_dict.items(), key=lambda item: item[1]['duration'], reverse=True))
+
+    with open(timings_output_file, "w") as file1:
+        file1.write('<table style="width:100%">\n')
+        file1.write('<tr><th>TCID</th><th>Title</th><th>Duration (h:m:s)</th></tr>')
+        for key in time_sorted_dict:
+            duration = str(datetime.timedelta(seconds=time_sorted_dict[key]["duration"]))
+            file1.write(f'<tr><td align=left>{key}</td><td align=left>{time_sorted_dict[key]["summary"]}</td><td align=left>{duration}</td></tr>\n')
+        file1.write('</table>')
+
+    cmd = f'cp {timings_output_file} {timings_html_file}'
+    logger.info(f'copy timings file cmd={cmd}')
+    os.system(cmd)
+
+    # create_graph(time_dict)
+
+
 def find_missing_tests():
     cycle_list = []
     expected_list = []
+    time_dict = {}
 
     offset = 0
     total_count = 1
@@ -131,13 +222,23 @@ def find_missing_tests():
         while offset < total_count:
             result = z.get_execution_list_by_folderid(folder_id=folder['id'], cycle_id=cycle_id, version_id=version_id, project_id=project_id, offset=offset)
             query_content = json.loads(result)
-            print('length', len(query_content['searchObjectList']))
-
+            print('length of exec list by folderid', len(query_content['searchObjectList']))
+            # if len(query_content['searchObjectList']) > 0:
+            #    print('length greater than 0')
+            #    sys.exit(1)
             total_count = query_content['totalCount']
             offset = offset + query_content['maxAllowed']
             for tc in query_content['searchObjectList']:
+                print('tccc', tc)
                 print(tc['issueKey'], tc['execution']['status']['name'], tc['execution']['defects'])
                 cycle_list.append(tc['issueKey'])
+                time_dict_key = tc['issueKey']
+                if tc['issueKey'] in time_dict:
+                    time_dict_key = tc['issueKey'] + '_' + tc['execution']['id']
+                if 'comment' in tc['execution'] and tc['execution']['comment'] != 'None':
+                    time_dict[time_dict_key] = tc['execution']['comment'].replace('}', ', "summary": "' + tc['issueSummary'].rstrip() + '"}')
+                else:
+                    time_dict[time_dict_key] = '{"cloudlet": "nocomment", "start_time": 0, "end_time": 0, "duration": 0, "summary": "' + tc['issueSummary'].rstrip() + '"}'
 
     print('expected count', len(expected_list), 'expected set count', len(set(expected_list)), 'cycle count', len(cycle_list), 'cycle set count', len(set(cycle_list)))
     print('expected_list', expected_list)
@@ -154,6 +255,8 @@ def find_missing_tests():
     print('duplicates', duplicate_tests)
     missing_tests = set(expected_list) - set(cycle_list)
     logging.info(f'total jira tests={total_jira_tests} missing len={len(missing_tests)} missing tests {missing_tests}')
+
+    write_exec_time_file(time_dict)
 
     return missing_tests, duplicate_tests
 

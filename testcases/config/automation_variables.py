@@ -3,13 +3,13 @@ test_timeout_crm1 = '40 min'
 
 cloudlet_name_azure = 'automationAzureCentralCloudlet'
 cloudlet_name_gcp = 'automationGcpCentralCloudlet'
-#cloudlet_name_openstack = 'automationHamburgCloudlet'
+# cloudlet_name_openstack = 'automationHamburgCloudlet'
 cloudlet_name_openstack = 'automationHamburgCloudlet'
 cloudlet_name_openstack_shared = 'automationHamburgCloudlet'
 cloudlet_name_openstack_dedicated = 'automationHamburgCloudlet'
 cloudlet_name_openstack_vm = 'automationHamburgCloudlet'
 cloudlet_name_openstack_metrics = 'automationHamburgCloudlet'
-cloudlet_name_openstack_gpu = 'automationHamburgCloudlet'
+cloudlet_name_openstack_gpu = 'automationBonnCloudlet'
 cloudlet_name_vmpool = 'automationVMPoolCloudlet'
 cloudlet_name_vsphere = 'DFWVMW2'
 cloudlet_name_openstack_packet = 'packet-qaregression'
@@ -28,6 +28,7 @@ region_azure = 'US'
 vmpool_name = 'automationVMPool'
 
 app_name_automation = 'automation_api_app'
+app_name_auth_automation = 'automation_api_auth_app'
 developer_org_name_automation = 'automation_dev_org'
 flavor_name_automation = 'automation_api_flavor'
 
@@ -61,9 +62,11 @@ qcow_centos_openstack_image = 'server_ping_threaded_centos7'
 qcow_gpu_ubuntu16_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/ubuntu16_nvidia_gpu.qcow2#md5:ebefc158437895d0399802dac66b2f4f'
 qcow_centos_image_nocloudinit = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7_nocloudinit.qcow2#md5:1e0f1567f87c5867e4cd999a9a3eec3a'
 
+server_ping_threaded_cloudconfig = 'http://35.199.188.102/apps/server_ping_threaded_cloudconfig.yml'
+
 helm_image = 'https://resources.gigaspaces.com/helm-charts:gigaspaces/insightedge'
 
-#vm_console_address =  'https://hamedgecloud.telekom.de:6080/vnc_auto.html'
+# vm_console_address =  'https://hamedgecloud.telekom.de:6080/vnc_auto.html'
 vm_console_address =  'https://bonnedgecloud.telekom.de:6080/vnc_auto.html'
 
 mextester99_gmail_password = 'rfbixqomqidobmcb'
@@ -93,6 +96,8 @@ expired_cookie = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODQ1NzQ5MDIsI
  
 vm_public_key = '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0Spdynjh+MPcziCH2Gij\nTkK9fspTH4onMtPTgxo+MQC+OZTwetvYFJjGV8jnYebtuvWWUCctYmt0SIPmA0F0\nVU6qzSlrBOKZ9yA7Rj3jSQtNrI5vfBIzK1wPDm7zuy5hytzauFupyfboXf4qS4uC\nGJCm9EOzUSCLRryyh7kTxa4cYHhhTTKNTTy06lc7YyxBsRsN/4jgxjjkxe3J0SfS\nz3eaHmfFn/GNwIAqy1dddTJSPugRkK7ZjFR+9+sscY9u1+F5QPwxa8vTB0U6hh1m\nQnhVd1d9osRwbyALfBY8R+gMgGgEBCPYpL3u5iSjgD6+n4d9RQS5zYRpeMJ1fX0C\n/QIDAQAB\n-----END PUBLIC KEY-----'
 
+app_auth_public_key = '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0Spdynjh+MPcziCH2Gij\nTkK9fspTH4onMtPTgxo+MQC+OZTwetvYFJjGV8jnYebtuvWWUCctYmt0SIPmA0F0\nVU6qzSlrBOKZ9yA7Rj3jSQtNrI5vfBIzK1wPDm7zuy5hytzauFupyfboXf4qS4uC\nGJCm9EOzUSCLRryyh7kTxa4cYHhhTTKNTTy06lc7YyxBsRsN/4jgxjjkxe3J0SfS\nz3eaHmfFn/GNwIAqy1dddTJSPugRkK7ZjFR+9+sscY9u1+F5QPwxa8vTB0U6hh1m\nQnhVd1d9osRwbyALfBY8R+gMgGgEBCPYpL3u5iSjgD6+n4d9RQS5zYRpeMJ1fX0C\n/QIDAQAB\n-----END PUBLIC KEY-----'
+
 gpu_client = 'multi_client.py'
 gpu_client_path = '../edge-cloud-sampleapps/ComputerVisionServer/moedx/client'
 gpu_client_image = '3_bodies.png'
@@ -100,7 +105,8 @@ gpu_client_image = '3_bodies.png'
 # alert receiver
 slack_channel = '#qa-alertreceiver'
 slack_api_url = 'https://hooks.slack.com/services/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'
-#pagerduty_key = 'R012YDFZXKFQ4OTD0TDE9JNYM1Y2M97I'
-pagerduty_key = '8048c9a8e470430dc0ad9605c7fb00a0'
+# pagerduty_key = 'R012YDFZXKFQ4OTD0TDE9JNYM1Y2M97I'
+# pagerduty_key = '8048c9a8e470430dc0ad9605c7fb00a0'  # free account
+pagerduty_key = 'd1bdad0245364905c0e25090ce357f30'  # paid account
 
 trust_policy_server = '35.199.188.102'

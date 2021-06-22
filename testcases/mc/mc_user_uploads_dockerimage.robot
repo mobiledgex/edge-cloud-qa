@@ -20,7 +20,7 @@ ${DEVorgname}        jdevorg
 ${i}                 1
 	
 *** Test Cases ***
-
+# ECQ-1514
 MC - User shall be able to upload docker image as Developer Manager
     [Documentation] 
     ...  create a new user 
@@ -29,6 +29,8 @@ MC - User shall be able to upload docker image as Developer Manager
     ...  add user to org as Developer Manager
     ...  upload docker image 
     ...  delete the user
+
+    [Tags]  Upload
 
     ${i}=  Get Time  epoch
     ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
@@ -62,6 +64,7 @@ MC - User shall be able to upload docker image as Developer Manager
     Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
     Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
 
+# ECQ-1515
 MC - User shall be able to upload docker image as Developer Contributor
     [Documentation] 
     ...  create a new user 
@@ -70,6 +73,8 @@ MC - User shall be able to upload docker image as Developer Contributor
     ...  add user to org as Developer Contributor
     ...  upload docker image 
     ...  delete the user
+
+    [Tags]  Upload
 
     ${i}=  Get Time  epoch
     ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
@@ -103,6 +108,7 @@ MC - User shall be able to upload docker image as Developer Contributor
     Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
     Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
 
+# ECQ-1516
 MC - User shall not be able to upload docker image as Developer Viewer
     [Documentation] 
     ...  create a new user 
@@ -110,6 +116,8 @@ MC - User shall not be able to upload docker image as Developer Viewer
     ...  add user to org as Developer Viewer
     ...  verify cant upload docker image 
     ...  delete the user
+
+    [Tags]  Upload
 
     ${i}=  Get Time  epoch
     ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
@@ -148,6 +156,7 @@ MC - User shall not be able to upload docker image as Developer Viewer
 
     Should Contain  ${pullerror}  not found
 
+# ECQ-1517
 MC - User shall not be able to upload docker image as Operator Manager
     [Documentation] 
     ...  create a new user 
@@ -155,6 +164,8 @@ MC - User shall not be able to upload docker image as Operator Manager
     ...  add user to org as Operator Manager
     ...  verify cant upload docker image 
     ...  delete the user
+
+    [Tags]  Upload
 
     ${i}=  Get Time  epoch
     ${OPorgname}=  Catenate  SEPARATOR=  ${OPorgname}  ${i}
@@ -193,6 +204,7 @@ MC - User shall not be able to upload docker image as Operator Manager
 
     Should Contain  ${pullerror}  pull access denied
 
+# ECQ-1518
 MC - User shall not be able to upload docker image as Operator Contributor
     [Documentation] 
     ...  create a new user 
@@ -200,6 +212,8 @@ MC - User shall not be able to upload docker image as Operator Contributor
     ...  add user to org as Operator Contributor
     ...  verify cant upload docker image
     ...  delete the user
+
+    [Tags]  Upload
 
     ${i}=  Get Time  epoch
     ${OPorgname}=  Catenate  SEPARATOR=  ${OPorgname}  ${i}
@@ -238,6 +252,7 @@ MC - User shall not be able to upload docker image as Operator Contributor
 
     Should Contain  ${pullerror}  pull access denied
 
+# ECQ-1519
 MC - User shall not be able to upload docker image as Operator Viewer
     [Documentation] 
     ...  create a new user 
@@ -245,6 +260,8 @@ MC - User shall not be able to upload docker image as Operator Viewer
     ...  add user to org as Operator Viewer
     ...  verify cant upload docker image
     ...  delete the user
+
+    [Tags]  Upload
 
     ${i}=  Get Time  epoch
     ${OPorgname}=  Catenate  SEPARATOR=  ${OPorgname}  ${i}

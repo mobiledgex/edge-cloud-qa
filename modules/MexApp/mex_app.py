@@ -3,19 +3,17 @@ import socket
 import ssl
 import sys
 import os
-import subprocess
 import time
 import requests
-import re
 import CloudFlare
 
 import rootlb
 import kubernetes
-import shared_variables
 
 from mex_master_controller.AlertReceiver import AlertReceiver
 
 logger = logging.getLogger(__name__)
+
 
 class MexApp(object):
     def __init__(self):
@@ -26,7 +24,7 @@ class MexApp(object):
         self.cf_zone_name = 'mobiledgex.net'
 
         self.alert_receiver = AlertReceiver(root_url='dummy')
-        
+
     def ping_udp_port(self, host, port):
         data = 'ping'
         exp_return_data = 'pong'
@@ -39,16 +37,16 @@ class MexApp(object):
         return_data = ''
         try:
             logging.debug(f'sending {data} to {host}:{port}')
-            client_socket.sendto(data_to_send,(host, int(port)))
+            client_socket.sendto(data_to_send, (host, int(port)))
             logging.debug(f'waiting for {exp_return_data}')
             (return_data, addr) = client_socket.recvfrom(data_size)
             logging.info('received this data from {}:{}'.format(addr, return_data.decode('utf-8')))
-            #client_socket.shutdown(socket.SHUT_RDWR)
+            # client_socket.shutdown(socket.SHUT_RDWR)
             client_socket.close()
         except Exception as e:
             client_socket.close()
             raise Exception('error=', e)
-            
+
         if return_data.decode('utf-8') != exp_return_data:
             raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
@@ -64,11 +62,11 @@ class MexApp(object):
         return_data = ''
         try:
             logging.debug(f'sending {data} to {host}:{port}')
-            client_socket.sendto(data_to_send,(host, int(port)))
+            client_socket.sendto(data_to_send, (host, int(port)))
             logging.debug(f'waiting for {exp_return_data}')
             (return_data, addr) = client_socket.recvfrom(data_size)
             logging.info('received this data from {}:{}'.format(addr, return_data.decode('utf-8')))
-            #client_socket.shutdown(socket.SHUT_RDWR)
+            # client_socket.shutdown(socket.SHUT_RDWR)
             client_socket.close()
         except Exception as e:
             client_socket.close()
@@ -89,11 +87,11 @@ class MexApp(object):
         return_data = ''
         try:
             logging.debug(f'sending {data} to {host}:{server_port}')
-            client_socket.sendto(data_to_send,(host, int(server_port)))
+            client_socket.sendto(data_to_send, (host, int(server_port)))
             logging.debug(f'waiting for {exp_return_data}')
             (return_data, addr) = client_socket.recvfrom(data_size)
             logging.info('received this data from {}:{}'.format(addr, return_data.decode('utf-8')))
-            #client_socket.shutdown(socket.SHUT_RDWR)
+            # client_socket.shutdown(socket.SHUT_RDWR)
             client_socket.close()
         except Exception as e:
             client_socket.close()
@@ -176,7 +174,7 @@ class MexApp(object):
         data = 'ping'
         exp_return_data = 'pong'
         data_size = sys.getsizeof(bytes(data, 'utf-8'))
-        
+
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.settimeout(10)
         sock = client_socket
@@ -190,7 +188,7 @@ class MexApp(object):
             sock = context.wrap_socket(client_socket)
 
         sock.connect((host, int(port)))
-        
+
         return_data = ''
         try:
             logging.debug('sending data')
@@ -205,7 +203,7 @@ class MexApp(object):
             print('caught exception')
             sock.close()
             raise Exception('error=', e)
-            
+
         if return_data.decode('utf-8') != exp_return_data:
             raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
@@ -242,21 +240,21 @@ class MexApp(object):
 
         logging.info(f'recieved status_code={resp.status_code}')
         logging.info(f'recieved body={resp.text}')
-        
+
         if resp.status_code != 200:
             raise Exception(f'error. got {resp.status_code}. expected 200')
 
         if '<p>test server is running</p>' not in resp.text:
             raise Exception(f'error. did not get proper html text. got={resp.text}')
-        
+
         return resp
-    
+
     def udp_port_should_be_alive(self, host, port):
         logging.info('host:' + host + ' port:' + str(port))
 
         self.wait_for_dns(host)
 
-        for attempt in range(1,4):
+        for attempt in range(1, 4):
             logging.debug(f'UDP port attempt {attempt}')
             try:
                 self.ping_udp_port(host, int(port))
@@ -267,14 +265,14 @@ class MexApp(object):
                     raise Exception(e)
                 else:
                     time.sleep(1)
-                
+
     def tcp_port_should_be_alive(self, host, port, wait_time=0, tls=False, num_tries=4):
         logging.info(f'host:{host} port:{port} wait_time:{wait_time} tls:{tls} num_tries={num_tries}')
 
         self.wait_for_dns(host)
         e_return = ''
- 
-        for attempt in range(1,num_tries):
+
+        for attempt in range(1, num_tries):
             logging.debug(f'TCP port attempt {attempt}')
             try:
                 self.ping_tcp_port(host, port, wait_time, tls)
@@ -282,9 +280,9 @@ class MexApp(object):
             except Exception as e:
                 e_return = e
                 logging.debug(f'tcp exception caught:{e}')
-                #if attempt == num_tries:
+                # if attempt == num_tries:
                 #    raise Exception(e)
-                #else:
+                # else:
                 time.sleep(1)
         raise Exception(e_return)
 
@@ -292,9 +290,9 @@ class MexApp(object):
         logging.info(f'host:{host} port:{port} tls:{tls}')
 
         self.wait_for_dns(host)
-        
-        resp = self.make_http_request(host, port, page, tls)
-        return True          
+
+        self.make_http_request(host, port, page, tls)
+        return True
 
     def _send_tcp_data(self, host, port, data):
         data_size = sys.getsizeof(bytes(data, 'utf-8'))
@@ -337,7 +335,7 @@ class MexApp(object):
         self.wait_for_dns(vm)
 
         return_data = None
-        for attempt in range(1,4):
+        for attempt in range(1, 4):
             logging.debug(f'TCP port attempt {attempt}')
             try:
                 return_data = self._send_tcp_data(vm, vm_port, data).decode('utf-8')
@@ -357,9 +355,8 @@ class MexApp(object):
             raise Exception(f'Egress port is not accessible. Data returned is {return_data}')
 
     def egress_port_should_not_be_accessible(self, vm, host, protocol, port, vm_port=3015, wait_time=0):
-        accessible = False
         try:
-            accessible = self.egress_port_should_be_accessible(vm=vm, host=host, protocol=protocol, port=port, vm_port=vm_port, wait_time=wait_time)
+            self.egress_port_should_be_accessible(vm=vm, host=host, protocol=protocol, port=port, vm_port=vm_port, wait_time=wait_time)
         except Exception as e:
             print(e)
             if 'Egress port is not accessible' in str(e):
@@ -375,72 +372,71 @@ class MexApp(object):
             try:
                 addr = socket.gethostbyname(dns)
                 logging.info('dns is ready at ' + addr)
-                return  addr
+                return addr
             except OSError as err:
                 logging.debug(f'dns not ready yet:{err}')
                 time.sleep(1)
-            except:
+            except Exception:
                 logging.debug(f'dns not ready yet:{sys.exc_info()[0]}')
                 time.sleep(1)
 
         raise Exception(f'DNS for {dns} not ready after {wait_time} seconds')
-   
-    def k8s_scale_replicas(self, root_loadbalancer=None, kubeconfig=None, cluster_name=None, operator_name=None, pod_name=None, number_of_replicas=None): 
+
+    def k8s_scale_replicas(self, root_loadbalancer=None, kubeconfig=None, cluster_name=None, operator_name=None, pod_name=None, number_of_replicas=None):
         rb = None
         if root_loadbalancer is not None:
             print('*WARN*', 'rootlb')
-            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
-            kubeconfig_file = f'{cluster_name}.{operator_name}.kubeconfig'
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
+            # kubeconfig_file = f'{cluster_name}.{operator_name}.kubeconfig'
         else:
             rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
-            kubeconfig_file = self.kubeconfig_dir + '/' + kubeconfig
-        
+            # kubeconfig_file = self.kubeconfig_dir + '/' + kubeconfig
+
         self.rootlb = rb
-        kubectl_out = rb.get_deploy() 
+        kubectl_out = rb.get_deploy()
 
         for line in kubectl_out:
-            if pod_name in line: 
+            if pod_name in line:
                 deployment = line
-                logging.info('Deployment is ' + deployment )
+                logging.info('Deployment is ' + deployment)
                 name = line.split('/')
                 instance = name[1]
 
         kubectl_out = rb.k8s_scale_replicas(instance, number_of_replicas)
-        logging.debug(kubectl_out)        
+        logging.debug(kubectl_out)
 
         for line in kubectl_out:
             if 'scaled' in line:
-                logging.info('Replicas scaled to ' + number_of_replicas )
+                logging.info('Replicas scaled to ' + number_of_replicas)
 
-            
     def wait_for_k8s_pod_to_be_running(self, root_loadbalancer=None, kubeconfig=None, cluster_name=None, operator_name=None, pod_name=None, number_of_pods=1, wait_time=600):
 
         rb = None
         if root_loadbalancer is not None:
             print('*WARN*', 'rootlb')
-            #rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig' )
-            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
+            # rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig')
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
         else:
             rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
 
         self.rootlb = rb
         pod_count = 0
-        
+
         if pod_name:
-            pod_name = pod_name.replace('.', '') #remove any dots
+            pod_name = pod_name.replace('.', '')  # remove any dots
 
-        #shared_variables.cluster_name_default = 'cluster1544640562'
-        #kubeconfig_file = self.kubeconfig_dir + '/' + shared_variables.cluster_name_default + '.kubeconfig'
-        #kubeconfig_file = self.kubeconfig_dir + '/' + kubeconfig
-        #logging.info('kubeconfig=' + kubeconfig_file)
+        # shared_variables.cluster_name_default = 'cluster1544640562'
+        # kubeconfig_file = self.kubeconfig_dir + '/' + shared_variables.cluster_name_default + '.kubeconfig'
+        # kubeconfig_file = self.kubeconfig_dir + '/' + kubeconfig
+        # logging.info('kubeconfig=' + kubeconfig_file)
 
-        #kubectl_cmd = 'export KUBECONFIG={};kubectl get pods'.format(kubeconfig_file)
-        #logging.info(kubectl_cmd)
-        
+        # kubectl_cmd = 'export KUBECONFIG={};kubectl get pods'.format(kubeconfig_file)
+        # logging.info(kubectl_cmd)
+
         found_pod_dict = {}
         for t in range(wait_time):
-            #kubectl_return = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-            #kubectl_out = kubectl_return.stdout.decode('utf-8')
+            # kubectl_return = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            # kubectl_out = kubectl_return.stdout.decode('utf-8')
             kubectl_out = rb.get_pods()
             logging.debug(kubectl_out)
 
@@ -461,16 +457,16 @@ class MexApp(object):
 
         if pod_count != number_of_pods:
             raise Exception('All pods not found. expected=' + str(number_of_pods) + ' got=' + str(pod_count))
-        
+
         raise Exception('Running k8s pod not found')
 
     def stop_crm_docker_container(self, crm_ip=None, background=False):
         rb = rootlb.Rootlb(host=crm_ip)
 
         output = rb.stop_docker_container('crmserver', background=background)
-       
+
         if background:
-            logger.info('no checking cmd return since ran in background') 
+            logger.info('no checking cmd return since ran in background')
         else:
             if output[0] == 'crmserver\n':
                 logger.info('Stopped crmserver on ' + crm_ip)
@@ -509,7 +505,7 @@ class MexApp(object):
                 return True
 
         raise Exception('docker stop failed on ' + root_loadbalancer)
-    
+
     def start_docker_container_rootlb(self, root_loadbalancer=None):
 
         self.wait_for_dns(root_loadbalancer)
@@ -578,7 +574,7 @@ class MexApp(object):
         raise Exception('docker stop failed on ' + node)
 
     def start_docker_container_clustervm(self, node, root_loadbalancer=None):
-        
+
         command = 'docker ps -a --format "{{.ID}}"'
         self.wait_for_dns(root_loadbalancer)
 
@@ -587,7 +583,7 @@ class MexApp(object):
         rb = None
         if root_loadbalancer is not None:
             rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
-    
+
         container_id_list = rb.run_command_on_node(node, command)
         logging.debug(f'container_id={container_id_list}')
         container_id = container_id_list[0]
@@ -605,7 +601,7 @@ class MexApp(object):
     def wait_for_docker_container_to_be_running(self, root_loadbalancer=None, docker_image=None, node=None, wait_time=600):
 
         self.wait_for_dns(root_loadbalancer)
-        
+
         rb = None
         if root_loadbalancer is not None:
             if node is not None:
@@ -613,7 +609,7 @@ class MexApp(object):
                 rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
             else:
                 rb = rootlb.Rootlb(host=root_loadbalancer)
-        
+
         container_ids = rb.get_docker_container_id()
         logging.debug(f'container_ids={container_ids}')
 
@@ -633,15 +629,15 @@ class MexApp(object):
 
         rb = None
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
         else:
             rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
 
         self.rootlb = rb
         app_count = 0
-        
+
         if app_name:
-            app_name = app_name.replace('.', '') #remove any dots
+            app_name = app_name.replace('.', '')  # remove any dots
 
         found_app_dict = {}
         for t in range(wait_time):
@@ -665,14 +661,14 @@ class MexApp(object):
 
         if app_count != number_of_apps:
             raise Exception('All apps not found. expected=' + str(number_of_apps) + ' got=' + str(app_count))
-        
+
         raise Exception('Deployed helm app not found')
 
     def block_rootlb_port(self, root_loadbalancer, port, target):
         rb = rootlb.Rootlb(host=root_loadbalancer)
 
         rb.block_port(port=port, target=target)
-        
+
     def unblock_rootlb_port(self, root_loadbalancer, port, target):
         rb = rootlb.Rootlb(host=root_loadbalancer)
 
@@ -682,13 +678,13 @@ class MexApp(object):
         rb = rootlb.Rootlb(host=root_loadbalancer)
 
         rb.reboot()
-        
+
     def mount_should_exist_on_pod(self, root_loadbalancer=None, cluster_name=None, operator_name=None, pod_name=None, mount=None):
 
         rb = None
         if root_loadbalancer is not None:
-            #rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig' )
-            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
+            # rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig')
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
         else:
             rb = self.rootlb
 
@@ -701,23 +697,23 @@ class MexApp(object):
         try:
             filename = rb.write_file_to_pod(pod=pod_name, mount=mount)
             logging.info(f'successfully wrote file to pod={pod_name} on mount={mount}')
-        except:
+        except Exception:
             raise Exception(f'error writing file to mount={mount} and pod={pod_name}. {sys.exc_info()[0]}')
 
-        #node_file = f'/data/{cluster_name}_node.txt'
+        # node_file = f'/data/{cluster_name}_node.txt'
         try:
             output = rb.read_file_from_pod(pod=pod_name, filename=filename)
             logging.info(f'output={output} expecting={cluster_name}')
             assert output[0].rstrip() == pod_name
-        except:
+        except Exception:
             raise Exception(f'error. file not found on node for file={filename} and pod={pod_name}. {sys.exc_info()[0]}')
 
         return filename
-    
+
     def mount_should_persist(self, root_loadbalancer=None, cluster_name=None, operator_name=None, pod_name=None, mount=None):
         rb = None
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
         else:
             rb = self.rootlb
 
@@ -728,7 +724,7 @@ class MexApp(object):
             output = rb.read_file_from_pod(pod=pod_name, filename=filename)
             logging.info(f'output={output} expecting={cluster_name}')
             assert output[0].rstrip() == pod_name
-        except:
+        except Exception:
             raise Exception(f'error. file not found on node for file={filename} and pod={pod_name}. {sys.exc_info()[0]}')
 
     def write_file_to_node(self, node, mount='/var/opt/', root_loadbalancer=None, data=None):
@@ -743,7 +739,6 @@ class MexApp(object):
         self.rootlb = rb
 
         rb.write_file_to_node(node=node, mount=mount, data=data)
-        
 
     def run_command_on_pod(self, pod_name, command, cluster_name, operator_name, root_loadbalancer=None):
         rb = None
@@ -770,21 +765,21 @@ class MexApp(object):
 
         try:
             logging.info(f'getting cloudflare zoneid for zone={self.cf_zone_name}')
-            zoneid = cf.zones.get(params = {'name':self.cf_zone_name,'per_page':1})[0]['id']
+            zoneid = cf.zones.get(params={'name': self.cf_zone_name, 'per_page': 1})[0]['id']
             logging.info(f'found zoneid={zoneid} for zone={self.cf_zone_name}')
         except CloudFlare.exceptions.CloudFlareAPIError as e:
-            #raise Exception(r'/zones.get %d %s - api call failed' % (e, e))
+            # raise Exception(r'/zones.get %d %s - api call failed' % (e, e))
             raise Exception(f'cloudlflare exception get zones failed: {e}')
         except Exception as e:
-            #exit('/zones.get - %s - api call failed' % (e))
+            # exit('/zones.get - %s - api call failed' % (e))
             raise Exception(f'exception get zones failed: {e}')
 
         try:
             logging.info(f'getting cloudflare dns record for dns={dns_name}')
-            dns_ip = cf.zones.dns_records.get(zoneid, params = {'name':dns_name})[0]['content']
+            dns_ip = cf.zones.dns_records.get(zoneid, params={'name': dns_name})[0]['content']
             logging.info(f'found name={dns_name} ip={dns_ip}')
-        except CloudFlare.exceptions.CloudFlareAPIError as e:
-            #exit('/zones/dns_records.get %d %s - api call failed' % (e, e))
+        except CloudFlare.exceptions.CloudFlareAPIError:
+            # exit('/zones/dns_records.get %d %s - api call failed' % (e, e))
             raise Exception(f'cloudlflaire exception get dns record failed: {sys.exc_info()[0]}')
 
         return dns_ip
@@ -794,45 +789,63 @@ class MexApp(object):
 
         output_dict = {}
         for line in output_list:
-          line_split = line.split(':')
-          #print('*WARN*', line)
-          #print('*WARN*', line_split)
-          output_dict[line_split[0].strip()] = line_split[1].strip()
+            line_split = line.split(':')
+            output_dict[line_split[0].strip()] = line_split[1].strip()
 
         return output_dict
 
-    def alert_receiver_email_should_be_received(self, email_address, email_password, alert_receiver_name, alert_type, alert_name, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, status=None, scope=None, description=None, title=None, wait=30):
-        return self.alert_receiver.verify_email(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name=alert_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status=status, port=port, scope=scope, description=description, title=title, wait=wait)
+    def node_should_ping_server(self, root_loadbalancer, node, server):
+        rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
+
+        cmd = f'ping -c 5 {server}'
+
+        try:
+            output = rb.run_command_on_node(node, cmd)
+            logger.info(f'cmd output={output}')
+            logging.info('ping successful')
+        except Exception as e:
+            raise Exception(f'ping failed: {e}')
+
+    def node_should_not_ping_server(self, root_loadbalancer, node, server):
+        try:
+            self.node_should_ping_server(root_loadbalancer, node, server)
+        except Exception as e:
+            logging.info(f'ping not successful: as {e}')
+            return
+
+        raise Exception('ping is successful')
+
+    def alert_receiver_email_should_be_received(self, email_address, email_password, alert_receiver_name, alert_type, alert_name, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, status=None, scope=None, description=None, title=None, receiver_type=None, pagerduty_status=None, wait=30):
+        return self.alert_receiver.verify_email(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name=alert_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status=status, port=port, scope=scope, description=description, title=title, receiver_type=receiver_type, pagerduty_status=pagerduty_status, wait=wait)
 
     def alert_receiver_slack_message_should_be_received(self, alert_type, alert_name, alert_receiver_name, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, scope=None, description=None, title=None, wait=30):
         return self.alert_receiver.verify_slack(alert_type=alert_type, alert_name=alert_name, region=region, alert_receiver_name=alert_receiver_name, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status=status, port=port, scope=scope, description=description, title=title, wait=wait)
 
-#    def alert_receiver_pagerduty_email_should_be_received(self, alert_type, alert_name, alert_receiver_name, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, scope=None, description=None, title=None, wait=30):
-#        return self.alert_receiver.verify_slack(alert_type=alert_type, alert_name=alert_name, region=region, alert_receiver_name=alert_receiver_name, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status=status, port=port, scope=scope, description=description, title=title, wait=wait)
+    def alert_receiver_email_for_firing_appinstdown_healthcheckfailserverfail_should_be_received(self, email_address, email_password, region=None, alert_type='FIRING', alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, receiver_type='email', pagerduty_status=None, wait=30):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailServerFail', port=port, scope='Application', description='Application server port is not responding', title='AppInstDown', receiver_type=receiver_type, pagerduty_status=pagerduty_status, wait=wait)
 
-    def alert_receiver_email_for_firing_appinstdown_healthcheckfailserverfail_should_be_received(self, email_address, email_password, region=None, alert_type='FIRING', alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, wait=30):
-        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailServerFail', port=port, scope='Application', description='Application server port is not responding', title='AppInstDown', wait=wait)
+    def alert_receiver_email_for_resolved_appinstdown_healthcheckfailserverfail_should_be_received(self, email_address, email_password, region=None, alert_type='RESOLVED', alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, receiver_type='email', pagerduty_status=None, wait=180):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type=alert_type, alert_receiver_name=alert_receiver_name, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailServerFail', port=port, scope='Application', description='Application server port is not responding', title='AppInstDown', receiver_type=receiver_type, pagerduty_status=pagerduty_status, wait=wait)
 
-    def alert_receiver_email_for_resolved_appinstdown_healthcheckfailserverfail_should_be_received(self, email_address, email_password, region=None, alert_type='RESOLVED', alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, wait=180):
-        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type=alert_type, alert_receiver_name=alert_receiver_name, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailServerFail', port=port, scope='Application', description='Application server port is not responding', title='AppInstDown', wait=wait)
+    def alert_receiver_email_for_firing_appinstdown_healthcheckfailrootlboffline_should_be_received(self, email_address, email_password, region=None, alert_type='FIRING', alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, receiver_type='email', pagerduty_status=None, wait=30):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', description='Root Load Balancer is not responding', title='AppInstDown', receiver_type=receiver_type, pagerduty_status=pagerduty_status, wait=wait)
 
-    def alert_receiver_email_for_firing_appinstdown_healthcheckfailrootlboffline_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, wait=30):
-        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='FIRING', alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', description='Root Load Balancer is not responding', title='AppInstDown', wait=wait)
+    def alert_receiver_email_for_resolved_appinstdown_healthcheckfailrootlboffline_should_be_received(self, email_address, email_password, region=None, alert_type='RESOLVED', alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, receiver_type='email', pagerduty_status=None, wait=180):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type=alert_type, alert_receiver_name=alert_receiver_name, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', description='Root Load Balancer is not responding', title='AppInstDown', receiver_type=receiver_type, pagerduty_status=pagerduty_status, wait=wait)
 
-    def alert_receiver_email_for_resolved_appinstdown_healthcheckfailrootlboffline_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, wait=180):
-        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type='RESOLVED', alert_receiver_name=alert_receiver_name, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', description='Root Load Balancer is not responding', title='AppInstDown', wait=wait)
+    def alert_receiver_pagerduty_email_for_firing_appinstdown_healthcheckfailserverfail_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, wait=30):
+        self.alert_receiver_email_for_firing_appinstdown_healthcheckfailserverfail_should_be_received(email_address=email_address, email_password=email_password, region=region, alert_type='FIRING', alert_receiver_name=alert_receiver_name, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, port=port, description='Application server port is not responding', title='AppInstDown', receiver_type='pagerduty', pagerduty_status='Triggered', wait=wait)
 
-    def alert_receiver_pagerduty_email_for_firing_appinstdown_healthcheckfailserverfail_should_be_received(self, email_address, email_password, region=None, alert_receiver_name='PagerDuty ALERT', app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, wait=30):
-        self.alert_receiver_email_for_firing_appinstdown_healthcheckfailserverfail_should_be_received(email_address=email_address, email_password=email_password, region=region, alert_type='ALERT', alert_receiver_name=alert_receiver_name, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, port=port, description='Application server port is not responding', title='AppInstDown', wait=wait)
-
-    def alert_receiver_pagerduty_email_for_resolved_appinstdown_healthcheckfailserverfail_should_be_received(self, email_address, email_password, region=None, alert_receiver_name='PagerDuty ALERT', app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, wait=30):
-        self.alert_receiver_email_for_resolved_appinstdown_healthcheckfailserverfail_should_be_received(email_address=email_address, email_password=email_password, region=region, alert_type='ALERT', alert_receiver_name=alert_receiver_name, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, port=port, description='Application server port is not responding', title='AppInstDown', wait=wait)
+    def alert_receiver_pagerduty_email_for_resolved_appinstdown_healthcheckfailserverfail_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, wait=30):
+        self.alert_receiver_email_for_resolved_appinstdown_healthcheckfailserverfail_should_be_received(email_address=email_address, email_password=email_password, region=region, alert_type='RESOLVED', alert_receiver_name=alert_receiver_name, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, port=port, description='Application server port is not responding', title='AppInstDown', receiver_type='pagerduty', pagerduty_status='Resolved', wait=wait)
 
     def alert_receiver_pagerduty_email_for_firing_appinstdown_healthcheckfailrootlboffline_should_be_received(self, email_address, email_password, region=None, alert_receiver_name='PagerDuty ALERT', app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, wait=30):
-        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='ALERT', alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', description='Root Load Balancer is not responding', title='AppInstDown', wait=wait)
+        self.alert_receiver_email_for_firing_appinstdown_healthcheckfailrootlboffline_should_be_received(email_address=email_address, email_password=email_password, region=region, alert_type='FIRING', alert_receiver_name=alert_receiver_name, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, port=port, description='Root Load Balancer is not responding', title='AppInstDown', receiver_type='pagerduty', pagerduty_status='Triggered', wait=wait)
+        # self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='ALERT', alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', description='Root Load Balancer is not responding', title='AppInstDown', wait=wait)
 
     def alert_receiver_pagerduty_email_for_resolved_appinstdown_healthcheckfailrootlboffline_should_be_received(self, email_address, email_password, region=None, alert_receiver_name='PagerDuty ALERT', app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, description=None, title=None, wait=180):
-        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type='ALERT', alert_receiver_name=alert_receiver_name, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', description='Root Load Balancer is not responding', title='AppInstDown', wait=wait)
+        self.alert_receiver_email_for_resolved_appinstdown_healthcheckfailrootlboffline_should_be_received(email_address=email_address, email_password=email_password, region=region, alert_type='FIRING', alert_receiver_name=alert_receiver_name, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, port=port, description='Root Load Balancer is not responding', title='AppInstDown', receiver_type='pagerduty', pagerduty_status='Resolved', wait=wait)
+        # self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type='ALERT', alert_receiver_name=alert_receiver_name, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', description='Root Load Balancer is not responding', title='AppInstDown', wait=wait)
 
     def alert_receiver_slack_message_for_firing_appinstdown_healthcheckfailserverfail_should_be_received(self, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, description=None, title=None, port=None, wait=30):
         self.alert_receiver_slack_message_should_be_received(alert_type='FIRING', alert_name='AppInstDown', alert_receiver_name=alert_receiver_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailServerFail', port=port, scope='Application', description='Application server port is not responding', title='AppInstDown', wait=wait)
@@ -845,12 +858,12 @@ class MexApp(object):
 
     def alert_receiver_slack_message_for_resolved_appinstdown_healthcheckfailrootlboffline_should_be_received(self, alert_receiver_name=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, wait=30):
         self.alert_receiver_slack_message_should_be_received(alert_type='RESOLVED', alert_name='AppInstDown', alert_receiver_name=alert_receiver_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', description='Root Load Balancer is not responding', title='AppInstDown', wait=wait)
- 
+
     def alert_receiver_email_for_firing_cloudletresourceusage_should_be_received(self, email_address, email_password, region=None, alert_type='FIRING', alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, description=None, wait=30):
         self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name='CloudletResourceUsage', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', description=description, wait=wait)
 
-    def alert_receiver_email_for_firing_cloudletdown_should_be_received(self, email_address, email_password, region=None, alert_type='FIRING', alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, wait=30):
-        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name='CloudletDown', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', wait=wait)
+    def alert_receiver_email_for_firing_cloudletdown_should_be_received(self, email_address, email_password, region=None, alert_type='FIRING', alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, receiver_type='email', wait=30):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name='CloudletDown', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', receiver_type=receiver_type, wait=wait)
 
     def alert_receiver_email_for_resolved_cloudletdown_should_be_received(self, email_address, email_password, region=None, alert_type='RESOLVED', alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, wait=180):
         self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type=alert_type, alert_receiver_name=alert_receiver_name, alert_name='CloudletDown', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', wait=wait)
@@ -861,14 +874,14 @@ class MexApp(object):
     def alert_receiver_slack_message_for_resolved_cloudletdown_should_be_received(self, region=None, alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, wait=30):
         self.alert_receiver_slack_message_should_be_received(alert_type='RESOLVED', alert_name='CloudletDown', alert_receiver_name=alert_receiver_name, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', description='Cloudlet resource manager is offline', title='CloudletDown', wait=wait)
 
+    def alert_receiver_pagerduty_email_for_firing_cloudletdown_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, wait=30):
+        self.alert_receiver_email_for_firing_cloudletdown_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='FIRING', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, receiver_type='pagerduty', wait=wait)
+
     def alert_receiver_slack_message_for_firing_cloudletresourceusage_should_be_received(self, region=None, alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, description=None, wait=30):
         self.alert_receiver_slack_message_should_be_received(alert_type='FIRING', alert_name='CloudletResourceUsage', alert_receiver_name=alert_receiver_name, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', description=description, title='CloudletResourceUsage', wait=wait)
 
-    def alert_receiver_pagerduty_email_for_firing_cloudletdown_should_be_received(self, email_address, email_password, region=None, alert_receiver_name='PagerDuty ALERT', cloudlet_name=None, operator_org_name=None, wait=30):
-        self.alert_receiver_email_for_firing_cloudletdown_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='ALERT', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, wait=wait)
-
     def alert_receiver_pagerduty_email_for_resolved_cloudletdown_should_be_received(self, email_address, email_password, region=None, alert_receiver_name='PagerDuty ALERT', cloudlet_name=None, operator_org_name=None, wait=30):
-        self.alert_receiver_email_for_resolved_cloudletdown_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='ALERT', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, wait=wait)
+        self.alert_receiver_email_for_resolved_cloudletdown_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='RESOLVED', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, wait=wait)
 
     def alert_receiver_email_for_firing_appinstdown_healthcheckfailrootlboffline_should_not_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, wait=30):
         try:
@@ -905,4 +918,3 @@ class MexApp(object):
             return True
 
         raise Exception('alert receiver slack message for resolved appinstdown healthcheckfailrootlboffline was received')
-

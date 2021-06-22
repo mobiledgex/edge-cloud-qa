@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   CreateAppInst VM
 
-Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 
 Test Setup	Setup
 Test Teardown   Cleanup Provisioning
@@ -61,6 +61,25 @@ AppInst - VM deployment without cluster shall be deleted without clustername
     Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  DefaultCluster  #changed from DefaultVMCluster
 
     Delete App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}   #cluster_instance_developer_org_name=${developer_name_default}  cluster_instance_name=DefaultCluster
+
+# ECQ-3429
+AppInst - Shall be able to create a VM deployment without ports
+    [Documentation]
+    ...  - create a VM app instance without ports
+    ...  - verify app inst does not have mapped_ports section
+
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+    ${developer_name_default}=  Get Default Developer Name
+    ${app_version_default}=  Get Default App Version
+
+    Create App   app_name=${app_name_default}1  deployment=vm  image_type=ImageTypeQCOW  image_path=${qcow_centos_image}  access_ports=${Empty}
+
+    ${app_inst}=  Create App Instance  app_name=${app_name_default}1  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False} 
+
+    Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  DefaultCluster  #changed from DefaultVMCluster
+
+    Should Be Empty  ${app_inst.mapped_ports}
 
 *** Keywords ***
 Setup

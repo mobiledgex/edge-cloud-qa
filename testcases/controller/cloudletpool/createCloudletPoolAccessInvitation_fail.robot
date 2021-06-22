@@ -11,7 +11,7 @@ Test Teardown  Cleanup Provisioning
 *** Variables ***
 ${region}=  US
 ${operator_organization}=  TDG
-${organization}=  tmus
+${organization}=  ${developer_org_name_automation}
 
 *** Test Cases ***
 # ECQ-3299
@@ -25,13 +25,13 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
    Create Cloudlet Pool  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  operator_org_name=${operator_organization}  use_defaults=False
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Region not specified"}')  Create Cloudlet Pool Access Invitation  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"CloudletPool name not specified"}')  Create Cloudlet Pool Access Invitation  token=${token}  region=${region}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"CloudletPool organization not specified"}')  Create Cloudlet Pool Access Invitation  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Organization name not specified"}')  Create Cloudlet Pool Access Invitation  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  use_defaults=False
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Region not specified"}')  Delete Cloudlet Pool Access Invitation  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Delete Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Delete Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"CloudletPool name not specified"}')  Delete Cloudlet Pool Access Invitation  token=${token}  region=${region}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"CloudletPool organization not specified"}')  Delete Cloudlet Pool Access Invitation  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Organization name not specified"}')  Delete Cloudlet Pool Access Invitation  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  use_defaults=False
@@ -44,8 +44,8 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
 
    [Tags]  CloudletPoolAccess
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"region \\\\"xx\\\\" not found"}')  Create Cloudlet Pool Access Invitation  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invitation not found"}')  Delete Cloudlet Pool Access Invitation  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Region \\\\"xx\\\\" not found"}')  Create Cloudlet Pool Access Invitation  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invitation not found"}')  Delete Cloudlet Pool Access Invitation  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
 
 # ECQ-3312
 CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool access invitation without matching cloudletpool 
@@ -56,7 +56,7 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
    [Tags]  CloudletPoolAccess
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Specified CloudletPool pool1${epoch} org TDG for region ${region} not found"}')  Create Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization} 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invitation not found"}')  Delete Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invitation not found"}')  Delete Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
 
 # ECQ-3313
 CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool access invitation without matching org
@@ -68,8 +68,8 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
 
    Create Cloudlet Pool  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  operator_org_name=${operator_organization}  use_defaults=False
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Specified Organization xx does not exist"}')  Create Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=xx
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invitation not found"}')  Delete Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=xx
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Specified developer organization not found"}')  Create Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=xx
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invitation not found"}')  Delete Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=xx
 
 # ECQ-3314
 CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool access response with missing parms
@@ -80,18 +80,18 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
    [Tags]  CloudletPoolAccess
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Region not specified"}')  Create Cloudlet Pool Access Response  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Create Cloudlet Pool Access Response  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Create Cloudlet Pool Access Response  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"CloudletPool name not specified"}')  Create Cloudlet Pool Access Response  token=${token}  region=${region}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"CloudletPool organization not specified"}')  Create Cloudlet Pool Access Response  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Organization name not specified"}')  Create Cloudlet Pool Access Response  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Decision must be either accept or reject"}')  Create Cloudlet Pool Access Response  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False 
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Region not specified"}')  Delete Cloudlet Pool Access Response  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Delete Cloudlet Pool Access Response  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Delete Cloudlet Pool Access Response  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"CloudletPool name not specified"}')  Delete Cloudlet Pool Access Response  token=${token}  region=${region}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"CloudletPool organization not specified"}')  Delete Cloudlet Pool Access Response  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  developer_org_name=${organization}  use_defaults=False
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Organization name not specified"}')  Delete Cloudlet Pool Access Response  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  use_defaults=False
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"response not found"}')  Delete Cloudlet Pool Access Response  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Response not found"}')  Delete Cloudlet Pool Access Response  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
 
 # ECQ-3315
 CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool access response without matching region
@@ -107,7 +107,7 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No invitation for specified cloudlet pool access"}')  Create Cloudlet Pool Access Response  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  decision=accept
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No invitation for specified cloudlet pool access"}')  Create Cloudlet Pool Access Response  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  decision=reject
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"response not found"}')  Delete Cloudlet Pool Access Response  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Response not found"}')  Delete Cloudlet Pool Access Response  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
 
 # ECQ-3316
 CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool access response without matching invitation 
@@ -120,7 +120,7 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No invitation for specified cloudlet pool access"}')  Create Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  decision=accept
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No invitation for specified cloudlet pool access"}')  Create Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  decision=reject
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"response not found"}')  Delete Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Response not found"}')  Delete Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
 
 # ECQ-3317
 CreateCloudletPoolAccess - shall not be able to create same cloudlet pool access invitation twice
@@ -185,6 +185,17 @@ CreateCloudletPoolAccess - shall not be able to reject cloudlet pool access invi
    Create Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  decision=reject
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"CloudletPool response for org ${organization}, region ${region}, pool pool${epoch} poolorg ${operator_organization} already exists"}')  Create Cloudlet Pool Access Response  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  decision=accept
+
+# ECQ-3399
+CreateCloudletPoolAccess - shall not be able to send an invitation to an operator org
+   [Documentation]
+   ...  - send Invitation to a developer org
+   ...  - verify error is created
+
+   [Tags]  CloudletPoolAccess
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Specified organization is not a developer organization"}')  Create Cloudlet Pool Access Invitation  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${operator_organization}  use_defaults=False
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Specified organization is not a developer organization"}')  Create Cloudlet Pool Access Invitation  token=${token}  region=${region}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=tmus  use_defaults=False
 
 *** Keywords ***
 Setup

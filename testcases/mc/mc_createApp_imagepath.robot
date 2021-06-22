@@ -9,6 +9,7 @@ Test Teardown	Cleanup Provisioning
 *** Variables ***
 
 *** Test Cases ***
+# ECQ-2001
 CreateApp - error shall be received with image_type=ImageTypeDocker deployment=kubernetes and org in imagepath not found
     [Documentation]
     ...  create app with image_type=ImageTypeDocker deployment=kubernetes and org in imagepath not found 

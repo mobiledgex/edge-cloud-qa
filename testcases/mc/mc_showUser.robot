@@ -70,6 +70,8 @@ MC - shall be able to show user by org
     ...  - send user show with org
     ...  - verify returned info is correct
 
+   [Setup]  Setup
+   [Teardown]  Cleanup Provisioning
    [Template]  Show User by Org Should Return Correct Users
 
    tmus
@@ -81,7 +83,26 @@ MC - shall be able to show user by locked
     ...  - send user show with locked
     ...  - verify returned info is correct
 
-    add test
+   [Setup]  Setup
+   [Teardown]  Cleanup Provisioning
+
+   @{info_locked}=    Show User  locked=${True}   token=${super_token}  use_defaults=${False}
+   @{info_unlocked}=  Show User  locked=${False}  token=${super_token}  use_defaults=${False}
+   @{info_all}=       Show User  token=${super_token}  use_defaults=${False}
+
+   FOR  ${user}  IN  @{info_locked}
+      Should Be True  ${user['Locked']}
+   END
+
+   FOR  ${user}  IN  @{info_unlocked}
+      Should Not Be True  ${user['Locked']}
+   END
+
+   ${num_locked}=  Get Length  ${info_locked}
+   ${num_unlocked}=  Get Length  ${info_unlocked}
+   ${num_all}  Get Length  ${info_all} 
+
+   Should Be True  ${num_locked} + ${num_unlocked} == ${num_all}
 
 # ECQ-3155
 MC - shall be able to show user by enabletotp
@@ -89,7 +110,26 @@ MC - shall be able to show user by enabletotp
     ...  - send user show with enabletotp
     ...  - verify returned info is correct
 
-    add test
+   [Setup]  Setup
+   [Teardown]  Cleanup Provisioning
+
+   @{info_true}=    Show User  enable_totp=${True}   token=${super_token}  use_defaults=${False}
+   @{info_false}=  Show User  enable_totp=${False}  token=${super_token}  use_defaults=${False}
+   @{info_all}=       Show User  token=${super_token}  use_defaults=${False}
+
+   FOR  ${user}  IN  @{info_true}
+      Should Be True  ${user['EnableTOTP']}
+   END
+
+   FOR  ${user}  IN  @{info_false}
+      Should Not Be True  ${user['EnableTOTP']}
+   END
+
+   ${num_true}=  Get Length  ${info_true}
+   ${num_false}=  Get Length  ${info_false}
+   ${num_all}  Get Length  ${info_all}
+
+   Should Be True  ${num_true} + ${num_false} == ${num_all}
 
 # ECQ-3156
 MC - shall be able to show user by emailverified
@@ -97,7 +137,26 @@ MC - shall be able to show user by emailverified
     ...  - send user show with emailverified
     ...  - verify returned info is correct
 
-    add test
+   [Setup]  Setup
+   [Teardown]  Cleanup Provisioning
+
+   @{info_true}=    Show User  email_verified=${True}   token=${super_token}  use_defaults=${False}
+   @{info_false}=  Show User  email_verified=${False}  token=${super_token}  use_defaults=${False}
+   @{info_all}=       Show User  token=${super_token}  use_defaults=${False}
+
+   FOR  ${user}  IN  @{info_true}
+      Should Be True  ${user['EmailVerified']}
+   END
+
+   FOR  ${user}  IN  @{info_false}
+      Should Not Be True  ${user['EmailVerified']}
+   END
+
+   ${num_true}=  Get Length  ${info_true}
+   ${num_false}=  Get Length  ${info_false}
+   ${num_all}  Get Length  ${info_all}
+
+   Should Be True  ${num_true} + ${num_false} == ${num_all}
  
 *** Keywords ***
 Show User by Role Should Return Correct Users
@@ -150,6 +209,8 @@ Setup
    
    ${username1}=  Set Variable  user1_${time}
    ${username2}=  Set Variable  user2_${time}
+
+   Skip Verify Email
 
    Create User  username=${username1}   password=${mextester06_gmail_password}   email_address=${username1}@xy.com  family_name=${username1}_familyname  given_name=${username1}_givenname  nickname=${username1}_nickname  
    Create User  username=${username2}   password=${mextester06_gmail_password}   email_address=${username2}@xy.com  family_name=${username2}_familyname  given_name=${username2}_givenname  nickname=${username2}_nickname  enable_totp=${True}

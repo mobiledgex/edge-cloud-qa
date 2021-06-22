@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   MasterController New User Login
+Documentation   MasterController show roles
 
 Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
@@ -12,49 +12,59 @@ ${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlh
 
 
 *** Test Cases ***
+# ECQ-3366
 MC - Admin user shall be able to show roles
 	[Documentation]
-	...  admin user can show roles 
-	...  verify the roles returned
+	...  - admin user can show roles 
+	...  - verify the roles returned
 
 	${roles}=   Show Role   token=${adminToken}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers  ${status_code}  200	
-	Should Be Equal             ${body}         ["AdminContributor","AdminManager","AdminViewer","DeveloperContributor","DeveloperManager","DeveloperViewer","OperatorContributor","OperatorManager","OperatorViewer"]
+	Should Contain             ${body}         "AdminContributor","AdminManager","AdminViewer","BillingManager","DeveloperContributor","DeveloperManager","DeveloperViewer","OperatorContributor","OperatorManager","OperatorViewer"
 
+# ECQ-3367
 MC - User shall be able to show roles
 	[Documentation]
-	...  user can show roles 
-	...  verify the roles returned
+	...  - user can show roles 
+	...  - verify the roles returned
+
+        [Setup]  Setup User
 
 	${roles}=  Show Role   token=${userToken}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers  ${status_code}  200	
-	Should Be Equal             ${body}         ["AdminContributor","AdminManager","AdminViewer","DeveloperContributor","DeveloperManager","DeveloperViewer","OperatorContributor","OperatorManager","OperatorViewer"]
+	Should Be Equal             ${body}         ["BillingManager","DeveloperContributor","DeveloperManager","DeveloperViewer","OperatorContributor","OperatorManager","OperatorViewer"]
 
+# ECQ-3368
 MC - User shall not be able to show roles without a token
 	[Documentation]
-	...  create a new user and show roles without a token
-	...  verify the correct error is returned
-	...  delete users after test completes
+	...  - create a new user and show roles without a token
+	...  - verify the correct error is returned
+	...  - delete users after test completes
+
+        [Setup]  Setup User
 
 	${error_msg}=  Run Keyword and Expect Error  *  Show Role   use_defaults=${False}
 
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 
-	Should Be Equal As Numbers  ${status_code}  401	
-	Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal As Numbers  ${status_code}  400	
+	Should Be Equal             ${body}         {"message":"No bearer token found"}
 
+# ECQ-3369
 MC - User shall not be able to show roles with an empty token
 	[Documentation]
-	...  create a new user and show roles with an empty token 
-	...  verify the correct error is returned
-	...  delete users after test completes
+	...  - create a new user and show roles with an empty token 
+	...  - verify the correct error is returned
+	...  - delete users after test completes
+
+        [Setup]  Setup User
 
 	${error_msg}=  Run Keyword and Expect Error  *  Show Role    token=${EMPTY}    use_defaults=${False}
 
@@ -62,13 +72,16 @@ MC - User shall not be able to show roles with an empty token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"no token found"}
+	Should Be Equal             ${body}         {"message":"No bearer token found"}
 
+# ECQ-3370
 MC - User shall not be able to show roles with a bad token
 	[Documentation]
-	...  create a new user and show roles with a bad token 
-	...  verify the correct error is returned
-	...  delete users after test completes
+	...  - create a new user and show roles with a bad token 
+	...  - verify the correct error is returned
+	...  - delete users after test completes
+
+        [Setup]  Setup User
 
 	${error_msg}=  Run Keyword and Expect Error  *  Show Role   token=thisisabadtoken     use_defaults=${False}
 
@@ -76,13 +89,16 @@ MC - User shall not be able to show roles with a bad token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  401	
-	Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal             ${body}         {"message":"Invalid or expired jwt"}
 
+# ECQ-3371
 MC - User shall not be able to show roles with an expired token
 	[Documentation]
-	...  create a new user and show roles with an expired token 
-	...  verify the correct error is returned
-	...  delete users after test completes
+	...  - create a new user and show roles with an expired token 
+	...  - verify the correct error is returned
+	...  - delete users after test completes
+
+        [Setup]  Setup User
 
 	${error_msg}=  Run Keyword and Expect Error  *  Show Role   token=${expToken}     use_defaults=${False}
 
@@ -90,13 +106,15 @@ MC - User shall not be able to show roles with an expired token
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  401	
-
-
+        Should Be Equal             ${body}         {"message":"Invalid or expired jwt"}
 	
 *** Keywords ***
-Setup
-	${adminToken}=   Login
-	Create User  username=myuser   password=${password}   email=xy@xy.com
-	${userToken}=  Login  username=myuser  password=${password}
+Setup 
+        ${adminToken}=   Get Super Token
         Set Suite Variable  ${adminToken}
+
+Setup User
+	#Create User  username=myuser   password=${password}   email_address=xy@xy.com
+	#${userToken}=  Login  username=myuser  password=${password}
+        ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
 	Set Suite Variable  ${userToken}

@@ -103,9 +103,9 @@ CreateAppInst - shall be able to create app inst with real_cluster_name
 
    [Template]  Shall CreatAppInst with Real Cluster Name
 
-   cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
-   cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
-   cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+   #cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
+   #cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
+   #cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
 
    cluster_name=cluster${app_name_default}  developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
    cluster_name=cluster${app_name_default}  developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
@@ -139,10 +139,10 @@ Shall CreatAppInst with Real Cluster Name
    Delete App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${app_name_default}  cluster_instance_developer_org_name=MobiledgeX
    Delete App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${app_name_default}-2  cluster_instance_developer_org_name=MobiledgeX
 
-   ${app_inst3}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX  real_cluster_name=${app_inst2['data']['real_cluster_name']}  auto_delete=${False}
-   Delete App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX
+   ${app_inst3}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${app_inst2['data']['real_cluster_name']}  cluster_instance_developer_org_name=MobiledgeX  real_cluster_name=${app_inst2['data']['real_cluster_name']}  auto_delete=${False}
+   Delete App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${app_inst2['data']['real_cluster_name']}  cluster_instance_developer_org_name=MobiledgeX
 
-   ${app_inst4}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX  real_cluster_name=${app_inst1['data']['real_cluster_name']}  
+   ${app_inst4}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${app_inst1['data']['real_cluster_name']}  cluster_instance_developer_org_name=MobiledgeX  real_cluster_name=${app_inst1['data']['real_cluster_name']}  
 
    Delete Cluster Instance  region=${region}  cluster_name=${app_inst2['data']['real_cluster_name']}  developer_org_name=MobiledgeX
 

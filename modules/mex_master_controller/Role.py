@@ -19,7 +19,7 @@ class Role(MexOperation):
         #self.create_url = '/usercreate'
         #self.delete_url = '/auth/user/delete'
         self.showuser_url = '/auth/role/showuser'
-        #self.current_url = '/auth/user/current'
+        self.showperms_url = '/auth/role/perms/show'
         #self.update_url = '/auth/user/update'
         #self.update_restricted_url = '/auth/restricted/user/update'
 
@@ -82,3 +82,20 @@ class Role(MexOperation):
             return_list = return_show
 
         return return_list
+
+    def role_perms(self, token=None, role=None, json_data=None, use_defaults=True, use_thread=False):
+        msg_dict = {}
+
+        return_show = self.show(token=token, url=self.showperms_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return_list = []
+
+        if role:
+            for user in return_show:
+               if user['role'] == role:
+                   return_list.append(user)
+        else:
+            return_list = return_show
+
+        return return_list
+
+

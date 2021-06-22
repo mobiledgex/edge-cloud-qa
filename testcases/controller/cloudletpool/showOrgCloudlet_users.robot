@@ -341,8 +341,8 @@ ShowOrgCloudlet - orgs shall be changed to different pools
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  auto_delete=False
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  developer_org_name=${orgnamedev2}  auto_delete=False
-   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
-   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  developer_org_name=${orgnamedev2}  decision=accept  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False  auto_delete=${False}
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  developer_org_name=${orgnamedev2}  decision=accept  use_defaults=False  auto_delete=${False}
 
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  org_name=${orgname}
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  org_name=${orgname2}
@@ -656,6 +656,9 @@ ShowOrgCloudlet - shall be to show after deleting all pools
    FOR  ${cloudlet}  IN  @{cloudlets}
       Set To Dictionary  ${org_dict}  ${cloudlet['operator']}  found
    END
+
+   [Teardown]  Cleanup Pools  ${org_dict}
+
    FOR  ${c}  IN  @{org_dict.keys()}
       Run Keyword If  '${c}' != 'tmus'  Adduser Role  token=${super_token}  orgname=${c}  username=${op_manager_user_automation}  role=OperatorManager
       Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  operator_org_name=${c}
@@ -734,11 +737,11 @@ ShowOrgCloudlet - shall be to show after deleting all pools
    # no cloudlets are returned since they are still in the pools even though org is removed from pool
    #@{cloudlets_new1}=  Create List  ${cloudlet0}  ${cloudlet1}  ${cloudlet2}  ${cloudlet3}  ${cloudlet4}
    Cloudlets Should Be In List  ${cloudlets}  ${show_return_new}
-   Length Should Be   ${show_return_new}  ${len_cloudlets}
+   Length Should Be   ${show_return_new}  ${num_public_cloudlets}
 
    #@{cloudlets_new2}=  Create List  ${cloudlet0}  ${cloudlet1}  ${cloudlet2}  ${cloudlet3}  ${cloudlet4}
    Cloudlets Should Be In List  ${cloudlets}  ${show_return_new2}
-   Length Should Be   ${show_return_new2}  ${len_cloudlets}
+   Length Should Be   ${show_return_new2}  ${num_public_cloudlets}
 
 # ECQ-1718
 ShowOrgCloudlet - shall be to add members after orgpoolcreate
@@ -1078,3 +1081,17 @@ Setup
    Set Suite Variable  ${public_cloudlets}
    Set Suite Variable  ${num_public_cloudlets}
    Set Suite Variable  ${public_cloudlet_list}
+
+Cleanup Pools
+   [Arguments]  ${org_dict}
+
+   FOR  ${cloudlet}  IN  @{cloudlets}
+      Run Keyword and Ignore Error  Remove Cloudlet Pool Member  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${cloudlet['operator']}  operator_org_name=${cloudlet['operator']}  cloudlet_name=${cloudlet['cloudlet']} 
+   END
+
+   FOR  ${c}  IN  @{org_dict.keys()}
+      Run Keyword and Ignore Error  Delete Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev} 
+      Run Keyword and Ignore Error  Delete Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev} 
+   END
+
+   Cleanup Provisioning

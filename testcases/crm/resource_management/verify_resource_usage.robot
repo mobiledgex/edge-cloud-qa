@@ -46,9 +46,8 @@ Controller throws proper error and displays correct resource usage/metrics data 
 
    &{resource1}=  Create Dictionary  name=RAM  value=8192
    &{resource2}=  Create Dictionary  name=vCPUs  value=4
-   &{resource3}=  Create Dictionary  name=Disk  value=80
-   &{resource4}=  Create Dictionary  name=Instances  value=2
-   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}  ${resource4}
+   &{resource3}=  Create Dictionary  name=Instances  value=2
+   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}
 
 
    # create cloudlet with resource quotas
@@ -57,17 +56,14 @@ Controller throws proper error and displays correct resource usage/metrics data 
    Should Be Equal As Numbers   ${cloudlet1['data']['default_resource_alert_threshold']}  80
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['value']}  8192
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['value']}  4
-   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['value']}  80
-   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][3]['value']}  2
+   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['value']}  2
 
-   Verify Resource Usage  80  2  8192  4
+   Verify Resource Usage  2  8192  4
  
    ${resourceusage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-   ${default_disk}=  Set Variable  ${resourceusage[0]['info'][0]['value']}
-   ${default_instances}=  Set Variable  ${resourceusage[0]['info'][3]['value']}
-   ${default_ram}=        Set Variable  ${resourceusage[0]['info'][4]['value']}
-   ${default_vcpus}=      Set Variable  ${resourceusage[0]['info'][5]['value']}
-   Set Suite Variable  ${default_disk}
+   ${default_instances}=  Set Variable  ${resourceusage[0]['info'][2]['value']}
+   ${default_ram}=        Set Variable  ${resourceusage[0]['info'][3]['value']}
+   ${default_vcpus}=      Set Variable  ${resourceusage[0]['info'][4]['value']}
    Set Suite Variable  ${default_instances}
    Set Suite Variable  ${default_ram}
    Set Suite Variable  ${default_vcpus}
@@ -93,139 +89,138 @@ Controller throws proper error and displays correct resource usage/metrics data 
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  token=${tokendev}
    Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available:
-   Should Contain  ${error}  required vCPUs is 4 but only 0 is available
-   Should Contain  ${error}  required Disk is 60GB but only 0GB is available
-   Should Contain  ${error}  required Instances is 2 but only 0 is available
-   Should Contain  ${error}  required RAM is 6144MB but only 0MB is available
+   Should Contain  ${error}  required vCPUs is 4 but only 0 out of 4 is available
+   #Should Contain  ${error}  required Disk is 60GB but only 0GB is available
+   Should Contain  ${error}  required Instances is 2 but only 0 out of 2 is available
+   Should Contain  ${error}  required RAM is 6144MB but only 0MB out of 8192MB is available
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor}  token=${tokendev}
    Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available:
-   Should Contain  ${error}  required RAM is 2048MB but only 0MB is available
-   Should Contain  ${error}  required vCPUs is 2 but only 0 is available
-   Should Contain  ${error}  required Disk is 20GB but only 0GB is available
-   Should Contain  ${error}  required Instances is 1 but only 0 is available
+   Should Contain  ${error}  required RAM is 2048MB but only 0MB out of 8192MB is available
+   Should Contain  ${error}  required vCPUs is 2 but only 0 out of 4 is available
+   #Should Contain  ${error}  required Disk is 20GB but only 0GB is available
+   Should Contain  ${error}  required Instances is 1 but only 0 out of 2 is available
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=kubernetes  number_nodes=1  flavor_name=${flavor}  token=${tokendev}
    Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available:
-   Should Contain  ${error}  required Disk is 80GB but only 0GB is available
-   Should Contain  ${error}  required Instances is 3 but only 0 is available
-   Should Contain  ${error}  required RAM is 8192MB but only 0MB is available
-   Should Contain  ${error}  required vCPUs is 6 but only 0 is available
+   #Should Contain  ${error}  required Disk is 80GB but only 0GB is available
+   Should Contain  ${error}  required Instances is 3 but only 0 out of 2 is available
+   Should Contain  ${error}  required RAM is 8192MB but only 0MB out of 8192MB is available
+   Should Contain  ${error}  required vCPUs is 6 but only 0 out of 4 is available
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=kubernetes  number_nodes=1  flavor_name=${flavor}  token=${tokendev}
    Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available:
-   Should Contain  ${error}  required RAM is 4096MB but only 0MB is available
-   Should Contain  ${error}  required vCPUs is 4 but only 0 is available
-   Should Contain  ${error}  required Disk is 40GB but only 0GB is available
-   Should Contain  ${error}  required Instances is 2 but only 0 is available
+   Should Contain  ${error}  required RAM is 4096MB but only 0MB out of 8192MB is available
+   Should Contain  ${error}  required vCPUs is 4 but only 0 out of 4 is available
+   #Should Contain  ${error}  required Disk is 40GB but only 0GB is available
+   Should Contain  ${error}  required Instances is 2 but only 0 out of 2 is available
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=helm  flavor_name=${flavor}  token=${tokendev}
    Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available:
-   Should Contain  ${error}  required vCPUs is 4 but only 0 is available
-   Should Contain  ${error}  required Disk is 60GB but only 0GB is available
-   Should Contain  ${error}  required Instances is 2 but only 0 is available
-   Should Contain  ${error}  required RAM is 6144MB but only 0MB is available
+   Should Contain  ${error}  required vCPUs is 4 but only 0 out of 4 is available
+   #Should Contain  ${error}  required Disk is 60GB but only 0GB is available
+   Should Contain  ${error}  required Instances is 2 but only 0 out of 2 is available
+   Should Contain  ${error}  required RAM is 6144MB but only 0MB out of 8192MB is available
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=helm  flavor_name=${flavor}  token=${tokendev}
    Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available:
-   Should Contain  ${error}  required RAM is 2048MB but only 0MB is available
-   Should Contain  ${error}  required vCPUs is 2 but only 0 is available
-   Should Contain  ${error}  required Disk is 20GB but only 0GB is available
-   Should Contain  ${error}  required Instances is 1 but only 0 is available
+   Should Contain  ${error}  required RAM is 2048MB but only 0MB out of 8192MB is available
+   Should Contain  ${error}  required vCPUs is 2 but only 0 out of 4 is available
+   #Should Contain  ${error}  required Disk is 20GB but only 0GB is available
+   Should Contain  ${error}  required Instances is 1 but only 0 out of 2 is available
 
    ${error}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  app_name=${app_name1}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name1}  token=${tokendev}
    Should Contain  ${error}  "code":400
    Should Contain  ${error}  'code=200', 'error={"result":{"message":"Not enough resources available:
-   Should Contain  ${error}   required vCPUs is 4 but only 0 is available 
-   Should Contain  ${error}   required Disk is 60GB but only 0GB is available
-   Should Contain  ${error}   required Instances is 2 but only 0 is available
-   Should Contain  ${error}   required RAM is 6144MB but only 0MB is available 
+   Should Contain  ${error}   required vCPUs is 4 but only 0 out of 4 is available 
+   #Should Contain  ${error}   required Disk is 60GB but only 0GB is available
+   Should Contain  ${error}   required Instances is 2 but only 0 out of 2 is available
+   Should Contain  ${error}   required RAM is 6144MB but only 0MB out of 8192MB is available 
 
    ${error}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  app_name=${app_name2}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name1}  token=${tokendev}
    Should Contain  ${error}  "code":400
    Should Contain  ${error}  'code=200', 'error={"result":{"message":"Not enough resources available:
-   Should Contain  ${error}   required vCPUs is 4 but only 0 is available
-   Should Contain  ${error}   required Disk is 40GB but only 0GB is available
-   Should Contain  ${error}   required Instances is 2 but only 0 is available
-   Should Contain  ${error}   required RAM is 4096MB but only 0MB is available
+   Should Contain  ${error}   required vCPUs is 4 but only 0 out of 4 is available
+   #Should Contain  ${error}   required Disk is 40GB but only 0GB is available
+   Should Contain  ${error}   required Instances is 2 but only 0 out of 2 is available
+   Should Contain  ${error}   required RAM is 4096MB but only 0MB out of 8192MB is available
 
    ${error}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  app_name=${app_name3}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=dummycluster  token=${tokendev}
    Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available:
-   Should Contain  ${error}  required vCPUs is 6 but only 0 is available
-   Should Contain  ${error}  required Disk is 120GB but only 0GB is available
-   Should Contain  ${error}  required RAM is 12288MB but only 0MB is available
-   Should Contain  ${error}  required Instances is 2 but only 0 is available
+   Should Contain  ${error}  required vCPUs is 6 but only 0 out of 4 is available
+   #Should Contain  ${error}  required Disk is 120GB but only 0GB is available
+   Should Contain  ${error}  required RAM is 12288MB but only 0MB out of 8192MB is available
+   Should Contain  ${error}  required Instances is 2 but only 0 out of 2 is available
 
-   Cloudlet Update  20480  10  200  4
+   Cloudlet Update  20480  10  4
 
    Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  auto_delete=False  token=${tokendev}
-   Verify Resource Usage  140  4  14336  8
+   Verify Resource Usage  4  14336  8
 
    ${metrics}=  Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  selector=resourceusage  last=2  token=${tokenop}
 
    Length Should Be  ${metrics['data'][0]['Series'][0]['values']}   1
-   Length Should Be  ${metrics['data'][0]['Series'][0]['columns']}  11
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][4]}    140
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][8]}    4
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][9]}    14336
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][10]}   8
+   Length Should Be  ${metrics['data'][0]['Series'][0]['columns']}  9
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][6]}    4
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][7]}    14336
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][8]}    8
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cluster_name=${cluster_name}1  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor}  token=${tokendev}
-   Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available: required Instances is 1 but only 0 is available"}
+   Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available: required Instances is 1 but only 0 out of 4 is available"}
 
    Delete Cluster Instance  region=${region}  cluster_name=${cluster_name}  developer_org_name=${org_name_dev}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokendev} 
-   Verify Resource Usage  ${default_disk}  ${default_instances}  ${default_ram}  ${default_vcpus}
+   Verify Resource Usage  ${default_instances}  ${default_ram}  ${default_vcpus}
 
    Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor}  auto_delete=False  token=${tokendev}
-   Verify Resource Usage  100  3  10240  6
-   Verify ResourceUsage Metrics  100  3  10240  6  2
+   Verify Resource Usage  3  10240  6
+   Verify ResourceUsage Metrics  3  10240  6  2
    Delete Cluster Instance  region=${region}  developer_org_name=${org_name_dev}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokendev}
-   Verify Resource Usage  ${default_disk}  ${default_instances}  ${default_ram}  ${default_vcpus}
+   Verify Resource Usage  ${default_instances}  ${default_ram}  ${default_vcpus}
 
    Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=kubernetes  number_nodes=1  flavor_name=${flavor}  auto_delete=False  token=${tokendev}
-   Verify Resource Usage  120  4  12288  8
-   Verify ResourceUsage Metrics  120  4  12288  8  2
+   Verify Resource Usage  4  12288  8
+   Verify ResourceUsage Metrics  4  12288  8  2
    Delete Cluster Instance  region=${region}  developer_org_name=${org_name_dev}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokendev}
-   Verify Resource Usage  ${default_disk}  ${default_instances}  ${default_ram}  ${default_vcpus}
+   Verify Resource Usage  ${default_instances}  ${default_ram}  ${default_vcpus}
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=kubernetes  number_nodes=1  flavor_name=${flavor}  auto_delete=False  token=${tokendev}
-   Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available: required Instances is 3 but only 2 is available"}
+   Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available: required Instances is 3 but only 2 out of 4 is available"}
 
-   Cloudlet Update  20480  10  200  5
+   Cloudlet Update  20480  10  5
 
    Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=kubernetes  number_nodes=1  flavor_name=${flavor}  auto_delete=False  token=${tokendev}
-   Verify Resource Usage  160  5  16384  10
-   Verify ResourceUsage Metrics  160  5  16384  10  2
+   Verify Resource Usage  5  16384  10
+   Verify ResourceUsage Metrics  5  16384  10  2
 
    ${error}=  Run Keyword and Expect Error  *  Update Cluster Instance  region=${region}  developer_org_name=${org_name_dev}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  number_nodes=2  token=${tokendev}
    Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available:
-   Should Contain  ${error}  required Instances is 1 but only 0 is available 
-   Should Contain  ${error}  required vCPUs is 2 but only 0 is available 
-   Cloudlet Update  20480  12  200  6
+   Should Contain  ${error}  required Instances is 1 but only 0 out of 5 is available 
+   Should Contain  ${error}  required vCPUs is 2 but only 0 out of 10 is available 
+   Cloudlet Update  20480  12  6
    Update Cluster Instance  region=${region}   developer_org_name=${org_name_dev}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  number_nodes=2  token=${tokendev}
-   Verify Resource Usage  180  6  18432  12
+   Verify Resource Usage  6  18432  12
    Delete Cluster Instance  region=${region}  developer_org_name=${org_name_dev}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokendev}
-   Verify Resource Usage  ${default_disk}  ${default_instances}  ${default_ram}  ${default_vcpus}
+   Verify Resource Usage  ${default_instances}  ${default_ram}  ${default_vcpus}
 
    Create App Instance  region=${region}  app_name=${app_name3}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=dummycluster  auto_delete=False  token=${tokendev}
-   Verify Resource Usage  200  4  20480  10
-   Verify ResourceUsage Metrics  200  4  20480  10  2
+   Verify Resource Usage  4  20480  10
+   Verify ResourceUsage Metrics  4  20480  10  2
    Delete App Instance  region=${region}  app_name=${app_name3}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=dummycluster  token=${tokendev}
-   Verify Resource Usage  ${default_disk}  ${default_instances}  ${default_ram}  ${default_vcpus}
+   Verify Resource Usage  ${default_instances}  ${default_ram}  ${default_vcpus}
 
    Create App Instance  region=${region}  app_name=${app_name1}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name1}  auto_delete=${False}  token=${tokendev}
-   Verify Resource Usage  140  4  14336  8
-   Verify ResourceUsage Metrics  140  4  14336  8  2
+   Verify Resource Usage  4  14336  8
+   Verify ResourceUsage Metrics  4  14336  8  2
    Delete App Instance  region=${region}  app_name=${app_name1}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name1}  cluster_instance_developer_org_name=MobiledgeX    
    Delete Idle Reservable Cluster Instances  region=${region}  token=${token}
-   Verify Resource Usage  ${default_disk}  ${default_instances}  ${default_ram}  ${default_vcpus}
+   Verify Resource Usage  ${default_instances}  ${default_ram}  ${default_vcpus}
 
    Create App Instance  region=${region}  app_name=${app_name2}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name2}  auto_delete=${False}  token=${tokendev}
-   Verify Resource Usage  120  4  12288  8
-   Verify ResourceUsage Metrics  120  4  12288  8  2
+   Verify Resource Usage  4  12288  8
+   Verify ResourceUsage Metrics  4  12288  8  2
    Delete App Instance  region=${region}  app_name=${app_name2}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name2}  cluster_instance_developer_org_name=MobiledgeX
    Delete Idle Reservable Cluster Instances  region=${region}  token=${token}
-   Verify Resource Usage  ${default_disk}  ${default_instances}  ${default_ram}  ${default_vcpus}
+   Verify Resource Usage  ${default_instances}  ${default_ram}  ${default_vcpus}
 
    #Total number of metrics
    ${metrics}=  Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  selector=resourceusage  token=${tokenop}
@@ -294,41 +289,36 @@ Setup
    Set Suite Variable  ${vmflavor}
 
 Verify Resource Usage
-   [Arguments]  ${disk}  ${instances}  ${ram}  ${vcpu}
+   [Arguments]   ${instances}  ${ram}  ${vcpu}
 
    ${resourceusage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['value']}  ${disk}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${instances}       #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${ram}             #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${vcpu}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['value']}  ${instances}       #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${ram}             #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${vcpu}            #vCPUs
 
 Cloudlet Update
-   [Arguments]  ${ram}  ${vcpu}  ${disk}  ${instances}
+   [Arguments]  ${ram}  ${vcpu}  ${instances}
 
    &{resource1}=  Create Dictionary  name=RAM  value=${ram}
    &{resource2}=  Create Dictionary  name=vCPUs  value=${vcpu}
-   &{resource3}=  Create Dictionary  name=Disk  value=${disk}
-   &{resource4}=  Create Dictionary  name=Instances  value=${instances}
-   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}  ${resource4}
+   &{resource3}=  Create Dictionary  name=Instances  value=${instances}
+   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}
 
    ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['value']}  ${ram}
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['value']}  ${vcpu}
-   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['value']}  ${disk}
-   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][3]['value']}  ${instances}
+   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['value']}  ${instances}
 
 Verify ResourceUsage Metrics
-   [Arguments]  ${disk}  ${instances}  ${ram}  ${vcpu}  ${length}
+   [Arguments]   ${instances}  ${ram}  ${vcpu}  ${length}
 
    ${metrics}=  Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  selector=resourceusage  last=2  token=${tokenop}
 
    Length Should Be  ${metrics['data'][0]['Series'][0]['values']}   ${length}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][4]}    ${disk}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][8]}    ${instances}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][9]}    ${ram}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][10]}   ${vcpu}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][6]}    ${instances}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][7]}    ${ram}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][8]}    ${vcpu}
 
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][4]}    ${default_disk}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][8]}    ${default_instances}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][9]}    ${default_ram}
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][10]}   ${default_vcpus}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][6]}    ${default_instances}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][7]}    ${default_ram}
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][1][8]}    ${default_vcpus}
