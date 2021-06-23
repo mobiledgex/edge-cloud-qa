@@ -210,6 +210,14 @@ CreateCloudlet - create with developer org shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Create Cloudlet  region=US  operator_org_name=${org}  latitude=1  longitude=1  number_dynamic_ips=1 
 
+# ECQ-3503
+CreateCloudlet - create with kafka user/password but no cluster shall return error
+   [Documentation]
+   ...  - send CreateCloudlet with kafka user/password but no cluster
+   ...  - verify error is returned
+
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Must specify a kafka cluster endpoint in addition to kafka credentials","code":400}}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  kafka_user=x  kafka_password=x
+
 ** Keywords **
 Setup
    ${token}=  Get Super Token

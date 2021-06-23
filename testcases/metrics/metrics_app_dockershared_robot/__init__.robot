@@ -43,9 +43,9 @@ Setup
    ${appinst}=  Show App Instances  region=${region}  app_name=${appname}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
 
    Log to Console  Wait and connect to TCP/UDP ports
-   Sleep  7 mins
+   Sleep  5 mins
    UDP Port Should Be Alive  ${appinst[0]['data']['uri']}  ${appinst[0]['data']['mapped_ports'][1]['public_port']}
-   TCP Port Should Be Alive  ${appinst[0]['data']['uri']}  ${appinst[0]['data']['mapped_ports'][0]['public_port']}  wait_time=20
+   TCP Port Should Be Alive  ${appinst[0]['data']['uri']}  ${appinst[0]['data']['mapped_ports'][0]['public_port']}  wait_time=180
 
    Log to Console  Waiting for metrics to be collected
    Sleep  3 mins
