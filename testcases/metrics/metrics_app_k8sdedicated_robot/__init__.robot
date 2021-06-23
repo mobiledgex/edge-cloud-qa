@@ -47,9 +47,9 @@ Setup
 #   ${fqdn_udp}=  Catenate  SEPARATOR=  ${appinst[0]['data']['mapped_ports'][1]['fqdn_prefix']}  ${appinst[0]['data']['uri']}
 
    Log to Console  Wait and connect to TCP/UDP ports
-   Sleep  7 mins
+   Sleep  5 mins
 #   UDP Port Should Be Alive  ${fqdn_udp}  ${appinst[0]['data']['mapped_ports'][1]['public_port']}
-   TCP Port Should Be Alive  ${fqdn_tcp}  ${appinst[0]['data']['mapped_ports'][0]['public_port']}  wait_time=20
+   TCP Port Should Be Alive  ${fqdn_tcp}  ${appinst[0]['data']['mapped_ports'][0]['public_port']}  wait_time=180
 
    Log to Console  Waiting for metrics to be collected
    Sleep  3 mins
