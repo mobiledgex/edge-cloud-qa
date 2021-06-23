@@ -50,10 +50,14 @@ from mex_master_controller.RestrictedOrgUpdate import RestrictedOrgUpdate
 from mex_master_controller.Controller import Controller
 from mex_master_controller.Org import Org
 from mex_master_controller.BillingOrg import BillingOrg
+<<<<<<< HEAD
 from mex_master_controller.GpuDriver import GpuDriver
 from mex_master_controller.RateLimitSettings import RateLimitSettings
 from mex_master_controller.AlertPolicy import AlertPolicy
 from mex_master_controller.OperatorReporting import OperatorReporting
+=======
+
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
 import shared_variables_mc
 import shared_variables
@@ -220,10 +224,13 @@ class MexMasterController(MexRest):
         self.org = Org(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.billingorg = BillingOrg(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token,
                                      super_token=self.super_token)
+<<<<<<< HEAD
         self.gpudriver = GpuDriver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.ratelimitsettings = RateLimitSettings(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.alert_policy = AlertPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)        
         self.operator_reporting = OperatorReporting(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+=======
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -292,6 +299,7 @@ class MexMasterController(MexRest):
     def get_default_alert_receiver_name(self):
         return shared_variables.alert_receiver_name_default
 
+<<<<<<< HEAD
     def get_default_alert_policy_name(self):
         return shared_variables.alert_policy_name_default
 
@@ -316,6 +324,14 @@ class MexMasterController(MexRest):
     def get_default_gpudriver_build_name(self):    
         return shared_variables.gpudriver_build_name_default
  
+=======
+    def get_default_auto_provisioning_policy_name(self):
+        return shared_variables.autoprov_policy_name_default
+
+    def get_default_time_stamp(self):
+        return shared_variables.time_stamp_default
+    
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
     def number_of_login_requests(self):
         return self._number_login_requests
 
@@ -480,21 +496,35 @@ class MexMasterController(MexRest):
     def get_current_user(self, token=None, json_data=None, use_defaults=True):
         return self.user.current_user(token=token, json_data=json_data, use_defaults=use_defaults)
 
+<<<<<<< HEAD
     def update_current_user(self, token=None, username=None, email_address=None, family_name=None, given_name=None, nickname=None, enable_totp=None, metadata=None, json_data=None, use_defaults=True, use_thread=False):
         return self.user.update_user(token=token, username=username, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, metadata=metadata, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+=======
+    def update_current_user(self, token=None, metadata=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.update_user(token=token, metadata=metadata, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def delete_user(self, username=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.user.delete_user(token=token, username=username, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+<<<<<<< HEAD
     def update_restricted_user(self, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.user.update_user_restricted(token=token, username=username, email_address=email_address, email_verified=email_verified, family_name=family_name, given_name=given_name, nickname=nickname, locked=locked, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+=======
+    def update_user_restriction(self, username=None, locked=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.update_user_restricted(token=token, username=username, locked=locked, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def unlock_user(self, token=None, username=None, use_thread=False):
         if username is None: username = shared_variables_mc.username_default
         if token is None: token = self.super_token
 
         logging.info(f'unlocking username={username}')
+<<<<<<< HEAD
         return self.update_restricted_user(token=token, username=username, locked=False, use_thread=use_thread)
+=======
+        return self.update_user_restriction(token=token, username=username, locked=False, use_thread=use_thread)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def show_user_role(self, role=None, organization=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.role.role_show(token=token, role=role, organization=organization, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
@@ -716,6 +746,7 @@ class MexMasterController(MexRest):
                            last_name=None, email_address=None, json_data=None, use_defaults=True, auto_delete=True,
                            use_thread=False):
 
+<<<<<<< HEAD
         if os.environ.get('AUTOMATION_BILLING_ENABLED') == '1' or not os.environ.get('AUTOMATION_BILLING_ENABLED'):
             return self.billingorg.create_billing_org(token=token, billing_org_name=billing_org_name,
                                                       billing_org_type=billing_org_type, first_name=first_name,
@@ -725,6 +756,14 @@ class MexMasterController(MexRest):
         else:
             logger.info('AUTOMATION_BILLING_ENABLED not enabled. Skipping billing org create')
  
+=======
+        return self.billingorg.create_billing_org(token=token, billing_org_name=billing_org_name,
+                                                  billing_org_type=billing_org_type, first_name=first_name,
+                                                  last_name=last_name, email_address=email_address, json_data=json_data,
+                                                  use_defaults=use_defaults, auto_delete=auto_delete,
+                                                  use_thread=use_thread)
+
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
     def delete_billing_org(self, token=None, billing_org_name=None, json_data=None, use_defaults=True, auto_delete=True,
                            use_thread=False):
         return self.billingorg.delete_billing_org(token=token, billing_org_name=billing_org_name, json_data=json_data,
@@ -1162,13 +1201,21 @@ class MexMasterController(MexRest):
 
         return resp_data
 
+<<<<<<< HEAD
     def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, timeout=600, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+=======
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, timeout=600, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
         if developer_org_name is None:
             if self.organization_name:
                 developer_org_name = self.organization_name
                 cluster_instance_developer_name = self.organization_name
 
+<<<<<<< HEAD
         return self.cluster_instance.create_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, autoscale_policy_name=autoscale_policy_name, reservable=reservable, reservation_ended_at_seconds=reservation_ended_at_seconds, reservation_ended_at_nanoseconds=reservation_ended_at_nanoseconds, stream_timeout=timeout, auto_delete=auto_delete, use_defaults=use_defaults, use_thread=use_thread)
+=======
+        return self.cluster_instance.create_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, autoscale_policy_name=autoscale_policy_name, reservable=reservable, stream_timeout=timeout, auto_delete=auto_delete, use_defaults=use_defaults, use_thread=use_thread)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def delete_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cluster_instance.delete_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
@@ -1209,7 +1256,11 @@ class MexMasterController(MexRest):
         """
         return self.app.update_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, auto_prov_policies=auto_prov_policies,  deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, skip_hc_ports=skip_hc_ports, annotations=annotations, trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, use_defaults=use_defaults)
 
+<<<<<<< HEAD
     def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, real_cluster_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False, timeout=600):
+=======
+    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, real_cluster_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
         """ Send region CreateAppInst
         """
         if developer_org_name is None:
@@ -1218,7 +1269,11 @@ class MexMasterController(MexRest):
         if cluster_instance_developer_org_name is None:
             if self.organization_name:
                 if cluster_instance_name is not None and not cluster_instance_name.startswith('autocluster'): cluster_instance_developer_org_name = self.organization_name
+<<<<<<< HEAD
         return self.app_instance.create_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, real_cluster_name=real_cluster_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, privacy_policy=privacy_policy, shared_volume_size=shared_volume_size, crm_override=crm_override, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread, stream_timeout=timeout)
+=======
+        return self.app_instance.create_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, real_cluster_name=real_cluster_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, privacy_policy=privacy_policy, shared_volume_size=shared_volume_size, crm_override=crm_override, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def get_create_app_instance_stream(self):
         return self.app_instance.create_app_instance_stream()
@@ -1292,10 +1347,14 @@ class MexMasterController(MexRest):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
+<<<<<<< HEAD
                 if appinstance[0]['data']['state'] == 'Ready':
                     logging.info(f'App Instance is Ready')
                     return appinstance
                 elif appinstance[0]['data']['state'] == 5:
+=======
+                if appinstance and appinstance[0]['data']['state'] == 5:
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
                     logging.info(f'App Instance is Ready')
                     return appinstance
                 else:
@@ -1304,7 +1363,11 @@ class MexMasterController(MexRest):
             else:
                 logging.debug(f'app instance is NOT found. sleeping and trying again')
             
+<<<<<<< HEAD
         raise Exception(f'app instance is NOT ready. Got {appinstance[0]["data"]["state"]} but expected Ready')
+=======
+        raise Exception(f'app instance is NOT ready. Got {appinstance[0]["data"]["state"]} but expected 5')
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def wait_for_app_instance_to_be_deleted(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=180):
         for x in range(1, timeout):
@@ -1345,9 +1408,12 @@ class MexMasterController(MexRest):
     def wait_for_app_instance_health_check_rootlb_offline(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=90):
         self.wait_for_app_instance_health_check(status=1, token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, timeout=timeout)
 
+<<<<<<< HEAD
     def wait_for_app_instance_health_check_cloudlet_offline(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=90):
         self.wait_for_app_instance_health_check(status=4, token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, timeout=timeout)
 
+=======
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
     def run_command(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, container_id=None, timeout=120, json_data=None, use_defaults=True, use_thread=False):
         return self.run_cmd.run_command(token=token, region=region, mc_address=self.mc_address, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, container_id=container_id, command=command, use_defaults=use_defaults, use_thread=use_thread, timeout=timeout)
 
@@ -1386,14 +1452,24 @@ class MexMasterController(MexRest):
         except Exception as e:
             raise Exception("runCommanddd failed:", e)
 
+<<<<<<< HEAD
     def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, static_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, container_version=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, kafka_cluster=None, kafka_user=None, kafka_password=None, timeout=600, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.cloudlet.create_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, static_ips=static_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, container_version=container_version, override_policy_container_version=override_policy_container_version, deployment_local=deployment_local, notify_server_address=notify_server_address, crm_override=crm_override, infra_api_access=infra_api_access, infra_config_flavor_name=infra_config_flavor_name, infra_config_external_network_name=infra_config_external_network_name, trust_policy=trust_policy, deployment_type=deployment_type, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, kafka_cluster=kafka_cluster, kafka_user=kafka_user, kafka_password=kafka_password, stream_timeout=timeout, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+=======
+    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, static_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, container_version=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, timeout=600, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet.create_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, static_ips=static_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, container_version=container_version, override_policy_container_version=override_policy_container_version, deployment_local=deployment_local, notify_server_address=notify_server_address, crm_override=crm_override, infra_api_access=infra_api_access, infra_config_flavor_name=infra_config_flavor_name, infra_config_external_network_name=infra_config_external_network_name, trust_policy=trust_policy, deployment_type=deployment_type, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, stream_timeout=timeout, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def delete_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.delete_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
 
+<<<<<<< HEAD
     def update_cloudlet(self, token=None, region=None,  operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, trust_policy=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.update_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, maintenance_state=maintenance_state, trust_policy=trust_policy, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+=======
+    def update_cloudlet(self, token=None, region=None,  operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, trust_policy=None, resource_list=None, default_resource_alert_threshold=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.update_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, maintenance_state=maintenance_state, trust_policy=trust_policy, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def get_resource_usage(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, infra_usage=False, json_data=None, use_defaults=False, use_thread=False):
         return self.cloudlet.get_resource_usage(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, infra_usage=infra_usage, use_defaults=use_defaults, use_thread=use_thread)
@@ -1429,6 +1505,7 @@ class MexMasterController(MexRest):
         """
         return self.cloudlet.add_resource_tag(token=token, region=region, resource_name=resource_name, operator_org_name=operator_org_name, tags=tags, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+<<<<<<< HEAD
     def find_flavor_match(self, token=None, region=None, cloudlet_name=None, operator_org_name=None, flavor_name=None, json_data=None, use_defaults=True, use_thread=False):
         """ Sends cloudlet findflavormatch
         """
@@ -1463,6 +1540,29 @@ class MexMasterController(MexRest):
 
     def get_register_client_api_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, selector=None, limit=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.get_api_metrics(method='RegisterClient', token=token, region=region, selector=selector, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, limit=limit, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+=======
+    def get_cluster_metrics(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+      return self.cluster_instance.get_cluster_metrics(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+        
+    def get_app_metrics(self, token=None, region=None, app_name=None, app_version=None, cluster_instance_name=None, developer_org_name=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        print('*WARN*', 'mc version', app_version)
+        return self.app_instance.get_app_metrics(token=token, region=region, app_name=app_name, app_version=app_version, cluster_instance_name=cluster_instance_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_dme_metrics(self, token=None, region=None, method=None, app_name=None, developer_org_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_api_metrics(method=method, token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_client_app_usage_metrics(self, token=None, region=None, method=None, app_name=None, developer_org_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_client_app_metrics(method=method, token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, selector=selector, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_model=device_model, data_network_type=data_network_type, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_client_cloudlet_usage_metrics(self, token=None, region=None, method=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_model=None, device_carrier=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.get_client_cloudlet_metrics(method=method, token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, selector=selector, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_model=device_model, device_carrier=device_carrier, data_network_type=data_network_type, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_api_metrics(method='FindCloudlet', token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_register_client_api_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_api_metrics(method='RegisterClient', token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def show_app_instance_client_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, unique_id=None, unique_id_type=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.show_app_instance_client_metrics(token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, uuid=unique_id, uuid_type=unique_id_type, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
@@ -1470,14 +1570,72 @@ class MexMasterController(MexRest):
     def get_show_app_instance_client_metrics_output(self):
         return self.app_instance.get_show_app_instance_client_metrics()
 
+<<<<<<< HEAD
     def create_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, developer_org_name=None,  min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, target_cpu=None, target_memory=None, target_active_connections=None, stabilization_window_sec=None, json_data=None, use_defaults=True, use_thread=False):
         return self.autoscale_policy.create_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, target_cpu=target_cpu, target_memory=target_memory, target_active_connections=target_active_connections, stabilization_window_sec=stabilization_window_sec, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+=======
+    def create_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, developer_org_name=None,  min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.autoscale_policy.create_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def delete_autoscale_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
         return self.autoscale_policy.delete_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+<<<<<<< HEAD
     def update_autoscale_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=False, use_thread=False):
         return self.autoscale_policy.update_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+=======
+    def update_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=False, use_thread=False):
+        url = self.root_url + '/auth/ctrl/UpdateAutoScalePolicy'
+
+        payload = None
+        policy = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes,  scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults, include_fields=True).policy
+            policy_dict = {'autoscalepolicy': policy}
+            if region is not None:
+                policy_dict['region'] = region
+
+            payload = json.dumps(policy_dict)
+
+        logger.info('update autoscalepolicy on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_updateautoscalepolicy_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                
+                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_updateautoscalepolicy_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                    
+            except Exception as e:
+                self._number_updateautoscalepolicy_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_updateautoscalepolicy_requests_success += 1
+
+            resp =  self.show_autoscale_policy(region=region, token=self.super_token, policy_name=policy['key']['name'], developer_name=policy['key']['developer'], use_defaults=False)
+
+            return resp
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def show_autoscale_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
         return self.autoscale_policy.show_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
@@ -1620,8 +1778,13 @@ class MexMasterController(MexRest):
     def delete_alert_receiver(self, token=None, receiver_name=None, type=None, severity=None, user=None, developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.alert_receiver.delete_alert_receiver(token=token, receiver_name=receiver_name, type=type, severity=severity, user=user, developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
     
+<<<<<<< HEAD
     def show_alerts(self, token=None, alert_name=None, region=None, app_name=None,  app_version=None,  developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, warning=None, description=None, json_data=None, use_defaults=True, use_thread=False):
         return self.alert.show_alert(token=token, alert_name=alert_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, port=port, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, scope=scope, warning=warning, description=description, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+=======
+    def show_alerts(self, token=None, alert_name=None, region=None, app_name=None,  app_version=None,  developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, warning=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.alert.show_alert(token=token, alert_name=alert_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, port=port, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, scope=scope, warning=warning, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def create_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None,undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.autoprov_policy.create_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count,undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
@@ -1693,12 +1856,20 @@ class MexMasterController(MexRest):
             token=self.super_token
         return self.config.update_config(token=token, max_metrics_data_points=max_metrics_data_points, use_defaults=use_defaults, use_thread=use_thread)
 
+<<<<<<< HEAD
     def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, timeout=None, json_data=None, use_defaults=True, use_thread=False): 
+=======
+    def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, timeout=None, json_data=None, use_defaults=True, use_thread=False): 
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
         if developer_org_name is None:
             if self.organization_name:
                 developer_org_name = self.organization_name
                 cluster_instance_developer_name = self.organization_name
+<<<<<<< HEAD
         return self.cluster_instance.update_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, number_masters=number_masters, number_nodes=number_nodes, autoscale_policy_name=autoscale_policy_name, reservation_ended_at_seconds=reservation_ended_at_seconds, reservation_ended_at_nanoseconds=reservation_ended_at_nanoseconds, stream_timeout=timeout, use_defaults=use_defaults)
+=======
+        return self.cluster_instance.update_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, number_masters=number_masters, number_nodes=number_nodes, autoscale_policy_name=autoscale_policy_name, stream_timeout=timeout, use_defaults=use_defaults)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def update_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, privacy_policy=None, shared_volume_size=None, crm_override=None, powerstate=None, configs_kind=None, configs_config=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.update_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, privacy_policy=privacy_policy, shared_volume_size=shared_volume_size, crm_override=crm_override, powerstate=powerstate, configs_kind=configs_kind, configs_config=configs_config, use_defaults=use_defaults, use_thread=use_thread)
@@ -1717,9 +1888,15 @@ class MexMasterController(MexRest):
 
     def show_settings(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
         return self.settings.show_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread)
+<<<<<<< HEAD
       
     def update_settings(self, token=None, region=None, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, shepherd_metrics_scrape_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_cloudlet_timeout=None, update_cloudlet_timeout=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_cloudlet_usage_metrics_retention=None, influx_db_metrics_retention=None, influx_db_downsampled_metrics_retention=None, influx_db_edge_events_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, update_trust_policy_timeout=None, dme_api_metrics_collection_interval=None, edge_events_metrics_collection_interval=None, edge_events_metrics_continuous_queries_collection_intervals=[], cleanup_reservable_auto_cluster_idletime=None, location_tile_side_length_km=None, appinst_client_cleanup_interval=None, cluster_auto_scale_averaging_duration_sec=None, cluster_auto_scale_retry_delay=None, alert_policy_min_trigger_time=None, disable_rate_limit=None, max_num_per_ip_rate_limiters=None, resource_snapshot_thread_interval=None, json_data=None, use_defaults=True, use_thread=False):
         return self.settings.update_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread, shepherd_metrics_collection_interval=shepherd_metrics_collection_interval, shepherd_alert_evaluation_interval=shepherd_alert_evaluation_interval, shepherd_health_check_retries=shepherd_health_check_retries, shepherd_health_check_interval=shepherd_health_check_interval, shepherd_metrics_scrape_interval=shepherd_metrics_scrape_interval, auto_deploy_interval_sec=auto_deploy_interval_sec, auto_deploy_offset_sec=auto_deploy_offset_sec, auto_deploy_max_intervals=auto_deploy_max_intervals, create_cloudlet_timeout=create_cloudlet_timeout, update_cloudlet_timeout=update_cloudlet_timeout, create_app_inst_timeout=create_app_inst_timeout, update_app_inst_timeout=update_app_inst_timeout, delete_app_inst_timeout=delete_app_inst_timeout, create_cluster_inst_timeout=create_cluster_inst_timeout, update_cluster_inst_timeout=update_cluster_inst_timeout, delete_cluster_inst_timeout=delete_cluster_inst_timeout, master_node_flavor=master_node_flavor, load_balancer_max_port_range=load_balancer_max_port_range, max_tracked_dme_clients=max_tracked_dme_clients, chef_client_interval=chef_client_interval, influx_db_metrics_retention=influx_db_metrics_retention, influx_db_cloudlet_usage_metrics_retention=influx_db_cloudlet_usage_metrics_retention, influx_db_downsampled_metrics_retention=influx_db_downsampled_metrics_retention, influx_db_edge_events_metrics_retention=influx_db_edge_events_metrics_retention, cloudlet_maintenance_timeout=cloudlet_maintenance_timeout, update_vm_pool_timeout=update_vm_pool_timeout, update_trust_policy_timeout=update_trust_policy_timeout, dme_api_metrics_collection_interval=dme_api_metrics_collection_interval, edge_events_metrics_collection_interval=edge_events_metrics_collection_interval, edge_events_metrics_continuous_queries_collection_intervals=edge_events_metrics_continuous_queries_collection_intervals, cleanup_reservable_auto_cluster_idletime=cleanup_reservable_auto_cluster_idletime, location_tile_side_length_km=location_tile_side_length_km, appinst_client_cleanup_interval=appinst_client_cleanup_interval, cluster_auto_scale_averaging_duration_sec=cluster_auto_scale_averaging_duration_sec, cluster_auto_scale_retry_delay=cluster_auto_scale_retry_delay, alert_policy_min_trigger_time=alert_policy_min_trigger_time, disable_rate_limit=disable_rate_limit, max_num_per_ip_rate_limiters=max_num_per_ip_rate_limiters, resource_snapshot_thread_interval=resource_snapshot_thread_interval)
+=======
+
+    def update_settings(self, token=None, region=None, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_cloudlet_timeout=None, update_cloudlet_timeout=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_cloudlet_usage_metrics_retention=None, influx_db_metrics_retention=None, influx_db_downsampled_metrics_retention=None, influx_db_edge_events_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, update_trust_policy_timeout=None, dme_api_metrics_collection_interval=None, edge_events_metrics_collection_interval=None, edge_events_metrics_continuous_queries_collection_intervals=[], cleanup_reservable_auto_cluster_idletime=None, location_tile_side_length_km=None, appinst_client_cleanup_interval=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.settings.update_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread, shepherd_metrics_collection_interval=shepherd_metrics_collection_interval, shepherd_alert_evaluation_interval=shepherd_alert_evaluation_interval, shepherd_health_check_retries=shepherd_health_check_retries, shepherd_health_check_interval=shepherd_health_check_interval, auto_deploy_interval_sec=auto_deploy_interval_sec, auto_deploy_offset_sec=auto_deploy_offset_sec, auto_deploy_max_intervals=auto_deploy_max_intervals, create_cloudlet_timeout=create_cloudlet_timeout, update_cloudlet_timeout=update_cloudlet_timeout, create_app_inst_timeout=create_app_inst_timeout, update_app_inst_timeout=update_app_inst_timeout, delete_app_inst_timeout=delete_app_inst_timeout, create_cluster_inst_timeout=create_cluster_inst_timeout, update_cluster_inst_timeout=update_cluster_inst_timeout, delete_cluster_inst_timeout=delete_cluster_inst_timeout, master_node_flavor=master_node_flavor, load_balancer_max_port_range=load_balancer_max_port_range, max_tracked_dme_clients=max_tracked_dme_clients, chef_client_interval=chef_client_interval, influx_db_metrics_retention=influx_db_metrics_retention, influx_db_cloudlet_usage_metrics_retention=influx_db_cloudlet_usage_metrics_retention, influx_db_downsampled_metrics_retention=influx_db_downsampled_metrics_retention, influx_db_edge_events_metrics_retention=influx_db_edge_events_metrics_retention, cloudlet_maintenance_timeout=cloudlet_maintenance_timeout, update_vm_pool_timeout=update_vm_pool_timeout, update_trust_policy_timeout=update_trust_policy_timeout, dme_api_metrics_collection_interval=dme_api_metrics_collection_interval, edge_events_metrics_collection_interval=edge_events_metrics_collection_interval, edge_events_metrics_continuous_queries_collection_intervals=edge_events_metrics_continuous_queries_collection_intervals, cleanup_reservable_auto_cluster_idletime=cleanup_reservable_auto_cluster_idletime, location_tile_side_length_km=location_tile_side_length_km, appinst_client_cleanup_interval=appinst_client_cleanup_interval)
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def restrictedorg_update(self, token=None, org_name=None, edgeboxonly=False, json_data=None, use_defaults=True, use_thread=False):
         if token is None:
@@ -1732,6 +1909,7 @@ class MexMasterController(MexRest):
 
     def request_app_instance_latency(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.request_appinst_latency.request_appinst_latency(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
+<<<<<<< HEAD
     
     def create_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, builds_dict={}, license_config=None, properties={}, use_defaults=True, use_thread=False, auto_delete=True):
         return self.gpudriver.create_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, builds_dict=builds_dict, license_config=license_config, properties=properties, use_defaults=use_defaults, use_thread=use_thread, auto_delete=auto_delete)
@@ -1822,12 +2000,18 @@ class MexMasterController(MexRest):
 
     def download_report(self, token=None, organization=None, filename=None, use_defaults=False, use_thread=False):
         return self.operator_reporting.download_report(token=token, organization=organization, filename=filename, use_defaults=use_defaults, use_thread=use_thread)
+=======
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
 
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
             token = self.token
 
+<<<<<<< HEAD
         cmd = f'docker run --rm harbor.mobiledgex.net/mobiledgex/edge-cloud:{version} mcctl --addr https://{self.mc_address} --skipverify --token={token} {parms} ' 
+=======
+        cmd = f'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:{version} mcctl --addr https://{self.mc_address} --skipverify --token={token} {parms} ' 
+>>>>>>> 7b6d6147... add kafka vars and test for EDGECLOUD-5117
         if output_format:
             cmd += f'--output-format {output_format}'
 
