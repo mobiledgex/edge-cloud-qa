@@ -75,8 +75,8 @@ Usage - mcctl shall be able to request cloudletpool usage
 
    [Template]  Success Cloudletpool Usage Via mcctl
       cloudletpool=${cloudletpool_name}  cloudletpoolorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
-      cloudletpool=${cloudletpool_name}  cloudletpoolorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}  shownonvmapps=${False}
-      cloudletpool=${cloudletpool_name}  cloudletpoolorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}  shownonvmapps=${True}
+      cloudletpool=${cloudletpool_name}  cloudletpoolorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}  showvmappsonly=${False}
+      cloudletpool=${cloudletpool_name}  cloudletpoolorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}  showvmappsonly=${True}
 
 # ECQ-3491
 Usage - mcctl shall handle usage failures
@@ -91,7 +91,7 @@ Usage - mcctl shall handle usage failures
       Error: missing required args:    app
       Error: missing required args:    cloudletpool
 
-      Must provide either App organization or Cloudlet organization  cluster  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
+      Must provide either Cluster organization or Cloudlet organization  cluster  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
       error decoding \\\'EndTime  cluster  starttime=2021-06-13T20:39:56Z  endtime=x
       error decoding \\\'StartTime  cluster  starttime=x  endtime=2021-06-14T20:49:56Z
       Error: 2 error  cluster  starttime=x  endtime=y
@@ -103,12 +103,12 @@ Usage - mcctl shall handle usage failures
       Unable to parse "vmonly" value "x" as bool: invalid syntax, valid values are true, false  app  cloudlet-org=tmus  vmonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
 
       Error: Bad Request (400), Unable to retrieve CloudletPool info  cloudletpool  cloudletpool=x  cloudletpoolorg=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
-      Unable to parse "shownonvmapps" value "x" as bool: invalid syntax, valid values are true, false  cloudletpool  cloudletpool=x  cloudletpoolorg=x  shownonvmapps=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
+      Unable to parse "showvmappsonly" value "x" as bool: invalid syntax, valid values are true, false  cloudletpool  cloudletpool=x  cloudletpoolorg=x  showvmappsonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
 
 *** Keywords ***
 Setup
    ${end_date}=  Get Current Date  time_zone=UTC  result_format=%Y-%m-%dT%H:%M:%SZ  increment=10 mins
-   ${start_date}=  Get Current Date  time_zone=UTC  result_format=%Y-%m-%dT%H:%M:%SZ  increment=-24 hours
+   ${start_date}=  Get Current Date  time_zone=UTC  result_format=%Y-%m-%dT%H:%M:%SZ  increment=-7 days
 
    Create Flavor  region=${region}
 
@@ -192,19 +192,19 @@ Success Cloudletpool Usage Via mcctl
       Should Be True  '${u[6]}' == '${cloudlet_name_fake}'
    END
 
-   IF  'shownonvmapps=${False}' in '${parmss}' or 'shownonvmapps' not in '${parmss}'
+   IF  'showvmappsonly=${True}' in '${parmss}'
       FOR  ${u}  IN  @{result['data'][1]['Series'][0]['values']}
          Should Be True  '${u[9]}' == 'vm'
       END
    ELSE
       ${found}=  Set Variable  ${False}
       FOR  ${u}  IN  @{result['data'][1]['Series'][0]['values']}
-         IF  '${u[9]}' != 'vm'
+         IF  '${u[9]}' == 'docker' or '${u[9]}' == 'kubernetes'
             ${found}=  Set Variable  ${True}
             Exit For Loop
          END
       END
-      SHould Be True  ${found}
+      Should Be True  ${found}
    END
 
 Fail Usage Via mcctl

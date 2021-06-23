@@ -59,15 +59,15 @@ ClientAppUsageMetrics - operator get with no cloudlet org shall return error
    Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}  token=${op_manager_token}
    Create Cloudlet Pool Access Response    region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}  decision=accept  token=${dev_manager_token}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  last=1  token=${op_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  last=1  token=${op_manager_token}  developer_org_name=${developer_org_name_automation}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Operators please specify the Cloudlet Organization"}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=deviceinfo  developer_org_name=${operator}  last=1  token=${op_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  last=1  token=${op_manager_token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Operators please specify the Cloudlet Organization"}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=x  developer_org_name=${operator}  last=1  token=${op_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=x  developer_org_name=${developer_org_name_automation}  last=1  token=${op_manager_token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Operators please specify the Cloudlet Organization"}
 
