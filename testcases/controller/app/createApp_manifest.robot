@@ -298,6 +298,15 @@ CreateApp - shall be able to create with deployment=k8s and IAV customer manifes
     ${app}=  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8989  deployment_manifest=${manifest_iav}
     Should Contain  ${app.deployment_manifest}  gh-configmap.yml
 
+# ECQ-3502
+CreateApp - shall be able to create with deployment=k8s and manifest with embedded separators
+    [Documentation]
+    ...  - create k8s app with a customer robotnik deployment manifest with embedded separators
+    ...  - verify success
+
+    ${app}=  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:30090  deployment_manifest=${robotnik_manifest}
+    Should Contain  ${app.deployment_manifest}  mqtt_params_fms_robot.yaml
+
 *** Keywords ***
 Setup
     #Create Developer            
