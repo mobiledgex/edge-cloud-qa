@@ -923,6 +923,7 @@ Setup
    ${emaildev}=  Catenate  SEPARATOR=  ${username}  dev  +  ${epoch}  @gmail.com
 
    Create Org  orgname=${org_name_dev}  orgtype=developer
+   Create Billing Org  billing_org_name=${org_name_dev}
 
    Skip Verify Email
    Create User  username=${usernameop_epoch}  password=${password}  email_address=${emailop}
