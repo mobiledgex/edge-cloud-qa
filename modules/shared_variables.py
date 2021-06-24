@@ -26,8 +26,8 @@ autoscale_policy_name_default = 'autoscalepolicy' + default_time_stamp
 first_name_default = 'firstname' + default_time_stamp
 org_name_default = 'name' + default_time_stamp
 last_name_default = 'lastname' + default_time_stamp
-billing_org_type = 'type'+ default_time_stamp
-email_address = 'email' + default_time_stamp
+billing_org_type_default = 'self'
+email_address_default = 'email' + default_time_stamp
 
 latitude_default = 10
 longitude_default = 10
