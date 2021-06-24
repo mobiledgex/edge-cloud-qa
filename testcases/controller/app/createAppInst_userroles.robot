@@ -71,6 +71,7 @@ CreateApp - DeveloperManager shall be able to create/show/delete/update an app
    ...  - verify they work
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+   Create Billing Org  billing_org_name=${orgname}  token=${super_token}
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperManager    token=${user_token}     use_defaults=${False}
 
    Create Flavor  region=${region}  token=${super_token}
@@ -94,6 +95,7 @@ CreateApp - DeveloperContributor shall be able to create/show/delete/update an a
    ...  - verify they work
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+   Create Billing Org  billing_org_name=${orgname}  token=${super_token}
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperContributor    token=${user_token}     use_defaults=${False}
 
    Create Flavor  region=${region}  token=${super_token}
