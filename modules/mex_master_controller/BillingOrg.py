@@ -1,4 +1,3 @@
-import json
 import logging
 import shared_variables
 from mex_master_controller.MexOperation import MexOperation
@@ -20,9 +19,9 @@ class BillingOrg(MexOperation):
         billing_org_dict = {}
         if use_defaults:
             if billing_org_name is None:
-                billing_org_name = shared_variables.org_name_default
+                billing_org_name = shared_variables.operator_name_default
             if billing_org_type is None:
-                billing_org_type = shared_variables.org_type_defualt
+                billing_org_type = shared_variables.billing_org_type_default
             if first_name is None:
                 first_name = shared_variables.first_name_default
             if last_name is None:
@@ -59,8 +58,8 @@ class BillingOrg(MexOperation):
         msg_dict_show = {}
 
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url,
-                    json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict,
-                    delete_msg=msg_dict_delete, show_msg=msg_dict_show)[0]
+                           json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict,
+                           delete_msg=msg_dict_delete, show_msg=msg_dict_show)[0]
 
     def delete_billing_org(self, token=None, billing_org_name=None, json_data=None, use_defaults=True, auto_delete=True,
                            use_thread=False):
