@@ -691,12 +691,15 @@ class MexMasterController(MexRest):
                            last_name=None, email_address=None, json_data=None, use_defaults=True, auto_delete=True,
                            use_thread=False):
 
-        return self.billingorg.create_billing_org(token=token, billing_org_name=billing_org_name,
-                                                  billing_org_type=billing_org_type, first_name=first_name,
-                                                  last_name=last_name, email_address=email_address, json_data=json_data,
-                                                  use_defaults=use_defaults, auto_delete=auto_delete,
-                                                  use_thread=use_thread)
-
+        if os.environ.get('AUTOMATION_BILLING_ENABLED') == '1' or not os.environ.get('AUTOMATION_BILLING_ENABLED'):
+            return self.billingorg.create_billing_org(token=token, billing_org_name=billing_org_name,
+                                                      billing_org_type=billing_org_type, first_name=first_name,
+                                                      last_name=last_name, email_address=email_address, json_data=json_data,
+                                                      use_defaults=use_defaults, auto_delete=auto_delete,
+                                                      use_thread=use_thread)
+        else:
+            logger.info('AUTOMATION_BILLING_ENABLED not enabled. Skipping billing org create')
+ 
     def delete_billing_org(self, token=None, billing_org_name=None, json_data=None, use_defaults=True, auto_delete=True,
                            use_thread=False):
         return self.billingorg.delete_billing_org(token=token, billing_org_name=billing_org_name, json_data=json_data,
