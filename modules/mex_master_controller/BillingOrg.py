@@ -22,7 +22,7 @@ class BillingOrg(MexOperation):
             if billing_org_name is None:
                 billing_org_name = shared_variables.org_name_default
             if billing_org_type is None:
-                billing_org_type = shared_variables.org_type_defualt
+                billing_org_type = shared_variables.billing_org_type_default
             if first_name is None:
                 first_name = shared_variables.first_name_default
             if last_name is None:
