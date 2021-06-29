@@ -7,105 +7,81 @@ Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
 
 *** Test Cases ***
+# ECQ-3538
 DeleteAutoScalePolicy - delete without region shall return error 
    [Documentation]
-   ...  send DeleteAutoScalePolicy without region 
-   ...  verify proper error is received 
+   ...  - send DeleteAutoScalePolicy without region 
+   ...  - verify proper error is received 
 
-   Run Keyword And Expect Error  *   Delete Autoscale Policy  token=${token}  use_defaults=False
-   ${response}=  Response Body
-   ${code}=  Response Status Code
+   ${error}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  token=${token}  use_defaults=False
         
-   Should Be Equal As Numbers  ${code}   400 
-   Should Be Equal             ${response}  {"message":"no region specified"} 
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"No region specified"}')
 
+# ECQ-3539
 DeleteAutoScalePolicy - delete without parameters shall return error
    [Documentation] 
-   ...  send DeleteAutoScalePolicy with region only
-   ...  verify proper error is received
+   ...  - send DeleteAutoScalePolicy with region only
+   ...  - verify proper error is received
 
    #  EDGECLOUD-1709 - CreateAutoScalePolicy without developer name gives strangely worded error message
 
-   Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  use_defaults=False
+   ${error}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  use_defaults=False
 
-   ${response}=  Response Body
-   ${code}=  Response Status Code
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Policy key {} not found"}')
 
-   Should Be Equal As Numbers  ${code}   400
-   Should Be Equal             ${response}  {"message":"no region specified"}
-
-DeleteAutoScalePolicy - delete without developer name shall return error
+# ECQ-3540
+DeleteAutoScalePolicy - delete without organization shall return error
    [Documentation]
-   ...  send DeleteAutoScalePolicy without developer name 
-   ...  verify proper error is received
+   ...  - send DeleteAutoScalePolicy without organization
+   ...  - verify proper error is received
 
    #  EDGECLOUD-1709 - CreateAutoScalePolicy without developer name gives strangely worded error message
 
    # policy name only
-   ${error_msg}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  use_defaults=False
-   ${response}=  Response Body
-   ${code}=  Response Status Code
-   Should Be Equal As Numbers  ${code}   400
-   Should Be Equal             ${response}  {"message":"no region specified"}
+   ${error}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  use_defaults=False
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Policy key {\\\\"name\\\\":\\\\"mypolicy\\\\"} not found"}')
 
    # minnodes only
-   ${error_msg}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  min_nodes=1  use_defaults=False
-   ${response}=  Response Body
-   ${code}=  Response Status Code
-   Should Be Equal As Numbers  ${code}   400
-   Should Be Equal             ${response}  {"message":"no region specified"}
+   ${error}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  min_nodes=1  use_defaults=False
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Policy key {} not found"}')
 
    # maxnodes only
-   ${error_msg}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  max_nodes=1  use_defaults=False
-   ${response}=  Response Body
-   ${code}=  Response Status Code
-   Should Be Equal As Numbers  ${code}   400
-   Should Be Equal             ${response}  {"message":"no region specified"}
+   ${error}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  max_nodes=1  use_defaults=False
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Policy key {} not found"}')
 
    # scaledowncpusthreshold only
-   ${error_msg}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  scale_down_cpu_threshold=1  use_defaults=False
-   ${response}=  Response Body
-   ${code}=  Response Status Code
-   Should Be Equal As Numbers  ${code}   400
-   Should Be Equal             ${response}  {"message":"no region specified"}
+   ${error}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  scale_down_cpu_threshold=1  use_defaults=False
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Policy key {} not found"}')
                         
    # scaleupcpusthreshold only
-   ${error_msg}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  scale_up_cpu_threshold=1  use_defaults=False
-   ${response}=  Response Body
-   ${code}=  Response Status Code
-   Should Be Equal As Numbers  ${code}   400
-   Should Be Equal             ${response}  {"message":"no region specified"}
+   ${error}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  scale_up_cpu_threshold=1  use_defaults=False
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Policy key {} not found"}')
 
    # triggertime only
-   ${error_msg}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  trigger_time=1  use_defaults=False
-   ${response}=  Response Body
-   ${code}=  Response Status Code
-   Should Be Equal As Numbers  ${code}   400
-   Should Be Equal             ${response}  {"message":"no region specified"}
- 
-DeleteAutoScalePolicy - delete with developer name only shall return error
+   ${error}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  trigger_time=1  use_defaults=False
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Policy key {} not found"}')
+
+# ECQ-3541 
+DeleteAutoScalePolicy - delete with organization only shall return error
    [Documentation]
-   ...  send DeleteAutoScalePolicy with developer name only
-   ...  verify proper error is received
+   ...  - send DeleteAutoScalePolicy with organization only
+   ...  - verify proper error is received
 
-   ${error_msg}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  developer_name=mypolicy  use_defaults=False
-   ${response}=  Response Body
-   ${code}=  Response Status Code
+   ${error_msg}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  developer_org_name=${developer_org_name_automation}  use_defaults=False
+   Should Be Equal  ${error_msg}   ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"automation_dev_org\\\\"} not found"}')
 
-   Should Be Equal As Numbers  ${code}   400
-   Should Be Equal             ${response}  {"message":"Invalid policy name"}
-
-DeleteAutoScalePolicy - delete with name not found shall return error
+# ECQ-3542
+DeleteAutoScalePolicy - delete with organization not found shall return error
    [Documentation]
-   ...  send DeleteAutoScalePolicy for policy not found
-   ...  verify proper error is received
+   ...  - send DeleteAutoScalePolicy with organization that doesnt exist
+   ...  - verify proper error is received
 
    #EDGECLOUD-1712 - DeleteAutoScalePolicy for non-existent policy does not return an error 
 
-   ${error}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  policy_name=x  developer_name=x  min_nodes=1  max_nodes=2  scale_down_cpu_threshold=1  scale_up_cpu_threshold=2   use_defaults=False
+   ${error}=  Run Keyword And Expect Error  *   Delete Autoscale Policy  region=US  token=${token}  policy_name=x  developer_org_name=x  min_nodes=1  max_nodes=2  scale_down_cpu_threshold=1  scale_up_cpu_threshold=2   use_defaults=False
    
    Should Contain  ${error}  code=400 
-   Should Contain  ${error}  {"message":"Policy key {\\\\"developer\\\\":\\\\"x\\\\",\\\\"name\\\\":\\\\"x\\\\"} not found"}
+   Should Contain  ${error}  {"message":"Policy key {\\\\"organization\\\\":\\\\"x\\\\",\\\\"name\\\\":\\\\"x\\\\"} not found"}
 
 *** Keywords ***
 Setup
