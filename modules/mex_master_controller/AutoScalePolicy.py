@@ -15,6 +15,7 @@ class AutoScalePolicy(MexOperation):
         self.create_url = '/auth/ctrl/CreateAutoScalePolicy'
         self.delete_url = '/auth/ctrl/DeleteAutoScalePolicy'
         self.show_url = '/auth/ctrl/ShowAutoScalePolicy'
+        self.update_url = '/auth/ctrl/UpdateAutoScalePolicy'
 
     def _build(self, policy_name=None, developer_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, include_fields=False, use_defaults=True):
 
@@ -135,3 +136,15 @@ class AutoScalePolicy(MexOperation):
         msg_dict = {'autoscalepolicy': msg}
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def update_autoscale_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None,  json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults, include_fields=True)
+        msg_dict = {'autoscalepolicy': msg}
+
+        msg_dict_show = None
+        if 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']:
+            msg_show = self._build(policy_name=msg['key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
+            msg_dict_show = {'autoscalepolicy': msg_show}
+
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)
+
