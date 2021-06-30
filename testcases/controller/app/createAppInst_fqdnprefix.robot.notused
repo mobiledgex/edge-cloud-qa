@@ -2,9 +2,7 @@
 Documentation   CreateAppInst public port TCP
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Library  String
 Library  DateTime
-
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
 
@@ -14,6 +12,7 @@ ${cloudlet_name}  tmocloud-1
 ${cloudlet_name_2}  tmocloud-2
 ${mobile_latitude}  1
 ${mobile_longitude}  1
+${release}=  10
 
 *** Test Cases ***
 # ECQ-1219
@@ -27,21 +26,19 @@ AppInst - user shall be able to add 1 TCP port with same public port
 
     Create App  access_ports=tcp:1
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  tcp  -
+    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}${release}  -  tcp  -
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          1  #LProtoTCP
     Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
 
-    Length Should Be   ${appInst.mapped_ports}  1
-
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
+	
+    Length Should Be   ${appInst.mapped_ports}  1
 
 # ECQ-1220
 AppInst - user shall be able to add 10 TCP port with same public port
@@ -54,11 +51,9 @@ AppInst - user shall be able to add 10 TCP port with same public port
 
     Create App  access_ports=tcp:1,tcp:2,tcp:3,tcp:4,tcp:5,tcp:6,tcp:7,tcp:8,tcp:9,tcp:10
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  tcp  -
+    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}${release}  -  tcp  -
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
@@ -112,7 +107,7 @@ AppInst - user shall be able to add 10 TCP port with same public port
 
     Length Should Be   ${appInst.mapped_ports}  10
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1221
@@ -126,12 +121,10 @@ AppInst - user shall be able to add TCP and UDP ports with the same port numbers
 
     Create App  access_ports=tcp:1,udp:1,tcp:3,udp:3,tcp:5,udp:5,tcp:7,udp:7,tcp:9,udp:9
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix_tcp}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  tcp  -
-    ${fqdn_prefix_udp}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
+    ${fqdn_prefix_tcp}=  Catenate  SEPARATOR=  ${app_default}${release}  -  tcp  -
+    ${fqdn_prefix_udp}=  Catenate  SEPARATOR=  ${app_default}${release}  -  udp  -
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
@@ -185,7 +178,7 @@ AppInst - user shall be able to add TCP and UDP ports with the same port numbers
 
     Length Should Be   ${appInst.mapped_ports}  10
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1222
@@ -201,14 +194,12 @@ AppInst - 2 appInst on different app and same cluster and same cloudlet shall no
     # create app1 and appIns 1
     Create App  access_ports=tcp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  tcp  -
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}${release}  -  tcp  -
 
-    ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  tcp  -
+    ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}${release}  2
+    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}${release}  -  tcp  -
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=tcp:1
@@ -228,9 +219,9 @@ AppInst - 2 appInst on different app and same cluster and same cloudlet shall no
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1223
@@ -246,14 +237,12 @@ AppInst - 2 appInst on different app and different cluster and same cloudlet sha
     # create app1 and appIns 1
     Create App  access_ports=tcp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  tcp  -
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}${release}  -  tcp  -
 
-    ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  tcp  -
+    ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}${release}  2
+    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}${release}  -  tcp  -
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=tcp:1
@@ -273,9 +262,9 @@ AppInst - 2 appInst on different app and different cluster and same cloudlet sha
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1224
@@ -291,14 +280,12 @@ AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate 
     # create app1 and appIns 1
     Create App  access_ports=tcp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  tcp  -
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}${release}  -  tcp  -
 
-    ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  tcp  -
+    ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}${release}  2
+    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}${release}  -  tcp  -
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=tcp:1
@@ -318,9 +305,9 @@ AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate 
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1225
@@ -338,19 +325,17 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall no
     # create app1 and appIns 1
     Create App  access_ports=tcp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  tcp  -
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}${release}  -  tcp  -
 
-    ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  tcp  -
+    ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}${release}  2
+    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}${release}  -  tcp  -
 
     # create app2 and appInst on the same port
     #Create App  app_name=${app_default_2}  access_ports=tcp:1
-    ${cluster_name_2}=  Catenate  SEPARATOR=  autocluster  ${epoch_time}
-    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_2}
+    ${autocluster}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
+    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${autocluster}
 
     # verify app1 uses port 1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -366,9 +351,9 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall no
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1226
@@ -384,11 +369,9 @@ AppInst - 2 appInst on same app and different cluster and different cloudlet sha
     # create app1 and appIns 1
     Create App  access_ports=tcp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  tcp  -
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}${release}  -  tcp  -
 
     # create app2 and appInst on the same port
     ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
@@ -407,9 +390,9 @@ AppInst - 2 appInst on same app and different cluster and different cloudlet sha
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1227
@@ -425,8 +408,6 @@ AppInst - User shall be able to add app/appInst, delete, and readd with same pub
     # create app1 and appIns 1
     Create App  access_ports=tcp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}  no_auto_delete=${True}
-    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     Delete App Instance
 
@@ -434,7 +415,7 @@ AppInst - User shall be able to add app/appInst, delete, and readd with same pub
     ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  tcp  -
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}${release}  -  tcp  -
 
     # verify app1 uses port 1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -450,9 +431,9 @@ AppInst - User shall be able to add app/appInst, delete, and readd with same pub
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1228
@@ -471,11 +452,9 @@ AppInst - User shall be able to add app, udpate app, add /appInst with same publ
 
     # create appInst
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  tcp  -
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}${release}  -  tcp  -
 
     # verify app1 uses port 1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  3
@@ -489,7 +468,7 @@ AppInst - User shall be able to add app, udpate app, add /appInst with same publ
 
     Length Should Be   ${appInst_1.mapped_ports}  2
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1229
@@ -502,31 +481,27 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
     ...  verify app2 internal port is 1 and public port is 10000
     ...  verify app3 internal port is 10000 and public port is 10001
 
-    ${epoch_time}=  Get Time  epoch
-
     ${cluster_instance_default}=  Get Default Cluster Name
 
     # create app1 and appIns 1
     Create App  access_ports=tcp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  tcp  -
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}${release}  -  tcp  -
 
     # create appInst2 on the same port
     ${app_name_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}  ${version}  -  tcp  -
-    ${autocluster_2}=  Catenate  SEPARATOR=  autocluster  ${epoch_time}  2
+    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}${release}  -  tcp  -
+    ${autocluster_2}=  Catenate  SEPARATOR=-  autocluster  2
     Create App  app_name=${app_name_2}  access_ports=tcp:1
     ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${autocluster_2}
 
 
     # create appInst4 on the port 10000
     ${app_name_3}=  Catenate  SEPARATOR=-  ${app_default_1}  3
-    ${fqdn_prefix_3}=  Catenate  SEPARATOR=  ${app_name_3}  ${version}  -  tcp  -
-    ${autocluster_3}=  Catenate  SEPARATOR=  autocluster  ${epoch_time}  3
+    ${fqdn_prefix_3}=  Catenate  SEPARATOR=  ${app_name_3}${release}  -  tcp  -
+    ${autocluster_3}=  Catenate  SEPARATOR=-  autocluster  3
     Create App  app_name=${app_name_3}  access_ports=tcp:10000
     ${appInst_3}=  Create App Instance  app_name=${app_name_3}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${autocluster_3}
 
@@ -551,11 +526,11 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
     Should Be Equal              ${appInst_3.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_3}
     Length Should Be   ${appInst_3.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_3.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_3.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_3.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1230
@@ -573,15 +548,13 @@ AppInst - appInst shall not allocate TCP port 10000 if already allocated
     # create app1 and appIns 1
     Create App  access_ports=tcp:10000
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  tcp  -
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}${release}  -  tcp  -
 
     # create appInst2 on the same port
     ${app_name_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}  ${version}  -  tcp  -
+    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}${release}  -  tcp  -
     Create App  app_name=${app_name_2}  access_ports=tcp:10000
     ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
@@ -600,9 +573,9 @@ AppInst - appInst shall not allocate TCP port 10000 if already allocated
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1231
@@ -615,6 +588,8 @@ AppInst - user shall be to add multiple TCP public ports
     ...  verify app2 internal port is 1 and public port is 10000
     ...  verify app3 internal port is 10000 and public port is 10001
 
+    #${epoch_time}=  Get Time  epoch
+
     ${cluster_instance_default}=  Get Default Cluster Name
 
     # create app1 and appIns 1
@@ -622,27 +597,25 @@ AppInst - user shall be to add multiple TCP public ports
 
     Create App  access_ports=tcp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  tcp  -
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default}${release}  -  tcp  -
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          1  #LProtoTCP
     Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
     FOR  ${index}  IN RANGE  0  100
-       ${epoch_time_multi}=  Get Time  epoch
+       ${epoch_time}=  Get Time  epoch
        ${app_name}=  Catenate  SEPARATOR=-  ${app_default}  ${index}
        Create App  app_name=${app_name}  access_ports=tcp:1
        ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
        
-       ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_name}  ${version}  -  tcp  -
+       ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_name}${release}  -  tcp  -
        ${public_port}=  Evaluate  10000 + ${index}
        # verify app1 uses port 1
        Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -650,7 +623,7 @@ AppInst - user shall be to add multiple TCP public ports
        Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          1  #LProtoTCP
        Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
        Length Should Be   ${appInst_1.mapped_ports}  1
-       Run Keyword Unless  (${epoch_time_multi}-90) < ${appInst_1.created_at.seconds} < (${epoch_time_multi}+90)  Fail  # verify created_at is within 1 minute
+       Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
        Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
     END
 
@@ -665,11 +638,9 @@ AppInst - user shall be to add multiple TCP public ports
 #
 #    Create App  access_ports=tcp:22
 #    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-#    ${version}=  Set Variable  ${appInst.key.app_key.version}
-#    ${version}=  Remove String  ${version}  .
 #
 #    ${app_default}=  Get Default App Name
-#    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  tcp  -
+#    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}${release}  -  tcp  -
 #
 #    Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  22
 #    Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    10000
@@ -678,7 +649,7 @@ AppInst - user shall be to add multiple TCP public ports
 #
 #    Length Should Be   ${appInst.mapped_ports}  1
 #
-#    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+#    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
 #    Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1233
@@ -692,11 +663,9 @@ AppInst - user shall be able to allocate public port tcp:18889
 
     Create App  access_ports=tcp:18889
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  tcp  -
+    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}${release}  -  tcp  -
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  18889
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    18889
@@ -705,7 +674,7 @@ AppInst - user shall be able to allocate public port tcp:18889
 
     Length Should Be   ${appInst.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 # ECQ-1234
@@ -719,11 +688,9 @@ AppInst - user shall be able to allocate public port tcp:18888
 
     Create App  access_ports=tcp:18888
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-    ${version}=  Set Variable  ${appInst.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  tcp  -
+    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}${release}  -  tcp  -
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  18888
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    18888
@@ -732,68 +699,13 @@ AppInst - user shall be able to allocate public port tcp:18888
 
     Length Should Be   ${appInst.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
-
-# ECQ-2429
-AppInst - User shall be able to add/delete dedicated/shared app/appInst with same TCP port
-    [Documentation]
-    ...  - create an app1 and appInst1 with shared (port not mapped)
-    ...  - create an app2 and appInst2 with dedicated  (port not mapped)
-    ...  - delete the appInst2
-    ...  - create appInst2 again with shared  (port IS mapped)
-    ...  - verify ports are mapped properly
-
-    ${cluster_instance_default}=  Get Default Cluster Name
-    ${app_name_1}=  Get Default App Name
-    ${app_name_2}=  Catenate  SEPARATOR=-  ${app_name_1}  2
-
-    # create app1 and appIns 1
-    Create App  app_name=${app_name_1}  access_ports=tcp:1  deployment=kubernetes  access_type=loadbalancer
-    ${appInst_1}=  Create App Instance  app_name=${app_name_1}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${cluster_instance_default}  autocluster_ip_access=IpAccessShared  #no_auto_delete=${True}
-    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
-    ${version}=  Remove String  ${version}  .
-
-    Create App  app_name=${app_name_2}  access_ports=tcp:1
-    ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${cluster_instance_default}2  autocluster_ip_access=IpAccessDedicated  no_auto_delete=${True}
-
-    Delete App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${cluster_instance_default}2
-
-    # create appInst again
-    ${appInst_2_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${cluster_instance_default}2  autocluster_ip_access=IpAccessShared
-
-    ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  tcp  -
-
-    # verify app1 uses port 1
-    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
-    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          1  #LProtoTCP
-    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
-    Length Should Be   ${appInst_1.mapped_ports}  1
-
-    # verify app2 uses port 1
-    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
-    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          1  #LProtoTCP
-    #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
-    Length Should Be   ${appInst_2.mapped_ports}  1
-
-    # verify app2 uses port 10000
-    Should Be Equal As Integers  ${appInst_2_2.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst_2_2.mapped_ports[0].public_port}    10000
-    Should Be Equal As Integers  ${appInst_2_2.mapped_ports[0].proto}          1  #LProtoTCP
-    #Should Be Equal              ${appInst_2_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
-    Length Should Be   ${appInst_2.mapped_ports}  1
-
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
-    Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
-    Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 *** Keywords ***
 Setup
     ${epoch}=  Get Current Date  result_format=epoch
+    
     #Create Developer
     Create Flavor
     #Create Cluster  
