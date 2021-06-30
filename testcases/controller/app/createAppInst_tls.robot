@@ -40,31 +40,31 @@ CreateAppInst - User shall be able to add TLS and non-TLS ports with cluster=k8s
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['internal_port']}  2015 
    Should Be True               ${appInst['data']['mapped_ports'][0]['public_port']} > 0  
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['proto']}          1  #LProtoTCP
-   Should Be Equal              ${appInst['data']['mapped_ports'][0]['fqdn_prefix']}    ${app_default}${version}-tcp. 
+   Should Be Equal              ${appInst['data']['mapped_ports'][0]['fqdn_prefix']}    ${app_default}${version}-tcp- 
    Should Be Equal              ${appInst['data']['mapped_ports'][0]['tls']}            ${True}
 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['internal_port']}  999 
    Should Be True               ${appInst['data']['mapped_ports'][1]['public_port']} > 0 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['proto']}          1  #LProtoTCP
-   Should Be Equal              ${appInst['data']['mapped_ports'][1]['fqdn_prefix']}    ${app_default}${version}-tcp.
+   Should Be Equal              ${appInst['data']['mapped_ports'][1]['fqdn_prefix']}    ${app_default}${version}-tcp-
    Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][1]}  tls
 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['internal_port']}  2016
    Should Be True               ${appInst['data']['mapped_ports'][2]['public_port']} > 0 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['proto']}          1  #LProtoTCP
-   Should Be Equal              ${appInst['data']['mapped_ports'][2]['fqdn_prefix']}    ${app_default}${version}-tcp. 
+   Should Be Equal              ${appInst['data']['mapped_ports'][2]['fqdn_prefix']}    ${app_default}${version}-tcp- 
    Should Be Equal              ${appInst['data']['mapped_ports'][2]['tls']}            ${True}
 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['internal_port']}  8085 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['public_port']}    8085 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['proto']}          1  #LProtoTCP  
-   Should Be Equal              ${appInst['data']['mapped_ports'][3]['fqdn_prefix']}    ${app_default}${version}-tcp.
+   Should Be Equal              ${appInst['data']['mapped_ports'][3]['fqdn_prefix']}    ${app_default}${version}-tcp-
    Should Be Equal              ${appInst['data']['mapped_ports'][3]['tls']}            ${True}
 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['internal_port']}  2016
    Should Be True               ${appInst['data']['mapped_ports'][4]['public_port']} > 0
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['proto']}          2
-   Should Be Equal              ${appInst['data']['mapped_ports'][4]['fqdn_prefix']}    ${app_default}${version}-udp.
+   Should Be Equal              ${appInst['data']['mapped_ports'][4]['fqdn_prefix']}    ${app_default}${version}-udp-
    Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][4]}  tls 
 
    Length Should Be   ${appInst['data']['mapped_ports']}  5
@@ -89,31 +89,31 @@ CreateAppInst - User shall be able to add TLS and non-TLS ports with cluster=k8s
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['internal_port']}  2000
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['public_port']}    2000
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['proto']}          1  #LProtoTCP
-   Should Be Equal              ${appInst['data']['mapped_ports'][0]['fqdn_prefix']}    ${app_default}${version}-tcp.
+   Should Be Equal              ${appInst['data']['mapped_ports'][0]['fqdn_prefix']}    ${app_default}${version}-tcp-
    Should Be Equal              ${appInst['data']['mapped_ports'][0]['tls']}            ${True}
 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['internal_port']}  999
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['public_port']}    999
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['proto']}          1  #LProtoTCP
-   Should Be Equal              ${appInst['data']['mapped_ports'][1]['fqdn_prefix']}    ${app_default}${version}-tcp.
+   Should Be Equal              ${appInst['data']['mapped_ports'][1]['fqdn_prefix']}    ${app_default}${version}-tcp-
    Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][1]}  tls
 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['internal_port']}  2016
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['public_port']}    2016
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['proto']}          1  #LProtoTCP
-   Should Be Equal              ${appInst['data']['mapped_ports'][2]['fqdn_prefix']}    ${app_default}${version}-tcp.
+   Should Be Equal              ${appInst['data']['mapped_ports'][2]['fqdn_prefix']}    ${app_default}${version}-tcp-
    Should Be Equal              ${appInst['data']['mapped_ports'][2]['tls']}            ${True}
 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['internal_port']}  8086
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['public_port']}    8086
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['proto']}          1
-   Should Be Equal              ${appInst['data']['mapped_ports'][3]['fqdn_prefix']}    ${app_default}${version}-tcp. 
+   Should Be Equal              ${appInst['data']['mapped_ports'][3]['fqdn_prefix']}    ${app_default}${version}-tcp- 
    Should Be Equal              ${appInst['data']['mapped_ports'][3]['tls']}            ${True}
 
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['internal_port']}  2016
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['public_port']}    2016
    Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['proto']}          2
-   Should Be Equal              ${appInst['data']['mapped_ports'][4]['fqdn_prefix']}    ${app_default}${version}-udp.
+   Should Be Equal              ${appInst['data']['mapped_ports'][4]['fqdn_prefix']}    ${app_default}${version}-udp-
    Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][4]}  tls
 
    Length Should Be   ${appInst['data']['mapped_ports']}  5
