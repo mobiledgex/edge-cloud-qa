@@ -170,4 +170,6 @@ ShowLogs - shall return error for VM apps
 
     ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  cloudlet_name=tmocloud-1  operator_org_name=tmus  developer_org_name=${developer_artifactory}
 
-    Should Contain  ${error1}  ('code=400', 'error={"message":"ShowLogs not available for vm deployments"}')
+    #Should Contain  ${error1}  ('code=400', 'error={"message":"ShowLogs not available for vm deployments"}')
+    Should Contain  ${error1}  ('code=400', 'error={"message":"Command not supported for vm deployments"}')
+
