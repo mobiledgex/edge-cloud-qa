@@ -139,7 +139,8 @@ Setup
     ${app_name_default}=        Get Default App Name
 
     #Create Developer            developer_name=${platos_developer_name}
-    Create App			developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1
+    # may already exist
+    Run Keyword and Ignore Error  Create App			developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1
     #Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_org_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
 
     ${app_version_default}=     Get Default App Version

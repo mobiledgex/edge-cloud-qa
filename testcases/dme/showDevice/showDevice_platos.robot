@@ -215,11 +215,11 @@ showDevice - request with bad token
     ...  verify no bearer token found
 
       # robot function
-      Run Keyword And Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  use_defaults=${False}
+      Run Keyword And Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  use_defaults=${False}
 
-      ${error}=  Run Keyword And Expect Error  *  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  use_defaults=${False}
-      #Should Be Equal  ${error}  ('code=400', 'error={"message":"no bearer token found"}')
-      Should Contain  ${error}  No bearer token found
+      #${error}=  Run Keyword And Expect Error  *  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  use_defaults=${False}
+      ##Should Be Equal  ${error}  ('code=400', 'error={"message":"no bearer token found"}')
+      #Should Contain  ${error}  No bearer token found
 
 #ECQ-2124
 showDevice - request token error jwt
