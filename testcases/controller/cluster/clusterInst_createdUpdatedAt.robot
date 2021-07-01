@@ -22,9 +22,9 @@ CreateClusterInst - timestamps shall be created for Create/Update k8s/helm Insta
 
     [Template]  Create/Update Clusterinst and Check Timestamps
 
-    ip_access=IpAccessUnknown
-    ip_access=IpAccessShared
-    ip_access=IpAccessDedicated
+    #ip_access=IpAccessUnknown  removed since cant update autoscake with master only
+    #ip_access=IpAccessShared
+    #ip_access=IpAccessDedicated
     deployment=kubernetes  number_masters=1  number_nodes=1   ip_access=IpAccessShared
     deployment=kubernetes  number_masters=1  number_nodes=1   ip_access=IpAccessDedicated
     deployment=kubernetes  number_masters=1  number_nodes=1   ip_access=IpAccessShared     developer_org_name=MobiledgeX  reservable=${True}
