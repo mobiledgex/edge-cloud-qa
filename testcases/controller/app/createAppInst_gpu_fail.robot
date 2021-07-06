@@ -25,7 +25,7 @@ AppInst - User shall not be able to create a VM AppInst with GPU flavor on cloud
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  use_defaults=${False}   #cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}
 
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Optional resource requested by ${flavor_name_default}, cloudlet ${cloudlet_name} supports none"}')
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet ${cloudlet_name} doesn\\\'t support GPU"}')
 
 # ECQ-3183
 AppInst - User shall not be able to create a docker autocluster AppInst with GPU flavor on cloudlet that doesnt support GPU
@@ -37,7 +37,7 @@ AppInst - User shall not be able to create a docker autocluster AppInst with GPU
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster 
 
-    Should Be Equal  ${error_msg}  ('code=200', 'error={"result":{"message":"Optional resource requested by ${flavor_name_default}, cloudlet tmocloud-2 supports none","code":400}}')
+    Should Be Equal  ${error_msg}  ('code=200', 'error={"result":{"message":"Cloudlet ${cloudlet_name} doesn\\\'t support GPU","code":400}}')
 
 # ECQ-3184
 AppInst - User shall not be able to create a k8s autocluster AppInst with GPU flavor on cloudlet that doesnt support GPU
@@ -49,7 +49,7 @@ AppInst - User shall not be able to create a k8s autocluster AppInst with GPU fl
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster 
 
-    Should Be Equal  ${error_msg}  ('code=200', 'error={"result":{"message":"Optional resource requested by ${flavor_name_default}, cloudlet tmocloud-2 supports none","code":400}}')
+    Should Be Equal  ${error_msg}  ('code=200', 'error={"result":{"message":"Cloudlet ${cloudlet_name} doesn\\\'t support GPU","code":400}}')
 
 # no longer supported because removed autocluster_ip_access option
 # ECQ-2005
