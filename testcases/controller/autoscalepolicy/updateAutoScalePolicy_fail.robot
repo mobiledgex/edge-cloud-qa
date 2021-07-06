@@ -116,7 +116,7 @@ UpdateAutoScalePolicy - update with scaledowncputhreshold <= scaleupcputhreshold
 
    #scaledowncputhreshold = scaleupcputhreshold = 0
    ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=1  max_nodes=2  scale_down_cpu_threshold=0  scale_up_cpu_threshold=0  use_defaults=False
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Scale down cpu threshold must be less than scale up cpu threshold"}')
+   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"One of target cpu or target mem or target active connections must be specified"}')
 
 # ECQ-3560
 UpdateAutoScalePolicy - update with scaledowncputhreshold > 100 shall return error
