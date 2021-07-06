@@ -176,7 +176,7 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures when quotamaxv
       #Error: Bad Request (400), Resource quota value for Disk is less than currently used value. Should be atleast ${disk_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=${disk_updated_value}
       Error: Bad Request (400), Resource quota value for RAM is less than currently used value. Should be atleast ${ram_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=RAM  resourcequotas:0.value=${ram_updated_value}
       Error: Bad Request (400), Resource quota value for vCPUs is less than currently used value. Should be atleast ${vcpus_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=vCPUs  resourcequotas:0.value=${vcpus_updated_value}
-      #Error: Bad Request (400), Resource quota value for External IPs is less than currently used value. Should be atleast ${external_ips_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name="External IPs"  resourcequotas:0.value=${external_ips_updated_value}
+      Error: Bad Request (400), Resource quota value for External IPs is less than currently used value. Should be atleast ${external_ips_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name="External IPs"  resourcequotas:0.value=${external_ips_updated_value}
 
 # ECQ-3343
 UpdateCloudlet with resource quotas - mcctl shall handle failures when quotamaxvalue is lesser than currently used value for PlatformTypeOpenstack
@@ -254,12 +254,12 @@ Update Setup
 Setup PlatformTypeFake
    [Arguments]   ${cloudlet_resource_usage}
 
-   ${ram_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][2]['infra_max_value']}
-   ${vcpus_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['infra_max_value']}
+   ${ram_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['infra_max_value']}
+   ${vcpus_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['infra_max_value']}
    ${external_ips_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][0]['infra_max_value']}
 
-   ${ram_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][2]['value']}
-   ${vcpus_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['value']}
+   ${ram_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['value']}
+   ${vcpus_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['value']}
    ${external_ips_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][0]['value']}
    
    ${ram_quota_value}=  Evaluate  ${ram_max_value}+1
@@ -285,14 +285,14 @@ Setup PlatformTypeFake
 Setup PlatformTypeOpenstack
    [Arguments]   ${cloudlet_resource_usage}
 
-   ${ram_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['infra_max_value']}
-   ${vcpus_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['infra_max_value']}
-   ${floating_ips_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][0]['infra_max_value']}
-   ${instances_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][2]['infra_max_value']}
+   ${ram_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['infra_max_value']}
+   ${vcpus_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][5]['infra_max_value']}
+   ${floating_ips_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][1]['infra_max_value']}
+   ${instances_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['infra_max_value']}
 
-   ${ram_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['value']}
-   ${vcpus_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['value']}
-   ${instances_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][2]['value']}
+   ${ram_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['value']}
+   ${vcpus_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][5]['value']}
+   ${instances_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['value']}
 
    ${ram_quota_value}=  Evaluate  ${ram_max_value}+1
    ${vcpus_quota_value}=  Evaluate  ${vcpus_max_value}+1
