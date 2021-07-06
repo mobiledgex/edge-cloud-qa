@@ -26,25 +26,25 @@ CreateAutoProvPolicy - mcctl shall be able to create/show/delete policy
 #      name=${recv_name}  app-org=testmonitor
 
       # minactive
-      name=${recv_name}  app-org=testmonitor  minactiveinstances=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=testmonitor  minactiveinstances=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
 
       # minactive and maxactive instance
-      name=${recv_name}  app-org=testmonitor  minactiveinstances=1  maxinstances=2  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=testmonitor  minactiveinstances=1  maxinstances=2  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
 
       # deployclientcount
-      name=${recv_name}  app-org=testmonitor  deployclientcount=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=testmonitor  deployclientcount=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
 
       # deployclientcount and deployintervalcount
-      name=${recv_name}  app-org=testmonitor  deployclientcount=1  deployintervalcount=1   cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=testmonitor  deployclientcount=1  deployintervalcount=1   cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
 
       # deployclientcount, deployintervalcount and minactiveinstances
-      name=${recv_name}  app-org=testmonitor  deployclientcount=1  deployintervalcount=1  minactiveinstances=1   cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=testmonitor  deployclientcount=1  deployintervalcount=1  minactiveinstances=1   cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
 
       # deployclientcount, deployintervalcount, minactiveinstances and maxinstances
-      name=${recv_name}  app-org=testmonitor  deployclientcount=1  deployintervalcount=1  minactiveinstances=1  maxinstances=2   cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=testmonitor  deployclientcount=1  deployintervalcount=1  minactiveinstances=1  maxinstances=2   cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
 
       # deployclientcount, deployintervalcount, minactiveinstances, maxinstances, undeployclientcount and undeployintervalcount
-      name=${recv_name}  app-org=testmonitor  deployclientcount=1  deployintervalcount=1  minactiveinstances=1  maxinstances=2  undeployclientcount=1  undeployclientcount=2   cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=testmonitor  deployclientcount=1  deployintervalcount=1  minactiveinstances=1  maxinstances=2  undeployclientcount=1  undeployclientcount=2   cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
 
 # ECQ-2828
 CreateAutoProvPolicy - mcctl shall handle create failures
@@ -56,14 +56,14 @@ CreateAutoProvPolicy - mcctl shall handle create failures
       # missing values
       Error: missing required args: app-org name  Error: missing required args: name app-org  #not sending any args with mcctl
 
-      Error: missing required args: name  app-org=${developer}  minactiveinstances=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
-      Error: missing required args: app-org  name=${recv_name}  minactiveinstances=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
-      Error: missing required args: app-org name  Error: missing required args: name app-org  minactiveinstances=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
-      Error: invalid args: cloudlets:  Error: invalid args: cloudlets:  name=${recv_name}  region=${region}  app-org=testmonitor  minactiveinstances=1  cloudlets:.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      Error: missing required args: name  app-org=${developer}  minactiveinstances=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      Error: missing required args: app-org  name=${recv_name}  minactiveinstances=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      Error: missing required args: app-org name  Error: missing required args: name app-org  minactiveinstances=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      Error: invalid args: cloudlets:  Error: invalid args: cloudlets:  name=${recv_name}  region=${region}  app-org=testmonitor  minactiveinstances=1  cloudlets:.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
       Error: Bad Request (400), Cloudlet key {"organization":"GDDT"} not found  Error: Bad Request (400), Cloudlet key {"organization":"GDDT"} not found  name=${recv_name}  region=${region}  app-org=testmonitor  minactiveinstances=1  cloudlets:0.key.organization=GDDT  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
-      Error: Bad Request (400), Minimum active instances cannot be larger than Maximum Instances  Error: Bad Request (400), Minimum active instances cannot be larger than Maximum Instances  name=${recv_name}  region=${region}  app-org=testmonitor  minactiveinstances=2  maxinstances=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
-      Error: Bad Request (400), One of deploy client count and minimum active instances must be specified  Error: Bad Request (400), One of deploy client count and minimum active instances must be specified  name=${recv_name}  region=${region}  app-org=testmonitor  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
-      Error: Bad Request (400), Minimum Active Instances cannot be larger than the number of Cloudlets  Error: Bad Request (400), Minimum Active Instances cannot be larger than the number of Cloudlets  name=${recv_name}  region=${region}  app-org=testmonitor  minactiveinstances=3  maxinstances=4  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      Error: Bad Request (400), Minimum active instances cannot be larger than Maximum Instances  Error: Bad Request (400), Minimum active instances cannot be larger than Maximum Instances  name=${recv_name}  region=${region}  app-org=testmonitor  minactiveinstances=2  maxinstances=1  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      Error: Bad Request (400), One of deploy client count and minimum active instances must be specified  Error: Bad Request (400), One of deploy client count and minimum active instances must be specified  name=${recv_name}  region=${region}  app-org=testmonitor  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      Error: Bad Request (400), Minimum Active Instances cannot be larger than the number of Cloudlets  Error: Bad Request (400), Minimum Active Instances cannot be larger than the number of Cloudlets  name=${recv_name}  region=${region}  app-org=testmonitor  minactiveinstances=3  maxinstances=4  cloudlets:0.key.organization=GDDT  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
 
 UpdatePrivacyPolicy - mcctl shall handle update policy
    [Documentation]
@@ -74,11 +74,11 @@ UpdatePrivacyPolicy - mcctl shall handle update policy
    [Teardown]  Update Teardown
 
    [Template]  Success Update/Show Privacy Policy Via mcctl
-      name=${recv_name}  app-org=${developer}  region=${region}  cloudlets:0.key.organization=GDDT  deployclientcount=1  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
-      name=${recv_name}  app-org=${developer}  region=${region}  cloudlets:0.key.organization=GDDT  deployclientcount=1  deployintervalcount=2  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
-      name=${recv_name}  app-org=${developer}  region=${region}  cloudlets:0.key.organization=GDDT  deployclientcount=1  deployintervalcount=2  minactiveinstances=1  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
-      name=${recv_name}  app-org=${developer}  region=${region}  cloudlets:0.key.organization=GDDT  deployclientcount=1  deployintervalcount=2  minactiveinstances=1  maxinstances=2  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
-      name=${recv_name}  app-org=${developer}  region=${region}  cloudlets:0.key.organization=GDDT  deployclientcount=1  deployintervalcount=2  minactiveinstances=1  maxinstances=2  undeployclientcount=2  undeployintervalcount=1  cloudlets:0.key.name=automationBuckhornCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=${developer}  region=${region}  cloudlets:0.key.organization=GDDT  deployclientcount=1  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=${developer}  region=${region}  cloudlets:0.key.organization=GDDT  deployclientcount=1  deployintervalcount=2  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=${developer}  region=${region}  cloudlets:0.key.organization=GDDT  deployclientcount=1  deployintervalcount=2  minactiveinstances=1  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=${developer}  region=${region}  cloudlets:0.key.organization=GDDT  deployclientcount=1  deployintervalcount=2  minactiveinstances=1  maxinstances=2  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
+      name=${recv_name}  app-org=${developer}  region=${region}  cloudlets:0.key.organization=GDDT  deployclientcount=1  deployintervalcount=2  minactiveinstances=1  maxinstances=2  undeployclientcount=2  undeployintervalcount=1  cloudlets:0.key.name=automationSunnydaleCloudlet  cloudlets:1.key.organization=GDDT  cloudlets:1.key.name=automationParadiseCloudlet
 
 *** Keywords ***
 Setup
