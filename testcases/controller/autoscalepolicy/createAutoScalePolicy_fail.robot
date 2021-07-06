@@ -100,7 +100,7 @@ CreateAutoScalePolicy - create with policy/organization and minnodes only shall 
    ${error_msg}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=1  use_defaults=False
 
    Should Contain  ${error_msg}   code=400
-   Should Contain  ${error_msg}  {"message":"Max nodes must be greater than Min nodes"}
+   Should Contain  ${error_msg}  {"message":"One of target cpu or target mem or target active connections must be specified"}
 
 # ECQ-3517
 CreateAutoScalePolicy - create with policy/organization and maxnodes only shall return error
@@ -122,7 +122,7 @@ CreateAutoScalePolicy - create with policy/organization and minnodes/maxnodes on
    ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=1  max_nodes=2  use_defaults=False
 
    Should Contain   ${error}   400
-   Should Contain   ${error}  {"message":"Scale down cpu threshold must be less than scale up cpu threshold"}
+   Should Contain   ${error}  {"message":"One of target cpu or target mem or target active connections must be specified"}
 
 # ECQ-3519
 CreateAutoScalePolicy - create with policy/organization name and minnodes/maxnodes and scaledowncputhreshold only shall return error
@@ -142,17 +142,17 @@ CreateAutoScalePolicy - create with minnodes <= maxnodes shall return error
    ...  - verify proper error is received
   
    # max < min
-   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=1  use_defaults=False
+   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=1  target_cpu=1  use_defaults=False
    Should Contain   ${error}   400
    Should Contain             ${error}  {"message":"Max nodes must be greater than Min nodes"}
 
    # max=0
-   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=0  use_defaults=False
+   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=0  target_memory=1  use_defaults=False
    Should Contain   ${error}   400
    Should Contain             ${error}  {"message":"Max nodes must be greater than Min nodes"}
 
    # min=max
-   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=2  use_defaults=False
+   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=2  target_active_connections=1  use_defaults=False
    Should Contain   ${error}   400
    Should Contain             ${error}  {"message":"Max nodes must be greater than Min nodes"}
 
@@ -197,7 +197,7 @@ CreateAutoScalePolicy - create with scaledowncputhreshold <= scaleupcputhreshold
    #scaledowncputhreshold = scaleupcputhreshold = 0
    ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=1  max_nodes=2  scale_down_cpu_threshold=0  scale_up_cpu_threshold=0  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Scale down cpu threshold must be less than scale up cpu threshold"}
+   Should Contain             ${error}  {"message":"One of target cpu or target mem or target active connections must be specified"}
 
 # ECQ-3524
 CreateAutoScalePolicy - create with scaledowncputhreshold > 100 shall return error
