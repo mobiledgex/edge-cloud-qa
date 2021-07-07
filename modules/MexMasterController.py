@@ -50,7 +50,7 @@ from mex_master_controller.RestrictedOrgUpdate import RestrictedOrgUpdate
 from mex_master_controller.Controller import Controller
 from mex_master_controller.Org import Org
 from mex_master_controller.BillingOrg import BillingOrg
-#from mex_master_controller.GpuDriver import GpuDriver
+from mex_master_controller.GpuDriver import GpuDriver
 
 
 import shared_variables_mc
