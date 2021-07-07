@@ -218,6 +218,17 @@ CreateCloudlet - create with kafka user/password but no cluster shall return err
 
    Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Must specify a kafka cluster endpoint in addition to kafka credentials","code":400}}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  kafka_user=x  kafka_password=x
 
+# ECQ-3567
+CreateCloudlet - create without both kafka user and password shall return error
+   [Documentation]
+   ...  - send CreateCloudlet without both kafka both user and password
+   ...  - verify error is returned
+
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Must specify both kafka username and password, or neither","code":400}}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  kafka_password=x
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Must specify both kafka username and password, or neither","code":400}}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  kafka_user=x
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Must specify both kafka username and password, or neither","code":400}}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  kafka_user=x  kafka_cluster=x
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Must specify both kafka username and password, or neither","code":400}}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  kafka_password=x  kafka_cluster=x
+
 ** Keywords **
 Setup
    ${token}=  Get Super Token
