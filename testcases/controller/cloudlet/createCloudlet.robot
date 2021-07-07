@@ -178,6 +178,28 @@ CreateCloudlet - shall be able to create cloudlet with empty trust policy
    Should Not Contain  ${cloudlet['data']}  trust_policy
    Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  1
 
+# ECQ-3568
+CreateCloudlet - shall be able to create cloudlet with kafka cluster only
+   [Documentation]
+   ...  - send CreateCloudlet with kafka cluster but no user/password
+   ...  - verify the cloudlet has cluster only
+
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  kafka_cluster=x
+   Should Not Contain  ${cloudlet['data']}  kafka_user
+   Should Not Contain  ${cloudlet['data']}  kafka_password
+   Should Be Equal  ${cloudlet['data']['kafka_cluster']}  x
+
+# ECQ-3569
+CreateCloudlet - shall be able to create cloudlet with kafka cluster/user/password
+   [Documentation]
+   ...  - send CreateCloudlet with kafka cluster but no user/password
+   ...  - verify the cloudlet has cluster only
+
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  kafka_cluster=x  kafka_user=myuser  kafka_password=mypassword
+   Should Not Contain  ${cloudlet['data']}  kafka_user
+   Should Not Contain  ${cloudlet['data']}  kafka_password
+   Should Be Equal  ${cloudlet['data']['kafka_cluster']}  x
+
 ** Keywords **
 Setup
    ${token}=  Get Super Token
