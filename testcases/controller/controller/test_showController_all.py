@@ -96,7 +96,7 @@ class tc(unittest.TestCase):
 #        if resp[1].build_head == build_head1 or resp[1].build_head == resp[1].build_master:
 #           foundhead1 = True
  
-        expect_equal(len(resp), 2, 'number of controllers')
+        expect_equal(len(resp), 1, 'number of controllers')
         expect_equal(foundmaster0, True, 'buildmaster')
         expect_equal(foundhost0, True, 'host')
         expect_equal(foundip0, True, 'host')
