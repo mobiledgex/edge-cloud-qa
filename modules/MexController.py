@@ -500,11 +500,11 @@ class Cloudlet():
         self.platform_type = platform_type
         self.physical_name = physical_name
         
-        print('*WARN*', vars(cloudlet_pb2.Cloudlet))
-        print('*WARN*', vars(cloudletkey_pb2.CloudletKey))
-        print('*WARN*',cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER)
-        print('*WARN*',cloudletkey_pb2.CloudletKey.ORGANIZATION_FIELD_NUMBER)
-        print('*WARN*', dir(cloudlet_pb2.Cloudlet))
+#        print('*WARN*', vars(cloudlet_pb2.Cloudlet))
+#        print('*WARN*', vars(cloudletkey_pb2.CloudletKey))
+#        print('*WARN*',cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER)
+#        print('*WARN*',cloudletkey_pb2.CloudletKey.ORGANIZATION_FIELD_NUMBER)
+#        print('*WARN*', dir(cloudlet_pb2.Cloudlet))
 
         # used for UpdateCloudelet - hardcoded from proto
         self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudletkey_pb2.CloudletKey.ORGANIZATION_FIELD_NUMBER) #+ '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
