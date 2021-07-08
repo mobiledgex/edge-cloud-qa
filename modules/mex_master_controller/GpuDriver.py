@@ -153,7 +153,7 @@ class GpuDriver(MexOperation):
         msg = self._build(gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, properties=properties,  use_defaults=use_defaults)
         msg_dict = {'GPUDriver': msg}
 
-        return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
+        return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
     def addbuild_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, build_name=None, build_driverpath=None, build_os=None, build_md5sum=None, build_driverpathcreds=None, build_kernelversion=None, build_hypervisorinfo=None, ignorestate=None, use_defaults=True, use_thread=False, json_data=None, stream=True, stream_timeout=100):
         msg = self._build(gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, build_name=build_name, build_driverpath=build_driverpath, build_os=build_os, build_md5sum=build_md5sum, build_driverpathcreds=build_driverpathcreds, build_kernelversion=build_kernelversion, build_hypervisorinfo=build_hypervisorinfo, ignorestate=ignorestate, use_defaults=use_defaults)
