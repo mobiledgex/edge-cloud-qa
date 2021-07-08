@@ -117,7 +117,7 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  port
+   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['columns'][8]}  port
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  active
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  handled
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  accepts
@@ -140,33 +140,34 @@ Connections Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal  ${reading[1]}  ${app_name_influx}
-   \  Should Be Equal  ${reading[2]}  v1
+    FOR  ${reading}  IN  @{values}
+      Should Be Equal  ${reading[1]}  ${app_name_influx}
+      Should Be Equal  ${reading[2]}  v1
 #   \  Should Be Equal  ${reading[3]}  ${pod}
-   \  Should Be Equal  ${reading[3]}  ${clustername_k8sdedicated}
-   \  Should Be Equal  ${reading[4]}  ${developer_name}
-   \  Should Be Equal  ${reading[5]}  ${cloudlet_name_openstack_metrics}
-   \  Should Be Equal  ${reading[6]}  ${operator}
-   \  Should Be Equal  ${reading[7]}  ${developer_name}
-   \  Should Be Equal  ${reading[8]}  ${port}
+      Should Be Equal  ${reading[3]}  ${clustername_k8sdedicated}
+      Should Be Equal  ${reading[4]}  ${developer_name}
+      Should Be Equal  ${reading[5]}  ${cloudlet_name_openstack_metrics}
+      Should Be Equal  ${reading[6]}  ${operator}
+      Should Be Equal  ${reading[7]}  ${developer_name}
+      Should Be Equal As Numbers   ${reading[8]}  ${port}
 
-   \  Should Be True               ${reading[9]} >= 0
-   \  Should Be True               ${reading[10]} >= 0
-   \  Should Be True               ${reading[11]} >= 0
-   \  Should Be True               ${reading[12]} >= 0
-   \  Should Be True               ${reading[13]} >= 0
-   \  Should Be True               ${reading[14]} >= 0
-   \  Should Be True               ${reading[15]} >= 0
-   \  Should Be True               ${reading[16]} >= 0
-   \  Should Be True               ${reading[17]} >= 0
-   \  Should Be True               ${reading[18]} >= 0
-   \  Should Be True               ${reading[19]} >= 0
-   \  Should Be True               ${reading[20]} >= 0
-   \  Should Be True               ${reading[21]} >= 0
-   \  Should Be True               ${reading[22]} >= 0
-   \  Should Be True               ${reading[23]} >= 0
+      Should Be True               ${reading[9]} >= 0
+      Should Be True               ${reading[10]} >= 0
+      Should Be True               ${reading[11]} >= 0
+      Should Be True               ${reading[12]} >= 0
+      Should Be True               ${reading[13]} >= 0
+      Should Be True               ${reading[14]} >= 0
+      Should Be True               ${reading[15]} >= 0
+      Should Be True               ${reading[16]} >= 0
+      Should Be True               ${reading[17]} >= 0
+      Should Be True               ${reading[18]} >= 0
+      Should Be True               ${reading[19]} >= 0
+      Should Be True               ${reading[20]} >= 0
+      Should Be True               ${reading[21]} >= 0
+      Should Be True               ${reading[22]} >= 0
+      Should Be True               ${reading[23]} >= 0
 #   \  Should Be True               ${reading[24]} >= 0
+    END
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
@@ -187,32 +188,33 @@ Metrics Should Match Influxdb
 
    ${index}=  Set Variable  0
 #   : FOR  ${reading}  IN  @{metrics_influx_t}
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+     FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
 #   \  Log to console  ${metrics_influx_t[${index}]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+      Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['app']}  ${reading[1]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['cluster']}  ${reading[2]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['dev']}  ${reading[3]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['cloudlet']}  ${reading[4]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['operator']}  ${reading[5]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['port']}  ${reading[6]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['active']}  ${reading[9]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['handled']}  ${reading[10]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['accepts']}  ${reading[11]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['bytesSent']}  ${reading[12]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['bytesRecvd']}  ${reading[13]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P0']}  ${reading[14]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P25']}  ${reading[15]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P50']}  ${reading[16]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P75']}  ${reading[17]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P90']}  ${reading[18]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P95']}  ${reading[19]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P99']}  ${reading[20]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P99.5']}  ${reading[21]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P99.9']}  ${reading[22]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P100']}  ${reading[23]}
+      Should Be Equal  ${metrics_influx_t[${index}]['active']}  ${reading[9]}
+      Should Be Equal  ${metrics_influx_t[${index}]['handled']}  ${reading[10]}
+      Should Be Equal  ${metrics_influx_t[${index}]['accepts']}  ${reading[11]}
+      Should Be Equal  ${metrics_influx_t[${index}]['bytesSent']}  ${reading[12]}
+      Should Be Equal  ${metrics_influx_t[${index}]['bytesRecvd']}  ${reading[13]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P0']}  ${reading[14]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P25']}  ${reading[15]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P50']}  ${reading[16]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P75']}  ${reading[17]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P90']}  ${reading[18]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P95']}  ${reading[19]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P99']}  ${reading[20]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P99.5']}  ${reading[21]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P99.9']}  ${reading[22]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P100']}  ${reading[23]}
 
-   \  ${index}=  Evaluate  ${index}+1
+      ${index}=  Evaluate  ${index}+1
+   END
 
 Metrics Should Match Connected App
    [Arguments]  ${metrics}
