@@ -42,7 +42,7 @@ CreateAutoScalePolicy - mcctl shall handle create failures
       Error: missing required args:  cluster-org=${developer}  name=${recv_name}
       Error: missing required args: maxnodes  cluster-org=${developer}  name=${recv_name}  minnodes=1
       Error: Bad Request (400), Max nodes must be greater than Min nodes  cluster-org=${developer}  name=${recv_name}  minnodes=2  maxnodes=1  scaleupcputhresh=50  scaledowncputhresh=10
-      Error: Bad Request (400), Scale down cpu threshold must be less than scale up cpu threshold  cluster-org=${developer}  name=${recv_name}  minnodes=1  maxnodes=2
+      Error: Bad Request (400), One of target cpu or target mem or target active connections must be specified  cluster-org=${developer}  name=${recv_name}  minnodes=1  maxnodes=2
       Error: Bad Request (400), Scale down cpu threshold must be less than scale up cpu threshold  cluster-org=${developer}  name=${recv_name}  minnodes=1  maxnodes=2  scaleupcputhresh=50  scaledowncputhresh=50
       Error: Bad Request (400), Scale down cpu threshold must be less than scale up cpu threshold  cluster-org=${developer}  name=${recv_name}  minnodes=1  maxnodes=2  scaledowncputhresh=50
 
