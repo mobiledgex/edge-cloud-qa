@@ -14,6 +14,8 @@ import clusterinst_pb2
 import clusterinst_pb2_grpc
 import cloudlet_pb2
 import cloudlet_pb2_grpc
+import cloudletkey_pb2
+import cloudletkey_pb2_grpc
 #import operator_pb2
 #import operator_pb2_grpc
 import flavor_pb2
@@ -388,7 +390,7 @@ class ClusterInstance():
         if self.cluster_name:
             clusterinst_key_dict['cluster_key'] = cluster_pb2.ClusterKey(name = self.cluster_name)
         if cloudlet_key_dict:
-            clusterinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
+            clusterinst_key_dict['cloudlet_key'] = cloudletkey_pb2.CloudletKey(**cloudlet_key_dict)
         if self.developer_org_name is not None:
             clusterinst_key_dict['organization'] = self.developer_org_name
 
@@ -498,10 +500,15 @@ class Cloudlet():
         self.platform_type = platform_type
         self.physical_name = physical_name
         
-        print('*WARN*', vars(loc_pb2.Loc))
+        print('*WARN*', vars(cloudlet_pb2.Cloudlet))
+        print('*WARN*', vars(cloudletkey_pb2.CloudletKey))
+        print('*WARN*',cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER)
+        print('*WARN*',cloudletkey_pb2.CloudletKey.ORGANIZATION_FIELD_NUMBER)
+        print('*WARN*', dir(cloudlet_pb2.Cloudlet))
+
         # used for UpdateCloudelet - hardcoded from proto
-        self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.ORGANIZATION_FIELD_NUMBER) #+ '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
-        self._cloudlet_name_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.NAME_FIELD_NUMBER)
+        self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudletkey_pb2.CloudletKey.ORGANIZATION_FIELD_NUMBER) #+ '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
+        self._cloudlet_name_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudletkey_pb2.CloudletKey.NAME_FIELD_NUMBER)
         #self._cloudlet_accesscredentials_field = str(cloudlet_pb2.Cloudlet.ACCESS_CREDENTIALS_FIELD_NUMBER)
         self._cloudlet_latitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LATITUDE_FIELD_NUMBER)
         self._cloudlet_longitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LONGITUDE_FIELD_NUMBER)
@@ -584,7 +591,7 @@ class Cloudlet():
         if loc_dict is not None:
             cloudlet_dict['location'] = loc_pb2.Loc(**loc_dict)
         if cloudlet_key_dict is not None:
-            cloudlet_dict['key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
+            cloudlet_dict['key'] = cloudletkey_pb2.CloudletKey(**cloudlet_key_dict)
         if self.number_of_dynamic_ips is not None:
             cloudlet_dict['num_dynamic_ips'] = int(self.number_of_dynamic_ips)
             _fields_list.append(self._cloudlet_numdynamicips_field)
@@ -959,7 +966,7 @@ class AppInstance():
         if self.operator_org_name is not None:
             cloudlet_key_dict['organization'] = self.operator_org_name
         if cloudlet_key_dict:
-            clusterinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
+            clusterinst_key_dict['cloudlet_key'] = cloudletkey_pb2.CloudletKey(**cloudlet_key_dict)
         if cluster_key_dict:
             clusterinst_key_dict['cluster_key'] = cluster_pb2.ClusterKey(**cluster_key_dict)
         if self.cluster_developer_org_name is not None:
@@ -976,7 +983,7 @@ class AppInstance():
         if clusterinst_key_dict:
             appinst_key_dict['cluster_inst_key'] = appinst_pb2.VirtualClusterInstKey(**clusterinst_key_dict)
         #if cloudlet_key_dict:
-        #    appinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict) 
+        #    appinst_key_dict['cloudlet_key'] = cloudletkey_pb2.CloudletKey(**cloudlet_key_dict) 
         #if self.appinst_id is not None:
         #    appinst_key_dict['id'] = int(self.appinst_id)
 
@@ -1040,7 +1047,7 @@ class RunCommand():
         if self.operator_name is not None:
             cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
         if cloudlet_key_dict:
-            clusterinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
+            clusterinst_key_dict['cloudlet_key'] = cloudletkey_pb2.CloudletKey(**cloudlet_key_dict)
         if cluster_key_dict:
             clusterinst_key_dict['cluster_key'] = cluster_pb2.ClusterKey(**cluster_key_dict)
         if self.cluster_developer_name is not None:
@@ -2506,8 +2513,8 @@ class MexController(MexGrpc):
     def _build_cluster(self, operator_name, cluster_name, cloud_name, flavor_name):
         operator_key = operator_pb2.OperatorKey(name = operator_name)
         clusterinst_key = clusterinst_pb2.ClusterInstKey(cluster_key = cluster_pb2.ClusterKey(name = cluster_name),
-                                                        cloudlet_key = cloudlet_pb2.CloudletKey(name = cloud_name,
-                                                                                                operator_key = operator_key)
+                                                        cloudlet_key = cloudletkey_pb2.CloudletKey(name = cloud_name,
+                                                                                                   operator_key = operator_key)
                                                        )
         clusterinst = clusterinst_pb2.ClusterInst(
                                                   flavor = clusterflavor_pb2.ClusterFlavorKey(name = flavor_name),
