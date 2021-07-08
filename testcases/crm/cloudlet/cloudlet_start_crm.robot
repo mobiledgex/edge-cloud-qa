@@ -45,7 +45,7 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Hawkins
         [Documentation]  
         ...  do CreateCloudlet to start a CRM on hawkins openstack 
 
-        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_hawkins}  cloudlet_name=${cloudlet_name_openstack_hawkins}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_hawkins}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682
+        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_hawkins}  cloudlet_name=${cloudlet_name_openstack_hawkins}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_hawkins}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  gpudriver_name=nvidia-450  gpudriver_org=GDDT
 
         Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_hawkins}  operator_org_name=${operator_name_openstack_hawkins}  mapping=gpu=${gpu_resource_name}
         Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_hawkins}  tags=pci=t4gpu:1
@@ -65,19 +65,22 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Beacon
         [Documentation]  
         ...  do CreateCloudlet to start a CRM on beacon openstack 
 
-        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_beacon}  cloudlet_name=${cloudlet_name_openstack_beacon}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_beacon}  number_dynamic_ips=254  latitude=52.520007  longitude=13.404954
+        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_beacon}  cloudlet_name=${cloudlet_name_openstack_beacon}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_beacon}  number_dynamic_ips=254  latitude=52.520007  longitude=13.404954  gpudriver_name=nvidia-450  gpudriver_org=GDDT
+
+        Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_beacon}  operator_org_name=${operator_name_openstack_beacon}  mapping=gpu=${gpu_resource_name}
+        Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_beacon}  tags=pci=t4gpu:1
 
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Sunnydale 
         [Documentation]  
         ...  do CreateCloudlet to start a CRM on sunnydale openstack 
 
-        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_sunnydale}  cloudlet_name=${cloudlet_name_openstack_sunnydale}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_sunnydale}  number_dynamic_ips=254  latitude=48.1351253  longitude=11.5819806
+        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_sunnydale}  cloudlet_name=${cloudlet_name_openstack_sunnydale}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_sunnydale}  number_dynamic_ips=254  latitude=48.1351253  longitude=11.5819806  gpudriver_name=nvidia-450  gpudriver_org=GDDT
 
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Fairview 
         [Documentation]
         ...  do CreateCloudlet to start a CRM on fairview openstack
 
-        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_fairview}  cloudlet_name=${cloudlet_name_openstack_fairview}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_fairview}  number_dynamic_ips=254  latitude=50.110922  longitude=8.682127  #env_vars=CLEANUP_ON_FAILURE=no
+        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_fairview}  cloudlet_name=${cloudlet_name_openstack_fairview}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_fairview}  number_dynamic_ips=254  latitude=50.110922  longitude=8.682127  gpudriver_name=nvidia-450  gpudriver_org=GDDT
 
         Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_fairview}  operator_org_name=${operator_name_openstack_fairview}  mapping=gpu=${gpu_resource_name}
         Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_fairview}  tags=pci=t4gpu:1
@@ -86,7 +89,7 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Paradise
         [Documentation]
         ...  do CreateCloudlet to start a CRM on paradise openstack
 
-        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_paradise}  cloudlet_name=${cloudlet_name_openstack_paradise}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_paradise}  number_dynamic_ips=254  latitude=51.2277  longitude=6.7735
+        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_paradise}  cloudlet_name=${cloudlet_name_openstack_paradise}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_paradise}  number_dynamic_ips=254  latitude=51.2277  longitude=6.7735  gpudriver_name=nvidia-450  gpudriver_org=GDDT
 
         Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_paradise}  operator_org_name=${operator_name_openstack_paradise}  mapping=gpu=${gpu_resource_name}
         Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_paradise}  tags=pci=t4gpu:1
