@@ -25,7 +25,7 @@ developer_email = 'dev@dev.com'
 app_name = 'app' + stamp
 app_version = '1.0'
 access_ports = 'tcp:1'
-qcow_image = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
+qcow_image = 'https://artifactory.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'mex-client.crt'
