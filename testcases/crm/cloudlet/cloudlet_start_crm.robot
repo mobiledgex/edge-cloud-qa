@@ -45,7 +45,7 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Hamburg
         [Documentation]  
         ...  do CreateCloudlet to start a CRM on hamburg openstack 
 
-        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_hamburg}  cloudlet_name=${cloudlet_name_openstack_hamburg}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_hamburg}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682
+        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_hamburg}  cloudlet_name=${cloudlet_name_openstack_hamburg}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_hamburg}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  gpudriver_name=nvidia-450  gpudriver_org=TDG
 
         Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_hamburg}  operator_org_name=${operator_name_openstack_hamburg}  mapping=gpu=${gpu_resource_name}
         Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_hamburg}  tags=pci=t4gpu:1
@@ -65,19 +65,22 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Berlin
         [Documentation]  
         ...  do CreateCloudlet to start a CRM on berlin openstack 
 
-        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_berlin}  cloudlet_name=${cloudlet_name_openstack_berlin}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_berlin}  number_dynamic_ips=254  latitude=52.520007  longitude=13.404954
+        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_berlin}  cloudlet_name=${cloudlet_name_openstack_berlin}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_berlin}  number_dynamic_ips=254  latitude=52.520007  longitude=13.404954  gpudriver_name=nvidia-450  gpudriver_org=TDG
+
+        Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_berlin}  operator_org_name=${operator_name_openstack_berlin}  mapping=gpu=${gpu_resource_name}
+        Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_berlin}  tags=pci=t4gpu:1
 
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Munich 
         [Documentation]  
         ...  do CreateCloudlet to start a CRM on munich openstack 
 
-        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_munich}  cloudlet_name=${cloudlet_name_openstack_munich}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_munich}  number_dynamic_ips=254  latitude=48.1351253  longitude=11.5819806
+        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_munich}  cloudlet_name=${cloudlet_name_openstack_munich}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_munich}  number_dynamic_ips=254  latitude=48.1351253  longitude=11.5819806  gpudriver_name=nvidia-450  gpudriver_org=TDG
 
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Frankfurt 
         [Documentation]
         ...  do CreateCloudlet to start a CRM on frankfurt openstack
 
-        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_frankfurt}  cloudlet_name=${cloudlet_name_openstack_frankfurt}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_frankfurt}  number_dynamic_ips=254  latitude=50.110922  longitude=8.682127  #env_vars=CLEANUP_ON_FAILURE=no
+        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_frankfurt}  cloudlet_name=${cloudlet_name_openstack_frankfurt}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_frankfurt}  number_dynamic_ips=254  latitude=50.110922  longitude=8.682127  gpudriver_name=nvidia-450  gpudriver_org=TDG
 
         Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_frankfurt}  operator_org_name=${operator_name_openstack_frankfurt}  mapping=gpu=${gpu_resource_name}
         Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_frankfurt}  tags=pci=t4gpu:1
@@ -86,7 +89,7 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Dusseldorf
         [Documentation]
         ...  do CreateCloudlet to start a CRM on dusseldorf openstack
 
-        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_dusseldorf}  cloudlet_name=${cloudlet_name_openstack_dusseldorf}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_dusseldorf}  number_dynamic_ips=254  latitude=51.2277  longitude=6.7735
+        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_dusseldorf}  cloudlet_name=${cloudlet_name_openstack_dusseldorf}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_dusseldorf}  number_dynamic_ips=254  latitude=51.2277  longitude=6.7735  gpudriver_name=nvidia-450  gpudriver_org=TDG
 
         Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_dusseldorf}  operator_org_name=${operator_name_openstack_dusseldorf}  mapping=gpu=${gpu_resource_name}
         Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_dusseldorf}  tags=pci=t4gpu:1
