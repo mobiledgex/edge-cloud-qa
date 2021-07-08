@@ -21,7 +21,7 @@ controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001
 access_ports = 'tcp:1'
 stamp = str(time.time())
 flavor_name = 'x1.small' + stamp
-qcow_image = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
+qcow_image = 'https://artifactory.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'mex-client.crt'

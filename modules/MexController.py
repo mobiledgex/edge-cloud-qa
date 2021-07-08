@@ -730,7 +730,7 @@ class App():
                 #self.image_type = 1
             elif self.image_type == 'imagetypeqcow':
                 if self.image_path is None:
-                    self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
+                    self.image_path = 'https://artifactory.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d'
                 #self.image_type = 2
 
         print('*WARN*', self.image_type)
