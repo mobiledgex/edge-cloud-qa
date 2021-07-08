@@ -15,7 +15,7 @@ ${qcow_centos_image_dummy}  https://artifactory-qa.mobiledgex.net/artifactory/re
 ${docker_image}  docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded_dummy:1.0
 ${manifest}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml 
 ${manifest_different_ports}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_different_ports.yml
-${manifest_artifactory_invalid}  https://artifactory-qa.mobiledgex.net/artifactory/epo-org1588686922/postgres_redis_compose.zip
+${manifest_artifactory_invalid}  https://artifactory.mobiledgex.net/artifactory/epo-org1588686922/postgres_redis_compose.zip
 ${manifest_clusterip}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_clusterip.yml
 ${manifest_iav}  http://35.199.188.102/apps/automation_iav_customer_manifest.yml
 
