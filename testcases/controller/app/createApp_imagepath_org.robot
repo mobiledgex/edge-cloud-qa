@@ -78,10 +78,10 @@ CreateApp - shall be to create with image_type=ImageTypeQcow deployment=vm and o
 
     ${orgname}=  Get Default Organization Name
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  region=${region}  developer_org_name=${orgname}  image_type=ImageTypeQcow  deployment=vm  image_path=https://artifactory-qa.mobiledgex.net/artifactory/repo-${orgname}/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  region=${region}  developer_org_name=${orgname}  image_type=ImageTypeQcow  deployment=vm  image_path=https://artifactory.mobiledgex.net/artifactory/repo-${orgname}/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d
 
     Should Contain  ${error_msg}  code=400
-    Should Contain  ${error_msg}  error={"message":"Failed to validate VM registry image, path https://artifactory-qa.mobiledgex.net/artifactory/repo-${orgname}/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d, Invalid URL: https://artifactory-qa.mobiledgex.net/artifactory/repo-${orgname}/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d, Not Found"}
+    Should Contain  ${error_msg}  error={"message":"Failed to validate VM registry image, path https://artifactory.mobiledgex.net/artifactory/repo-${orgname}/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d, Invalid URL: https://artifactory.mobiledgex.net/artifactory/repo-${orgname}/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d, Not Found"}
 
 *** Keywords ***
 Setup
