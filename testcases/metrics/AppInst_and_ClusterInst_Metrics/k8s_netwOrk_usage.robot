@@ -127,16 +127,17 @@ Network Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal  ${reading[1]}  ${app_name_influx}
-   \  Should Be Equal  ${reading[2]}  v1
-   \  Should Be Equal  ${reading[3]}  ${clustername_k8sdedicated}
-   \  Should Be Equal  ${reading[4]}  ${developer_name}
-   \  Should Be Equal  ${reading[5]}  ${cloudlet_name_openstack_metrics}
-   \  Should Be Equal  ${reading[6]}  ${operator}
-   \  Should Be Equal  ${reading[7]}  ${developer_name}
+    FOR  ${reading}  IN  @{values}
+      Should Be Equal  ${reading[1]}  ${app_name_influx}
+      Should Be Equal  ${reading[2]}  v1
+      Should Be Equal  ${reading[3]}  ${clustername_k8sdedicated}
+      Should Be Equal  ${reading[4]}  ${developer_name}
+      Should Be Equal  ${reading[5]}  ${cloudlet_name_openstack_metrics}
+      Should Be Equal  ${reading[6]}  ${operator}
+      Should Be Equal  ${reading[7]}  ${developer_name}
 
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
+      Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
+    END
 
 Network Should Have Received Data
    [Arguments]  ${metrics}
@@ -172,8 +173,9 @@ Metrics Should Match Influxdb
    log to console  ${metrics_influx_t}
 
    ${index}=  Set Variable  0
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['sendBytes']}  ${reading[9]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['recvBytes']}  ${reading[10]}
-   \  ${index}=  Evaluate  ${index}+1
+     FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+      Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+      Should Be Equal  ${metrics_influx_t[${index}]['sendBytes']}  ${reading[9]}
+      Should Be Equal  ${metrics_influx_t[${index}]['recvBytes']}  ${reading[10]}
+      ${index}=  Evaluate  ${index}+1
+     END
