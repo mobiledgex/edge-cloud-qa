@@ -112,18 +112,18 @@ CPU Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal  ${reading[1]}  ${app_name_influx}
-   \  Should Be Equal  ${reading[2]}  v1
-   \  Should Be Equal  ${reading[3]}  ${clustername_k8sdedicated}
-   \  Should Be Equal  ${reading[4]}  ${developer_name}
-   \  Should Be Equal  ${reading[5]}  ${cloudlet_name_openstack_metrics}
-   \  Should Be Equal  ${reading[6]}  ${operator}
-   \  Should Be Equal  ${reading[7]}  ${developer_name}
+    FOR  ${reading}  IN  @{values}
+      Should Be Equal  ${reading[1]}  ${app_name_influx}
+      Should Be Equal  ${reading[2]}  v1
+      Should Be Equal  ${reading[3]}  ${clustername_k8sdedicated}
+      Should Be Equal  ${reading[4]}  ${developer_name}
+      Should Be Equal  ${reading[5]}  ${cloudlet_name_openstack_metrics}
+      Should Be Equal  ${reading[6]}  ${operator}
+      Should Be Equal  ${reading[7]}  ${developer_name}
 #   \  Should Be Equal  ${reading[8]}  ${pod}
 
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100
-
+      Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100
+    END
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
 
@@ -142,8 +142,9 @@ Metrics Should Match Influxdb
    log to console  ${metrics_influx_t}
 
    ${index}=  Set Variable  0
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['cpu']}  ${reading[9]}
+    FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+      Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+      Should Be Equal  ${metrics_influx_t[${index}]['cpu']}  ${reading[9]}
 
-   \  ${index}=  Evaluate  ${index}+1
+      ${index}=  Evaluate  ${index}+1
+    END
