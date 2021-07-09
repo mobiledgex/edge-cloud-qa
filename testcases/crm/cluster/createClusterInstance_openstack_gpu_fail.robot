@@ -31,7 +31,7 @@ GPU - CreateClusterInst shall fail if gpu=0
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
 
-   Create Flavor  region=${region}  flavor_name=${flavor_name}  disk=80  optional_resources=gpu=gpu:0
+   Create Flavor  region=${region}  flavor_name=${flavor_name}  disk=80  optional_resources=gpu=pci:0
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker
 
