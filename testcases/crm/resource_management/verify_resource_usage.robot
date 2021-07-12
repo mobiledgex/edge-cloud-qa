@@ -61,9 +61,9 @@ Controller throws proper error and displays correct resource usage/metrics data 
    Verify Resource Usage  2  8192  4
  
    ${resourceusage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-   ${default_instances}=  Set Variable  ${resourceusage[0]['info'][2]['value']}
-   ${default_ram}=        Set Variable  ${resourceusage[0]['info'][3]['value']}
-   ${default_vcpus}=      Set Variable  ${resourceusage[0]['info'][4]['value']}
+   ${default_instances}=  Set Variable  ${resourceusage[0]['info'][3]['value']}
+   ${default_ram}=        Set Variable  ${resourceusage[0]['info'][4]['value']}
+   ${default_vcpus}=      Set Variable  ${resourceusage[0]['info'][5]['value']}
    Set Suite Variable  ${default_instances}
    Set Suite Variable  ${default_ram}
    Set Suite Variable  ${default_vcpus}
@@ -76,7 +76,7 @@ Controller throws proper error and displays correct resource usage/metrics data 
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][0]['status']}  ACTIVE
    Dictionary Should Contain Key  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][0]['ipaddresses'][0]}   externalIp
    
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][1]['name']}  ${cloudlet_name}.${operator_name_openstack_packet}.mobiledgex.net
+   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][1]['name']}  shared.${cloudlet_name}.${operator_name_openstack_packet}.mobiledgex.net
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][1]['type']}  rootlb
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][1]['status']}  ACTIVE
    Dictionary Should Contain Key  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][1]['ipaddresses'][0]}   externalIp
@@ -293,9 +293,9 @@ Verify Resource Usage
    [Arguments]   ${instances}  ${ram}  ${vcpu}
 
    ${resourceusage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['value']}  ${instances}       #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${ram}             #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${vcpu}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${instances}       #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${ram}             #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${vcpu}            #vCPUs
 
 Cloudlet Update
    [Arguments]  ${ram}  ${vcpu}  ${instances}

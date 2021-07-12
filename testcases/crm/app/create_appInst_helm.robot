@@ -127,7 +127,7 @@ User shall be able to create an app instance on openstack with deployment=helm a
 Setup
     Create Flavor  region=${region}
 
-    ${rootlb_shared}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb_shared}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb_shared}=  Convert To Lowercase  ${rootlb_shared}
 
     ${rootlb_dedicated}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
