@@ -187,6 +187,17 @@ ClientApiUsageMetrics - get with invalid start/end age shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_age=x  end_age=2019-09  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.startage of type time.Duration"}')
 
+# ECQ-3602
+ClientApiUsageMetrics - get with start age newer than end age shall return error
+   [Documentation]
+   ...  - get clientapiusage metrics with start age newer than /end age
+   ...  - verify error
+
+   #  EDGECLOUD-5269 - metrics request with startage lower than endage gives incorrect error
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=api  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  start_age=2  end_age=3  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxx Start time must be before (older than) end time"}')
+
 # ECQ-3593
 ClientApiUsageMetrics - get with invalid limit shall return error
    [Documentation]
