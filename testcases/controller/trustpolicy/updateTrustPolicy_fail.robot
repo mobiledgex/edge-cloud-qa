@@ -305,7 +305,7 @@ UpdateTrustPolicy - update with trust policy and maintenance mode shall return e
 
    ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   Should Be Equal             ${cloudlet['data']['trust_policy_state']}  Ready
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot change both maintenance state and trust policy at the same time"}')  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  trust_policy=${cloudlet['data']['trust_policy']}  maintenance_state=MaintenanceStart  use_defaults=False
 
@@ -355,7 +355,7 @@ UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mi
    # create cloudlet with trust policy
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_name}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   Should Be Equal             ${cloudlet['data']['trust_policy_state']}  Ready
 
    # add appinst on the cloudlet
    &{rule1}=  Create Dictionary  protocol=udp  port=1001  remote_ip=3.1.1.1
