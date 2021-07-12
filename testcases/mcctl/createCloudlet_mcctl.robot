@@ -185,16 +185,16 @@ Success Update/Show Cloudlet Via mcctl
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['cloudlet']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['cloudlet-org']}
-   Should Be Equal As Numbers  ${show[0]['state']}                  5
+   Should Be Equal  ${show[0]['state']}                  Ready
 
    IF  'trustpolicy' in ${parms}
       IF  '${parms['trustpolicy']}' != '${Empty}'
          Should Be Equal  ${show[0]['trust_policy']}  ${parms['trustpolicy']}
-         Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  5
+         Should Be Equal  ${show[0]['trust_policy_state']}  Ready
       END
    ELSE
       Should Not Contain  ${show[0]}  trust_policy
-      Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  1
+      Should Be Equal  ${show[0]['trust_policy_state']}  NotPresent
    END
 
    IF  'kafkacluster' in ${parms}
