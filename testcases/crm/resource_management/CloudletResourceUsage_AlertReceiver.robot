@@ -75,11 +75,11 @@ AlertReceiver - shall be able to create/receive email/slack CloudletResourceUsag
    Log To Console  Done Creating Cluster Instance
    Verify Resource Usage  4  14336  8  CurrentUsage
 
-   Alert Receiver Email For Firing CloudletResourceUsage Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  wait=${email_wait}  description=More than 75% of RAM is used
-   Alert Receiver Slack Message For Firing CloudletResourceUsage Should Be Received  region=${region}  alert_receiver_name=${recv_name}_2  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_openstack}  wait=120  description=More than 75% of RAM is used
+   Alert Receiver Email For Firing CloudletResourceUsage Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  wait=${email_wait}  description=More than 75% of RAM is used by the cloudlet
+   Alert Receiver Slack Message For Firing CloudletResourceUsage Should Be Received  region=${region}  alert_receiver_name=${recv_name}_2  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_openstack}  wait=120  description=More than 75% of RAM is used by the cloudlet
 
    #Verify Soft Alert
-   ${alert1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 75% of RAM is used  token=${op_token}
+   ${alert1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 75% of RAM is used by the cloudlet  token=${op_token}
    Should Not Be Empty  ${alert1[0]['data']}
 
    &{resource1}=  Create Dictionary  name=vCPUs  value=8    alert_threshold=80
@@ -87,10 +87,10 @@ AlertReceiver - shall be able to create/receive email/slack CloudletResourceUsag
 
    Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${op_token}
 
-   Alert Receiver Email For Firing CloudletResourceUsage Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  wait=${email_wait}  description=More than 80% of vCPUs is used
-   Alert Receiver Slack Message For Firing CloudletResourceUsage Should Be Received  region=${region}  alert_receiver_name=${recv_name}_2  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_openstack}  wait=120  description=More than 80% of vCPUs is used
+   Alert Receiver Email For Firing CloudletResourceUsage Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  wait=${email_wait}  description=More than 80% of vCPUs is used by the cloudlet
+   Alert Receiver Slack Message For Firing CloudletResourceUsage Should Be Received  region=${region}  alert_receiver_name=${recv_name}_2  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_openstack}  wait=120  description=More than 80% of vCPUs is used by the cloudlet
 
-   ${alert2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 80% of vCPUs is used  token=${op_token}
+   ${alert2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 80% of vCPUs is used by the cloudlet  token=${op_token}
    Should Not Be Empty  ${alert2[0]['data']}
 
    &{resource1}=  Create Dictionary  name=Instances  value=4  alert_threshold=90
@@ -98,10 +98,10 @@ AlertReceiver - shall be able to create/receive email/slack CloudletResourceUsag
 
    Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${op_token}
 
-   Alert Receiver Email For Firing CloudletResourceUsage Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  wait=${email_wait}  description=More than 90% of Instances is used
-   Alert Receiver Slack Message For Firing CloudletResourceUsage Should Be Received  region=${region}  alert_receiver_name=${recv_name}_2  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_openstack}  wait=120  description=More than 90% of Instances is used
+   Alert Receiver Email For Firing CloudletResourceUsage Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  wait=${email_wait}  description=More than 90% of Instances is used by the cloudlet
+   Alert Receiver Slack Message For Firing CloudletResourceUsage Should Be Received  region=${region}  alert_receiver_name=${recv_name}_2  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_openstack}  wait=120  description=More than 90% of Instances is used by the cloudlet
 
-   ${alert4}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 90% of Instances is used  token=${op_token}
+   ${alert4}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 90% of Instances is used by the cloudlet  token=${op_token}
    Should Not Be Empty  ${alert4[0]['data']}
 
 
@@ -141,15 +141,15 @@ Verify Current Usage
    [Arguments]  ${resourcelist}  ${resourceusage}
 
    #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['value']}  ${resourcelist[0]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[1]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[2]}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${resourcelist[2]}            #vCPUs
 
 Verify Quota Limits
    [Arguments]  ${resourcelist}  ${resourceusage}
 
    #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['quota_max_value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['quota_max_value']}  ${resourcelist[0]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[1]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[2]}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['quota_max_value']}  ${resourcelist[2]}            #vCPUs
 

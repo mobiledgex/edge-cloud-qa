@@ -22,7 +22,7 @@ ${operator_name_openstack}  GDDT
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${rootlb}          automationhawkinscloudlet.gddt.mobiledgex.net
+${rootlb}          shared.automationhawkinscloudlet.gddt.mobiledgex.net
 
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
