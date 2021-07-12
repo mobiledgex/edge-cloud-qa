@@ -159,16 +159,20 @@ CreateApp - serverless apps with invalid config options shall fail
    [Tags]  Serverless
 
    ${error1}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  developer_org_name=${developer_org_name}  app_version=1.0  allow_serverless=${True}  serverless_config_vcpus=1  serverless_config_ram=-1  serverless_config_min_replicas=1
-   Should Contain  ${error1}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint64, got=number -1, field=App.serverless_config.ram, offset=
+   #Should Contain  ${error1}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint64, got=number -1, field=App.serverless_config.ram, offset=
+   Should Contain  ${error1}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal number -1 into Go struct field ServerlessConfig.App.serverless_config.ram of type uint64
 
    ${error2}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  developer_org_name=${developer_org_name}  app_version=1.0  allow_serverless=${True}  serverless_config_vcpus=1  serverless_config_ram=1  serverless_config_min_replicas=-1
-   Should Contain  ${error2}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -1, field=App.serverless_config.min_replicas, offset=
+   #Should Contain  ${error2}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -1, field=App.serverless_config.min_replicas, offset=
+   Should Contain  ${error2}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal number -1 into Go struct field ServerlessConfig.App.serverless_config.min_replicas of type uint32
 
    ${error3}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  developer_org_name=${developer_org_name}  app_version=1.0  allow_serverless=${True}  serverless_config_vcpus=-1  serverless_config_ram=-1  serverless_config_min_replicas=-1
-   Should Contain  ${error3}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint64, got=number -1, field=App.serverless_config.ram, offset=
+   #Should Contain  ${error3}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint64, got=number -1, field=App.serverless_config.ram, offset=
+   Should Contain  ${error3}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal number -1 into Go struct field ServerlessConfig.App.serverless_config.ram of type uint64
 
    ${error4}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  developer_org_name=${developer_org_name}  app_version=1.0  allow_serverless=${True}  serverless_config_vcpus=x  serverless_config_ram=x  serverless_config_min_replicas=x
-   Should Contain  ${error4}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=float32, got=string, field=App.serverless_config.vcpus, offset
+   #Should Contain  ${error4}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=float32, got=string, field=App.serverless_config.vcpus, offset
+   Should Contain  ${error3}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal number -1 into Go struct field ServerlessConfig.App.serverless_config.ram of type uint64
 
 *** Keywords ***
 Setup
