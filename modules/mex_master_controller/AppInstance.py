@@ -168,28 +168,39 @@ class AppInstance(MexOperation):
 
         return appinst_dict
 
-    def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, last=None, start_time=None, end_time=None, raw_data=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, use_defaults=True):
+    def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, limit=None, number_samples=None, start_time=None, end_time=None, start_age=None, end_age=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, use_defaults=True):
         metric_dict = {}
+
+        if use_defaults:
+            if not selector:
+                selector = 'api'
 
         if type_dict is not None:
             metric_dict.update(type_dict)
         if selector is not None:
             metric_dict['selector'] = selector
-        if last is not None:
+        if limit is not None:
             try:
-                metric_dict['last'] = int(last)
+                metric_dict['limit'] = int(limit)
             except ValueError:
-                metric_dict['last'] = last
+                metric_dict['limit'] = limit
+        if number_samples is not None:
+            try:
+                metric_dict['numsamples'] = int(number_samples)
+            except ValueError:
+                metric_dict['numsamples'] = number_samples
         if start_time is not None:
             metric_dict['starttime'] = start_time
         if end_time is not None:
             metric_dict['endtime'] = end_time
+        if start_age is not None:
+            metric_dict['startage'] = start_age
+        if end_age is not None:
+            metric_dict['endage'] = end_age
         if method is not None:
             metric_dict['method'] = method
         if cell_id is not None:
             metric_dict['cellid'] = int(cell_id)
-        if raw_data is not None:
-            metric_dict['rawdata'] = raw_data
         if device_os is not None:
             metric_dict['deviceos'] = device_os
         if device_model is not None:
@@ -300,25 +311,25 @@ class AppInstance(MexOperation):
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, stream=stream, stream_timeout=stream_timeout)
 
-    def get_api_metrics(self, method, token=None, region=None, app_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+    def get_api_metrics(self, method, token=None, region=None, app_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, app_version=None, selector=None, limit=None, number_samples=None, start_time=None, end_time=None, start_age=None, end_age=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
         app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
         app_inst_metric = app_inst
         if 'key' in app_inst:
             app_inst_metric['appinst'] = app_inst['key']
             del app_inst_metric['key']
 
-        msg_dict = self._build_metrics(type_dict=app_inst_metric, method=method, cell_id=cell_id, selector='api', last=last, start_time=start_time, end_time=end_time)
+        msg_dict = self._build_metrics(type_dict=app_inst_metric, method=method, cell_id=cell_id, selector=selector, limit=limit, number_samples=number_samples, start_time=start_time, end_time=end_time, start_age=start_age, end_age=end_age, use_defaults=use_defaults)
 
         return self.show(token=token, url=self.metrics_client_api_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
-    def get_client_app_metrics(self, method, token=None, region=None, app_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, raw_data=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
+    def get_client_app_metrics(self, method, token=None, region=None, app_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, app_version=None, selector=None, limit=None, number_samples=None, start_time=None, end_time=None, start_age=None, end_age=None, cell_id=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
         app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
         app_inst_metric = app_inst
         if 'key' in app_inst:
             app_inst_metric['appinst'] = app_inst['key']
             del app_inst_metric['key']
 
-        msg_dict = self._build_metrics(type_dict=app_inst_metric, method=method, cell_id=cell_id, selector=selector, last=last, start_time=start_time, end_time=end_time, raw_data=raw_data, location_tile=location_tile, device_os=device_os, device_model=device_model, data_network_type=data_network_type)
+        msg_dict = self._build_metrics(type_dict=app_inst_metric, method=method, cell_id=cell_id, selector=selector, limit=limit, number_samples=number_samples, start_time=start_time, end_time=end_time, start_age=start_age, end_age=end_age, location_tile=location_tile, device_os=device_os, device_model=device_model, data_network_type=data_network_type)
 
         return self.show(token=token, url=self.metrics_client_app_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
