@@ -56,7 +56,8 @@ User shall be able to create an app instance on openstack with a dot in the app 
     ${app_name_nodot}=    Catenate  SEPARATOR=  app  ${epoch_time}  ${version}  -udp.
 
     # verify dot is gone
-    Should Be Equal     ${app_name_nodot}  ${cloudlet.ports[0].fqdn_prefix}
+    #Should Be Equal     ${app_name_nodot}  ${cloudlet.ports[0].fqdn_prefix}
+    Should Be Equal      ${cloudlet.fqdn}   shared.${rootlb}
 
     #Log To Console  Waiting for k8s pod to be running
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name}

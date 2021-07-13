@@ -140,14 +140,12 @@ CreateTrustPolicy - create with invalid minport shall return error
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=x  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
    ${error}=  Run Keyword and Expect Error  *   Create Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
-   #Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=string, field=TrustPolicy.outbound_security_rules.port_range_min, offset
-   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field SecurityRule.TrustPolicy.outbound_security_rules.port_range_min of type uint32
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=string, field=TrustPolicy.outbound_security_rules.port_range_min, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=-1  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
    ${error}=  Run Keyword and Expect Error  *  Create Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
-   #Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=number -1, field=TrustPolicy.outbound_security_rules.port_range_min, offset
-   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal number -1 into Go struct field SecurityRule.TrustPolicy.outbound_security_rules.port_range_min of type uint32
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=number -1, field=TrustPolicy.outbound_security_rules.port_range_min, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=65536  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
@@ -164,14 +162,12 @@ CreateTrustPolicy - create with invalid maxport shall return error
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=x  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
    ${error}=  Run Keyword and Expect Error  *  Create Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
-   #Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=string, field=TrustPolicy.outbound_security_rules.port_range_max, offset
-   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field SecurityRule.TrustPolicy.outbound_security_rules.port_range_max of type uint32
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=string, field=TrustPolicy.outbound_security_rules.port_range_max, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=-1  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
    ${error}=  Run Keyword and Expect Error  *  Create Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
-   #Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=number -1, field=TrustPolicy.outbound_security_rules.port_range_max, offset
-   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal number -1 into Go struct field SecurityRule.TrustPolicy.outbound_security_rules.port_range_max of type uint32
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=uint32, got=number -1, field=TrustPolicy.outbound_security_rules.port_range_max, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=65536  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
