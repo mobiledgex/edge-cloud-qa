@@ -76,7 +76,7 @@ Controller throws proper error and displays correct resource usage/metrics data 
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][0]['status']}  ACTIVE
    Dictionary Should Contain Key  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][0]['ipaddresses'][0]}   externalIp
    
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][1]['name']}  shared.${cloudlet_name}.${operator_name_openstack_packet}.mobiledgex.net
+   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][1]['name']}  ${cloudlet_name}.${operator_name_openstack_packet}.mobiledgex.net
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][1]['type']}  rootlb
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][1]['status']}  ACTIVE
    Dictionary Should Contain Key  ${cloudlet_info[0]['data']['resources_snapshot']['platform_vms'][1]['ipaddresses'][0]}   externalIp
