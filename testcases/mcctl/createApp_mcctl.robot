@@ -12,7 +12,7 @@ Test Timeout  10m
 
 *** Variables ***
 ${region}=  US
-${developer}=  MobiledgeX
+${developer}=  ${developer_org_name_automation}
 ${manifest_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml
 ${server_ping_threaded_cloudconfig}  http://35.199.188.102/apps/server_ping_threaded_cloudconfig.yml
 ${manifest_string}=  apiVersion: v1\nkind: Service\nmetadata:\n  name: server-ping-threaded-udptcphttp-tcpservice\n  labels:\n    run: server-ping-threaded-udptcphttpapp\nspec:\n  type: LoadBalancer\n  ports:\n  - port: 2016\n    targetPort: 2016\n    protocol: TCP\n    name: tcp2016\n  selector:\n    run: server-ping-threaded-udptcphttpapp
@@ -128,11 +128,11 @@ CreateApp - mcctl shall handle create failures
       Error: Bad Request (400), Unknown image type IMAGE_TYPE_UNKNOWN  appname=${app_name}  app-org=${developer}  appvers=1.0
 
       # autoprovpolicies
-      Error: Bad Request (400), Policy key {"organization":"MobiledgeX","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}  autoprovpolicies=x
-      Error: Bad Request (400), Policy key {"organization":"MobiledgeX","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  autoprovpolicies=x
-      Error: Bad Request (400), Policy key {"organization":"MobiledgeX","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker   deployment=docker  imagepath=${docker_image}  autoprovpolicies=x
-      Error: Bad Request (400), Policy key {"organization":"MobiledgeX","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  autoprovpolicies=x
-      Error: Bad Request (400), Policy key {"organization":"MobiledgeX"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}  autoprovpolicies=
+      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}  autoprovpolicies=x
+      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  autoprovpolicies=x
+      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker   deployment=docker  imagepath=${docker_image}  autoprovpolicies=x
+      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  autoprovpolicies=x
+      Error: Bad Request (400), Policy key {"organization":"${developer}"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}  autoprovpolicies=
 
       # authpublickey
       Error: Bad Request (400), Failed to parse public key: ssh: no key found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}  authpublickey=x
@@ -254,6 +254,9 @@ UpdateApp - mcctl shall handle update app
       appname=${app_name_docker}  app-org=${developer}  appvers=1.0  requiredoutboundconnections:0.protocol=udp  requiredoutboundconnections:0.port=1  requiredoutboundconnections:0.remoteip=1.1.1.1
       appname=${app_name_helm}  app-org=${developer}  appvers=1.0  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:1.protocol=tcp  requiredoutboundconnections:1.port=1  requiredoutboundconnections:1.remoteip=1.1.1.1
       appname=${app_name_vm}  app-org=${developer}  appvers=1.0  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.port=10  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:1.protocol=tcp  requiredoutboundconnections:1.port=1  requiredoutboundconnections:1.remoteip=1.1.1.1
+
+      appname=${app_name_k8s}  app-org=${developer}  appvers=1.0  autoprovpolicies=${autoprovpolicy_name}
+      appname=${app_name_k8s}  app-org=${developer}  appvers=1.0  autoprovpolicies:empty=true
  
 *** Keywords ***
 Setup
@@ -289,9 +292,9 @@ Success Create/Show/Delete App Via mcctl
    Should Be Equal  ${show[0]['key']['version']}  ${parms['appvers']}
    Should Be Equal  ${show[0]['image_path']}  ${parms['imagepath']}
 
-   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal As Integers  ${show[0]['image_type']}  1 
-   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal As Integers  ${show[0]['image_type']}  2
-   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal As Integers  ${show[0]['image_type']}  3
+   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal  ${show[0]['image_type']}  ImageTypeDocker 
+   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal  ${show[0]['image_type']}  ImageTypeQcow
+   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal  ${show[0]['image_type']}  ImageTypeHelm
 
    Run Keyword If  'deployment' in ${parms}  Should Be Equal  ${show[0]['deployment']}  ${parms['deployment']}
 
@@ -300,10 +303,10 @@ Success Create/Show/Delete App Via mcctl
    Run Keyword If  'deployment' not in ${parms} and '${parms['imagetype']}' == 'ImageTypeQcow'    Should Be Equal  ${show[0]['deployment']}  vm
  
 
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal As Integers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'helm'        Should Be Equal As Integers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal As Integers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'docker'      Should Be Equal As Integers  ${show[0]['access_type']}  2
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'helm'        Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'docker'      Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
 
    Run Keyword If  'officialfqdn' in ${parms}  Should Be Equal  ${show[0]['official_fqdn']}  ${parms['officialfqdn']} 
    Run Keyword If  'androidpackagename' in ${parms}  Should Be Equal  ${show[0]['android_package_name']}  ${parms['androidpackagename']}
@@ -358,13 +361,18 @@ Update Setup
    ${app_name_docker}=  Set Variable  ${app_name}_docker
    ${app_name_helm}=  Set Variable  ${app_name}_helm
    ${app_name_vm}=  Set Variable  ${app_name}_vm
+   ${autoprovpolicy_name}=  Set Variable  ${app_name}_autoprovpolicy
 
    Set Suite Variable  ${app_name_k8s}
    Set Suite Variable  ${app_name_docker}
    Set Suite Variable  ${app_name_vm}
    Set Suite Variable  ${app_name_helm}
+   Set Suite Variable  ${autoprovpolicy_name}
 
-   Run mcctl  app create region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=kubernetes imagepath=${docker_image}  version=${version}
+   Run mcctl  autoprovpolicy create region=${region} name=${autoprovpolicy_name}0 app-org=${developer} deployclientcount=1 minactiveinstances=1 cloudlets:0.key.organization=dmuus cloudlets:0.key.name=tmocloud-1
+   Run mcctl  autoprovpolicy create region=${region} name=${autoprovpolicy_name} app-org=${developer} deployclientcount=1 minactiveinstances=1 cloudlets:0.key.organization=dmuus cloudlets:0.key.name=tmocloud-1
+
+   Run mcctl  app create region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=kubernetes imagepath=${docker_image} defaultflavor=automation_api_flavor autoprovpolicies=${autoprovpolicy_name}0  version=${version}
    Run mcctl  app create region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=docker imagepath=${docker_image}  version=${version}
    Run mcctl  app create region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0 imagetype=ImageTypeHelm deployment=helm imagepath=${docker_image}  version=${version}
    Run mcctl  app create region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0 imagetype=ImageTypeQcow deployment=vm imagepath=${qcow_centos_image}  version=${version}
@@ -374,6 +382,8 @@ Update Teardown
    Run mcctl  app delete region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0  version=${version}
    Run mcctl  app delete region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0  version=${version}
    Run mcctl  app delete region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0  version=${version}
+   Run mcctl  autoprovpolicy delete region=${region} name=${autoprovpolicy_name}0 app-org=${developer}  version=${version}
+   Run mcctl  autoprovpolicy delete region=${region} name=${autoprovpolicy_name} app-org=${developer}  version=${version}
 
 Success Update/Show App Via mcctl
    [Arguments]  &{parms}
@@ -390,16 +400,16 @@ Success Update/Show App Via mcctl
 
    Run Keyword If  'imagepath' in ${parms}  Should Be Equal  ${show[0]['image_path']}  ${parms['imagepath']} 
 
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDirect'  Should Be Equal As Numbers  ${show[0]['access_type']}  1
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeLoadBalancer'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'docker'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'helm'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'vm'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDirect'  Should Be Equal  ${show[0]['access_type']}  AccessTypeDirect
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeLoadBalancer'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'docker'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'helm'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'vm'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
 
-   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal As Integers  ${show[0]['image_type']}  1
-   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal As Integers  ${show[0]['image_type']}  2
-   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal As Integers  ${show[0]['image_type']}  3
+   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal  ${show[0]['image_type']}  ImageTypeDocker
+   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal  ${show[0]['image_type']}  ImageTypeQcow
+   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal  ${show[0]['image_type']}  ImageTypeHelm
 
    Run Keyword If  'trusted' in ${parms}  Run Keyword If  ${parms['trusted']} == ${True}  Should Be Equal  ${show[0]['trusted']}  ${True}
    ...  ELSE  Should Not Contain  ${show[0]}  trusted
@@ -414,6 +424,13 @@ Success Update/Show App Via mcctl
    Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][1]}  port
    Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][1]['port']}  ${parms['requiredoutboundconnections:1.port']}
 
+   IF  'autoprovpolicies' in ${parms}
+      Should Be Equal  ${show[0]['auto_prov_policies'][0]}  ${autoprovpolicy_name}
+   END
+   IF  'autoprovpolicies:empty' in ${parms}
+      Should Be True  'auto_prov_policies' not in ${show[0]} 
+   END
+ 
 Fail Create App Via mcctl
    [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
 
