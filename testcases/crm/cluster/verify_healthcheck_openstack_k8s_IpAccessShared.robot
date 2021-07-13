@@ -208,7 +208,7 @@ IpAccessShared k8s - healthcheck shows HealthCheckOk when TCP port with skip_hc 
     ${public_port_0}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][0]['public_port']}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_1}
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  HealthCheckFailServerFail
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
@@ -264,7 +264,7 @@ IpAccessShared k8s - healthcheck shows proper state after UpdateApp
     ${public_port_0}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][0]['public_port']}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_1}
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  HealthCheckFailServerFail
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_0}
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
@@ -296,4 +296,4 @@ Verify Health Check Ok
         Exit For Loop If  '${app_inst[0]['data']['health_check']}' == '${state}'
         Sleep  2s
     END
-    Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   3
+    Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   HealthCheckOk

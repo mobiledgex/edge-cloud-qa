@@ -61,7 +61,8 @@ CreateFlavor - mcctl shall handle create failures
       Error: Bad Request (400), Missing manditory resource count, ex: optresmap\=gpu\=gpu:1                            name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=gpu=vgpu
       Error: Bad Request (400), Invalid optresmap syntax encountered: ex: optresmap\=gpu\=gpu:1                          name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=gpu=gpu:::1
 #      Error: Bad Request (400), GPU resource type selector must be one of [gpu, pci, vgpu] found pu                    name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=gpu=pu:nvidia-63:1    now succeeds and moved to test above
-      Error: value "x" of arg "optresmap\=x" must be formatted as key\=value                                           name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=x
+      #Error: value "x" of arg "optresmap\=x" must be formatted as key\=value                                           name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=x
+      Error: parsing arg "optresmap\=x" failed: value "x" must be formatted as key\=value                               name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=x
       Error: Bad Request (400), Only GPU resources currently supported, use optresmap\=gpu\=$resource:[$specifier:]$count found x   name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=x=x
 
 *** Keywords ***

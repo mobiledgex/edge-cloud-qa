@@ -796,7 +796,7 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlet
 
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  Ready
 
    &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=3001  port_range_maximum=4001  remote_cidr=3.1.1.1/1
    &{rule3}=  Create Dictionary  protocol=tcp  port_range_minimum=3002  port_range_maximum=4002  remote_cidr=3.1.1.1/1
@@ -827,7 +827,7 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlet
 
    ${cloudlet_post}=  Show Cloudlets  region=${region}  operator_org_name=${operator_name_fake}
    Should Be Equal             ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet_post[0]['data']['trust_policy_state']}  5
+   Should Be Equal  ${cloudlet_post[0]['data']['trust_policy_state']}  Ready
 
 # ECQ-3116
 UpdateTrustPolicy - shall be able to update policy in use by multiple cloudlets
@@ -859,15 +859,15 @@ UpdateTrustPolicy - shall be able to update policy in use by multiple cloudlets
 
    ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}-1  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   Should Be Equal   ${cloudlet['data']['trust_policy_state']}  Ready
 
    ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}-2  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   Should Be Equal   ${cloudlet['data']['trust_policy_state']}  Ready
 
    ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}-3  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   Should Be Equal   ${cloudlet['data']['trust_policy_state']}  Ready
 
    &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=3001  port_range_maximum=4001  remote_cidr=3.1.1.1/1
    &{rule3}=  Create Dictionary  protocol=tcp  port_range_minimum=3002  port_range_maximum=4002  remote_cidr=3.1.1.1/1
@@ -898,13 +898,13 @@ UpdateTrustPolicy - shall be able to update policy in use by multiple cloudlets
 
    ${cloudlet_post}=  Show Cloudlets  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}-1  operator_org_name=${operator_name_fake}  use_defaults=${False}
    Should Be Equal             ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet_post[0]['data']['trust_policy_state']}  5
+   Should Be Equal   ${cloudlet_post[0]['data']['trust_policy_state']}  Ready
    ${cloudlet_post}=  Show Cloudlets  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}-2  operator_org_name=${operator_name_fake}  use_defaults=${False}
    Should Be Equal             ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet_post[0]['data']['trust_policy_state']}  5
+   Should Be Equal   ${cloudlet_post[0]['data']['trust_policy_state']}  Ready
    ${cloudlet_post}=  Show Cloudlets  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}-3  operator_org_name=${operator_name_fake}  use_defaults=${False}
    Should Be Equal             ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet_post[0]['data']['trust_policy_state']}  5
+   Should Be Equal   ${cloudlet_post[0]['data']['trust_policy_state']}  Ready
 
 # ECQ-3117
 UpdateTrustPolicy - shall be able to update policy in use by cloudlets in maintenance mode
@@ -937,7 +937,7 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlets in mainte
 
    ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  Ready
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  maintenance_state=MaintenanceStart  use_defaults=False
 
