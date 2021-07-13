@@ -31,11 +31,11 @@ AppInst - user shall be able to add 1 UDP port with same public port
     ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
+    #${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
 
     Length Should Be   ${appInst.mapped_ports}  1
 
@@ -54,57 +54,57 @@ AppInst - user shall be able to add 10 UDP port with same public port
     ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
+    #${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[1].internal_port}  2
     Should Be Equal As Integers  ${appInst.mapped_ports[1].public_port}    2
     Should Be Equal As Integers  ${appInst.mapped_ports[1].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[1].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[1].fqdn_prefix}    ${fqdn_prefix}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[2].internal_port}  3
     Should Be Equal As Integers  ${appInst.mapped_ports[2].public_port}    3
     Should Be Equal As Integers  ${appInst.mapped_ports[2].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[2].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[2].fqdn_prefix}    ${fqdn_prefix}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[3].internal_port}  4
     Should Be Equal As Integers  ${appInst.mapped_ports[3].public_port}    4
     Should Be Equal As Integers  ${appInst.mapped_ports[3].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[3].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[3].fqdn_prefix}    ${fqdn_prefix}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[4].internal_port}  5
     Should Be Equal As Integers  ${appInst.mapped_ports[4].public_port}    5
     Should Be Equal As Integers  ${appInst.mapped_ports[4].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[4].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[4].fqdn_prefix}    ${fqdn_prefix}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[5].internal_port}  6
     Should Be Equal As Integers  ${appInst.mapped_ports[5].public_port}    6
     Should Be Equal As Integers  ${appInst.mapped_ports[5].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[5].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[5].fqdn_prefix}    ${fqdn_prefix}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[6].internal_port}  7
     Should Be Equal As Integers  ${appInst.mapped_ports[6].public_port}    7
     Should Be Equal As Integers  ${appInst.mapped_ports[6].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[6].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[6].fqdn_prefix}    ${fqdn_prefix}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[7].internal_port}  8
     Should Be Equal As Integers  ${appInst.mapped_ports[7].public_port}    8
     Should Be Equal As Integers  ${appInst.mapped_ports[7].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[7].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[7].fqdn_prefix}    ${fqdn_prefix}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[8].internal_port}  9
     Should Be Equal As Integers  ${appInst.mapped_ports[8].public_port}    9
     Should Be Equal As Integers  ${appInst.mapped_ports[8].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[8].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[8].fqdn_prefix}    ${fqdn_prefix}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[9].internal_port}  10
     Should Be Equal As Integers  ${appInst.mapped_ports[9].public_port}    10
     Should Be Equal As Integers  ${appInst.mapped_ports[9].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[9].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[9].fqdn_prefix}    ${fqdn_prefix}
 
     Length Should Be   ${appInst.mapped_ports}  10
 
@@ -125,10 +125,10 @@ AppInst - 2 appInst on different app and same cluster and same cloudlet shall no
     ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
+    #${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
 
     ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  udp  -
+    #${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  udp  -
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=udp:1
@@ -138,14 +138,14 @@ AppInst - 2 appInst on different app and same cluster and same cloudlet shall no
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
+    #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
 # ECQ-1238
@@ -165,10 +165,10 @@ AppInst - 2 appInst on different app and different cluster and same cloudlet sha
     ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
+    #${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
 
     ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  udp  -
+    #${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  udp  -
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=udp:1
@@ -178,14 +178,14 @@ AppInst - 2 appInst on different app and different cluster and same cloudlet sha
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
+    #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
 # ECQ-1239
@@ -205,10 +205,10 @@ AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate 
     ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
+    #${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
 
     ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  udp  -
+    #${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  udp  -
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=udp:1
@@ -218,14 +218,14 @@ AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate 
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
+    #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
 # ECQ-1240
@@ -249,7 +249,7 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall no
     ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
+    #${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
 
     #${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
     #${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  -  udp  -
@@ -263,14 +263,14 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall no
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
 # ECQ-1241
@@ -290,7 +290,7 @@ AppInst - 2 appInst on same app and different cluster and different cloudlet sha
     ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
+    #${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
 
     # create app2 and appInst on the same port
     ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
@@ -299,14 +299,14 @@ AppInst - 2 appInst on same app and different cluster and different cloudlet sha
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
 # ECQ-1242
@@ -330,20 +330,20 @@ AppInst - User shall be able to add app/appInst, delete, and readd with same pub
     ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
+    #${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
 
     # verify app1 uses port 1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
 # ECQ-1243
@@ -366,17 +366,17 @@ AppInst - User shall be able to add app, udpate app, add /appInst with same publ
     ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
+    #${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
 
     # verify app1 uses port 1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  3
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    3
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Should Be Equal As Integers  ${appInst_1.mapped_ports[1].internal_port}  4
     Should Be Equal As Integers  ${appInst_1.mapped_ports[1].public_port}    4
     Should Be Equal As Integers  ${appInst_1.mapped_ports[1].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_1.mapped_ports[1].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_1.mapped_ports[1].fqdn_prefix}    ${fqdn_prefix_1}
 
     Length Should Be   ${appInst_1.mapped_ports}  2
 
@@ -401,18 +401,18 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
     ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
+    #${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
 
     # create appInst2 on the same port
     ${app_name_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}  ${version}  -  udp  -
+    #${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}  ${version}  -  udp  -
     ${autocluster_2}=  Catenate  SEPARATOR=  autocluster  ${epoch_time}   2
     Create App  app_name=${app_name_2}  access_ports=udp:1
     ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${autocluster_2}
 
     # create appInst4 on the port 10000
     ${app_name_3}=  Catenate  SEPARATOR=-  ${app_default_1}  3
-    ${fqdn_prefix_3}=  Catenate  SEPARATOR=  ${app_name_3}  ${version}  -  udp  -
+    #${fqdn_prefix_3}=  Catenate  SEPARATOR=  ${app_name_3}  ${version}  -  udp  -
     ${autocluster_3}=  Catenate  SEPARATOR=  autocluster  ${epoch_time}   3
     Create App  app_name=${app_name_3}  access_ports=udp:10000
     ${appInst_3}=  Create App Instance  app_name=${app_name_3}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${autocluster_3}
@@ -421,21 +421,21 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
+    #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
     # verify app2 uses port 10001
     Should Be Equal As Integers  ${appInst_3.mapped_ports[0].internal_port}  10000
     Should Be Equal As Integers  ${appInst_3.mapped_ports[0].public_port}    10001
     Should Be Equal As Integers  ${appInst_3.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_3.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_3}
+    #Should Be Equal              ${appInst_3.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_3}
     Length Should Be   ${appInst_3.mapped_ports}  1
 
 # ECQ-1245
@@ -457,11 +457,11 @@ AppInst - appInst shall not allocate UDP port 10000 if already allocated
     ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
+    #${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  -
 
     # create appInst2 on the same port
     ${app_name_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}  ${version}  -  udp  -
+    #${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}  ${version}  -  udp  -
     Create App  app_name=${app_name_2}  access_ports=udp:10000
     ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
@@ -470,14 +470,14 @@ AppInst - appInst shall not allocate UDP port 10000 if already allocated
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  10000
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    10000
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 10001
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10001
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
+    #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
 # ECQ-1246
@@ -496,11 +496,11 @@ AppInst - user shall be to add multiple UDP public ports
     ${version}=  Set Variable  ${appInst_1.key.app_key.version}
     ${version}=  Remove String  ${version}  .
 
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
+    #${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoTCP
-    Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     FOR  ${index}  IN RANGE  0  100
@@ -509,13 +509,13 @@ AppInst - user shall be to add multiple UDP public ports
        ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
        
-       ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_name}  ${version}  -  udp  -
+       #${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_name}  ${version}  -  udp  -
        ${public_port}=  Evaluate  10000 + ${index}
        # verify app1 uses port 1
        Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
        Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    ${public_port}
        Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoUDP
-       Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+       #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
        Length Should Be   ${appInst_1.mapped_ports}  1
     END
 
@@ -534,12 +534,12 @@ AppInst - user shall not be able to allocate public port udp:22
     ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
+    #${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  22
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    10000
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
 
     Length Should Be   ${appInst.mapped_ports}  1
 
@@ -558,12 +558,12 @@ AppInst - user shall be able to allocate public port udp:18889
     ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
+    #${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  18889
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    18889
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
 
     Length Should Be   ${appInst.mapped_ports}  1
 
@@ -582,12 +582,12 @@ AppInst - user shall be able to allocate public port udp:18888
     ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
+    #${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  -
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  18888
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    18888
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
 
     Length Should Be   ${appInst.mapped_ports}  1
 

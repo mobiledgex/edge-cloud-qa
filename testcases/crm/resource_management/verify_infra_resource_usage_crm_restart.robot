@@ -55,12 +55,12 @@ Cloudletinfo displays correct infra usage and existing cluster instances after C
 
    FOR  ${x}  IN RANGE  0  30
        ${cloudlet_info}=   Show Cloudlet Info  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  token=${tokenop}      
-       Exit For Loop If  '${cloudlet_info[0]['data']['resources_snapshot']['info'][2]['value']}' == '${resource_usage[0]['info'][2]['value']}'
+       Exit For Loop If  '${cloudlet_info[0]['data']['resources_snapshot']['info'][3]['value']}' == '${resource_usage[0]['info'][3]['value']}'
        Sleep  10s
    END
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][2]['value']}              ${resource_usage[0]['info'][2]['value']}    #Instances
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][0]['value']}              ${resource_usage[0]['info'][3]['value']}    #RAM
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][1]['value']}              ${resource_usage[0]['info'][4]['value']}    #vCPUs
+   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][3]['value']}              ${resource_usage[0]['info'][3]['value']}    #Instances
+   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][0]['value']}              ${resource_usage[0]['info'][4]['value']}    #RAM
+   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][1]['value']}              ${resource_usage[0]['info'][5]['value']}    #vCPUs
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['cluster_insts'][0]['cluster_key']['name']}  ${cluster_name}
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['cluster_insts'][0]['organization']}   ${org_name_dev}
 
@@ -70,18 +70,18 @@ Cloudletinfo displays correct infra usage and existing cluster instances after C
 
    FOR  ${x}  IN RANGE  0  15
        ${cloudlet_info}=  Show Cloudlet Info   region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-       Exit For Loop If  '${cloudlet_info[0]['data']['state']}' == '2'
+       Exit For Loop If  '${cloudlet_info[0]['data']['state']}' == 'CloudletStateReady'
        Sleep  10s
    END
-   Should Be Equal As Numbers  ${cloudlet_info[0]['data']['state']}  2
+   Should Be Equal  ${cloudlet_info[0]['data']['state']}  CloudletStateReady
 
    ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  infra_usage=${True}  token=${tokenop}
 
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['cluster_insts'][0]['cluster_key']['name']}  ${cluster_name}
    Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['cluster_insts'][0]['organization']}   ${org_name_dev}
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][2]['value']}              ${resource_usage[0]['info'][2]['value']}    #Instances
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][0]['value']}              ${resource_usage[0]['info'][3]['value']}    #RAM
-   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][1]['value']}              ${resource_usage[0]['info'][4]['value']}    #vCPUs
+   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][3]['value']}              ${resource_usage[0]['info'][3]['value']}    #Instances
+   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][0]['value']}              ${resource_usage[0]['info'][4]['value']}    #RAM
+   Should Be Equal  ${cloudlet_info[0]['data']['resources_snapshot']['info'][1]['value']}              ${resource_usage[0]['info'][5]['value']}    #vCPUs
    
    Verify Resource Usage   4  14336  8  CurrentUsage
  
@@ -148,23 +148,23 @@ Verify Current Usage
    [Arguments]  ${resourcelist}  ${resourceusage}
 
    #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['value']}  ${resourcelist[0]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[1]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[2]}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${resourcelist[2]}            #vCPUs
 
 Verify Infra Limits
    [Arguments]  ${resourcelist}  ${resourceusage}
 
    #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['infra_max_value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['infra_max_value']}  ${resourcelist[0]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['infra_max_value']}  ${resourcelist[1]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['infra_max_value']}  ${resourcelist[2]}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['infra_max_value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['infra_max_value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['infra_max_value']}  ${resourcelist[2]}            #vCPUs
 
 Verify Quota Limits
    [Arguments]  ${resourcelist}  ${resourceusage}
 
    #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['quota_max_value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['quota_max_value']}  ${resourcelist[0]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[1]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[2]}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['quota_max_value']}  ${resourcelist[2]}            #vCPUs
 
