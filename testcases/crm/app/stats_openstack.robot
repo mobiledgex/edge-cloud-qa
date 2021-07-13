@@ -22,7 +22,7 @@ ${operator_name_openstack}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${rootlb}          shared.automationhamburgcloudlet.tdg.mobiledgex.net
+${rootlb}          automationhamburgcloudlet.tdg.mobiledgex.net
 
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
