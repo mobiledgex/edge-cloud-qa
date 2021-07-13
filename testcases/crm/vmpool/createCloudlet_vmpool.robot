@@ -42,7 +42,7 @@ CreateCloudlet - shall be able to create in vm pool
    ${operator_organization_lc}=  Convert To Lowercase  ${operator_organization}
 
    ${group_name}=  Set Variable  ${pool_return['data']['key']['name']}-${operator_organization}-pf
-   ${internal_name}=  Set Variable  shared.${pool_return['data']['key']['name']}.${operator_organization_lc}.mobiledgex.net
+   ${internal_name}=  Set Variable  ${pool_return['data']['key']['name']}.${operator_organization_lc}.mobiledgex.net
    ${internal_name}=  Convert To Lowercase  ${internal_name}
 
    VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_organization}  group_name=${group_name}  internal_name=${group_name}
