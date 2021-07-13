@@ -18,15 +18,15 @@ ClientAppUsageMetrics - get with no app org shall return error
    ...  - get clientappusage metrics with no app org
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  last=1  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=1  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Must provide either App organization or Cloudlet organization"}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=deviceinfo  last=1  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=deviceinfo  limit=1  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Must provide either App organization or Cloudlet organization"}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=x  last=1  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=x  limit=1  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Must provide either App organization or Cloudlet organization"}
 
@@ -36,15 +36,15 @@ ClientAppUsageMetrics - developer get with no app org shall return error
    ...  - get clientappusage metrics with no app org as developer
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  operator_org_name=${operator}  last=1  token=${dev_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  operator_org_name=${operator}  limit=1  token=${dev_manager_token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Developers please specify the App Organization"}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=deviceinfo  operator_org_name=${operator}  last=1  token=${dev_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=deviceinfo  operator_org_name=${operator}  limit=1  token=${dev_manager_token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Developers please specify the App Organization"}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=x  operator_org_name=${operator}  last=1  token=${dev_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=x  operator_org_name=${operator}  limit=1  token=${dev_manager_token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Developers please specify the App Organization"}
 
@@ -59,15 +59,15 @@ ClientAppUsageMetrics - operator get with no cloudlet org shall return error
    Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}  token=${op_manager_token}
    Create Cloudlet Pool Access Response    region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}  decision=accept  token=${dev_manager_token}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  last=1  token=${op_manager_token}  developer_org_name=${developer_org_name_automation}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=1  token=${op_manager_token}  developer_org_name=${developer_org_name_automation}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Operators please specify the Cloudlet Organization"}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  last=1  token=${op_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  limit=1  token=${op_manager_token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Operators please specify the Cloudlet Organization"}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=x  developer_org_name=${developer_org_name_automation}  last=1  token=${op_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=x  developer_org_name=${developer_org_name_automation}  limit=1  token=${op_manager_token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Operators please specify the Cloudlet Organization"}
 
@@ -77,15 +77,15 @@ ClientAppUsageMetrics - operator get with no cloudlet pools shall return error
    ...  - get clientappusage metrics with no cloudlet pools as operator
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  developer_org_name=${operator}  operator_org_name=dmuus  last=1  token=${op_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  developer_org_name=${operator}  operator_org_name=dmuus  limit=1  token=${op_manager_token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"No non-empty CloudletPools to show"}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=deviceinfo  developer_org_name=${operator}  operator_org_name=dmuus  last=1  token=${op_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=deviceinfo  developer_org_name=${operator}  operator_org_name=dmuus  limit=1  token=${op_manager_token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"No non-empty CloudletPools to show"}
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=x  developer_org_name=${operator}  operator_org_name=dmuus  last=1  token=${op_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=x  developer_org_name=${operator}  operator_org_name=dmuus  limit=1  token=${op_manager_token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"No non-empty CloudletPools to show"}
 
@@ -95,7 +95,7 @@ ClientAppUsageMetrics - get with selector=custom shall return error
    ...  - get clientappusage metrics with selector=custom
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=custom  developer_org_name=${operator}  last=1  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=custom  developer_org_name=${operator}  limit=1  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Custom stat not implemented yet"}
 
@@ -105,7 +105,7 @@ ClientAppUsageMetrics - get with no token shall return error
    ...  - get clientappusage metrics with no token
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  last=1  developer_org_name=developer  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=1  developer_org_name=developer  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"No bearer token found"}
 
@@ -115,7 +115,7 @@ ClientAppUsageMetrics - get with no selector shall return error
    ...  - get clientappusage metrics with no selector
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Provided selector \\\\"\\\\" is not valid. Must provide only one of \\\\"latency\\\\", \\\\"deviceinfo\\\\", \\\\"custom\\\\""} 
 
@@ -125,7 +125,7 @@ ClientAppUsageMetrics - get with invalid selector shall return error
    ...  - get clientappusage metrics with invalid selector
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=xx  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=xx  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
 
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Provided selector \\\\"xx\\\\" is not valid. Must provide only one of \\\\"latency\\\\", \\\\"deviceinfo\\\\", \\\\"custom\\\\""}
@@ -136,7 +136,7 @@ ClientAppUsageMetrics - get with invalid start time shall return error
    ...  - get clientappusage metrics with invalid start time
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""} 
 
@@ -146,7 +146,7 @@ ClientAppUsageMetrics - get with invalid end time shall return error
    ...  - get clientappusage metrics with invalid end time
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
@@ -156,19 +156,75 @@ ClientAppUsageMetrics - get with invalid start/end time shall return error
    ...  - get clientappusage metrics with invalid start/end time
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
-# ECQ-3465
-ClientAppUsageMetrics - get with invalid last shall return error
+# ECQ-3572
+ClientAppUsageMetrics - get with invalid start age shall return error
    [Documentation]
-   ...  - get clientappusage metrics with invalid last
+   ...  - get clientappusage metrics with invalid start age 
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  last=x  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
-   Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.startage of type time.Duration"}')
+
+# ECQ-3573
+ClientAppUsageMetrics - get with invalid end age shall return error
+   [Documentation]
+   ...  - get clientappusage metrics with invalid end age
+   ...  - verify error
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  end_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.endage of type time.Duration"}')
+
+# ECQ-3574
+ClientAppUsageMetrics - get with invalid start/end age shall return error
+   [Documentation]
+   ...  - get clientappusage metrics with invalid start/end age
+   ...  - verify error
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_age=x  end_age=2019-09  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.startage of type time.Duration"}')
+
+# ECQ-3601
+ClientAppUsageMetrics - get with start age newer than end age shall return error
+   [Documentation]
+   ...  - get clientappusage metrics with start age newer than /end age
+   ...  - verify error
+
+   #  EDGECLOUD-5269 - metrics request with startage lower than endage gives incorrect error
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  start_age=2  end_age=3  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxx Start time must be before (older than) end time"}')
+
+# ECQ-3465
+ClientAppUsageMetrics - get with invalid limit shall return error
+   [Documentation]
+   ...  - get clientappusage metrics with invalid limit
+   ...  - verify error
+
+   # EDGECLOUD-5254 dme metrics with negative limit/numsamples needs better error handling
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=x  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.Limit of type int"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=-1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxxxxxxInvalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.Limit of type int"}')
+
+# ECQ-3575
+ClientAppUsageMetrics - get with invalid numsamples shall return error
+   [Documentation]
+   ...  - get clientappusage metrics with invalid numsamples
+   ...  - verify error
+
+   # EDGECLOUD-5254 dme metrics with negative limit/numsamples needs better error handling
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  number_samples=x  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.NumSamples of type int"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  number_samples=-1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxxxxxxInvalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.Limit of type int"}')
 
 # ECQ-3466
 ClientAppUsageMetrics - get with cluster not found shall return an empty list
@@ -176,7 +232,7 @@ ClientAppUsageMetrics - get with cluster not found shall return an empty list
    ...  - get clientappusage metrics with cluster not found
    ...  - verify empty list is returned
 
-   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  last=1  cloudlet_name=${cloudlet_name_openstack_metrics}  app_name=automation_api_app  app_version=1.0  operator_org_name=GDDT  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=${cloudlet_name_openstack_metrics}  app_name=automation_api_app  app_version=1.0  operator_org_name=GDDT  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
@@ -186,7 +242,7 @@ ClientAppUsageMetrics - get with operator not found shall return an empty list
    ...  - get clientappusage metrics with operator not found
    ...  - verify empty list is returned
 
-   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  last=1  cloudlet_name=${cloudlet_name_openstack_metrics}  app_name=automation_api_app  app_version=1.0  operator_org_name=operator  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=${cloudlet_name_openstack_metrics}  app_name=automation_api_app  app_version=1.0  operator_org_name=operator  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
@@ -196,7 +252,7 @@ ClientAppUsageMetrics - get with cloudlet not found shall return an empty list
    ...  - get clientappusage metrics with cloudlet not found
    ...  - verify empty list is returned
 
-   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  last=1  cloudlet_name=cloudlet_name_openstack_metrics  app_name=automation_api_app  app_version=1.0  operator_org_name=GDDT  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet_name_openstack_metrics  app_name=automation_api_app  app_version=1.0  operator_org_name=GDDT  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
@@ -206,7 +262,7 @@ ClientAppUsageMetrics - get with appname not found shall return an empty list
    ...  - get clientappusage metrics with cloudlet not found
    ...  - verify empty list is returned
 
-   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  last=1  cloudlet_name=cloudlet_name_openstack_metrics  app_name=xx  app_version=1.0  operator_org_name=GDDT  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet_name_openstack_metrics  app_name=xx  app_version=1.0  operator_org_name=GDDT  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
@@ -216,19 +272,20 @@ ClientAppUsageMetrics - get without region shall return error
    ...  - get clientappusage metrics without region 
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  selector=latency  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"No region specified"}
 
+# rawdata no longer supported
 # ECQ-3471
-ClientAppUsageMetrics - get with invalid rawdata shall return error
-   [Documentation]
-   ...  - get clientappusage metrics with invalid rawdata
-   ...  - verify error
-
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  raw_data=x  selector=latency  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
-   Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=bool, got=string, field=RawData, offset=253"}
+#ClientAppUsageMetrics - get with invalid rawdata shall return error
+#   [Documentation]
+#   ...  - get clientappusage metrics with invalid rawdata
+#   ...  - verify error
+#
+#   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  raw_data=x  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+#   Should Contain  ${error}  code=400
+#   Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=bool, got=string, field=RawData, offset=253"}
 
 # ECQ-3472
 ClientAppUsageMetrics - get with latency and deviceos shall return error
@@ -236,7 +293,7 @@ ClientAppUsageMetrics - get with latency and deviceos shall return error
    ...  - get clientappusage metrics with latency and deviceos
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  device_os=x   selector=latency  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  device_os=x   selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"DeviceOS not allowed for appinst latency metric"}
 
@@ -246,19 +303,20 @@ ClientAppUsageMetrics - get with latency and devicemodel shall return error
    ...  - get clientappusage metrics with latency and devicemodel
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  device_model=x   selector=latency  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  device_model=x   selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"DeviceModel not allowed for appinst latency metric"}
 
+# we now support this: EDGECLOUD-5213 Allow developers to see data network type for latency metrics
 # ECQ-3474
-ClientAppUsageMetrics - get with latency and data_network_type shall return error
-   [Documentation]
-   ...  - get clientappusage metrics with latency and data_network_type
-   ...  - verify error
-
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  data_network_type=x   selector=latency  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
-   Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"DataNetworkType not allowed for appinst latency metric"}
+#ClientAppUsageMetrics - get with latency and data_network_type shall return error
+#   [Documentation]
+#   ...  - get clientappusage metrics with latency and data_network_type
+#   ...  - verify error
+#
+#   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  data_network_type=x   selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+#   Should Contain  ${error}  code=400
+#   Should Contain  ${error}  {"message":"DataNetworkType not allowed for appinst latency metric"}
 
 # ECQ-3475
 ClientAppUsageMetrics - get with deviceinfo and locationtile shall return error
@@ -266,7 +324,7 @@ ClientAppUsageMetrics - get with deviceinfo and locationtile shall return error
    ...  - get clientappusage metrics with deviceinfo and locationtile
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  data_network_type=x   selector=deviceinfo  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  location_tile=x  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  data_network_type=x   selector=deviceinfo  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  location_tile=x  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"LocationTile not allowed for appinst deviceinfo metric"}
 
