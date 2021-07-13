@@ -76,16 +76,16 @@ AppInst - User shall be able to update the app accessports afer appInst delete
   
     ${app_name_default}=  Get Default App Name
  
-    ${fqdn_prefix}=  Catenate  SEPARATOR=-  ${app_name_default}${version}  udp-
+    #${fqdn_prefix}=  Catenate  SEPARATOR=-  ${app_name_default}${version}  udp-
     Should Be Equal As Integers  ${appInst_pre.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_pre.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_pre.mapped_ports[0].proto}          2
-    Should Be Equal              ${appInst_pre.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix} 
+    #Should Be Equal              ${appInst_pre.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix} 
 
     Should Be Equal As Integers  ${appInst_post.mapped_ports[0].internal_port}  2
     Should Be Equal As Integers  ${appInst_post.mapped_ports[0].public_port}    2
     Should Be Equal As Integers  ${appInst_post.mapped_ports[0].proto}          2
-    Should Be Equal              ${appInst_post.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
+    #Should Be Equal              ${appInst_post.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix}
 
 *** Keywords ***
 Setup
