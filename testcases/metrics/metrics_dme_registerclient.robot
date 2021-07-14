@@ -4,14 +4,14 @@ Documentation  DME RegisterClient Metrics
 #Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 #Library  MexInfluxDB  influxdb_address=%{AUTOMATION_INFLUXDB_ADDRESS}
 #Library  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
-#Library  DateTime
+Library  DateTime
 #Library  String
 #Library  Collections
 Library         MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
 
 Resource  metrics_dme_library.robot
 	      
-Test Setup       Setup
+Suite Setup       Setup
 #Test Teardown    Cleanup provisioning
 Test Timeout  ${test_timeout}
 
@@ -31,6 +31,8 @@ ${password}=  ${mextester06_gmail_password}
 
 ${test_timeout}=  32 min
 
+${api_collection_timer}=  30
+
 ${region}=  US
 
 # ECQ-2055	
@@ -42,7 +44,7 @@ DMEMetrics - Shall be able to get the last DME RegisterClient metric on openstac
 
    ${metrics}  ${metrics_influx}=  Get the last dme metric on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 	
    Metrics Headings Should Be Correct  ${metrics}
 	
@@ -55,7 +57,7 @@ DMEMetrics - Shall be able to get the last 5 DME RegisterClient metrics on opens
 
    ${metrics}  ${metrics_influx}=  Get the last 5 dme metrics on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -68,7 +70,7 @@ DMEMetrics - Shall be able to get the last 10 DME RegisterClient metrics on open
 
    ${metrics}  ${metrics_influx}=  Get the last 10 dme metrics on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -81,7 +83,7 @@ DMEMetrics - Shall be able to get all DME RegisterClient metrics on openstack
 
    ${metrics}  ${metrics_influx}=  Get all dme metrics on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -94,7 +96,7 @@ DMEMetrics - Shall be able to request more DME RegisterClient metrics than exist
 
    ${metrics}  ${metrics_influx}=  Get more dme metrics than exist on openstack   selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -105,22 +107,22 @@ DMEMetrics - Shall be able to get DME RegisterClient metrics with starttime on o
    ...  request DME RegisterClient metrics with starttime 
    ...  verify info is correct
 
-   ${metrics}=  Get dme metrics with starttime on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
-
+   ${metrics}  ${time_diff}=  Get dme metrics with starttime on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+   log to console  ${time_diff}
    Metrics Headings Should Be Correct  ${metrics}
 
-   Values Should Be In Range  ${metrics}
+   Values Should Be In Range  ${metrics}  ${time_diff}
 
 DMEMetrics - Shall be able to get DME RegisterClient metrics with endtime on openstack
    [Documentation]
    ...  request DME RegisterClient metrics with endtime 
    ...  verify info is correct
 
-   ${metrics}=  Get dme metrics with endtime on openstack   selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+   ${metrics}  ${time_diff}=  Get dme metrics with endtime on openstack   selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
    Metrics Headings Should Be Correct  ${metrics}  
 
-   Values Should Be In Range  ${metrics}
+   Values Should Be In Range  ${metrics}  ${time_diff}
 
 DMEMetrics - Shall be able to get the DME RegisterClient metrics with starttime=lastrecord on openstack
    [Documentation]
@@ -129,13 +131,14 @@ DMEMetrics - Shall be able to get the DME RegisterClient metrics with starttime=
 
    #edgecloud-1338 Metrics - requesting cloudlet metrics with starttime=<time> does not return the reading with that time
 
-   ${metrics}  ${metrics_influx}=  Get dme metrics with starttime=lastrecord on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   #${metrics}  ${metrics_influx}=  Get dme metrics with starttime=lastrecord on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metrics}  ${time_diff}=  Get dme metrics with starttime=lastrecord on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
-   Values Should Be In Range  ${metrics} 
+   Values Should Be In Range  ${metrics}   ${time_diff}
 
 DMEMetrics - Shall be able to get the DME RegisterClient metrics with starttime > lastrecord on openstack
    [Documentation]
@@ -151,18 +154,22 @@ DMEMetrics - Shall be able to get the DME RegisterClient metrics with endtime=la
 
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
-   ${metrics}=  Get dme metrics with endtime=lastrecord on openstack   selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metrics}  ${time_diff}=  Get dme metrics with endtime=lastrecord on openstack   selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
 
    Metrics Headings Should Be Correct  ${metrics}
 
-   Values Should be in Range  ${metrics}
+   Values Should be in Range  ${metrics}  ${time_diff}
 
 DMEMetrics - Shall be able to get the DME RegisterClient metrics with endtime = firstrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with endtime = firstrecord 
    ...  verify empty list is returned
 
-   Get dme metrics with endtime = firstrecord on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metrics}  ${time_diff}=  Get dme metrics with endtime = firstrecord on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}  ${time_diff}
 
 DMEMetrics - Shall be able to get the DME RegisterClient metrics with starttime > endtime on openstack
    [Documentation]
@@ -183,22 +190,77 @@ DMEMetrics - Shall be able to get the DME RegisterClient metrics with starttime 
    ...  request DME RegisterClient metrics with starttime and endtime on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get dme metrics with starttime and endtime on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metrics}  ${time_diff}=  Get dme metrics with starttime and endtime on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
 
    Metrics Headings Should Be Correct  ${metrics}
 
-   Values Should be in Range  ${metrics}
+   Values Should be in Range  ${metrics}  ${time_diff}
 
 DMEMetrics - Shall be able to get the DME RegisterClient metrics with starttime and endtime and last on openstack
    [Documentation]
    ...  request all DME RegisterClient metrics with starttime and endtime and last on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get dme metrics with starttime and endtime and last on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metrics}  ${time_diff}=  Get dme metrics with starttime and endtime and last on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}  ${time_diff}
+
+DMEMetrics - Shall be able to get the DME RegisterClient metrics with startage
+   [Documentation]
+   ...  request all DME RegisterClient metrics with startage
+   ...  verify info is correct
+
+   ${metrics}=  Get dme metrics with startage  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
    Metrics Headings Should Be Correct  ${metrics}
 
    Values Should be in Range  ${metrics}
+
+DMEMetrics - Shall be able to get the DME RegisterClient metrics with endage
+   [Documentation]
+   ...  request all DME RegisterClient metrics with endage
+   ...  verify info is correct
+
+   ${metrics}=  Get dme metrics with endage  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}
+
+DMEMetrics - Shall be able to get the DME RegisterClient metrics with startage and endage
+   [Documentation]
+   ...  request all DME RegisterClient metrics with startage and endage
+   ...  verify info is correct
+
+   ${metrics}=  Get dme metrics with startage and endage  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}
+
+DMEMetrics - Shall be able to get the DME RegisterClient metrics with numsamples
+   [Documentation]
+   ...  request all DME RegisterClient metrics with numsamples
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get dme metrics with numsamples  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}  ${time_diff}  ${10}
+
+DMEMetrics - Shall be able to get the DME RegisterClient metrics with numsamples and starttime/endtime
+   [Documentation]
+   ...  request all DME RegisterClient metrics with numsamples and startime/endtime
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get dme metrics with numsamples and starttime/endtime  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}  ${time_diff}  ${5}
 
 DMEMetrics - DeveloperManager shall be able to get DME RegisterClient metrics
    [Documentation]
@@ -207,7 +269,7 @@ DMEMetrics - DeveloperManager shall be able to get DME RegisterClient metrics
 
    ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get dme metrics  selector=RegisterClient  username=${username}  password=${password}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -220,7 +282,7 @@ DMEMetrics - DeveloperContributor shall be able to get DME RegisterClient metric
 
    ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get dme metrics  selector=RegisterClient  username=${username}  password=${password}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -233,7 +295,7 @@ DMEMetrics - DeveloperViewer shall be able to get DME RegisterClient metrics
 
    ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get dme metrics  selector=RegisterClient  username=${username}  password=${password}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -243,7 +305,13 @@ DMEMetrics - DeveloperViewer shall be able to get DME RegisterClient metrics
 Setup
    ${developer_org_name}=  Get Default Developer Name 
 
-   Register Client  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name}
+   Update Settings  region=${region}  dme_api_metrics_collection_interval=${api_collection_timer}s
+
+   FOR  ${i}  IN  1..12
+      Register Client  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name}
+   END
+
+   Sleep  45s
 
    Set Suite Variable  ${developer_org_name}
  
@@ -252,52 +320,86 @@ Metrics Headings Should Be Correct
 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        dme-api 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  apporg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  app
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  ver
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  dmeId
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cellID
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  method
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  foundOperator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  reqs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  errs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  0s
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  5ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  10ms 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  25ms 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  50ms 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  100ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  reqs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  0s
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  5ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  10ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  25ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  50ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  100ms
 
- 
+   Should Be True  'apporg' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'app' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'ver' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'cloudletorg' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'cloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'dmeId' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'cellID' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'method' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'foundCloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'foundOperator' in ${metrics['data'][0]['Series'][0]['tags']}
 
 Values Should Be In Range
-  [Arguments]  ${metrics}
+  [Arguments]  ${metrics}  ${time_diff}=${None}  ${numsamples}=${100}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
+
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['apporg']}  ${developer_org_name}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['app']}  ${appname}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['ver']}  ${appversion}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_org_name_dme}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet_name_dme}
+   Should Be True   '${metrics['data'][0]['Series'][0]['tags']['dmeId']}'.startswith('dme-')
+   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
+   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
+   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['method']}  RegisterClient
 	
    # verify values
+   #@{datesplit}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   #@{datesplit}=  Split String  ${datesplit[0]}  Z
+   #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   #${start}=  Evaluate  ${epochpre} - 30
+   #${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${start}=  Set Variable  0
+
+   IF  ${time_diff} != ${None}
+      ${time_def}=  Evaluate  ${time_diff}/${numsamples}
+
+      ${time_check}=  Set Variable  ${api_collection_timer}
+      IF  ${time_def} > ${api_collection_timer}
+         ${time_check}=  Set Variable  ${time_def}
+      END
+     
+      ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+      @{datesplit}=  Split String  ${datez}  .
+      ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+      ${start}=  Evaluate  ${epochpre} + ${time_check}
+   END
+
    FOR  ${reading}  IN  @{values}
-      Should Be Equal  ${reading[1]}  ${developer_org_name}
-      Should Be Equal  ${reading[2]}  ${appname}
-      Should Be Equal  ${reading[3]}  ${appversion}
-      Should Be Equal  ${reading[4]}  ${operator_org_name_dme}
-      Should Be Equal  ${reading[5]}  ${cloudlet_name_dme}
-      Should Be True   '${reading[6]}'.startswith('dme-')
-      Should Be True   ${reading[7]} == 0
-      Should Be Equal  ${reading[8]}  RegisterClient
-      Should Be True   len('${reading[9]}') == 0
-      Should Be True   len('${reading[10]}') == 0
-      Should Be True   ${reading[11]} > 0
-      Should Be True   ${reading[12]} >= 0
-      Should Be True   ${reading[13]} >= 0
-      Should Be True   ${reading[14]} >= 0
-      Should Be True   ${reading[15]} >= 0
-      Should Be True   ${reading[16]} >= 0
-      Should Be True   ${reading[17]} >= 0
-      Should Be True   ${reading[18]} >= 0
+      IF  ${reading[1]} != ${None}    # dont check null readings which be removed later
+         Should Be True   ${reading[1]} > 0
+         Should Be True   ${reading[2]} >= 0
+         Should Be True   ${reading[3]} >= 0
+         Should Be True   ${reading[4]} >= 0
+         Should Be True   ${reading[5]} >= 0
+         Should Be True   ${reading[6]} >= 0
+         Should Be True   ${reading[7]} >= 0
+         Should Be True   ${reading[8]} >= 0
+      END
+
+      IF  ${time_diff} != ${None}
+         ${datez}=  Get Substring  ${reading[0]}  0  -1
+         @{vdatesplit}=  Split String  ${datez}  .
+         ${vepochpre}=  Evaluate  calendar.timegm(time.strptime('${vdatesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+         #${vepochpre}=  Convert Date  ${vdatesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+         ${epoch_diff}=  Evaluate  ${start}-${vepochpre}
+         #Should Be True  ${epoch_diff} <= ${time_check}+1 and ${epoch_diff} >= ${time_check}-1
+         Should Be True  ${time_check}-1 <= ${epoch_diff} <= ${time_check}+1
+         ${start}=  Set Variable  ${vepochpre}
+      END
    END
 
 Metrics Should Match Influxdb
@@ -306,7 +408,9 @@ Metrics Should Match Influxdb
    ${metrics_influx_t}=  Set Variable  ${metrics_influx}
    ${index}=  Set Variable  0
    FOR  ${reading}  IN  @{metrics_influx}
-      @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
+      ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+      @{datesplit1}=  Split String  ${datez}  .
+      #@{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
       ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
       @{datesplit2}=  Split String  ${reading['time']}  .
       ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -324,24 +428,50 @@ Metrics Should Match Influxdb
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][5]}  ${reading['cpu']}
 #   \  ${index}=  Evaluate  ${index}+1
    FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['apporg']}  ${metrics['data'][0]['Series'][0]['tags']['apporg']}
+      Should Be Equal  ${metrics_influx_t[${index}]['app']}                  ${metrics['data'][0]['Series'][0]['tags']['app']} 
+      Should Be Equal  ${metrics_influx_t[${index}]['ver']}                  ${metrics['data'][0]['Series'][0]['tags']['ver']} 
+      Should Be Equal  ${metrics_influx_t[${index}]['cloudletorg']}          ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']} 
+      Should Be Equal  ${metrics_influx_t[${index}]['cloudlet']}             ${metrics['data'][0]['Series'][0]['tags']['cloudlet']} 
+      Should Be Equal  ${metrics_influx_t[${index}]['dmeId']}                ${metrics['data'][0]['Series'][0]['tags']['dmeId']} 
+#      Should Be Equal  ${metrics_influx_t[${index}]['cellID']}               ${metrics['data'][0]['Series'][0]['tags']['cellID']} 
+      Should Be Equal  ${metrics_influx_t[${index}]['method']}               ${metrics['data'][0]['Series'][0]['tags']['method']} 
+      Should Be Equal  ${metrics_influx_t[${index}]['foundCloudlet']}        ${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']} 
+      Should Be Equal  ${metrics_influx_t[${index}]['foundOperator']}        ${metrics['data'][0]['Series'][0]['tags']['foundOperator']} 
+
       Should Be Equal  ${metrics_influx_t[${index}]['time']}           ${reading[0]}
-      Should Be Equal  ${metrics_influx_t[${index}]['apporg']}         ${reading[1]}
-      Should Be Equal  ${metrics_influx_t[${index}]['app']}            ${reading[2]}
-      Should Be Equal  ${metrics_influx_t[${index}]['ver']}            ${reading[3]}
-      Should Be Equal  ${metrics_influx_t[${index}]['cloudletorg']}    ${reading[4]}
-      Should Be Equal  ${metrics_influx_t[${index}]['cloudlet']}       ${reading[5]}
-      Should Be Equal  ${metrics_influx_t[${index}]['dmeId']}          ${reading[6]}
-      Should Be Equal  ${metrics_influx_t[${index}]['cellID']}         ${reading[7]}
-      Should Be Equal  ${metrics_influx_t[${index}]['method']}         ${reading[8]}
-      Should Be Equal  ${metrics_influx_t[${index}]['foundCloudlet']}  ${reading[9]}
-      Should Be Equal  ${metrics_influx_t[${index}]['foundOperator']}  ${reading[10]}
-      Should Be Equal  ${metrics_influx_t[${index}]['reqs']}           ${reading[11]}
-      Should Be Equal  ${metrics_influx_t[${index}]['errs']}           ${reading[12]}
-      Should Be Equal  ${metrics_influx_t[${index}]['0s']}             ${reading[13]}
-      Should Be Equal  ${metrics_influx_t[${index}]['5ms']}            ${reading[14]}
-      Should Be Equal  ${metrics_influx_t[${index}]['10ms']}           ${reading[15]}
-      Should Be Equal  ${metrics_influx_t[${index}]['25ms']}           ${reading[16]}
-      Should Be Equal  ${metrics_influx_t[${index}]['50ms']}           ${reading[17]}
-      Should Be Equal  ${metrics_influx_t[${index}]['100ms']}          ${reading[18]}
+      Should Be Equal  ${metrics_influx_t[${index}]['reqs']}           ${reading[1]}
+      Should Be Equal  ${metrics_influx_t[${index}]['errs']}           ${reading[2]}
+      Should Be Equal  ${metrics_influx_t[${index}]['0s']}             ${reading[3]}
+      Should Be Equal  ${metrics_influx_t[${index}]['5ms']}            ${reading[4]}
+      Should Be Equal  ${metrics_influx_t[${index}]['10ms']}           ${reading[5]}
+      Should Be Equal  ${metrics_influx_t[${index}]['25ms']}           ${reading[6]}
+      Should Be Equal  ${metrics_influx_t[${index}]['50ms']}           ${reading[7]}
+      Should Be Equal  ${metrics_influx_t[${index}]['100ms']}          ${reading[8]}
       ${index}=  Evaluate  ${index}+1
    END
+
+#   FOR  ${i}  IN  @{metrics_influx_t}
+#      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['apporg']}  ${i['apporg']}
+#      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['app']}  ${i['app']}
+#      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['ver']}  ${i['ver']}
+#      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${i['cloudletorg']}
+#      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${i['cloudlet']}
+#      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['dmeId']}  ${i['dmeId']}
+##      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cellID']}  ${i['cellID']}
+#      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}  ${i['foundCloudlet']}
+#      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['foundOperator']}  ${i['foundOperator']} 
+#      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['method']}  ${i['method']}
+#   END
+#   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['apporg']}  ${metrics_influx_t[${index}]['apporg']}         ${reading[1]}
+#      Should Be Equal  ${metrics_influx_t[${index}]['app']}            ${reading[2]}
+#      Should Be Equal  ${metrics_influx_t[${index}]['ver']}            ${reading[3]}
+#      Should Be Equal  ${metrics_influx_t[${index}]['cloudletorg']}    ${reading[4]}
+#      Should Be Equal  ${metrics_influx_t[${index}]['cloudlet']}       ${reading[5]}
+#      Should Be Equal  ${metrics_influx_t[${index}]['dmeId']}          ${reading[6]}
+#      Should Be Equal  ${metrics_influx_t[${index}]['cellID']}         ${reading[7]}
+#      Should Be Equal  ${metrics_influx_t[${index}]['method']}         ${reading[8]}
+#      Should Be Equal  ${metrics_influx_t[${index}]['foundCloudlet']}  ${reading[9]}
+#      Should Be Equal  ${metrics_influx_t[${index}]['foundOperator']}  ${reading[10]}
+#      ${index}=  Evaluate  ${index}+1
+#   END
