@@ -278,6 +278,15 @@ ClientApiUsageMetrics - get without region shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"No region specified"}
 
+# ECQ-3605
+ClientApiUsageMetrics - get with numsamples and limit shall return error
+   [Documentation]
+   ...  - get clientapiusage metrics with numsamples and limit
+   ...  - verify error
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=api  number_samples=1  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Only one of Limit or NumSamples can be specified"}')
+
 *** Keywords ***
 Setup
     ${token}=  Get Super Token
