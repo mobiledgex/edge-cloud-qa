@@ -308,6 +308,18 @@ ClientCloudletUsageMetrics - get with deviceinfo and data_network_type shall ret
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"DataNetworkType not allowed for cloudlet deviceinfo metric"}
 
+# ECQ-3607
+ClientCloudletUsageMetrics - get with numsamples and limit shall return error
+   [Documentation]
+   ...  - get clientcloudletusage metrics with numsamples and limit
+   ...  - verify error
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  number_samples=1  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Only one of Limit or NumSamples can be specified"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=deviceinfo  number_samples=1  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Only one of Limit or NumSamples can be specified"}')
+
 *** Keywords ***
 Setup
     ${token}=  Get Super Token
