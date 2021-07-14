@@ -26,7 +26,7 @@ FindCloudlet - request shall not return appinst for k8s/lb/shared app inst when 
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
 # ECQ-2534
 FindCloudlet - request shall not return appinst for k8s/lb/dedicated app inst when cloudlet is maintenance mode
@@ -74,7 +74,7 @@ FindCloudlet - request shall not return appinst for docker/lb/shared app inst wh
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
 # direct no longer supported
 # ECQ-2537
@@ -135,7 +135,7 @@ FindCloudlet - request shall not return appinst for helm/shared/lb app inst when
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
 # ECQ-2541
 FindCloudlet - request shall not return appinst for helm/dedicated/lb app inst when cloudlet is maintenance mode
@@ -189,7 +189,7 @@ Register Client and Find Cloudlet
    # verify it returns the appinst on the 1st cloudlet
    Register Client  app_name=${app_name_default}  developer_org_name=${developer_org_name_automation}
    ${cloudlet_1}=  Find Cloudlet      latitude=31  longitude=-91
-   Should Be Equal  ${cloudlet_1['status']}  FIND_FOUND
+   Should Be Equal  ${cloudlet_1['status']}  FindFound
    Should Be Equal  ${cloudlet_1['fqdn']}  ${fqdn_check}
 
    # put cloudlet in maintenance mode
@@ -197,13 +197,13 @@ Register Client and Find Cloudlet
 
    # verify not found
    ${cloudlet_2}=  Run Keyword and Expect Error  *  Find Cloudlet      latitude=31  longitude=-91
-   Should Contain  ${cloudlet_2}  FIND_NOTFOUND
+   Should Contain  ${cloudlet_2}  FindNotfound
 
    # put cloudlet back online
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
 
    ${cloudlet_3}=  Find Cloudlet      latitude=31  longitude=-91
-   Should Be Equal  ${cloudlet_3['status']}  FIND_FOUND
+   Should Be Equal  ${cloudlet_3['status']}  FindFound
    Should Be Equal  ${cloudlet_3['fqdn']}  ${fqdn_check}
 
    Should Be True  len('${cloudlet_3['edge_events_cookie']}') > 100
@@ -213,4 +213,4 @@ Register Client and Find Cloudlet
 
    # verify not found
    ${cloudlet_4}=  Run Keyword and Expect Error  *  Find Cloudlet      latitude=31  longitude=-91
-   Should Contain  ${cloudlet_4}  FIND_NOTFOUND
+   Should Contain  ${cloudlet_4}  FindNotfound
