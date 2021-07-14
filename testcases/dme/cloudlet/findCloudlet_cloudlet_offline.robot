@@ -74,7 +74,8 @@ FindCloudlet - request shall not return cloudlet if state=CloudletStateOffline
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${tmus_cloudlet_latitude}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${tmus_cloudlet_longitude}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${tmus_appinst['data']['mapped_ports'][0]['proto']}  #LProtoTCP
+      #Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${tmus_appinst['data']['mapped_ports'][0]['proto']}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  1
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${tmus_appinst['data']['mapped_ports'][0]['internal_port']}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${tmus_appinst['data']['mapped_ports'][0]['public_port']}
 

@@ -59,11 +59,12 @@ RegisterClient - request with id and type and auth shall return device informati
    ...  registerClient with samsung app with unique_id and type and auth
    ...  verify returns id and type
 
-   Run Keyword and Ignore Error  Create App   region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}    auth_public_key=${app_key}  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
+   #Run Keyword and Ignore Error  Create App   region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}    auth_public_key=${app_key}  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
+   Create App   region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}2    auth_public_key=${app_key}  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
 
-   ${token}=  Generate Auth Token  app_name=${samsung_app_name}  app_version=${app_version}  developer_name=${samsung_developer_name}
+   ${token}=  Generate Auth Token  app_name=${samsung_app_name}2  app_version=${app_version}  developer_name=${samsung_developer_name}
 
-   Register Client      app_name=${samsung_app_name}  app_version=${app_version}  developer_org_name=${samsung_developer_name}  auth_token=${token}
+   Register Client      app_name=${samsung_app_name}2  app_version=${app_version}  developer_org_name=${samsung_developer_name}  auth_token=${token}
    ${decoded_cookie}=  decoded session cookie
    ${token_server}=    token server uri
 
@@ -76,10 +77,11 @@ RegisterClient - request with id and type and auth shall return device informati
    #Should Be Equal  ${decoded_cookie['key']['peerip']}   ${peer_ip}
    Should Match Regexp         ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
    Should Be Equal             ${decoded_cookie['key']['orgname']}  ${samsung_developer_name}
-   Should Be Equal             ${decoded_cookie['key']['appname']}  ${samsung_app_name}
+   Should Be Equal             ${decoded_cookie['key']['appname']}  ${samsung_app_name}2
    Should Be Equal             ${decoded_cookie['key']['appvers']}  ${app_version}
    Should Be Equal As Numbers  ${uuid_length}  27
-   Should Be Equal             ${decoded_cookie['key']['uniqueidtype']}  ${samsung_developer_name}:${samsung_app_name} 
+   #Should Be Equal             ${decoded_cookie['key']['uniqueidtype']}  ${samsung_developer_name}:${samsung_app_name} 
+   Should Be Equal             ${decoded_cookie['key']['uniqueidtype']}  dme-ksuid
 
 # ECQ-2111
 RegisterClient - request without id shall return error 
