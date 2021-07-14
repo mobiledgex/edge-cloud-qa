@@ -11,7 +11,7 @@ Library         MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cer
 
 Resource  metrics_dme_library.robot
 	      
-Test Setup       Setup
+Suite Setup       Setup
 #Test Teardown    Cleanup provisioning
 Test Timeout  ${test_timeout}
 
@@ -36,6 +36,8 @@ ${test_timeout}=  32 min
 
 ${region}=  US
 
+${api_collection_timer}=  30
+
 # ECQ-2054
 *** Test Cases ***
 DMEMetrics - Shall be able to get the last DME FindCloudlet metric on openstack
@@ -45,7 +47,7 @@ DMEMetrics - Shall be able to get the last DME FindCloudlet metric on openstack
 
    ${metrics}  ${metrics_influx}=  Get the last dme metric on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 	
    Metrics Headings Should Be Correct  ${metrics}
 	
@@ -58,7 +60,7 @@ DMEMetrics - Shall be able to get the last 5 DME FindCloudlet metrics on opensta
 
    ${metrics}  ${metrics_influx}=  Get the last 5 dme metrics on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -71,7 +73,7 @@ DMEMetrics - Shall be able to get the last 10 DME FindCloudlet metrics on openst
 
    ${metrics}  ${metrics_influx}=  Get the last 10 dme metrics on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -84,7 +86,7 @@ DMEMetrics - Shall be able to get all DME FindCloudlet metrics on openstack
 
    ${metrics}  ${metrics_influx}=  Get all dme metrics on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -97,7 +99,7 @@ DMEMetrics - Shall be able to request more DME FindCloudlet metrics than exist o
 
    ${metrics}  ${metrics_influx}=  Get more dme metrics than exist on openstack   selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -108,22 +110,22 @@ DMEMetrics - Shall be able to get DME FindCloudlet metrics with starttime on ope
    ...  request DME FindCloudlet metrics with starttime 
    ...  verify info is correct
 
-   ${metrics}=  Get dme metrics with starttime on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+   ${metrics}  ${time_diff}=  Get dme metrics with starttime on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
    Metrics Headings Should Be Correct  ${metrics}
 
-   Values Should Be In Range  ${metrics}
+   Values Should Be In Range  ${metrics}  ${time_diff}
 
 DMEMetrics - Shall be able to get DME FindCloudlet metrics with endtime on openstack
    [Documentation]
    ...  request DME FindCloudlet metrics with endtime 
    ...  verify info is correct
 
-   ${metrics}=  Get dme metrics with endtime on openstack   selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+   ${metrics}  ${time_diff}=  Get dme metrics with endtime on openstack   selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
    Metrics Headings Should Be Correct  ${metrics}  
 
-   Values Should Be In Range  ${metrics}
+   Values Should Be In Range  ${metrics}  ${time_diff}
 
 DMEMetrics - Shall be able to get the DME FindCloudlet metrics with starttime=lastrecord on openstack
    [Documentation]
@@ -132,13 +134,13 @@ DMEMetrics - Shall be able to get the DME FindCloudlet metrics with starttime=la
 
    #edgecloud-1338 Metrics - requesting cloudlet metrics with starttime=<time> does not return the reading with that time
 
-   ${metrics}  ${metrics_influx}=  Get dme metrics with starttime=lastrecord on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metrics}  ${time_diff}=  Get dme metrics with starttime=lastrecord on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
-   Values Should Be In Range  ${metrics} 
+   Values Should Be In Range  ${metrics}  ${time_diff}
 
 DMEMetrics - Shall be able to get the DME FindCloudlet metrics with starttime > lastrecord on openstack
    [Documentation]
@@ -154,18 +156,22 @@ DMEMetrics - Shall be able to get the DME FindCloudlet metrics with endtime=last
 
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
-   ${metrics}=  Get dme metrics with endtime=lastrecord on openstack   selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metrics}  ${time_diff}=  Get dme metrics with endtime=lastrecord on openstack   selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
 
    Metrics Headings Should Be Correct  ${metrics}
 
-   Values Should be in Range  ${metrics}
+   Values Should be in Range  ${metrics}  ${time_diff}
 
 DMEMetrics - Shall be able to get the DME FindCloudlet metrics with endtime = firstrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with endtime = firstrecord 
    ...  verify empty list is returned
 
-   Get dme metrics with endtime = firstrecord on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metrics}  ${time_diff}=  Get dme metrics with endtime = firstrecord on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}  ${time_diff}
 
 DMEMetrics - Shall be able to get the DME FindCloudlet metrics with starttime > endtime on openstack
    [Documentation]
@@ -186,22 +192,77 @@ DMEMetrics - Shall be able to get the DME FindCloudlet metrics with starttime an
    ...  request DME FindCloudlet metrics with starttime and endtime on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get dme metrics with starttime and endtime on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metrics}  ${time_diff}=  Get dme metrics with starttime and endtime on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
 
    Metrics Headings Should Be Correct  ${metrics}
 
-   Values Should be in Range  ${metrics}
+   Values Should be in Range  ${metrics}  ${time_diff}
 
 DMEMetrics - Shall be able to get the DME FindCloudlet metrics with starttime and endtime and last on openstack
    [Documentation]
    ...  request all DME FindCloudlet metrics with starttime and endtime and last on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get dme metrics with starttime and endtime and last on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metrics}  ${time_diff}=  Get dme metrics with starttime and endtime and last on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}  ${time_diff}
+
+DMEMetrics - Shall be able to get the DME FindCloudlet metrics with startage
+   [Documentation]
+   ...  request all DME FindCloudlet metrics with startage
+   ...  verify info is correct
+
+   ${metrics}=  Get dme metrics with startage  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
    Metrics Headings Should Be Correct  ${metrics}
 
    Values Should be in Range  ${metrics}
+
+DMEMetrics - Shall be able to get the DME FindCloudlet metrics with endage
+   [Documentation]
+   ...  request all DME FindCloudlet metrics with endage
+   ...  verify info is correct
+
+   ${metrics}=  Get dme metrics with endage  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}
+
+DMEMetrics - Shall be able to get the DME FindCloudlet metrics with startage and endage
+   [Documentation]
+   ...  request all DME FindCloudlet metrics with startage and endage
+   ...  verify info is correct
+
+   ${metrics}=  Get dme metrics with startage and endage  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}
+
+DMEMetrics - Shall be able to get the DME FindCloudlet metrics with numsamples
+   [Documentation]
+   ...  request all DME FindCloudlet metrics with numsamples
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get dme metrics with numsamples  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}  ${time_diff}  ${10}
+
+DMEMetrics - Shall be able to get the DME FindCloudlet metrics with numsamples and starttime/endtime
+   [Documentation]
+   ...  request all DME FindCloudlet metrics with numsamples and startime/endtime
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get dme metrics with numsamples and starttime/endtime  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}  ${time_diff}  ${5}
 
 DMEMetrics - DeveloperManager shall be able to get DME FindCloudlet metrics
    [Documentation]
@@ -210,7 +271,7 @@ DMEMetrics - DeveloperManager shall be able to get DME FindCloudlet metrics
 
    ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get dme metrics  selector=FindCloudlet  username=${username}  password=${password}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -223,7 +284,7 @@ DMEMetrics - DeveloperContributor shall be able to get DME FindCloudlet metrics
 
    ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get dme metrics  selector=FindCloudlet  username=${username}  password=${password}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -236,7 +297,7 @@ DMEMetrics - DeveloperViewer shall be able to get DME FindCloudlet metrics
 
    ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get dme metrics  selector=FindCloudlet  username=${username}  password=${password}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
 
-   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -246,6 +307,8 @@ DMEMetrics - DeveloperViewer shall be able to get DME FindCloudlet metrics
 Setup
    ${developer_name}=  Get Default Developer Name 
 
+   Update Settings  region=${region}  dme_api_metrics_collection_interval=${api_collection_timer}s
+
    Register Client  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_name}
    Find Cloudlet	carrier_name=tmus  latitude=36  longitude=-95
    Sleep  30 seconds
@@ -253,53 +316,82 @@ Setup
  
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
+
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        dme-api
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  apporg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  app
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  ver
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  dmeId
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cellID
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  method
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  foundOperator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  reqs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  errs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  0s
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  5ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  10ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  25ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  50ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  100ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  reqs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  0s
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  5ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  10ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  25ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  50ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  100ms
+
+   Should Be True  'apporg' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'app' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'ver' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'cloudletorg' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'cloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'dmeId' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'cellID' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'method' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'foundCloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
+   Should Be True  'foundOperator' in ${metrics['data'][0]['Series'][0]['tags']}
 
 Values Should Be In Range
-  [Arguments]  ${metrics}
+  [Arguments]  ${metrics}  ${time_diff}=${None}  ${numsamples}=${100}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
+
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['apporg']}  ${developer_org_name}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['app']}  ${appname}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['ver']}  ${appversion}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_org_name_dme}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet_name_dme}
+   Should Be True   '${metrics['data'][0]['Series'][0]['tags']['dmeId']}'.startswith('dme-')
+   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
+   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
+   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['method']}  FindCloudlet
+
+   IF  ${time_diff} != ${None}
+      ${time_def}=  Evaluate  ${time_diff}/${numsamples}
+
+      ${time_check}=  Set Variable  ${api_collection_timer}
+      IF  ${time_def} > ${api_collection_timer}
+         ${time_check}=  Set Variable  ${time_def}
+      END
+
+      ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+      @{datesplit}=  Split String  ${datez}  .
+      ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+      ${start}=  Evaluate  ${epochpre} + ${time_check}
+   END
 	
    # verify values
    FOR  ${reading}  IN  @{values}
-      Should Be Equal  ${reading[1]}  ${developer_org_name}
-      Should Be Equal  ${reading[2]}  ${appname}
-      Should Be Equal  ${reading[3]}  ${appversion}
-      Should Be Equal  ${reading[4]}  ${operator_org_name_dme}
-      Should Be Equal  ${reading[5]}  ${cloudlet_name_dme}
-      Should Be True   '${reading[6]}'.startswith('dme-')
-      Should Be True   ${reading[7]} == 0
-      Should Be Equal  ${reading[8]}  FindCloudlet
-      Run Keyword If  '${reading[9]}' == '0'  Check Found Cloudlet  ${reading[9]}  ${reading[10]}
-      ...  ELSE  Check Not Found Cloudlet  ${None}  ${None}
-      Should Be True   ${reading[11]} > 0
-      Should Be True   ${reading[12]} >= 0
-      Should Be True   ${reading[13]} >= 0
-      Should Be True   ${reading[14]} >= 0
-      Should Be True   ${reading[15]} >= 0
-      Should Be True   ${reading[16]} >= 0
-      Should Be True   ${reading[17]} >= 0
-      Should Be True   ${reading[18]} >= 0
+      IF  ${reading[1]} != ${None}    # dont check null readings which be removed later
+         Should Be True   ${reading[1]} > 0
+         Should Be True   ${reading[2]} >= 0
+         Should Be True   ${reading[3]} >= 0
+         Should Be True   ${reading[4]} >= 0
+         Should Be True   ${reading[5]} >= 0
+         Should Be True   ${reading[6]} >= 0
+         Should Be True   ${reading[7]} >= 0
+         Should Be True   ${reading[8]} >= 0
+      END
 
+      IF  ${time_diff} != ${None}
+         ${datez}=  Get Substring  ${reading[0]}  0  -1
+         @{vdatesplit}=  Split String  ${datez}  .
+         ${vepochpre}=  Evaluate  calendar.timegm(time.strptime('${vdatesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+         #${vepochpre}=  Convert Date  ${vdatesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+         ${epoch_diff}=  Evaluate  ${start}-${vepochpre}
+         #Should Be True  ${epoch_diff} <= ${time_check}+1 and ${epoch_diff} >= ${time_check}-1
+         Should Be True  ${time_check}-1 <= ${epoch_diff} <= ${time_check}+1
+         ${start}=  Set Variable  ${vepochpre}
+      END
    END
 
 Check Found Cloudlet
