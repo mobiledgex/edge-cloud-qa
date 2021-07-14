@@ -4,7 +4,7 @@ manifest_1 =  """manifestitems:
     from the link
   contenttype: url
   contentsubtype: none
-  content: https://artifactory-qa.mobiledgex.net/artifactory/baseimages/mobiledgex-v4.5.0.qcow2"""
+  content: https://artifactory.mobiledgex.net/artifactory/baseimages/mobiledgex-v4.5.0.qcow2"""
 
 manifest_2 = """- id: 2
   title: Execute the following command to upload the image to your glance store
