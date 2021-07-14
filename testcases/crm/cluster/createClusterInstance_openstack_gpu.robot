@@ -52,7 +52,7 @@ GPU - 1 GPU shall be allocated for K8s IpAccessShared on openstack
 
    Should Be Equal              ${cluster_inst['data']['node_flavor']}  ${openstack_flavor_name} 
    Should Be Equal              ${cluster_inst['data']['deployment']}   kubernetes
-   Should Be Equal As Integers  ${cluster_inst['data']['ip_access']}    3 
+   Should Be Equal              ${cluster_inst['data']['ip_access']}    IpAccessShared
  
    # verify the NVIDIA is allocated
    Node Should Have GPU      root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}
@@ -88,7 +88,7 @@ GPU - 1 GPU shall be allocated for K8s IpAccessDedicated on openstack
 
    Should Be Equal              ${cluster_inst['data']['node_flavor']}  ${openstack_flavor_name}
    Should Be Equal              ${cluster_inst['data']['deployment']}   kubernetes
-   Should Be Equal As Integers  ${cluster_inst['data']['ip_access']}    1
+   Should Be Equal              ${cluster_inst['data']['ip_access']}    IpAccessDedicated
 
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 
@@ -153,7 +153,7 @@ GPU - 1 GPU shall be allocated for Docker IpAccessShared on openstack
 
    Should Be Equal              ${cluster_inst['data']['node_flavor']}  ${openstack_flavor_name}
    Should Be Equal              ${cluster_inst['data']['deployment']}   docker
-   Should Be Equal As Integers  ${cluster_inst['data']['ip_access']}    3
+   Should Be Equal              ${cluster_inst['data']['ip_access']}    IpAccessShared
 
    Sleep  15s
 
@@ -191,7 +191,7 @@ GPU - no GPU shall be allocated if gpu not specified for K8s IpAccessShared on o
 
    Should Not Be Equal          ${cluster_inst['data']['node_flavor']}  gpu_flavor
    Should Be Equal              ${cluster_inst['data']['deployment']}   kubernetes
-   Should Be Equal As Integers  ${cluster_inst['data']['ip_access']}    3
+   Should Be Equal              ${cluster_inst['data']['ip_access']}    IpAccessShared
 
 
    # verify the NVIDIA is allocated
@@ -229,7 +229,7 @@ GPU - no GPU shall be allocated if gpu not specified for K8s IpAccessDedicated o
 
    Should Not Be Equal          ${cluster_inst['data']['node_flavor']}  gpu_flavor
    Should Be Equal              ${cluster_inst['data']['deployment']}   kubernetes
-   Should Be Equal As Integers  ${cluster_inst['data']['ip_access']}    3
+   Should Be Equal              ${cluster_inst['data']['ip_access']}    IpAccessDedicated
 
 
    # verify the NVIDIA is allocated
@@ -324,7 +324,7 @@ GPU - 1 GPU shall be allocated for each node for K8s IpAccessShared and nodes=2 
 
    Should Be Equal              ${cluster_inst['data']['node_flavor']}  gpu_flavor
    Should Be Equal              ${cluster_inst['data']['deployment']}   kubernetes
-   Should Be Equal As Integers  ${cluster_inst['data']['ip_access']}    3
+   Should Be Equal              ${cluster_inst['data']['ip_access']}    IpAccessShared
 
 
    # verify the NVIDIA is allocated
