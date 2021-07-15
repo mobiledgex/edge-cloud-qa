@@ -258,7 +258,7 @@ Reservable Cluster Should Be Created
    Length Should Be  ${cluster_inst}  1
 
    ${uri}=  Run Keyword If  '${deployment}' == 'docker'  Set Variable  ${app_inst['data']['real_cluster_name']}.${cloudlet_name}.${operator_name}.mobiledgex.net
-   ...  ELSE  Set Variable  ${cloudlet_name}.${operator_name}.mobiledgex.net
+   ...  ELSE  Set Variable  shared.${cloudlet_name}.${operator_name}.mobiledgex.net
 
    Should Be Equal  ${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  autocluster${app_name_default}
    Should Match Regexp  ${app_inst['data']['real_cluster_name']}  ^reservable\\d$
