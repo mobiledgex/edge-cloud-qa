@@ -31,7 +31,7 @@ Register And Find Cloudlet
 
    Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
-   Should Be Equal             ${cloudlet.fqdn}  tmocloud-1.tmus.mobiledgex.net
+   Should Be Equal             ${cloudlet.fqdn}  shared.tmocloud-1.tmus.mobiledgex.net
    Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${latitude}
    Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${longitude}
 
