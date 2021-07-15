@@ -150,7 +150,7 @@ class MexDmeRest(MexRest):
                     self._number_findCloudlet_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
-                if self.decoded_data['status'] != 'FindFound':  # FIND_FOUND
+                if self.decoded_data['status'] != 'Found':  # FIND_FOUND
                     raise Exception(f'find cloudlet not found:{self.decoded_data}')
 
                 # for data in self.decoded_data:
@@ -196,7 +196,7 @@ class MexDmeRest(MexRest):
                     self._number_getqospositionkpi_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
-                if self.decoded_data['result']['status'] != 'RsSuccess':
+                if self.decoded_data['result']['status'] != 'Success':
                     raise Exception(f'get qos position kpi failed:{self.decoded_data}')
 
             except Exception as e:

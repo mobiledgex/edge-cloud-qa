@@ -72,13 +72,13 @@ FindCloudlet REST - request with timestamp shall return tmus
       Log to console  after register
       ${cloudlet}=  Find Cloudlet	carrier_name=${tmus_operator_name}  latitude=34  longitude=-96  seconds=10  nanos=1
 
-      Should Be Equal  ${cloudlet['status']}  FindFound
+      Should Be Equal  ${cloudlet['status']}  Found
 
       Should Be Equal             ${cloudlet['fqdn']}                         ${tmus_appinst.uri}
       Should Be Equal As Numbers  ${cloudlet['cloudlet_location']['latitude']}   ${tmus_cloudlet_latitude}
       Should Be Equal As Numbers  ${cloudlet['cloudlet_location']['longitude']}  ${tmus_cloudlet_longitude}
 
-      Should Be Equal   ${cloudlet['ports'][0]['proto']}                         LProtoTcp 
+      Should Be Equal   ${cloudlet['ports'][0]['proto']}                         Tcp 
       Should Be Equal As Numbers  ${cloudlet['ports'][0]['internal_port']}       ${tmus_appinst.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet['ports'][0]['public_port']}         ${tmus_appinst.mapped_ports[0].public_port}
       Should Be Equal             ${cloudlet['ports'][0]['fqdn_prefix']}         ${tmus_appinst.mapped_ports[0].fqdn_prefix}
