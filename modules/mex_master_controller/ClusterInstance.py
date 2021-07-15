@@ -21,7 +21,7 @@ class ClusterInstance(MexOperation):
         #self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
         self.delete_idle_url = '/auth/ctrl/DeleteIdleReservableClusterInsts'
 
-    def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, autoscale_policy_name=None, use_defaults=True, include_fields=False, auto_delete=True):
+    def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, autoscale_policy_name=None, use_defaults=True, include_fields=False, auto_delete=True):
 
         _fields_list = []
         _number_nodes_field_number="14"
@@ -110,9 +110,16 @@ class ClusterInstance(MexOperation):
         if privacy_policy is not None:
             clusterinst_dict['privacy_policy'] = privacy_policy
 
+        reservation_ended_at_dict = {}
         if reservable is not None:
             clusterinst_dict['reservable'] = reservable
             _fields_list.append(_reservable_field_number)
+        if reservation_ended_at_seconds is not None:
+            reservation_ended_at_dict['seconds'] = int(reservation_ended_at_seconds)
+        if reservation_ended_at_nanoseconds is not None:
+            reservation_ended_at_dict['nanos'] = int(reservation_ended_at_nanoseconds)
+        if reservation_ended_at_dict:
+            clusterinst_dict['reservation_ended_at'] = reservation_ended_at_dict
 
         if crm_override:
             if str(crm_override).lower() == "ignorecrm":
@@ -167,8 +174,8 @@ class ClusterInstance(MexOperation):
 
         return idle_dict
 
-    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=600):
-        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, autoscale_policy_name=autoscale_policy_name, reservable=reservable, auto_delete=auto_delete, use_defaults=use_defaults)
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=600):
+        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, autoscale_policy_name=autoscale_policy_name, reservable=reservable, reservation_ended_at_seconds=reservation_ended_at_seconds, reservation_ended_at_nanoseconds=reservation_ended_at_nanoseconds, auto_delete=auto_delete, use_defaults=use_defaults)
         msg_dict = {'clusterinst': msg}
 
         thread_name = None
@@ -199,13 +206,13 @@ class ClusterInstance(MexOperation):
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, stream=True, stream_timeout=600)
 
 
-    def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, json_data=None, crm_override=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600): 
+    def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, json_data=None, crm_override=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600): 
         if not cluster_name: cluster_name = 'default'
         if not operator_org_name: operator_org_name = 'default'
         if not cloudlet_name: cloudlet_name = 'default'
         if not developer_org_name: developer_org_name = 'default'
 
-        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, crm_override=crm_override, autoscale_policy_name=autoscale_policy_name, use_defaults=False, include_fields=True)      
+        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, reservation_ended_at_seconds=reservation_ended_at_seconds, reservation_ended_at_nanoseconds=reservation_ended_at_nanoseconds, crm_override=crm_override, autoscale_policy_name=autoscale_policy_name, use_defaults=False, include_fields=True)      
         msg_dict = {'clusterinst': msg}
          
         msg_dict_show = None
