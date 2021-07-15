@@ -80,6 +80,22 @@ CreateClusterInst - shall not be able to create reservable cluster with non-Mobi
    deployment=kubernetes  ip_access=IpAccessShared   
    deployment=kubernetes  ip_access=IpAccessDedicated
 
+# ECQ-3608
+CreateClusterInst - shall not be able to create/update reservable cluster with reservationendedat
+   [Documentation]
+   ...  - send reservable CreateClusterInst and UpdateClusterInst with reservationendedat
+   ...  - verify it fails
+
+   [Tags]  ReservableCluster
+
+   [Setup]  Setup
+   [Template]  Reservable cluster with reservationendedat shall Fail
+
+   deployment=docker      ip_access=IpAccessShared
+   deployment=docker      ip_access=IpAccessDedicated
+   deployment=kubernetes  ip_access=IpAccessShared
+   deployment=kubernetes  ip_access=IpAccessDedicated
+
 *** Keywords ***
 Setup
    ${super_token}=  Get Super Token
@@ -115,6 +131,27 @@ Non-MobiledgeX Reservable cluster shall Fail
 
    ${error_msg1}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cluster_name=myclusterreserved  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  deployment=${deployment}  ip_access=${ip_access}  reservable=${True}  token=${super_token}
    Should Be Equal  ${error_msg1}  ('code=400', 'error={"message":"Only MobiledgeX ClusterInsts may be reservable"}')
+
+Reservable cluster with reservationendedat shall Fail
+   [Arguments]  ${deployment}  ${ip_access}
+
+   ${error_msg1}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  reservation_ended_at_seconds=1  cluster_name=myclusterreserved  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  deployment=${deployment}  ip_access=${ip_access}  reservable=${True}  token=${super_token}
+   Should Be Equal  ${error_msg1}  ('code=400', 'error={"message":"Invalid field specified: ReservationEndedAt.Seconds, this field is only for internal use"}')
+
+   ${error_msg1}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  reservation_ended_at_nanoseconds=1  cluster_name=myclusterreserved  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  deployment=${deployment}  ip_access=${ip_access}  reservable=${True}  token=${super_token}
+   Should Be Equal  ${error_msg1}  ('code=400', 'error={"message":"Invalid field specified: ReservationEndedAt.Nanos, this field is only for internal use"}')
+
+   ${error_msg1}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  reservation_ended_at_seconds=1  reservation_ended_at_nanoseconds=1  cluster_name=myclusterreserved  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  deployment=${deployment}  ip_access=${ip_access}  reservable=${True}  token=${super_token}
+   Should Be Equal  ${error_msg1}  ('code=400', 'error={"message":"Invalid field specified: ReservationEndedAt.Seconds, this field is only for internal use"}')
+
+   ${error_msg1}=  Run Keyword And Expect Error  *  Update Cluster Instance  region=${region}  reservation_ended_at_seconds=1  cluster_name=myclusterreserved  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  ip_access=${ip_access}  token=${super_token}
+   Should Be Equal  ${error_msg1}  ('code=400', 'error={"message":"Invalid field specified: ReservationEndedAt.Seconds, this field is only for internal use"}')
+
+   ${error_msg1}=  Run Keyword And Expect Error  *  Update Cluster Instance  region=${region}  reservation_ended_at_nanoseconds=1  cluster_name=myclusterreserved  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  ip_access=${ip_access}  token=${super_token}
+   Should Be Equal  ${error_msg1}  ('code=400', 'error={"message":"Invalid field specified: ReservationEndedAt.Nanos, this field is only for internal use"}')
+
+   ${error_msg1}=  Run Keyword And Expect Error  *  Update Cluster Instance  region=${region}  reservation_ended_at_seconds=1  reservation_ended_at_nanoseconds=1  cluster_name=myclusterreserved  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}    ip_access=${ip_access}  token=${super_token}
+   Should Be Equal  ${error_msg1}  ('code=400', 'error={"message":"Invalid field specified: ReservationEndedAt.Seconds, this field is only for internal use"}')
 
 Teardown
    Cleanup Provisioning
