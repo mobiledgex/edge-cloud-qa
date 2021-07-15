@@ -23,7 +23,7 @@ FindCloudlet - request shall return edge events cookie
 
    log to console  ${decoded_edge_cookie}
    Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
-   Should Be Equal             ${cloudlet.fqdn}  tmocloud-1.dmuus.mobiledgex.net
+   Should Be Equal             ${cloudlet.fqdn}  shared.tmocloud-1.dmuus.mobiledgex.net
    Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${latitude}
    Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${longitude}
 

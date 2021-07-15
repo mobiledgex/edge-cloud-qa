@@ -39,10 +39,10 @@ GetAppInstList - request with opertor code mapping shall return 1 app
       Should Be Equal             ${appfqdns[0].appinstances[0].app_name}                 ${dmuus_appinst['data']['key']['app_key']['name']}
       Should Be Equal             ${appfqdns[0].appinstances[0].app_vers}                 ${dmuus_appinst['data']['key']['app_key']['version']}
       Should Be Equal             ${appfqdns[0].appinstances[0].fqdn}                    ${dmuus_appinst['data']['uri']}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].proto}          ${dmuus_appinst['data']['mapped_ports'][0]['proto']}
+      Should Be Equal As Numbers  ${appfqdns[0].appinstances[0].ports[0].proto}          1
       Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].internal_port}  ${dmuus_appinst['data']['mapped_ports'][0]['internal_port']}
       Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].public_port}    ${dmuus_appinst['data']['mapped_ports'][0]['public_port']}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].fqdn_prefix}    ${dmuus_appinst['data']['mapped_ports'][0]['fqdn_prefix']}
+      #Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].fqdn_prefix}    ${dmuus_appinst['data']['mapped_ports'][0]['fqdn_prefix']}
 
       Should Be Equal             ${appfqdns[0].carrier_name}  ${operator_name}
 
