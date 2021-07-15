@@ -64,7 +64,7 @@ CreateApp - User shall be able to create a k8s loadbalancer app with envVarsYaml
     ${app}=  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=${config}
 
     Should Be Equal  ${app['data']['deployment']}            kubernetes 
-    Should Be Equal  ${app['data']['access_type']}           AccessTypeLoadBalancer
+    Should Be Equal  ${app['data']['access_type']}           LoadBalancer
     Should Be Equal  ${app['data']['configs'][0]['kind']}  envVarsYaml
     Should Be Equal  ${app['data']['configs'][0]['config']}  ${config}
 
@@ -102,7 +102,7 @@ CreateApp - User shall be able to create a helm app with helmCustomizationYaml C
     ${app}=  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  image_path=${helm_image}  access_ports=tcp:2016  configs_kind=helmCustomizationYaml  configs_config=${config}
 
     Should Be Equal  ${app['data']['deployment']}           helm
-    Should Be Equal  ${app['data']['access_type']}           AccessTypeLoadBalancer
+    Should Be Equal  ${app['data']['access_type']}           LoadBalancer
     Should Be Equal  ${app['data']['configs'][0]['kind']}  helmCustomizationYaml 
     Should Be Equal  ${app['data']['configs'][0]['config']}  ${config}
 
@@ -115,7 +115,7 @@ CreateApp - User shall be able to create a k8s loadbalancer app with envVarsYaml
     ${app}=  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=${configs_envvars_url}
 
     Should Be Equal  ${app['data']['deployment']}            kubernetes
-    Should Be Equal  ${app['data']['access_type']}           AccessTypeLoadBalancer
+    Should Be Equal  ${app['data']['access_type']}           LoadBalancer
     Should Be Equal  ${app['data']['configs'][0]['kind']}  envVarsYaml
     Should Be Equal  ${app['data']['configs'][0]['config']}  ${configs_envvars_url}
 
@@ -141,7 +141,7 @@ CreateApp - User shall be able to create a helm app with helmCustomizationYaml C
     ${app}=  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  image_path=${helm_image}  access_ports=tcp:2016  configs_kind=helmCustomizationYaml  configs_config=${configs_helmvars_url}
 
     Should Be Equal  ${app['data']['deployment']}           helm
-    Should Be Equal  ${app['data']['access_type']}           AccessTypeLoadBalancer
+    Should Be Equal  ${app['data']['access_type']}           LoadBalancer
     Should Be Equal  ${app['data']['configs'][0]['kind']}  helmCustomizationYaml
     Should Be Equal  ${app['data']['configs'][0]['config']}  ${configs_helmvars_url}
  
