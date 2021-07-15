@@ -1,4 +1,3 @@
-import json
 import logging
 
 import shared_variables
@@ -16,36 +15,45 @@ class ClusterInstance(MexOperation):
         self.delete_url = '/auth/ctrl/DeleteClusterInst'
         self.show_url = '/auth/ctrl/ShowClusterInst'
         self.update_url = '/auth/ctrl/UpdateClusterInst'
-        #self.metrics_client_url = '/auth/metrics/client'
         self.metrics_cluster_url = '/auth/metrics/cluster'
-        #self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
         self.delete_idle_url = '/auth/ctrl/DeleteIdleReservableClusterInsts'
 
     def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, autoscale_policy_name=None, use_defaults=True, include_fields=False, auto_delete=True):
 
         _fields_list = []
-        _number_nodes_field_number="14"
-        _autoscale_policy_field_number="18"
-        _flavor_name_field_number="3.1"
-        _reservable_field_number="21"
+        _number_nodes_field_number = "14"
+        _autoscale_policy_field_number = "18"
+        _flavor_name_field_number = "3.1"
+        _reservable_field_number = "21"
 
         liveness = None
-        
-        if cluster_name == 'default': cluster_name = shared_variables.cluster_name_default
-        if cloudlet_name == 'default': cloudlet_name = shared_variables.cloudlet_name_default
-        if operator_org_name == 'default': operator_org_name = shared_variables.operator_name_default
-        if developer_org_name == 'default': developer_org_name = shared_variables.developer_name_default
- 
+
+        if cluster_name == 'default':
+            cluster_name = shared_variables.cluster_name_default
+        if cloudlet_name == 'default':
+            cloudlet_name = shared_variables.cloudlet_name_default
+        if operator_org_name == 'default':
+            operator_org_name = shared_variables.operator_name_default
+        if developer_org_name == 'default':
+            developer_org_name = shared_variables.developer_name_default
+
         if use_defaults:
-            if cluster_name is None: cluster_name = shared_variables.cluster_name_default
-            if cloudlet_name is None: cloudlet_name = shared_variables.cloudlet_name_default
-            if operator_org_name is None: operator_org_name = shared_variables.operator_name_default
-            if flavor_name is None: flavor_name = shared_variables.flavor_name_default
-            if developer_org_name is None: developer_org_name = shared_variables.developer_name_default
-            #if liveness is None: liveness = 1
+            if cluster_name is None:
+                cluster_name = shared_variables.cluster_name_default
+            if cloudlet_name is None:
+                cloudlet_name = shared_variables.cloudlet_name_default
+            if operator_org_name is None:
+                operator_org_name = shared_variables.operator_name_default
+            if flavor_name is None:
+                flavor_name = shared_variables.flavor_name_default
+            if developer_org_name is None:
+                developer_org_name = shared_variables.developer_name_default
+            # if liveness is None: liveness = 1
             if deployment == 'kubernetes':
-                if number_masters is None: number_masters = 1
-                if number_nodes is None: number_nodes = 1
+                if number_masters is None:
+                    number_masters = 1
+                if number_nodes is None:
+                    number_nodes = 1
 
             shared_variables.cluster_name_default = cluster_name
             shared_variables.cloudlet_name_default = cloudlet_name
@@ -68,15 +76,13 @@ class ClusterInstance(MexOperation):
 
         clusterinst_dict = {}
         clusterinst_key_dict = {}
-        operator_dict = {}
         cloudlet_key_dict = {}
-        #cluster_key_dict = {}
 
         if operator_org_name is not None:
             cloudlet_key_dict['organization'] = operator_org_name
         if cloudlet_name:
             cloudlet_key_dict['name'] = cloudlet_name
-            
+
         if cluster_name:
             clusterinst_key_dict['cluster_key'] = {'name': cluster_name}
         if cloudlet_key_dict:
@@ -86,7 +92,7 @@ class ClusterInstance(MexOperation):
 
         if clusterinst_key_dict:
             clusterinst_dict['key'] = clusterinst_key_dict
-            
+
         if flavor_name is not None:
             clusterinst_dict['flavor'] = {'name': flavor_name}
             _fields_list.append(_flavor_name_field_number)
@@ -130,7 +136,7 @@ class ClusterInstance(MexOperation):
 
         if deployment is not None:
             clusterinst_dict['deployment'] = deployment
-    
+
         if autoscale_policy_name is not None:
             if str(autoscale_policy_name) != "Unset":
                 clusterinst_dict['auto_scale_policy'] = autoscale_policy_name
@@ -140,7 +146,7 @@ class ClusterInstance(MexOperation):
             clusterinst_dict['fields'] = []
             for field in _fields_list:
                 clusterinst_dict['fields'].append(field)
-            
+
         return clusterinst_dict
 
     def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, last=None, start_time=None, end_time=None, use_defaults=True):
@@ -153,7 +159,7 @@ class ClusterInstance(MexOperation):
         if last is not None:
             try:
                 metric_dict['last'] = int(last)
-            except:
+            except Exception:
                 metric_dict['last'] = last
         if start_time is not None:
             metric_dict['starttime'] = start_time
@@ -205,16 +211,19 @@ class ClusterInstance(MexOperation):
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, stream=True, stream_timeout=600)
 
+    def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, json_data=None, crm_override=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600):
+        if not cluster_name:
+            cluster_name = 'default'
+        if not operator_org_name:
+            operator_org_name = 'default'
+        if not cloudlet_name:
+            cloudlet_name = 'default'
+        if not developer_org_name:
+            developer_org_name = 'default'
 
-    def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, json_data=None, crm_override=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600): 
-        if not cluster_name: cluster_name = 'default'
-        if not operator_org_name: operator_org_name = 'default'
-        if not cloudlet_name: cloudlet_name = 'default'
-        if not developer_org_name: developer_org_name = 'default'
-
-        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, reservation_ended_at_seconds=reservation_ended_at_seconds, reservation_ended_at_nanoseconds=reservation_ended_at_nanoseconds, crm_override=crm_override, autoscale_policy_name=autoscale_policy_name, use_defaults=False, include_fields=True)      
+        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, reservation_ended_at_seconds=reservation_ended_at_seconds, reservation_ended_at_nanoseconds=reservation_ended_at_nanoseconds, crm_override=crm_override, autoscale_policy_name=autoscale_policy_name, use_defaults=False, include_fields=True)
         msg_dict = {'clusterinst': msg}
-         
+
         msg_dict_show = None
         if 'key' in msg:
             msg_show = self._build(cluster_name=msg['key']['cluster_key']['name'], operator_org_name=msg['key']['cloudlet_key']['organization'], cloudlet_name=msg['key']['cloudlet_key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
@@ -222,7 +231,6 @@ class ClusterInstance(MexOperation):
         print('*WARN*', use_defaults, region)
 
         return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, show_msg=msg_dict_show, message=msg_dict, stream=True, stream_timeout=600)[0]
-
 
     def show_cluster_instance(self, token=None, region=None, cluster_name=None, cloudlet_name=None, developer_org_name=None, json_data=None, use_thread=False, use_defaults=True, stream=True, stream_timeout=600):
         msg = self._build(cluster_name=cluster_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, use_defaults=use_defaults)
@@ -247,4 +255,3 @@ class ClusterInstance(MexOperation):
         msg_dict = {'idlereservableclusterinsts': inst}
 
         return self.delete(token=token, url=self.delete_idle_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, stream=True, stream_timeout=600)
-
