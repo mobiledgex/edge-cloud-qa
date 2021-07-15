@@ -37,8 +37,8 @@ CreateApp - User shall be able to create an app with docker compose and no acces
 
     ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0 
 
-    Should Be Equal   ${app['data']['access_type']}          AccessTypeLoadBalancer
-    Should Be Equal   ${app['data']['image_type']}           ImageTypeDocker
+    Should Be Equal   ${app['data']['access_type']}          LoadBalancer
+    Should Be Equal   ${app['data']['image_type']}           Docker
     Should Contain              ${app['data']['deployment_manifest']}  image
 
 # ECQ-1996
@@ -61,8 +61,8 @@ CreateApp - User shall be able to create an app with docker compose and access_t
 
     ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=default
 
-    Should Be Equal   ${app['data']['access_type']}          AccessTypeLoadBalancer            
-    Should Be Equal   ${app['data']['image_type']}           ImageTypeDocker
+    Should Be Equal   ${app['data']['access_type']}          LoadBalancer
+    Should Be Equal   ${app['data']['image_type']}           Docker
     Should Contain              ${app['data']['deployment_manifest']}  image
 
 *** Keywords ***
