@@ -100,7 +100,7 @@ Operator Should See All Details
    Should Be True  ${show[0]['data']['default_resource_alert_threshold']} > 0
    Should Be True  len("${show[0]['data']['deployment']}") > 0
    Should Be True  len("${show[0]['data']['flavor']}") > 0
-   Should Be Equal  ${show[0]['data']['ip_support']}  IpSupportDynamic
+   Should Be Equal  ${show[0]['data']['ip_support']}  Dynamic
    Should Be Equal  ${show[0]['data']['key']['name']}  ${cloudlet}
    Should Be Equal  ${show[0]['data']['key']['organization']}  ${operator}
    Should Be True  ${show[0]['data']['location']['latitude']} > 0
@@ -128,7 +128,7 @@ Developer Should See Minimal Details
    Dictionary Should Not Contain Key  ${show[0]['data']}  notify_srv_addr
    Dictionary Should Not Contain Key  ${show[0]['data']}  physical_name
 
-   Should Be Equal  ${show[0]['data']['ip_support']}  IpSupportDynamic
+   Should Be Equal  ${show[0]['data']['ip_support']}  Dynamic
    Should Be Equal  ${show[0]['data']['key']['name']}  ${cloudlet}
    Should Be Equal  ${show[0]['data']['key']['organization']}  ${operator}
    Should Be True  ${show[0]['data']['location']['latitude']} > 0
