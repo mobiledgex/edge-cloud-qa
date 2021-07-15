@@ -25,7 +25,7 @@ RegisterClient - shall be able to send request with tags
    ${regresp}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  unique_id=myid  unique_id_type=mytype  tags=${tags}
 
    ${cloudlet}=  Find Cloudlet       carrier_name=dmuus  latitude=34  longitude=-96
-   Should Be Equal  ${cloudlet['status']}  FindFound
+   Should Be Equal  ${cloudlet['status']}  Found
    Should Be Equal  ${cloudlet['fqdn']}    shared.tmocloud-1.dmuus.mobiledgex.net
    Should Be True   len('${cloudlet['edge_events_cookie']}') > 100
 
