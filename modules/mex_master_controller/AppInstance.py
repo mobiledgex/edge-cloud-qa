@@ -168,17 +168,22 @@ class AppInstance(MexOperation):
 
         return appinst_dict
 
-    def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, limit=None, number_samples=None, start_time=None, end_time=None, start_age=None, end_age=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, use_defaults=True):
+    def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, last=None, limit=None, number_samples=None, start_time=None, end_time=None, start_age=None, end_age=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, use_defaults=True):
         metric_dict = {}
 
-        if use_defaults:
-            if not selector:
-                selector = 'api'
+        # if use_defaults:
+        #    if not selector:
+        #        selector = 'api'
 
         if type_dict is not None:
             metric_dict.update(type_dict)
         if selector is not None:
             metric_dict['selector'] = selector
+        if last is not None:
+            try:
+                metric_dict['last'] = int(last)
+            except ValueError:
+                metric_dict['last'] = last
         if limit is not None:
             try:
                 metric_dict['limit'] = int(limit)
