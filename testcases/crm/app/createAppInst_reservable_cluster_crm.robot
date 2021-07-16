@@ -108,7 +108,7 @@ CreateAppInst - shall be able to create/delete k8s reservable clusters on CRM
    ${app_inst1}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app_name_default}-1  auto_delete=${False}
 
    Should Match Regexp  ${app_inst1['data']['real_cluster_name']}  reservable[0-9]
-   ${uri}=  Convert To Lowercase  ${cloudlet_name_crm}.${operator_name_crm}.mobiledgex.net
+   ${uri}=  Convert To Lowercase  shared.${cloudlet_name_crm}.${operator_name_crm}.mobiledgex.net
    Should Be Equal  ${app_inst1['data']['uri']}  ${uri}
 
    ${cluster_inst1}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
