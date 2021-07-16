@@ -194,7 +194,7 @@ class VMPool(MexOperation):
             raise Exception(f'VM pool={vm_pool_name} not found')
 
         for vm in pool[0]['data']['vms']:
-            if 'group_name' in vm and vm['group_name'] == group_name and vm['internal_name'] == internal_name and vm['state'] == 'VmInUse':
+            if 'group_name' in vm and vm['group_name'] == group_name and vm['internal_name'] == internal_name and vm['state'] == 'InUse':
                 return vm['name']
 
         raise Exception(f'VM with group_name={group_name} and internal_name={internal_name} not In Use or not found')

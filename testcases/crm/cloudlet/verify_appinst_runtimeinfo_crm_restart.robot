@@ -48,10 +48,10 @@ AppInst show displays runtimeinfo after CRM restart
 
    FOR  ${x}  IN RANGE  0  15
        ${cloudlet_info}=  Show Cloudlet Info   region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-       Exit For Loop If  '${cloudlet_info[0]['data']['state']}' == 'CloudletStateReady'
+       Exit For Loop If  '${cloudlet_info[0]['data']['state']}' == 'Ready'
        Sleep  10s
    END
-   Should Be Equal  ${cloudlet_info[0]['data']['state']}  CloudletStateReady
+   Should Be Equal  ${cloudlet_info[0]['data']['state']}  Ready
 
    ${app_inst1}=  Show App Instances  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name}  token=${tokendev}
 
