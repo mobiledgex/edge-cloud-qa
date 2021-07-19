@@ -28,7 +28,8 @@ GetCloudletManifest - User shall be able to get cloudlet manifest, revoke and ge
 
    ${cloudlet}=  Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_hawkins}  cloudlet_name=${cloudlet_name_openstack_hawkins}restricted  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_hawkins}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  infra_api_access=RestrictedAccess  infra_config_flavor_name=x1.medium  infra_config_external_network_name=external-network-shared
 
-   Should Be Equal  ${cloudlet['data']['infra_api_access']}   RestrictedAccess
+   Should Be Equal As Numbers  ${cloudlet['data']['infra_api_access']}   1
+   #Should Be Equal  ${cloudlet['data']['infra_api_access']}   RestrictedAccess
    Should Be Equal  ${cloudlet['data']['infra_config']['external_network_name']}  external-network-shared 
    Should Be Equal  ${cloudlet['data']['infra_config']['flavor_name']}  x1.medium 
    
