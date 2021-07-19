@@ -57,7 +57,7 @@ namespace MexGrpcSampleConsoleApp
             string uri = dmeHost + ":" + dmePort;
             //string devName = "MobiledgeX”;
             //string appName = "MobiledgeX SDK Demo”;
-            string devName = "mobiledgex";
+            string orgName = "automation_dev_org";
             string appName = "automation_api_app";
 
             // Channel:
@@ -66,7 +66,7 @@ namespace MexGrpcSampleConsoleApp
 
             client = new DistributedMatchEngine.MatchEngineApi.MatchEngineApiClient(channel);
 
-            var registerClientRequest = CreateRegisterClientRequest(devName, appName, "1.0");
+            var registerClientRequest = CreateRegisterClientRequest(orgName, appName, "1.0");
             var regReply = client.RegisterClient(registerClientRequest);
 
             //Console.WriteLine("RegisterClient Reply: " + regReply);
@@ -108,15 +108,15 @@ namespace MexGrpcSampleConsoleApp
             bool expParse = false;
             bool iatParse = false;
             string peer;
-            string dev;
+            string org;
             string app;
             string appver;
 
             foreach (var word in words)
             {
+                //Console.WriteLine("Word:  " + word + "\n\n");
                 if (word.Length > 7)
                 {
-                    //Console.WriteLine(word);
                     if (word.Substring(1, 3) == "exp")
                     {
                         expParse = long.TryParse(word.Substring(7, 10), out expTime);
@@ -158,18 +158,18 @@ namespace MexGrpcSampleConsoleApp
                             Environment.Exit(1);
                         }
                     }
-                    if (word.Substring(1, 7) == "devname")
+                    if (word.Substring(1, 7) == "orgname")
                     {
-                        dev = word.Substring(11);
-                        dev = dev.Substring(0, dev.Length - 1);
-                        if (dev != devName)
+                        org = word.Substring(11);
+                        org = org.Substring(0, org.Length - 1);
+                        if (org != orgName)
                         {
-                            Console.WriteLine("Devname Didn't Match!  " + dev);
+                            Console.WriteLine("Orgname Didn't Match!  " + org);
                             Environment.Exit(1);
                         }
                         else
                         {
-                            Console.WriteLine("Devname Matched!  " + dev);
+                            Console.WriteLine("Orgname Matched!  " + org);
                         }
                     }
                     if (word.Substring(1, 7) == "appname")
@@ -266,12 +266,12 @@ namespace MexGrpcSampleConsoleApp
         }
 
 
-        RegisterClientRequest CreateRegisterClientRequest(string devName, string appName, string appVersion)
+        RegisterClientRequest CreateRegisterClientRequest(string orgName, string appName, string appVersion)
         {
             var request = new RegisterClientRequest
             {
                 Ver = 1,
-                DevName = devName,
+                DevName = orgName,
                 AppName = appName,
                 AppVers = appVersion
             };
