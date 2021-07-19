@@ -1,4 +1,6 @@
-﻿using System;
+﻿//ECQ-1874
+
+using System;
 using Grpc.Core;
 using System.Net;
 using System.IO;

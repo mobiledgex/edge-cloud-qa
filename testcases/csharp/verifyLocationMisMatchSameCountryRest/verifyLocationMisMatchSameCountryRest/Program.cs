@@ -1,4 +1,6 @@
-﻿using System;
+﻿//ECQ-1188
+
+using System;
 using System.Net;
 using System.IO;
 using System.Text;
@@ -146,13 +148,13 @@ namespace RestSample
 
                 Console.WriteLine("VerifyLocationMisMatchSameCountryRest Testcase");
 
-                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
                 //port = MatchingEngine.defaultDmeRestPort;
 
                 //Set the location in the location server
                 Console.WriteLine("Seting the location in the Location Server");
-                setLocation("52.52", "13.405");
+                setLocation("52.52", "10.405");
                 Console.WriteLine("Location Set\n");
 
                 // Start location task:
@@ -176,7 +178,7 @@ namespace RestSample
                     altitude = 100,
                     horizontal_accuracy = 5,
                     speed = 2,
-                    longitude = 13.405,
+                    longitude = 10.405,
                     latitude = 53.42,
                     vertical_accuracy = 20,
                     timestamp = ts
@@ -200,6 +202,8 @@ namespace RestSample
 
                 // Awaits:
                 var verifyLocationReply = await verfiyLocationTask;
+                Console.WriteLine("Location Reply Status: " + verifyLocationReply.gps_location_status.ToString());
+               // Console.WriteLine("Location Reply Full: " + verifyLocationReply.);
                 if (verifyLocationReply.gps_location_status.ToString() == "LOC_UNKNOWN")
                 {
                     Console.WriteLine("Verify Location Failed!!");
