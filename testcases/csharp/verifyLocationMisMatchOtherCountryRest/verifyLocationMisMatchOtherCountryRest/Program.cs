@@ -1,4 +1,6 @@
-﻿using System;
+﻿//ECQ-1187
+
+using System;
 using System.Net;
 using System.IO;
 using System.Text;
