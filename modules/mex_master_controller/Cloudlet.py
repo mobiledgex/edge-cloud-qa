@@ -28,8 +28,10 @@ class Cloudlet(MexOperation):
         self.resourcequotaprops_url = '/auth/ctrl/GetCloudletResourceQuotaProps'
         self.cloudletusage_metrics_url = '/auth/metrics/cloudlet/usage'
         self.cloudletrefs_url = '/auth/ctrl/ShowCloudletRefs'
+        self.findflavormatch_url = '/auth/ctrl/FindFlavorMatch'
+        self.showflavorsfor_url = '/auth/ctrl/ShowFlavorsForCloudlet'
 
-    def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, maintenance_state=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, kafka_cluster=None, kafka_user=None, kafka_password=None, include_fields=False, use_defaults=True):
+    def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, maintenance_state=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, kafka_cluster=None, kafka_user=None, kafka_password=None, flavor_name=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
         _operator_name_field_number = "2.1"
@@ -234,6 +236,9 @@ class Cloudlet(MexOperation):
         if default_resource_alert_threshold is not None:
             cloudlet_dict['default_resource_alert_threshold'] = int(default_resource_alert_threshold)
             _fields_list.append(_default_resource_alert_threshold_field_number)
+
+        if flavor_name is not None:
+            cloudlet_dict['flavor_name'] = flavor_name
 
         if include_fields and _fields_list:
             cloudlet_dict['fields'] = []
@@ -514,3 +519,15 @@ class Cloudlet(MexOperation):
         msg_dict = {'cloudletkey': msg['key']}
 
         return self.show(token=token, url=self.revoke_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
+
+    def find_flavor_match(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, flavor_name=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, flavor_name=flavor_name, use_defaults=False)
+        msg_dict = {'FlavorMatch': msg}
+
+        return self.show(token=token, url=self.findflavormatch_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
+
+    def show_flavors_for_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
+        msg_dict = {'cloudletkey': msg['key']}
+
+        return self.show(token=token, url=self.showflavorsfor_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
