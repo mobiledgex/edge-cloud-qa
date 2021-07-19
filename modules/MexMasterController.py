@@ -1275,7 +1275,10 @@ class MexMasterController(MexRest):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
-                if appinstance and appinstance[0]['data']['state'] == 'Ready':
+                if appinstance[0]['data']['state'] == 'Ready':
+                    logging.info(f'App Instance is Ready')
+                    return appinstance
+                elif appinstance[0]['data']['state'] == 5:
                     logging.info(f'App Instance is Ready')
                     return appinstance
                 else:
@@ -1317,13 +1320,13 @@ class MexMasterController(MexRest):
         raise Exception(f'app instance health check is NOT {status}. Got {appinstance[0]["data"]["health_check"]} but expected {status}')
 
     def wait_for_app_instance_health_check_ok(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=False, use_thread=False, timeout=180):
-        self.wait_for_app_instance_health_check(status='Ok', token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, timeout=timeout)
+        self.wait_for_app_instance_health_check(status=3, token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, timeout=timeout)
 
     def wait_for_app_instance_health_check_server_fail(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=90):
-        self.wait_for_app_instance_health_check(status='FailServerFail', token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, timeout=timeout)
+        self.wait_for_app_instance_health_check(status=2, token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, timeout=timeout)
 
     def wait_for_app_instance_health_check_rootlb_offline(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=90):
-        self.wait_for_app_instance_health_check(status='FailRootlbOffline', token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, timeout=timeout)
+        self.wait_for_app_instance_health_check(status=1, token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, timeout=timeout)
 
     def run_command(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, container_id=None, timeout=120, json_data=None, use_defaults=True, use_thread=False):
         return self.run_cmd.run_command(token=token, region=region, mc_address=self.mc_address, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, container_id=container_id, command=command, use_defaults=use_defaults, use_thread=use_thread, timeout=timeout)

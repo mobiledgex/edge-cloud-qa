@@ -70,10 +70,10 @@ Cloudletinfo displays correct infra usage and existing cluster instances after C
 
    FOR  ${x}  IN RANGE  0  15
        ${cloudlet_info}=  Show Cloudlet Info   region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-       Exit For Loop If  '${cloudlet_info[0]['data']['state']}' == 'CloudletStateReady'
+       Exit For Loop If  '${cloudlet_info[0]['data']['state']}' == '2'
        Sleep  10s
    END
-   Should Be Equal  ${cloudlet_info[0]['data']['state']}  CloudletStateReady
+   Should Be Equal As Numbers   ${cloudlet_info[0]['data']['state']}  2
 
    ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  infra_usage=${True}  token=${tokenop}
 

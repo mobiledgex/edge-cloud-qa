@@ -101,16 +101,16 @@ Success Create/Show/Delete Cloudlet Via mcctl
    Should Be Equal As Numbers  ${show[0]['location']['latitude']}   ${parms['location.latitude']}
    Should Be Equal As Numbers  ${show[0]['location']['longitude']}  ${parms['location.longitude']}
    Should Be Equal As Numbers  ${show[0]['num_dynamic_ips']}        ${parms['numdynamicips']}
-   Should Be Equal             ${show[0]['state']}                  Ready
+   Should Be Equal As Numbers  ${show[0]['state']}                  5
 
    IF  'trustpolicy' in ${parms}
       IF  '${parms['trustpolicy']}' != '${Empty}'
          Should Be Equal  ${show[0]['trust_policy']}  ${parms['trustpolicy']}
-         Should Be Equal  ${show[0]['trust_policy_state']}  Ready
+         Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  5
       END
    ELSE
       Should Not Contain  ${show[0]}  trust_policy
-      Should Be Equal     ${show[0]['trust_policy_state']}  NotPresent
+      Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  1
    END
 
    IF  'kafkacluster' in ${parms}
@@ -143,16 +143,16 @@ Success Update/Show Cloudlet Via mcctl
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['cloudlet']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['cloudlet-org']}
-   Should Be Equal  ${show[0]['state']}                  Ready
+   Should Be Equal As Numbers  ${show[0]['state']}     5
 
    IF  'trustpolicy' in ${parms}
       IF  '${parms['trustpolicy']}' != '${Empty}'
          Should Be Equal  ${show[0]['trust_policy']}  ${parms['trustpolicy']}
-         Should Be Equal  ${show[0]['trust_policy_state']}  Ready
+         Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  5
       END
    ELSE
       Should Not Contain  ${show[0]}  trust_policy
-      Should Be Equal  ${show[0]['trust_policy_state']}  NotPresent
+      Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  1
    END
 
    IF  'kafkacluster' in ${parms}
