@@ -294,7 +294,7 @@ UpdateApp - shall not be able to update app with mismatched appinst rules
    # create cloudlet with trust policy
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator}  trust_policy=${policy_name}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_name}
-   Should Be Equal             ${cloudlet['data']['trust_policy_state']}  Ready
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
 
    # add appinst on the cloudlet
    &{rule1}=  Create Dictionary  protocol=udp  port=1001  remote_ip=3.1.1.1
