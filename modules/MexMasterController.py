@@ -1409,6 +1409,16 @@ class MexMasterController(MexRest):
         """
         return self.cloudlet.add_resource_tag(token=token, region=region, resource_name=resource_name, operator_org_name=operator_org_name, tags=tags, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+    def find_flavor_match(self, token=None, region=None, cloudlet_name=None, operator_org_name=None, flavor_name=None, json_data=None, use_defaults=True, use_thread=False):
+        """ Sends cloudlet findflavormatch
+        """
+        return self.cloudlet.find_flavor_match(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, flavor_name=flavor_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_flavors_for_cloudlet(self, token=None, region=None, cloudlet_name=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        """ Sends cloudlet showflavorsfor
+        """
+        return self.cloudlet.show_flavors_for_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
     def get_cluster_metrics(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
       return self.cluster_instance.get_cluster_metrics(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
         

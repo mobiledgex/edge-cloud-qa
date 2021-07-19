@@ -70,6 +70,48 @@ UpdateCloudlet - mcctl shall handle update cloudlet
       # kafka
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  kafkacluster=x
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  kafkacluster=cluster  kafkauser=user  kafkapassword=password
+
+# ECQ-3609
+FindFlavorMatch - mcctl shall handle findflavormatch
+   [Documentation]
+   ...  - send FindFlavorMatch via mcctl with various args
+   ...  - verify flavor is returned or error is received
+
+   [Setup]
+
+   ${show}=  Run mcctl  cloudlet findflavormatch region=${region} cloudlet=tmocloud-1 cloudlet-org=dmuus flavor=automation_api_flavor  version=${version}
+   Should Be Equal  ${show['key']['name']}  tmocloud-1
+   Should Be Equal  ${show['key']['organization']}  dmuus
+   Should Be Equal  ${show['flavor_name']}  x1.small
+
+   ${error1}=  Run Keyword And Expect Error  *  Run mcctl  cloudlet findflavormatch region=${region} cloudlet-org=dmuus  version=${version}
+   Should Contain  ${error1}  missing required args
+
+   ${error2}=  Run Keyword And Expect Error  *  Run mcctl  cloudlet findflavormatch region=${region} cloudlet=tmocloud-1  version=${version}
+   Should Contain  ${error2}  missing required args
+
+   ${error3}=  Run Keyword And Expect Error  *  Run mcctl  cloudlet findflavormatch region=${region} cloudlet=tmocloud-1 cloudlet-org=dmuus  version=${version}
+   Should Contain  ${error3}  missing required args
+
+# ECQ-3610
+ShowFlavorsFor - mcctl shall handle showflavorsfor
+   [Documentation]
+   ...  - send ShowFlavorsFor via mcctl with various args
+   ...  - verify flavor is returned or error is received
+
+   [Setup]
+
+   ${show}=  Run mcctl  cloudlet showflavorsfor region=${region} cloudlet=tmocloud-1 cloudlet-org=dmuus  version=${version}
+   Should Contain  ${show}  automation_api_flavor
+
+   ${error1}=  Run Keyword And Expect Error  *  Run mcctl  cloudlet showflavorsfor region=${region}  version=${version}
+   Should Contain  ${error1}  missing required args
+
+   ${error2}=  Run Keyword And Expect Error  *  Run mcctl  cloudlet showflavorsfor region=${region} cloudlet=tmocloud-1   version=${version}
+   Should Contain  ${error2}  missing required args
+
+   ${error3}=  Run Keyword And Expect Error  *  Run mcctl  cloudlet showflavorsfor region=${region} cloudlet-org=dmuus   version=${version}
+   Should Contain  ${error3}  missing required args
  
 *** Keywords ***
 Setup
