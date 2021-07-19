@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-// https://mobiledgex.atlassian.net/browse/ECQ-2186
+// ECQ-2186
 
 using System;
 using System.Threading.Tasks;
@@ -169,7 +169,7 @@ namespace RestSample
             {
                 Console.WriteLine("GetConnectionWorkflowRest Testcase");
 
-                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo);
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
                 MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
                 me.SetTimeout(15000);
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -183,6 +183,8 @@ namespace RestSample
                 // Await synchronously.
                 //Console.WriteLine("Port: " + port);
                 var registerClientReply = await me.RegisterClient(host, port, registerClientRequest);
+
+                Console.WriteLine("RC Reply:  " + registerClientReply.status.ToString());
 
                 if (registerClientReply.status.ToString() != "RS_SUCCESS")
                 {

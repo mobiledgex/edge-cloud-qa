@@ -1,4 +1,6 @@
-﻿using System;
+﻿//ECQ-1192
+
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using DistributedMatchEngine;
@@ -82,7 +84,7 @@ namespace RestSample
 
                 Console.WriteLine("FindCloudletFailRest Testcase");
 
-                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo);
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
                 MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
                 //port = MatchingEngine.defaultDmeRestPort;
 
@@ -274,6 +276,15 @@ namespace RestSample
                 // Awaits:
                 var findCloudletReply = await findCloudletTask;
                 if(findCloudletReply.status.ToString() == "FIND_FOUND")
+                {
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.fqdn);
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.latitude);
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.longitude);
+                    Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
+                }
+                if(findCloudletReply.status.ToString() == "FIND_UNKNOWN")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.fqdn);
