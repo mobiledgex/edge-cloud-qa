@@ -164,7 +164,7 @@ CreateCloudlet - shall be able to create cloudlet with trust policy
 
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal             ${cloudlet['data']['trust_policy_state']}  Ready
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
 
 # ECQ-3091
 CreateCloudlet - shall be able to create cloudlet with empty trust policy
@@ -176,7 +176,7 @@ CreateCloudlet - shall be able to create cloudlet with empty trust policy
 
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${Empty}
    Should Not Contain  ${cloudlet['data']}  trust_policy
-   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  NotPresent
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  1
 
 # ECQ-3568
 CreateCloudlet - shall be able to create cloudlet with kafka cluster only

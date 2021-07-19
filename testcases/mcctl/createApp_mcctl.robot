@@ -400,16 +400,16 @@ Success Update/Show App Via mcctl
 
    Run Keyword If  'imagepath' in ${parms}  Should Be Equal  ${show[0]['image_path']}  ${parms['imagepath']} 
 
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDirect'  Should Be Equal  ${show[0]['access_type']}  Direct
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeLoadBalancer'  Should Be Equal  ${show[0]['access_type']}  LoadBalancer
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'docker'  Should Be Equal  ${show[0]['access_type']}  LoadBalancer
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal  ${show[0]['access_type']}  LoadBalancer
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'helm'  Should Be Equal  ${show[0]['access_type']}  LoadBalancer
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'vm'  Should Be Equal  ${show[0]['access_type']}  LoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDirect'  Should Be Equal  ${show[0]['access_type']}  AccessTypeDirect
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeLoadBalancer'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'docker'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'helm'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'vm'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
 
-   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal  ${show[0]['image_type']}  Docker
-   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal  ${show[0]['image_type']}  Qcow
-   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal  ${show[0]['image_type']}  Helm
+   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal  ${show[0]['image_type']}  ImageTypeDocker
+   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal  ${show[0]['image_type']}  ImageTypeQcow
+   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal  ${show[0]['image_type']}  ImageTypeHelm
 
    Run Keyword If  'trusted' in ${parms}  Run Keyword If  ${parms['trusted']} == ${True}  Should Be Equal  ${show[0]['trusted']}  ${True}
    ...  ELSE  Should Not Contain  ${show[0]}  trusted

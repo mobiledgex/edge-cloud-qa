@@ -338,7 +338,7 @@ UpdateCloudlet - error shall be received for update to trusted with nontrusted a
    # create cloudlet without trust policy
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${oper}
    Should Not Contain  ${cloudlet['data']}  trust_policy
-   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  NotPresent
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  1
 
    # create a trusted app/appinst on the cloudlet
    ${app}=  Create App  region=${region}  trusted=${True}
@@ -388,7 +388,7 @@ UpdateCloudlet - error shall be received for update to trusted with trusted app 
    # create cloudlet without trust policy
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${oper}
    Should Not Contain  ${cloudlet['data']}  trust_policy
-   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  NotPresent
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  1
 
    # create a trusted app/appinst on the cloudlet
    &{rule1}=  Create Dictionary  protocol=udp  port=1000  remote_ip=3.1.1.1

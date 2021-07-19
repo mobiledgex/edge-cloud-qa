@@ -42,7 +42,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStart
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStart     use_defaults=False
 
-   Should Be Equal  ${ret['data']['maintenance_state']}  UnderMaintenance  # UNDER_MAINTENANCE
+   Should Be Equal As Integers   ${ret['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
    Should Be True  ${ret['data']['updated_at']['seconds']} > ${created_secs}
    Should Be True  ${ret['data']['updated_at']['nanos']} > 0
@@ -52,7 +52,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStart
    Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation      use_defaults=False
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStart     use_defaults=False
 
-   Should Be Equal  ${ret2['data']['maintenance_state']}  UnderMaintenance  # UNDER_MAINTENANCE
+   Should Be Equal As Integers   ${ret2['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
    Should Be True  ${ret2['data']['updated_at']['seconds']} > ${ret['data']['updated_at']['seconds']}
    Should Be True  ${ret2['data']['updated_at']['nanos']} > 0
@@ -65,7 +65,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNo
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover      use_defaults=False
 
-   Should Be Equal  ${ret['data']['maintenance_state']}  UnderMaintenance  # UNDER_MAINTENANCE
+   Should Be Equal As Integers   ${ret['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
    Should Be True  ${ret['data']['updated_at']['seconds']} > ${created_secs}
    Should Be True  ${ret['data']['updated_at']['nanos']} > 0
@@ -75,7 +75,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNo
    Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation      use_defaults=False
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover      use_defaults=False
 
-   Should Be Equal  ${ret2['data']['maintenance_state']}  UnderMaintenance  # UNDER_MAINTENANCE
+   Should Be Equal As Integers   ${ret2['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
    Should Be True  ${ret2['data']['updated_at']['seconds']} > ${ret['data']['updated_at']['seconds']}
    Should Be True  ${ret2['data']['updated_at']['nanos']} > 0
@@ -90,7 +90,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNo
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover     use_defaults=False
 
-   Should Be Equal  ${ret['data']['maintenance_state']}  UnderMaintenance  # UNDER_MAINTENANCE
+   Should Be Equal As Integers   ${ret['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
    Should Be True  ${ret['data']['updated_at']['seconds']} > ${created_secs}
    Should Be True  ${ret['data']['updated_at']['nanos']} > 0
@@ -98,7 +98,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNo
    Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation      use_defaults=False
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStart     use_defaults=False
 
-   Should Be Equal  ${ret2['data']['maintenance_state']}  UnderMaintenance  # UNDER_MAINTENANCE
+   Should Be Equal As Integers   ${ret2['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
    Should Be True  ${ret2['data']['updated_at']['seconds']} > ${ret['data']['updated_at']['seconds']}
    Should Be True  ${ret2['data']['updated_at']['nanos']} > 0
