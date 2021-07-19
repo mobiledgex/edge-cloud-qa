@@ -32,7 +32,7 @@ User shall be able to deploy docker compose file with public docker image
     Create App  region=${region}  token=${token}  access_ports=tcp:5201  deployment_manifest=${docker_compose_iperf}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${orgname}  app_version=1.0   access_type=loadbalancer
     ${appinst}=  Create App Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${orgname}  cluster_instance_developer_org_name=${orgname}
 
-    Should Be Equal             ${appinst['data']['state']}  Ready
+    Should Be Equal As Numbers  ${appinst['data']['state']}  5
     Should Be Equal             ${appinst['data']['runtime_info']['container_ids'][0]}  iperf3
 
 *** Keywords ***
