@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+// ECQ-2802
+
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -180,7 +182,12 @@ namespace RestSample
                     try
                     {
                         registerClientReply = await me.RegisterClient(host, MatchingEngine.defaultDmeRestPort, registerClientRequest);
-                        Console.WriteLine("RegisterClient Reply Status: " + registerClientReply.status);
+                        if(registerClientReply.status != ReplyStatus.RS_SUCCESS)
+                        {
+                            Console.WriteLine("RegisterClient Failed! " + registerClientReply.status);
+                            Console.WriteLine("Test Case Failed!!!");
+                            Environment.Exit(1);
+                        }                        
                     }
                     catch (DmeDnsException)
                     {
@@ -219,6 +226,12 @@ namespace RestSample
                     try
                     {
                         findCloudletReply = await me.FindCloudlet(host, MatchingEngine.defaultDmeRestPort, findCloudletRequest);
+                        if(findCloudletReply.status != FindCloudletReply.FindStatus.FIND_FOUND)
+                        {
+                            Console.WriteLine("FindCloudlet Failed! " + findCloudletReply.status);
+                            Console.WriteLine("Test Case Failed!!!");
+                            Environment.Exit(1);
+                        }
                     }
                     catch (DmeDnsException)
                     {
