@@ -97,18 +97,18 @@ Clientappusage - mcctl shall handle clientappusage metrics failures
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=x
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=latency
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=latency appname=x
-      Error: Bad Request (400), Custom stat not implemented yet                                                                 selector=custom app-org=automation_dev_org
-      Error: Bad Request (400), Provided selector "x" is not valid. Must provide only one of "latency", "deviceinfo", "custom"  selector=x app-org=automation_dev_org
+      Error: Bad Request (400), Provided selector "custom" is not valid. Must provide only one of "latency", "deviceinfo"\\n    selector=custom app-org=automation_dev_org
+      Error: Bad Request (400), Provided selector "x" is not valid. Must provide only one of "latency", "deviceinfo"\\n         selector=x app-org=automation_dev_org
       Error: Bad Request (400), DeviceOS not allowed for appinst latency metric                                                 selector=latency  app-org=automation_dev_org  deviceos=x
       Error: Bad Request (400), DeviceModel not allowed for appinst latency metric                                              selector=latency  app-org=automation_dev_org  devicemodel=x
-      error decoding \\\'MetricsCommon.TimeRange.StartTime\\\'                                                                  selector=latency  app-org=automation_dev_org  starttime=x
-      error decoding \\\'MetricsCommon.TimeRange.EndTime\\\'                                                                    selector=latency  app-org=automation_dev_org  endtime=x
-      error decoding \\\'MetricsCommon.TimeRange.StartAge\\\': time: invalid duration "x"                                       selector=latency  cloudlet-org=automation_dev_org  startage=x
-      error decoding \\\'MetricsCommon.TimeRange.EndAge\\\': time: invalid duration "x"                                         selector=latency  cloudlet-org=automation_dev_org  endage=x
-      Unable to parse "limit" value "x" as int: invalid syntax                                                                  selector=latency  app-org=automation_dev_org  limit=x
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time.Time: parsing time "x" into RFC3339 format failed. Example: "2006-01-02T15:04:05Z07:00"  selector=latency  app-org=automation_dev_org  starttime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time.Time: parsing time "x" into RFC3339 format failed. Example: "2006-01-02T15:04:05Z07:00"    selector=latency  app-org=automation_dev_org  endtime=x
+      Error: parsing arg "startage\=x" failed: unable to parse "x" as time.Duration: time: invalid duration "x"                                                      selector=latency  cloudlet-org=automation_dev_org  startage=x
+      Error: parsing arg "endage\=x" failed: unable to parse "x" as time.Duration: time: invalid duration "x"                                                        selector=latency  cloudlet-org=automation_dev_org  endage=x
+      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                                                selector=latency  app-org=automation_dev_org  limit=x
       Error: Bad Request (400), LocationTile not allowed for appinst deviceinfo metric                                          selector=deviceinfo  app-org=automation_dev_org  locationtile=x
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=deviceinfo
-      Unable to parse "numsamples" value "x" as int: invalid syntax                                                             selector=latency  app-org=automation_dev_org  numsamples=x
+      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                     selector=latency  app-org=automation_dev_org  numsamples=x
 
 *** Keywords ***
 Setup
