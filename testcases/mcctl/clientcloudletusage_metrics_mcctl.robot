@@ -91,15 +91,15 @@ Clientcloudletusage - mcctl shall handle clientcloudletusage metrics failures
       Error: Bad Request (400), Invalid clientcloudletusage selector: x                           selector=x cloudlet-org=dmuus
       Error: Bad Request (400), DeviceOS not allowed for cloudlet latency metric                  selector=latency  cloudlet-org=automation_dev_org  deviceos=x
       Error: Bad Request (400), DeviceModel not allowed for cloudlet latency metric               selector=latency  cloudlet-org=automation_dev_org  devicemodel=x
-      error decoding \\\'MetricsCommon.TimeRange.StartTime\\\': parsing time "x"                  selector=latency  cloudlet-org=automation_dev_org  starttime=x
-      error decoding \\\'MetricsCommon.TimeRange.EndTime\\\': parsing time "x"                    selector=latency  cloudlet-org=automation_dev_org  endtime=x
-      error decoding \\\'MetricsCommon.TimeRange.StartAge\\\': time: invalid duration "x"         selector=latency  cloudlet-org=automation_dev_org  startage=x
-      error decoding \\\'MetricsCommon.TimeRange.EndAge\\\': time: invalid duration "x"           selector=latency  cloudlet-org=automation_dev_org  endage=x
-      Unable to parse "limit" value "x" as int: invalid syntax                                    selector=latency  cloudlet-org=automation_dev_org  limit=x
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time.Time: parsing time "x" into RFC3339 format failed. Example: "2006-01-02T15:04:05Z07:00"   selector=latency  cloudlet-org=automation_dev_org  starttime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time.Time: parsing time "x" into RFC3339 format failed. Example: "2006-01-02T15:04:05Z07:00"                    selector=latency  cloudlet-org=automation_dev_org  endtime=x
+      Error: parsing arg "startage\=x" failed: unable to parse "x" as time.Duration: time: invalid duration "x"         selector=latency  cloudlet-org=automation_dev_org  startage=x
+      Error: parsing arg "endage\=x" failed: unable to parse "x" as time.Duration: time: invalid duration "x"           selector=latency  cloudlet-org=automation_dev_org  endage=x
+      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                    selector=latency  cloudlet-org=automation_dev_org  limit=x
       Error: Bad Request (400), DataNetworkType not allowed for cloudlet deviceinfo metric        selector=deviceinfo  cloudlet-org=dmuus  datanetworktype=x
       Error: missing required args:                                                               selector=deviceinfo
       Error: Bad Request (400), DataNetworkType not allowed for cloudlet deviceinfo metric        selector=deviceinfo  cloudlet-org=automation_dev_org  datanetworktype=x
-      Unable to parse "numsamples" value "x" as int: invalid syntax                               selector=latency  cloudlet-org=automation_dev_org  numsamples=x
+      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax             selector=latency  cloudlet-org=automation_dev_org  numsamples=x
 
 *** Keywords ***
 Setup
