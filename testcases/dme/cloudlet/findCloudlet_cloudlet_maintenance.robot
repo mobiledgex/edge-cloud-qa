@@ -189,7 +189,7 @@ Register Client and Find Cloudlet
    # verify it returns the appinst on the 1st cloudlet
    Register Client  app_name=${app_name_default}  developer_org_name=${developer_org_name_automation}
    ${cloudlet_1}=  Find Cloudlet      latitude=31  longitude=-91
-   Should Be Equal  ${cloudlet_1['status']}  Found
+   Should Be Equal  ${cloudlet_1['status']}  FIND_FOUND
    Should Be Equal  ${cloudlet_1['fqdn']}  ${fqdn_check}
 
    # put cloudlet in maintenance mode
@@ -203,7 +203,7 @@ Register Client and Find Cloudlet
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
 
    ${cloudlet_3}=  Find Cloudlet      latitude=31  longitude=-91
-   Should Be Equal  ${cloudlet_3['status']}  Found
+   Should Be Equal  ${cloudlet_3['status']}  FIND_FOUND
    Should Be Equal  ${cloudlet_3['fqdn']}  ${fqdn_check}
 
    Should Be True  len('${cloudlet_3['edge_events_cookie']}') > 100
