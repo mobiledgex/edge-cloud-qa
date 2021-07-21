@@ -257,6 +257,16 @@ UpdateApp - mcctl shall handle update app
 
       appname=${app_name_k8s}  app-org=${developer}  appvers=1.0  autoprovpolicies=${autoprovpolicy_name}
       appname=${app_name_k8s}  app-org=${developer}  appvers=1.0  autoprovpolicies:empty=true
+
+# ECQ-3618
+UpdateApp - mcctl shall handle update failures
+   [Documentation]
+   ...  - send UpdateApp via mcctl with various error cases
+   ...  - verify proper error is received
+
+   [Template]  Fail Update App Via mcctl
+
+      Error: parsing arg "autoprovpolicies:empty\=xx" failed: unable to parse "xx" as bool, valid values are true, false  appname=andyautoprov appvers=1.0 app-org=automation_dev_org autoprovpolicies:empty=xx 
  
 *** Keywords ***
 Setup
@@ -438,3 +448,12 @@ Fail Create App Via mcctl
 
    ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app create region=${region} ${parmss}  version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
+
+Fail Update App Via mcctl
+   [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
+
+   ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
+
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app update region=${region} ${parmss}    version=${version}
+   Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
+
