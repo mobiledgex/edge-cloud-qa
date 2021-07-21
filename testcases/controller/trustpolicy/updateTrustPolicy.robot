@@ -863,7 +863,7 @@ UpdateTrustPolicy - shall be able to update policy in use by multiple cloudlets
 
    ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}-2  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal   ${cloudlet['data']['trust_policy_state']}  Ready
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
 
    ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}-3  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
