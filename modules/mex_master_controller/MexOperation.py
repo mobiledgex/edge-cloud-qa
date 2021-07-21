@@ -142,6 +142,12 @@ class MexOperation(MexRest):
                 elif url.endswith('billingorg/delete'):
                     if str(self.resp.text) != '{"message":"Billing Organization deleted"}':
                         raise Exception('ERROR: billing org not deleted successfully:' + str(self.resp_text))
+                elif url.endswith('CreateGPUDriver'):
+                    if 'GPU driver created successfully' not in str(self.resp_text):
+                        raise Exception('ERROR: GPU driver not created successfully:' + str(self.resp_text))
+                elif url.endswith('AddGPUDriverBuild'):
+                    if 'GPU driver build added successfully' not in str(self.resp_text):
+                        raise Exception('ERROR: GPU driver build not added successfully:' + str(self.resp_text))
                 else:
                     logger.info(f'not checking specific url response for {url}')
                 #elif url.endswith('UpdateCloudlet'):

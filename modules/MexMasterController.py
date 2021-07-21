@@ -50,6 +50,7 @@ from mex_master_controller.RestrictedOrgUpdate import RestrictedOrgUpdate
 from mex_master_controller.Controller import Controller
 from mex_master_controller.Org import Org
 from mex_master_controller.BillingOrg import BillingOrg
+from mex_master_controller.GpuDriver import GpuDriver
 
 
 import shared_variables_mc
@@ -217,6 +218,7 @@ class MexMasterController(MexRest):
         self.org = Org(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.billingorg = BillingOrg(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token,
                                      super_token=self.super_token)
+        self.gpudriver = GpuDriver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -293,7 +295,13 @@ class MexMasterController(MexRest):
 
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
-    
+   
+    def get_default_gpudriver_name(self):
+        return shared_variables.gpudriver_name_default
+
+    def get_default_gpudriver_build_name(self):    
+        return shared_variables.gpudriver_build_name_default
+ 
     def number_of_login_requests(self):
         return self._number_login_requests
 
@@ -1270,7 +1278,10 @@ class MexMasterController(MexRest):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
-                if appinstance and appinstance[0]['data']['state'] == 5:
+                if appinstance[0]['data']['state'] == 'Ready':
+                    logging.info(f'App Instance is Ready')
+                    return appinstance
+                elif appinstance[0]['data']['state'] == 5:
                     logging.info(f'App Instance is Ready')
                     return appinstance
                 else:
@@ -1279,7 +1290,7 @@ class MexMasterController(MexRest):
             else:
                 logging.debug(f'app instance is NOT found. sleeping and trying again')
             
-        raise Exception(f'app instance is NOT ready. Got {appinstance[0]["data"]["state"]} but expected 5')
+        raise Exception(f'app instance is NOT ready. Got {appinstance[0]["data"]["state"]} but expected Ready')
 
     def wait_for_app_instance_to_be_deleted(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=180):
         for x in range(1, timeout):
@@ -1364,8 +1375,8 @@ class MexMasterController(MexRest):
     def delete_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.delete_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
 
-    def update_cloudlet(self, token=None, region=None,  operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, trust_policy=None, resource_list=None, default_resource_alert_threshold=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.cloudlet.update_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, maintenance_state=maintenance_state, trust_policy=trust_policy, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def update_cloudlet(self, token=None, region=None,  operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, trust_policy=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.update_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, maintenance_state=maintenance_state, trust_policy=trust_policy, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def get_resource_usage(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, infra_usage=False, json_data=None, use_defaults=False, use_thread=False):
         return self.cloudlet.get_resource_usage(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, infra_usage=infra_usage, use_defaults=use_defaults, use_thread=use_thread)
@@ -1689,7 +1700,7 @@ class MexMasterController(MexRest):
 
     def show_settings(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
         return self.settings.show_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread)
-
+      
     def update_settings(self, token=None, region=None, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_cloudlet_timeout=None, update_cloudlet_timeout=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_cloudlet_usage_metrics_retention=None, influx_db_metrics_retention=None, influx_db_downsampled_metrics_retention=None, influx_db_edge_events_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, update_trust_policy_timeout=None, dme_api_metrics_collection_interval=None, edge_events_metrics_collection_interval=None, edge_events_metrics_continuous_queries_collection_intervals=[], cleanup_reservable_auto_cluster_idletime=None, location_tile_side_length_km=None, appinst_client_cleanup_interval=None, cluster_auto_scale_averaging_duration_sec=None, cluster_auto_scale_retry_delay=None, user_defined_alert_min_trigger_time=None, disable_rate_limit=None, max_num_per_ip_rate_limiters=None, json_data=None, use_defaults=True, use_thread=False):
         return self.settings.update_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread, shepherd_metrics_collection_interval=shepherd_metrics_collection_interval, shepherd_alert_evaluation_interval=shepherd_alert_evaluation_interval, shepherd_health_check_retries=shepherd_health_check_retries, shepherd_health_check_interval=shepherd_health_check_interval, auto_deploy_interval_sec=auto_deploy_interval_sec, auto_deploy_offset_sec=auto_deploy_offset_sec, auto_deploy_max_intervals=auto_deploy_max_intervals, create_cloudlet_timeout=create_cloudlet_timeout, update_cloudlet_timeout=update_cloudlet_timeout, create_app_inst_timeout=create_app_inst_timeout, update_app_inst_timeout=update_app_inst_timeout, delete_app_inst_timeout=delete_app_inst_timeout, create_cluster_inst_timeout=create_cluster_inst_timeout, update_cluster_inst_timeout=update_cluster_inst_timeout, delete_cluster_inst_timeout=delete_cluster_inst_timeout, master_node_flavor=master_node_flavor, load_balancer_max_port_range=load_balancer_max_port_range, max_tracked_dme_clients=max_tracked_dme_clients, chef_client_interval=chef_client_interval, influx_db_metrics_retention=influx_db_metrics_retention, influx_db_cloudlet_usage_metrics_retention=influx_db_cloudlet_usage_metrics_retention, influx_db_downsampled_metrics_retention=influx_db_downsampled_metrics_retention, influx_db_edge_events_metrics_retention=influx_db_edge_events_metrics_retention, cloudlet_maintenance_timeout=cloudlet_maintenance_timeout, update_vm_pool_timeout=update_vm_pool_timeout, update_trust_policy_timeout=update_trust_policy_timeout, dme_api_metrics_collection_interval=dme_api_metrics_collection_interval, edge_events_metrics_collection_interval=edge_events_metrics_collection_interval, edge_events_metrics_continuous_queries_collection_intervals=edge_events_metrics_continuous_queries_collection_intervals, cleanup_reservable_auto_cluster_idletime=cleanup_reservable_auto_cluster_idletime, location_tile_side_length_km=location_tile_side_length_km, appinst_client_cleanup_interval=appinst_client_cleanup_interval, cluster_auto_scale_averaging_duration_sec=cluster_auto_scale_averaging_duration_sec, cluster_auto_scale_retry_delay=cluster_auto_scale_retry_delay, user_defined_alert_min_trigger_time=user_defined_alert_min_trigger_time, disable_rate_limit=disable_rate_limit, max_num_per_ip_rate_limiters=max_num_per_ip_rate_limiters)
 
@@ -1704,6 +1715,27 @@ class MexMasterController(MexRest):
 
     def request_app_instance_latency(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.request_appinst_latency.request_appinst_latency(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
+    
+    def create_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, builds_dict={}, license_config=None, properties={}, use_defaults=True, use_thread=False, auto_delete=True):
+        return self.gpudriver.create_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, builds_dict=builds_dict, license_config=license_config, properties=properties, use_defaults=use_defaults, use_thread=use_thread, auto_delete=auto_delete)
+
+    def update_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, license_config=None, properties={}, use_defaults=True, use_thread=False):
+        return self.gpudriver.update_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, license_config=license_config, properties=properties, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, use_defaults=True, use_thread=False):
+        return self.gpudriver.delete_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, properties={}, use_defaults=True, use_thread=False):
+        return self.gpudriver.show_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, properties=properties, use_defaults=use_defaults, use_thread=use_thread)
+
+    def addbuild_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, build_name=None, build_driverpath=None, build_os=None, build_md5sum=None, build_driverpathcreds=None, build_kernelversion=None, build_hypervisorinfo=None, ignorestate=None, use_defaults=True, use_thread=False):
+        return self.gpudriver.addbuild_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, build_name=build_name, build_driverpath=build_driverpath, build_os=build_os, build_md5sum=build_md5sum, build_driverpathcreds=build_driverpathcreds, build_kernelversion=build_kernelversion, build_hypervisorinfo=build_hypervisorinfo, ignorestate=ignorestate, use_defaults=use_defaults, use_thread=use_thread)
+
+    def removebuild_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, build_name=None, use_defaults=True, use_thread=False):
+        return self.gpudriver.removebuild_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, build_name=build_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def getbuildurl_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, build_name=None, use_defaults=True, use_thread=False):
+        return self.gpudriver.getbuildurl_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, build_name=build_name, use_defaults=use_defaults, use_thread=use_thread)
 
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:

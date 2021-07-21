@@ -50,6 +50,8 @@ class Settings(MexOperation):
         _influx_db_downsampled_metrics_retention_field_number = '31'
         _influx_db_edge_events_metrics_retention_field_number = '32'
         _appinst_client_cleanup_interval_field_number = '33'
+        _cluster_auto_scale_averaging_duration_sec_field_number = '34'
+        _cluster_auto_scale_retry_delay_field_number = '35'
 
         settings_dict = {}
         

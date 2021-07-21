@@ -113,6 +113,7 @@ Developer Setup
    Unlock User
 
    ${orgname}=  Create Org  orgtype=developer
+   Create Billing Org  billing_org_name=${orgname}  token=${super_token}
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=DeveloperManager  
 
    ${user_token}=  Login  username=${epochusername}  password=${password}

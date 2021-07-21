@@ -1,4 +1,6 @@
-﻿using System;
+﻿//ECQ-1193
+
+using System;
 using System.Threading.Tasks;
 using DistributedMatchEngine;
 using System.Collections.Generic;
@@ -264,6 +266,15 @@ namespace RestSample
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.longitude);
                     Console.WriteLine("Test Case Passed!!!");
                     Environment.Exit(0);
+                }
+                if (findCloudletReply.status.ToString() == "FIND_UNKNOWN")
+                {
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.fqdn);
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.latitude);
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.longitude);
+                    Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
                 }
                 if (findCloudletReply.status.ToString() == "FIND_NOTFOUND")
                 {

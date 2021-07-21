@@ -42,9 +42,9 @@ Controller displays resources consumed/freed by creation/deletion of an autoprov
 
    ${resourceusage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_dedicated}  token=${super_token}
    #${current_disk_usage}=  Set Variable  ${resourceusage[0]['info'][0]['value']}
-   ${current_instances}=  Set Variable  ${resourceusage[0]['info'][2]['value']}
-   ${current_ram_usage}=  Set Variable  ${resourceusage[0]['info'][3]['value']}
-   ${current_vcpu_usage}=  Set Variable  ${resourceusage[0]['info'][4]['value']}
+   ${current_instances}=  Set Variable  ${resourceusage[0]['info'][3]['value']}
+   ${current_ram_usage}=  Set Variable  ${resourceusage[0]['info'][4]['value']}
+   ${current_vcpu_usage}=  Set Variable  ${resourceusage[0]['info'][5]['value']}
    #${expected_disk_usage}=  Evaluate  ${current_disk_usage} + 60
    ${expected_instances}=  Evaluate  ${current_instances} + 2
    ${expected_ram_usage}=  Evaluate  ${current_ram_usage} + 6144
@@ -89,9 +89,9 @@ Verify Resource Usage
    log to console  ${resource_usage}
 
    #Should Be Equal As Numbers  ${resource_usage[0]['info'][0]['value']}  ${disk}            #Disk
-   Should Be Equal As Numbers  ${resource_usage[0]['info'][2]['value']}  ${instances}       #Instances
-   Should Be Equal As Numbers  ${resource_usage[0]['info'][3]['value']}  ${ram}             #RAM
-   Should Be Equal As Numbers  ${resource_usage[0]['info'][4]['value']}  ${vcpu}            #vCPUs
+   Should Be Equal As Numbers  ${resource_usage[0]['info'][3]['value']}  ${instances}       #Instances
+   Should Be Equal As Numbers  ${resource_usage[0]['info'][4]['value']}  ${ram}             #RAM
+   Should Be Equal As Numbers  ${resource_usage[0]['info'][5]['value']}  ${vcpu}            #vCPUs
 
 Teardown
    Update Settings  region=${region}  cleanup_reservable_auto_cluster_idletime=30m  token=${super_token} 

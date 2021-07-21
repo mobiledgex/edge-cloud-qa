@@ -101,6 +101,7 @@ Operator Should See All Details
    Should Be True  len("${show[0]['data']['deployment']}") > 0
    Should Be True  len("${show[0]['data']['flavor']}") > 0
    Should Be True  ${show[0]['data']['ip_support']} > 0
+   #Should Be Equal  ${show[0]['data']['ip_support']}  Dynamic
    Should Be Equal  ${show[0]['data']['key']['name']}  ${cloudlet}
    Should Be Equal  ${show[0]['data']['key']['organization']}  ${operator}
    Should Be True  ${show[0]['data']['location']['latitude']} > 0
@@ -109,7 +110,9 @@ Operator Should See All Details
    Should Be True  len("${show[0]['data']['notify_srv_addr']}") > 0
    Should Be Equal  ${show[0]['data']['physical_name']}  ${cloudlet}
    Should Be Equal As Numbers  ${show[0]['data']['state']}  5
+   #Should Be Equal  ${show[0]['data']['state']}  Ready
    Should Be Equal As Numbers  ${show[0]['data']['trust_policy_state']}  1
+   #Should Be Equal  ${show[0]['data']['trust_policy_state']}  NotPresent
 
 Developer Should See Minimal Details
    [Arguments]  ${role}
@@ -129,13 +132,16 @@ Developer Should See Minimal Details
    Dictionary Should Not Contain Key  ${show[0]['data']}  physical_name
 
    Should Be True  ${show[0]['data']['ip_support']} > 0
+   #Should Be Equal  ${show[0]['data']['ip_support']}  Dynamic
    Should Be Equal  ${show[0]['data']['key']['name']}  ${cloudlet}
    Should Be Equal  ${show[0]['data']['key']['organization']}  ${operator}
    Should Be True  ${show[0]['data']['location']['latitude']} > 0
    Should Be True  ${show[0]['data']['location']['longitude']} > 0
    Should Be Equal As Numbers  ${show[0]['data']['state']}  5
+   #Should Be Equal  ${show[0]['data']['state']}  Ready
    Should Be True  ${show[0]['data']['num_dynamic_ips']} > 0
    Should Be Equal As Numbers  ${show[0]['data']['trust_policy_state']}  1
+   #Should Be Equal  ${show[0]['data']['trust_policy_state']}  NotPresent
 
 Teardown Userrole
    [Arguments]  ${username}  ${orgname}  ${role}

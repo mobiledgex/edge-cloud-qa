@@ -40,3 +40,5 @@ token_default = ''
 token_server_uri_default = ''
 crm_notify_server_address = '127.0.0.1'
 crm_notify_server_address_port = random.randint(49152, 65535)
+gpudriver_name_default = 'gpudriver' + default_time_stamp
+gpudriver_build_name_default = 'build' + default_time_stamp
