@@ -72,13 +72,13 @@ FindCloudlet REST - request with timestamp shall return dmuus
       Log to console  after register
       ${cloudlet}=  Find Cloudlet	carrier_name=${dmuus_operator_name}  latitude=34  longitude=-96  seconds=10  nanos=1
 
-      Should Be Equal  ${cloudlet['status']}  Found
+      Should Be Equal  ${cloudlet['status']}  FIND_FOUND
 
       Should Be Equal             ${cloudlet['fqdn']}                         ${dmuus_appinst.uri}
       Should Be Equal As Numbers  ${cloudlet['cloudlet_location']['latitude']}   ${dmuus_cloudlet_latitude}
       Should Be Equal As Numbers  ${cloudlet['cloudlet_location']['longitude']}  ${dmuus_cloudlet_longitude}
 
-      Should Be Equal   ${cloudlet['ports'][0]['proto']}                         Tcp 
+      Should Be Equal   ${cloudlet['ports'][0]['proto']}                          L_PROTO_TCP
       Should Be Equal As Numbers  ${cloudlet['ports'][0]['internal_port']}       ${dmuus_appinst.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet['ports'][0]['public_port']}         ${dmuus_appinst.mapped_ports[0].public_port}
       Should Be Equal             ${cloudlet['ports'][0]['fqdn_prefix']}         ${dmuus_appinst.mapped_ports[0].fqdn_prefix}

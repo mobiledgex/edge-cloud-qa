@@ -196,7 +196,7 @@ class MexDmeRest(MexRest):
                     self._number_getqospositionkpi_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
-                if self.decoded_data['result']['status'] != 'Success':
+                if self.decoded_data['result']['status'] != 'RS_SUCCESS':
                     raise Exception(f'get qos position kpi failed:{self.decoded_data}')
 
             except Exception as e:
