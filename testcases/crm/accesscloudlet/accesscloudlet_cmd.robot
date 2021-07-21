@@ -212,7 +212,7 @@ AccessCloudlet - Access cloudlet check for error if region is not specified
 #('code=400', 'error={"message":"no region specified"}')
 
       ${error}=  Run Keyword And Expect Error  *  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=  command=${access_command}  node_type=${platformvm} node_name=
-      Should Contain  ${error}  ('code=400', 'error={"message":"no region specified"}') 
+      Should Contain  ${error}  ('code=400', 'error={"message":"No region specified"}') 
       Log to Console  \n\n${error}
 
 
