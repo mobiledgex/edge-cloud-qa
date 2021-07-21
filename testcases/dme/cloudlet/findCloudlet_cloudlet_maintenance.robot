@@ -197,7 +197,7 @@ Register Client and Find Cloudlet
 
    # verify not found
    ${cloudlet_2}=  Run Keyword and Expect Error  *  Find Cloudlet      latitude=31  longitude=-91
-   Should Contain  ${cloudlet_2}  Notfound
+   Should Contain  ${cloudlet_2}  FIND_NOTFOUND
 
    # put cloudlet back online
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
@@ -213,4 +213,4 @@ Register Client and Find Cloudlet
 
    # verify not found
    ${cloudlet_4}=  Run Keyword and Expect Error  *  Find Cloudlet      latitude=31  longitude=-91
-   Should Contain  ${cloudlet_4}  Notfound
+   Should Contain  ${cloudlet_4}  FIND_NOTFOUND
