@@ -60,6 +60,11 @@ Settings - ShowSettings should return the settings
    Should Contain  ${settings}  cleanup_reservable_auto_cluster_idletime
    Should Contain  ${settings}  location_tile_side_length_km
    Should Contain  ${settings}  appinst_client_cleanup_interval
+   Should Contain  ${settings}  cluster_auto_scale_averaging_duration_sec
+   Should Contain  ${settings}  cluster_auto_scale_retry_delay         
+   Should Contain  ${settings}  user_defined_alert_min_trigger_time    
+#   Should Contain  ${settings}  disable_rate_limit                 
+   Should Contain  ${settings}  max_num_per_ip_rate_limiters         
 
 # ECQ-2989
 Settings - UpdateSettings should update the settings
@@ -94,6 +99,8 @@ Settings - UpdateSettings should update the settings
 
    @{collection_intervals}=  Create List  1s  1s  1s 
    Update Settings  region=${region}  update_trust_policy_timeout=1s  dme_api_metrics_collection_interval=1s  edge_events_metrics_collection_interval=1s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}  cleanup_reservable_auto_cluster_idletime=31s  location_tile_side_length_km=1  appinst_client_cleanup_interval=1h
+
+   Update Settings  region=${region}  cluster_auto_scale_averaging_duration_sec=1  cluster_auto_scale_retry_delay=1s  user_defined_alert_min_trigger_time=1s  disable_rate_limit=${True}  max_num_per_ip_rate_limiters=1
 
    ${settings_post}=   Show Settings  region=${region}
 
@@ -135,6 +142,12 @@ Settings - UpdateSettings should update the settings
    Should Be Equal             ${settings_post['cleanup_reservable_auto_cluster_idletime']}   31s
    Should Be Equal As Numbers  ${settings_post['location_tile_side_length_km']}               1
    Should Be Equal             ${settings_post['appinst_client_cleanup_interval']}   1h0m0s
+
+   Should Be Equal As Numbers  ${settings_post['cluster_auto_scale_averaging_duration_sec']}  1 
+   Should Be Equal             ${settings_post['cluster_auto_scale_retry_delay']}  1s 
+   Should Be Equal             ${settings_post['user_defined_alert_min_trigger_time']}  1s
+   Should Be True              ${settings_post['disable_rate_limit']} 
+   Should Be Equal As Numbers  ${settings_post['max_num_per_ip_rate_limiters']}  1
 
 # ECQ-2990
 Settings - UpdateSettings with bad parms shall return error
@@ -381,6 +394,12 @@ Settings - user shall be able to reset the settings
    Should Be Equal             ${settings_post['cleanup_reservable_auto_cluster_idletime']}            30m0s
    Should Be Equal             ${settings_post['appinst_client_cleanup_interval']}            24h0m0s
 
+   Should Be Equal As Numbers  ${settings_post['cluster_auto_scale_averaging_duration_sec']}  60
+   Should Be Equal             ${settings_post['cluster_auto_scale_retry_delay']}  1m0s
+   Should Be Equal             ${settings_post['user_defined_alert_min_trigger_time']}  30s
+   Should Not Contain          ${settings_post}  disable_rate_limit
+   Should Be Equal As Numbers  ${settings_post['max_num_per_ip_rate_limiters']}  10000
+
 *** Keywords ***
 Cleanup Settings
    [Arguments]  ${settings}
@@ -398,6 +417,7 @@ Cleanup Settings
    Update Settings  region=${region}  master_node_flavor=${master_node_flavor_default}
    Update Settings  region=${region}  influx_db_metrics_retention=120h0m0s
    Update Settings  region=${region}  influx_db_cloudlet_usage_metrics_retention=120h0m0s
+   Update Settings  region=${region}  disable_rate_limit=${False}
 
 Fail Create UpdateSettings
    [Arguments]  ${error_msg}  ${parm}  ${value}
