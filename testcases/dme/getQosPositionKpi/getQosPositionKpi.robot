@@ -27,7 +27,7 @@ GetQosPositionKpi - request shall return 0 position
    ${qos}=  Get Qos Position KPI  
 
    Should Be Equal As Integers   ${qos['result']['ver']}     0
-   Should Be Equal               ${qos['result']['status']}  Success
+   Should Be Equal               ${qos['result']['status']}  RS_SUCCESS
 
    Length Should Be              ${qos['result']['tags']}  0
    Length Should Be              ${qos['result']['position_results']}  0
@@ -46,7 +46,7 @@ GetQosPositionKpi - request shall return 1 position
    ${qos}=  Get Qos Position KPI  position_list=${positionlist} 
 
    Should Be Equal As Integers   ${qos['result']['ver']}     0 
-   Should Be Equal               ${qos['result']['status']}  Success 
+   Should Be Equal               ${qos['result']['status']}  RS_SUCCESS 
 
    Should Be Equal               ${qos['result']['position_results'][0]['positionid']}                           1 
    Should Be Equal As Integers   ${qos['result']['position_results'][0]['gps_location']['latitude']}             1
@@ -90,7 +90,7 @@ GetQosPositionKpi - request shall return multiple positions
    ${qos}=  Get Qos Position KPI  position_list=${positionlist}
 
    Should Be Equal As Integers   ${qos['result']['ver']}     0
-   Should Be Equal               ${qos['result']['status']}  Success
+   Should Be Equal               ${qos['result']['status']}  RS_SUCCESS
 
    FOR  ${index}  IN RANGE  1  ${num_positions} 
       Should Be Equal As Strings    ${qos['result']['position_results'][${index}-1]['positionid']}                           ${index} 
@@ -131,7 +131,7 @@ GetQosPositionKpi - request with lte shall return 1 position
    ${qos}=  Get Qos Position KPI  position_list=${positionlist}  lte_category=3
 
    Should Be Equal As Integers   ${qos['result']['ver']}     0
-   Should Be Equal               ${qos['result']['status']}  Success
+   Should Be Equal               ${qos['result']['status']}  RS_SUCCESS
 
    Should Be Equal               ${qos['result']['position_results'][0]['positionid']}                           1
    Should Be Equal As Integers   ${qos['result']['position_results'][0]['gps_location']['latitude']}             1
@@ -170,7 +170,7 @@ GetQosPositionKpi - request with latitude only shall return 1 position
    ${qos}=  Get Qos Position KPI  position_list=${positionlist}
 
    Should Be Equal As Integers   ${qos['result']['ver']}     0
-   Should Be Equal               ${qos['result']['status']}  Success
+   Should Be Equal               ${qos['result']['status']}  RS_SUCCESS
 
    Should Be Equal               ${qos['result']['position_results'][0]['positionid']}                           1
    Should Be Equal As Integers   ${qos['result']['position_results'][0]['gps_location']['latitude']}             1
@@ -209,7 +209,7 @@ GetQosPositionKpi - request with longitude only shall return 1 position
    ${qos}=  Get Qos Position KPI  position_list=${positionlist}
 
    Should Be Equal As Integers   ${qos['result']['ver']}     0
-   Should Be Equal               ${qos['result']['status']}  Success
+   Should Be Equal               ${qos['result']['status']}  RS_SUCCESS
 
    Should Be Equal               ${qos['result']['position_results'][0]['positionid']}                           0
    Should Be Equal As Integers   ${qos['result']['position_results'][0]['gps_location']['latitude']}             0
@@ -248,7 +248,7 @@ GetQosPositionKpi - request with position_id only shall return 1 position
    ${qos}=  Get Qos Position KPI  position_list=${positionlist}
 
    Should Be Equal As Integers   ${qos['result']['ver']}     0
-   Should Be Equal               ${qos['result']['status']}  Success
+   Should Be Equal               ${qos['result']['status']}  RS_SUCCESS
 
    Should Be Equal               ${qos['result']['position_results'][0]['positionid']}                           1
    Should Be Equal As Integers   ${qos['result']['position_results'][0]['gps_location']['latitude']}             0
