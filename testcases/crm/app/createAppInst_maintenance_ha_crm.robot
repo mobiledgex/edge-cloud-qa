@@ -43,7 +43,7 @@ AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is mainte
 
    #AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2_fqdn=${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=shared.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}  cloudlet2_fqdn=shared.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
 # ECQ-2551
 AppInst - appinst shall start for docker/lb/dedicated app inst when cloudlet is maintenance mode

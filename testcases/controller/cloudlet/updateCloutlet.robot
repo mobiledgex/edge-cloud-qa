@@ -235,12 +235,12 @@ UpdateCloudlet - shall be able to update cloudlet with trust policy
    # create cloudlet trust policy
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet_update['data']['trust_policy_state']}  5
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
 
    # update cloudlet with new trust policy
    ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}_2
    Should Be Equal             ${cloudlet_update['data']['trust_policy']}  ${policy_name}_2
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   Should Be Equal As Numbers  ${cloudlet_update['data']['trust_policy_state']}  5
 
 # ECQ-3066
 UpdateCloudlet - shall be able to add trust policy to cloudlet
@@ -308,7 +308,7 @@ UpdateCloudlet - shall be able to remove trust policy from cloudlet
    # create cloudlet with trust policy
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_name}
-   Should Be Equal As Numbers  ${cloudlet_update['data']['trust_policy_state']}  5
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
 
    # update cloudlet with empty trust policy
    ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  trust_policy=${Empty}
