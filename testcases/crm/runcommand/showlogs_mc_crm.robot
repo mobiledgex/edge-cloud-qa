@@ -57,7 +57,7 @@ ShowLogs - k8s shared shall return logs on CRM
 
     # with since
     Sleep  60 
-    TCP Port Should Be Alive  ${app_inst['data']['mapped_ports'][0]['fqdn_prefix']}${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
+    TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
     ${stdout_since}=  Show Logs  region=${region}  since=${since}
 
     # with wrong containerid
@@ -113,7 +113,7 @@ ShowLogs - k8s dedicated shall return logs on CRM
 
     # with since
     Sleep  60 
-    TCP Port Should Be Alive  ${app_inst['data']['mapped_ports'][0]['fqdn_prefix']}${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
+    TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
     ${stdout_since}=  Show Logs  region=${region}  since=${since}
 
     # with wrong containerid

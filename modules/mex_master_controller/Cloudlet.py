@@ -267,6 +267,11 @@ class Cloudlet(MexOperation):
                 metric_dict['numsamples'] = int(number_samples)
             except Exception:
                 metric_dict['numsamples'] = number_samples
+        if last is not None:
+            try:
+                metric_dict['last'] = int(last)
+            except ValueError:
+                metric_dict['last'] = last
         if start_time is not None:
             metric_dict['starttime'] = start_time
         if end_time is not None:
