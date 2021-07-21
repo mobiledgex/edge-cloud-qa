@@ -351,4 +351,4 @@ Verify Health Check Ok
         Exit For Loop If  '${app_inst[0]['data']['health_check']}' == '${state}'
         Sleep  2s
     END
-    Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   3
+    Should Be Equal As Numbers  ${app_inst[0]['data']['health_check']}   3

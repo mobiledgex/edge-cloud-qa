@@ -131,7 +131,7 @@ CreateApp - error shall be received with image_type=ImageTypeQCOW deployment=vm 
     ...  create app with image_type=ImageTypeQCOW deployment=vm image_path=mypath
     ...  verify error is received
 
-    ${qcow_centos_image}=  Set Variable  https://artifactory-qa.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:12345678901234567890123456789012
+    ${qcow_centos_image}=  Set Variable  https://artifactory.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:12345678901234567890123456789012
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}	
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
@@ -201,10 +201,10 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
     ...  create app wih image_type=ImageTypeQCOW deployment=vm image_path=docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:1:3
     ...  verify error is received
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://artifactory.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Failed to validate VM registry image, path https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d, Invalid URL: https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d, Not Found" 
+    Should Contain  ${error_msg}   details = "Failed to validate VM registry image, path https://artifactory.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d, Invalid URL: https://artifactory.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d, Not Found" 
 
 # ECQ-1372
 CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and invalid url

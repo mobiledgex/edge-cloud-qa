@@ -24,6 +24,7 @@ CreateCloudletPoolAccess - OperatorManager shall be able to see developer cluste
    [Tags]  CloudletPoolAccess
 
    ${devorg1}=  Create Org  token=${super_token}  orgtype=developer
+   Create Billing Org  billing_org_name=${devorg1}  token=${super_token}
    Adduser Role  token=${super_token}  orgname=${devorg1}  username=${dev_manager_user_automation}  role=DeveloperManager
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${pool_name}  cloudlet_pool_org_name=${organization}  developer_org_name=${devorg1}
@@ -69,6 +70,7 @@ CreateCloudletPoolAccess - OperatorContributor shall be able to see developer cl
    [Tags]  CloudletPoolAccess
 
    ${devorg1}=  Create Org  token=${super_token}  orgtype=developer
+   Create Billing Org  billing_org_name=${devorg1}  token=${super_token}
    Adduser Role  token=${super_token}  orgname=${devorg1}  username=${dev_manager_user_automation}  role=DeveloperManager
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${opcon_token}  cloudlet_pool_name=${pool_name}  cloudlet_pool_org_name=${organization}  developer_org_name=${devorg1}
@@ -114,6 +116,7 @@ CreateCloudletPoolAccess - OperatorViewer shall be able to see developer cluster
    [Tags]  CloudletPoolAccess
 
    ${devorg1}=  Create Org  token=${super_token}  orgtype=developer
+   Create Billing Org  billing_org_name=${devorg1}  token=${super_token}
    Adduser Role  token=${super_token}  orgname=${devorg1}  username=${dev_manager_user_automation}  role=DeveloperManager
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${pool_name}  cloudlet_pool_org_name=${organization}  developer_org_name=${devorg1}

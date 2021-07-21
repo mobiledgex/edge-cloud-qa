@@ -48,8 +48,8 @@ class Cloudlet(MexOperation):
         _env_vars_field_number = "19"
         _resource_quotas_field_number = "39"
         _default_resource_alert_threshold_field_number = "40"
-        # _gpudriver_name_field_number = "45.1.1"
-        # _gpudriver_org_field_number = "45.1.2"
+        _gpudriver_name_field_number = "45.1.1"
+        _gpudriver_org_field_number = "45.1.2"
 
         if use_defaults:
             if cloudlet_name is None:
@@ -105,8 +105,10 @@ class Cloudlet(MexOperation):
         gpudriver_dict_ref = {}
         if gpudriver_name is not None:
             gpudriver_dict['name'] = gpudriver_name
+            _fields_list.append(_gpudriver_name_field_number)
             if gpudriver_org is not None:
                 gpudriver_dict['organization'] = gpudriver_org
+                _fields_list.append(_gpudriver_org_field_number)
             gpudriver_dict_ref['driver'] = gpudriver_dict
 
         # "{\"cloudlet\":{\"key\":{\"operator_key\":{\"name\":\"rrrr\"},\"name\":\"rrrr\"},\"location\":{\"latitude\":5,\"longitude\":5,\"timestamp\":{}},\"ip_support\":2,\"num_dynamic_ips\":2}}"
@@ -265,6 +267,11 @@ class Cloudlet(MexOperation):
                 metric_dict['numsamples'] = int(number_samples)
             except Exception:
                 metric_dict['numsamples'] = number_samples
+        if last is not None:
+            try:
+                metric_dict['last'] = int(last)
+            except ValueError:
+                metric_dict['last'] = last
         if start_time is not None:
             metric_dict['starttime'] = start_time
         if end_time is not None:
@@ -421,8 +428,8 @@ class Cloudlet(MexOperation):
 
         return self.update(token=token, url=self.inject_info_url, show_url=self.show_info_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)
 
-    def update_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, trust_policy=None, resource_list=None, default_resource_alert_threshold=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False, stream=True, stream_timeout=600):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, maintenance_state=maintenance_state, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, trust_policy=trust_policy, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, use_defaults=False, include_fields=include_fields)
+    def update_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, trust_policy=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False, stream=True, stream_timeout=600):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, maintenance_state=maintenance_state, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, trust_policy=trust_policy, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, use_defaults=False, include_fields=include_fields)
         msg_dict = {'cloudlet': msg}
 
         msg_dict_show = None

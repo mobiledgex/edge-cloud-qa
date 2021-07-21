@@ -48,7 +48,7 @@ AppInst show displays runtimeinfo after CRM restart
 
    FOR  ${x}  IN RANGE  0  15
        ${cloudlet_info}=  Show Cloudlet Info   region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-       Exit For Loop If  '${cloudlet_info[0]['data']['state']}' == '2'
+       Exit For Loop If  '${cloudlet_info[0]['data']['state']}' == 2
        Sleep  10s
    END
    Should Be Equal As Numbers  ${cloudlet_info[0]['data']['state']}  2

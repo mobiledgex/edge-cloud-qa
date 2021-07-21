@@ -23,7 +23,7 @@ ClusterInst - User shall not be able to create a docker/shared ClusterInst with 
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared  
  
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Optional resource requested by ${flavor_name_default}, cloudlet ${cloudlet_name} supports none"}')
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet ${cloudlet_name} doesn\\\'t support GPU"}')
 
 ClusterInst - User shall not be able to create a docker/dedicated ClusterInst with GPU flavor on cloudlet that doesnt support GPU
     [Documentation]
@@ -32,7 +32,7 @@ ClusterInst - User shall not be able to create a docker/dedicated ClusterInst wi
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
 
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Optional resource requested by ${flavor_name_default}, cloudlet ${cloudlet_name} supports none"}')
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet ${cloudlet_name} doesn\\\'t support GPU"}')
 
 ClusterInst - User shall not be able to create a k8s/shared ClusterInst with GPU flavor on cloudlet that doesnt support GPU
     [Documentation]
@@ -41,7 +41,7 @@ ClusterInst - User shall not be able to create a k8s/shared ClusterInst with GPU
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared
 
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Optional resource requested by ${flavor_name_default}, cloudlet ${cloudlet_name} supports none"}')
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet ${cloudlet_name} doesn\\\'t support GPU"}')
 
 ClusterInst - User shall not be able to create a k8s/dedicated ClusterInst with GPU flavor on cloudlet that doesnt support GPU
     [Documentation]
@@ -50,7 +50,7 @@ ClusterInst - User shall not be able to create a k8s/dedicated ClusterInst with 
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated
 
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Optional resource requested by ${flavor_name_default}, cloudlet ${cloudlet_name} supports none"}')
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet ${cloudlet_name} doesn\\\'t support GPU"}')
 
 *** Keywords ***
 Setup

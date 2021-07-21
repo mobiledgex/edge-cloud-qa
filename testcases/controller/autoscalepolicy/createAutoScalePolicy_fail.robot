@@ -259,15 +259,15 @@ CreateAutoScalePolicy - create with invalid scaleupcputhreshold shall return err
    ...  - send CreateAutoScalePolicy with invalid scaleupcputhreshold 
    ...  - verify proper error is received
 
-   #maxnodes=-1
-   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=1  max_nodes=2  scale_down_cpu_threshold=-10  scale_up_cpu_threshold=101  use_defaults=False
+   #scale_up_cpu_threshold=-10
+   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=-10  scale_down_cpu_threshold=10  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -10, field=AutoScalePolicy.scale_down_cpu_thresh
+   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -10, field=AutoScalePolicy.scale_up_cpu_thresh
 
-   #maxnodes=x
-   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=2  scale_down_cpu_threshold=xx  scale_up_cpu_threshold=101  use_defaults=False
+   #scale_up_cpu_threshold=xx
+   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=2  scale_up_cpu_threshold=xx  scale_down_cpu_threshold=101  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.scale_down_cpu_thresh
+   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.scale_up_cpu_thresh
 
 # ECQ-3529
 CreateAutoScalePolicy - create with invalid scaledowncputhreshold shall return error
@@ -275,15 +275,15 @@ CreateAutoScalePolicy - create with invalid scaledowncputhreshold shall return e
    ...  - send CreateAutoScalePolicy with invalid scaledowncputhreshold 
    ...  - verify proper error is received
 
-   #scale_up_cpu_threshold=-1
-   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=1  max_nodes=2  scale_down_cpu_threshold=10  scale_up_cpu_threshold=-11  use_defaults=False
+   #scale_down_cpu_threshold=-11
+   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=10  scale_down_cpu_threshold=-11  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -11, field=AutoScalePolicy.scale_up_cpu_thresh
+   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -11, field=AutoScalePolicy.scale_down_cpu_thresh
 
-   #scale_up_cpu_threshold=x
-   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=2  scale_down_cpu_threshold=1  scale_up_cpu_threshold=xx  use_defaults=False
+   #scale_down_cpu_threshold=xx
+   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=2  scale_up_cpu_threshold=1  scale_down_cpu_threshold=xx  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.scale_up_cpu_thresh
+   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.scale_down_cpu_thresh
 
 # ECQ-3530
 CreateAutoScalePolicy - create with same name shall return error

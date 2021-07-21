@@ -1,4 +1,6 @@
-﻿using System;
+﻿//ECQ-1181
+
+using System;
 using System.Net;
 using System.IO;
 using System.Text;
@@ -152,8 +154,9 @@ namespace RestSample
 
                 //Set the location in the location server
                 Console.WriteLine("Seting the location in the Location Server");
-                setLocation("52.52", "13.405");
-                Console.WriteLine("Location Set\n");
+                //setLocation("52.52", "13.405");
+                setLocation("0", "0");
+                Console.WriteLine("Location Set to 0 0\n");
 
                 // Start location task:
                 var locTask = Util.GetLocationFromDevice();
