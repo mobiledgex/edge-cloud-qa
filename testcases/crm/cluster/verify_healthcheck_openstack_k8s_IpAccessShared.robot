@@ -271,7 +271,7 @@ IpAccessShared k8s - healthcheck shows proper state after UpdateApp
 
 *** Keywords ***
 Setup
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_shared}
@@ -296,4 +296,4 @@ Verify Health Check Ok
         Exit For Loop If  '${app_inst[0]['data']['health_check']}' == '${state}'
         Sleep  2s
     END
-    Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   3
+    Should Be Equal As Numbers  ${app_inst[0]['data']['health_check']}   3

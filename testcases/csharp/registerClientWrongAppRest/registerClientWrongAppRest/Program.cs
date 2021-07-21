@@ -94,6 +94,12 @@ namespace RestSample
                 // Await synchronously.
                 //Console.WriteLine("Port: " + port);
                 var registerClientReply = await me.RegisterClient(host, port, registerClientRequest);
+                if (registerClientReply.status != ReplyStatus.RS_SUCCESS)
+                {
+                    Console.WriteLine("RegisterClient Failed! " + registerClientReply.status);
+                    Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
+                }
 
 
                 //var loc = await locTask;

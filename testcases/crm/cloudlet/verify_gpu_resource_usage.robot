@@ -16,7 +16,7 @@ ${region}=  EU
 ${developer}=  mobiledgex
 
 ${operator_name_openstack}  TDG
-${physical_name_openstack}  bonn
+${physical_name_openstack}  munich
 
 ${username}=   mextester06
 ${password}=   ${mextester06_gmail_password}
@@ -36,24 +36,25 @@ Controller displays GPU resource usage of cloudlet and triggers alert when thres
    @{resource_list}=  Create List  ${resource1}
 
    # create cloudlet with resource quotas
-   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  env_vars=MEX_EXT_NETWORK=external-network-02  token=${tokenop}  
+   #${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  env_vars=MEX_EXT_NETWORK=external-network-02  gpudriver_name=nvidia-450  gpudriver_org=${operator_name_openstack}  token=${tokenop}  
+   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  gpudriver_name=nvidia-450  gpudriver_org=${operator_name_openstack}  token=${tokenop}
 
    Add Cloudlet Resource Mapping   region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  mapping=gpu=mygpuresrouce  token=${tokenop}
 
    ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-   Dictionary Should Not Contain Key  ${resource_usage[0]['info'][1]}  value
-   Should Be Equal As Numbers  ${resource_usage[0]['info'][1]['quota_max_value']}  2
+   Dictionary Should Not Contain Key  ${resource_usage[0]['info'][2]}  value
+   Should Be Equal As Numbers  ${resource_usage[0]['info'][2]['quota_max_value']}  2
 
    Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor  token=${tokendev}
 
    ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  token=${tokenop}
    log to console  ${resource_usage}
-   Should Be Equal As Numbers  ${resource_usage[0]['info'][1]['value']}  1
+   Should Be Equal As Numbers  ${resource_usage[0]['info'][2]['value']}  1
    
    Sleep  60s
 
    #Verify Soft Alert
-   ${alert1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 40% of GPUs is used  token=${tokenop}
+   ${alert1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 40% of GPUs is used by the cloudlet  token=${tokenop}
    Should Not Be Empty  ${alert1[0]['data']}
 
    &{resource1}=  Create Dictionary  name=GPUs  value=4  alert_threshold=50
@@ -63,11 +64,11 @@ Controller displays GPU resource usage of cloudlet and triggers alert when thres
    ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
 
    ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-   Should Be Equal As Numbers  ${resource_usage[0]['info'][1]['value']}  1
-   Should Be Equal As Numbers  ${resource_usage[0]['info'][1]['quota_max_value']}  4
+   Should Be Equal As Numbers  ${resource_usage[0]['info'][2]['value']}  1
+   Should Be Equal As Numbers  ${resource_usage[0]['info'][2]['quota_max_value']}  4
 
    Sleep  60s
-   ${alert1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 40% of GPUs is used  token=${tokenop}
+   ${alert1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 40% of GPUs is used by the cloudlet  token=${tokenop}
    Should Be Empty  ${alert1}
 
    &{resource1}=  Create Dictionary  name=GPUs  value=1

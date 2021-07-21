@@ -33,7 +33,7 @@ AppInst - user shall be able to add with TCP port range for k8s
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].end_port}       10
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          1  #LProtoTCP
-    Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${public_path}
+    #Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${public_path}
 
     Length Should Be   ${appInst.mapped_ports}  1
 
@@ -56,7 +56,7 @@ AppInst - user shall be able to add with UDP port range for k8s
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].end_port}       10
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${public_path}
+    #Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${public_path}
 
     Length Should Be   ${appInst.mapped_ports}  1
 
@@ -101,13 +101,13 @@ AppInst - user shall be able to add with TCP/UDP port range for k8s
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    100
     Should Be Equal As Integers  ${appInst.mapped_ports[0].end_port}       160
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          1  #LProtoTCP
-    Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${app_default}${version}-tcp- 
+    #Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${app_default}${version}-tcp- 
 
     Should Be Equal As Integers  ${appInst.mapped_ports[1].internal_port}  100
     Should Be Equal As Integers  ${appInst.mapped_ports[1].public_port}    100
     Should Be Equal As Integers  ${appInst.mapped_ports[1].end_port}       160
     Should Be Equal As Integers  ${appInst.mapped_ports[1].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[1].fqdn_prefix}    ${app_default}${version}-udp-
+    #Should Be Equal              ${appInst.mapped_ports[1].fqdn_prefix}    ${app_default}${version}-udp-
 
     Length Should Be   ${appInst.mapped_ports}  2
 

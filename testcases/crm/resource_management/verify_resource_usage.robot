@@ -61,9 +61,9 @@ Controller throws proper error and displays correct resource usage/metrics data 
    Verify Resource Usage  2  8192  4
  
    ${resourceusage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-   ${default_instances}=  Set Variable  ${resourceusage[0]['info'][2]['value']}
-   ${default_ram}=        Set Variable  ${resourceusage[0]['info'][3]['value']}
-   ${default_vcpus}=      Set Variable  ${resourceusage[0]['info'][4]['value']}
+   ${default_instances}=  Set Variable  ${resourceusage[0]['info'][3]['value']}
+   ${default_ram}=        Set Variable  ${resourceusage[0]['info'][4]['value']}
+   ${default_vcpus}=      Set Variable  ${resourceusage[0]['info'][5]['value']}
    Set Suite Variable  ${default_instances}
    Set Suite Variable  ${default_ram}
    Set Suite Variable  ${default_vcpus}
@@ -256,6 +256,7 @@ Setup
    ${emaildev}=  Catenate  SEPARATOR=  ${username}  dev  +  ${epoch}  @gmail.com
 
    Create Org  orgname=${org_name_dev}  orgtype=developer
+   Create Billing Org  billing_org_name=${org_name_dev}  token=${token}
 
    Skip Verify Email
    Create User  username=${usernameop_epoch}  password=${password}  email_address=${emailop}
@@ -292,9 +293,9 @@ Verify Resource Usage
    [Arguments]   ${instances}  ${ram}  ${vcpu}
 
    ${resourceusage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['value']}  ${instances}       #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${ram}             #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${vcpu}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${instances}       #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${ram}             #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${vcpu}            #vCPUs
 
 Cloudlet Update
    [Arguments]  ${ram}  ${vcpu}  ${instances}

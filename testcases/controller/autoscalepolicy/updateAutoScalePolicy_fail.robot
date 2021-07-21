@@ -172,11 +172,11 @@ UpdateAutoScalePolicy - update with invalid scaleupcputhreshold shall return err
    ...  - send UpdateAutoScalePolicy with invalid scaleupcputhreshold 
    ...  - verify proper error is received
 
-   #maxnodes=-1
+   #scaleupcputhreshold=-10
    ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=1  max_nodes=2  scale_down_cpu_threshold=10  scale_up_cpu_threshold=-10  use_defaults=False
    Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -10, field=AutoScalePolicy.scale_up_cpu_thresh
 
-   #maxnodes=x
+   #scaleupcputhreshold=xx
    ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=2  max_nodes=2  scale_down_cpu_threshold=10  scale_up_cpu_threshold=xx  use_defaults=False
    Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.scale_up_cpu_thresh
 
@@ -186,13 +186,13 @@ UpdateAutoScalePolicy - update with invalid scaledowncputhreshold shall return e
    ...  - send UpdateAutoScalePolicy with invalid scaledowncputhreshold 
    ...  - verify proper error is received
 
-   #scale_up_cpu_threshold=-1
-   ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=1  max_nodes=2  scale_down_cpu_threshold=10  scale_up_cpu_threshold=-11  use_defaults=False
-   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -11, field=AutoScalePolicy.scale_up_cpu_thresh
+   #scaledowncputhreshold=-10
+   ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=1  max_nodes=2  scale_down_cpu_threshold=-10  scale_up_cpu_threshold=11  use_defaults=False
+   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -10, field=AutoScalePolicy.scale_down_cpu_thresh
 
-   #scale_up_cpu_threshold=x
-   ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=2  max_nodes=x  scale_down_cpu_threshold=1  scale_up_cpu_threshold=xx  use_defaults=False
-   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.max_nodes
+   #scaledowncputhreshold=xx
+   ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=2  max_nodes=3  scale_down_cpu_threshold=xx  scale_up_cpu_threshold=1  use_defaults=False
+   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.scale_down_cpu_thresh
 
 # ECQ-3566
 UpdateAutoScalePolicy - update with organization not found shall return error
