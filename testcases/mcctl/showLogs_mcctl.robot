@@ -63,11 +63,11 @@ ShowLogs - mcctl shall handle failures
       # bad values
       Error: Bad Request (400), Unable to parse Since field as duration or RFC3339 formatted time  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  since=1985
       Error: Bad Request (400), Unable to parse Since field as duration or RFC3339 formatted time  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  since=1d
-      Unable to parse "timestamps" value "s" as bool: invalid syntax, valid values are true, false  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  timestamps=s
-      Unable to parse "timestamps" value "2" as bool: invalid syntax, valid values are true, false  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  timestamps=2
-      Unable to parse "tail" value "s" as int: invalid syntax  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  tail=s
-      Unable to parse "follow" value "s" as bool: invalid syntax, valid values are true, false  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  follow=s
-      Unable to parse "follow" value "2" as bool  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  follow=2
+      Error: parsing arg "timestamps\=s" failed: unable to parse "s" as bool: invalid syntax, valid values are true, false  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  timestamps=s
+      Error: parsing arg "timestamps\=2" failed: unable to parse "2" as bool: invalid syntax, valid values are true, false  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  timestamps=2
+      Error: parsing arg "tail\=s" failed: unable to parse "s" as int: invalid syntax  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  tail=s
+      Error: parsing arg "follow\=s" failed: unable to parse "s" as bool: invalid syntax, valid values are true, false  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  follow=s
+      Error: parsing arg "follow\=2" failed: unable to parse "2" as bool: invalid syntax, valid values are true, false  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  follow=2
 
 
 
