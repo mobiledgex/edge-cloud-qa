@@ -83,15 +83,15 @@ CreateTrustPolicy - mcctl shall handle create failures
       # invalid values
       Error: Bad Request (400), Invalid CIDR address: 1.11.1/1  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.11.1/1
 
-      Unable to parse "outboundsecurityrules[0].portrangemin" value "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
-      Unable to parse "outboundsecurityrules[0].portrangemax" value "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
+      Error: parsing arg "outboundsecurityrules:0.portrangemin\=x" failed: unable to parse "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
+      Error: parsing arg "outboundsecurityrules:0.portrangemax\=x" failed: unable to parse "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
       Error: Bad Request (400), Invalid min port range: 999999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
       Error: Bad Request (400), Invalid max port range: 99999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
       Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
       Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.11.1/1
 
-      Unable to parse "outboundsecurityrules[0].portrangemin" value "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
-      Unable to parse "outboundsecurityrules[0].portrangemax" value "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
+      Error: parsing arg "outboundsecurityrules:0.portrangemin\=x" failed: unable to parse "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
+      Error: parsing arg "outboundsecurityrules:0.portrangemax\=x" failed: unable to parse "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
       Error: Bad Request (400), Invalid min port range: 999999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
       Error: Bad Request (400), Invalid max port range: 99999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
       Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
