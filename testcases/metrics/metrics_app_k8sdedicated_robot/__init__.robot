@@ -43,7 +43,7 @@ Setup
 
    #${appname_k8s}=  Set Variable  app1576004798-848067k8s 
    ${appinst}=  Show App Instances  region=${region}  app_name=${appname}  cluster_instance_name=${clustername_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
-   ${fqdn_tcp}=  Catenate  SEPARATOR=  ${appinst[0]['data']['mapped_ports'][0]['fqdn_prefix']}  ${appinst[0]['data']['uri']}
+   ${fqdn_tcp}=  Set Variable   ${appinst[0]['data']['uri']}
 #   ${fqdn_udp}=  Catenate  SEPARATOR=  ${appinst[0]['data']['mapped_ports'][1]['fqdn_prefix']}  ${appinst[0]['data']['uri']}
 
    Log to Console  Wait and connect to TCP/UDP ports

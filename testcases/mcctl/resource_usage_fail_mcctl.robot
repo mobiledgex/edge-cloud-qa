@@ -59,7 +59,7 @@ CreateCloudlet with resource quotas - mcctl shall handle failures
    [Template]  Fail CreateCloudlet Via mcctl
 
       # invalid values
-      parsing arg "resourcequotas:0.value\=-1" failed: unmarshal value -1 into type uint64 failed: yaml: unmarshal errors:  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10 numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Disk  resourcequotas:0.value=-1
+      Error: parsing arg "resourcequotas:0.value\=-1" failed: unable to parse "-1" as uint: invalid syntax  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10 numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Disk  resourcequotas:0.value=-1
 
       Error: OK (200), Invalid quota name: Dis, valid names are Instances,Floating IPs,RAM,vCPUs,GPUs  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Dis  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=90
 

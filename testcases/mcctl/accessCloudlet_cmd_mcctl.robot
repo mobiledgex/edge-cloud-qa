@@ -70,7 +70,7 @@ AccessCloudlet - mcctl shall handle error messages
    [Template]  Fail AccessCloudlet Command Via mcctl
 
       Error: missing required args                                           region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}
-      Error: missing required args: cloudlet-org                             region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  notcloudlet-org=${operator_name_openstack}   
+      Error: parsing arg "notcloudlet-org\=GDDT" failed: invalid argument: key "notcloudlet-org" not found   region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  notcloudlet-org=${operator_name_openstack}   
       Error: missing required args: cloudlet                                 region=${region_EU}  cloudlet-org=${operator_name_openstack} node-type=sharedrootlb  command=exit
       Error: missing required args: region                                                        cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack} node-type=sharedrootlb  command=exit
       Error: Bad Request (400), No cloudlet mgmt node specified              region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  command=a
