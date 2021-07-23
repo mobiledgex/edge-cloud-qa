@@ -69,7 +69,7 @@ Setup
     #Create Org  orgtype=developer
 
     Create Flavor  region=${region}  ram=4096  vcpus=2  disk=40
-    Create App  region=${region}  image_path=https://artifactory.mobiledgex.net/artifactory/repo-MobiledgeX/cirros-0.5.1-x86_64-disk.img#md5:1d3062cd89af34e419f7100277f38b2b  access_ports=tcp:8080  deployment=vm  image_type=ImageTypeQCOW  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
+    Create App  region=${region}  image_path=https://artifactory.mobiledgex.net/artifactory/repo-MobiledgeX/cirros-0.5.1-x86_64-disk.img#md5:33622b3106fdb13bfd1de6df4403eec2  access_ports=tcp:8080  deployment=vm  image_type=ImageTypeQCOW  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
     Create App Instance  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  #app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}
 
     ${epoch}=  Get Time  epoch
