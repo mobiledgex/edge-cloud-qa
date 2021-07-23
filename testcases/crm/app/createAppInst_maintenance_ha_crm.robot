@@ -159,7 +159,7 @@ AppInst - vmpool-to-openstack appinst shall start for k8s/lb/shared app inst whe
 
    Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_vmpool}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cloudlet_name_vmpool}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha1}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_vmpool}  operator1=${operator_name_openstack}  cloudlet1_fqdn=shared.${cloudlet_name_vmpool}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha1}  operator2=${operator_name_openstack}  cloudlet2_fqdn=shared.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net
 
 *** Keywords ***
 Setup
