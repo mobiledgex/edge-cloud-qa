@@ -22,7 +22,8 @@ ${latitude}       32.7767
 ${longitude}      -96.7970
 
 #@{clustersvc_pods}  alertmanager-mexprometheusappname-prome-alertmanager  mexprometheusappname-kube-state-metrics  mexprometheusappname-prome-operator  mexprometheusappname-prometheus-node-exporter  prometheus-mexprometheusappname-prome-prometheus  
-@{clustersvc_pods}  mexprometheusappnamev10-kube-state-metrics  mexprometheusappnamev10-pr-operator  mexprometheusappnamev10-prometheus-node-exporter  mexprometheusappnamev10-prometheus-node-exporter  prometheus-mexprometheusappnamev10-pr-prometheus
+#@{clustersvc_pods}  mexprometheusappnamev10-kube-state-metrics  mexprometheusappnamev10-pr-operator  mexprometheusappnamev10-prometheus-node-exporter  mexprometheusappnamev10-prometheus-node-exporter  prometheus-mexprometheusappnamev10-pr-prometheus
+@{clustersvc_pods}  mexprometheusappnamev10-kube-state-metrics  mexprometheusappnamev10-ku-operator  mexprometheusappnamev10-prometheus-node-exporter  mexprometheusappnamev10-prometheus-node-exporter  prometheus-mexprometheusappnamev10-ku-prometheus
 #mexmetricswriter-deployment  mexprometheusappname-grafana
 
 #${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
@@ -41,7 +42,8 @@ Create clusterInst for clustersvc on openstack
     ${cluster_name_default}=  Get Default Cluster Name
 
     # check that apps are created
-    App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_org_name=MobiledgeX  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  deployment=helm
+    App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_org_name=MobiledgeX  image_path=https://prometheus-community.github.io/helm-charts:prometheus-community/kube-prometheus-stack  default_flavor_name=x1.medium  cluster_name=default  deployment=helm
+    #App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_org_name=MobiledgeX  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  deployment=helm
     #App Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  image_path=docker.mobiledgex.net/mobiledgex/images/metrics-exporter:latest  default_flavor_name=x1.medium  deployment=kubernetes
 
     # check that pods are running
@@ -61,7 +63,7 @@ Setup
     #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
     #Create Cluster   default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}  
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
