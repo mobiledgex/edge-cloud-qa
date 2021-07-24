@@ -398,6 +398,258 @@ Get dme metrics with numsamples and starttime/endtime
 
    [Return]  ${metrics}  ${time_diff}
 
+Get client cloudlet usage metrics with startage
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_age=3600000000000  # 60min 
+
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${currentdate}=      Get Current Date    result_format=epoch
+   ${oldest}=  Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epocholdest}=  Evaluate  calendar.timegm(time.strptime('${oldest[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   Should Be True  (${currentdate} - ${epocholdest}) <= (3600000000000/1000000000)
+
+   [Return]  ${metrics}
+
+Get client cloudlet usage metrics with endage
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  end_age=60000000000  # 1min
+
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${currentdate}=      Get Current Date    result_format=epoch
+   ${newest}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochnewest}=  Evaluate  calendar.timegm(time.strptime('${newest[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   Should Be True  (${currentdate} - ${epochnewest}) >= (60000000000/1000000000)
+
+   [Return]  ${metrics}
+
+Get client cloudlet usage metrics with startage and endage
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${metricsall}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name} 
+   ${t1split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][1][0]}  .
+   ${t2split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][-2][0]}  .
+   ${epochend}=  Evaluate  calendar.timegm(time.strptime('${t1split[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${epochstart}=  Evaluate  calendar.timegm(time.strptime('${t2split[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${currentdate}=      Get Current Date    result_format=epoch
+   ${diffend}=  Evaluate  int(((${currentdate}-${epochend} - 100))*1000000000)
+   ${diffstart}=  Evaluate  int(((${currentdate}-${epochstart} + 100))*1000000000)
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_age=${diffstart}  end_age=${diffend} 
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${currentdate}=      Get Current Date    result_format=epoch
+   ${newest}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochnewest}=  Evaluate  calendar.timegm(time.strptime('${newest[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${oldest}=  Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epocholdest}=  Evaluate  calendar.timegm(time.strptime('${oldest[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   Should Be True  (${currentdate}-${epochnewest}) >= (${currentdate}-${epochend})
+   Should Be True  (${currentdate}-${epocholdest}) <= (${currentdate}-${epochstart})
+
+   [Return]  ${metrics}
+
+Get client app usage metrics with startage
+   [Arguments]  ${app_name}  ${developer_org_name}  ${selector}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  start_age=3600000000000  # 60min
+
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${currentdate}=      Get Current Date    result_format=epoch
+   ${oldest}=  Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epocholdest}=  Evaluate  calendar.timegm(time.strptime('${oldest[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   Should Be True  (${currentdate} - ${epocholdest}) <= (3600000000000/1000000000)
+
+   [Return]  ${metrics}
+
+Get client app usage metrics with endage
+   [Arguments]  ${app_name}  ${developer_org_name}  ${selector}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  end_age=60000000000  # 1min
+
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${currentdate}=      Get Current Date    result_format=epoch
+   ${newest}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochnewest}=  Evaluate  calendar.timegm(time.strptime('${newest[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   Should Be True  (${currentdate} - ${epochnewest}) >= (60000000000/1000000000)
+
+   [Return]  ${metrics}
+
+Get client app usage metrics with startage and endage
+   [Arguments]  ${app_name}  ${developer_org_name}  ${selector}
+
+   ${metricsall}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}
+   ${t1split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][0][0]}  .
+   ${t2split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochend}=  Evaluate  calendar.timegm(time.strptime('${t1split[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${epochstart}=  Evaluate  calendar.timegm(time.strptime('${t2split[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${currentdate}=      Get Current Date    result_format=epoch
+   ${diffend}=  Evaluate  int(((${currentdate}-${epochend} - 100))*1000000000)
+   ${diffstart}=  Evaluate  int(((${currentdate}-${epochstart} + 100))*1000000000)
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  start_age=${diffstart}  end_age=${diffend}
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${currentdate}=      Get Current Date    result_format=epoch
+   ${newest}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochnewest}=  Evaluate  calendar.timegm(time.strptime('${newest[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${oldest}=  Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epocholdest}=  Evaluate  calendar.timegm(time.strptime('${oldest[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   Should Be True  (${currentdate}-${epochnewest}) >= (${currentdate}-${epochend})
+   Should Be True  (${currentdate}-${epocholdest}) <= (${currentdate}-${epochstart})
+
+   [Return]  ${metrics}
+
+Get client cloudlet usage metrics with numsamples
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  number_samples=10
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) == 10
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${time_diff}=  Evaluate  12*60*60
+
+   [Return]  ${metrics}  ${time_diff}
+
+Get client app usage metrics with numsamples
+   [Arguments]  ${app_name}  ${developer_org_name}  ${selector}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  number_samples=10
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) == 10
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${time_diff}=  Evaluate  12*60*60
+
+   [Return]  ${metrics}  ${time_diff}
+
+Get client cloudlet usage metrics with numsamples and starttime/endtime
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   # get last metric and set starttime = 2 mins earlier
+   ${metricspre}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  limit=5
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${start_date}=  Set Variable  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}
+   ${end_date}=  Set Variable  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
+   @{datesplit_start}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  .
+   @{datesplit_end}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${start}=  Evaluate  calendar.timegm(time.strptime('${datesplit_start[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${end}=  Evaluate  calendar.timegm(time.strptime('${datesplit_end[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${start}=  Evaluate  ${start} - 100
+   ${end}=  Evaluate  ${end} + 100
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${start}))
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
+
+   log to console  ${start_date} ${end_date}
+   ${time_diff}=  Evaluate  ${end}-${start}
+
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_time=${start_date}  end_time=${end_date}  number_samples=5
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) == 5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+   @{datesplit_first}=  Split String  ${datez}  .
+   ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit_last}=  Split String  ${datez}  .
+
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   Should Be True  ${epoch_first} > ${epochpre}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   Should Be True  ${num_readings} <= 100
+
+   ${time_diff}=  Evaluate  12*60*60
+
+   [Return]  ${metrics}  ${time_diff}
+
+Get client app usage metrics with numsamples and starttime/endtime
+   [Arguments]  ${app_name}  ${developer_org_name}  ${selector}
+
+   # get last metric and set starttime = 2 mins earlier
+   ${metricspre}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  limit=5
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${start_date}=  Set Variable  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}
+   ${end_date}=  Set Variable  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
+   @{datesplit_start}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  .
+   @{datesplit_end}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${start}=  Evaluate  calendar.timegm(time.strptime('${datesplit_start[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${end}=  Evaluate  calendar.timegm(time.strptime('${datesplit_end[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${start}=  Evaluate  ${start} - 100
+   ${end}=  Evaluate  ${end} + 100
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${start}))
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
+
+   log to console  ${start_date} ${end_date}
+   ${time_diff}=  Evaluate  ${end}-${start}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  start_time=${start_date}  end_time=${end_date}  number_samples=5
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) == 5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+   @{datesplit_first}=  Split String  ${datez}  .
+   ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit_last}=  Split String  ${datez}  .
+
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   Should Be True  ${epoch_first} > ${epochpre}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   Should Be True  ${num_readings} <= 100
+
+   ${time_diff}=  Evaluate  12*60*60
+
+   [Return]  ${metrics}  ${time_diff}
+
 Get client app usage metrics with starttime
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
@@ -427,18 +679,23 @@ Get client cloudlet usage metrics with starttime
    log to console  ${metricspre['data'][0]}
    ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  0  -1
    @{datesplit}=  Split String  ${datez}  .
-   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
    ${start}=  Evaluate  ${epochpre} - 600
-   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${start}))
+
+   ${currentdate}=      Get Current Date    result_format=epoch
+   ${time_diff}=  Evaluate  ${currentdate}-${start}
+   log to console  ${currentdate} ${start}
 
    # get readings and 1st and last timestamp
    ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_time=${start_date}
-   #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   [Return]  ${metrics}
+   [Return]  ${metrics}  ${time_diff}
 
 Get dme metrics with endtime on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
@@ -504,18 +761,32 @@ Get client cloudlet usage metrics with endtime
    log to console  ${metricspre['data'][0]}
    ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
    @{datesplit}=  Split String  ${datez}  .
-   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   ${end}=  Evaluate  ${epochpre} + 180
-   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${end}=  Evaluate  ${epochpre} + 90
+   #${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
+
+   ${start}=  Evaluate  ${end} - 43200  # end - 12hrs
+   
+   ${time_diff}=  Evaluate  ${end}-${start}
 
    # get readings and 1st and last timestamp
    ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  end_time=${end_date}
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   ${datez_first}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+   @{datesplit_first}=  Split String  ${datez}  .
+   ${epoch_first}=  Evaluate  calendar.timegm(time.strptime('${datesplit_first[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+
    #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   [Return]  ${metrics}
+   Should Be True  ${num_readings} > 10
+   Should Be True  ${epoch_first} <= ${end}
+
+   [Return]  ${metrics}  ${time_diff}
 
 Get dme metrics with starttime=lastrecord on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
@@ -703,7 +974,7 @@ Get dme metrics with starttime and endtime on openstack
    #${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
    ${start_date}=  Set Variable  ${metricspre['data'][0]['Series'][0]['values'][4][0]}
    ${end_date}=  Set Variable  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
-   @{datesplit_start}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][4][0]}  .
+   @{datesplit_start}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  .
    @{datesplit_end}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${start}=  Evaluate  calendar.timegm(time.strptime('${datesplit_start[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
    ${end}=  Evaluate  calendar.timegm(time.strptime('${datesplit_end[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
@@ -766,24 +1037,52 @@ Get client cloudlet usage metrics with starttime and endtime
    [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
 
    # get last metric and set starttime = 2 mins earlier
-   ${metricspre}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  limit=1
+   ${metricspre}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  limit=5
    log to console  ${metricspre['data'][0]}
    ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
    @{datesplit}=  Split String  ${datez}  .
-   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   ${start}=  Evaluate  ${epochpre} - 900
-   ${end}=  Evaluate  ${epochpre} + 120
-   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
-   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   #${start}=  Evaluate  ${epochpre} - 900
+   #${end}=  Evaluate  ${epochpre} + 120
+   #${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${start_date}=  Set Variable  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}
+   ${end_date}=  Set Variable  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
+   @{datesplit_start}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  .
+   @{datesplit_end}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${start}=  Evaluate  calendar.timegm(time.strptime('${datesplit_start[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${end}=  Evaluate  calendar.timegm(time.strptime('${datesplit_end[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${start}=  Evaluate  ${start} - 10
+   ${end}=  Evaluate  ${end} + 10
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${start}))
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
+
+   log to console  ${start_date} ${end_date}
+   ${time_diff}=  Evaluate  ${end}-${start}
 
    # get readings and 1st and last timestamp
    ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_time=${start_date}  end_time=${end_date}
    #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
+   ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+   @{datesplit_first}=  Split String  ${datez}  .
+   ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit_last}=  Split String  ${datez}  .
+
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   Should Be True  ${epoch_first} > ${epochpre}
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   [Return]  ${metrics}
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   Should Be True  ${num_readings} <= 100
+
+   [Return]  ${metrics}  ${time_diff}
 	
 Get dme metrics with starttime and endtime and last on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
