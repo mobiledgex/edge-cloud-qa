@@ -28,9 +28,9 @@ ${cloud1_lat}=  31
 ${cloud1_long}=  -91
 ${cloud2_lat}=  35
 ${cloud2_long}=  -95
-${cloudlet1_tile}=  -90.998922,30.984896_-91.016888,31.002985_2
-${cloudlet2_tile}=  -94.987424,34.982364_-95.005390,35.000452_2
-${cloudlet12_tile}=  -94.987424,30.984896_-95.005390,31.002985_2
+${cloudlet1_tile}=  -90.998922,30.993940_-91.007905,31.002985_1
+${cloudlet2_tile}=   -94.996407,34.991408_-95.005390,35.000452_1
+${cloudlet12_tile}=  -94.987424,30.984896_-95.005390,31.002985_1
 
 ${dme_conn_lat}=  ${cloud1_lat}
 ${dme_conn_long}=  ${cloud1_long}
@@ -44,9 +44,9 @@ DMEMetrics - Shall be able to get the last DME Client Cloudlet Latency metric
 
    ${metrics}=  Get the last client cloudlet usage metric  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
 
 DMEMetrics - Shall be able to get the last DME Client Cloudlet DeviceInfo metric
    [Documentation]
@@ -55,9 +55,9 @@ DMEMetrics - Shall be able to get the last DME Client Cloudlet DeviceInfo metric
 
    ${metrics}=  Get the last client cloudlet usage metric  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
 
-   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   DeviceInfo Values Should Be Correct  ${metrics} 
+   DeviceInfo Values Should Be Correct  ${metrics}   raw=${True}
 
 DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with cloudletorg only
    [Documentation]
@@ -66,13 +66,13 @@ DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with cloud
 
    ${metrics}=  Get all client cloudlet usage metrics  operator_org_name=${operator_name_fake}  selector=latency
 
-   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6 
-   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  2
+#   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6 
+#   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  2
+
+   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${True}
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[2]}' == '${operator_name_fake}'
-      END
+      Should Be True  '${m['tags']['cloudletorg']}' == '${operator_name_fake}'
    END
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with cloudletorg only
@@ -84,15 +84,16 @@ DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with cl
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}  raw=${True}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}  raw=${True}
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[2]}' == '${operator_name_fake}'
-      END
+      Should Be True  '${m['tags']['cloudletorg']}' == '${operator_name_fake}' 
    END
 
 DMEMetrics - Shall be able to get all DME Client Cloudlet Latency metric
@@ -104,10 +105,12 @@ DMEMetrics - Shall be able to get all DME Client Cloudlet Latency metric
 
    Latency Metrics Headings Should Be Correct  ${metrics}
 
-   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
-   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  2
+   #Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   #Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  2
 
-   Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${True}
+
+   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
 
 DMEMetrics - Shall be able to get all DME Client Cloudlet DeviceInfo metric
    [Documentation]
@@ -118,67 +121,81 @@ DMEMetrics - Shall be able to get all DME Client Cloudlet DeviceInfo metric
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
 
-   DeviceInfo Values Should Be Correct  ${metrics}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}  raw=${True}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}  raw=${True}
+
+   DeviceInfo Values Should Be Correct  ${metrics}  raw=${True}
 
 DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with starttime
    [Documentation]
    ...  request latency clientappusage metrics with starttime
    ...  verify info is correct
 
-   ${metrics}=  Get client cloudlet usage metrics with starttime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
+   ${metrics}  ${time_diff}=  Get client cloudlet usage metrics with starttime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
-   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  2
+#   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+#   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  2
 
-   Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${False}
+
+   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False} 
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with starttime
    [Documentation]
    ...  request deviceinfo clientappusage metrics with starttime
    ...  verify info is correct
 
-   ${metrics}=  Get client cloudlet usage metrics with starttime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
+   ${metrics}  ${time_diff}=  Get client cloudlet usage metrics with starttime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
 
-   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
 
-   DeviceInfo Values Should Be Correct  ${metrics}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
+
+   DeviceInfo Values Should Be Correct  metrics=${metrics}  time_diff=${time_diff}  raw=${False}
 
 DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with endtime
    [Documentation]
    ...  request latency clientappusage metrics with endtime
    ...  verify info is correct
 
-   ${metrics}=  Get client cloudlet usage metrics with endtime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
+   ${metrics}  ${time_diff}=  Get client cloudlet usage metrics with endtime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
+
+   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False}
+
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with endtime
    [Documentation]
    ...  request deviceinfo clientappusage metrics with endtime
    ...  verify info is correct
 
-   ${metrics}=  Get client cloudlet usage metrics with endtime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
+   ${metrics}  ${time_diff}=  Get client cloudlet usage metrics with endtime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
 
-   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -187,25 +204,32 @@ DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with start
    ...  request latency clientappusage metrics with startime and endtime
    ...  verify info is correct
 
-   ${metrics}=  Get client cloudlet usage metrics with starttime and endtime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
+   ${metrics}  ${time_diff}=  Get client cloudlet usage metrics with starttime and endtime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
+
+   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False}
+
+   #Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  ${time_diff}
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with starttime and endtime
    [Documentation]
    ...  request deviceinfo clientappusage metrics with startime and endtime
    ...  verify info is correct
 
-   ${metrics}=  Get client cloudlet usage metrics with starttime and endtime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
+   ${metrics}  ${time_diff}=  Get client cloudlet usage metrics with starttime and endtime   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
 
-   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -216,9 +240,13 @@ DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with start
 
    ${metrics}=  Get client cloudlet usage metrics with starttime and endtime and last   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+
+   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+
+   #Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with starttime and endtime and last
    [Documentation]
@@ -227,12 +255,15 @@ DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with st
 
    ${metrics}=  Get client cloudlet usage metrics with starttime and endtime and last   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
 
-   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -247,33 +278,6 @@ DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with locat
 
    Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
 
-DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with rawdata
-   [Documentation]
-   ...  request deviceinfo clientappusage metrics with locationtile
-   ...  verify info is correct
-
-   ${metrics}=  Get client cloudlet usage metrics with rawdata   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
-
-   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
-
-   Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
-
-DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with rawdata
-   [Documentation]
-   ...  request latency clientappusage metrics with rawdata
-   ...  verify info is correct
-
-   ${metrics}=  Get client cloudlet usage metrics with rawdata   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
-
-   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${True}
-
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
-
-   DeviceInfo Values Should Be Correct  ${metrics}  raw=${True}
-
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with deviceos
    [Documentation]
    ...  request deviceinfo clientappusage metrics with deviceos
@@ -283,15 +287,16 @@ DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with de
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}  
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[3]}' == '${device_os}'
-      END
+      Should Be Equal  ${m['tags']['deviceos']}  ${device_os}
    END
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with devicemodel
@@ -303,15 +308,16 @@ DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with de
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[4]}' == '${device_model}'
-      END
+      Should Be Equal  ${m['tags']['devicemodel']}  ${device_model} 
    END
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with devicecarrier
@@ -323,13 +329,13 @@ DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with de
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+ 
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[5]}' == '${carrier_name}'
-      END
+      Should Be Equal  ${m['tags']['devicecarrier']}  ${carrier_name}
    END
 
 
@@ -342,14 +348,149 @@ DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with al
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[5]}' == '${carrier_name}'
-      END
+      Should Be Equal  ${m['tags']['devicecarrier']}  ${carrier_name}
    END
+
+DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with startage
+   [Documentation]
+   ...  request all DME client cloudlet latency metrics with startage
+   ...  verify info is correct
+
+   ${metrics}=  Get client cloudlet usage metrics with startage  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
+
+   Latency Metrics Headings Should Be Correct  ${metrics}
+
+   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${True}
+
+   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+
+DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with endage
+   [Documentation]
+   ...  request all DME client cloudlet latency metrics with endage
+   ...  verify info is correct
+
+   ${metrics}=  Get client cloudlet usage metrics with endage  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
+
+   Latency Metrics Headings Should Be Correct  ${metrics}
+
+   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${True}
+
+   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+
+DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with startage and endage
+   [Documentation]
+   ...  request all DME client cloudlet latency metrics with startage and endage
+   ...  verify info is correct
+
+   ${metrics}=  Get client cloudlet usage metrics with startage and endage  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
+
+   Latency Metrics Headings Should Be Correct  ${metrics}
+
+   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${True}
+
+   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+
+DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with numsamples
+   [Documentation]
+   ...  request all DME client cloudlet latency metrics with numsamples
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get client cloudlet usage metrics with numsamples  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${False}
+
+   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${False}
+
+DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with numsamples and starttime/endtime
+   [Documentation]
+   ...  request all DME client cloudlet latency metrics with numsamples and startime/endtime
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get client cloudlet usage metrics with numsamples and starttime/endtime  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${False}
+
+   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${False}
+
+DMEMetrics - Shall be able to get the DME Client Cloudlet DeviceInfo metrics with startage
+   [Documentation]
+   ...  request all DME client cloudlet deviceinfo metrics with startage
+   ...  verify info is correct
+
+   ${metrics}=  Get client cloudlet usage metrics with startage  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${True}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
+
+   DeviceInfo Values Should Be Correct  metrics=${metrics}  raw=${True}
+
+DMEMetrics - Shall be able to get the DME Client Cloudlet DeviceInfo metrics with endage
+   [Documentation]
+   ...  request all DME client cloudlet deviceinfo metrics with endage
+   ...  verify info is correct
+
+   ${metrics}=  Get client cloudlet usage metrics with endage  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${True}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
+
+   DeviceInfo Values Should Be Correct  metrics=${metrics}  raw=${True}
+
+DMEMetrics - Shall be able to get the DME Client Cloudlet DeviceInfo metrics with startage and endage
+   [Documentation]
+   ...  request all DME client cloudlet deviceinfo metrics with startage and endage
+   ...  verify info is correct
+
+   ${metrics}=  Get client cloudlet usage metrics with startage and endage  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${True}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
+
+   DeviceInfo Values Should Be Correct  metrics=${metrics}  raw=${True}
+
+DMEMetrics - Shall be able to get the DME Client Cloudlet DeviceInfo metrics with numsamples
+   [Documentation]
+   ...  request all DME client cloudlet deviceinfo metrics with numsamples
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get client cloudlet usage metrics with numsamples  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
+
+   DeviceInfo Values Should Be Correct  metrics=${metrics}  time_diff=${time_diff}  raw=${False}
+
+DMEMetrics - Shall be able to get the DME Client Cloudlet DeviceInfo metrics with numsamples and starttime/endtime
+   [Documentation]
+   ...  request all DME client cloudlet deviceinfo metrics with numsamples and startime/endtime
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get client cloudlet usage metrics with numsamples and starttime/endtime  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=deviceinfo
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
+
+   DeviceInfo Values Should Be Correct  metrics=${metrics}  time_diff=${time_diff}  raw=${False}
 
 DMEMetrics - DeveloperManager shall not be able to get DME Client Cloudlet Latency metrics
    [Documentation]
@@ -413,10 +554,13 @@ DMEMetrics - OperatorManager shall be able to get DME Client Cloudlet DeviceInfo
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -440,8 +584,10 @@ DMEMetrics - OperatorContributor shall be able to get DME Client Cloudlet Device
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -465,10 +611,13 @@ DMEMetrics - OperatorViewer shall be able to get DME Client Cloudlet DeviceInfo 
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
-   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -504,31 +653,32 @@ Setup
     ${settings_pre}=   Show Settings  region=${region}
     Set Suite Variable  ${settings_pre}
 
-    @{collection_intervals}=  Create List  10s  1m10s  2m10s
+    @{collection_intervals}=  Create List  1m10s  2m10s  3m10s
     Update Settings  region=${region}  edge_events_metrics_collection_interval=10s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}
+    Sleep  15s
 
     ${r1}=  Register Client  app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}	
     ${cloudlet1}=  Find Cloudlet   carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud1_long}
     #${cloudlet1}=  Find Cloudlet   carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud2_long}
     Should Be Equal As Numbers  ${cloudlet1.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet1.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet1.fqdn}  ${cloudlet_name}.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet1.fqdn}  shared.${cloudlet_name}.tmus.mobiledgex.net
 
     ${r2}=  Register Client  app_name=${app_name}2  app_version=1.0  developer_org_name=${developer_org_name_automation}
     ${cloudlet2}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud1_long}
     Should Be Equal As Numbers  ${cloudlet2.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet2.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet2.fqdn}  ${cloudlet_name}.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet2.fqdn}  shared.${cloudlet_name}.tmus.mobiledgex.net
 
     ${r3}=  Register Client  app_name=${app_name}3  app_version=1.0  developer_org_name=${developer_org_name_automation}
     ${cloudlet3}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=${cloud2_lat}  longitude=${cloud2_long}
     Should Be Equal As Numbers  ${cloudlet3.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet3.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet3.fqdn}  ${cloudlet2_name}.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet3.fqdn}  shared.${cloudlet2_name}.tmus.mobiledgex.net
 
     @{samples1}=  Create List  ${10.4}  ${4.20}  ${30}  ${440}  ${0.50}  ${6.00}  ${170.45}
     ${num_samples1}=  Get Length  ${samples1}
-
+    
     # connect to cloud1
     Create DME Persistent Connection  carrier_name=${carrier_name}  session_cookie=${r1.session_cookie}  edge_events_cookie=${cloudlet1.edge_events_cookie}  device_os=${device_os}  device_model=${device_model}  signal_strength=${signal_strength}  data_network_type=${data_network_type}c1
     ${latency11}=  Send Latency Edge Event  carrier_name=${carrier_name}  latitude=${dme_conn_lat}  longitude=${dme_conn_long}  samples=${samples1}  signal_strength=${signal_strength}  data_network_type=${data_network_type}
@@ -541,19 +691,19 @@ Setup
     # this should return cloud2 
     ${lu}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud2_lat}  longitude=${cloud2_long}  signal_strength=${signal_strength}  data_network_type=${data_network_type}l1
     Should Be Equal As Numbers  ${lu.new_cloudlet.status}  1  #FIND_FOUND
-    Should Be Equal  ${lu.new_cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${lu.new_cloudlet.fqdn}  shared.tmocloud-2.tmus.mobiledgex.net
     # connection to cloud2
     Create DME Persistent Connection  carrier_name=${carrier_name}  session_cookie=${r1.session_cookie}  edge_events_cookie=${lu.new_cloudlet.edge_events_cookie}  device_os=${device_os}  device_model=${device_model}  signal_strength=${signal_strength}  data_network_type=${data_network_type}c2
     # this should return cloud1
     ${lu3}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud1_long}  signal_strength=${signal_strength}  data_network_type=${data_network_type}l2
     Should Be Equal As Numbers  ${lu3.new_cloudlet.status}  1  #FIND_FOUND
-    Should Be Equal  ${lu3.new_cloudlet.fqdn}  ${cloudlet_name}.tmus.mobiledgex.net
+    Should Be Equal  ${lu3.new_cloudlet.fqdn}  shared.${cloudlet_name}.tmus.mobiledgex.net
     # connect back to cloud1 with same deviceinfo
     Create DME Persistent Connection  carrier_name=${carrier_name}  session_cookie=${r1.session_cookie}  edge_events_cookie=${lu3.new_cloudlet.edge_events_cookie}  device_os=${device_os}  device_model=${device_model}  signal_strength=${signal_strength}  data_network_type=${data_network_type}c1
     # this should return cloud2
     ${lu4}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud2_lat}  longitude=${cloud2_long}  signal_strength=${signal_strength_2}  data_network_type=${data_network_type}l3
     Should Be Equal As Numbers  ${lu4.new_cloudlet.status}  1  #FIND_FOUND
-    Should Be Equal  ${lu4.new_cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${lu4.new_cloudlet.fqdn}  shared.tmocloud-2.tmus.mobiledgex.net
 
 #    Terminate DME Persistent Connection
 
@@ -573,7 +723,7 @@ Setup
     Sleep  60s
 #    ${metrics2}=  Get Client App Metrics  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
     
-    Sleep  70s
+    Sleep  2m 
 #    ${metrics31}=  Get Client App Metrics  region=${region}  app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 #    ${metrics32}=  Get Client App Metrics  region=${region}  app_name=${app_name}2  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 #    ${metrics33}=  Get Client App Metrics  region=${region}  app_name=${app_name}3  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
@@ -599,6 +749,7 @@ Setup
     Set Suite Variable  ${latency11}
     Set Suite Variable  ${latency13}
     Set Suite Variable  ${num_samples1}
+    Set Suite Variable  @{samples1}
 
 #*** Keywords ***
 #Setup
@@ -634,58 +785,69 @@ Teardown
    Cleanup Provisioning
 
 Latency Metrics Headings Should Be Correct
-  [Arguments]  ${metrics}  ${raw}=${False}
+  [Arguments]  ${metrics}  ${raw}=${True}
 
-   Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric-2m10s
-   Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}  latency-metric-1m10s
-   Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}  latency-metric-10s
-   ${count}=  Run Keyword If   not ${raw}  Set Variable  3
-   ...   ELSE  Set Variable  1
-
-   Run Keyword If   ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric
+   #Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric-2m10s
+   #Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}  latency-metric-1m10s
+   #Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}  latency-metric-10s
+   #${count}=  Run Keyword If   not ${raw}  Set Variable  3
+   #...   ELSE  Set Variable  1
+   ${count}=  Set Variable  1
+   #Run Keyword If   ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric
 
    FOR  ${i}  IN RANGE  0  ${count} 
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][0]}  time
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][1]}  cloudlet
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  cloudletorg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][3]}  signalstrength
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  0s
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][5]}  5ms
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][6]}  10ms
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][7]}  25ms
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][8]}  50ms
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][9]}  100ms
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][10]}  max
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][11]}  min
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][12]}  avg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][13]}  variance
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][14]}  stddev
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][15]}  numsamples
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][16]}  locationtile
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][17]}  devicecarrier
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][18]}  datanetworktype
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][1]}  0s
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  5ms
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][3]}  10ms
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  25ms
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][5]}  50ms
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][6]}  100ms
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][7]}  max
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][8]}  min
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][9]}  avg
+      IF  ${raw}
+          Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][10]}  variance
+          Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][11]}  stddev
+          Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][12]}  numsamples
+      ELSE
+          Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][10]}  numsamples
+      END
+   END
+
+   FOR  ${i}  IN RANGE  0  ${count}
+      Should Be True  'cloudlet' in ${metrics['data'][0]['Series'][${i}]['tags']}
+      Should Be True  'cloudletorg' in ${metrics['data'][0]['Series'][${i}]['tags']}
+      Should Be True  'datanetworktype' in ${metrics['data'][0]['Series'][${i}]['tags']}
+      Should Be True  'devicecarrier' in ${metrics['data'][0]['Series'][${i}]['tags']}
+      Should Be True  'locationtile' in ${metrics['data'][0]['Series'][${i}]['tags']}
    END
 
 DeviceInfo Metrics Headings Should Be Correct
-  [Arguments]  ${metrics}  ${raw}=${False}
+  [Arguments]  ${metrics}  ${raw}=${True}
 
-   Run Keyword If   not ${raw}  DeviceInfo Metrics Headings Should Contain Name  ${metrics}  device-metric-2m10s  #Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  device-metric-2m10s
-   Run Keyword If   not ${raw}  DeviceInfo Metrics Headings Should Contain Name  ${metrics}  device-metric-1m10s  #Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}  device-metric-1m10s
-   Run Keyword If   not ${raw}  DeviceInfo Metrics Headings Should Contain Name  ${metrics}  device-metric-10s    #Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}  device-metric-10s
-   ${count}=  Run Keyword If   not ${raw}  Set Variable  3
-   ...   ELSE  Set Variable  1
-
-   Run Keyword If   ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  device-metric
+   #Run Keyword If   not ${raw}  DeviceInfo Metrics Headings Should Contain Name  ${metrics}  device-metric-2m10s  #Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  device-metric-2m10s
+   #Run Keyword If   not ${raw}  DeviceInfo Metrics Headings Should Contain Name  ${metrics}  device-metric-1m10s  #Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}  device-metric-1m10s
+   #Run Keyword If   not ${raw}  DeviceInfo Metrics Headings Should Contain Name  ${metrics}  device-metric-10s    #Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}  device-metric-10s
+   #${count}=  Run Keyword If   not ${raw}  Set Variable  3
+   #...   ELSE  Set Variable  1
+   ${count}=  Set Variable  1
+   #Run Keyword If   ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  device-metric
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  device-metric
 
    FOR  ${i}  IN RANGE  0  ${count}
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][0]}  time
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][1]}  cloudlet
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  cloudletorg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][3]}  deviceos
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  devicemodel
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][5]}  devicecarrier
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][6]}  numsessions
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][7]}  locationtile
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][1]}  numsessions
+   END
+
+   FOR  ${i}  IN RANGE  0  ${count}
+      Should Be True  'cloudlet' in ${metrics['data'][0]['Series'][${i}]['tags']}
+      Should Be True  'cloudletorg' in ${metrics['data'][0]['Series'][${i}]['tags']}
+      Should Be True  'devicecarrier' in ${metrics['data'][0]['Series'][${i}]['tags']}
+      Should Be True  'devicemodel' in ${metrics['data'][0]['Series'][${i}]['tags']}
+      Should Be True  'deviceos' in ${metrics['data'][0]['Series'][${i}]['tags']}
+      Should Be True  'locationtile' in ${metrics['data'][0]['Series'][${i}]['tags']}
    END
 
 DeviceInfo Metrics Headings Should Contain Name
@@ -702,32 +864,35 @@ DeviceInfo Metrics Headings Should Contain Name
    Should Be True  ${found}
 
 Latency Values Should Be Correct
-   [Arguments]  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet_name}  ${raw}=${False}
+   [Arguments]  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet_name}  ${raw}=${True}  ${time_diff}=${None}
 
-   ${count}=  Run Keyword If   not ${raw}  Set Variable  3
-   ...   ELSE  Set Variable  1
+   #${count}=  Run Keyword If   not ${raw}  Set Variable  3
+   #...   ELSE  Set Variable  1
 
-   FOR  ${i}  IN RANGE  0  ${count}
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][1]}  ${cloudlet}
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][2]}  ${operator_name_fake}
-#      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][8]}  75
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_name_fake}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['datanetworktype']}  ${data_network_type}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['devicecarrier']}  ${carrier_name}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['locationtile']}  ${cloudlet1_tile}
 
-      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][4]} >= 0
-      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][5]} >= 0
-      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][6]} >= 0
-      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][7]} >= 0
-      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][8]} >= 0
-      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][9]} >= 0
-      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][10]} > 0
-      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][11]} > 0
-      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][12]} > 0
-#      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][13]} > 0
-#      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][14]} > 0
-      Should Be True  ${metrics['data'][0]['Series'][${i}]['values'][0][15]} > 0
-      Should Be True  len("${metrics['data'][0]['Series'][${i}]['values'][0][16]}") > 0
-      Should Be True  len("${metrics['data'][0]['Series'][${i}]['values'][0][17]}") > 0
-      Should Be True  len("${metrics['data'][0]['Series'][${i}]['values'][0][18]}") > 0
-
+   #FOR  ${i}  IN RANGE  0  ${count}
+    FOR  ${v}  IN  @{metrics['data'][0]['Series'][0]['values']}
+      IF  ${v[1]} != None
+         Should Be True  ${v[1]} >= 0
+         Should Be True  ${v[2]} >= 0
+         Should Be True  ${v[3]} >= 0
+         Should Be True  ${v[4]} >= 0
+         Should Be True  ${v[5]} >= 0
+         Should Be True  ${v[6]} >= 0
+         Should Be True  ${v[7]} > 0
+         Should Be True  ${v[8]} > 0
+         Should Be True  ${v[9]} > 0
+         Should Be True  ${v[10]} > 0
+         IF  ${raw}
+            Should Be True  ${v[11]} > 0
+            Should Be True  ${v[12]} > 0
+        END
+     END 
    END
 
 #DeviceInfo Values Should Be Correct
@@ -751,114 +916,237 @@ Latency Values Should Be Correct
 #   END
 
 DeviceInfo Values Should Be Correct
-   [Arguments]  ${metrics}  ${raw}=${False}
+   [Arguments]  ${metrics}  ${raw}=${True}  ${time_diff}=${None}  ${cloudlet}=${cloudlet_name}
 
-   ${count}=  Run Keyword If   not ${raw}  Set Variable  3
-   ...   ELSE  Set Variable  1
+   #${count}=  Run Keyword If   not ${raw}  Set Variable  3
+   #...   ELSE  Set Variable  2
 
-   Length Should Be  ${metrics['data'][0]['Series']}  ${count}
+   #Length Should Be  ${metrics['data'][0]['Series']}  ${count}
 
-   FOR  ${i}  IN RANGE  0  ${count}
-      #Length Should Be  ${metrics['data'][0]['Series'][${i}]['values']}  2
-      ${len}=  Get Length  ${metrics['data'][0]['Series'][${i}]['values']}
-      #Should Be True  ${len} == 1 or ${len} == 2
-      Should Be True  ${len} >= 1
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_name_fake}
+   Should Be True   '${metrics['data'][0]['Series'][0]['tags']['devicecarrier']}' == '${carrier_name}' or '${metrics['data'][0]['Series'][0]['tags']['devicecarrier']}' == '${operator_name_fake}'
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['devicemodel']}  ${device_model}
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['deviceos']}  ${device_os}
+   Should Be True  '${metrics['data'][0]['Series'][0]['tags']['locationtile']}' == '${cloudlet1_tile}' or '${metrics['data'][0]['Series'][0]['tags']['locationtile']}' == '${cloudlet2_tile}'
+
+   #FOR  ${i}  IN RANGE  0  ${count}
+   FOR  ${v}  IN  @{metrics['data'][0]['Series'][0]['values']}
+      IF  ${v[1]} != None
+         Should Be True  ${v[1]} > 0
+      END
    END
 
 Cloudlet Should Be Found
-   [Arguments]  ${cloudlet_name}  ${metrics}  ${totalrequests}=${None}  ${numsessions}=${None}  ${device_network_type}=${None}  ${carrier}=${None}  ${tile}=${None}
+   [Arguments]  ${cloudlet_name}  ${metrics}  ${numsamples}=${None}  ${numsessions}=${None}  ${data_network_type}=${None}  ${carrier}=${None}  ${tile}=${None}
 
    ${metric_found}=  Set Variable  ${None}
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          IF  '${v[1]}' == '${cloudlet_name}'
-              ${metric_found}=  Set Variable  ${v}
+      IF  '${m['tags']['cloudlet']}' == '${cloudlet_name}'
+          ${metric_found}=  Set Variable  ${m}
 
-              IF  '${totalrequests}' != '${None}' and '${v[4]}' != '${totalrequests}'
+          IF  '${carrier}' != '${None}'
+              log to console  ${m['tags']['cloudlet']} ${m['tags']['devicecarrier']} ${carrier}
+              IF  '${m['tags']['devicecarrier']}' != '${carrier}'
                   ${metric_found}=  Set Variable  ${None}
               END
-              IF  '${numsessions}' != '${None}' and ${v[6]} != ${numsessions}
+          END
+
+          IF  '${data_network_type}' != '${None}'
+              log to console  ${m['tags']['cloudlet']} ${m['tags']['datanetworktype']} ${datanetworktype}
+              IF  '${m['tags']['datanetworktype']}' != '${data_network_type}'
                   ${metric_found}=  Set Variable  ${None}
               END
-              IF  '${device_network_type}' != '${None}'
-                  IF  '${v[18]}' != '${device_network_type}'
-                      ${metric_found}=  Set Variable  ${None}
-                  END
-              END
-              IF  '${carrier}' != '${None}'
-                  IF  '${device_network_type}' != '${None}'
-                      IF  '${v[17]}' != '${carrier}'
-                          ${metric_found}=  Set Variable  ${None}
-                      END
-                  ELSE
-                      IF  '${v[5]}' != '${carrier}'
-                          ${metric_found}=  Set Variable  ${None}
-                      END
-                  END
-              END
+          END
 
-              IF  '${tile}' != '${None}'
-                  IF  '${device_network_type}' != '${None}'
-                      IF  '${v[16]}' != '${tile}'
-                          ${metric_found}=  Set Variable  ${None}
-                      END
-                  ELSE
-                      IF  '${v[7]}' != '${tile}'
-                          ${metric_found}=  Set Variable  ${None}
-                      END
-                  END
+          IF  '${tile}' != '${None}'
+              log to console  ${m['tags']['cloudlet']} ${m['tags']['locationtile']} ${tile}
+              IF  '${m['tags']['locationtile']}' != '${tile}'
+                  ${metric_found}=  Set Variable  ${None}
               END
+          END
+      END
+
+      IF  ${metric_found} != ${None}
+          ${value_sum}=  Set Variable  ${0}
+          FOR  ${v}  IN  @{m['values']}
+              IF  ${v[1]} != ${None}    # dont check null readings which be removed later
+                 ${value_sum}=  Evaluate  ${value_sum}+${v[-1]}
+                 log to console  ${value_sum}
+              END
+          END
+
+          IF  '${numsamples}' != '${None}'
+              IF  '${value_sum}' != '${numsamples}'
+                  ${metric_found}=  Set Variable  ${None}
+              END
+          ELSE
+              ${metric_found}=  Set Variable  ${m}
+          END
+          IF  '${numsessions}' != '${None}'
+              IF  ${value_sum} != ${numsessions}
+                  ${metric_found}=  Set Variable  ${None}
+              END
+          ELSE
+              ${metric_found}=  Set Variable  ${m}
+          END
+
+#          FOR  ${v}  IN  @{m['values']}
+#              IF  '${numsamples}' != '${None}'
+#                  IF  '${v[12]}' != '${numsamples}'
+#                      ${metric_found}=  Set Variable  ${None}
+#                  END
+#              END
+#              IF  '${numsessions}' != '${None}'
+#                  IF  ${v[1]} != ${numsessions}
+#                      ${metric_found}=  Set Variable  ${None}
+#                  END
+#              ELSE
+#                  ${metric_found}=  Set Variable  ${m}
+#              END
+#              Exit For Loop If  ${metric_found} != ${None}
+#          END
+      END
+      Exit For Loop If  ${metric_found} != ${None}
+   END
+#              IF  '${device_network_type}' != '${None}'
+#                  IF  '${v[2]}' != '${device_network_type}'
+#                      ${metric_found}=  Set Variable  ${None}
+#                  END
+#              END
+#              IF  '${carrier}' != '${None}'
+#                  IF  '${device_network_type}' != '${None}'
+#                      IF  '${v[3]}' != '${carrier}'
+#                          ${metric_found}=  Set Variable  ${None}
+#                      END
+#                  ELSE
+#                      IF  '${v[3]}' != '${carrier}'
+#                          ${metric_found}=  Set Variable  ${None}
+#                      END
+#                  END
+#              END
+#
+#              IF  '${tile}' != '${None}'
+#                  IF  '${device_network_type}' != '${None}'
+#                      IF  '${v[4]}' != '${tile}'
+#                          ${metric_found}=  Set Variable  ${None}
+#                      END
+#                  ELSE
+#                      IF  '${v[4]}' != '${tile}'
+#                          ${metric_found}=  Set Variable  ${None}
+#                      END
+#                  END
+#              END
 
               #IF  '${numsessions}' != '${None}' and '${device_network_type}' != '${None}'
               #    IF  ${v[6]} != ${numsessions} or '${v[12]}' != '${device_network_type}'
               #        ${metric_found}=  Set Variable  ${None}
               #    END
               #END
-          END
-          Exit For Loop If  ${metric_found} != ${None}
-      END
-      Exit For Loop If  ${metric_found} != ${None}
-   END
+#          END
+#          Exit For Loop If  ${metric_found} != ${None}
+#      END
+#      Exit For Loop If  ${metric_found} != ${None}
+#   END
+
+   Should Be True  ${metric_found} != ${None}
 
    [Return]  ${metric_found}
 
 Latency Cloudlet Should Be Found
    [Arguments]  ${cloudlet_name}  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet2_name}  ${raw}=${False}
 
-   ${numrequests_find}=  Evaluate  ${2}*${numrequests}
-   ${metric_found}=  Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  totalrequests=${numrequests_find}
+   ${numsamples_find}=  Evaluate  ${numsamples}*${numrequests}
+#   ${numrequests_find}=  Evaluate  ${2}*${numrequests}
+   ${metric_found}=  Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  numsamples=${numsamples_find}  #tottotalrequests=${numrequests_find}
+   ${values_found}=  Set Variable  ${None}
 
-   Should Be Equal  ${metric_found[1]}  ${cloudlet_name}
-   Should Be Equal  ${metric_found[2]}  ${operator_name_fake}
-   #Should Be Equal  ${metric_found[3]}  signal strength
+#   FOR  ${v}  IN  @{metric_found['values']}
+#       IF  ${v[12]} == ${numsamples_find}
+#           ${values_found}=  Set Variable  ${v}
+#           Exit For Loop
+#       END
+#   END
 
-   ${r9}=  Evaluate  ${2}*${numrequests}
-   ${r10}=  Evaluate  ${1}*${numrequests}
-   ${r11}=  Evaluate  ${1}*${numrequests}
-   ${r12}=  Evaluate  ${1}*${numrequests}
-   ${r13}=  Evaluate  ${0}*${numrequests}
-   ${r14}=  Evaluate  ${2}*${numrequests}
-   ${r20}=  Evaluate  ${numsamples}*${numrequests}
+   Should Be Equal  ${metric_found['tags']['cloudlet']}  ${cloudlet_name}
+   Should Be Equal  ${metric_found['tags']['cloudletorg']}  ${operator_name_fake}
 
-   Should Be Equal As Numbers  ${metric_found[4]}   ${r9}
-   Should Be Equal As Numbers  ${metric_found[5]}  ${r10}
-   Should Be Equal As Numbers  ${metric_found[6]}  ${r11}
-   Should Be Equal As Numbers  ${metric_found[7]}  ${r12}
-   Should Be Equal As Numbers  ${metric_found[8]}  ${r13}
-   Should Be Equal As Numbers  ${metric_found[9]}  ${r14}
+   FOR  ${v}  IN  @{metric_found['values']}
+      IF  ${v[1]} != ${None}    # dont check null readings which be removed later
+         IF  ${raw}
+            ${vrequests}=  Evaluate  int(${v[12]}/${numsamples})
+         ELSE
+            ${vrequests}=  Evaluate  int(${v[10]}/${numsamples})
+         END
+ 
+         ${r9}=   Evaluate  ${2}*${vrequests}
+         ${r10}=  Evaluate  ${1}*${vrequests}
+         ${r11}=  Evaluate  ${1}*${vrequests}
+         ${r12}=  Evaluate  ${1}*${vrequests}
+         ${r13}=  Evaluate  ${0}*${vrequests}
+         ${r14}=  Evaluate  ${2}*${vrequests}
+         ${r20}=  Evaluate  ${numsamples}*${vrequests}
+ 
+         Should Be Equal As Numbers  ${v[1]}  ${r9}
+         Should Be Equal As Numbers  ${v[2]}  ${r10}
+         Should Be Equal As Numbers  ${v[3]}  ${r11}
+         Should Be Equal As Numbers  ${v[4]}  ${r12}
+         Should Be Equal As Numbers  ${v[5]}  ${r13}
+         Should Be Equal As Numbers  ${v[6]}  ${r14}
 
-   ${latency_avg}=  Evaluate  round(${avg})
-   ${metrics_avg}=  Evaluate  round(${metric_found[12]})
+         ${latency_avg}=  Evaluate  round(${avg})
+         ${metrics_avg}=  Evaluate  round(${v[9]})
 
-   Should Be Equal  ${metric_found[10]}  ${max}
-   Should Be Equal  ${metric_found[11]}  ${min}
-   Should Be Equal  ${metrics_avg}  ${latency_avg}
-#      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][18]}  ${variance}
-#      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][19]}  ${stddev}
-   Should Be Equal  ${metric_found[15]}  ${r20}
-   Should Be Equal  ${metric_found[16]}  ${cloudlet1_tile}
-   Should Be Equal  ${metric_found[17]}  ${carrier_name}
-   Should Be Equal  ${metric_found[18]}  5G
+         Should Be Equal  ${v[7]}  ${max}
+         Should Be Equal  ${v[8]}  ${min}
+         Should Be Equal  ${metrics_avg}  ${latency_avg}
+
+         IF  ${raw}
+            ${latency_total_stdev}=     Evaluate  statistics.stdev(${vrequests}*@{samples1})     modules=statistics
+            ${latency_total_variance}=  Evaluate  statistics.variance(${vrequests}*@{samples1})  modules=statistics
+            ${latency_var}=  Evaluate  round(${latency_total_variance})
+            ${metrics_var}=  Evaluate  round(${v[10]})
+            ${latency_std}=  Evaluate  round(${latency_total_stdev})
+            ${metrics_std}=  Evaluate  round(${v[11]})
+
+            Should Be Equal  ${metrics_var}  ${latency_var}
+            Should Be Equal  ${metrics_std}  ${latency_std}
+            Should Be Equal  ${v[12]}  ${r20}
+         END
+      END
+   END
+
+#   ${r9}=  Evaluate  ${2}*${numrequests}
+#   ${r10}=  Evaluate  ${1}*${numrequests}
+#   ${r11}=  Evaluate  ${1}*${numrequests}
+#   ${r12}=  Evaluate  ${1}*${numrequests}
+#   ${r13}=  Evaluate  ${0}*${numrequests}
+#   ${r14}=  Evaluate  ${2}*${numrequests}
+#   ${r20}=  Evaluate  ${numsamples}*${numrequests}
+#
+#   Should Be Equal As Numbers  ${values_found[1]}   ${r9}
+#   Should Be Equal As Numbers  ${values_found[2]}  ${r10}
+#   Should Be Equal As Numbers  ${values_found[3]}  ${r11}
+#   Should Be Equal As Numbers  ${values_found[4]}  ${r12}
+#   Should Be Equal As Numbers  ${values_found[5]}  ${r13}
+#   Should Be Equal As Numbers  ${values_found[6]}  ${r14}
+
+#   ${latency_total_stdev}=     Evaluate  statistics.stdev(${numrequests}*@{samples1})     modules=statistics
+#   ${latency_total_variance}=  Evaluate  statistics.variance(${numrequests}*@{samples1})  modules=statistics
+
+#   ${latency_avg}=  Evaluate  round(${avg})
+#   ${metrics_avg}=  Evaluate  round(${values_found[9]})
+#   ${latency_var}=  Evaluate  round(${latency_total_variance})
+#   ${metrics_var}=  Evaluate  round(${values_found[10]})
+#   ${latency_std}=  Evaluate  round(${latency_total_stdev})
+#   ${metrics_std}=  Evaluate  round(${values_found[11]})
+#
+#   Should Be Equal  ${values_found[7]}  ${max}
+#   Should Be Equal  ${values_found[8]}  ${min}
+#   Should Be Equal  ${metrics_avg}  ${latency_avg}
+#   Should Be Equal  ${metrics_var}  ${latency_var}
+#   Should Be Equal  ${metrics_std}  ${latency_std}
+#   Should Be Equal  ${values_found[12]}  ${r20}
 
 #   IF  '${cloudlet}' == '${cloudlet2}'
 #      Should Be Equal  ${metric_found[21]}  ${cloudlet2_tile}
@@ -867,14 +1155,33 @@ Latency Cloudlet Should Be Found
 #   END
 
 DeviceInfo Cloudlet Should Be Found
-   [Arguments]  ${cloudlet_name}  ${metrics}  ${numsessions}=1  ${raw}=${False}  ${device_carrier}=${operator_name_fake}  ${tile}=${None}
+   [Arguments]  ${cloudlet_name}  ${metrics}  ${numsessions}=1  ${raw}=${False}  ${device_carrier}=${operator_name_fake}  ${data_network_type}=${None}  ${tile}=${None}
 
-   ${metric_found}=  Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  numsessions=${numsessions}  carrier=${device_carrier}  tile=${tile}
+   ${metric_found}=  Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  numsessions=${numsessions}  carrier=${device_carrier}  data_network_type=${data_network_type}  tile=${tile}
 
-   Should Be Equal  ${metric_found[1]}  ${cloudlet_name}
-   Should Be Equal  ${metric_found[2]}  ${operator_name_fake}
-   Should Be Equal  ${metric_found[3]}  ${device_os}
-   Should Be Equal  ${metric_found[4]}  ${device_model}
-   Should Be Equal  ${metric_found[5]}  ${device_carrier}
-   Should Be Equal As Integers  ${metric_found[6]}  ${numsessions} 
-   Should Be Equal  ${metric_found[7]}  ${tile}
+   ${vsum}=  Set Variable  ${0} 
+   FOR  ${v}  IN  @{metric_found['values']}
+      IF  ${v[1]} != ${None}
+         ${vsum}=  Evaluate  ${vsum}+${v[1]}    # dont check null readings which be removed later
+      END
+   END
+
+#   ${values_found}=  Set Variable  ${None}
+#   FOR  ${v}  IN  @{metric_found['values']}
+#       IF  ${v[12]} == ${numsamples_find}
+#           ${values_found}=  Set Variable  ${v}
+#           Exit For Loop
+#       END
+#   END
+
+   Should Be Equal  ${metric_found['tags']['cloudlet']}  ${cloudlet_name}
+   Should Be Equal  ${metric_found['tags']['cloudletorg']}  ${operator_name_fake}
+   Should Be Equal  ${metric_found['tags']['devicecarrier']}  ${device_carrier}
+   Should Be Equal  ${metric_found['tags']['devicemodel']}  ${device_model}
+   Should Be Equal  ${metric_found['tags']['deviceos']}  ${device_os}
+   Should Be Equal  ${metric_found['tags']['locationtile']}  ${tile}
+
+#   Should Be Equal As Numbers  ${values_found[1]}   ${numsessions}
+   Should Be Equal As Numbers  ${vsum}  ${numsessions}
+
+

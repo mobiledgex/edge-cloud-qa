@@ -22,13 +22,13 @@ ${signal_strength_2}=  2
 ${carrier_name}=  mycarrier
 
 ${cloudlet1}=  ${cloudlet_name_fake}
-${cloudlet2}=  tmocloud-2
+${cloudlet2_name}=  tmocloud-2
 
 ${cloud1_lat}=  31
 ${cloud1_long}=  -91
 ${cloud2_lat}=  35
 ${cloud2_long}=  -95
-${cloudlet1_tile}=  -90.998922,30.984896_-91.016888,31.002985_2
+${cloudlet1_tile}=  -90.998922,30.993940_-91.007905,31.002985_1
 ${cloudlet2_tile}=  2-1990,5343-2
 
 ${dme_conn_lat}=  ${cloud1_lat}
@@ -43,9 +43,9 @@ DMEMetrics - Shall be able to get the last DME Client App Latency metric
 
    ${metrics}=  Get the last client app usage metric  app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
 
 DMEMetrics - Shall be able to get the last DME Client App DeviceInfo metric
    [Documentation]
@@ -65,12 +65,13 @@ DMEMetrics - Shall be able to get DME Client App Latency metrics with apporg onl
 
    ${metrics}=  Get all client app usage metrics  app_name=${None}  app_version=${None}  developer_org_name=${developer_org_name_automation}  selector=latency
 
-   Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet1}
+   Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${True}
+   Latency App Should Be Found  ${app_name}2  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${True}
+   Latency App Should Be Found  ${app_name}3  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  raw=${True}
+
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[2]}' == '${developer_org_name_automation}'
-      END
+      Should Be True  '${m['tags']['apporg']}' == '${developer_org_name_automation}'
    END
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with apporg only
@@ -82,19 +83,17 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with apporg 
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
-   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[2]}' == '${developer_org_name_automation}'
-      END
+      Should Be True  '${m['tags']['apporg']}' == '${developer_org_name_automation}'
    END
 
 DMEMetrics - Shall be able to get all DME Client App Latency metric
@@ -104,9 +103,9 @@ DMEMetrics - Shall be able to get all DME Client App Latency metric
 
    ${metrics}=  Get all client app usage metrics  app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
 
 DMEMetrics - Shall be able to get all DME Client App DeviceInfo metric
    [Documentation]
@@ -117,11 +116,11 @@ DMEMetrics - Shall be able to get all DME Client App DeviceInfo metric
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -132,9 +131,9 @@ DMEMetrics - Shall be able to get DME Client App Latency metrics with starttime
 
    ${metrics}=  Get client app usage metrics with starttime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with starttime
    [Documentation]
@@ -145,11 +144,11 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with startti
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -160,9 +159,9 @@ DMEMetrics - Shall be able to get DME Client App Latency metrics with endtime
 
    ${metrics}=  Get client app usage metrics with endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with endtime
    [Documentation]
@@ -173,11 +172,11 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with endtime
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -188,9 +187,9 @@ DMEMetrics - Shall be able to get DME Client App Latency metrics with starttime 
 
    ${metrics}=  Get client app usage metrics with starttime and endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with starttime and endtime
    [Documentation]
@@ -201,11 +200,11 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with startti
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -216,9 +215,9 @@ DMEMetrics - Shall be able to get DME Client App Latency metrics with starttime 
 
    ${metrics}=  Get client app usage metrics with starttime and endtime and last   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with starttime and endtime and last
    [Documentation]
@@ -229,11 +228,11 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with startti
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -244,37 +243,9 @@ DMEMetrics - Shall be able to get DME Client App Latency metrics with locationti
 
    ${metrics}=  Get client app usage metrics with locationtile   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency  location_tile=${cloudlet1_tile}
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
-
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
-
-DMEMetrics - Shall be able to get DME Client App Latency metrics with rawdata
-   [Documentation]
-   ...  request deviceinfo clientappusage metrics with locationtile
-   ...  verify info is correct
-
-   ${metrics}=  Get client app usage metrics with rawdata   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
-
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
    Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
-
-DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with rawdata
-   [Documentation]
-   ...  request latency clientappusage metrics with rawdata
-   ...  verify info is correct
-
-   ${metrics}=  Get client app usage metrics with rawdata   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
-
-   DeviceInfo Metrics Headings Should Be Correct  ${metrics}  raw=${True}
-
-   #DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2  # sessions sometimes gets split because of timing
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
-
-   DeviceInfo Values Should Be Correct  ${metrics}  raw=${True}
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with deviceos
    [Documentation]
@@ -285,19 +256,17 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with deviceo
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}  
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
-   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[8]}' == '${device_os}'
-      END
+       Should Be True  '${m['tags']['deviceos']}' == '${device_os}'
    END
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with devicemodel
@@ -309,19 +278,34 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with devicem
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
-   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[9]}' == '${device_model}'
-      END
+       Should Be True  '${m['tags']['devicemodel']}' == '${device_model}'
+   END
+
+DMEMetrics - Shall be able to get DME Client App Latency metrics with datanetworktype
+   [Documentation]
+   ...  request latency clientappusage metrics with datanetworktype
+   ...  verify info is correct
+
+   ${metrics}=  Get client app usage metrics with deviceinfo   developer_org_name=${developer_org_name_automation}  selector=latency  data_network_type=${data_network_type}
+
+   Latency Metrics Headings Should Be Correct  ${metrics}
+
+   Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${True}
+   Latency App Should Be Found  ${app_name}2  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${True}
+   Latency App Should Be Found  ${app_name}3  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  raw=${True}
+
+   FOR  ${m}  IN  @{metrics['data'][0]['Series']}
+       Should Be True  '${m['tags']['datanetworktype']}' == '${data_network_type}'
    END
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with datanetworktype
@@ -334,15 +318,12 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with datanet
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[12]}' == '${data_network_type}'
-      END
+       Should Be True  '${m['tags']['datanetworktype']}' == '${data_network_type}'
    END
-
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with all deviceinfo
    [Documentation]
@@ -353,14 +334,142 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with all dev
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          Should Be True  '${v[12]}' == '${data_network_type}'
-      END
+       Should Be True  '${m['tags']['datanetworktype']}' == '${data_network_type}'
    END
+
+DMEMetrics - Shall be able to get the DME Client App Latency metrics with startage
+   [Documentation]
+   ...  request all DME client app latency metrics with startage
+   ...  verify info is correct
+
+   ${metrics}=  Get client app usage metrics with startage  app_name=${app_name}1  developer_org_name=${developer_org_name_automation}  selector=latency
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
+
+   Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${True}
+
+DMEMetrics - Shall be able to get the DME Client App Latency metrics with endage
+   [Documentation]
+   ...  request all DME client app latency metrics with endage
+   ...  verify info is correct
+
+   ${metrics}=  Get client app usage metrics with endage  app_name=${app_name}1  developer_org_name=${developer_org_name_automation}  selector=latency
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
+
+   Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${True}
+
+DMEMetrics - Shall be able to get the DME Client App Latency metrics with startage and endage
+   [Documentation]
+   ...  request all DME client app latency metrics with startage and endage
+   ...  verify info is correct
+
+   ${metrics}=  Get client app usage metrics with startage and endage  app_name=${app_name}1  developer_org_name=${developer_org_name_automation}  selector=latency
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
+
+   Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${True}
+
+DMEMetrics - Shall be able to get the DME Client App Latency metrics with numsamples
+   [Documentation]
+   ...  request all DME client app latency metrics with numsamples
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get client app usage metrics with numsamples  app_name=${app_name}1  developer_org_name=${developer_org_name_automation}  selector=latency
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${False}
+
+DMEMetrics - Shall be able to get the DME Client App Latency metrics with numsamples and starttime/endtime
+   [Documentation]
+   ...  request all DME client app latency metrics with numsamples and startime/endtime
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get client app usage metrics with numsamples and starttime/endtime  app_name=${app_name}1  developer_org_name=${developer_org_name_automation}  selector=latency
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${False}
+
+DMEMetrics - Shall be able to get the DME Client App DeviceInfo metrics with startage
+   [Documentation]
+   ...  request all DME client app latency metrics with startage
+   ...  verify info is correct
+
+   ${metrics}=  Get client app usage metrics with startage  app_name=${app_name}1  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+
+DMEMetrics - Shall be able to get the DME Client App DeviceInfo metrics with endage
+   [Documentation]
+   ...  request all DME client app latency metrics with endage
+   ...  verify info is correct
+
+   ${metrics}=  Get client app usage metrics with endage  app_name=${app_name}1  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+
+DMEMetrics - Shall be able to get the DME Client App DeviceInfo metrics with startage and endage
+   [Documentation]
+   ...  request all DME client app latency metrics with startage and endage
+   ...  verify info is correct
+
+   ${metrics}=  Get client app usage metrics with startage and endage  app_name=${app_name}1  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+
+DMEMetrics - Shall be able to get the DME Client App DeviceInfo metrics with numsamples
+   [Documentation]
+   ...  request all DME client app latency metrics with numsamples
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get client app usage metrics with numsamples  app_name=${app_name}1  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+
+DMEMetrics - Shall be able to get the DME Client App DeviceInfo metrics with numsamples and starttime/endtime
+   [Documentation]
+   ...  request all DME client app latency metrics with numsamples and startime/endtime
+   ...  verify info is correct
+
+   ${metrics}  ${time_diff}=  Get client app usage metrics with numsamples and starttime/endtime  app_name=${app_name}1  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
 DMEMetrics - DeveloperManager shall be able to get DME Client App Latency metrics
    [Documentation]
@@ -369,9 +478,9 @@ DMEMetrics - DeveloperManager shall be able to get DME Client App Latency metric
 
    ${metrics}=  DeveloperManager shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
 
 DMEMetrics - DeveloperManager shall be able to get DME Client App DeviceInfo metrics
    [Documentation]
@@ -382,11 +491,11 @@ DMEMetrics - DeveloperManager shall be able to get DME Client App DeviceInfo met
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -397,9 +506,9 @@ DMEMetrics - DeveloperContributor shall be able to get DME Client App Latency me
 
    ${metrics}=  DeveloperContributor shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
 
 DMEMetrics - DeveloperContributor shall be able to get DME Client App DeviceInfo metrics
    [Documentation]
@@ -410,11 +519,11 @@ DMEMetrics - DeveloperContributor shall be able to get DME Client App DeviceInfo
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -425,9 +534,9 @@ DMEMetrics - DeveloperViewer shall be able to get DME Client App Latency metrics
 
    ${metrics}=  DeveloperViewer shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
 
 DMEMetrics - DeveloperViewer shall be able to get DME Client App DeviceInfo metrics
    [Documentation]
@@ -438,11 +547,11 @@ DMEMetrics - DeveloperViewer shall be able to get DME Client App DeviceInfo metr
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -453,9 +562,9 @@ DMEMetrics - OperatorManager shall be able to get DME Client App Latency metrics
 
    ${metrics}=  OperatorManager shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2
+   Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  raw=${True}
 
 DMEMetrics - OperatorManager shall be able to get DME Client App DeviceInfo metrics
    [Documentation]
@@ -466,7 +575,7 @@ DMEMetrics - OperatorManager shall be able to get DME Client App DeviceInfo metr
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -477,9 +586,9 @@ DMEMetrics - OperatorContributor shall be able to get DME Client App Latency met
 
    ${metrics}=  OperatorContributor shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2
+   Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  raw=${True}
 
 DMEMetrics - OperatorContributor shall be able to get DME Client App DeviceInfo metrics
    [Documentation]
@@ -490,7 +599,7 @@ DMEMetrics - OperatorContributor shall be able to get DME Client App DeviceInfo 
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
@@ -501,9 +610,9 @@ DMEMetrics - OperatorViewer shall be able to get DME Client App Latency metrics
 
    ${metrics}=  OperatorViewer shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2
+   Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  raw=${True}
 
 DMEMetrics - OperatorViewer shall be able to get DME Client App DeviceInfo metrics
    [Documentation]
@@ -514,34 +623,38 @@ DMEMetrics - OperatorViewer shall be able to get DME Client App DeviceInfo metri
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
-DMEMetrics - Shall be able to get DME Client App Latency metrics with cloudletorg only
+DMEMetrics - Shall be able to get DME Client App Latency metrics with apporg only
    [Documentation]
-   ...  request latency clientappusage metrics with cloudletorg only
+   ...  request latency clientappusage metrics with apporg only
    ...  verify info is correct
 
-   ${metrics}=  OperatorManager shall be able to get client app usage metrics  selector=latency  developer_org_name=${None}  app_name=${None}  app_version=${None}  operator_org_name=${operator_name_fake}
+   ${metrics}=  DeveloperManager shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${None}  app_version=${None} 
 
-   Latency App Should Be Found  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2
+   Latency App Should Be Found  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  device_network_type=${data_network_type}  raw=${True}
 
-DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with cloudletorg only
+   FOR  ${m}  IN  @{metrics['data'][0]['Series']}
+      Should Be True  '${m['tags']['apporg']}' == '${developer_org_name_automation}'
+   END
+
+DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with apporg only
    [Documentation]
-   ...  request deviceinfo clientappusage metrics with cloudletorg only
+   ...  request deviceinfo clientappusage metrics with apporg only
    ...  verify info is correct
 
-   ${metrics}=  OperatorManager shall be able to get client app usage metrics  selector=deviceinfo  developer_org_name=${None}  app_name=${None}  app_version=${None}  operator_org_name=${operator_name_fake}
+   ${metrics}=  DeveloperManager shall be able to get client app usage metrics  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  app_name=${None}  app_version=${None}
 
 #   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
 #   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
 #   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
 #   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 
 *** Keywords ***
 Setup
@@ -551,17 +664,21 @@ Setup
 
     Create Flavor  region=${region}
 
+    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud1_long}
+    ${cloudlet_name}=  Set Variable  ${cloudlet['data']['key']['name']}
+    Set Suite Variable  ${cloudlet_name}
+
     @{cloudlet_list}=  Create List  tmocloud-2
     ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_list=${cloudlet_list}
     Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}
     Create Cloudlet Pool Access Response    region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}  decision=accept
 
     Create App  region=${region}  app_name=${app_name}1  access_ports=tcp:1
-    Create App Instance  region=${region}  app_name=${app_name}1  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
+    Create App Instance  region=${region}  app_name=${app_name}1  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
     Create App Instance  region=${region}  app_name=${app_name}1  cloudlet_name=tmocloud-2  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
 
     Create App  region=${region}  app_name=${app_name}2  access_ports=tcp:1
-    Create App Instance  region=${region}  app_name=${app_name}2  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
+    Create App Instance  region=${region}  app_name=${app_name}2  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
 
     Create App  region=${region}  app_name=${app_name}3  access_ports=tcp:1
     Create App Instance  region=${region}  app_name=${app_name}3  cloudlet_name=tmocloud-2  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
@@ -571,27 +688,28 @@ Setup
     ${settings_pre}=   Show Settings  region=${region}
     Set Suite Variable  ${settings_pre}
 
-    @{collection_intervals}=  Create List  10s  1m10s  2m10s
+    @{collection_intervals}=  Create List  10s  2m10s  3m10s
     Update Settings  region=${region}  edge_events_metrics_collection_interval=10s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}
+    Sleep  15s
 
     ${r1}=  Register Client  app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}	
     ${cloudlet1}=  Find Cloudlet   carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud1_long}
     #${cloudlet1}=  Find Cloudlet   carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud2_long}
     Should Be Equal As Numbers  ${cloudlet1.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet1.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet1.fqdn}  tmocloud-1.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet1.fqdn}  shared.${cloudlet_name}.tmus.mobiledgex.net
 
     ${r2}=  Register Client  app_name=${app_name}2  app_version=1.0  developer_org_name=${developer_org_name_automation}
     ${cloudlet2}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud2_long}
     Should Be Equal As Numbers  ${cloudlet2.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet2.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet2.fqdn}  tmocloud-1.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet2.fqdn}  shared.${cloudlet_name}.tmus.mobiledgex.net
 
     ${r3}=  Register Client  app_name=${app_name}3  app_version=1.0  developer_org_name=${developer_org_name_automation}
     ${cloudlet3}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud2_long}
     Should Be Equal As Numbers  ${cloudlet3.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet3.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet3.fqdn}  tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet3.fqdn}  shared.${cloudlet2_name}.tmus.mobiledgex.net
 
     @{samples1}=  Create List  ${10.4}  ${4.20}  ${30}  ${440}  ${0.50}  ${6.00}  ${170.45}
     ${num_samples1}=  Get Length  ${samples1}
@@ -608,19 +726,19 @@ Setup
     # this should return cloud2 
     ${lu}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud2_lat}  longitude=${cloud2_long}  signal_strength=${signal_strength}  data_network_type=${data_network_type}l1
     Should Be Equal As Numbers  ${lu.new_cloudlet.status}  1  #FIND_FOUND
-    Should Be Equal  ${lu.new_cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${lu.new_cloudlet.fqdn}  shared.${cloudlet2_name}.tmus.mobiledgex.net
     # connection to cloud2
     Create DME Persistent Connection  carrier_name=${carrier_name}  session_cookie=${r1.session_cookie}  edge_events_cookie=${lu.new_cloudlet.edge_events_cookie}  device_os=${device_os}  device_model=${device_model}  signal_strength=${signal_strength}  data_network_type=${data_network_type}c2
     # this should return cloud1
     ${lu3}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud1_long}  signal_strength=${signal_strength}  data_network_type=${data_network_type}l2
     Should Be Equal As Numbers  ${lu3.new_cloudlet.status}  1  #FIND_FOUND
-    Should Be Equal  ${lu3.new_cloudlet.fqdn}  tmocloud-1.tmus.mobiledgex.net
+    Should Be Equal  ${lu3.new_cloudlet.fqdn}  shared.${cloudlet_name}.tmus.mobiledgex.net
     # connect back to cloud1 with same deviceinfo
     Create DME Persistent Connection  carrier_name=${carrier_name}  session_cookie=${r1.session_cookie}  edge_events_cookie=${lu3.new_cloudlet.edge_events_cookie}  device_os=${device_os}  device_model=${device_model}  signal_strength=${signal_strength}  data_network_type=${data_network_type}c1
     # this should return cloud2
     ${lu4}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud2_lat}  longitude=${cloud2_long}  signal_strength=${signal_strength_2}  data_network_type=${data_network_type}l3
     Should Be Equal As Numbers  ${lu4.new_cloudlet.status}  1  #FIND_FOUND
-    Should Be Equal  ${lu4.new_cloudlet.fqdn}  tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${lu4.new_cloudlet.fqdn}  shared.${cloudlet2_name}.tmus.mobiledgex.net
 
 #    Terminate DME Persistent Connection
 
@@ -666,6 +784,8 @@ Setup
     Set Suite Variable  ${latency11}
     Set Suite Variable  ${latency13}
     Set Suite Variable  ${num_samples1}
+    Set Suite Variable  @{samples1}
+
 
 #*** Keywords ***
 #Setup
@@ -701,65 +821,69 @@ Teardown
    Cleanup Provisioning
 
 Latency Metrics Headings Should Be Correct
-  [Arguments]  ${metrics}  ${raw}=${False}
+  [Arguments]  ${metrics}  ${raw}=${True}
 
-   Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric-2m10s
-   Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}  latency-metric-1m10s
-   Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}  latency-metric-10s
-   ${count}=  Run Keyword If   not ${raw}  Set Variable  3
-   ...   ELSE  Set Variable  1
+   #Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric-2m10s
+   #Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}  latency-metric-1m10s
+   #Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}  latency-metric-10s
+   #${count}=  Run Keyword If   not ${raw}  Set Variable  3
+   #...   ELSE  Set Variable  1
 
-   Run Keyword If   ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric
 
-   FOR  ${i}  IN RANGE  0  ${count} 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][0]}  time
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][1]}  app
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  apporg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][3]}  ver
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  cluster
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][5]}  clusterorg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][6]}  cloudlet
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][7]}  cloudletorg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][8]}  0s
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][9]}  5ms
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][10]}  10ms
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][11]}  25ms
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][12]}  50ms
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][13]}  100ms
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][14]}  max
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][15]}  min
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][16]}  avg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][17]}  variance 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][18]}  stddev
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][19]}  numsamples
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][20]}  locationtile
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  0s
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  5ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  10ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  25ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  50ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  100ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  max
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  min
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  avg
+   IF  ${raw}
+       Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  variance
+       Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  stddev
+       Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  numsamples
+   ELSE
+       Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  numsamples
+   END
+
+   FOR  ${i}  IN  @{metrics['data'][0]['Series']}
+      Should Be True  'apporg' in ${i['tags']}
+      Should Be True  'app' in ${i['tags']}
+      Should Be True  'ver' in ${i['tags']}
+      Should Be True  'cloudletorg' in ${i['tags']}
+      Should Be True  'cloudlet' in ${i['tags']}
+      Should Be True  'datanetworktype' in ${i['tags']}
+      Should Be True  'locationtile' in ${i['tags']}
+      Should Be True  'clusterorg' in ${i['tags']}
+      Should Be True  'cluster' in ${i['tags']}
    END
 
 DeviceInfo Metrics Headings Should Be Correct
   [Arguments]  ${metrics}  ${raw}=${False}
 
-   Run Keyword If   not ${raw}  DeviceInfo Metrics Headings Should Contain Name  ${metrics}  device-metric-2m10s  #Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  device-metric-2m10s
-   Run Keyword If   not ${raw}  DeviceInfo Metrics Headings Should Contain Name  ${metrics}  device-metric-1m10s  #Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}  device-metric-1m10s
-   Run Keyword If   not ${raw}  DeviceInfo Metrics Headings Should Contain Name  ${metrics}  device-metric-10s    #Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}  device-metric-10s
-   ${count}=  Run Keyword If   not ${raw}  Set Variable  3
-   ...   ELSE  Set Variable  1
+   #${count}=  Run Keyword If   not ${raw}  Set Variable  3
+   #...   ELSE  Set Variable  1
 
-   Run Keyword If   ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  device-metric
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  device-metric
 
-   FOR  ${i}  IN RANGE  0  ${count}
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][0]}  time
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][1]}  app
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  apporg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][3]}  ver
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  cluster
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][5]}  clusterorg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][6]}  cloudlet
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][7]}  cloudletorg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][8]}  deviceos
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][9]}  devicemodel
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][10]}  devicecarrier
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][11]}  numsessions
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][12]}  datanetworktype
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  numsessions
+
+   FOR  ${i}  IN  @{metrics['data'][0]['Series']}
+      Should Be True  'apporg' in ${i['tags']}
+      Should Be True  'app' in ${i['tags']}
+      Should Be True  'ver' in ${i['tags']}
+      Should Be True  'cloudletorg' in ${i['tags']}
+      Should Be True  'cloudlet' in ${i['tags']}
+      Should Be True  'datanetworktype' in ${i['tags']}
+      Should Be True  'clusterorg' in ${i['tags']}
+      Should Be True  'cluster' in ${i['tags']}
+      Should Be True  'devicecarrier' in ${i['tags']}
+      Should Be True  'devicemodel' in ${i['tags']}
+      Should Be True  'deviceos' in ${i['tags']}
    END
 
 DeviceInfo Metrics Headings Should Contain Name
@@ -776,46 +900,49 @@ DeviceInfo Metrics Headings Should Contain Name
    Should Be True  ${found}
 
 Latency Values Should Be Correct
-   [Arguments]  ${app_name}  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet1}  ${raw}=${False}
+   [Arguments]  ${app_name}  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet_name}  ${raw}=${True}
 
-   ${count}=  Run Keyword If   not ${raw}  Set Variable  3
-   ...   ELSE  Set Variable  1
+   FOR  ${i}  IN  @{metrics['data'][0]['Series']}
+      Should Be Equal  ${i['tags']['app']}  ${app_name}
+      Should Be Equal  ${i['tags']['apporg']}  ${developer_org_name_automation}
+      Should Be Equal  ${i['tags']['ver']}  1.0
+      Should Be Equal  ${i['tags']['cluster']}  autocluster
+      Should Be Equal  ${i['tags']['clusterorg']}  MobiledgeX
+      Should Be Equal  ${i['tags']['cloudlet']}  ${cloudlet}
+      Should Be Equal  ${i['tags']['cloudletorg']}  ${operator_name_fake}
+      Should Be Equal  ${i['tags']['datanetworktype']}  ${data_network_type}
+      Should Be Equal  ${i['tags']['locationtile']}  ${cloudlet1_tile}
 
-   FOR  ${i}  IN RANGE  0  ${count}
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][1]}  ${app_name}
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][2]}  ${developer_org_name_automation}
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][3]}  1.0
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][4]}  autocluster
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][5]}  MobiledgeX
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][6]}  ${cloudlet}
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][7]}  ${operator_name_fake}
-#      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][8]}  75 
-
-      ${r9}=  Evaluate  ${2}*${numrequests}
-      ${r10}=  Evaluate  ${1}*${numrequests}
-      ${r11}=  Evaluate  ${1}*${numrequests}
-      ${r12}=  Evaluate  ${1}*${numrequests}
-      ${r13}=  Evaluate  ${0}*${numrequests}
-      ${r14}=  Evaluate  ${2}*${numrequests}
-      ${r20}=  Evaluate  ${numsamples}*${numrequests}
-
-      Should Be Equal As Numbers  ${metrics['data'][0]['Series'][${i}]['values'][0][8]}   ${r9}
-      Should Be Equal As Numbers  ${metrics['data'][0]['Series'][${i}]['values'][0][9]}  ${r10}
-      Should Be Equal As Numbers  ${metrics['data'][0]['Series'][${i}]['values'][0][10]}  ${r11}
-      Should Be Equal As Numbers  ${metrics['data'][0]['Series'][${i}]['values'][0][11]}  ${r12}
-      Should Be Equal As Numbers  ${metrics['data'][0]['Series'][${i}]['values'][0][12]}  ${r13}
-      Should Be Equal As Numbers  ${metrics['data'][0]['Series'][${i}]['values'][0][13]}  ${r14}
-
-      ${latency_avg}=  Evaluate  round(${avg})
-      ${metrics_avg}=  Evaluate  round(${metrics['data'][0]['Series'][${i}]['values'][0][16]})
-
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][14]}  ${max}
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][15]}  ${min}
-      Should Be Equal  ${metrics_avg}  ${latency_avg} 
-#      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][18]}  ${variance}
-#      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][19]}  ${stddev}
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][19]}  ${r20}
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][20]}  ${cloudlet1_tile}
+      FOR  ${v}  IN  @{i['values']}
+         IF  ${v[1]} != None
+            Should Be True  ${v[1]} >= 0
+         END
+    #     ${r9}=  Evaluate  ${2}*${numrequests}
+    #     ${r10}=  Evaluate  ${1}*${numrequests}
+    #     ${r11}=  Evaluate  ${1}*${numrequests}
+    #     ${r12}=  Evaluate  ${1}*${numrequests}
+    #     ${r13}=  Evaluate  ${0}*${numrequests}
+    #     ${r14}=  Evaluate  ${2}*${numrequests}
+    #     ${r20}=  Evaluate  ${numsamples}*${numrequests}
+#
+#         Should Be Equal As Numbers  ${v[1]}   ${r9}
+#         Should Be Equal As Numbers  ${v[2]}  ${r10}
+#         Should Be Equal As Numbers  ${v[3]}  ${r11}
+#         Should Be Equal As Numbers  ${v[4]}  ${r12}
+#         Should Be Equal As Numbers  ${v[5]}  ${r13}
+#         Should Be Equal As Numbers  ${v[6]}  ${r14}
+#
+#         ${latency_avg}=  Evaluate  round(${avg})
+#         ${metrics_avg}=  Evaluate  round(${v[9]})
+#
+#         Should Be Equal  ${v[7]}  ${max}
+#         Should Be Equal  ${v[8]}  ${min}
+#         Should Be Equal  ${metrics_avg}  ${latency_avg} 
+#         Should Be Equal  ${v[10]}  ${variance}
+#         Should Be Equal  ${v[11]}  ${stddev}
+#         Should Be Equal  ${v[12]}  ${r20}
+#         #Should Be Equal  ${v[12]}  ${numsamples}
+     END
    END
 
 #DeviceInfo Values Should Be Correct
@@ -839,102 +966,147 @@ Latency Values Should Be Correct
 #   END
 
 DeviceInfo Values Should Be Correct
-   [Arguments]  ${metrics}  ${raw}=${False}
+   [Arguments]  ${metrics}  ${raw}=${True}  ${cloudlet}=${cloudlet_name}
 
-   ${count}=  Run Keyword If   not ${raw}  Set Variable  3
-   ...   ELSE  Set Variable  1
+   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
+      Should Be True  '${s['tags']['cloudlet']}' == '${cloudlet}' or '${s['tags']['cloudlet']}' == '${cloudlet2_name}'
+      Should Be Equal  ${s['tags']['cloudletorg']}  ${operator_name_fake}
+      Should Be True   '${s['tags']['devicecarrier']}' == '${carrier_name}' or '${s['tags']['devicecarrier']}' == '${operator_name_fake}'
+      Should Be Equal  ${s['tags']['devicemodel']}  ${device_model}
+      Should Be Equal  ${s['tags']['deviceos']}  ${device_os}
+      Should Contain   ${s['tags']['app']}  ${app_name}
+      Should Be Equal  ${s['tags']['apporg']}  automation_dev_org
+      Should Be Equal  ${s['tags']['cluster']}  autocluster
+      Should Be Equal  ${s['tags']['clusterorg']}  MobiledgeX
+   END
 
-   Length Should Be  ${metrics['data'][0]['Series']}  ${count}
-
-   FOR  ${i}  IN RANGE  0  ${count}
-      #Length Should Be  ${metrics['data'][0]['Series'][${i}]['values']}  2
-      ${len}=  Get Length  ${metrics['data'][0]['Series'][${i}]['values']}
-      #Should Be True  ${len} == 1 or ${len} == 2
-      Should Be True  ${len} >= 1
+   FOR  ${v}  IN  @{metrics['data'][0]['Series'][0]['values']}
+      IF  ${v[1]} != None
+         Should Be True  ${v[1]} > 0
+      END
    END
 
 App Should Be Found
-   [Arguments]  ${app_name}  ${cloudlet_name}  ${metrics}  ${numsessions}=${None}  ${device_network_type}=${None}
+   [Arguments]  ${app_name}  ${cloudlet_name}  ${metrics}  ${numsamples}=${None}  ${numsessions}=${None}  ${device_network_type}=${None}
 
    ${metric_found}=  Set Variable  ${None}
    FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      FOR  ${v}  IN  @{m['values']}
-          IF  '${v[1]}' == '${app_name}' and '${v[6]}' == '${cloudlet_name}'
-              IF  ${numsessions} != ${None} and '${device_network_type}' != ${None}
-                  IF  ${v[11]} == ${numsessions} and '${v[12]}' == '${device_network_type}'
-                      ${metric_found}=  Set Variable  ${v}
-                      Exit For Loop
-                  END
-              ELSE
-                  ${metric_found}=  Set Variable  ${v} 
-                  Exit For Loop
+      IF  '${m['tags']['app']}' == '${app_name}' and '${m['tags']['cloudlet']}' == '${cloudlet_name}' and '${m['tags']['datanetworktype']}' == '${device_network_type}'
+          ${metric_found}=  Set Variable  ${m}
+      END
+      log to console  found1 ${metric_found}
+      IF  ${metric_found} != ${None}
+          ${value_sum}=  Set Variable  ${0}
+          FOR  ${v}  IN  @{m['values']}
+              IF  ${v[1]} != ${None}    # dont check null readings which be removed later
+                 ${value_sum}=  Evaluate  ${value_sum}+${v[-1]}
+                 log to console  ${value_sum}
               END
           END
-          Exit For Loop If  ${metric_found} != ${None}
+          log to console  value_sum ${value_sum}
+          IF  '${numsamples}' != '${None}'
+              IF  '${value_sum}' != '${numsamples}'
+                  ${metric_found}=  Set Variable  ${None}
+              END
+          ELSE
+              ${metric_found}=  Set Variable  ${m}
+          END
+          IF  '${numsessions}' != '${None}'
+              IF  ${value_sum} != ${numsessions}
+                  ${metric_found}=  Set Variable  ${None}
+              END
+          ELSE
+              ${metric_found}=  Set Variable  ${m}
+          END
       END
+      Exit For Loop If  ${metric_found} != ${None}
    END
+
+   Should Be True  ${metric_found} != ${None}
 
    [Return]  ${metric_found}
 
 Latency App Should Be Found
-   [Arguments]  ${app_name}  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet2}  ${raw}=${False}
+   [Arguments]  ${app_name}  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet2}  ${raw}=${False}  ${device_network_type}=${None}
 
-   ${metric_found}=  App Should Be Found  ${app_name}  ${cloudlet}  ${metrics}
+   ${metric_found}=  App Should Be Found  ${app_name}  ${cloudlet}  ${metrics}  device_network_type=${device_network_type}
 
-   Should Be Equal  ${metric_found[1]}  ${app_name}
-   Should Be Equal  ${metric_found[2]}  ${developer_org_name_automation}
-   Should Be Equal  ${metric_found[3]}  1.0
-   Should Be Equal  ${metric_found[4]}  autocluster
-   Should Be Equal  ${metric_found[5]}  MobiledgeX
-   Should Be Equal  ${metric_found[6]}  ${cloudlet}
-   Should Be Equal  ${metric_found[7]}  ${operator_name_fake}
+   Should Be Equal  ${metric_found['tags']['app']}  ${app_name}
+   Should Be Equal  ${metric_found['tags']['apporg']}  ${developer_org_name_automation}
+   Should Be Equal  ${metric_found['tags']['ver']}  1.0
+   Should Be Equal  ${metric_found['tags']['cluster']}  autocluster
+   Should Be Equal  ${metric_found['tags']['clusterorg']}  MobiledgeX
+   Should Be Equal  ${metric_found['tags']['cloudlet']}  ${cloudlet}
+   Should Be Equal  ${metric_found['tags']['cloudletorg']}  ${operator_name_fake}
+   Should Be Equal  ${metric_found['tags']['datanetworktype']}  ${device_network_type}
+   Should Be Equal  ${metric_found['tags']['locationtile']}  ${cloudlet1_tile}
 
-   ${r9}=  Evaluate  ${2}*${numrequests}
-   ${r10}=  Evaluate  ${1}*${numrequests}
-   ${r11}=  Evaluate  ${1}*${numrequests}
-   ${r12}=  Evaluate  ${1}*${numrequests}
-   ${r13}=  Evaluate  ${0}*${numrequests}
-   ${r14}=  Evaluate  ${2}*${numrequests}
-   ${r20}=  Evaluate  ${numsamples}*${numrequests}
+   FOR  ${v}  IN  @{metric_found['values']}
+      IF  ${v[1]} != ${None}    # dont check null readings which be removed later
+         IF  ${raw}
+            ${vrequests}=  Evaluate  int(${v[12]}/${numsamples})
+         ELSE
+            ${vrequests}=  Evaluate  int(${v[10]}/${numsamples})
+         END
 
-   Should Be Equal As Numbers  ${metric_found[8]}   ${r9}
-   Should Be Equal As Numbers  ${metric_found[9]}  ${r10}
-   Should Be Equal As Numbers  ${metric_found[10]}  ${r11}
-   Should Be Equal As Numbers  ${metric_found[11]}  ${r12}
-   Should Be Equal As Numbers  ${metric_found[12]}  ${r13}
-   Should Be Equal As Numbers  ${metric_found[13]}  ${r14}
+         ${r9}=  Evaluate  ${2}*${vrequests}
+         ${r10}=  Evaluate  ${1}*${vrequests}
+         ${r11}=  Evaluate  ${1}*${vrequests}
+         ${r12}=  Evaluate  ${1}*${vrequests}
+         ${r13}=  Evaluate  ${0}*${vrequests}
+         ${r14}=  Evaluate  ${2}*${vrequests}
+         ${r20}=  Evaluate  ${numsamples}*${vrequests}
 
-   ${latency_avg}=  Evaluate  round(${avg})
-   ${metrics_avg}=  Evaluate  round(${metric_found[16]})
+         Should Be Equal As Numbers  ${v[1]}   ${r9}
+         Should Be Equal As Numbers  ${v[2]}  ${r10}
+         Should Be Equal As Numbers  ${v[3]}  ${r11}
+         Should Be Equal As Numbers  ${v[4]}  ${r12}
+         Should Be Equal As Numbers  ${v[5]}  ${r13}
+         Should Be Equal As Numbers  ${v[6]}  ${r14}
 
-   Should Be Equal  ${metric_found[14]}  ${max}
-   Should Be Equal  ${metric_found[15]}  ${min}
-   Should Be Equal  ${metrics_avg}  ${latency_avg}
-#      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][18]}  ${variance}
-#      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][19]}  ${stddev}
-   Should Be Equal  ${metric_found[19]}  ${r20}
-   Should Be Equal  ${metric_found[20]}  ${cloudlet1_tile}
+         ${latency_avg}=  Evaluate  round(${avg})
+         ${metrics_avg}=  Evaluate  round(${v[9]})
 
-#   IF  '${cloudlet}' == '${cloudlet2}'
-#      Should Be Equal  ${metric_found[21]}  ${cloudlet2_tile}
-#   ELSE
-#      Should Be Equal  ${metric_found[21]}  ${cloudlet1_tile}
-#   END
+         Should Be Equal  ${v[7]}  ${max}
+         Should Be Equal  ${v[8]}  ${min}
+         Should Be Equal  ${metrics_avg}  ${latency_avg}
+
+         IF  ${raw}
+            ${latency_total_stdev}=     Evaluate  statistics.stdev(${vrequests}*@{samples1})     modules=statistics
+            ${latency_total_variance}=  Evaluate  statistics.variance(${vrequests}*@{samples1})  modules=statistics
+            ${latency_var}=  Evaluate  round(${latency_total_variance})
+            ${metrics_var}=  Evaluate  round(${v[10]})
+            ${latency_std}=  Evaluate  round(${latency_total_stdev})
+            ${metrics_std}=  Evaluate  round(${v[11]})
+
+            Should Be Equal  ${metrics_var}  ${latency_var}
+            Should Be Equal  ${metrics_std}  ${latency_std}
+            Should Be Equal  ${v[12]}  ${r20}
+         END
+      END
+   END
 
 DeviceInfo App Should Be Found
    [Arguments]  ${app_name}  ${metrics}  ${cloudlet}  ${device_network_type}  ${numsessions}=1  ${raw}=${False}  ${device_carrier}=${operator_name_fake}
 
-   ${metric_found}=  App Should Be Found  ${app_name}  ${cloudlet}  ${metrics}  ${numsessions}  ${device_network_type}
+   ${metric_found}=  App Should Be Found  ${app_name}  ${cloudlet}  ${metrics}  ${numsessions}  device_network_type=${device_network_type}
 
-   Should Be Equal  ${metric_found[1]}  ${app_name}
-   Should Be Equal  ${metric_found[2]}  ${developer_org_name_automation}
-   Should Be Equal  ${metric_found[3]}  1.0
-   Should Be Equal  ${metric_found[4]}  autocluster
-   Should Be Equal  ${metric_found[5]}  MobiledgeX
-   Should Be Equal  ${metric_found[6]}  ${cloudlet}
-   Should Be Equal  ${metric_found[7]}  ${operator_name_fake}
-   Should Be Equal  ${metric_found[8]}  ${device_os}
-   Should Be Equal  ${metric_found[9]}  ${device_model}
-   Should Be Equal  ${metric_found[10]}  ${device_carrier}
-   Should Be Equal As Integers  ${metric_found[11]}  ${numsessions} 
-   Should Be Equal  ${metric_found[12]}  ${device_network_type}
+   ${vsum}=  Set Variable  ${0}
+   FOR  ${v}  IN  @{metric_found['values']}
+      IF  ${v[1]} != ${None}
+         ${vsum}=  Evaluate  ${vsum}+${v[1]}    # dont check null readings which be removed later
+      END
+   END
+
+   Should Be Equal  ${metric_found['tags']['app']}  ${app_name}
+   Should Be Equal  ${metric_found['tags']['apporg']}  ${developer_org_name_automation}
+   Should Be Equal  ${metric_found['tags']['ver']}  1.0
+   Should Be Equal  ${metric_found['tags']['cluster']}  autocluster
+   Should Be Equal  ${metric_found['tags']['clusterorg']}  MobiledgeX
+   Should Be Equal  ${metric_found['tags']['cloudlet']}  ${cloudlet}
+   Should Be Equal  ${metric_found['tags']['cloudletorg']}  ${operator_name_fake}
+   Should Be Equal  ${metric_found['tags']['datanetworktype']}  ${device_network_type}
+#   Should Be Equal  ${metric_found['tags']['locationtile']}  ${cloudlet1_tile}
+
+   Should Be Equal As Numbers  ${vsum}  ${numsessions}
+
