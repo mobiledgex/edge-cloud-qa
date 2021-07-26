@@ -54,12 +54,13 @@ UpdateConfig - mcctl shall handle update failures
 	[Template]  Fail Update Config Via mcctl
 	Error: parsing arg "locknewaccounts\=any" failed: unable to parse "any" as bool: invalid syntax, valid values are true, false  locknewaccounts=any
 	 Error: parsing arg "skipverifyemail\=any" failed: unable to parse "any" as bool: invalid syntax, valid values are true, false  skipverifyemail=any
-	Error: unmarshal err on locknewaccounts (StructNamespace), 1, bool, yaml: unmarshal errors:  locknewaccounts=1
-	Error: unmarshal err on locknewaccounts (StructNamespace), 0, bool, yaml: unmarshal errors:  locknewaccounts=0
-	Error: unmarshal err on skipverifyemail (StructNamespace), 1, bool, yaml: unmarshal errors:  skipverifyemail=1
-	Error: unmarshal err on skipverifyemail (StructNamespace), 0, bool, yaml: unmarshal errors:  skipverifyemail=0
+        # we now support 1 and 0
+	#Error: unmarshal err on locknewaccounts (StructNamespace), 1, bool, yaml: unmarshal errors:  locknewaccounts=1
+	#Error: unmarshal err on locknewaccounts (StructNamespace), 0, bool, yaml: unmarshal errors:  locknewaccounts=0
+	#Error: unmarshal err on skipverifyemail (StructNamespace), 1, bool, yaml: unmarshal errors:  skipverifyemail=1
+	#Error: unmarshal err on skipverifyemail (StructNamespace), 0, bool, yaml: unmarshal errors:  skipverifyemail=0
 	Bad Request (400), Admin password min crack time must be greater than password min crack time  passwordmincracktimesec=63072001
-	Bad Request (400), Admin password min crack time must be greater than password min crack time  adminpasswordmincracktimesec=2591999
+	Bad Request (400), Admin password min crack time must be greater than password min crack time  adminpasswordmincracktimesec=1
 
 
 # ECQ-2866

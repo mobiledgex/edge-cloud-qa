@@ -98,7 +98,7 @@ CreateAlertReceiver - mcctl shall handle create failures
       Error: missing required args: name                                                               type=email  severity=info  app-org=${developer}
       Error: missing required args: type                                                               name=${recv_name}  severity=info  app-org=${developer}
       Error: missing required args: severity                                                           name=${recv_name}  type=email  app-org=${developer}
-      Error: Bad Request (400), Either cloudlet, cluster or app instance details have to be specified  name=${recv_name}  type=email  severity=info 
+      #Error: Bad Request (400), Either cloudlet, cluster or app instance details have to be specified  name=${recv_name}  type=email  severity=info    now supported
       Error: missing required args: severity                                                           name=${recv_name}  type=slack  app-org=${developer}
       Error: Bad Request (400), Both slack URL and slack channel must be specified                     name=${recv_name}  type=slack  severity=info  slack-channel=x  app-org=${developer}
       Error: Bad Request (400), Both slack URL and slack channel must be specified                     name=${recv_name}  type=slack  severity=info  slack-api-url=x  app-org=${developer}
