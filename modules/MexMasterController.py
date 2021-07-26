@@ -51,6 +51,7 @@ from mex_master_controller.Controller import Controller
 from mex_master_controller.Org import Org
 from mex_master_controller.BillingOrg import BillingOrg
 from mex_master_controller.GpuDriver import GpuDriver
+from mex_master_controller.RateLimitSettings import RateLimitSettings
 
 
 import shared_variables_mc
@@ -219,6 +220,7 @@ class MexMasterController(MexRest):
         self.billingorg = BillingOrg(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token,
                                      super_token=self.super_token)
         self.gpudriver = GpuDriver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.ratelimitsettings = RateLimitSettings(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -291,7 +293,7 @@ class MexMasterController(MexRest):
         return shared_variables.autoprov_policy_name_default
 
     def get_default_rate_limiting_flow_name(self):
-        return shared_variables.ratelimiting_flow_name_default
+        return shared_variables.flow_settings_name_default
 
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
@@ -1736,6 +1738,36 @@ class MexMasterController(MexRest):
 
     def getbuildurl_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, build_name=None, use_defaults=True, use_thread=False):
         return self.gpudriver.getbuildurl_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, build_name=build_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_rate_limit_settings(self, token=None, region=None, flow_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.show_rate_limit_settings(token=token, region=region, flow_settings_name=flow_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_rate_limit_flow(self, token=None, region=None, flow_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.create_rate_limit_flow(token=token, region=region, flow_settings_name=flow_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_rate_limit_flow(self, token=None, region=None, flow_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.show_rate_limit_flow(token=token, region=region, flow_settings_name=flow_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_rate_limit_flow(self, token=None, region=None, flow_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.delete_rate_limit_flow(token=token, region=region, flow_settings_name=flow_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_rate_limit_flow(self, token=None, region=None, flow_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.update_rate_limit_flow(token=token, region=region, flow_settings_name=flow_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_rate_limit_max_requests(self, token=None, region=None, max_requests_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, max_requests_algorithm=None, max_requests=None, interval=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.create_rate_limit_max_requests(token=token, region=region, max_requests_settings_name=max_requests_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, max_requests_algorithm=max_requests_algorithm, max_requests=max_requests, interval=interval, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_mc_rate_limit_flow(self, token=None, flow_settings_name=None, api_name=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.create_mc_rate_limit_flow(token=token, flow_settings_name=flow_settings_name, api_name=api_name, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_mc_rate_limit_flow(self, token=None, flow_settings_name=None, api_name=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.show_mc_rate_limit_flow(token=token, flow_settings_name=flow_settings_name, api_name=api_name, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_mc_rate_limit_flow(self, token=None, flow_settings_name=None, api_name=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.delete_mc_rate_limit_flow(token=token, flow_settings_name=flow_settings_name, api_name=api_name, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_mc_rate_limit_flow(self, token=None, flow_settings_name=None, api_name=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.update_mc_rate_limit_flow(token=token, flow_settings_name=flow_settings_name, api_name=api_name, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
 
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
