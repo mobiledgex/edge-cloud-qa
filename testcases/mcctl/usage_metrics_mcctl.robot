@@ -92,18 +92,26 @@ Usage - mcctl shall handle usage failures
       Error: missing required args:    cloudletpool
 
       Must provide either Cluster organization or Cloudlet organization  cluster  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
-      error decoding \\\'EndTime  cluster  starttime=2021-06-13T20:39:56Z  endtime=x
-      error decoding \\\'StartTime  cluster  starttime=x  endtime=2021-06-14T20:49:56Z
-      Error: 2 error  cluster  starttime=x  endtime=y
+      #error decoding \\\'EndTime  cluster  starttime=2021-06-13T20:39:56Z  endtime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format  cluster  starttime=2021-06-13T20:39:56Z  endtime=x
+      #error decoding \\\'StartTime  cluster  starttime=x  endtime=2021-06-14T20:49:56Z
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format  cluster  starttime=x  endtime=2021-06-14T20:49:56Z
+      #Error: 2 error  cluster  starttime=x  endtime=y
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format  cluster  starttime=x  endtime=y
 
       Must provide either App organization or Cloudlet organization  app  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
-      error decoding \\\'EndTime  app  starttime=2021-06-13T20:39:56Z  endtime=x
-      error decoding \\\'StartTime  app  starttime=x  endtime=2021-06-14T20:49:56Z
-      Error: 2 error  app  starttime=x  endtime=y
-      Unable to parse "vmonly" value "x" as bool: invalid syntax, valid values are true, false  app  cloudlet-org=dmuus  vmonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
+      #error decoding \\\'EndTime  app  starttime=2021-06-13T20:39:56Z  endtime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format  app  starttime=2021-06-13T20:39:56Z  endtime=x
+      #error decoding \\\'StartTime  app  starttime=x  endtime=2021-06-14T20:49:56Z
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format  app  starttime=x  endtime=2021-06-14T20:49:56Z
+      #Error: 2 error  app  starttime=x  endtime=y
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format  app  starttime=x  endtime=y
+      #Unable to parse "vmonly" value "x" as bool: invalid syntax, valid values are true, false  app  cloudlet-org=dmuus  vmonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
+      Error: parsing arg "vmonly\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false  app  cloudlet-org=dmuus  vmonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
 
       Error: Bad Request (400), Unable to retrieve CloudletPool info  cloudletpool  cloudletpool=x  cloudletpoolorg=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
-      Unable to parse "showvmappsonly" value "x" as bool: invalid syntax, valid values are true, false  cloudletpool  cloudletpool=x  cloudletpoolorg=x  showvmappsonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
+      #Unable to parse "showvmappsonly" value "x" as bool: invalid syntax, valid values are true, false  cloudletpool  cloudletpool=x  cloudletpoolorg=x  showvmappsonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
+      Error: parsing arg "showvmappsonly\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false  cloudletpool  cloudletpool=x  cloudletpoolorg=x  showvmappsonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
 
 *** Keywords ***
 Setup
