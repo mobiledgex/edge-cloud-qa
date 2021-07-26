@@ -22,6 +22,7 @@ alert_receiver_severity_default = 'info'
 trust_policy_name_default = 'trustpolicy' + default_time_stamp
 autoprov_policy_name_default = 'autoprovpolicy' + default_time_stamp
 autoscale_policy_name_default = 'autoscalepolicy' + default_time_stamp
+flow_settings_name_default = 'flow' + default_time_stamp
 
 first_name_default = 'firstname' + default_time_stamp
 # org_name_default = 'name' + default_time_stamp
