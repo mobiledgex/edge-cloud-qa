@@ -42,9 +42,9 @@ Clientcloudletusage - mcctl shall be able to request clientcloudletusage latency
       selector=latency  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  datanetworktype=${datanetworktype}
       selector=latency  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  devicecarrier=${devicecarrier}  datanetworktype=${datanetworktype}
       selector=latency  cloudlet-org=${operator_name_fake}  limit=1
-      selector=latency  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}
+      selector=latency  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
       selector=latency  cloudlet-org=${operator_name_fake}  numsamples=1
-      selector=latency  cloudlet-org=${operator_name_fake}  numsamples=1  starttime=${start_date}  endtime=${end_date}
+      selector=latency  cloudlet-org=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
       selector=latency  cloudlet-org=${operator_name_fake}  startage=12h
       selector=latency  cloudlet-org=${operator_name_fake}  endage=1s
       selector=latency  cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
@@ -67,7 +67,7 @@ Clientcloudletusage - mcctl shall be able to request clientcloudletusage devicei
       selector=deviceinfo  cloudlet-org=${operator_name_fake}  limit=1
       selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}
       selector=deviceinfo  cloudlet-org=${operator_name_fake}  numsamples=1
-      selector=deviceinfo  cloudlet-org=${operator_name_fake}  numsamples=1  starttime=${start_date}  endtime=${end_date}
+      selector=deviceinfo  cloudlet-org=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
       selector=deviceinfo  cloudlet-org=${operator_name_fake}  startage=12h
       selector=deviceinfo  cloudlet-org=${operator_name_fake}  endage=1s
       selector=deviceinfo  cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
@@ -103,10 +103,16 @@ Clientcloudletusage - mcctl shall handle clientcloudletusage metrics failures
 
 *** Keywords ***
 Setup
-   ${end_date}=  Get Current Date  time_zone=UTC  result_format=%Y-%m-%dT%H:%M:%SZ
-   ${start_date}=  Get Current Date  time_zone=UTC  result_format=%Y-%m-%dT%H:%M:%SZ  increment=-24 hours
+   ${epochnow}=  Get Current Date  result_format=epoch
+   #${epochnow}=  Evaluate  calendar.timegm(time.strptime('${now}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${epochstart}=  Evaluate  ${epochnow} - 86400
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${epochstart}))
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${epochnow}))
 
-   Update Settings  region=${region}  edge_events_metrics_collection_interval=5s
+   #${end_date}=  Get Current Date  time_zone=UTC  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${start_date}=  Get Current Date  time_zone=UTC  result_format=%Y-%m-%dT%H:%M:%SZ  increment=-24 hours
+   
+   Update Settings  region=${region}  edge_events_metrics_collection_interval=5s  location_tile_side_length_km=1
    Sleep  10s
 
    ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
@@ -122,6 +128,8 @@ Setup
 
    ${latency}=  Send Latency Edge Event  edge_events_cookie=${cloudlet.edge_events_cookie}  carrier_name=${devicecarrier}  data_network_type=${datanetworktype}  latitude=31  longitude=-91  samples=${samples}
 
+   Sleep  10s
+
    Set Suite Variable  ${start_date}
    Set Suite Variable  ${end_date}
 
@@ -136,11 +144,7 @@ Success Clientcloudletusage Latency Metrics Via mcctl
 
    ${result}=  Run mcctl  metrics clientcloudletusage region=${region} ${parmss}  version=${version}
 
-   IF  'numsamples' not in '${parmss}'
-      Should Be Equal  ${result['data'][0]['Series'][0]['name']}  latency-metric
-   ELSE
-      Should Contain  ${result['data'][0]['Series'][0]['name']}  latency-metric-
-   END
+   Should Be Equal  ${result['data'][0]['Series'][0]['name']}  latency-metric
 
 #   Run Keyword If  'rawdata=false' in '${parmss}'  Should Contain  ${result['data'][0]['Series'][0]['name']}  latency-metric-
 #   Run Keyword If  'numsamples' in '${parmss}'  Should Contain  ${result['data'][0]['Series'][0]['name']}  latency-metric-
@@ -156,11 +160,7 @@ Success Clientcloudletusage DeviceInfo Metrics Via mcctl
 
    ${result}=  Run mcctl  metrics clientcloudletusage region=${region} ${parmss}  version=${version}
 
-   IF  'numsamples' not in '${parmss}'
-      Should Be Equal  ${result['data'][0]['Series'][0]['name']}  device-metric
-   ELSE
-      Should Contain  ${result['data'][0]['Series'][0]['name']}  device-metric-
-   END
+   Should Be Equal  ${result['data'][0]['Series'][0]['name']}  device-metric
 
 #   Run Keyword If  'rawdata=false' in '${parmss}'  Should Contain  ${result['data'][0]['Series'][0]['name']}  device-metric-
 #   Run Keyword If  'rawdata' not in '${parmss}'  Should Contain  ${result['data'][0]['Series'][0]['name']}  device-metric-
