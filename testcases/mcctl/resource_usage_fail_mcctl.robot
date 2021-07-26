@@ -48,7 +48,7 @@ GetCloudletResourceQuotaProps - mcctl shall handle failures
       
       # invalid values
       # Unable to parse "platformtype" value "x" as int: invalid syntax  platformtype=x
-      parsing arg "platformtype\=x" failed: unmarshal value x into type edgeproto.PlatformType failed: No enum value for x  platformtype=x
+      Error: parsing arg "platformtype\=x" failed: unable to parse "x" as int: invalid syntax  platformtype=x
 
 # ECQ-3337
 CreateCloudlet with resource quotas - mcctl shall handle failures
