@@ -121,7 +121,7 @@ UpdateCloudlet with a numdynamicips 2323232232323
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	 region=${region}  operator_org_name=${oper}   cloudlet_name=${cldlet}    number_dynamic_ips=2323232232323        use_defaults=False
 
 	#Should Contain  ${error_msg}   Invalid data: Unmarshal type error: expected=int32, got=number 2323232232323, field=Cloudlet.num_dynamic_ips, offset=101
-        Should Contain  ${error_msg}  Invalid POST data, code=400, message=Unmarshal type error: expected=int32, got=number 2323232232323, field=Cloudlet.num_dynamic_ips, offset=101
+        Should Contain  ${error_msg}  Invalid JSON data: Unmarshal error: expected int32, but got number 2323232232323 for field \\\\"Cloudlet.num_dynamic_ips\\\\" at offset 101
 
 # ECQ-943
 UpdateCloudlet with a ipsupport of -1
@@ -281,8 +281,8 @@ UpdateCloudlet with staticips of 6
 	${staticips}    Convert To Integer 	6
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	  region=${region}  operator_org_name=${oper}     cloudlet_name=${cldlet}     static_ips=${staticips}       use_defaults=False
+        Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected string, but got number for field \\\\"Cloudlet.static_ips\\\\" at offset 84"}')
         #Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid data: Unmarshal type error: expected=string, got=number, field=Cloudlet.static_ips, offset=84"}')
-        Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=string, got=number, field=Cloudlet.static_ips, offset=84"}')
 	#Should Contain Any  ${error_msg}   TypeError: 6 has type int, but expected one of: bytes, unicode    TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.static_ips 
         #Should Contain  ${error_msg}  TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.static_ips
 

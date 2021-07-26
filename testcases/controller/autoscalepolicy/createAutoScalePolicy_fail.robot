@@ -230,12 +230,12 @@ CreateAutoScalePolicy - create with invalid minnodes shall return error
    #minnodes=-1
    ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=-1  max_nodes=2  scale_down_cpu_threshold=10  scale_up_cpu_threshold=101  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -1, field=AutoScalePolicy.min_nodes
+   Should Contain             ${error}  {"message":"Invalid JSON data: Unmarshal error: expected uint32, but got number -1 for field \\\\"AutoScalePolicy.min_nodes\\\\" at offset
 
    #minnodes=x
    ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=x  max_nodes=2  scale_down_cpu_threshold=10  scale_up_cpu_threshold=101  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.min_nodes
+   Should Contain             ${error}  {"message":"Invalid JSON data: Unmarshal error: expected uint32, but got string for field \\\\"AutoScalePolicy.min_nodes\\\\" at offset
 
 # ECQ-3527
 CreateAutoScalePolicy - create with invalid maxnodes shall return error
@@ -246,12 +246,12 @@ CreateAutoScalePolicy - create with invalid maxnodes shall return error
    #maxnodes=-1
    ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=1  max_nodes=-1  scale_down_cpu_threshold=10  scale_up_cpu_threshold=101  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -1, field=AutoScalePolicy.max_nodes
+   Should Contain             ${error}  {"message":"Invalid JSON data: Unmarshal error: expected uint32, but got number -1 for field \\\\"AutoScalePolicy.max_nodes\\\\" at offset
 
    #maxnodes=x
    ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=x  scale_down_cpu_threshold=10  scale_up_cpu_threshold=101  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.max_nodes
+   Should Contain             ${error}  {"message":"Invalid JSON data: Unmarshal error: expected uint32, but got string for field \\\\"AutoScalePolicy.max_nodes\\\\" at offset
 
 # ECQ-3528
 CreateAutoScalePolicy - create with invalid scaleupcputhreshold shall return error
@@ -262,12 +262,12 @@ CreateAutoScalePolicy - create with invalid scaleupcputhreshold shall return err
    #scale_up_cpu_threshold=-10
    ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=-10  scale_down_cpu_threshold=10  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -10, field=AutoScalePolicy.scale_up_cpu_thresh
+   Should Contain             ${error}  {"message":"Invalid JSON data: Unmarshal error: expected uint32, but got number -10 for field \\\\"AutoScalePolicy.scale_up_cpu_thresh\\\\" at offset
 
    #scale_up_cpu_threshold=xx
    ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=2  scale_up_cpu_threshold=xx  scale_down_cpu_threshold=101  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.scale_up_cpu_thresh
+   Should Contain             ${error}  {"message":"Invalid JSON data: Unmarshal error: expected uint32, but got string for field \\\\"AutoScalePolicy.scale_up_cpu_thresh\\\\" at offset
 
 # ECQ-3529
 CreateAutoScalePolicy - create with invalid scaledowncputhreshold shall return error
@@ -278,12 +278,12 @@ CreateAutoScalePolicy - create with invalid scaledowncputhreshold shall return e
    #scale_down_cpu_threshold=-11
    ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=10  scale_down_cpu_threshold=-11  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -11, field=AutoScalePolicy.scale_down_cpu_thresh
+   Should Contain             ${error}  {"message":"Invalid JSON data: Unmarshal error: expected uint32, but got number -11 for field \\\\"AutoScalePolicy.scale_down_cpu_thresh\\\\" at offset
 
    #scale_down_cpu_threshold=xx
    ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=2  max_nodes=2  scale_up_cpu_threshold=1  scale_down_cpu_threshold=xx  use_defaults=False
    Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.scale_down_cpu_thresh
+   Should Contain             ${error}  {"message":"Invalid JSON data: Unmarshal error: expected uint32, but got string for field \\\\"AutoScalePolicy.scale_down_cpu_thresh\\\\" at offset
 
 # ECQ-3530
 CreateAutoScalePolicy - create with same name shall return error
