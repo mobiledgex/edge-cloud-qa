@@ -44,9 +44,12 @@ DeleteIdleReservableClusterInsts - mcctl shall handle create failures
    [Tags]  ReservableCluster
 
    [Template]  Fail DeleteIdleReservableClusterInsts Via mcctl
-      time: invalid duration "x"               idletime=x
-      time: missing unit in duration "5"       idletime=5
-      time: unknown unit "a" in duration "5a"  idletime=5a
+      #time: invalid duration "x"               idletime=x
+      Error: parsing arg "idletime\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  idletime=x
+      #time: missing unit in duration "5"       idletime=5
+      Error: parsing arg "idletime\=5" failed: unable to parse "5" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  idletime=5
+      #time: unknown unit "a" in duration "5a"  idletime=5a
+      Error: parsing arg "idletime\=5a" failed: unable to parse "5a" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  idletime=5a
 
 *** Keywords ***
 Success DeleteIdleReservableClusterInsts Via mcctl

@@ -146,11 +146,11 @@ UpdateAutoScalePolicy - update with invalid minnodes shall return error
 
    #minnodes=-1
    ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=-1  max_nodes=2  scale_down_cpu_threshold=10  scale_up_cpu_threshold=101  use_defaults=False
-   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -1, field=AutoScalePolicy.min_nodes
+   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected uint32, but got number -1 for field \\\\"AutoScalePolicy.min_nodes\\\\" at offset
 
    #minnodes=x
    ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=x  max_nodes=2  scale_down_cpu_threshold=10  scale_up_cpu_threshold=101  use_defaults=False
-   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.min_nodes
+   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected uint32, but got string for field \\\\"AutoScalePolicy.min_nodes\\\\" at offset
 
 # ECQ-3563
 UpdateAutoScalePolicy - update with invalid maxnodes shall return error
@@ -160,11 +160,11 @@ UpdateAutoScalePolicy - update with invalid maxnodes shall return error
 
    #maxnodes=-1
    ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=1  max_nodes=-1  scale_down_cpu_threshold=10  scale_up_cpu_threshold=101  use_defaults=False
-   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -1, field=AutoScalePolicy.max_nodes
+   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected uint32, but got number -1 for field \\\\"AutoScalePolicy.max_nodes\\\\" at offset
 
    #maxnodes=x
    ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=2  max_nodes=x  scale_down_cpu_threshold=10  scale_up_cpu_threshold=101  use_defaults=False
-   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.max_nodes
+   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected uint32, but got string for field \\\\"AutoScalePolicy.max_nodes\\\\" at offset
 
 # ECQ-3564
 UpdateAutoScalePolicy - update with invalid scaleupcputhreshold shall return error
@@ -174,11 +174,11 @@ UpdateAutoScalePolicy - update with invalid scaleupcputhreshold shall return err
 
    #scaleupcputhreshold=-10
    ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=1  max_nodes=2  scale_down_cpu_threshold=10  scale_up_cpu_threshold=-10  use_defaults=False
-   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -10, field=AutoScalePolicy.scale_up_cpu_thresh
+   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected uint32, but got number -10 for field \\\\"AutoScalePolicy.scale_up_cpu_thresh\\\\" at offset
 
    #scaleupcputhreshold=xx
    ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=2  max_nodes=2  scale_down_cpu_threshold=10  scale_up_cpu_threshold=xx  use_defaults=False
-   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.scale_up_cpu_thresh
+   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected uint32, but got string for field \\\\"AutoScalePolicy.scale_up_cpu_thresh\\\\" at offset
 
 # ECQ-3565
 UpdateAutoScalePolicy - update with invalid scaledowncputhreshold shall return error
@@ -188,11 +188,11 @@ UpdateAutoScalePolicy - update with invalid scaledowncputhreshold shall return e
 
    #scaledowncputhreshold=-10
    ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=1  max_nodes=2  scale_down_cpu_threshold=-10  scale_up_cpu_threshold=11  use_defaults=False
-   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=number -10, field=AutoScalePolicy.scale_down_cpu_thresh
+   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected uint32, but got number -10 for field \\\\"AutoScalePolicy.scale_down_cpu_thresh\\\\" at offset
 
    #scaledowncputhreshold=xx
    ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=2  max_nodes=3  scale_down_cpu_threshold=xx  scale_up_cpu_threshold=1  use_defaults=False
-   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=uint32, got=string, field=AutoScalePolicy.scale_down_cpu_thresh
+   Should Contain  ${error_msg}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected uint32, but got string for field \\\\"AutoScalePolicy.scale_down_cpu_thresh\\\\" at offset
 
 # ECQ-3566
 UpdateAutoScalePolicy - update with organization not found shall return error
