@@ -203,6 +203,7 @@ ClientCloudletUsageMetrics - get with invalid limit shall return error
 
    [Tags]  DMEPersistentConnection
 
+   # EDGECLOUD-5254 dme metrics with negative limit/numsamples needs better error handling
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=x  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
    Should Contain  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
