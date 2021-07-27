@@ -108,7 +108,7 @@ CloudletMetrics - get with invalid start time shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  region=US  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""} 
-   Should Contain  ${error}  {"message":"Invalid POST data, parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
    # EDGECLOUD-1332
    # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
 
@@ -116,7 +116,7 @@ CloudletMetrics - get with invalid start time shall return error
    ${error2}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=ipusage  region=US  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
    #Should Contain  ${error2}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error2}  {"message":"Invalid POST data, parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
 CloudletMetrics - get with invalid end time shall return error
    [Documentation]
@@ -129,7 +129,7 @@ CloudletMetrics - get with invalid end time shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  region=US  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""} 
-   Should Contain  ${error}  {"message":"Invalid POST data, parsing time \\\\"\\\\"2019-09\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    # EDGECLOUD-1332
    # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
@@ -138,7 +138,7 @@ CloudletMetrics - get with invalid end time shall return error
    ${error2}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=ipusage  region=US  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
    #Should Contain  ${error2}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error2}  {"message":"Invalid POST data, parsing time \\\\"\\\\"2019-09\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
 CloudletMetrics - get with invalid start/end time shall return error
    [Documentation]
@@ -151,7 +151,7 @@ CloudletMetrics - get with invalid start/end time shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  region=US  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""} 
-   Should Contain  ${error}  {"message":"Invalid POST data, parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
    # EDGECLOUD-1332
    # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
@@ -160,7 +160,7 @@ CloudletMetrics - get with invalid start/end time shall return error
    ${error2}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=ipusage  region=US  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
    #Should Contain  ${error2}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error2}  {"message":"Invalid POST data, parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error2}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
 CloudletMetrics - get with invalid last shall return error
    [Documentation]
@@ -172,14 +172,14 @@ CloudletMetrics - get with invalid last shall return error
    # utilization
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  region=US  last=x  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset= 
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
 
    # EDGECLOUD-1332
 
    # ipusage
    ${error2}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=ipusage  region=US  last=x  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset= 
+   Should Contain  ${error2}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
 
 CloudletMetrics - get with operator not found shall return an empty list
    [Documentation]
