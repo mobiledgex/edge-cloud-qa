@@ -199,9 +199,11 @@ class AppInstance(MexOperation):
         if end_time is not None:
             metric_dict['endtime'] = end_time
         if start_age is not None:
-            metric_dict['startage'] = int(start_age)
+            #metric_dict['startage'] = int(start_age)
+            metric_dict['startage'] = start_age
         if end_age is not None:
-            metric_dict['endage'] = int(end_age)
+            #metric_dict['endage'] = int(end_age)
+            metric_dict['endage'] = end_age
         if method is not None:
             metric_dict['method'] = method
         if cell_id is not None:
