@@ -131,7 +131,7 @@ ClientCloudletUsageMetrics - get with invalid start time shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""} 
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
 # ECQ-3441
 ClientCloudletUsageMetrics - get with invalid end time shall return error
@@ -143,7 +143,7 @@ ClientCloudletUsageMetrics - get with invalid end time shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
 # ECQ-3442
 ClientCloudletUsageMetrics - get with invalid start/end time shall return error
@@ -155,7 +155,7 @@ ClientCloudletUsageMetrics - get with invalid start/end time shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
 
 # ECQ-3576
 ClientCloudletUsageMetrics - get with invalid start age shall return error
@@ -164,7 +164,7 @@ ClientCloudletUsageMetrics - get with invalid start age shall return error
    ...  - verify error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  start_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientCloudletUsageMetrics.startage of type time.Duration"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"2019-09-26T04:01:01\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
 # ECQ-3577
 ClientCloudletUsageMetrics - get with invalid end age shall return error
@@ -173,7 +173,7 @@ ClientCloudletUsageMetrics - get with invalid end age shall return error
    ...  - verify error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  end_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientCloudletUsageMetrics.endage of type time.Duration"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"2019-09-26T04:01:01\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
 # ECQ-3578
 ClientCloudletUsageMetrics - get with invalid start/end age shall return error
@@ -182,7 +182,7 @@ ClientCloudletUsageMetrics - get with invalid start/end age shall return error
    ...  - verify error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  start_age=x  end_age=2019-09  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientCloudletUsageMetrics.startage of type time.Duration"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"x\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
 # ECQ-3600
 ClientCloudletUsageMetrics - get with start age newer than end age shall return error
@@ -192,8 +192,8 @@ ClientCloudletUsageMetrics - get with start age newer than end age shall return 
 
    #  EDGECLOUD-5269 - metrics request with startage lower than endage gives incorrect error 
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  start_age=2  end_age=3  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxx Start time must be before (older than) end time"}')
+   ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  start_age=2m  end_age=3m  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Start age must be before (older than) end age"}')
 
 # ECQ-3443
 ClientCloudletUsageMetrics - get with invalid limit shall return error
@@ -204,7 +204,7 @@ ClientCloudletUsageMetrics - get with invalid limit shall return error
    [Tags]  DMEPersistentConnection
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=x  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientCloudletUsageMetrics.Limit of type int"}')
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=-1  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxxInvalid data: json: cannot unmarshal string into Go struct field RegionClientCloudletUsageMetrics.Limit of type int"}')
@@ -218,7 +218,7 @@ ClientCloudletUsageMetrics - get with invalid numsamples shall return error
    # EDGECLOUD-5254 dme metrics with negative limit/numsamples needs better error handling
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  number_samples=x  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientCloudletUsageMetrics.NumSamples of type int"}')
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"NumSamples\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  number_samples=-1  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxxxxxxInvalid data: json: cannot unmarshal string into Go struct field RegionClientCloudletUsageMetrics.Limit of type int"}')
