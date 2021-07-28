@@ -41,7 +41,7 @@ DMEMetrics - FindCloudlet shall generate metrics
    Find Cloudlet       carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
-   ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  
+   ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  
    ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
 
    Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
@@ -70,7 +70,7 @@ DMEMetrics - FindCloudlet Not Found shall generate metrics
    Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=8  latitude=35  longitude=-94
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
-   ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
+   ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
    ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
 
    Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
@@ -97,7 +97,7 @@ DMEMetrics - FindCloudlet with error shall generate metrics
 
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
-   ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
+   ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
    ${req_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
    ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][2]}
    Should Be Equal As Numbers  ${req_count}  4  
