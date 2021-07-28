@@ -38,7 +38,7 @@ DMEMetrics - RegisterClient shall generate metrics
    Register Client  app_name=${app}
    Register Client  app_name=${app}
    Sleep  ${metrics_wait_time}
-   ${metrics}=  Get Register Client API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  
+   ${metrics}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  
    ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}  # reqs field
  
    Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
@@ -68,7 +68,7 @@ DMEMetrics - RegisterClient with cellid shall generate metrics
    Register Client  app_name=${app}  cell_id=123
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
-   ${metrics}=  Get Register Client API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
+   ${metrics}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
    ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
 
    Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
@@ -98,7 +98,7 @@ DMEMetrics - RegisterClient with auth shall generate metrics
    Register Client  app_name=${appauth}  auth_token=${token}
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
-   ${metrics}=  Get Register Client API Metrics  region=${region}  developer_org_name=${developer}  app_name=${appauth}  app_version=${appvers}
+   ${metrics}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${appauth}  app_version=${appvers}
    ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
 
    Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
@@ -120,7 +120,7 @@ DMEMetrics - RegisterClient with error shall generate metrics
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
    # get appauth metrics
-   ${metrics}=  Get Register Client API Metrics  region=${region}  developer_org_name=${developer}  app_name=${appauth}  app_version=${appvers}
+   ${metrics}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${appauth}  app_version=${appvers}
    ${req_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
    ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][2]}
    Should Be Equal As Numbers  ${req_count}  2  # should be 2 register client requests
@@ -129,7 +129,7 @@ DMEMetrics - RegisterClient with error shall generate metrics
    Values With Error Should Be In Range  ${metrics}  ${appauth}  ${developer}  ${appvers}
 
    # get app ver=2.0 metrics
-   ${metrics2}=  Get Register Client API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=2.0
+   ${metrics2}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=2.0
    ${req_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][1]}
    ${error_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][2]}
    Should Be Equal As Numbers  ${req_count2}  1  # should be 2 register client requests
@@ -138,7 +138,7 @@ DMEMetrics - RegisterClient with error shall generate metrics
    Values With Error Should Be In Range  ${metrics2}  ${app}  ${developer}  2.0
 
    # get app dev=2.0 metrics
-   ${metrics3}=  Get Register Client API Metrics  region=${region}  developer_org_name=2.0  app_name=${app}
+   ${metrics3}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=2.0  app_name=${app}
    ${req_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][1]}
    ${error_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][2]}
    Should Be Equal As Numbers  ${req_count3}  1  # should be 2 register client requests

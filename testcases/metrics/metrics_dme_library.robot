@@ -27,7 +27,7 @@ ${region}=  EU
 Get the last dme metric on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 2  # last record
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -154,7 +154,7 @@ Get client Cloudlet usage metrics with deviceinfo
 Get the last 5 dme metrics on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 6  # last record
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -171,7 +171,7 @@ Get the last 5 dme metrics on openstack for multiple selectors
 
    #${contains}=  Evaluate   "," in """${selector}""" or "*" in """${selector}"""
 
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5
 
    #${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
@@ -189,7 +189,7 @@ Get the last 5 dme metrics on openstack for multiple selectors
 Get the last 10 dme metrics on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=10
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=10
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 11  # last record
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -204,7 +204,7 @@ Get the last 10 dme metrics on openstack
 Get all dme metrics on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC 
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -238,11 +238,11 @@ Get all client cloudlet usage metrics
 Get more dme metrics than exist on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
-   ${metricsall}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+   ${metricsall}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
    ${num_readings_all}=  Get Length  ${metricsall['data'][0]['Series'][0]['values']}
 
    ${more_readings}=  Evaluate  ${num_readings_all} + 100
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=${more_readings}
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=${more_readings}
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -263,7 +263,7 @@ Get dme metrics with starttime on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
    # get last metric and set starttime = 2 mins earlier
-   ${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
+   ${metricspre}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    #${epochpre}=  Convert Date  ${datesplit[0]} UTC  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S %Z
@@ -278,7 +278,7 @@ Get dme metrics with starttime on openstack
    ${time_diff}=  Evaluate  ${currentdate}-${start}
    log to console  ${currentdate} ${start}
 
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}
    Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
    #@{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    #@{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
@@ -301,7 +301,7 @@ Get dme metrics with startage
    #${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
    #log to console  ${metricspre['data'][0]}
 
-   ${metrics}=  Get Client API Usage Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_age=3600000000000  # 60min
+   ${metrics}=  Get Client API Usage Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_age=60m  #start_age=3600000000000  # 60min
    Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -317,7 +317,7 @@ Get dme metrics with startage
 Get dme metrics with endage
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
-   ${metrics}=  Get Client API Usage Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  end_age=3600000000000  # 60min
+   ${metrics}=  Get Client API Usage Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  end_age=60m  #end_age=3600000000000  # 60min
    Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -333,7 +333,7 @@ Get dme metrics with endage
 Get dme metrics with startage and endage
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
-   ${metricsall}=  Get Client API Usage Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+   ${metricsall}=  Get Client API Usage Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
    ${t1split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][1][0]}  .
    ${t2split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][-2][0]}  .
    ${epochend}=  Evaluate  calendar.timegm(time.strptime('${t1split[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
@@ -342,7 +342,7 @@ Get dme metrics with startage and endage
    ${diffend}=  Evaluate  int((${currentdate}-${epochend})*1000000000)
    ${diffstart}=  Evaluate  int((${currentdate}-${epochstart})*1000000000)
 
-   ${metrics}=  Get Client API Usage Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_age=${diffstart}  end_age=${diffend}  # 60min
+   ${metrics}=  Get Client API Usage Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_age=${diffstart}  end_age=${diffend}  # 60min
    Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -365,7 +365,7 @@ Get dme metrics with startage and endage
 Get dme metrics with numsamples
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
-   ${metrics}=  Get Client API Usage Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  number_samples=10 
+   ${metrics}=  Get Client API Usage Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  number_samples=10 
    Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) == 10
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -383,7 +383,7 @@ Get dme metrics with numsamples
 Get dme metrics with numsamples and starttime/endtime
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
-   ${metrics}=  Get Client API Usage Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  number_samples=5
+   ${metrics}=  Get Client API Usage Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  number_samples=5
    Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) == 5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -701,7 +701,7 @@ Get dme metrics with endtime on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
    # get all metric and set endtime = 2 mins from 1st metric
-   ${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
+   ${metricspre}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
    ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  0  -1
    @{datesplit}=  Split String  ${datez}  .
    #${epochpre}=  Convert Date  ${datesplit[0]}  epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -714,7 +714,7 @@ Get dme metrics with endtime on openstack
    #${currentdate}=      Get Current Date    result_format=epoch
    ${time_diff}=  Evaluate  ${end}-${start}
 
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  end_time=${end_date} 
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  end_time=${end_date} 
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    ${datez_first}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
    @{datesplit_first}=  Split String  ${datez}  .
@@ -791,7 +791,7 @@ Get client cloudlet usage metrics with endtime
 Get dme metrics with starttime=lastrecord on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
    # get last metric
-   ${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
+   ${metricspre}=  Get DME Metrics  selector=api  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
 
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
@@ -799,7 +799,7 @@ Get dme metrics with starttime=lastrecord on openstack
    ${time_diff}=  Evaluate  ${currentdate}-${epochpre}
 
    # get readings and 1st and last timestamp
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${metricspre['data'][0]['Series'][0]['values'][0][0]} 
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${metricspre['data'][0]['Series'][0]['values'][0][0]} 
    #log to console  ${metrics}
 
    #${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 2
@@ -824,14 +824,14 @@ Get dme metrics with starttime > lastrecord on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 	
    # get last metric
-   ${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
+   ${metricspre}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${start}=  Evaluate  ${epochpre} + 10
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date} 
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date} 
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -843,11 +843,11 @@ Get dme metrics with endtime=lastrecord on openstack
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 	
    # get last metric
-   ${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
+   ${metricspre}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
    log to console  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
 
    # get all metrics
-   ${metrics_all}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
+   ${metrics_all}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
 
    ${datez}=  Get Substring  ${metrics_all['data'][0]['Series'][0]['values'][0][0]}  0  -1
    @{datesplit}=  Split String  ${datez}  .
@@ -857,7 +857,7 @@ Get dme metrics with endtime=lastrecord on openstack
    ${time_diff}=  Evaluate  ${epochpre}-${start}
 
    # get readings and 1st and last timestamp
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  end_time=${metrics_all['data'][0]['Series'][0]['values'][0][0]}
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  end_time=${metrics_all['data'][0]['Series'][0]['values'][0][0]}
    log to console  ${metrics}
    ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
    @{datesplit_first}=  Split String  ${datez}  .
@@ -896,7 +896,7 @@ Get dme metrics with endtime = firstrecord on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
    # get last metric
-   ${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
+   ${metricspre}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
    #@{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    #${start}=  Evaluate  ${epochpre} + 60
@@ -910,7 +910,7 @@ Get dme metrics with endtime = firstrecord on openstack
    ${time_diff}=  Evaluate  ${epochpre}-${start}
 
    # get readings and with starttime in the future
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  end_time=${metricspre['data'][0]['Series'][0]['values'][0][0]} 
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  end_time=${metricspre['data'][0]['Series'][0]['values'][0][0]} 
 
 #   # readings should be empty
 #   Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -928,10 +928,10 @@ Get dme metrics with starttime > endtime on openstack
    ${start_date}=  Set Variable  2019-09-02T01:01:01Z	
    ${end_date}=  Set Variable  2019-09-01T01:01:01Z
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Start time must be before (older than) end time"}')  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Start time must be before (older than) end time"}')  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}
 
    # get readings and with starttime in the future
-   #${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date} 
+   #${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date} 
 
    # readings should be empty
    #Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -941,7 +941,7 @@ Get dme metrics with starttime and endtime > lastrecord on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
    # get last metric
-   ${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
+   ${metricspre}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${start}=  Evaluate  ${epochpre} + 60
@@ -950,7 +950,7 @@ Get dme metrics with starttime and endtime > lastrecord on openstack
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date} 
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date} 
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -960,7 +960,7 @@ Get dme metrics with starttime and endtime on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5
+   ${metricspre}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -983,7 +983,7 @@ Get dme metrics with starttime and endtime on openstack
    ${time_diff}=  Evaluate  ${end}-${start}
 
    # get readings with starttime and endtime
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date} 
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date} 
    ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
    @{datesplit_first}=  Split String  ${datez}  .
    ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  0  -1
@@ -1088,7 +1088,7 @@ Get dme metrics with starttime and endtime and last on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5
+   ${metricspre}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -1112,7 +1112,7 @@ Get dme metrics with starttime and endtime and last on openstack
    ${time_diff}=  Evaluate  ${end}-${start}
 
    # get readings with starttime and endtime
-   ${metrics}=  Get Client Api Usage Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}  limit=1
+   ${metrics}=  Get Client Api Usage Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}  limit=1
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    #${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -1201,7 +1201,7 @@ DeveloperManager shall be able to get dme metrics
 
    #Adduser Role   orgname=${developer_org_name}   username=${dev_manager_user_automation}  role=DeveloperManager   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5  token=${userToken} 
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5  token=${userToken} 
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 6 
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -1401,7 +1401,7 @@ DeveloperContributor shall be able to get dme metrics
 
    #Adduser Role   orgname=${developer_org_name}   username=${dev_contributor_user_automation}  role=DeveloperContributor   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5  token=${userToken}
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5  token=${userToken}
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 6
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -1439,7 +1439,7 @@ DeveloperViewer shall be able to get dme metrics
 
    #Adduser Role   orgname=${developer_org_name}   username=${epochusername}  role=DeveloperViewer   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5  token=${userToken}
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5  token=${userToken}
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 6
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -1459,9 +1459,9 @@ Get cluster metrics with cloudlet/operator/developer only
    [Arguments]  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    # get last metric and set starttime = 1 hour earlier
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5  token=${userToken}
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=5  token=${userToken}
 
-   ${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=20
+   ${metricspre}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=20
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -1474,7 +1474,7 @@ Get cluster metrics with cloudlet/operator/developer only
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}  limit=20
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}  limit=20
    #@{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    #@{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    #${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
