@@ -97,7 +97,7 @@ ClientAppUsageMetrics - get with selector=custom shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=custom  developer_org_name=${operator}  limit=1  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Provided selector \\\\"custom\\\\" is not valid, must provide only one of \\\\"latency\\\\", \\\\"deviceinfo\\\\""}
+   Should Contain  ${error}  {"message":"Provided selector \\\\"custom\\\\" is not valid. Must provide only one of \\\\"latency\\\\", \\\\"deviceinfo\\\\""}
 
 # ECQ-3459
 ClientAppUsageMetrics - get with no token shall return error
@@ -117,7 +117,7 @@ ClientAppUsageMetrics - get with no selector shall return error
    # EDGECLOUD-5255 invalid limit/numsamples/startage/endage for clientapiusage/clientappusage/clientcloudletusage needs better error handling
    ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Provided selector \\\\"\\\\" is not valid, must provide only one of \\\\"latency\\\\", \\\\"deviceinfo\\\\""} 
+   Should Contain  ${error}  {"message":"Provided selector \\\\"\\\\" is not valid. Must provide only one of \\\\"latency\\\\", \\\\"deviceinfo\\\\", \\\\"custom\\\\""} 
 
 # ECQ-3461
 ClientAppUsageMetrics - get with invalid selector shall return error
@@ -129,7 +129,7 @@ ClientAppUsageMetrics - get with invalid selector shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=xx  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
 
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Provided selector \\\\"xx\\\\" is not valid, must provide only one of \\\\"latency\\\\", \\\\"deviceinfo\\\\""}
+   Should Contain  ${error}  {"message":"Provided selector \\\\"xx\\\\" is not valid. Must provide only one of \\\\"latency\\\\", \\\\"deviceinfo\\\\", \\\\"custom\\\\""}
 
 # ECQ-3462
 ClientAppUsageMetrics - get with invalid start time shall return error
