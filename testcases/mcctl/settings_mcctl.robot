@@ -103,61 +103,61 @@ Settings - mcctl shall handle update settings failures
    # EDGECLOUD-4163 	UpdateSettings for influxdbmetricsretention should give better error message - closed
 
    [Template]  Fail UpdateSettings Via mcctl
-      error decoding \\\'Settings.ShepherdMetricsCollectionInterval\\\': time: missing unit in duration "1"       shepherdmetricscollectioninterval=1
-      error decoding \\\'Settings.ShepherdMetricsCollectionInterval\\\': time: unknown unit "x" in duration "1x"  shepherdmetricscollectioninterval=1x
-      error decoding \\\'Settings.ShepherdMetricsCollectionInterval\\\': time: invalid duration "x"               shepherdmetricscollectioninterval=x
+      Error: parsing arg "shepherdmetricscollectioninterval=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc       shepherdmetricscollectioninterval=1
+      Error: parsing arg "shepherdmetricscollectioninterval=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  shepherdmetricscollectioninterval=1x
+      Error: parsing arg "shepherdmetricscollectioninterval=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc               shepherdmetricscollectioninterval=x
       Shepherd Metrics Collection Interval must be greater than 0                                                 shepherdmetricscollectioninterval=0s
 
-      error decoding \\\'Settings.ShepherdAlertEvaluationInterval\\\': time: missing unit in duration "1"       shepherdalertevaluationinterval=1
-      error decoding \\\'Settings.ShepherdAlertEvaluationInterval\\\': time: unknown unit "x" in duration "1x"  shepherdalertevaluationinterval=1x
-      error decoding \\\'Settings.ShepherdAlertEvaluationInterval\\\': time: invalid duration "x"               shepherdalertevaluationinterval=x
+      Error: parsing arg "shepherdalertevaluationinterval=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc       shepherdalertevaluationinterval=1
+      Error: parsing arg "shepherdalertevaluationinterval=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  shepherdalertevaluationinterval=1x
+      Error: parsing arg "shepherdalertevaluationinterval=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc               shepherdalertevaluationinterval=x
       Shepherd Alert Evaluation Interval must be greater than 0                                                 shepherdalertevaluationinterval=0s
 
-      Unable to parse "shepherdhealthcheckretries" value "1x" as int: invalid syntax                                shepherdhealthcheckretries=1x
-      Unable to parse "shepherdhealthcheckretries" value "9999999999999999999999999999" as int: value out of range  shepherdhealthcheckretries=9999999999999999999999999999
+      Error: parsing arg "shepherdhealthcheckretries=1x" failed: unable to parse "1x" as int: invalid syntax                                shepherdhealthcheckretries=1x
+      Error: parsing arg "shepherdhealthcheckretries=9999999999999999999999999999" failed: unable to parse "9999999999999999999999999999" as int: value out of range  shepherdhealthcheckretries=9999999999999999999999999999
       Shepherd Health Check Retries must be greater than 0                                                          shepherdhealthcheckretries=0
 
-      error decoding \\\'Settings.ShepherdHealthCheckInterval\\\': time: missing unit in duration "1"       shepherdhealthcheckinterval=1
-      error decoding \\\'Settings.ShepherdHealthCheckInterval\\\': time: unknown unit "x" in duration "1x"  shepherdhealthcheckinterval=1x
-      error decoding \\\'Settings.ShepherdHealthCheckInterval\\\': time: invalid duration "x"               shepherdhealthcheckinterval=x
+      Error: parsing arg "shepherdhealthcheckinterval=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc      shepherdhealthcheckinterval=1
+      Error: parsing arg "shepherdhealthcheckinterval=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  shepherdhealthcheckinterval=1x
+      Error: parsing arg "shepherdhealthcheckinterval=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc               shepherdhealthcheckinterval=x
       Shepherd Health Check Interval must be greater than 0                                                 shepherdhealthcheckinterval=0s
 
-      Unable to parse "autodeployintervalsec" value "x" as float64: invalid syntax  autodeployintervalsec=x
+      Error: parsing arg "autodeployintervalsec=x" failed: unable to parse "x" as float64: invalid syntax  autodeployintervalsec=x
       #Unmarshal type error: expected=int32, got=number 9999999999999999999, field=Settings.shepherd_health_check_retries, offset=66"}')  autodeployintervalsec=9999999999999999999
       Auto Deploy Interval Sec must be greater than 0  autodeployintervalsec=0
 
-      Unable to parse "autodeploymaxintervals" value "x" as uint: invalid syntax                        autodeploymaxintervals=x
-      Unable to parse "autodeploymaxintervals" value "9999999999999999999" as uint: value out of range  autodeploymaxintervals=9999999999999999999
+      Error: parsing arg "autodeploymaxintervals=x" failed: unable to parse "x" as uint: invalid syntax                        autodeploymaxintervals=x
+      Error: parsing arg "autodeploymaxintervals=9999999999999999999" failed: unable to parse "9999999999999999999" as uint: value out of range  autodeploymaxintervals=9999999999999999999
       Auto Deploy Max Intervals must be greater than 0                                                  autodeploymaxintervals=0
 
-      Unable to parse "autodeployoffsetsec" value "1x" as float64: invalid syntax  autodeployoffsetsec=1x
+      Error: parsing arg "autodeployoffsetsec=1x" failed: unable to parse "1x" as float64: invalid syntax  autodeployoffsetsec=1x
 
-      error decoding \\\'Settings.CreateAppInstTimeout\\\': time: unknown unit "x" in duration "1x"        createappinsttimeout=1x
-      error decoding \\\'Settings.CreateAppInstTimeout\\\': time: missing unit in duration "1"             createappinsttimeout=1
+      Error: parsing arg "createappinsttimeout=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc        createappinsttimeout=1x
+      Error: parsing arg "createappinsttimeout=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc             createappinsttimeout=1
       Create App Inst Timeout must be greater than 0                                                       createappinsttimeout=0s
-      error decoding \\\'Settings.CreateAppInstTimeout\\\': time: invalid duration "99999999999999999999s  createappinsttimeout=99999999999999999999s
-      error decoding \\\'Settings.UpdateAppInstTimeout\\\': time: unknown unit "x" in duration "1x"        updateappinsttimeout=1x
-      error decoding \\\'Settings.UpdateAppInstTimeout\\\': time: missing unit in duration "1"             updateappinsttimeout=1
+      Error: parsing arg "createappinsttimeout=99999999999999999999s" failed: unable to parse "99999999999999999999s" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  createappinsttimeout=99999999999999999999s
+      Error: parsing arg "updateappinsttimeout=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc        updateappinsttimeout=1x
+      Error: parsing arg "updateappinsttimeout=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc             updateappinsttimeout=1
       Update App Inst Timeout must be greater than 0                                                       updateappinsttimeout=0s
-      error decoding \\\'Settings.UpdateAppInstTimeout\\\': time: invalid duration "99999999999999999999s  updateappinsttimeout=99999999999999999999s
-      error decoding \\\'Settings.DeleteAppInstTimeout\\\': time: unknown unit "x" in duration "1x"        deleteappinsttimeout=1x
-      error decoding \\\'Settings.DeleteAppInstTimeout\\\': time: missing unit in duration "1"             deleteappinsttimeout=1
+      Error: parsing arg "updateappinsttimeout=99999999999999999999s" failed: unable to parse "99999999999999999999s" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  updateappinsttimeout=99999999999999999999s
+      Error: parsing arg "deleteappinsttimeout=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc       deleteappinsttimeout=1x
+      Error: parsing arg "deleteappinsttimeout=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc             deleteappinsttimeout=1
       Delete App Inst Timeout must be greater than 0                                                       deleteappinsttimeout=0s
-      error decoding \\\'Settings.DeleteAppInstTimeout\\\': time: invalid duration "99999999999999999999s  deleteappinsttimeout=99999999999999999999s
+      Error: parsing arg "deleteappinsttimeout=99999999999999999999s" failed: unable to parse "99999999999999999999s" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  deleteappinsttimeout=99999999999999999999s
 
 
-      error decoding \\\'Settings.CreateClusterInstTimeout\\\': time: unknown unit "x" in duration "1x"        createclusterinsttimeout=1x
-      error decoding \\\'Settings.CreateClusterInstTimeout\\\': time: missing unit in duration "1"             createclusterinsttimeout=1
+      Error: parsing arg "createclusterinsttimeout=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc        createclusterinsttimeout=1x
+      Error: parsing arg "createclusterinsttimeout=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc             createclusterinsttimeout=1
       Create Cluster Inst Timeout must be greater than 0                                                       createclusterinsttimeout=0s
-      error decoding \\\'Settings.CreateClusterInstTimeout\\\': time: invalid duration "99999999999999999999s  createclusterinsttimeout=99999999999999999999s
-      error decoding \\\'Settings.UpdateClusterInstTimeout\\\': time: unknown unit "x" in duration "1x"        updateclusterinsttimeout=1x
-      error decoding \\\'Settings.UpdateClusterInstTimeout\\\': time: missing unit in duration "1"             updateclusterinsttimeout=1
+      Error: parsing arg "createclusterinsttimeout=99999999999999999999s" failed: unable to parse "99999999999999999999s" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  createclusterinsttimeout=99999999999999999999s
+      Error: parsing arg "updateclusterinsttimeout=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc        updateclusterinsttimeout=1x
+      Error: parsing arg "updateclusterinsttimeout=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc             updateclusterinsttimeout=1
       Update Cluster Inst Timeout must be greater than 0                                                       updateclusterinsttimeout=0s
-      error decoding \\\'Settings.UpdateClusterInstTimeout\\\': time: invalid duration "99999999999999999999s  updateclusterinsttimeout=99999999999999999999s
-      error decoding \\\'Settings.DeleteClusterInstTimeout\\\': time: unknown unit "x" in duration "1x"        deleteclusterinsttimeout=1x
-      error decoding \\\'Settings.DeleteClusterInstTimeout\\\': time: missing unit in duration "1"             deleteclusterinsttimeout=1
+      Error: parsing arg "updateclusterinsttimeout=99999999999999999999s" failed: unable to parse "99999999999999999999s" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  updateclusterinsttimeout=99999999999999999999s
+      Error: parsing arg "deleteclusterinsttimeout=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc        deleteclusterinsttimeout=1x
+      Error: parsing arg "deleteclusterinsttimeout=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc             deleteclusterinsttimeout=1
       Delete Cluster Inst Timeout must be greater than 0                                                       deleteclusterinsttimeout=0s
-      error decoding \\\'Settings.DeleteClusterInstTimeout\\\': time: invalid duration "99999999999999999999s  deleteclusterinsttimeout=99999999999999999999s
+      Error: parsing arg "deleteclusterinsttimeout=99999999999999999999s" failed: unable to parse "99999999999999999999s" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  deleteclusterinsttimeout=99999999999999999999s
 
       Flavor must preexist  masternodeflavor=xx
 
@@ -169,28 +169,28 @@ Settings - mcctl shall handle update settings failures
 
       Max Tracked Dme Clients must be greater than 0  maxtrackeddmeclients=0
       Max Tracked Dme Clients must be greater than 0  maxtrackeddmeclients=-1
-      Unable to parse "maxtrackeddmeclients" value "x" as int: invalid syntax  maxtrackeddmeclients=x
+      Error: parsing arg "maxtrackeddmeclients=x" failed: unable to parse "x" as int: invalid syntax  maxtrackeddmeclients=x
 
-      error decoding \\\'Settings.ChefClientInterval\\\': time: missing unit in duration "1"  chefclientinterval=1
-      error decoding \\\'Settings.ChefClientInterval\\\': time: unknown unit "x" in duration "1x"  chefclientinterval=1x
-      error decoding \\\'Settings.ChefClientInterval\\\': time: invalid duration "x"  chefclientinterval=x
+      Error: parsing arg "chefclientinterval=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  chefclientinterval=1
+      Error: parsing arg "chefclientinterval=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  chefclientinterval=1x
+      Error: parsing arg "chefclientinterval=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  chefclientinterval=x
       Chef Client Interval must be greater than 0  chefclientinterval=-1s
 
-      error decoding \\\'Settings.InfluxDbMetricsRetention\\\': time: missing unit in duration "1"  influxdbmetricsretention=1
-      error decoding \\\'Settings.InfluxDbMetricsRetention\\\': time: unknown unit "x" in duration "1x"  influxdbmetricsretention=1x
-      error decoding \\\'Settings.InfluxDbMetricsRetention\\\': time: invalid duration "x"  influxdbmetricsretention=x
+      Error: parsing arg "influxdbmetricsretention=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  influxdbmetricsretention=1
+      Error: parsing arg "influxdbmetricsretention=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  influxdbmetricsretention=1x
+      Error: parsing arg "influxdbmetricsretention=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  influxdbmetricsretention=x
       #Influx Db Metrics Retention must be greater than 0  influxdbmetricsretention=0s  supported
       Error parsing query: found -, expected duration at line 1, char 65  influxdbmetricsretention=-1s
       Retention policy duration must be at least 1h0m0s  influxdbmetricsretention=1s
 
-      error decoding \\\'Settings.CloudletMaintenanceTimeout\\\': time: missing unit in duration "1"       cloudletmaintenancetimeout=1
-      error decoding \\\'Settings.CloudletMaintenanceTimeout\\\': time: unknown unit "x" in duration "1x"  cloudletmaintenancetimeout=1x
-      error decoding \\\'Settings.CloudletMaintenanceTimeout\\\': time: invalid duration "x"               cloudletmaintenancetimeout=x
+      Error: parsing arg "cloudletmaintenancetimeout=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc       cloudletmaintenancetimeout=1
+      Error: parsing arg "cloudletmaintenancetimeout=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  cloudletmaintenancetimeout=1x
+      Error: parsing arg "cloudletmaintenancetimeout=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc               cloudletmaintenancetimeout=x
       Cloudlet Maintenance Timeout must be greater than 0                                                  cloudletmaintenancetimeout=0s
 
-      error decoding \\\'Settings.UpdateVmPoolTimeout\\\': time: missing unit in duration "1"       updatevmpooltimeout=1
-      error decoding \\\'Settings.UpdateVmPoolTimeout\\\': time: unknown unit "x" in duration "1x"  updatevmpooltimeout=1x
-      error decoding \\\'Settings.UpdateVmPoolTimeout\\\': time: invalid duration "x"               updatevmpooltimeout=x
+      Error: parsing arg "updatevmpooltimeout=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc       updatevmpooltimeout=1
+      Error: parsing arg "updatevmpooltimeout=1x" failed: unable to parse "1x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  updatevmpooltimeout=1x
+      Error: parsing arg "updatevmpooltimeout=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc               updatevmpooltimeout=x
       Update Vm Pool Timeout must be greater than 0                                                 updatevmpooltimeout=0s
 
 # ECQ-2987
