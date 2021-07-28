@@ -46,7 +46,7 @@ Clientappusage - mcctl shall be able to request clientappusage latency metrics
       selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}
       selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  datanetworktype=${datanetworktype}
       selector=latency  app-org=${developer_org_name_automation}  numsamples=1
-      selector=latency  app-org=${developer_org_name_automation}  numsamples=1  starttime=${start_date}  endtime=${end_date}
+      selector=latency  app-org=${developer_org_name_automation}  numsamples=100  starttime=${start_date}  endtime=${end_date}
       selector=latency  app-org=${developer_org_name_automation}  startage=12h
       selector=latency  app-org=${developer_org_name_automation}  endage=1s
       selector=latency  app-org=${developer_org_name_automation}  startage=12h  endage=1s
@@ -77,7 +77,7 @@ Clientappusage - mcctl shall be able to request clientappusage deviceinfo metric
       selector=deviceinfo  cloudlet-org=${operator_name_fake}  datanetworktype=${datanetworktype}
       selector=deviceinfo  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}  deviceos=${deviceos}  devicemodel=${devicemodel}  datanetworktype=${datanetworktype}
       selector=deviceinfo  app-org=${developer_org_name_automation}  numsamples=1
-      selector=deviceinfo  app-org=${developer_org_name_automation}  numsamples=1  starttime=${start_date}  endtime=${end_date}
+      selector=deviceinfo  app-org=${developer_org_name_automation}  numsamples=100  starttime=${start_date}  endtime=${end_date}
       selector=deviceinfo  app-org=${developer_org_name_automation}  startage=12h
       selector=deviceinfo  app-org=${developer_org_name_automation}  endage=1s
       selector=deviceinfo  app-org=${developer_org_name_automation}  startage=12h  endage=1s
@@ -112,10 +112,15 @@ Clientappusage - mcctl shall handle clientappusage metrics failures
 
 *** Keywords ***
 Setup
-   ${end_date}=  Get Current Date  time_zone=UTC  result_format=%Y-%m-%dT%H:%M:%SZ
-   ${start_date}=  Get Current Date  time_zone=UTC  result_format=%Y-%m-%dT%H:%M:%SZ  increment=-24 hours
+   ${epochnow}=  Get Current Date  result_format=epoch
+   ${epochstart}=  Evaluate  ${epochnow} - 86400
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${epochstart}))
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${epochnow}))
 
-   Update Settings  region=${region}  edge_events_metrics_collection_interval=5s
+   #${end_date}=  Get Current Date  time_zone=UTC  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${start_date}=  Get Current Date  time_zone=UTC  result_format=%Y-%m-%dT%H:%M:%SZ  increment=-24 hours
+
+   Update Settings  region=${region}  edge_events_metrics_collection_interval=5s  location_tile_side_length_km=1
    Sleep  10s
 
    ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
@@ -131,6 +136,8 @@ Setup
 
    ${latency}=  Send Latency Edge Event  edge_events_cookie=${cloudlet.edge_events_cookie}  carrier_name=${devicecarrier}  latitude=36  longitude=-96  samples=${samples}
 
+   Sleep  10s
+
    Set Suite Variable  ${start_date}
    Set Suite Variable  ${end_date}
 
@@ -145,11 +152,7 @@ Success Clientappusage Latency Metrics Via mcctl
 
    ${result}=  Run mcctl  metrics clientappusage region=${region} ${parmss}  version=${version}
 
-   IF  'numsamples' not in '${parmss}'
-      Should Be Equal  ${result['data'][0]['Series'][0]['name']}  latency-metric
-   ELSE
-      Should Contain  ${result['data'][0]['Series'][0]['name']}  latency-metric-
-   END
+   Should Be Equal  ${result['data'][0]['Series'][0]['name']}  latency-metric
 
 #   Run Keyword If  'rawdata=false' in '${parmss}'  Should Contain  ${result['data'][0]['Series'][0]['name']}  latency-metric-
 #   Run Keyword If  'rawdata' not in '${parmss}'  Should Contain  ${result['data'][0]['Series'][0]['name']}  latency-metric-
@@ -165,11 +168,7 @@ Success Clientappusage DeviceInfo Metrics Via mcctl
 
    ${result}=  Run mcctl  metrics clientappusage region=${region} ${parmss}  version=${version}
 
-   IF  'numsamples' not in '${parmss}'
-      Should Be Equal  ${result['data'][0]['Series'][0]['name']}  device-metric
-   ELSE
-      Should Contain  ${result['data'][0]['Series'][0]['name']}  device-metric-
-   END
+   Should Be Equal  ${result['data'][0]['Series'][0]['name']}  device-metric
 
 #   Run Keyword If  'rawdata=false' in '${parmss}'  Should Contain  ${result['data'][0]['Series'][0]['name']}  device-metric-
 #   Run Keyword If  'rawdata' not in '${parmss}'  Should Contain  ${result['data'][0]['Series'][0]['name']}  device-metric-
