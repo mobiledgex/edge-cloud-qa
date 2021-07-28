@@ -197,6 +197,31 @@ CreateAppInst - User shall not be able to create a reservable cluster on a misma
     ${error_msg12}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=${appinst['data']['real_cluster_name']}  cluster_instance_developer_org_name=MobiledgeX  flavor_name=automation_api_flavor  real_cluster_name=${appinst['data']['real_cluster_name']}
     Should Be Equal  ${error_msg12}  ('code=400', 'error={"message":"Failed to reserve specified reservable ClusterInst, deployment type mismatch between App and reservable ClusterInst"}')
 
+# ECQ-3621
+CreateAppInst - User shall not be able to create an AppInst with real_cluster_name and autocluster
+    [Documentation]
+    ...  - send CreateApp with different deployment types
+    ...  - send CreateAppInst with real_cluster_name and autocluster
+    ...  - verify proper error is received
+
+    [Tags]  ReservableCluster
+
+    Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
+    ${error_msg11}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autoclusterxx  flavor_name=automation_api_flavor  real_cluster_name=xxx
+    Should Be Equal  ${error_msg11}  ('code=400', 'error={"message":"Cannot specify real cluster name with autocluster cluster name prefix"}')
+
+    Create App  region=${region}  token=${token}  app_name=${app_name_default}-2  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
+    ${error_msg22}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autoclusterxxx  flavor_name=automation_api_flavor  real_cluster_name=xxx
+    Should Be Equal  ${error_msg22}  ('code=400', 'error={"message":"Cannot specify real cluster name with autocluster cluster name prefix"}')
+
+    Create App  region=${region}  token=${token}  app_name=${app_name_default}-3  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeHelm  deployment=helm  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
+    ${error_msg32}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autoclusterxxx  flavor_name=automation_api_flavor  real_cluster_name=xxx
+    Should Be Equal  ${error_msg32}  ('code=400', 'error={"message":"Cannot specify real cluster name with autocluster cluster name prefix"}')
+
+    Create App  region=${region}  token=${token}  app_name=${app_name_default}-4  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
+    ${error_msg42}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autoclusterxxx  flavor_name=automation_api_flavor  real_cluster_name=xxx
+    Should Be Equal  ${error_msg42}  ('code=400', 'error={"message":"Cannot specify real cluster name with autocluster cluster name prefix"}')
+
 *** Keywords ***
 Setup
     Create Flavor  region=${region}  #disk=80
