@@ -97,8 +97,8 @@ Clientappusage - mcctl shall handle clientappusage metrics failures
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=x
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=latency
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=latency appname=x
-      Error: Bad Request (400), Provided selector "custom" is not valid. Must provide only one of "latency", "deviceinfo"\\n    selector=custom app-org=automation_dev_org
-      Error: Bad Request (400), Provided selector "x" is not valid. Must provide only one of "latency", "deviceinfo"\\n         selector=x app-org=automation_dev_org
+      Error: Bad Request (400), Provided selector "custom" is not valid, must provide only one of "latency", "deviceinfo"\\n    selector=custom app-org=automation_dev_org
+      Error: Bad Request (400), Provided selector "x" is not valid, must provide only one of "latency", "deviceinfo"\\n         selector=x app-org=automation_dev_org
       Error: Bad Request (400), DeviceOS not allowed for appinst latency metric                                                 selector=latency  app-org=automation_dev_org  deviceos=x
       Error: Bad Request (400), DeviceModel not allowed for appinst latency metric                                              selector=latency  app-org=automation_dev_org  devicemodel=x
       Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z07:00"       selector=latency  app-org=automation_dev_org  starttime=x
