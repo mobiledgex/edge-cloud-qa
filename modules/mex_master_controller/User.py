@@ -1,4 +1,3 @@
-import json
 import logging
 import imaplib
 import time
@@ -26,11 +25,14 @@ class User(MexOperation):
     def _build(self, username=None, password=None, email_address=None, metadata=None, locked=None, family_name=None, given_name=None, nickname=None, enable_totp=None, email_verified=None, role=None, organization=None, use_defaults=True):
         if username == 'default':
             username = shared_variables_mc.username_default
-            
+
         if use_defaults:
-            if username is None: username = shared_variables_mc.username_default
-            if password is None: password = shared_variables_mc.password_default
-            if email_address is None: email_address = username + '@email.com'
+            if username is None:
+                username = shared_variables_mc.username_default
+            if password is None:
+                password = shared_variables_mc.password_default
+            if email_address is None:
+                email_address = username + '@email.com'
 
         shared_variables_mc.username_default = username
         shared_variables_mc.password_default = password
@@ -60,18 +62,17 @@ class User(MexOperation):
         if role is not None:
             user_dict['role'] = role
         if organization is not None:
-            user_dict['org'] = organization 
+            user_dict['org'] = organization
 
         return user_dict
 
-    def _build_update_restricted(self, username=None, locked=None, use_defaults=True):
-        #pool = None
-
+    def _build_update_restricted(self, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, use_defaults=True):
         if username == 'default':
             username = shared_variables_mc.username_default
 
         if use_defaults:
-            if username is None: username = shared_variables_mc.username_default
+            if username is None:
+                username = shared_variables_mc.username_default
 
         shared_variables_mc.username_default = username
 
@@ -81,6 +82,16 @@ class User(MexOperation):
             user_dict['name'] = username
         if locked is not None:
             user_dict['locked'] = locked
+        if email_address is not None:
+            user_dict['email'] = email_address
+        if family_name is not None:
+            user_dict['familyname'] = family_name
+        if given_name is not None:
+            user_dict['givenname'] = given_name
+        if nickname is not None:
+            user_dict['nickname'] = nickname
+        if email_verified is not None:
+            user_dict['emailverified'] = email_verified
 
         return user_dict
 
@@ -121,7 +132,6 @@ class User(MexOperation):
 
         return self.create(token=None, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=None, json_data=json_data, use_defaults=False, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=None, stream_timeout=None)
 
-
     def show_user(self, token=None, username=None, email_address=None, given_name=None, family_name=None, nickname=None, role=None, organization=None, locked=None, enable_totp=None, email_verified=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(username=username, email_address=email_address, given_name=given_name, family_name=family_name, nickname=nickname, role=role, organization=organization, locked=locked, enable_totp=enable_totp, email_verified=email_verified, use_defaults=use_defaults)
         msg_dict = msg
@@ -131,21 +141,20 @@ class User(MexOperation):
     def current_user(self, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.show(token=token, url=self.current_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=None)[0]
 
-    def update_user(self, token=None, metadata=None, json_data=None, use_defaults=False, use_thread=False):
-        msg = self._build(metadata=metadata, use_defaults=use_defaults)
+    def update_user(self, token=None, username=None, email_address=None, family_name=None, given_name=None, nickname=None, enable_totp=None, metadata=None, json_data=None, use_defaults=False, use_thread=False):
+        msg = self._build(username=username, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, metadata=metadata, use_defaults=use_defaults)
         msg_dict = msg
 
         return self.update(token=token, url=self.update_url, show_url=self.show_url, region=None, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=None)
 
-    def update_user_restricted(self, token=None, username=None, locked=None, json_data=None, use_defaults=False, use_thread=False):
-        msg = self._build_update_restricted(username=username, locked=locked, use_defaults=use_defaults)
+    def update_user_restricted(self, token=None, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, json_data=None, use_defaults=False, use_thread=False):
+        msg = self._build_update_restricted(username=username, email_address=email_address, email_verified=email_verified, family_name=family_name, given_name=given_name, nickname=nickname, locked=locked, use_defaults=use_defaults)
         msg_dict = msg
 
         thread_name = 'update_user_restricted'
         if username:
             thread_name += username
-        
-        #msg_show_dict = {}
+
         msg_show_dict = None
         return self.update(token=token, url=self.update_restricted_url, show_url=self.show_url, region=None, json_data=json_data, use_defaults=True, use_thread=use_thread, thread_name=thread_name, message=msg_dict, show_msg=msg_show_dict)
 
@@ -156,10 +165,13 @@ class User(MexOperation):
         return self.delete(token=token, url=self.delete_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
     def verify_email(self, username=None, password=None, email_address=None, server='imap.gmail.com', wait=30, mc_address=None):
-        if username is None: username = self.username
-        if password is None: password = self.password
-        if email_address is None: email_address = self.email_address
-        
+        if username is None:
+            username = self.username
+        if password is None:
+            password = self.password
+        if email_address is None:
+            email_address = self.email_address
+
         self.mc_address = mc_address
         mail = self._mail
         num_emails_pre = self._mail_count
@@ -176,9 +188,9 @@ class User(MexOperation):
                 for response_part in data:
                     if isinstance(response_part, tuple):
                         msg = email.message_from_string(response_part[1].decode('utf-8'))
-                        email_subject = msg['subject']
-                        email_from = msg['from']
-                        date_received = msg['date']
+                        # email_subject = msg['subject']
+                        # email_from = msg['from']
+                        # date_received = msg['date']
                         payload = msg.get_payload(decode=True).decode('utf-8')
                         logging.info(payload)
 
@@ -192,11 +204,11 @@ class User(MexOperation):
                         else:
                             raise Exception('Body1 not found')
 
-                        #if f'Click to verify: {self.console_url}/verify?token=' in payload:
-                        if f'Copy and paste to verify your email:' in payload:
+                        # if f'Click to verify: {self.console_url}/verify?token=' in payload:
+                        if 'Copy and paste to verify your email:' in payload:
                             for line in payload.split('\n'):
                                 if 'mcctl user verifyemail token=' in line:
-                                    #label, link = line.split('Click to verify:')
+                                    # label, link = line.split('Click to verify:')
                                     self._verify_link = line.rstrip()
 
                                     cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadminfastedgecloudinfra --skipverify'
@@ -204,7 +216,7 @@ class User(MexOperation):
                                     self._run_command(cmd)
                                     cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest {line} --addr https://{self.mc_address} --skipverify '
                                     logging.info('verifying email with:' + cmd)
-                                    self._run_command(cmd)    
+                                    self._run_command(cmd)
 
                                     break
                             logging.info('verify link found')
@@ -228,7 +240,7 @@ class User(MexOperation):
                                        )
             stdout, stderr = process.communicate()
             logging.info(f'stdout:{stdout} stderr:{stderr}')
-            #print('*WARN*',stdout, stderr)
+            # print('*WARN*',stdout, stderr)
             if stderr:
                 raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
 
@@ -237,4 +249,3 @@ class User(MexOperation):
             raise Exception("runCommanddd failed:", e)
         except Exception as e:
             raise Exception("runCommanddd failed:", e)
- 
