@@ -109,7 +109,7 @@ ClientApiUsageMetrics - get with no selector shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Provided selector \\\\"\\\\" is not valid. Must provide only one of \\\\"latency\\\\", \\\\"deviceinfo\\\\", \\\\"custom\\\\""} 
+   Should Contain  ${error}  {"message":"Invalid dme selector: , only \\\\"api\\\\" is supported"} 
 
 # ECQ-3586
 ClientApiUsageMetrics - get with invalid selector shall return error
@@ -122,7 +122,7 @@ ClientApiUsageMetrics - get with invalid selector shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=xx  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
 
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Provided selector \\\\"xx\\\\" is not valid. Must provide only one of \\\\"latency\\\\", \\\\"deviceinfo\\\\", \\\\"custom\\\\""}
+   Should Contain  ${error}  {"message":"Invalid dme selector: xx, only \\\\"api\\\\" is supported"}
 
 # ECQ-3587
 ClientApiUsageMetrics - get with invalid start time shall return error
