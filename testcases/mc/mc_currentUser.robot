@@ -181,3 +181,214 @@ MC - User shall be able to update current metadata
    Should Be Equal            ${info2['Metadata']}        xxxx
    Convert Date  ${info2['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
+# ECQ-3623
+MC - User shall not be able to update username
+    [Documentation]
+    ...  - create a new user and login
+    ...  - set the username
+    ...  - verify error is received
+
+   ${i}=  Get Time  epoch
+   ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
+   ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
+
+   Skip Verify Email
+   Create User  ${username1}  ${password}  ${email1}
+   Unlock User  #username=${username}
+   ${token}=  Login
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot change username"}')  Update Current User  username=xx  use_defaults=False  token=${token}
+
+# ECQ-3622
+MC - User shall be able to update current nick/family/given name
+    [Documentation]
+    ...  - create a new user and login
+    ...  - set the nick/family/given name
+    ...  - get the user data and verify nick/family/given name is set
+
+   ${i}=  Get Time  epoch
+   ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
+   ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
+
+   Skip Verify Email
+   Create User  ${username1}  ${password}  ${email1}
+   Unlock User  #username=${username}
+   ${token}=  Login
+
+   ${username}=  Get Default Username
+   ${email}=  Get Default Email
+
+   ${info}=  Get Current User
+
+   Convert Date  ${info['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+   Should Be Equal             ${info['Email']}          ${email1}
+   Should Be Equal             ${info['EmailVerified']}  ${False}
+   Should Be Equal             ${info['FamilyName']}     ${EMPTY}
+   Should Be Equal             ${info['GivenName']}      ${EMPTY}
+   #Should Be Equal  ${info['ID']}  1
+   Should Be Equal As Numbers  ${info['Iter']}           0
+   Should Be Equal             ${info['Name']}           ${username1}
+   Should Be Equal             ${info['Nickname']}       ${EMPTY}
+   Should Be Equal             ${info['Passhash']}       ${EMPTY}
+   Should Be Equal             ${info['Picture']}        ${EMPTY}
+   Should Be Equal             ${info['Salt']}           ${EMPTY}
+   Should Be Equal            ${info['Metadata']}        ${EMPTY}
+   Convert Date  ${info['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+
+   Update Current User  family_name=newfamilyname  given_name=newgivenname  nickname=newnickname  use_defaults=False  token=${token}
+
+   ${info2}=  Get Current User
+
+   Convert Date  ${info2['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+   Should Be Equal             ${info2['Email']}          ${email1}
+   Should Be Equal             ${info2['EmailVerified']}  ${False}
+   Should Be Equal             ${info2['FamilyName']}     newfamilyname
+   Should Be Equal             ${info2['GivenName']}      newgivenname
+   #Should Be Equal  ${info['ID']}  1
+   Should Be Equal As Numbers  ${info2['Iter']}           0
+   Should Be Equal             ${info2['Name']}           ${username1}
+   Should Be Equal             ${info2['Nickname']}       newnickname
+   Should Be Equal             ${info2['Passhash']}       ${EMPTY}
+   Should Be Equal             ${info2['Picture']}        ${EMPTY}
+   Should Be Equal             ${info2['Salt']}           ${EMPTY}
+   Should Be Equal            ${info2['Metadata']}        ${EMPTY}
+   Convert Date  ${info2['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+
+# ECQ-3624
+MC - User shall be able to update current email address
+    [Documentation]
+    ...  - create a new user and login
+    ...  - set the emailaddress
+    ...  - get the user data and verify emailaddress is set
+
+   ${i}=  Get Time  epoch
+   ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
+   ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
+
+   Skip Verify Email
+   Create User  ${username1}  ${password}  ${email1}
+   Unlock User  #username=${username}
+   ${token}=  Login
+
+   ${username}=  Get Default Username
+   ${email}=  Get Default Email
+
+   ${info}=  Get Current User
+
+   Convert Date  ${info['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+   Should Be Equal             ${info['Email']}          ${email1}
+   Should Be Equal             ${info['EmailVerified']}  ${False}
+   Should Be Equal             ${info['FamilyName']}     ${EMPTY}
+   Should Be Equal             ${info['GivenName']}      ${EMPTY}
+   #Should Be Equal  ${info['ID']}  1
+   Should Be Equal As Numbers  ${info['Iter']}           0
+   Should Be Equal             ${info['Name']}           ${username1}
+   Should Be Equal             ${info['Nickname']}       ${EMPTY}
+   Should Be Equal             ${info['Passhash']}       ${EMPTY}
+   Should Be Equal             ${info['Picture']}        ${EMPTY}
+   Should Be Equal             ${info['Salt']}           ${EMPTY}
+   Should Be Equal            ${info['Metadata']}        ${EMPTY}
+   Convert Date  ${info['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+
+   Update Current User  email_address=newemail@email.com  use_defaults=False  token=${token}
+
+   ${info2}=  Get Current User
+
+   Convert Date  ${info2['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+   Should Be Equal             ${info2['Email']}          newemail@email.com
+   Should Be Equal             ${info2['EmailVerified']}  ${False}
+   Should Be Equal             ${info2['FamilyName']}     ${EMPTY}
+   Should Be Equal             ${info2['GivenName']}      ${EMPTY}
+   #Should Be Equal  ${info['ID']}  1
+   Should Be Equal As Numbers  ${info2['Iter']}           0
+   Should Be Equal             ${info2['Name']}           ${username1}
+   Should Be Equal             ${info2['Nickname']}       ${EMPTY} 
+   Should Be Equal             ${info2['Passhash']}       ${EMPTY}
+   Should Be Equal             ${info2['Picture']}        ${EMPTY}
+   Should Be Equal             ${info2['Salt']}           ${EMPTY}
+   Should Be Equal            ${info2['Metadata']}        ${EMPTY}
+   Convert Date  ${info2['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+
+# ECQ-3625
+MC - User shall be able to update current enable totp
+    [Documentation]
+    ...  - create a new user and login
+    ...  - enable totp
+    ...  - get the user data and verify enable totp is set
+
+   ${i}=  Get Time  epoch
+   ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
+   ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
+
+   Skip Verify Email
+   Create User  ${username1}  ${password}  ${email1}
+   Unlock User  #username=${username}
+   ${token}=  Login
+
+   ${username}=  Get Default Username
+   ${email}=  Get Default Email
+
+   ${info}=  Get Current User
+
+   Convert Date  ${info['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+   Should Be Equal             ${info['Email']}          ${email1}
+   Should Be Equal             ${info['EmailVerified']}  ${False}
+   Should Be Equal             ${info['FamilyName']}     ${EMPTY}
+   Should Be Equal             ${info['GivenName']}      ${EMPTY}
+   #Should Be Equal  ${info['ID']}  1
+   Should Be Equal As Numbers  ${info['Iter']}           0
+   Should Be Equal             ${info['Name']}           ${username1}
+   Should Be Equal             ${info['Nickname']}       ${EMPTY}
+   Should Be Equal             ${info['Passhash']}       ${EMPTY}
+   Should Be Equal             ${info['Picture']}        ${EMPTY}
+   Should Be Equal             ${info['Salt']}           ${EMPTY}
+   Should Be Equal            ${info['Metadata']}        ${EMPTY}
+   Should Not Be True         ${info['EnableTOTP']}
+   Should Be Equal             ${info['TOTPSharedKey']}  ${EMPTY}
+   Convert Date  ${info['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+
+   ${msg}=  Update Current User  enable_totp=${True}  use_defaults=False  token=${token}
+   Should Contain  ${msg['Message']}  User updated${\n}Enabled two factor authentication. Please use the following text code with the two factor authentication app on your phone to set it up
+   Should Be True  len('${msg['TOTPSharedKey']}') > 0
+   Should Be True  len('${msg['TOTPQRImage']}') > 0
+
+   ${info2}=  Get Current User
+
+   Convert Date  ${info2['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+   Should Be Equal             ${info2['Email']}          ${email1}
+   Should Be Equal             ${info2['EmailVerified']}  ${False}
+   Should Be Equal             ${info2['FamilyName']}     ${EMPTY}
+   Should Be Equal             ${info2['GivenName']}      ${EMPTY}
+   #Should Be Equal  ${info['ID']}  1
+   Should Be Equal As Numbers  ${info2['Iter']}           0
+   Should Be Equal             ${info2['Name']}           ${username1}
+   Should Be Equal             ${info2['Nickname']}       ${EMPTY}
+   Should Be Equal             ${info2['Passhash']}       ${EMPTY}
+   Should Be Equal             ${info2['Picture']}        ${EMPTY}
+   Should Be Equal             ${info2['Salt']}           ${EMPTY}
+   Should Be Equal            ${info2['Metadata']}        ${EMPTY}
+   Should Be True              ${info2['EnableTOTP']}
+   Should Be Equal             ${info2['TOTPSharedKey']}  ${EMPTY}
+   Convert Date  ${info2['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+
+   ${msg}=  Update Current User  enable_totp=${False}  use_defaults=False  token=${token}
+
+   ${info2}=  Get Current User
+
+   Convert Date  ${info2['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+   Should Be Equal             ${info2['Email']}          ${email1}
+   Should Be Equal             ${info2['EmailVerified']}  ${False}
+   Should Be Equal             ${info2['FamilyName']}     ${EMPTY}
+   Should Be Equal             ${info2['GivenName']}      ${EMPTY}
+   #Should Be Equal  ${info['ID']}  1
+   Should Be Equal As Numbers  ${info2['Iter']}           0
+   Should Be Equal             ${info2['Name']}           ${username1}
+   Should Be Equal             ${info2['Nickname']}       ${EMPTY}
+   Should Be Equal             ${info2['Passhash']}       ${EMPTY}
+   Should Be Equal             ${info2['Picture']}        ${EMPTY}
+   Should Be Equal             ${info2['Salt']}           ${EMPTY}
+   Should Be Equal            ${info2['Metadata']}        ${EMPTY}
+   Should Not Be True         ${info2['EnableTOTP']}
+   Should Be Equal             ${info2['TOTPSharedKey']}  ${EMPTY}
+   Convert Date  ${info2['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+

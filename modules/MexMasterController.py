@@ -468,21 +468,21 @@ class MexMasterController(MexRest):
     def get_current_user(self, token=None, json_data=None, use_defaults=True):
         return self.user.current_user(token=token, json_data=json_data, use_defaults=use_defaults)
 
-    def update_current_user(self, token=None, metadata=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.user.update_user(token=token, metadata=metadata, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def update_current_user(self, token=None, username=None, email_address=None, family_name=None, given_name=None, nickname=None, enable_totp=None, metadata=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.update_user(token=token, username=username, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, metadata=metadata, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def delete_user(self, username=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.user.delete_user(token=token, username=username, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def update_user_restriction(self, username=None, locked=None, token=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.user.update_user_restricted(token=token, username=username, locked=locked, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def update_restricted_user(self, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.update_user_restricted(token=token, username=username, email_address=email_address, email_verified=email_verified, family_name=family_name, given_name=given_name, nickname=nickname, locked=locked, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def unlock_user(self, token=None, username=None, use_thread=False):
         if username is None: username = shared_variables_mc.username_default
         if token is None: token = self.super_token
 
         logging.info(f'unlocking username={username}')
-        return self.update_user_restriction(token=token, username=username, locked=False, use_thread=use_thread)
+        return self.update_restricted_user(token=token, username=username, locked=False, use_thread=use_thread)
 
     def show_user_role(self, role=None, organization=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.role.role_show(token=token, role=role, organization=organization, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
