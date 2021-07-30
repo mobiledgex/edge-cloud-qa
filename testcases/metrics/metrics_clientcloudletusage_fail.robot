@@ -82,7 +82,7 @@ ClientCloudletUsageMetrics - get with selector=custom shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=custom  operator_org_name=${operator}  limit=1  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid clientcloudletusage selector: custom"}
+   Should Contain  ${error}  {"message":"Invalid clientcloudletusage selector: custom, must be one of \\\\"latency\\\\", \\\\"deviceinfo\\\\""}
 
 # ECQ-3437
 ClientCloudletUsageMetrics - get with no token name shall return error
@@ -106,7 +106,7 @@ ClientCloudletUsageMetrics - get with no selector name shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid clientcloudletusage selector: "} 
+   Should Contain  ${error}  {"message":"Invalid clientcloudletusage selector: , must be one of \\\\"latency\\\\", \\\\"deviceinfo\\\\""} 
 
 # ECQ-3439
 ClientCloudletUsageMetrics - get with invalid selector name shall return error
@@ -119,7 +119,7 @@ ClientCloudletUsageMetrics - get with invalid selector name shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=xx  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
 
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid clientcloudletusage selector: xx"}
+   Should Contain  ${error}  {"message":"Invalid clientcloudletusage selector: xx, must be one of \\\\"latency\\\\", \\\\"deviceinfo\\\\""}
 
 # ECQ-3440
 ClientCloudletUsageMetrics - get with invalid start time shall return error
