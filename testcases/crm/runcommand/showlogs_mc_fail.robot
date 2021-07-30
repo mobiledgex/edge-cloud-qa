@@ -150,10 +150,10 @@ ShowLogs - shall return error without invalid parms
     ${error5}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  cluster_instance_developer_org_name=MobiledgeX  operator_org_name=dmuus  cloudlet_name=tmocloud-1   tail=999999999999999
 
     Should Be Equal  ${error1}  ('code=400', 'error={"message":"Unable to parse Since field as duration or RFC3339 formatted time"}') 
-    Should Contain  ${error2}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=int32, got=string, field=ExecRequest.log.tail, offset=
-    Should Contain  ${error3}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=bool, got=string, field=ExecRequest.log.timestamps, offset= 
-    Should Contain  ${error4}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=bool, got=string, field=ExecRequest.log.follow, offset= 
-    Should Contain  ${error5}  ('code=400', 'error={"message":"Invalid POST data, code=400, message=Unmarshal type error: expected=int32, got=number 999999999999999, field=ExecRequest.log.tail, offset 
+    Should Contain  ${error2}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int32, but got string for field \\\\"ExecRequest.log.tail\\\\" at offset
+    Should Contain  ${error3}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected bool, but got string for field \\\\"ExecRequest.log.timestamps\\\\" at offset
+    Should Contain  ${error4}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected bool, but got string for field \\\\"ExecRequest.log.follow\\\\" at offset
+    Should Contain  ${error5}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int32, but got number 999999999999999 for field \\\\"ExecRequest.log.tail\\\\" at offset
 
 # ECQ-1896
 ShowLogs - shall return error for VM apps
