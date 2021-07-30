@@ -207,10 +207,10 @@ ClientApiUsageMetrics - get with invalid limit shall return error
    # EDGECLOUD-5254 dme metrics with negative limit/numsamples needs better error handling
    # EDGECLOUD-5255 invalid limit/numsamples/startage/endage for clientapiusage/clientappusage/clientcloudletusage needs better error handling
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=latency  limit=x  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=api  limit=x  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=latency  limit=-1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=api  limit=-1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxxxxxxInvalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.Limit of type int"}')
 
 # ECQ-3594
@@ -222,10 +222,10 @@ ClientApiUsageMetrics - get with invalid numsamples shall return error
    # EDGECLOUD-5254 dme metrics with negative limit/numsamples needs better error handling
    # EDGECLOUD-5255 invalid limit/numsamples/startage/endage for clientapiusage/clientappusage/clientcloudletusage needs better error handling
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=latency  number_samples=x  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=api  number_samples=x  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"NumSamples\\\\" at offset
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=latency  number_samples=-1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=api  number_samples=-1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxxxxxxInvalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.Limit of type int"}')
 
 # ECQ-3595

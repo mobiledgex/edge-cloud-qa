@@ -47,7 +47,7 @@ CreateAlertReceiver - missing/invalid/empty parms shall return error
    ('code\=400', 'error\={"message":"Receiver type invalid"}')  receiver_name=email  severity=error  type=${EMPTY}  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
 
    # no app/cloudlet/cluster
-   ('code\=400', 'error\={"message":"Either cloudlet, cluster or app instance details have to be specified"}')  receiver_name=xxx  type=email  severity=info  token=${super_token}  use_defaults=${False}
+   #('code\=400', 'error\={"message":"Either cloudlet, cluster or app instance details have to be specified"}')  receiver_name=xxx  type=email  severity=info  token=${super_token}  use_defaults=${False}
 
    # no/invalid/empty severity
    ('code\=400', 'error\={"message":"Alert severity has to be one of \\\\"info\\\\", \\\\"warning\\\\", \\\\"error\\\\""}')  receiver_name=xxx  type=email  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
