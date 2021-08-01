@@ -62,7 +62,7 @@ Settings - ShowSettings should return the settings
    Should Contain  ${settings}  appinst_client_cleanup_interval
    Should Contain  ${settings}  cluster_auto_scale_averaging_duration_sec
    Should Contain  ${settings}  cluster_auto_scale_retry_delay         
-   Should Contain  ${settings}  user_defined_alert_min_trigger_time    
+   Should Contain  ${settings}  alert_policy_min_trigger_time   
 #   Should Contain  ${settings}  disable_rate_limit                 
    Should Contain  ${settings}  max_num_per_ip_rate_limiters         
 
@@ -83,7 +83,7 @@ Settings - UpdateSettings should update the settings
    END
 
    Update Settings  region=${region}  shepherd_metrics_collection_interval=1s
-   Update Settings  region=${region}  shepherd_alert_evaluation_interval=1s 
+   Update Settings  region=${region}  shepherd_alert_evaluation_interval=100s 
    Update Settings  region=${region}  shepherd_health_check_retries=1 
    Update Settings  region=${region}  shepherd_health_check_interval=1s 
 
@@ -100,12 +100,12 @@ Settings - UpdateSettings should update the settings
    @{collection_intervals}=  Create List  1s  1s  1s 
    Update Settings  region=${region}  update_trust_policy_timeout=1s  dme_api_metrics_collection_interval=1s  edge_events_metrics_collection_interval=1s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}  cleanup_reservable_auto_cluster_idletime=31s  location_tile_side_length_km=1  appinst_client_cleanup_interval=1h
 
-   Update Settings  region=${region}  cluster_auto_scale_averaging_duration_sec=1  cluster_auto_scale_retry_delay=1s  user_defined_alert_min_trigger_time=1s  disable_rate_limit=${True}  max_num_per_ip_rate_limiters=1
+   Update Settings  region=${region}  cluster_auto_scale_averaging_duration_sec=1  cluster_auto_scale_retry_delay=1s  alert_policy_min_trigger_time=1s  disable_rate_limit=${True}  max_num_per_ip_rate_limiters=1
 
    ${settings_post}=   Show Settings  region=${region}
 
    Should Be Equal             ${settings_post['shepherd_metrics_collection_interval']}  1s
-   Should Be Equal             ${settings_post['shepherd_alert_evaluation_interval']}    1s
+   Should Be Equal             ${settings_post['shepherd_alert_evaluation_interval']}    1m40s
    Should Be Equal As Numbers  ${settings_post['shepherd_health_check_retries']}         1
    Should Be Equal             ${settings_post['shepherd_health_check_interval']}        1s
 
@@ -145,7 +145,7 @@ Settings - UpdateSettings should update the settings
 
    Should Be Equal As Numbers  ${settings_post['cluster_auto_scale_averaging_duration_sec']}  1 
    Should Be Equal             ${settings_post['cluster_auto_scale_retry_delay']}  1s 
-   Should Be Equal             ${settings_post['user_defined_alert_min_trigger_time']}  1s
+   Should Be Equal             ${settings_post['alert_policy_min_trigger_time']}  1s
    Should Be True              ${settings_post['disable_rate_limit']} 
    Should Be Equal As Numbers  ${settings_post['max_num_per_ip_rate_limiters']}  1
 
@@ -398,9 +398,11 @@ Settings - user shall be able to reset the settings
 
    Should Be Equal As Numbers  ${settings_post['cluster_auto_scale_averaging_duration_sec']}  60
    Should Be Equal             ${settings_post['cluster_auto_scale_retry_delay']}  1m0s
-   Should Be Equal             ${settings_post['user_defined_alert_min_trigger_time']}  30s
+   Should Be Equal             ${settings_post['alert_policy_min_trigger_time']}  30s
    Should Not Contain          ${settings_post}  disable_rate_limit
    Should Be Equal As Numbers  ${settings_post['max_num_per_ip_rate_limiters']}  10000
+
+   Should Be Equal             ${settings_post['alert_policy_min_trigger_time']}  30s
 
 *** Keywords ***
 Cleanup Settings
