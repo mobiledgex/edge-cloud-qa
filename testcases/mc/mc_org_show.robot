@@ -13,7 +13,7 @@ ${username}          mextester99
 ${password}          ${mextester06_gmail_password}
 ${email}             mextester99@gmail.com
 ${dev_address}=  222 dev dr
-${dev_phone}=    111-222-3333
+${dev_phone}=    999-222-3333
 ${op_address}=  222 op dr
 ${op_phone}=    222-222-3333
 
