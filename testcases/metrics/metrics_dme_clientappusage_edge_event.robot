@@ -34,6 +34,8 @@ ${cloudlet2_tile}=  2-1990,5343-2
 ${dme_conn_lat}=  ${cloud1_lat}
 ${dme_conn_long}=  ${cloud1_long}
 
+${edge_collection_timer}=  10
+
 *** Test Cases ***
 # ECQ-3426
 DMEMetrics - Shall be able to get the last DME Client App Latency metric
@@ -45,7 +47,8 @@ DMEMetrics - Shall be able to get the last DME Client App Latency metric
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${True}
 
 DMEMetrics - Shall be able to get the last DME Client App DeviceInfo metric
    [Documentation]
@@ -105,7 +108,7 @@ DMEMetrics - Shall be able to get all DME Client App Latency metric
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${True}
 
 DMEMetrics - Shall be able to get all DME Client App DeviceInfo metric
    [Documentation]
@@ -129,18 +132,19 @@ DMEMetrics - Shall be able to get DME Client App Latency metrics with starttime
    ...  request latency clientappusage metrics with starttime
    ...  verify info is correct
 
-   ${metrics}=  Get client app usage metrics with starttime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
+   ${metrics}  ${time_diff}=  Get client app usage metrics with starttime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
-   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False} 
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}  time_diff=${time_diff}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${False}  time_diff=${time_diff}
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with starttime
    [Documentation]
    ...  request deviceinfo clientappusage metrics with starttime
    ...  verify info is correct
 
-   ${metrics}=  Get client app usage metrics with starttime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
+   ${metrics}  ${time_diff}=  Get client app usage metrics with starttime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
@@ -150,25 +154,26 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with startti
    DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
    DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
-   DeviceInfo Values Should Be Correct  ${metrics}
+   DeviceInfo Values Should Be Correct  ${metrics}  raw=${False}  time_diff=${time_diff}
 
 DMEMetrics - Shall be able to get DME Client App Latency metrics with endtime
    [Documentation]
    ...  request latency clientappusage metrics with endtime
    ...  verify info is correct
 
-   ${metrics}=  Get client app usage metrics with endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
+   ${metrics}  ${time_diff}=  Get client app usage metrics with endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${False}  time_diff=${time_diff}
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with endtime
    [Documentation]
    ...  request deviceinfo clientappusage metrics with endtime
    ...  verify info is correct
 
-   ${metrics}=  Get client app usage metrics with endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
+   ${metrics}  ${time_diff}=  Get client app usage metrics with endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
@@ -178,25 +183,26 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with endtime
    DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
    DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
-   DeviceInfo Values Should Be Correct  ${metrics}
+   DeviceInfo Values Should Be Correct  ${metrics}  raw=${False}  time_diff=${time_diff}
 
 DMEMetrics - Shall be able to get DME Client App Latency metrics with starttime and endtime
    [Documentation]
    ...  request latency clientappusage metrics with startime and endtime
    ...  verify info is correct
 
-   ${metrics}=  Get client app usage metrics with starttime and endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
+   ${metrics}  ${time_diff}=  Get client app usage metrics with starttime and endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${False}  time_diff=${time_diff}
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with starttime and endtime
    [Documentation]
    ...  request deviceinfo clientappusage metrics with startime and endtime
    ...  verify info is correct
 
-   ${metrics}=  Get client app usage metrics with starttime and endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
+   ${metrics}  ${time_diff}=  Get client app usage metrics with starttime and endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=deviceinfo
 
    DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
@@ -206,7 +212,7 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with startti
    DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
    DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
-   DeviceInfo Values Should Be Correct  ${metrics}
+   DeviceInfo Values Should Be Correct  ${metrics}  raw=${False}  time_diff=${time_diff}
 
 DMEMetrics - Shall be able to get DME Client App Latency metrics with starttime and endtime and last
    [Documentation]
@@ -217,7 +223,8 @@ DMEMetrics - Shall be able to get DME Client App Latency metrics with starttime 
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${True}
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with starttime and endtime and last
    [Documentation]
@@ -234,7 +241,7 @@ DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with startti
    DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
    DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
-   DeviceInfo Values Should Be Correct  ${metrics}
+   DeviceInfo Values Should Be Correct  ${metrics}  raw=${True}
 
 DMEMetrics - Shall be able to get DME Client App Latency metrics with locationtile
    [Documentation]
@@ -245,7 +252,7 @@ DMEMetrics - Shall be able to get DME Client App Latency metrics with locationti
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${True}
 
 DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with deviceos
    [Documentation]
@@ -350,7 +357,7 @@ DMEMetrics - Shall be able to get the DME Client App Latency metrics with starta
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${True}
+   Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}   ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${True}
 
 DMEMetrics - Shall be able to get the DME Client App Latency metrics with endage
    [Documentation]
@@ -385,6 +392,8 @@ DMEMetrics - Shall be able to get the DME Client App Latency metrics with numsam
 
    Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${False}
 
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${False}  numsamples=${10}  time_diff=${time_diff}
+
 DMEMetrics - Shall be able to get the DME Client App Latency metrics with numsamples and starttime/endtime
    [Documentation]
    ...  request all DME client app latency metrics with numsamples and startime/endtime
@@ -395,6 +404,8 @@ DMEMetrics - Shall be able to get the DME Client App Latency metrics with numsam
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
    Latency App Should Be Found  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}  raw=${False}
+
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${False}  numsamples=${5}  time_diff=${time_diff}
 
 DMEMetrics - Shall be able to get the DME Client App DeviceInfo metrics with startage
    [Documentation]
@@ -471,7 +482,7 @@ DMEMetrics - Shall be able to get the DME Client App DeviceInfo metrics with num
    DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
    DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
 
-DMEMetrics - DeveloperManager shall be able to get DME Client App Latency metrics
+DMEMetrics - DeveloperManager shall be able to get DME Client App Latency metrics with raw data
    [Documentation]
    ...  request latency clientappusage metrics as DeveloperManager
    ...  verify metrics are returned
@@ -480,9 +491,10 @@ DMEMetrics - DeveloperManager shall be able to get DME Client App Latency metric
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${True}
 
-DMEMetrics - DeveloperManager shall be able to get DME Client App DeviceInfo metrics
+DMEMetrics - DeveloperManager shall be able to get DME Client App DeviceInfo metrics with raw data
    [Documentation]
    ...  request deviceinfo clientappusage metrics as DeveloperManager
    ...  verify metrics are returned
@@ -499,7 +511,7 @@ DMEMetrics - DeveloperManager shall be able to get DME Client App DeviceInfo met
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
-DMEMetrics - DeveloperContributor shall be able to get DME Client App Latency metrics
+DMEMetrics - DeveloperContributor shall be able to get DME Client App Latency metrics with raw data
    [Documentation]
    ...  request latency clientappusage metrics as DeveloperContributor
    ...  verify metrics are returned
@@ -508,9 +520,10 @@ DMEMetrics - DeveloperContributor shall be able to get DME Client App Latency me
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${True}
 
-DMEMetrics - DeveloperContributor shall be able to get DME Client App DeviceInfo metrics
+DMEMetrics - DeveloperContributor shall be able to get DME Client App DeviceInfo metrics with raw data
    [Documentation]
    ...  request deviceinfo clientappusage metrics as DeveloperContributor
    ...  verify metrics are returned
@@ -527,7 +540,7 @@ DMEMetrics - DeveloperContributor shall be able to get DME Client App DeviceInfo
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
-DMEMetrics - DeveloperViewer shall be able to get DME Client App Latency metrics
+DMEMetrics - DeveloperViewer shall be able to get DME Client App Latency metrics with raw data
    [Documentation]
    ...  request latency clientappusage metrics as DeveloperViewer
    ...  verify metrics are returned
@@ -536,9 +549,9 @@ DMEMetrics - DeveloperViewer shall be able to get DME Client App Latency metrics
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${True}
 
-DMEMetrics - DeveloperViewer shall be able to get DME Client App DeviceInfo metrics
+DMEMetrics - DeveloperViewer shall be able to get DME Client App DeviceInfo metrics with raw data
    [Documentation]
    ...  request deviceinfo clientappusage metrics as DeveloperViewer
    ...  verify metrics are returned
@@ -555,7 +568,94 @@ DMEMetrics - DeveloperViewer shall be able to get DME Client App DeviceInfo metr
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
-DMEMetrics - OperatorManager shall be able to get DME Client App Latency metrics
+DMEMetrics - DeveloperManager shall be able to get DME Client App Latency metrics with starttime/endtime
+   [Documentation]
+   ...  request latency clientappusage metrics as DeveloperManager
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  DeveloperManager shall be able to get client app usage metrics with starttime and endtime  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${False}  time_diff=${time_diff}
+
+DMEMetrics - DeveloperManager shall be able to get DME Client App DeviceInfo metrics with starttime/endtime
+   [Documentation]
+   ...  request deviceinfo clientappusage metrics as DeveloperManager
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  DeveloperManager shall be able to get client app usage metrics with starttime and endtime  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+
+   DeviceInfo Values Should Be Correct  ${metrics}  time_diff=${time_diff}
+
+DMEMetrics - DeveloperContributor shall be able to get DME Client App Latency metrics with starttime/endtime
+   [Documentation]
+   ...  request latency clientappusage metrics as DeveloperContributor
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  DeveloperContributor shall be able to get client app usage metrics with starttime and endtime  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${False}  time_diff=${time_diff}
+
+DMEMetrics - DeveloperContributor shall be able to get DME Client App DeviceInfo metrics with starttime/endtime
+   [Documentation]
+   ...  request deviceinfo clientappusage metrics as DeveloperContributor
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  DeveloperContributor shall be able to get client app usage metrics with starttime and endtime  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+
+   DeviceInfo Values Should Be Correct  ${metrics}  time_diff=${time_diff}
+
+DMEMetrics - DeveloperViewer shall be able to get DME Client App Latency metrics with starttime/endtime
+   [Documentation]
+   ...  request latency clientappusage metrics as DeveloperViewer
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  DeveloperViewer shall be able to get client app usage metrics with starttime and endtime  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}1  ${metrics}  raw=${False}  time_diff=${time_diff}
+
+DMEMetrics - DeveloperViewer shall be able to get DME Client App DeviceInfo metrics with starttime/endtime
+   [Documentation]
+   ...  request deviceinfo clientappusage metrics as DeveloperViewer
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  DeveloperViewer shall be able to get client app usage metrics with starttime and endtime  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet_name}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+
+   DeviceInfo Values Should Be Correct  ${metrics}  time_diff=${time_diff}
+
+DMEMetrics - OperatorManager shall be able to get DME Client App Latency metrics with raw data
    [Documentation]
    ...  request latency clientappusage metrics as OperatorManager
    ...  verify metrics are returned
@@ -564,9 +664,10 @@ DMEMetrics - OperatorManager shall be able to get DME Client App Latency metrics
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  raw=${True}
+   #Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  raw=${True}
+   Latency Values Should Be Correct  ${app_name}3  ${metrics}  cloudlet=tmocloud-2  raw=${True}
 
-DMEMetrics - OperatorManager shall be able to get DME Client App DeviceInfo metrics
+DMEMetrics - OperatorManager shall be able to get DME Client App DeviceInfo metrics with raw data
    [Documentation]
    ...  request deviceinfo clientappusage metrics as OperatorManager
    ...  verify metrics are returned
@@ -579,7 +680,7 @@ DMEMetrics - OperatorManager shall be able to get DME Client App DeviceInfo metr
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
-DMEMetrics - OperatorContributor shall be able to get DME Client App Latency metrics
+DMEMetrics - OperatorContributor shall be able to get DME Client App Latency metrics with raw data
    [Documentation]
    ...  request latency clientappusage metrics as OperatorContributor
    ...  verify metrics are returned
@@ -588,9 +689,10 @@ DMEMetrics - OperatorContributor shall be able to get DME Client App Latency met
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  raw=${True}
+   #Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  raw=${True}
+   Latency Values Should Be Correct  ${app_name}3  ${metrics}  cloudlet=tmocloud-2  raw=${True}
 
-DMEMetrics - OperatorContributor shall be able to get DME Client App DeviceInfo metrics
+DMEMetrics - OperatorContributor shall be able to get DME Client App DeviceInfo metrics with raw data
    [Documentation]
    ...  request deviceinfo clientappusage metrics as OperatorContributor
    ...  verify metrics are returned
@@ -603,7 +705,7 @@ DMEMetrics - OperatorContributor shall be able to get DME Client App DeviceInfo 
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
-DMEMetrics - OperatorViewer shall be able to get DME Client App Latency metrics
+DMEMetrics - OperatorViewer shall be able to get DME Client App Latency metrics with raw data
    [Documentation]
    ...  request latency clientappusage metrics as OperatorViewer
    ...  verify metrics are returned
@@ -612,9 +714,10 @@ DMEMetrics - OperatorViewer shall be able to get DME Client App Latency metrics
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  raw=${True}
+   #Latency Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  raw=${True}
+   Latency Values Should Be Correct  ${app_name}3  ${metrics}  cloudlet=tmocloud-2  raw=${True}
 
-DMEMetrics - OperatorViewer shall be able to get DME Client App DeviceInfo metrics
+DMEMetrics - OperatorViewer shall be able to get DME Client App DeviceInfo metrics with raw data
    [Documentation]
    ...  request deviceinfo clientappusage metrics as OperatorViewer
    ...  verify metrics are returned
@@ -627,34 +730,110 @@ DMEMetrics - OperatorViewer shall be able to get DME Client App DeviceInfo metri
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
-DMEMetrics - Shall be able to get DME Client App Latency metrics with apporg only
+DMEMetrics - OperatorManager shall be able to get DME Client App Latency metrics with starttime/endtime
    [Documentation]
-   ...  request latency clientappusage metrics with apporg only
-   ...  verify info is correct
+   ...  request latency clientappusage metrics as OperatorManager
+   ...  verify metrics are returned
 
-   ${metrics}=  DeveloperManager shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${None}  app_version=${None} 
+   ${metrics}  ${time_diff}=  OperatorManager shall be able to get client app usage metrics with starttime and endtime  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
 
-   Latency App Should Be Found  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  device_network_type=${data_network_type}  raw=${True}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
 
-   FOR  ${m}  IN  @{metrics['data'][0]['Series']}
-      Should Be True  '${m['tags']['apporg']}' == '${developer_org_name_automation}'
-   END
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}3  ${metrics}  cloudlet=tmocloud-2  raw=${False}  time_diff=${time_diff}
 
-DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with apporg only
+DMEMetrics - OperatorManager shall be able to get DME Client App DeviceInfo metrics with starttime/endtime
    [Documentation]
-   ...  request deviceinfo clientappusage metrics with apporg only
-   ...  verify info is correct
+   ...  request deviceinfo clientappusage metrics as OperatorManager
+   ...  verify metrics are returned
 
-   ${metrics}=  DeveloperManager shall be able to get client app usage metrics  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  app_name=${None}  app_version=${None}
+   ${metrics}  ${time_diff}=  OperatorManager shall be able to get client app usage metrics with starttime and endtime  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
 
-#   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
-#   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
-#   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
-   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
 
-#   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
    DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+
+   DeviceInfo Values Should Be Correct  ${metrics}  time_diff=${time_diff}
+
+DMEMetrics - OperatorContributor shall be able to get DME Client App Latency metrics with starttime/endtime
+   [Documentation]
+   ...  request latency clientappusage metrics as OperatorContributor
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  OperatorContributor shall be able to get client app usage metrics with starttime and endtime  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}3  ${metrics}  cloudlet=tmocloud-2  raw=${False}  time_diff=${time_diff}
+
+DMEMetrics - OperatorContributor shall be able to get DME Client App DeviceInfo metrics with starttime/endtime
+   [Documentation]
+   ...  request deviceinfo clientappusage metrics as OperatorContributor
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  OperatorContributor shall be able to get client app usage metrics with starttime and endtime  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+
+   DeviceInfo Values Should Be Correct  ${metrics}  time_diff=${time_diff}
+
+DMEMetrics - OperatorViewer shall be able to get DME Client App Latency metrics with starttime/endtime
+   [Documentation]
+   ...  request latency clientappusage metrics as OperatorViewer
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  OperatorViewer shall be able to get client app usage metrics with starttime and endtime  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   #Latency Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+   Latency Values Should Be Correct  ${app_name}3  ${metrics}  cloudlet=tmocloud-2  raw=${False}  time_diff=${time_diff}
+
+DMEMetrics - OperatorViewer shall be able to get DME Client App DeviceInfo metrics with starttime/endtime
+   [Documentation]
+   ...  request deviceinfo clientappusage metrics as OperatorViewer
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  OperatorViewer shall be able to get client app usage metrics with starttime and endtime  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+
+   DeviceInfo Values Should Be Correct  ${metrics}  time_diff=${time_diff}
+
+#DMEMetrics - Shall be able to get DME Client App Latency metrics with apporg only
+#   [Documentation]
+#   ...  request latency clientappusage metrics with apporg only
+#   ...  verify info is correct
+#
+#   ${metrics}=  DeveloperManager shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${None}  app_version=${None} 
+#
+#   Latency App Should Be Found  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  device_network_type=${data_network_type}  raw=${True}
+#   Latency Values Should Be Correct  ${app_name}3  ${metrics}  cloudlet=tmocloud-2  device_network_type=${data_network_type}  raw=${True}
+#
+#   FOR  ${m}  IN  @{metrics['data'][0]['Series']}
+#      Should Be True  '${m['tags']['apporg']}' == '${developer_org_name_automation}'
+#   END
+#
+#DMEMetrics - Shall be able to get DME Client App DeviceInfo metrics with apporg only
+#   [Documentation]
+#   ...  request deviceinfo clientappusage metrics with apporg only
+#   ...  verify info is correct
+#
+#   ${metrics}=  DeveloperManager shall be able to get client app usage metrics  selector=deviceinfo  developer_org_name=${developer_org_name_automation}  app_name=${None}  app_version=${None}
+#
+##   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}c1  device_carrier=${carrier_name}  numsessions=2
+##   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l1  device_carrier=${operator_name_fake}  numsessions=1
+##   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}l3  device_carrier=${operator_name_fake}  numsessions=1
+#   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}c2  device_carrier=${carrier_name}  numsessions=1
+#   DeviceInfo App Should Be Found  ${app_name}1  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}l2  device_carrier=${operator_name_fake}  numsessions=1
+#
+##   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
+#   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 
 *** Keywords ***
 Setup
@@ -689,7 +868,7 @@ Setup
     Set Suite Variable  ${settings_pre}
 
     @{collection_intervals}=  Create List  10s  2m10s  3m10s
-    Update Settings  region=${region}  edge_events_metrics_collection_interval=10s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}
+    Update Settings  region=${region}  edge_events_metrics_collection_interval=${edge_collection_timer}s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}  location_tile_side_length_km=1
     Sleep  15s
 
     ${r1}=  Register Client  app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}	
@@ -900,7 +1079,8 @@ DeviceInfo Metrics Headings Should Contain Name
    Should Be True  ${found}
 
 Latency Values Should Be Correct
-   [Arguments]  ${app_name}  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet_name}  ${raw}=${True}
+   #[Arguments]  ${app_name}  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet_name}  ${raw}=${True} 
+   [Arguments]  ${app_name}  ${metrics}  ${cloudlet}=${cloudlet_name}  ${raw}=${True}  ${time_diff}=${None}  ${numsamples}=${100}
 
    FOR  ${i}  IN  @{metrics['data'][0]['Series']}
       Should Be Equal  ${i['tags']['app']}  ${app_name}
@@ -913,10 +1093,53 @@ Latency Values Should Be Correct
       Should Be Equal  ${i['tags']['datanetworktype']}  ${data_network_type}
       Should Be Equal  ${i['tags']['locationtile']}  ${cloudlet1_tile}
 
+      #IF  not ${raw}
+      #   Length Should Be  ${i['values']}  ${numsamples}
+      #END
+
+      IF  ${time_diff} != ${None}
+         ${time_def}=  Evaluate  ${time_diff}/${numsamples}
+
+         ${time_check}=  Set Variable  ${edge_collection_timer}
+         IF  ${time_def} > ${edge_collection_timer}
+            ${time_check}=  Set Variable  ${time_def}
+         END
+
+         ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+         @{datesplit}=  Split String  ${datez}  .
+         ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+         ${start}=  Evaluate  ${epochpre} + ${time_check}
+      END
+
       FOR  ${v}  IN  @{i['values']}
          IF  ${v[1]} != None
             Should Be True  ${v[1]} >= 0
+            Should Be True  ${v[2]} >= 0
+            Should Be True  ${v[3]} >= 0
+            Should Be True  ${v[4]} >= 0
+            Should Be True  ${v[5]} >= 0
+            Should Be True  ${v[6]} >= 0
+            Should Be True  ${v[7]} >= 0
+            Should Be True  ${v[8]} >= 0
+            Should Be True  ${v[9]} >= 0
+            Should Be True  ${v[10]} >= 0
+            IF  ${raw}
+               Should Be True  ${v[11]} >= 0
+               Should Be True  ${v[12]} >= 0
+            END
          END
+
+         IF  ${time_diff} != ${None}
+            ${datez}=  Get Substring  ${v[0]}  0  -1
+            @{vdatesplit}=  Split String  ${datez}  .
+            ${vepochpre}=  Evaluate  calendar.timegm(time.strptime('${vdatesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+            #${vepochpre}=  Convert Date  ${vdatesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+            ${epoch_diff}=  Evaluate  ${start}-${vepochpre}
+            #Should Be True  ${epoch_diff} <= ${time_check}+1 and ${epoch_diff} >= ${time_check}-1
+            Should Be True  ${time_check}-1 <= ${epoch_diff} <= ${time_check}+1
+            ${start}=  Set Variable  ${vepochpre}
+         END
+
     #     ${r9}=  Evaluate  ${2}*${numrequests}
     #     ${r10}=  Evaluate  ${1}*${numrequests}
     #     ${r11}=  Evaluate  ${1}*${numrequests}
@@ -966,7 +1189,7 @@ Latency Values Should Be Correct
 #   END
 
 DeviceInfo Values Should Be Correct
-   [Arguments]  ${metrics}  ${raw}=${True}  ${cloudlet}=${cloudlet_name}
+   [Arguments]  ${metrics}  ${raw}=${True}  ${cloudlet}=${cloudlet_name}  ${time_diff}=${None}  ${numsamples}=${100}
 
    FOR  ${s}  IN  @{metrics['data'][0]['Series']}
       Should Be True  '${s['tags']['cloudlet']}' == '${cloudlet}' or '${s['tags']['cloudlet']}' == '${cloudlet2_name}'
@@ -978,11 +1201,41 @@ DeviceInfo Values Should Be Correct
       Should Be Equal  ${s['tags']['apporg']}  automation_dev_org
       Should Be Equal  ${s['tags']['cluster']}  autocluster
       Should Be Equal  ${s['tags']['clusterorg']}  MobiledgeX
-   END
 
-   FOR  ${v}  IN  @{metrics['data'][0]['Series'][0]['values']}
-      IF  ${v[1]} != None
-         Should Be True  ${v[1]} > 0
+      #IF  not ${raw}
+      #   Length Should Be  ${s['values']}  ${numsamples}
+      #END
+
+      IF  ${time_diff} != ${None}
+         ${time_def}=  Evaluate  ${time_diff}/${numsamples}
+
+         ${time_check}=  Set Variable  ${edge_collection_timer}
+         IF  ${time_def} > ${edge_collection_timer}
+            ${time_check}=  Set Variable  ${time_def}
+         END
+
+         ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+         @{datesplit}=  Split String  ${datez}  .
+         ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+         ${start}=  Evaluate  ${epochpre} + ${time_check}
+      END
+
+      FOR  ${v}  IN  @{metrics['data'][0]['Series'][0]['values']}
+         IF  ${v[1]} != None
+            Should Be True  ${v[1]} > 0
+         END
+
+         IF  ${time_diff} != ${None}
+            ${datez}=  Get Substring  ${v[0]}  0  -1
+            @{vdatesplit}=  Split String  ${datez}  .
+            ${vepochpre}=  Evaluate  calendar.timegm(time.strptime('${vdatesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+            #${vepochpre}=  Convert Date  ${vdatesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+            ${epoch_diff}=  Evaluate  ${start}-${vepochpre}
+            #Should Be True  ${epoch_diff} <= ${time_check}+1 and ${epoch_diff} >= ${time_check}-1
+            Should Be True  ${time_check}-1 <= ${epoch_diff} <= ${time_check}+1
+            ${start}=  Set Variable  ${vepochpre}
+         END
+
       END
    END
 

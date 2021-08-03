@@ -401,7 +401,7 @@ Get dme metrics with numsamples and starttime/endtime
 Get client cloudlet usage metrics with startage
    [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
 
-   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_age=3600000000000  # 60min 
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_age=60m  #start_age=3600000000000  # 60min 
 
    Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
 
@@ -418,7 +418,7 @@ Get client cloudlet usage metrics with startage
 Get client cloudlet usage metrics with endage
    [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
 
-   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  end_age=60000000000  # 1min
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  end_age=1m  #end_age=60000000000  # 1min
 
    Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
 
@@ -436,8 +436,10 @@ Get client cloudlet usage metrics with startage and endage
    [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
 
    ${metricsall}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name} 
-   ${t1split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][1][0]}  .
-   ${t2split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][-2][0]}  .
+   ${t1split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][0][0]}  .
+   ${t2split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][0][0]}  .
+   #${t1split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][1][0]}  .
+   #${t2split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][-2][0]}  .
    ${epochend}=  Evaluate  calendar.timegm(time.strptime('${t1split[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
    ${epochstart}=  Evaluate  calendar.timegm(time.strptime('${t2split[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
    ${currentdate}=      Get Current Date    result_format=epoch
@@ -463,7 +465,7 @@ Get client cloudlet usage metrics with startage and endage
 Get client app usage metrics with startage
    [Arguments]  ${app_name}  ${developer_org_name}  ${selector}
 
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  start_age=3600000000000  # 60min
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  start_age=60m
 
    Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
 
@@ -480,7 +482,7 @@ Get client app usage metrics with startage
 Get client app usage metrics with endage
    [Arguments]  ${app_name}  ${developer_org_name}  ${selector}
 
-   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  end_age=60000000000  # 1min
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  end_age=1m
 
    Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) >= 1
 
@@ -500,6 +502,8 @@ Get client app usage metrics with startage and endage
    ${metricsall}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}
    ${t1split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][0][0]}  .
    ${t2split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][0][0]}  .
+   #${t1split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][1][0]}  .
+   #${t2split}=  Split String  ${metricsall['data'][0]['Series'][0]['values'][-2][0]}  .
    ${epochend}=  Evaluate  calendar.timegm(time.strptime('${t1split[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
    ${epochstart}=  Evaluate  calendar.timegm(time.strptime('${t2split[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
    ${currentdate}=      Get Current Date    result_format=epoch
@@ -595,7 +599,7 @@ Get client cloudlet usage metrics with numsamples and starttime/endtime
 
    Should Be True  ${num_readings} <= 100
 
-   ${time_diff}=  Evaluate  12*60*60
+   #${time_diff}=  Evaluate  12*60*60
 
    [Return]  ${metrics}  ${time_diff}
 
@@ -646,7 +650,7 @@ Get client app usage metrics with numsamples and starttime/endtime
 
    Should Be True  ${num_readings} <= 100
 
-   ${time_diff}=  Evaluate  12*60*60
+   #${time_diff}=  Evaluate  12*60*60
 
    [Return]  ${metrics}  ${time_diff}
 
@@ -658,9 +662,15 @@ Get client app usage metrics with starttime
    log to console  ${metricspre['data'][0]}
    ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  0  -1
    @{datesplit}=  Split String  ${datez}  .
-   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
    ${start}=  Evaluate  ${epochpre} - 600
-   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${start}))
+
+   ${currentdate}=      Get Current Date    result_format=epoch
+   ${time_diff}=  Evaluate  ${currentdate}-${start}
+   log to console  ${currentdate} ${start}
 
    # get readings and 1st and last timestamp
    ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}
@@ -669,7 +679,7 @@ Get client app usage metrics with starttime
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   [Return]  ${metrics}
+   [Return]  ${metrics}  ${time_diff}
 
 Get client cloudlet usage metrics with starttime
    [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
@@ -740,9 +750,20 @@ Get client app usage metrics with endtime
    log to console  ${metricspre['data'][0]}
    ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
    @{datesplit}=  Split String  ${datez}  .
-   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   ${end}=  Evaluate  ${epochpre} + 180
-   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   #${start_date}=  Set Variable  ${metricspre['data'][0]['Series'][0]['values'][4][0]}
+   #${end_date}=  Set Variable  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
+   #@{datesplit_start}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  .
+   #@{datesplit_end}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   #${start}=  Evaluate  calendar.timegm(time.strptime('${datesplit_start[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   #${end}=  Evaluate  calendar.timegm(time.strptime('${datesplit_end[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${end}=  Evaluate  ${epochpre} + 240
+   ${start}=  Evaluate  ${end} - 43200  # end - 12hrs
+   #${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
+
+   ${time_diff}=  Evaluate  ${end}-${start}
 
    # get readings and 1st and last timestamp
    ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  end_time=${end_date}
@@ -751,7 +772,7 @@ Get client app usage metrics with endtime
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   [Return]  ${metrics}
+   [Return]  ${metrics}  ${time_diff}
 
 Get client cloudlet usage metrics with endtime
    [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
@@ -763,7 +784,7 @@ Get client cloudlet usage metrics with endtime
    @{datesplit}=  Split String  ${datez}  .
    #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
-   ${end}=  Evaluate  ${epochpre} + 90
+   ${end}=  Evaluate  ${epochpre} + 240
    #${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
    ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
 
@@ -1018,11 +1039,16 @@ Get client app usage metrics with starttime and endtime
    log to console  ${metricspre['data'][0]}
    ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
    @{datesplit}=  Split String  ${datez}  .
-   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
    ${start}=  Evaluate  ${epochpre} - 900
    ${end}=  Evaluate  ${epochpre} + 120
-   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
-   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${start}))
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
+   #${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   ${time_diff}=  Evaluate  ${end}-${start}
 
    # get readings and 1st and last timestamp
    ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}
@@ -1031,7 +1057,7 @@ Get client app usage metrics with starttime and endtime
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   [Return]  ${metrics}
+   [Return]  ${metrics}  ${time_diff}
 
 Get client cloudlet usage metrics with starttime and endtime
    [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
@@ -1143,11 +1169,16 @@ Get client app usage metrics with starttime and endtime and last
    log to console  ${metricspre['data'][0]}
    ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
    @{datesplit}=  Split String  ${datez}  .
-   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
    ${start}=  Evaluate  ${epochpre} - 900
    ${end}=  Evaluate  ${epochpre} + 120
-   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
-   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${start}))
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
+
+   #${time_diff}=  Evaluate  ${end}-${start}
 
    # get readings and 1st and last timestamp
    ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}  limit=10
@@ -1156,7 +1187,7 @@ Get client app usage metrics with starttime and endtime and last
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   [Return]  ${metrics}
+   [Return]  ${metrics}  #${time_diff}
 
 Get client cloudlet usage metrics with starttime and endtime and last
    [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
@@ -1166,11 +1197,16 @@ Get client cloudlet usage metrics with starttime and endtime and last
    log to console  ${metricspre['data'][0]}
    ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
    @{datesplit}=  Split String  ${datez}  .
-   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
    ${start}=  Evaluate  ${epochpre} - 900
    ${end}=  Evaluate  ${epochpre} + 120
-   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
-   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   #${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${start}))
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
+
+   #${time_diff}=  Evaluate  ${end}-${start}
 
    # get readings and 1st and last timestamp
    ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_time=${start_date}  end_time=${end_date}  limit=10
@@ -1179,7 +1215,7 @@ Get client cloudlet usage metrics with starttime and endtime and last
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
-   [Return]  ${metrics}
+   [Return]  ${metrics}  #${time_diff}
 
 DeveloperManager shall be able to get dme metrics
    [Arguments]  ${username}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
@@ -1232,6 +1268,131 @@ DeveloperManager shall be able to get client app usage metrics
    #Should Be Equal As Integers  ${num_readings}  1
 
    [Return]  ${metrics}
+
+DeveloperOperator shall be able to get client app usage metrics with starttime and endtime
+   [Arguments]  ${user}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}  ${operator_org_name}=${None}
+
+   ${metricspre}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  limit=1
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${start}=  Evaluate  ${epochpre} - 900
+   ${end}=  Evaluate  ${epochpre} + 120
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${start}))
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
+
+   ${userToken}=  Login  username=${user}  password=${password}
+
+   log to console  ${start_date} ${end_date}
+   ${time_diff}=  Evaluate  ${end}-${start}
+
+   # get readings with starttime and endtime
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  start_time=${start_date}  end_time=${end_date}  token=${userToken}
+   ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+   @{datesplit_first}=  Split String  ${datez}  .
+   ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit_last}=  Split String  ${datez}  .
+
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   log to console  ${epochpre}
+   log to console  ${epoch_first}
+   log to console  ${epoch_last}
+   Should Be True  ${epoch_first} > ${epochpre}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   Should Be True  ${num_readings} <= 100
+
+   [Return]  ${metrics}  ${time_diff}
+
+Operator shall be able to get client cloudlet usage metrics with starttime and endtime
+   [Arguments]  ${user}  ${password}  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${metricspre}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  limit=1
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+   ${start}=  Evaluate  ${epochpre} - 900
+   ${end}=  Evaluate  ${epochpre} + 120
+   ${start_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${start}))
+   ${end_date}=  Evaluate  time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(${end}))
+
+   ${userToken}=  Login  username=${user}  password=${password}
+
+   log to console  ${start_date} ${end_date}
+   ${time_diff}=  Evaluate  ${end}-${start}
+
+   # get readings with starttime and endtime
+   ${metrics}=  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  start_time=${start_date}  end_time=${end_date}  token=${userToken}
+   ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+   @{datesplit_first}=  Split String  ${datez}  .
+   ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit_last}=  Split String  ${datez}  .
+
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   Should Be True  ${epoch_first} > ${epochpre}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   Should Be True  ${num_readings} <= 100
+
+   [Return]  ${metrics}  ${time_diff}
+
+DeveloperManager shall be able to get client app usage metrics with starttime and endtime
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   ${metrics}  ${time_diff}=  DeveloperOperator shall be able to get client app usage metrics with starttime and endtime  ${dev_manager_user_automation}  ${dev_manager_password_automation}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   [Return]  ${metrics}  ${time_diff}
+
+DeveloperContributor shall be able to get client app usage metrics with starttime and endtime
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   ${metrics}  ${time_diff}=  DeveloperOperator shall be able to get client app usage metrics with starttime and endtime  ${dev_contributor_user_automation}  ${dev_contributor_password_automation}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   [Return]  ${metrics}  ${time_diff}
+
+DeveloperViewer shall be able to get client app usage metrics with starttime and endtime
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   ${metrics}  ${time_diff}=  DeveloperOperator shall be able to get client app usage metrics with starttime and endtime  ${dev_viewer_user_automation}  ${dev_viewer_password_automation}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   [Return]  ${metrics}  ${time_diff}
+
+OperatorManager shall be able to get client cloudlet usage metrics with starttime and endtime
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${metrics}  ${time_diff}=  Operator shall be able to get client cloudlet usage metrics with starttime and endtime  ${op_manager_user_automation}  ${op_manager_password_automation}  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   [Return]  ${metrics}  ${time_diff}
+
+OperatorContributor shall be able to get client cloudlet usage metrics with starttime and endtime
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${metrics}  ${time_diff}=  Operator shall be able to get client cloudlet usage metrics with starttime and endtime  ${op_contributor_user_automation}  ${op_contributor_password_automation}  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   [Return]  ${metrics}  ${time_diff}
+
+OperatorViewer shall be able to get client cloudlet usage metrics with starttime and endtime
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${metrics}  ${time_diff}=  Operator shall be able to get client cloudlet usage metrics with starttime and endtime  ${op_viewer_user_automation}  ${op_viewer_password_automation}  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   [Return]  ${metrics}  ${time_diff}
 
 DeveloperManager shall not be able to get client cloudlet usage metrics
    [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
@@ -1378,6 +1539,34 @@ OperatorViewer shall be able to get client cloudlet usage metrics
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
    [Return]  ${metrics}
+
+OperatorManager shall be able to get client app usage metrics with starttime and endtime
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
+
+   ${metrics}  ${time_diff}=  DeveloperOperator shall be able to get client app usage metrics with starttime and endtime  ${op_manager_user_automation}  ${op_manager_password_automation}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}  ${operator_org_name}
+
+   [Return]  ${metrics}  ${time_diff}
+
+OperatorContributor shall be able to get client app usage metrics with starttime and endtime
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
+
+   ${metrics}  ${time_diff}=  DeveloperOperator shall be able to get client app usage metrics with starttime and endtime  ${op_contributor_user_automation}  ${op_contributor_password_automation}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}  ${operator_org_name}
+
+   [Return]  ${metrics}  ${time_diff}
+
+OperatorViewer shall be able to get client app usage metrics with starttime and endtime
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
+
+   ${metrics}  ${time_diff}=  DeveloperOperator shall be able to get client app usage metrics with starttime and endtime  ${op_viewer_user_automation}  ${op_viewer_password_automation}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}  ${operator_org_name}
+
+   [Return]  ${metrics}  ${time_diff}
+
+OperatorManager shall not be able to get client cloudlet usage metrics
+   [Arguments]  ${cloudlet_name}  ${operator_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
+
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  token=${userToken}
 
 DeveloperContributor shall be able to get dme metrics
    [Arguments]  ${username}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 

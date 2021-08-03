@@ -35,6 +35,8 @@ ${cloudlet12_tile}=  -94.987424,30.984896_-95.005390,31.002985_1
 ${dme_conn_lat}=  ${cloud1_lat}
 ${dme_conn_long}=  ${cloud1_long}
 
+${edge_collection_timer}=  10
+
 *** Test Cases ***
 # ECQ-3476
 DMEMetrics - Shall be able to get the last DME Client Cloudlet Latency metric
@@ -46,7 +48,8 @@ DMEMetrics - Shall be able to get the last DME Client Cloudlet Latency metric
 
    Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+   #Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+   Latency Values Should Be Correct  metrics=${metrics}  cloudlet=${cloudlet_name}  raw=${True}
 
 DMEMetrics - Shall be able to get the last DME Client Cloudlet DeviceInfo metric
    [Documentation]
@@ -110,7 +113,8 @@ DMEMetrics - Shall be able to get all DME Client Cloudlet Latency metric
 
    Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${True}
 
-   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+   #Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+   Latency Values Should Be Correct  metrics=${metrics}  cloudlet=${cloudlet_name}  raw=${True}
 
 DMEMetrics - Shall be able to get all DME Client Cloudlet DeviceInfo metric
    [Documentation]
@@ -145,7 +149,8 @@ DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with start
 
    Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${False}
 
-   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False} 
+   #Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False} 
+   Latency Values Should Be Correct  metrics=${metrics}  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False}
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with starttime
    [Documentation]
@@ -177,7 +182,9 @@ DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with endti
 
    Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
 
-   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False}
+   #Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False}
+   Latency Values Should Be Correct  metrics=${metrics}  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False}
+
 
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with endtime
@@ -197,7 +204,7 @@ DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with en
    DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
    DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
-   DeviceInfo Values Should Be Correct  ${metrics}
+   DeviceInfo Values Should Be Correct  ${metrics}  time_diff=${time_diff}  raw=${False}
 
 DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with starttime and endtime
    [Documentation]
@@ -210,9 +217,9 @@ DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with start
 
    Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${False}
 
-   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False}
+   #Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False}
 
-   #Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  ${time_diff}
+   Latency Values Should Be Correct  ${metrics}  cloudlet=${cloudlet_name}  time_diff=${time_diff}  raw=${False}
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with starttime and endtime
    [Documentation]
@@ -231,7 +238,7 @@ DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with st
    DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
    DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
-   DeviceInfo Values Should Be Correct  ${metrics}
+   DeviceInfo Values Should Be Correct  ${metrics}  time_diff=${time_diff}  raw=${False}
 
 DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with starttime and endtime and last
    [Documentation]
@@ -244,9 +251,9 @@ DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with start
 
    Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
 
-   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+   #Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
 
-   #Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  ${metrics}  cloudlet=${cloudlet_name}  raw=${True}
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with starttime and endtime and last
    [Documentation]
@@ -265,7 +272,7 @@ DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with st
    DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
    DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
-   DeviceInfo Values Should Be Correct  ${metrics}
+   DeviceInfo Values Should Be Correct  ${metrics}  raw=${True}
 
 DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with locationtile
    [Documentation]
@@ -274,9 +281,10 @@ DMEMetrics - Shall be able to get DME Client Cloudlet Latency metrics with locat
 
    ${metrics}=  Get client cloudlet usage metrics with locationtile   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  selector=latency  location_tile=${cloudlet1_tile}
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   #Latency Values Should Be Correct  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+   Latency Values Should Be Correct  ${metrics}    raw=${True}
 
 DMEMetrics - Shall be able to get DME Client Cloudlet DeviceInfo metrics with deviceos
    [Documentation]
@@ -368,7 +376,8 @@ DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with s
 
    Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${True}
 
-   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+   #Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+   Latency Values Should Be Correct  metrics=${metrics}  cloudlet=${cloudlet_name}  raw=${True}
 
 DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with endage
    [Documentation]
@@ -381,7 +390,8 @@ DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with e
 
    Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${True}
 
-   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+   #Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+   Latency Values Should Be Correct  metrics=${metrics}  cloudlet=${cloudlet_name}  raw=${True}
 
 DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with startage and endage
    [Documentation]
@@ -394,7 +404,8 @@ DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with s
 
    Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${True}
 
-   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+   #Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${True}
+   Latency Values Should Be Correct  metrics=${metrics}  cloudlet=${cloudlet_name}  raw=${True}
 
 DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with numsamples
    [Documentation]
@@ -407,7 +418,8 @@ DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with n
 
    Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${False}
 
-   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${False}
+   #Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${False}
+   Latency Values Should Be Correct  metrics=${metrics}  cloudlet=${cloudlet_name}  raw=${False}  numsamples=${10}
 
 DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with numsamples and starttime/endtime
    [Documentation]
@@ -420,7 +432,8 @@ DMEMetrics - Shall be able to get the DME Client Cloudlet Latency metrics with n
 
    Latency Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  8  raw=${False}
 
-   Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${False}
+   #Latency Values Should Be Correct  metrics=${metrics}  max=${latency11.statistics.max}  min=${latency11.statistics.min}  avg=${latency11.statistics.avg}  stddev=${latency11.statistics.std_dev}  variance=${latency11.statistics.variance}  numsamples=${num_samples1}  numrequests=6  cloudlet=${cloudlet_name}  raw=${False}
+   Latency Values Should Be Correct  metrics=${metrics}  cloudlet=${cloudlet_name}  raw=${False}  numsamples=${5}
 
 DMEMetrics - Shall be able to get the DME Client Cloudlet DeviceInfo metrics with startage
    [Documentation]
@@ -476,7 +489,7 @@ DMEMetrics - Shall be able to get the DME Client Cloudlet DeviceInfo metrics wit
    DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
    DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
-   DeviceInfo Values Should Be Correct  metrics=${metrics}  time_diff=${time_diff}  raw=${False}
+   DeviceInfo Values Should Be Correct  metrics=${metrics}  time_diff=${time_diff}  raw=${False}  numsamples=${10}
 
 DMEMetrics - Shall be able to get the DME Client Cloudlet DeviceInfo metrics with numsamples and starttime/endtime
    [Documentation]
@@ -490,7 +503,7 @@ DMEMetrics - Shall be able to get the DME Client Cloudlet DeviceInfo metrics wit
    DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
    DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
-   DeviceInfo Values Should Be Correct  metrics=${metrics}  time_diff=${time_diff}  raw=${False}
+   DeviceInfo Values Should Be Correct  metrics=${metrics}  time_diff=${time_diff}  raw=${False}  numsamples=${5}
 
 DMEMetrics - DeveloperManager shall not be able to get DME Client Cloudlet Latency metrics
    [Documentation]
@@ -534,18 +547,19 @@ DMEMetrics - DeveloperViewer shall not be able to get DME Client Cloudlet Device
 
    DeveloperViewer shall not be able to get client cloudlet usage metrics  selector=deviceinfo  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet2_name} 
 
-DMEMetrics - OperatorManager shall be able to get DME Client Cloudlet Latency metrics
+DMEMetrics - OperatorManager shall be able to get DME Client Cloudlet Latency metrics with raw data
    [Documentation]
    ...  request latency clientappusage metrics as OperatorManager
    ...  verify metrics are returned
 
    ${metrics}=  OperatorManager shall be able to get client cloudlet usage metrics  selector=latency  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet_name}
+   #Latency Values Should Be Correct  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet_name}
+   Latency Values Should Be Correct  ${metrics}  raw=${True}  cloudlet=${cloudlet_name}
 
-DMEMetrics - OperatorManager shall be able to get DME Client Cloudlet DeviceInfo metrics
+DMEMetrics - OperatorManager shall be able to get DME Client Cloudlet DeviceInfo metrics with raw data
    [Documentation]
    ...  request deviceinfo clientappusage metrics as OperatorManager
    ...  verify metrics are returned
@@ -564,18 +578,19 @@ DMEMetrics - OperatorManager shall be able to get DME Client Cloudlet DeviceInfo
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
-DMEMetrics - OperatorContributor shall be able to get DME Client Cloudlet Latency metrics
+DMEMetrics - OperatorContributor shall be able to get DME Client Cloudlet Latency metrics with raw data
    [Documentation]
    ...  request latency clientappusage metrics as OperatorContributor
    ...  verify metrics are returned
 
    ${metrics}=  OperatorContributor shall be able to get client cloudlet usage metrics  selector=latency  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet_name}
+   #Latency Values Should Be Correct  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet_name}
+   Latency Values Should Be Correct  ${metrics}  cloudlet=${cloudlet_name}
 
-DMEMetrics - OperatorContributor shall be able to get DME Client Cloudlet DeviceInfo metrics
+DMEMetrics - OperatorContributor shall be able to get DME Client Cloudlet DeviceInfo metrics with raw data
    [Documentation]
    ...  request deviceinfo clientappusage metrics as OperatorContributor
    ...  verify metrics are returned
@@ -591,18 +606,19 @@ DMEMetrics - OperatorContributor shall be able to get DME Client Cloudlet Device
 
    DeviceInfo Values Should Be Correct  ${metrics}
 
-DMEMetrics - OperatorViewer shall be able to get DME Client Cloudlet Latency metrics
+DMEMetrics - OperatorViewer shall be able to get DME Client Cloudlet Latency metrics with raw data
    [Documentation]
    ...  request latency clientappusage metrics as OperatorViewer
    ...  verify metrics are returned
 
    ${metrics}=  OperatorViewer shall be able to get client cloudlet usage metrics  selector=latency  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
 
-   Latency Metrics Headings Should Be Correct  ${metrics}
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${True}
 
-   Latency Values Should Be Correct  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet_name}
+   #Latency Values Should Be Correct  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet_name}
+   Latency Values Should Be Correct  ${metrics}  cloudlet=${cloudlet_name}
 
-DMEMetrics - OperatorViewer shall be able to get DME Client Cloudlet DeviceInfo metrics
+DMEMetrics - OperatorViewer shall be able to get DME Client Cloudlet DeviceInfo metrics with raw data
    [Documentation]
    ...  request deviceinfo clientappusage metrics as OperatorViewer
    ...  verify metrics are returned
@@ -620,6 +636,96 @@ DMEMetrics - OperatorViewer shall be able to get DME Client Cloudlet DeviceInfo 
    DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
 
    DeviceInfo Values Should Be Correct  ${metrics}
+
+DMEMetrics - OperatorManager shall be able to get DME Client Cloudlet Latency metrics with starttime and endtime
+   [Documentation]
+   ...  request latency clientappusage metrics as OperatorManager with starttime and endtime
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  OperatorManager shall be able to get client cloudlet usage metrics with starttime and endtime  selector=latency  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   #Latency Values Should Be Correct  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet_name}
+   Latency Values Should Be Correct  ${metrics}  raw=${False}  cloudlet=${cloudlet_name}  time_diff=${time_diff}
+
+DMEMetrics - OperatorManager shall be able to get DME Client Cloudlet DeviceInfo metrics with starttime and endtime
+   [Documentation]
+   ...  request deviceinfo clientappusage metrics as OperatorManager with starttime and endtime
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  OperatorManager shall be able to get client cloudlet usage metrics with starttime and endtime  selector=deviceinfo  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
+
+   DeviceInfo Values Should Be Correct  ${metrics}  raw=${False}  time_diff=${time_diff}
+
+DMEMetrics - OperatorContributor shall be able to get DME Client Cloudlet Latency metrics with starttime and endtime
+   [Documentation]
+   ...  request latency clientappusage metrics as OperatorContributor with starttime and endtime
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  OperatorContributor shall be able to get client cloudlet usage metrics with starttime and endtime  selector=latency  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   #Latency Values Should Be Correct  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet_name}
+   Latency Values Should Be Correct  ${metrics}  cloudlet=${cloudlet_name}  raw=${False}  time_diff=${time_diff}
+
+DMEMetrics - OperatorContributor shall be able to get DME Client Cloudlet DeviceInfo metrics with starttime and endtime
+   [Documentation]
+   ...  request deviceinfo clientappusage metrics as OperatorContributor with starttime and endtime
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  OperatorContributor shall be able to get client cloudlet usage metrics with starttime and endtime  selector=deviceinfo  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
+
+   DeviceInfo Values Should Be Correct  ${metrics}  raw=${False}  time_diff=${time_diff}
+
+DMEMetrics - OperatorViewer shall be able to get DME Client Cloudlet Latency metrics with starttime and endtime
+   [Documentation]
+   ...  request latency clientappusage metrics as OperatorViewer with starttime and endtime
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  OperatorViewer shall be able to get client cloudlet usage metrics with starttime and endtime  selector=latency  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
+
+   Latency Metrics Headings Should Be Correct  ${metrics}  raw=${False}
+
+   #Latency Values Should Be Correct  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=${cloudlet_name}
+   Latency Values Should Be Correct  ${metrics}  cloudlet=${cloudlet_name}  raw=${False}  time_diff=${time_diff}
+
+DMEMetrics - OperatorViewer shall be able to get DME Client Cloudlet DeviceInfo metrics with starttime and endtime
+   [Documentation]
+   ...  request deviceinfo clientappusage metrics as OperatorViewer with starttime and endtime
+   ...  verify metrics are returned
+
+   ${metrics}  ${time_diff}=  OperatorViewer shall be able to get client cloudlet usage metrics with starttime and endtime  selector=deviceinfo  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics}
+
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=2  tile=${cloudlet1_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=1  tile=${cloudlet2_tile}
+#   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=1  tile=${cloudlet1_tile}
+
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${carrier_name}        numsessions=3  tile=${cloudlet1_tile}
+   DeviceInfo Cloudlet Should Be Found  ${cloudlet_name}  ${metrics}  device_carrier=${operator_name_fake}  numsessions=2  tile=${cloudlet2_tile}
+
+   DeviceInfo Values Should Be Correct  ${metrics}  raw=${False}  time_diff=${time_diff}
 
 *** Keywords ***
 Setup
@@ -654,7 +760,7 @@ Setup
     Set Suite Variable  ${settings_pre}
 
     @{collection_intervals}=  Create List  1m10s  2m10s  3m10s
-    Update Settings  region=${region}  edge_events_metrics_collection_interval=10s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}
+    Update Settings  region=${region}  edge_events_metrics_collection_interval=${edge_collection_timer}s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}  location_tile_side_length_km=1
     Sleep  15s
 
     ${r1}=  Register Client  app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}	
@@ -864,35 +970,62 @@ DeviceInfo Metrics Headings Should Contain Name
    Should Be True  ${found}
 
 Latency Values Should Be Correct
-   [Arguments]  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet_name}  ${raw}=${True}  ${time_diff}=${None}
+   #[Arguments]  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet_name}  ${raw}=${True}  ${time_diff}=${None}
+   [Arguments]  ${metrics}  ${cloudlet}=${cloudlet_name}  ${raw}=${True}  ${time_diff}=${None}  ${numsamples}=${100}
 
    #${count}=  Run Keyword If   not ${raw}  Set Variable  3
    #...   ELSE  Set Variable  1
 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet}
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_name_fake}
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['datanetworktype']}  ${data_network_type}
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['devicecarrier']}  ${carrier_name}
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['locationtile']}  ${cloudlet1_tile}
+   FOR  ${i}  IN  @{metrics['data'][0]['Series']}
+      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet}
+      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_name_fake}
+      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['datanetworktype']}  ${data_network_type}
+      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['devicecarrier']}  ${carrier_name}
+      Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['locationtile']}  ${cloudlet1_tile}
+
+      IF  ${time_diff} != ${None}
+         ${time_def}=  Evaluate  ${time_diff}/${numsamples}
+
+         ${time_check}=  Set Variable  ${edge_collection_timer}
+         IF  ${time_def} > ${edge_collection_timer}
+            ${time_check}=  Set Variable  ${time_def}
+         END
+
+         ${datez}=  Get Substring  ${metrics['data'][0]['Series'][0]['values'][0][0]}  0  -1
+         @{datesplit}=  Split String  ${datez}  .
+         ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+         ${start}=  Evaluate  ${epochpre} + ${time_check}
+      END
 
    #FOR  ${i}  IN RANGE  0  ${count}
-    FOR  ${v}  IN  @{metrics['data'][0]['Series'][0]['values']}
-      IF  ${v[1]} != None
-         Should Be True  ${v[1]} >= 0
-         Should Be True  ${v[2]} >= 0
-         Should Be True  ${v[3]} >= 0
-         Should Be True  ${v[4]} >= 0
-         Should Be True  ${v[5]} >= 0
-         Should Be True  ${v[6]} >= 0
-         Should Be True  ${v[7]} > 0
-         Should Be True  ${v[8]} > 0
-         Should Be True  ${v[9]} > 0
-         Should Be True  ${v[10]} > 0
-         IF  ${raw}
-            Should Be True  ${v[11]} > 0
-            Should Be True  ${v[12]} > 0
-        END
-     END 
+      FOR  ${v}  IN  @{i['values']}
+         IF  ${v[1]} != None
+            Should Be True  ${v[1]} >= 0
+            Should Be True  ${v[2]} >= 0
+            Should Be True  ${v[3]} >= 0
+            Should Be True  ${v[4]} >= 0
+            Should Be True  ${v[5]} >= 0
+            Should Be True  ${v[6]} >= 0
+            Should Be True  ${v[7]} > 0
+            Should Be True  ${v[8]} > 0
+            Should Be True  ${v[9]} > 0
+            Should Be True  ${v[10]} > 0
+            IF  ${raw}
+               Should Be True  ${v[11]} > 0
+               Should Be True  ${v[12]} > 0
+            END
+         END
+         IF  ${time_diff} != ${None}
+            ${datez}=  Get Substring  ${v[0]}  0  -1
+            @{vdatesplit}=  Split String  ${datez}  .
+            ${vepochpre}=  Evaluate  calendar.timegm(time.strptime('${vdatesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+            #${vepochpre}=  Convert Date  ${vdatesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+            ${epoch_diff}=  Evaluate  ${start}-${vepochpre}
+            #Should Be True  ${epoch_diff} <= ${time_check}+1 and ${epoch_diff} >= ${time_check}-1
+            Should Be True  ${time_check}-1 <= ${epoch_diff} <= ${time_check}+1
+            ${start}=  Set Variable  ${vepochpre}
+         END
+      END
    END
 
 #DeviceInfo Values Should Be Correct
@@ -916,24 +1049,49 @@ Latency Values Should Be Correct
 #   END
 
 DeviceInfo Values Should Be Correct
-   [Arguments]  ${metrics}  ${raw}=${True}  ${time_diff}=${None}  ${cloudlet}=${cloudlet_name}
+   [Arguments]  ${metrics}  ${raw}=${True}  ${time_diff}=${None}  ${numsamples}=${100}  ${cloudlet}=${cloudlet_name}
 
    #${count}=  Run Keyword If   not ${raw}  Set Variable  3
    #...   ELSE  Set Variable  2
 
    #Length Should Be  ${metrics['data'][0]['Series']}  ${count}
 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet}
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_name_fake}
-   Should Be True   '${metrics['data'][0]['Series'][0]['tags']['devicecarrier']}' == '${carrier_name}' or '${metrics['data'][0]['Series'][0]['tags']['devicecarrier']}' == '${operator_name_fake}'
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['devicemodel']}  ${device_model}
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['deviceos']}  ${device_os}
-   Should Be True  '${metrics['data'][0]['Series'][0]['tags']['locationtile']}' == '${cloudlet1_tile}' or '${metrics['data'][0]['Series'][0]['tags']['locationtile']}' == '${cloudlet2_tile}'
+   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
+      Should Be Equal  ${s['tags']['cloudlet']}  ${cloudlet}
+      Should Be Equal  ${s['tags']['cloudletorg']}  ${operator_name_fake}
+      Should Be True   '${s['tags']['devicecarrier']}' == '${carrier_name}' or '${metrics['data'][0]['Series'][0]['tags']['devicecarrier']}' == '${operator_name_fake}'
+      Should Be Equal  ${s['tags']['devicemodel']}  ${device_model}
+      Should Be Equal  ${s['tags']['deviceos']}  ${device_os}
+      Should Be True  '${s['tags']['locationtile']}' == '${cloudlet1_tile}' or '${metrics['data'][0]['Series'][0]['tags']['locationtile']}' == '${cloudlet2_tile}'
 
-   #FOR  ${i}  IN RANGE  0  ${count}
-   FOR  ${v}  IN  @{metrics['data'][0]['Series'][0]['values']}
-      IF  ${v[1]} != None
-         Should Be True  ${v[1]} > 0
+      IF  ${time_diff} != ${None}
+         ${time_def}=  Evaluate  ${time_diff}/${numsamples}
+
+         ${time_check}=  Set Variable  ${edge_collection_timer}
+         IF  ${time_def} > ${edge_collection_timer}
+            ${time_check}=  Set Variable  ${time_def}
+         END
+
+         ${datez}=  Get Substring  ${s['values'][0][0]}  0  -1
+         @{datesplit}=  Split String  ${datez}  .
+         ${epochpre}=  Evaluate  calendar.timegm(time.strptime('${datesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+         ${start}=  Evaluate  ${epochpre} + ${time_check}
+      END
+
+      FOR  ${v}  IN  @{s['values']}
+         IF  ${v[1]} != None
+            Should Be True  ${v[1]} > 0
+         END
+         IF  ${time_diff} != ${None}
+            ${datez}=  Get Substring  ${v[0]}  0  -1
+            @{vdatesplit}=  Split String  ${datez}  .
+            ${vepochpre}=  Evaluate  calendar.timegm(time.strptime('${vdatesplit[0]}', '%Y-%m-%dT%H:%M:%S'))  modules=calendar
+            #${vepochpre}=  Convert Date  ${vdatesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+            ${epoch_diff}=  Evaluate  ${start}-${vepochpre}
+            #Should Be True  ${epoch_diff} <= ${time_check}+1 and ${epoch_diff} >= ${time_check}-1
+            Should Be True  ${time_check}-1 <= ${epoch_diff} <= ${time_check}+1
+            ${start}=  Set Variable  ${vepochpre}
+         END
       END
    END
 
