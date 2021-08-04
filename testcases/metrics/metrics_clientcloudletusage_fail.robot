@@ -321,6 +321,22 @@ ClientCloudletUsageMetrics - get with numsamples and limit shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=deviceinfo  number_samples=1  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Only one of Limit or NumSamples can be specified"}')
 
+# ECQ-3638
+ClientCloudletUsageMetrics - get with invalid cloudlet shall return error
+   [Documentation]
+   ...  - get clientcloudletusage metrics with invalid cloudlet args
+   ...  - verify error
+
+   ${token}=  Get Token
+
+   ${inject}=  Set Variable  \\'\\;drop measurment \"cloudlet-ipusage\"
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  selector=latency  cloudlet_name=${inject}  operator_org_name=${operator}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudlet"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  selector=latency  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${inject}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudletorg"}')
+
 *** Keywords ***
 Setup
     ${token}=  Get Super Token
