@@ -84,7 +84,7 @@ CloudletMetrics - get with no selector name shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  region=US  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid cloudlet selector: "} 
+   Should Contain  ${error}  {"message":"Invalid cloudlet selector: , must be one of \\\\"network\\\\", \\\\"utilization\\\\", \\\\"ipusage\\\\""} 
 
 CloudletMetrics - get with invalid selector name shall return error
    [Documentation]
@@ -95,7 +95,7 @@ CloudletMetrics - get with invalid selector name shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=xx  region=US  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid cloudlet selector: xx"}
+   Should Contain  ${error}  {"message":"Invalid cloudlet selector: xx, must be one of \\\\"network\\\\", \\\\"utilization\\\\", \\\\"ipusage\\\\""}
 
 CloudletMetrics - get with invalid start time shall return error
    [Documentation]

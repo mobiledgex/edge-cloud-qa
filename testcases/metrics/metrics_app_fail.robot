@@ -112,7 +112,7 @@ AppMetrics - get with no selector name shall return error
    ${token}=  Get Token
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid appinst selector: "} 
+   Should Contain  ${error}  {"message":"Invalid appinst selector: , must be one of \\\\"cpu\\\\", \\\\"mem\\\\", \\\\"disk\\\\", \\\\"network\\\\", \\\\"connections\\\\", \\\\"udp\\\\""} 
 
 AppMetrics - get with invalid selector name shall return error
    [Documentation]
@@ -123,7 +123,7 @@ AppMetrics - get with invalid selector name shall return error
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=xx  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
 
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid appinst selector: xx"}
+   Should Contain  ${error}  {"message":"Invalid appinst selector: xx, must be one of \\\\"cpu\\\\", \\\\"mem\\\\", \\\\"disk\\\\", \\\\"network\\\\", \\\\"connections\\\\", \\\\"udp\\\\""}
 
 AppMetrics - get with invalid start time shall return error
    [Documentation]
