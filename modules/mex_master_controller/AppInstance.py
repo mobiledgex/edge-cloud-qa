@@ -199,10 +199,10 @@ class AppInstance(MexOperation):
         if end_time is not None:
             metric_dict['endtime'] = end_time
         if start_age is not None:
-            #metric_dict['startage'] = int(start_age)
+            # metric_dict['startage'] = int(start_age)
             metric_dict['startage'] = start_age
         if end_age is not None:
-            #metric_dict['endage'] = int(end_age)
+            # metric_dict['endage'] = int(end_age)
             metric_dict['endage'] = end_age
         if method is not None:
             metric_dict['method'] = method
@@ -329,8 +329,8 @@ class AppInstance(MexOperation):
 
         return self.show(token=token, url=self.metrics_client_api_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
-    def get_client_app_metrics(self, method, token=None, region=None, app_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, app_version=None, selector=None, limit=None, number_samples=None, start_time=None, end_time=None, start_age=None, end_age=None, cell_id=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
-        app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
+    def get_client_app_metrics(self, method, token=None, region=None, app_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, cloudlet_name=None, operator_org_name=None, app_version=None, selector=None, limit=None, number_samples=None, start_time=None, end_time=None, start_age=None, end_age=None, cell_id=None, location_tile=None, device_os=None, device_model=None, data_network_type=None, json_data=None, use_defaults=True, use_thread=False):
+        app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
         app_inst_metric = app_inst
         if 'key' in app_inst:
             app_inst_metric['appinst'] = app_inst['key']
@@ -340,8 +340,8 @@ class AppInstance(MexOperation):
 
         return self.show(token=token, url=self.metrics_client_app_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
-    def get_app_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
-        app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=False)
+    def get_app_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=False)
         app_inst_metric = app_inst
         app_inst_metric['appinst'] = app_inst['key']
         del app_inst_metric['key']
