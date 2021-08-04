@@ -106,7 +106,7 @@ Clientappusage - mcctl shall handle clientappusage metrics failures
       Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                         selector=latency  cloudlet-org=automation_dev_org  startage=x
       Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                           selector=latency  cloudlet-org=automation_dev_org  endage=x
       Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                                               selector=latency  app-org=automation_dev_org  limit=x
-      Error: Bad Request (400), LocationTile not allowed for appinst deviceinfo metric                                          selector=deviceinfo  app-org=automation_dev_org  locationtile=x
+      Error: Bad Request (400), LocationTile not allowed for appinst deviceinfo metric                                          selector=deviceinfo  app-org=automation_dev_org  locationtile=${locationtile}
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=deviceinfo
       Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                     selector=latency  app-org=automation_dev_org  numsamples=x
 
