@@ -131,7 +131,7 @@ ClusterMetrics - get with no selector name shall return error
    ${token}=  Get Token
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid cluster selector: "} 
+   Should Contain  ${error}  {"message":"Invalid cluster selector: , must be one of \\\\"cpu\\\\", \\\\"mem\\\\", \\\\"disk\\\\", \\\\"network\\\\", \\\\"tcp\\\\", \\\\"udp\\\\""} 
 
 # ECQ-1940
 ClusterMetrics - get with invalid selector name shall return error
@@ -143,7 +143,7 @@ ClusterMetrics - get with invalid selector name shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=xx  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
 
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid cluster selector: xx"}
+   Should Contain  ${error}  {"message":"Invalid cluster selector: xx, must be one of \\\\"cpu\\\\", \\\\"mem\\\\", \\\\"disk\\\\", \\\\"network\\\\", \\\\"tcp\\\\", \\\\"udp\\\\""}
 
 # ECQ-1941
 ClusterMetrics - get with invalid start time shall return error
