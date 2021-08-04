@@ -232,3 +232,19 @@ CloudletMetrics - get without region shall return error
    Should Contain  ${error2}  code=400
    Should Contain  ${error2}  {"message":"No region specified"}
 
+# ECQ-3634
+CloudletMetrics - get with invalid cloudlet shall return error
+   [Documentation]
+   ...  - get app metrics with invalid cloudlet args
+   ...  - verify error
+
+   ${token}=  Get Token
+
+   ${inject}=  Set Variable  \\'\\;drop measurment \"cloudlet-ipusage\"
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  selector=utilization  last=1  cloudlet_name=${inject}  operator_org_name=${operator}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudlet"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  selector=utilization  last=1  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${inject}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudletorg"}')
+
