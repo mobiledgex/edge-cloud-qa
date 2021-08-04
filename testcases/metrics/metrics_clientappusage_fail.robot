@@ -325,7 +325,7 @@ ClientAppUsageMetrics - get with deviceinfo and locationtile shall return error
    ...  - get clientappusage metrics with deviceinfo and locationtile
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  data_network_type=x   selector=deviceinfo  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  location_tile=x  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  data_network_type=x   selector=deviceinfo  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  location_tile=-90.998922,30.993940_-91.007905,31.002985_1  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"LocationTile not allowed for appinst deviceinfo metric"}
 
@@ -340,6 +340,18 @@ ClientAppUsageMetrics - get with numsamples and limit shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=deviceinfo  number_samples=1  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Only one of Limit or NumSamples can be specified"}')
+
+# ECQ-3632
+ClientAppUsageMetrics - get with invalid locationtile shall return error
+   [Documentation]
+   ...  - get clientappusage metrics with invalid locationtile
+   ...  - verify error
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  data_network_type=x   selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  location_tile=x  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid format for the location tile."}') 
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  data_network_type=x   selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  location_tile=-90.998922,30.993940_-91.007905a  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid format for the location tile."}')
 
 *** Keywords ***
 Setup
