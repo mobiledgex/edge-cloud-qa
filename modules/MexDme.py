@@ -30,12 +30,15 @@ token_global = None
 
 
 class Client():
-    def __init__(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, use_defaults=True):
+    def __init__(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, cell_id=None, unique_id=None, unique_id_type=None, use_defaults=True):
         client_dict = {}
         self.dev_name = developer_org_name
         self.app_name = app_name
         self.app_vers = app_version
         self.auth_token = auth_token
+        self.cell_id = cell_id
+        self.unique_id = unique_id
+        self.unique_id_type = unique_id_type
 
         global auth_token_global
 
@@ -57,6 +60,12 @@ class Client():
             client_dict['app_vers'] = self.app_vers
         if self.auth_token is not None:
             client_dict['auth_token'] = self.auth_token
+        if self.cell_id is not None:
+            client_dict['cell_id'] = int(self.cell_id)
+        if self.unique_id is not None:
+            client_dict['unique_id'] = str(self.unique_id)
+        if self.unique_id_type is not None:
+            client_dict['unique_id_type'] = self.unique_id_type
 
         self.client = app_client_pb2.RegisterClientRequest(**client_dict)
 
@@ -486,7 +495,7 @@ class MexDme(MexGrpc):
         logger.info('stream created')
         self.edge_event_queue.put(request)
         logger.info('stream in queue')
-        print('*WARN*',self.edge_event_queue)
+        # print('*WARN*', self.edge_event_queue)
         try:
             response = next(self.edge_event_stream)
         except Exception as e:
@@ -509,7 +518,7 @@ class MexDme(MexGrpc):
             request = StreamEdgeEvent(**kwargs).request
 
         logger.info('terminate dme persistent connection on {}. \n\t{}'.format(self.address, str(request).replace('\n', '\n\t')))
-        print('*WARN*',request, self.edge_event_queue)
+        # print('*WARN*', request, self.edge_event_queue)
         self.edge_event_queue.put(request)
 
         try:
