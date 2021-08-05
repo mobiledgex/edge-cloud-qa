@@ -145,7 +145,7 @@ ShowFlavorsForCloudlet - DeveloperContributor shall be able to show flavors for 
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=automation_api_flavor  token=${tokendev_contributor}
 
-   ${flavors}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  token=${tokenop_contributor}
+   ${flavors}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  token=${tokendev_contributor}
    Should Be True  len(@{flavors}) > 0
 
 # ECQ-3617
@@ -164,7 +164,7 @@ ShowFlavorsForCloudlet - DeveloperViewer shall be able to show flavors for cloud
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=automation_api_flavor  token=${tokendev_viewer}
 
-   ${flavors}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  token=${tokenop_viewer}
+   ${flavors}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  token=${tokendev_viewer}
    Should Be True  len(@{flavors}) > 0
 
 ** Keywords **
