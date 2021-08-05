@@ -119,12 +119,14 @@ ShowFlavorsForCloudlet - DeveloperManager shall be able to show flavors for clou
 
    [Setup]  Userrole Setup
 
-   Run Keyword and Ignore Error  Adduser Role   orgname=${developer_org_name_automation}   username=${op_manager_user_automation}   role=DeveloperContributor    token=${token}     use_defaults=${False}
+   #Run Keyword and Ignore Error  Adduser Role   orgname=${developer_org_name_automation}   username=${op_manager_user_automation}   role=DeveloperContributor    token=${token}     use_defaults=${False}
 
-   ${match}=  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=automation_api_flavor  token=${tokenop_manager}
-   Should Be True  len('${match['flavor_name']}') > 0
+   #${match}=  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=automation_api_flavor  token=${tokendev_manager}
+   #Should Be True  len('${match['flavor_name']}') > 0
 
-   ${flavors}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  token=${tokenop_manager}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=automation_api_flavor  token=${tokendev_manager}
+
+   ${flavors}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  token=${tokendev_manager}
    Should Be True  len(@{flavors}) > 0
 
 # ECQ-3616
@@ -136,12 +138,14 @@ ShowFlavorsForCloudlet - DeveloperContributor shall be able to show flavors for 
 
    [Setup]  Userrole Setup
 
-   Run Keyword and Ignore Error   Adduser Role   orgname=${developer_org_name_automation}   username=${op_manager_user_automation}   role=DeveloperContributor    token=${token}     use_defaults=${False}
+   #Run Keyword and Ignore Error   Adduser Role   orgname=${developer_org_name_automation}   username=${op_manager_user_automation}   role=DeveloperContributor    token=${token}     use_defaults=${False}
 
-   ${match}=  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=automation_api_flavor  token=${tokenop_manager}
-   Should Be True  len('${match['flavor_name']}') > 0
+   #${match}=  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=automation_api_flavor  token=${tokenop_manager}
+   #Should Be True  len('${match['flavor_name']}') > 0
 
-   ${flavors}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  token=${tokenop_manager}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=automation_api_flavor  token=${tokendev_contributor}
+
+   ${flavors}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  token=${tokendev_contributor}
    Should Be True  len(@{flavors}) > 0
 
 # ECQ-3617
@@ -153,12 +157,14 @@ ShowFlavorsForCloudlet - DeveloperViewer shall be able to show flavors for cloud
 
    [Setup]  Userrole Setup
 
-   Run Keyword and Ignore Error   Adduser Role   orgname=${developer_org_name_automation}   username=${op_manager_user_automation}   role=DeveloperViewer   token=${token}     use_defaults=${False}
+   #Run Keyword and Ignore Error   Adduser Role   orgname=${developer_org_name_automation}   username=${op_manager_user_automation}   role=DeveloperViewer   token=${token}     use_defaults=${False}
 
-   ${match}=  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=automation_api_flavor  token=${tokenop_manager}
-   Should Be True  len('${match['flavor_name']}') > 0
+   #${match}=  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=automation_api_flavor  token=${tokenop_manager}
+   #Should Be True  len('${match['flavor_name']}') > 0
 
-   ${flavors}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  token=${tokenop_manager}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=automation_api_flavor  token=${tokendev_viewer}
+
+   ${flavors}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  token=${tokendev_viewer}
    Should Be True  len(@{flavors}) > 0
 
 ** Keywords **
