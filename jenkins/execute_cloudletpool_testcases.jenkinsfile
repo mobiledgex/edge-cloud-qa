@@ -50,7 +50,7 @@ node('jenkinsSlave1'){
          for(int i=0; i < jobList1Parallel.size(); ++i) {
             try {
                def jobName = jobList1Parallel[i];
-               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'MasterController', value: mastercontroller)]
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'MasterController', value: mastercontroller), string(name: 'RunFailedOnly', value: runfailedonly)]
             } catch(err) {
               currentBuild.result = 'FAILURE'
             }
