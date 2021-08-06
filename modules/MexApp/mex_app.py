@@ -740,6 +740,18 @@ class MexApp(object):
 
         rb.write_file_to_node(node=node, mount=mount, data=data)
 
+    def run_command_on_clustervm(self, command, node, root_loadbalancer=None):
+
+        self.wait_for_dns(root_loadbalancer)
+
+        network, node = node.split('=')
+
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
+
+        return rb.run_command_on_node(node, command)
+
     def run_command_on_pod(self, pod_name, command, cluster_name, operator_name, root_loadbalancer=None):
         rb = None
         if root_loadbalancer is not None:
