@@ -1348,15 +1348,18 @@ class MexOpenstack():
         return outcome
 
     
-    def node_should_have_gpu(self, root_loadbalancer, node=None):
+    def node_should_have_gpu(self, root_loadbalancer, node=None, type=None):
         if node is None:
             node = '127.0.0.1'
         else:
             network, node = node.split('=')
 
         rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
-                
-        cmd = 'lspci | grep \"3D controller: NVIDIA Corporation Device\"'
+
+        if type is not None:
+            cmd = 'lspci | grep \"VGA compatible controller: NVIDIA Corporation Device\"'
+        else:
+            cmd = 'lspci | grep \"3D controller: NVIDIA Corporation Device\"'
 
         try:
             output = rb.run_command_on_node(node, cmd)
@@ -1365,9 +1368,9 @@ class MexOpenstack():
         except:
             raise Exception('NVIDIA GPU is NOT allocated')
         
-    def node_should_not_have_gpu(self, root_loadbalancer, node=None):
+    def node_should_not_have_gpu(self, root_loadbalancer, node=None, type=None):
         try:
-            self.node_should_have_gpu(root_loadbalancer, node)
+            self.node_should_have_gpu(root_loadbalancer, node, type)
         except:
             logging.info('NVIDIA GPU is not allocated')
             return
