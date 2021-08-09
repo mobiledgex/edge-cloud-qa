@@ -430,3 +430,26 @@ ClusterMetrics - get without region shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  selector=network  last=1  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"No region specified"}
+
+# ECQ-3635
+ClusterMetrics - get with invalid cluster/cloudlet shall return error
+   [Documentation]
+   ...  - get app metrics with invalid cluster/cloudlet args
+   ...  - verify error
+
+   ${token}=  Get Token
+
+   ${inject}=  Set Variable  \\'\\;drop measurment \"cloudlet-ipusage\"
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  selector=cpu  last=1  cluster_name=${inject}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cluster"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  selector=cpu  last=1  cluster_name=autoclusterautomation  cloudlet_name=${inject}  operator_org_name=${operator}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudlet"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  selector=cpu  last=1  cluster_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${inject}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudletorg"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  selector=cpu  last=1  cluster_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=${inject}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid clusterorg"}')
+
