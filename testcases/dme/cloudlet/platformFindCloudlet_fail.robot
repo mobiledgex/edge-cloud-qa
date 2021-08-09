@@ -51,8 +51,8 @@ PlatformFindCloudlet - request with bad client_token shall return error
 
     #EDGECLOUD-2583 - PlatformFindCloudlet with bad client_token returns wrong status code
     ${error_msg}=  Run Keyword And Expect Error  *  Platform Find Cloudlet  carrier_name=${dmuus_operator_name}  client_token=x
-    Should Contain  ${error_msg}  status = StatusCode.UNKNOWNxxx
-    Should Contain  ${error_msg}  details = "unable to decode token: illegal base64 data at input byte 0"
+    Should Contain  ${error_msg}  status = StatusCode.INVALID_ARGUMENT
+    Should Contain  ${error_msg}  details = "Invalid ClientToken"
 
 # ECQ-2127
 PlatformFindCloudlet - request with non-platos session cookie shall return error
