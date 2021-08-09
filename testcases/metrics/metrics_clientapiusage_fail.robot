@@ -287,6 +287,31 @@ ClientApiUsageMetrics - get with numsamples and limit shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=api  number_samples=1  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Only one of Limit or NumSamples can be specified"}')
 
+# ECQ-3636
+ClientApiUsageMetrics - get with invalid app/cloudlet shall return error
+   [Documentation]
+   ...  - get clientapiiusage metrics with invalid app/cloudlet args
+   ...  - verify error
+
+   ${token}=  Get Token
+
+   ${inject}=  Set Variable  \\'\\;drop measurment \"cloudlet-ipusage\"
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  selector=api  app_name=${inject}  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator} developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid app"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  selector=api  app_name=automation_api_app  app_version=${inject}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid appver"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  selector=api  app_name=automation_api_app  app_version=1.0  cloudlet_name=${inject}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudlet"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  selector=api  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${inject}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudletorg"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  selector=api  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=${inject}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid apporg"}')
+
 *** Keywords ***
 Setup
     ${token}=  Get Super Token
