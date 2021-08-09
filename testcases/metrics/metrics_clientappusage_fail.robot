@@ -353,6 +353,37 @@ ClientAppUsageMetrics - get with invalid locationtile shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  data_network_type=x   selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  location_tile=-90.998922,30.993940_-91.007905a  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid format for the location tile."}')
 
+# ECQ-3637
+ClientAppUsageMetrics - get with invalid app/cluster/cloudlet shall return error
+   [Documentation]
+   ...  - get clientappusage metrics with invalid app/cluster/cloudlet args
+   ...  - verify error
+
+   ${token}=  Get Token
+
+   ${inject}=  Set Variable  \\'\\;drop measurment \"cloudlet-ipusage\"
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  selector=latency  app_name=${inject}  app_version=1.0  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid app"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  selector=latency  app_name=automation_api_app  app_version=${inject}  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid appver"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  selector=latency  app_name=automation_api_app  app_version=1.0  cluster_instance_name=${inject}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cluster"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  selector=latency  app_name=automation_api_app  app_version=1.0  cluster_instance_name=autoclusterautomation  cloudlet_name=${inject}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudlet"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  selector=latency  app_name=automation_api_app  app_version=1.0  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${inject}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudletorg"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  selector=latency  app_name=automation_api_app  app_version=1.0  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=${inject}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid apporg"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  selector=latency  app_name=automation_api_app  app_version=1.0  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  cluster_instance_developer_org_name=${inject}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid clusterorg"}')
+
 *** Keywords ***
 Setup
     ${token}=  Get Super Token
