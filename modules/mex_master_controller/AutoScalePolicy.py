@@ -16,7 +16,7 @@ class AutoScalePolicy(MexOperation):
         self.show_url = '/auth/ctrl/ShowAutoScalePolicy'
         self.update_url = '/auth/ctrl/UpdateAutoScalePolicy'
 
-    def _build(self, policy_name=None, developer_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, target_cpu=None, target_memory=None, target_active_connections=None, include_fields=False, use_defaults=True):
+    def _build(self, policy_name=None, developer_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, target_cpu=None, target_memory=None, target_active_connections=None, stabilization_window_sec=None, include_fields=False, use_defaults=True):
 
         policy_name = policy_name
         developer_name = developer_name
@@ -130,6 +130,12 @@ class AutoScalePolicy(MexOperation):
                 policy_dict['target_active_connections'] = target_active_connections
             _fields_list.append(_target_active_connections_field_number)
 
+        if stabilization_window_sec is not None:
+            try:
+                policy_dict['stabilization_window_sec'] = int(stabilization_window_sec)
+            except Exception:
+                policy_dict['stabilization_window_sec'] = stabilization_window_sec
+
         if include_fields and _fields_list:
             policy_dict['fields'] = []
             for field in _fields_list:
@@ -137,8 +143,8 @@ class AutoScalePolicy(MexOperation):
 
         return policy_dict
 
-    def create_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, target_cpu=None, target_memory=None, target_active_connections=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        msg = self._build(policy_name=policy_name, developer_name=developer_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, target_cpu=target_cpu, target_memory=target_memory, target_active_connections=target_active_connections, use_defaults=use_defaults)
+    def create_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, target_cpu=None, target_memory=None, target_active_connections=None, stabilization_window_sec=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_name=developer_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, target_cpu=target_cpu, target_memory=target_memory, target_active_connections=target_active_connections, stabilization_window_sec=stabilization_window_sec, use_defaults=use_defaults)
         msg_dict = {'autoscalepolicy': msg}
 
         msg_dict_delete = None

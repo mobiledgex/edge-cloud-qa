@@ -136,7 +136,8 @@ Shall be able to update IpAccessShared k8s autocluster to include auto scale pol
     ${cluster_name_default}=  Catenate  SEPARATOR=  auto  ${cluster_name_default}
     ${app_name_default}=  Get Default App Name
 
-    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
+    #Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
+    Create Autoscale Policy  region=${region}  policy_name=${policy_name_default}  developer_org_name=automation_dev_org  min_nodes=1  max_nodes=2  target_cpu=70  stabilization_window_sec=60  use_defaults=${False}  token=${super_token}
 
     Create App  region=${region}  image_path=${docker_image_cpu}  access_ports=tcp:2017  scale_with_cluster=True
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}   cluster_instance_name=${cluster_name_default}  autocluster_ip_access=IpAccessShared
@@ -219,8 +220,10 @@ Shall be able to update IpAccessShared k8s autocluster to include auto scale pol
 
 *** Keywords ***
 Setup
+    ${super_token}=  Get Super Token
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_shared}
     Set Suite Variable  ${cloudlet_lowercase}
+    Set Suite Variable  ${super_token}
 
     ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
