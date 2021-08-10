@@ -62,10 +62,10 @@ Clientapiusage - mcctl shall handle clientapiusage metrics failures
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=api
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=api appname=x
       Error: Bad Request (400), Invalid dme selector: x                                                                         selector=x app-org=automation_dev_org
-      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time.Time: parsing time "x" into RFC3339 format failed. Example: "2006-01-02T15:04:05Z07:00"   selector=api  app-org=automation_dev_org  starttime=x
-      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time.Time: parsing time "x" into RFC3339 format failed. Example: "2006-01-02T15:04:05Z07:00"     selector=api  app-org=automation_dev_org  endtime=x
-      Error: parsing arg "startage\=x" failed: unable to parse "x" as time.Duration: time: invalid duration "x"                                                       selector=api  cloudlet-org=automation_dev_org  startage=x
-      Error: parsing arg "endage\=x" failed: unable to parse "x" as time.Duration: time: invalid duration "x"                                                         selector=api  cloudlet-org=automation_dev_org  endage=x
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z07:00"   selector=api  app-org=automation_dev_org  starttime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z07:00"     selector=api  app-org=automation_dev_org  endtime=x
+      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                     selector=api  cloudlet-org=automation_dev_org  startage=x
+      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                       selector=api  cloudlet-org=automation_dev_org  endage=x
       Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                                                selector=api  app-org=automation_dev_org  limit=x
       Error: parsing arg "cellid\=x" failed: unable to parse "x" as int: invalid syntax                                                                               selector=api  app-org=automation_dev_org  cellid=x
       Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                                                           selector=api  app-org=automation_dev_org  numsamples=x
