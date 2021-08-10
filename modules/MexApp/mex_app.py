@@ -645,10 +645,10 @@ class MexApp(object):
             logging.debug(kubectl_out)
 
             for line in kubectl_out:
-                name, revision, updated, status, chart, version, namespace = [x.strip() for x in line.split('\t')]
-                logging.debug(f'{name} {revision} {updated} {status} {chart} {version} {namespace}')
+                name, namespace, revision, updated, status, chart, version = [x.strip() for x in line.split('\t')]
+                logging.debug(f'{name} {namespace} {revision} {updated} {status} {chart} {version}')
                 if app_name in name:
-                    if line.split('\t')[3].strip() == 'DEPLOYED' and line.split('\t')[4].strip() == chart_name:
+                    if line.split('\t')[4].strip() == 'deployed' and line.split('\t')[5].strip() == chart_name:
                         logging.info('Found deployed app ' + line)
                         if name in found_app_dict:
                             logging.info(f'already found {name}')
