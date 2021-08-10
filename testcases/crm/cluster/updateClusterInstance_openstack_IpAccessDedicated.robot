@@ -154,7 +154,8 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
 
     ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
 
-    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
+    #Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
+    Create Autoscale Policy  region=${region}  policy_name=${policy_name_default}  developer_org_name=automation_dev_org  min_nodes=1  max_nodes=2  target_cpu=70  stabilization_window_sec=60  use_defaults=${False}  token=${super_token}
 
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1
@@ -243,8 +244,10 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
 
 *** Keywords ***
 Setup
+    ${super_token}=  Get Super Token
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_dedicated}
     Set Suite Variable  ${cloudlet_lowercase}
+    Set Suite Variable  ${super_token}
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
