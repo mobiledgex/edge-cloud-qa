@@ -77,7 +77,7 @@ ClientApiUsageMetrics - operator get with no cloudlet pools shall return error
    ...  - get clientapiusage metrics with no cloudlet pools as operator
    ...  - verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=latency  developer_org_name=${operator}  operator_org_name=tmus  limit=1  token=${op_manager_token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=api  developer_org_name=${operator}  operator_org_name=tmus  limit=1  token=${op_manager_token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"No non-empty CloudletPools to show"}
 
