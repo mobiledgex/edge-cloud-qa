@@ -263,8 +263,10 @@ class AlertReceiver(MexOperation):
                     mail_id = newemail.split()
                     logger.info(f'checking new email with id={mail_id}')
 
-                    for i in range(num_new_emails, 0, -1):
-                        typ, data = mail.fetch(mail_id[-1], '(RFC822)')
+                    # for i in range(num_new_emails, 0, -1):
+                    #    typ, data = mail.fetch(mail_id[-1], '(RFC822)')
+                    for i in mail_id:
+                        typ, data = mail.fetch(i.decode('utf-8'), '(RFC822)')
                         for response_part in data:
                             # print('*WARN*', 'response_part', response_part)
                             if isinstance(response_part, tuple):
@@ -286,8 +288,9 @@ class AlertReceiver(MexOperation):
                                     # else:
                                     #    subject_to_check = 'You are no longer assigned triggered incidents'
 
-                                    subject_to_check = 'TRIGGERED Incident'
-                                    if subject_to_check in email_subject:
+                                    # subject_to_check = 'TRIGGERED Incident'
+                                    subject_to_check = 'triggered incident'
+                                    if subject_to_check in email_subject.lower():
                                         logger.info(f'pagerduty subject{email_subject} verified')
                                     else:
                                         logger.info(f'pagerduty subject not found. Expected: subject={subject_to_check}. Got {email_subject}')
@@ -346,7 +349,7 @@ class AlertReceiver(MexOperation):
                                             check_payload(f'Alert for {alert_receiver_name}: CloudletDown Cloudlet: {cloudlet_name}')
                                         else:
                                             check_payload(f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}')
-                                        check_payload('Triggered')
+                                        # check_payload('Triggered')
                                     # check_payload('job = MobiledgeX Monitoring')
 
                                     if 'job =' in payload:
