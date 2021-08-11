@@ -11,7 +11,7 @@ Library  DateTime
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
 
-Test Timeout  25m
+Test Timeout  30m
 
 *** Variables ***
 ${username}=  qaadmin
@@ -36,7 +36,7 @@ ${developer}=  ${developer_org_name_automation}
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${email_wait}=  300
+${email_wait}=  400
 ${email_not_wait}=  30
 
 *** Test Cases ***
@@ -750,16 +750,85 @@ AlertReceiver - shall be able to create/receive cloudletname/cloudletorg Cloudle
    Stop CRM Docker Container  ${crm_split[1]}
 
    Sleep  30s
-   ${alerts1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   ${alerts1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  description=Cloudlet resource manager is offline
    Length Should Be  ${alerts1}  1
 
    Alert Receiver PagerDuty Email For Firing CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
 
    Start CRM Docker Container  ${crm_split[1]}
 
-   Alert Receiver PagerDuty Email For Resolved CloudletDown Should Be Received  email_password=${password}  email_address=${email}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
-   ${alerts2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   Alert Receiver PagerDuty Email For Resolved CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   ${alerts2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  description=Cloudlet resource manager is offline
    Length Should Be  ${alerts2}  0
+
+# ECQ-3680
+AlertReceiver - shall be able to create/receive AppInst CloudletOffline email/slack alerts
+   [Documentation]
+   ...  - create an appinst
+   ...  - create alert reciever for the appinst
+   ...  - stop the crm docker container
+   ...  - verify CloudletOffline firing alert and email/slack is generated
+   ...  - verify FindCloudlet doesnt find the cloudlet
+   ...  - start the crm docker container
+   ...  - verify CloudletOffline resolved alert and email/slack is generated
+
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated
+
+   ${app}=  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016,tcp:4015  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
+
+   Register Client  app_name=${app_name}
+   ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+   ${fqdn}=  Convert To Lowercase  ${cluster_name}.${cloudlet_name_offline}.${operator_name_openstack}.mobiledgex.net
+   Should Be Equal  ${cloudlet['status']}  FIND_FOUND
+   Should Be Equal  ${cloudlet['fqdn']}  ${fqdn}
+
+   Create Alert Receiver  region=${region}  app_name=${app_name}  cluster_instance_developer_org_name=${developer}
+   Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error  region=${region}  app_name=${app_name}  cluster_instance_developer_org_name=${developer}
+   Create Alert Receiver  type=pagerduty  pagerduty_integration_key=${pagerduty_key}  app_name=${app_name}  cluster_instance_developer_org_name=${developer}
+
+#   ${app_name}=  Set Variable  app1628633059-463253
+#   ${recv_name}=  Set Variable  alertreceiver1628633059463253
+#   ${cluster_name}=  Set Variable  cluster1628633059-463253
+
+   ${crm_show}=  Get Server Show  ${cloudlet_name_offline}-${operator_name_openstack}-pf
+   @{crm_split}=  Split String  ${crm_show['addresses']}  separator==
+
+   #[Teardown]  Teardown CloudletDown  ${crm_split[1]}
+
+   Stop CRM Docker Container  ${crm_split[1]}
+
+   Wait For App Instance Health Check Cloudlet Offline  region=${region}  app_name=${app_name}
+
+   Register Client  app_name=${app_name}
+   ${error}=  Run Keyword and Expect Error  *   Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+   Should Contain  ${error}  FIND_NOTFOUND
+
+   Sleep  30s
+   ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  description=AppInst down due to cloudlet offline
+   Length Should Be  ${alerts1}  1
+
+   Alert Receiver Email For Firing AppInstDown HealthCheckCloudletOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
+
+   Alert Receiver Slack Message For Firing AppInstDown HealthCheckCloudletOffline Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
+
+   Start CRM Docker Container  ${crm_split[1]}
+
+   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
+
+   Alert Receiver Email For Resolved AppInstDown HealthCheckCloudletOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
+
+   Alert Receiver Slack Message For Resolved AppInstDown HealthCheckCloudletOffline Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
+
+   ${alerts2}=  Show Alerts  region=${region}  app_name=${app_name}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  description=AppInst down due to cloudlet offline
+   Length Should Be  ${alerts2}  0
+
+   Register Client  app_name=${app_name}
+   ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+   ${fqdn}=  Convert To Lowercase  ${cluster_name}.${cloudlet_name_offline}.${operator_name_openstack}.mobiledgex.net
+   Should Be Equal  ${cloudlet['status']}  FIND_FOUND
+   Should Be Equal  ${cloudlet['fqdn']}  ${fqdn}
 
 *** Keywords ***
 Setup
