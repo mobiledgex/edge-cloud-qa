@@ -36,7 +36,7 @@ ClusterMetrics - Shall be able to get all docker cluster autocluster Disk metric
 
    [Tags]  ReservableCluster
 
-   ${metrics}  ${metrics_influx}=  Get all cluster metrics on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get all cluster metrics on openstack     ${realclustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -50,9 +50,13 @@ Setup
    #Set Suite Variable  ${limits}
  
    ${timestamp}=  Get Default Time Stamp
-   ${developer_name}=  Get Default Developer Name 
+   ${developer_name}=  Get Default Developer Name
+   ${app_name}=  Get Default App Name
    #${clustername}=  Get Default Cluster Name
    ${clustername_docker}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -docker
+
+   ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
+   ${realclustername_docker}=  Set Variable  ${appinst[0]['data']['real_cluster_name']}
 
    #${clustername_docker}=   Set Variable  cluster1574811700-5411682-k8sshared
    #${developer_name}=  Set Variable  developer1574811700-5411682
@@ -62,6 +66,7 @@ Setup
    Set Suite Variable  ${clustername_docker}
    Set Suite Variable  ${developer_name}
    Set Suite Variable  ${timestamp}
+   Set Suite Variable  ${realclustername_docker}
  
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
