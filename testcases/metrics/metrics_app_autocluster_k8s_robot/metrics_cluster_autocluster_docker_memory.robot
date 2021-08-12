@@ -36,7 +36,7 @@ ClusterMetrics - Shall be able to get all docker cluster autocluster Memory metr
 
    [Tags]  ReservableCluster
 
-   ${metrics}  ${metrics_influx}=  Get all cluster metrics on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  Get all cluster metrics on openstack     ${realclustername_k8s}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -51,9 +51,12 @@ Setup
   
    ${timestamp}=  Get Default Time Stamp
    ${developer_name}=  Get Default Developer Name 
+   ${app_name}=  Get Default App Name
    #${clustername}=  Get Default Cluster Name
    ${clustername_docker}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -docker
 
+   ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
+   ${realclustername_k8s}=  Set Variable  ${appinst[0]['data']['real_cluster_name']}
    #${clustername_docker}=   Set Variable  cluster1575388979-827483-k8sshared 
    #${developer_name}=  Set Variable  developer1575388979-827483 
 
@@ -63,6 +66,7 @@ Setup
    Set Suite Variable  ${clustername_docker}
    Set Suite Variable  ${developer_name}
    Set Suite Variable  ${timestamp}
+   Set Suite Variable  ${realclustername_k8s}
  
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}

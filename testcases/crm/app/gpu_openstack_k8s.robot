@@ -27,7 +27,7 @@ ${longitude}      -96.7970
 
 ${mobiledgex_domain}  mobiledgex.net
 
-${docker_compose_url}=  http://35.199.188.102/apps/automation_configs_gpu_compose.yml
+${k8s_manifest_url}=  http://35.199.188.102/apps/k8s-computervision-gpu.yaml
 ${k8s_gpu}  docker.mobiledgex.net/mobiledgex-samples/images/computervision-gpu:no-pose-2020-10-28
 ${openstack_flavor_name}  m4.small-gpu	
 ${test_timeout_crm}  15 min
@@ -123,6 +123,37 @@ GPU - shall be able to deploy k8s reservable autocluster NVidia T4 Passthru GPU 
     ${app_name_default}=  Get Default App Name
 
     Create App  region=${region}  image_path=${k8s_gpu}  access_ports=tcp:8008:tls,tcp:8011  image_type=ImageTypeDocker  deployment=kubernetes  skip_hc_ports=tcp:8011  developer_org_name=MobiledgeX-Samples
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
+
+    Register Client  developer_org_name=MobiledgeX-Samples
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+
+    ${rootlb_ip}=  Wait For DNS  ${cloudlet.fqdn}
+
+    Sleep  30 s
+
+    ${epoch_time}=  Get Time  epoch
+    ${outfile}=        Catenate  SEPARATOR=  outfile  ${epoch_time}
+
+    Run Process   curl -k -X POST https://${rootlb_ip}:8008/object/detect/ -F image\=@Bruce.jpg  shell=True  stdout=${outfile}  stderr=STDOUT
+    ${output}=  Get File  ${outfile}
+    Log To Console  ${output}
+
+    Should Contain  ${output}  "gpu_support": true
+
+# ECQ-3693
+GPU - shall be able to deploy k8s NVidia T4 Passthru GPU app on KVM Openstack with user provided deployment manifest
+    [Documentation]
+    ...  - deploy k8s cluster with GPU support on openstack
+    ...  - create app with user defined manifest and deploy app instance
+    ...  - verify app uses the GPU for Object Detection
+
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=kubernetes  developer_org_name=MobiledgeX-Samples
+    Sleep  30  seconds
+    Create App  region=${region}  deployment_manifest=${k8s_manifest_url}  access_ports=tcp:8008:tls,tcp:8011  image_type=ImageTypeDocker  deployment=kubernetes  skip_hc_ports=tcp:8011  developer_org_name=MobiledgeX-Samples
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
 
     Register Client  developer_org_name=MobiledgeX-Samples
