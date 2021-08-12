@@ -1,0 +1,212 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: automation1
+  labels:
+    name: automation1
+    label1: value1
+apiVersion: v1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-ping-threaded-udptcphttp-tcpservice
+  namespace: automation1
+  labels:
+    run: server-ping-threaded-udptcphttpapp1
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 2015
+    targetPort: 2015
+    protocol: TCP
+    name: tcp2015
+  selector:
+    run: server-ping-threaded-udptcphttpapp1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-ping-threaded-udptcphttp-deployment
+  namespace: automation1
+spec:
+  selector:
+    matchLabels:
+      run: server-ping-threaded-udptcphttpapp1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: server-ping-threaded-udptcphttpapp1
+    spec:
+      imagePullSecrets:
+      - name: docker-qa.mobiledgex.net
+      containers:
+      - name: server-ping-threaded-udptcphttpapp1
+        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:9.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 2015
+          protocol: TCP
+        command:
+         - "./server_ping_threaded.py"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: automation2
+  labels:
+    name: automation2
+    label1: value1
+apiVersion: v1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-ping-threaded-udptcphttp-tcpservice
+  namespace: automation2
+  labels:
+    run: server-ping-threaded-udptcphttpapp2
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 2016
+    targetPort: 2016
+    protocol: TCP
+    name: tcp2016
+  selector:
+    run: server-ping-threaded-udptcphttpapp2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-ping-threaded-udptcphttp-deployment
+  namespace: automation2
+spec:
+  selector:
+    matchLabels:
+      run: server-ping-threaded-udptcphttpapp2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: server-ping-threaded-udptcphttpapp2
+    spec:
+      imagePullSecrets:
+      - name: docker-qa.mobiledgex.net
+      containers:
+      - name: server-ping-threaded-udptcphttpapp2
+        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:9.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 2016
+          protocol: TCP
+        command:
+         - "./server_ping_threaded.py"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: automation3
+  labels:
+    name: automation3
+    label1: value1
+apiVersion: v1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-ping-threaded-udptcphttp-httpservice
+  namespace: automation3
+  labels:
+    run: server-ping-threaded-udptcphttpapp3
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8085
+    targetPort: 8085
+    protocol: TCP
+    name: http2015
+  selector:
+    run: server-ping-threaded-udptcphttpapp3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-ping-threaded-udptcphttp-deployment
+  namespace: automation3
+spec:
+  selector:
+    matchLabels:
+      run: server-ping-threaded-udptcphttpapp3
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: server-ping-threaded-udptcphttpapp3
+    spec:
+      imagePullSecrets:
+      - name: docker-qa.mobiledgex.net
+      containers:
+      - name: server-ping-threaded-udptcphttpapp
+        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:9.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8085
+          protocol: TCP
+        command:
+         - "./server_ping_threaded.py"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: automation4
+  labels:
+    name: automation4
+    label1: value1
+apiVersion: v1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-ping-threaded-udptcphttp-tcpservice
+  namespace: automation4
+  labels:
+    run: server-ping-threaded-udptcphttpapp4
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 2015
+    targetPort: 2015
+    protocol: UDP
+    name: udp2015
+  selector:
+    run: server-ping-threaded-udptcphttpapp4
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-ping-threaded-udptcphttp-deployment
+  namespace: automation4
+spec:
+  selector:
+    matchLabels:
+      run: server-ping-threaded-udptcphttpapp4
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: server-ping-threaded-udptcphttpapp4
+    spec:
+      imagePullSecrets:
+      - name: docker-qa.mobiledgex.net
+      containers:
+      - name: server-ping-threaded-udptcphttpapp4
+        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:9.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 2015
+          protocol: UDP
+        command:
+         - "./server_ping_threaded.py"
+
