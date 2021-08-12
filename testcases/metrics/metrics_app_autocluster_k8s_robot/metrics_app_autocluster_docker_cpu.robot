@@ -32,7 +32,7 @@ AppMetrics - Shall be able to get all docker autocluster app CPU metrics
 
    [Tags]  ReservableCluster
 
-   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  cpu
+   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${app_name_influx}  ${realclustername_k8s}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  cpu
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -55,6 +55,7 @@ Setup
    #${developer_name}=  Set Variable  mobiledgex 
 
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
+   ${realclustername_k8s}=  Set Variable  ${appinst[0]['data']['real_cluster_name']}
    #${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
 
    ${app_name_influx}=  Convert To Lowercase  ${app_name}
@@ -65,6 +66,7 @@ Setup
    Set Suite Variable  ${clustername_docker}
    Set Suite Variable  ${developer_name}
    Set Suite Variable  ${app_name_influx}
+   Set Suite Variable  ${realclustername_k8s}
  
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
