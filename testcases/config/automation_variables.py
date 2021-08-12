@@ -66,6 +66,7 @@ qcow_centos_image_nocloudinit = 'https://artifactory.mobiledgex.net/artifactory/
 
 server_ping_threaded_cloudconfig = 'http://35.199.188.102/apps/server_ping_threaded_cloudconfig.yml'
 robotnik_manifest = 'http://35.199.188.102/apps/automation_robotnik.yml'
+namespace_manifest = 'http://35.199.188.102/apps/automation_server_ping_threaded_namespaces.yml'
 
 helm_image = 'https://resources.gigaspaces.com/helm-charts:gigaspaces/insightedge'
 
