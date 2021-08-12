@@ -4,7 +4,7 @@ dateParm = "${BuildDate}"
 commit_version = "notset"
 image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
 
-def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runRunConsoleTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runShowLogsTests", "runVMPoolControllerTests", "runSecurityTests", "runUserTests", "runMCConfigsTests"]
+def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runRunConsoleTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runShowLogsTests", "runVMPoolControllerTests", "runSecurityTests", "runUserTests", "runMCConfigsTests", "runRateLimitMCTests"]
 def jobListGcp = ["runCrmTests"]
 def jobList2Parallel = ["runCloudletPoolAllTests", "runOrganizationTests", "runShowNodeTests", "runPerformance", "RunCRMResourceManagement"]
 def jobListPerformance=["Performance"]
@@ -13,7 +13,7 @@ def jobListOwaspZAP=["OWASP ZAP"]
 def jobListNmapScanning=["nmap scanning"]
 def jobListImageScanning=["Image Scanning"]
 def jobListConsole=["runConsoleTests"]
-def jobListRunFailed = ["runControllerTests", "runDMETests", "runAccountTests", "runUserRoleTests", "runUserTests", "runMCConfigsTests", "runOrganizationTests", "runCloudletPoolAllTests"]
+def jobListRunFailed = ["runControllerTests", "runDMETests", "runAccountTests", "runUserRoleTests", "runUserTests", "runMCConfigsTests", "runOrganizationTests", "runCloudletPoolAllTests", "runRateLimitMCTests"]
 
 builds1 = [:]
 builds2 = [:]
