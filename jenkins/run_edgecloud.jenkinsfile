@@ -144,8 +144,7 @@ node('jenkinsSlave1'){
        stage('Check Load Exists') {
           def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + tag + '\\")"'
           def index  = sh(script: s, returnStdout: true);
-	  int indexnum = index as Integer
-          if(indexnum < 1) {
+	  if(index == 'null') {
              println "${s} failed"
              currentBuild.result = 'FAILURE'
           }
