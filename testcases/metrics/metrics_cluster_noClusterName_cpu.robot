@@ -145,8 +145,9 @@ CPU Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 	
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} >= 0 and ${reading[5]} <= 100
+   FOR  ${reading}  IN  @{values}
+       Should Be True               ${reading[5]} >= 0 and ${reading[5]} <= 100
+   END
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
