@@ -271,8 +271,9 @@ UDP Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 	
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} >= 0 and ${reading[6]} >= 0 and ${reading[7]} >= 0
+   FOR  ${reading}  IN  @{values}
+       Should Be True               ${reading[5]} >= 0 and ${reading[6]} >= 0 and ${reading[7]} >= 0
+   END
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
@@ -299,10 +300,10 @@ Metrics Should Match Influxdb
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][6]}  ${reading['udpRecv']}
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][7]}  ${reading['udpRecvErr']}
 #   \  ${index}=  Evaluate  ${index}+1
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['udpSent']}   ${reading[5]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['udpRecv']}   ${reading[6]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['udpRecvErr']}   ${reading[7]}
-   \  ${index}=  Evaluate  ${index}+1
-
+   FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+       Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+       Should Be Equal  ${metrics_influx_t[${index}]['udpSent']}   ${reading[5]}
+       Should Be Equal  ${metrics_influx_t[${index}]['udpRecv']}   ${reading[6]}
+       Should Be Equal  ${metrics_influx_t[${index}]['udpRecvErr']}   ${reading[7]}
+       ${index}=  Evaluate  ${index}+1
+   END

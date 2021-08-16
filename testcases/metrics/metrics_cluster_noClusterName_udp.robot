@@ -147,8 +147,9 @@ UDP Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 	
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} >= 0 and ${reading[6]} >= 0 and ${reading[7]} >= 0
+   FOR  ${reading}  IN  @{values}
+       Should Be True               ${reading[5]} >= 0 and ${reading[6]} >= 0 and ${reading[7]} >= 0
+   END
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
