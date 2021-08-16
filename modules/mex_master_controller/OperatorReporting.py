@@ -17,7 +17,7 @@ class OperatorReporting(MexOperation):
         self.show_url = '/auth/reporter/show'
         self.update_url = '/auth/reporter/update'
 
-    def _build(self, reporter_name=None, organization=None, email=None, schedule=None, start_schedule_date=None, timezone=None,  use_defaults=True):
+    def _build(self, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None,  use_defaults=True):
 
         if use_defaults:
             if reporter_name is None:
@@ -32,8 +32,8 @@ class OperatorReporting(MexOperation):
         if organization is not None:
             reporter_dict['Org'] = organization
 
-        if email is not None:
-            reporter_dict['Email'] = email
+        if email_address is not None:
+            reporter_dict['Email'] = email_address
 
         if schedule is not None:
             reporter_dict['Schedule'] = schedule
@@ -46,8 +46,8 @@ class OperatorReporting(MexOperation):
 
         return reporter_dict
 
-    def create_reporter(self, token=None, reporter_name=None, organization=None, email=None, schedule=None, start_schedule_date=None, timezone=None, use_defaults=True, use_thread=False, auto_delete=True, json_data=None, stream=False, stream_timeout=100):
-        msg = self._build(reporter_name=reporter_name, organization=organization, email=email, schedule=schedule, start_schedule_date=start_schedule_date, timezone=timezone, use_defaults=use_defaults)
+    def create_reporter(self, token=None, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, use_defaults=True, use_thread=False, auto_delete=True, json_data=None, stream=False, stream_timeout=100):
+        msg = self._build(reporter_name=reporter_name, organization=organization, email_address=email_address, schedule=schedule, start_schedule_date=start_schedule_date, timezone=timezone, use_defaults=use_defaults)
         msg_dict = msg
 
         thread_name = None
@@ -63,8 +63,8 @@ class OperatorReporting(MexOperation):
 
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)[0]
 
-    def update_reporter(self, token=None, reporter_name=None, organization=None, email=None, schedule=None, start_schedule_date=None, timezone=None, use_defaults=True, use_thread=False, json_data=None):
-        msg = self._build(reporter_name=reporter_name, organization=organization, email=email, schedule=schedule, start_schedule_date=start_schedule_date, timezone=timezone, use_defaults=use_defaults)
+    def update_reporter(self, token=None, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(reporter_name=reporter_name, organization=organization, email_address=email_address, schedule=schedule, start_schedule_date=start_schedule_date, timezone=timezone, use_defaults=use_defaults)
         msg_dict = msg
 
         msg_dict_show = None
