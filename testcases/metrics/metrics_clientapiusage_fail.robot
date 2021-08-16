@@ -297,7 +297,7 @@ ClientApiUsageMetrics - get with invalid app/cloudlet shall return error
 
    ${inject}=  Set Variable  \\'\\;drop measurment \"cloudlet-ipusage\"
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  selector=api  app_name=${inject}  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator} developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  selector=api  app_name=${inject}  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid app"}')
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  selector=api  app_name=automation_api_app  app_version=${inject}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
