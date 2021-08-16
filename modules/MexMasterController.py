@@ -52,7 +52,7 @@ from mex_master_controller.Org import Org
 from mex_master_controller.BillingOrg import BillingOrg
 from mex_master_controller.GpuDriver import GpuDriver
 from mex_master_controller.RateLimitSettings import RateLimitSettings
-
+from mex_master_controller.OperatorReporting import OperatorReporting
 
 import shared_variables_mc
 import shared_variables
@@ -221,6 +221,7 @@ class MexMasterController(MexRest):
                                      super_token=self.super_token)
         self.gpudriver = GpuDriver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.ratelimitsettings = RateLimitSettings(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.operator_reporting = OperatorReporting(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -297,7 +298,10 @@ class MexMasterController(MexRest):
 
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
-   
+  
+    def get_default_reporter_name(self):
+        return shared_variables.reporter_name_default
+ 
     def get_default_gpudriver_name(self):
         return shared_variables.gpudriver_name_default
 
@@ -1771,6 +1775,18 @@ class MexMasterController(MexRest):
 
     def update_mc_rate_limit_flow(self, token=None, flow_settings_name=None, api_name=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
         return self.ratelimitsettings.update_mc_rate_limit_flow(token=token, flow_settings_name=flow_settings_name, api_name=api_name, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_reporter(self, token=None, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, use_defaults=True, use_thread=False):
+        return self.operator_reporting.create_reporter(token=token, reporter_name=reporter_name, organization=organization, email_address=email_address, schedule=schedule, start_schedule_date=start_schedule_date, timezone=timezone, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_reporter(self, token=None, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, use_defaults=True, use_thread=False):
+        return self.operator_reporting.update_reporter(token=token, reporter_name=reporter_name, organization=organization, email_address=email_address, schedule=schedule, start_schedule_date=start_schedule_date, timezone=timezone, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_reporter(self, token=None, reporter_name=None, organization=None, use_defaults=True, use_thread=False):
+        return self.operator_reporting.delete_reporter(token=token, reporter_name=reporter_name, organization=organization, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_reporter(self, token=None, reporter_name=None, organization=None, use_defaults=True, use_thread=False):
+        return self.operator_reporting.show_reporter(token=token, reporter_name=reporter_name, organization=organization, use_defaults=use_defaults, use_thread=use_thread)
 
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
