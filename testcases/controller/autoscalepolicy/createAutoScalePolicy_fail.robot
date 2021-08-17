@@ -89,7 +89,8 @@ CreateAutoScalePolicy - create with policy/organization only shall return error
    ${error_msg}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  use_defaults=False
 
    Should Contain  ${error_msg}   code=400
-   Should Contain  ${error_msg}  {"message":"Min nodes cannot be less than 1"} 
+   #Should Contain  ${error_msg}  {"message":"Min nodes cannot be less than 1"} 
+   Should Contain  ${error_msg}  {"message":"One of target cpu or target mem or target active connections must be specified"}
 
 # ECQ-3516
 CreateAutoScalePolicy - create with policy/organization and minnodes only shall return error
@@ -111,7 +112,7 @@ CreateAutoScalePolicy - create with policy/organization and maxnodes only shall 
    ${error_msg}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  max_nodes=1  use_defaults=False
 
    Should Contain  ${error_msg}   code=400
-   Should Contain  ${error_msg}  {"message":"Min nodes cannot be less than 1"}
+   Should Contain  ${error_msg}  {"message":"One of target cpu or target mem or target active connections must be specified"}
 
 # ECQ-3518	
 CreateAutoScalePolicy - create with policy/organization and minnodes/maxnodes only shall return error
@@ -162,7 +163,7 @@ CreateAutoScalePolicy - create with minnodes=0 shall return error
    ...  - send CreateAutoScalePolicy with minnodes=0
    ...  - verify proper error is received
 
-   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=0  max_nodes=1  use_defaults=False
+   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=0  max_nodes=1  target_cpu=10  use_defaults=False
 
    Should Contain   ${error}   400
    Should Contain             ${error}  {"message":"Min nodes cannot be less than 1"}
