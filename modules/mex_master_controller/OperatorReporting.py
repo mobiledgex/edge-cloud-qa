@@ -1,6 +1,8 @@
 import logging
 import re
-
+import email
+import imaplib
+import time
 import shared_variables
 
 from mex_master_controller.MexOperation import MexOperation
@@ -85,4 +87,89 @@ class OperatorReporting(MexOperation):
         msg_dict = msg
 
         return self.show(token=token, url=self.show_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def verify_email(self, email_address=None, email_password=None, reporter_name=None, report_period=None, timezone=None, username=None, organization=None, server='imap.gmail.com', wait=30):
+        rp = report_period.split('to')
+        start_period = rp[0].strip()
+        end_period = rp[1].strip()
+        start_period = start_period.replace('/', '')
+        end_period = end_period.replace('/', '')
+        expected_filename = f'{organization}_{reporter_name}_{start_period}_{end_period}.pdf'
+        logger.debug(f'expected filename is {expected_filename}')
+
+
+        mail = imaplib.IMAP4_SSL(server)
+        mail.login(email_address, email_password)
+        mail.select('inbox')
+        logger.debug(f'successfully logged into {email_address}')
+
+        email_heading_search = f'(SUBJECT "[{reporter_name}]")'
+
+        emailstatus, email_list = mail.search(None, email_heading_search)
+        mail_ids_pre = email_list[0].split()
+        num_emails_pre = len(mail_ids_pre)
+        logger.debug(f'originally found {num_emails_pre} with {email_heading_search}')
+        num_emails_pre = 0
+
+        for attempt in range(wait):
+            mail.recent()
+            emailstatus, email_list = mail.search(None, email_heading_search)
+            mail_ids = email_list[0].split()
+            num_emails = len(mail_ids)
+            logger.info(f'number of emails found is {num_emails}')
+            if num_emails > num_emails_pre:
+                def check_payload(text):
+                    if text in payload:
+                        logger.info(f'{text} found in alert email')
+                    else:
+                        raise Exception(f'{text} not found in alert email')
+                num_new_emails = num_emails - num_emails_pre
+                logging.info(f'found {num_new_emails} new emails')
+                for newemail in email_list:
+                    mail_id = newemail.split()
+                    logger.info(f'checking new email with id={mail_id}')
+
+                    for i in mail_id:
+                        typ, data = mail.fetch(i.decode('utf-8'), '(RFC822)')
+                        for response_part in data:
+                            if isinstance(response_part, tuple):
+                                msg = email.message_from_string(response_part[1].decode('utf-8'))
+                                email_subject = msg['subject'].replace('\r\n', '')
+                                logger.debug(f'subject={email_subject}')
+
+                                subject_to_check = f'[{reporter_name}] Cloudlet Usage Report for {organization} for the period {report_period} (Timezone: {timezone})'
+                                if subject_to_check in email_subject:
+                                    logger.info(f'subject{email_subject}  verified')
+                                else:
+                                    raise Exception(f'subject not found. Expected: subject={subject_to_check}. Got {email_subject}')
+                                    
+                                if msg.is_multipart():
+                                    for part in msg.walk():
+                                        ctype = part.get_content_type()
+                                        logger.debug(f'type={ctype}')
+                                        content_disposition = str(part.get("Content-Disposition"))
+                                        logger.debug(f'Content={content_disposition}')
+                                        if ctype == 'text/plain':
+                                            payload = part.get_payload(decode=True).decode('utf-8')
+                                            logger.debug(f'payload={payload}')
+                                        if 'attachment' in content_disposition:
+                                            filename = part.get_filename()
+                                            logger.debug(f'Attached file={filename}')
+                                if f'Hi {username},' in payload:
+                                    logging.info('greetings found')
+                                else:
+                                    raise Exception('Greetings not found')
+                                if f'Please find the attached report generated for cloudlets part of {organization} organization for the period {report_period}' in payload:
+                                    logging.info('body1 found')
+                                else:
+                                    raise Exception('Body1 not found')
+                                if filename == expected_filename:
+                                    logging.info('Found attachment')
+                                else:
+                                    raise Exception('Attachment NOT found')
+
+                                return True
+            time.sleep(1)
+
+        raise Exception('email not found')
 
