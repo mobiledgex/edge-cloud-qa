@@ -142,7 +142,7 @@ node('jenkinsSlave1'){
 
     try {
        stage('Check Load Exists') {
-          def s = 'curl -s curl -s https://robot\\$qa:RIuSwsdA9naFkunkDtg7TrPOHG3YoqS8@harbor.mobiledgex.net/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + tag + '\\")"'
+          def s = 'curl -s https://robot\\$qa:RIuSwsdA9naFkunkDtg7TrPOHG3YoqS8@harbor.mobiledgex.net/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + tag + '\\")"'
           def index  = sh(script: s, returnStdout: true);
 	  int indexnum = index as Integer
           if(indexnum < 1) {
