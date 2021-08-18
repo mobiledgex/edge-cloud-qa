@@ -33,7 +33,7 @@ class MexArtifactory():
         print('*WARN*', 'stderr=' ,stderr)
         print('*WARN*', 'return code=' ,process.returncode)
         
-        if process.returncode != 0 or f'"createdBy" : "{username}"' not in stdout[4].decode('utf-8'):
+        if process.returncode != 0 or f'"createdBy": "{username}"' not in stdout[4].decode('utf-8'):
             raise Exception(f'artifactory curl failed:  {stderr} {stdout}')
 
         return stdout
