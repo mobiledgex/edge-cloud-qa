@@ -6,10 +6,12 @@ import os
 import time
 import requests
 import CloudFlare
+import pytz
 
 import rootlb
 import kubernetes
 
+from datetime import datetime
 from mex_master_controller.AlertReceiver import AlertReceiver
 from mex_master_controller.OperatorReporting import OperatorReporting
 
@@ -947,3 +949,8 @@ class MexApp(object):
 
     def email_with_operator_report_should_be_received(self, email_address=None, email_password=None, reporter_name=None, report_period=None, timezone=None, username=None, organization=None):
         self.operator_reporting.verify_email(email_address=email_address, email_password=email_password, reporter_name=reporter_name, report_period=report_period, timezone=timezone, username=username, organization=organization)
+
+    def get_current_date(self, timezone=None):
+        tz = pytz.timezone(timezone)
+        current_date = datetime.now(tz)
+        return current_date
