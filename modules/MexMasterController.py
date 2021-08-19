@@ -295,6 +295,9 @@ class MexMasterController(MexRest):
     def get_default_rate_limiting_flow_name(self):
         return shared_variables.flow_settings_name_default
 
+    def get_default_rate_limiting_max_requests_name(self):
+        return shared_variables.max_requests_settings_name_default
+
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
    
@@ -1759,6 +1762,12 @@ class MexMasterController(MexRest):
 
     def create_rate_limit_max_requests(self, token=None, region=None, max_requests_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, max_requests_algorithm=None, max_requests=None, interval=None, use_defaults=True, use_thread=False):
         return self.ratelimitsettings.create_rate_limit_max_requests(token=token, region=region, max_requests_settings_name=max_requests_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, max_requests_algorithm=max_requests_algorithm, max_requests=max_requests, interval=interval, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_rate_limit_max_requests(self, token=None, region=None, max_requests_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, max_requests_algorithm=None, max_requests=None, interval=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.delete_rate_limit_max_requests(token=token, region=region, max_requests_settings_name=max_requests_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, max_requests_algorithm=max_requests_algorithm, max_requests=max_requests, interval=interval, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_rate_limit_max_requests(self, token=None, region=None, max_requests_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, max_requests_algorithm=None, max_requests=None, interval=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.update_rate_limit_max_requests(token=token, region=region, max_requests_settings_name=max_requests_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, max_requests_algorithm=max_requests_algorithm, max_requests=max_requests, interval=interval, use_defaults=use_defaults, use_thread=use_thread)
 
     def create_mc_rate_limit_flow(self, token=None, flow_settings_name=None, api_name=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
         return self.ratelimitsettings.create_mc_rate_limit_flow(token=token, flow_settings_name=flow_settings_name, api_name=api_name, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
