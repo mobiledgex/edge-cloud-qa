@@ -34,6 +34,7 @@ ${docker_image_cpu}    docker-qa.mobiledgex.net/mobiledgex/images/cpu_generator:
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
+# ECQ-2281
 Shall be able to update IpAccessDedicated k8s cluster to modify number of worker nodes
     [Documentation]
     ...  increase and reduce the number of slave nodes 
@@ -45,7 +46,7 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=0
     Log To Console  Done Creating Cluster Instance
 
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}
@@ -62,12 +63,31 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
 
+    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
+    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name_default}
+
+    ${server_info_node}=    Get Server List  name=${openstack_node_name}
+    ${num_servers_node}=     Get Length  ${server_info_node}
+    Should Be Equal As Numbers  ${num_servers_node}    0   # 0 nodes
+
+    Log To Console  Updating Cluster Instance
+    Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=1
+    Log To Console  Done Updating Cluster Instance
+
+    ${server_info_node}=    Get Server List  name=${openstack_node_name}
+    ${server_info_master}=  Get Server List  name=${openstack_node_master}
+    ${server_info_lb}=      Get Server List  name=${clusterlb}
+
+    ${num_servers_node}=     Get Length  ${server_info_node}
+    Should Be Equal As Numbers  ${num_servers_node}    1   # 1 nodes
+
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+
     Log To Console  Updating Cluster Instance
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=2
     Log To Console  Done Updating Cluster Instance
-
-    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
-    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name_default}
 
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
     ${server_info_master}=  Get Server List  name=${openstack_node_master}
@@ -87,13 +107,25 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
 
     ${num_servers_node}=     Get Length  ${server_info_node}
-    Should Be Equal As Numbers  ${num_servers_node}    2   # 2 worker nodes
+    Should Be Equal As Numbers  ${num_servers_node}    1   # 2 worker nodes
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
 
+    Log To Console  Updating Cluster Instance
+    Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=1
+    Log To Console  Done Updating Cluster Instance
 
+    ${server_info_node}=    Get Server List  name=${openstack_node_name}
+    ${num_servers_node}=     Get Length  ${server_info_node}
+    Should Be Equal As Numbers  ${num_servers_node}    0   # 0 worker nodes
+
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+
+# ECQ-2282
 Shall be able to update IpAccessDedicated k8s cluster to increase number of worker nodes with scale_with_cluster
     [Documentation]
     ...  increase the number of slave nodes with scale_with_cluster enabled for App
@@ -140,7 +172,7 @@ Shall be able to update IpAccessDedicated k8s cluster to increase number of work
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
 
-
+# ECQ-2275
 Shall be able to update IpAccessDedicated k8s cluster to include auto scale policy
     [Documentation]
     ...  create an auto scale policy
@@ -198,7 +230,7 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
-
+# ECQ-2276
 Shall be able to update IpAccessDedicated k8s cluster to include auto scale policy where min_nodes > number_nodes
     [Documentation]
     ...  create an auto scale policy
