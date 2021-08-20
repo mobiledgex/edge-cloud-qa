@@ -23,6 +23,7 @@ trust_policy_name_default = 'trustpolicy' + default_time_stamp
 autoprov_policy_name_default = 'autoprovpolicy' + default_time_stamp
 autoscale_policy_name_default = 'autoscalepolicy' + default_time_stamp
 flow_settings_name_default = 'flow' + default_time_stamp
+alert_policy_name_default = 'alertrpolicy' + default_time_stamp.replace('-', '')
 max_requests_settings_name_default = 'maxreqs' + default_time_stamp
 
 first_name_default = 'firstname' + default_time_stamp
