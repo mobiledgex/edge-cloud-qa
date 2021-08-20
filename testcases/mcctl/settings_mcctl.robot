@@ -55,7 +55,7 @@ Settings - mcctl shall be able to update the settings
    [Teardown]  Cleanup Settings  ${settings}
 
    Run mcctl  settings update region=${region} shepherdmetricscollectioninterval=1s
-   Run mcctl  settings update region=${region} shepherdalertevaluationinterval=1s
+   Run mcctl  settings update region=${region} shepherdalertevaluationinterval=111s
    Run mcctl  settings update region=${region} shepherdhealthcheckretries=1
    Run mcctl  settings update region=${region} shepherdhealthcheckinterval=1s
    Run mcctl  settings update region=${region} autodeployintervalsec=1 autodeployoffsetsec=1 autodeploymaxintervals=1
@@ -66,7 +66,7 @@ Settings - mcctl shall be able to update the settings
 
    ${settings_post}=  Run mcctl  settings show region=${region}
 
-   Should Be Equal             ${settings_post['shepherd_alert_evaluation_interval']}    1s
+   Should Be Equal             ${settings_post['shepherd_alert_evaluation_interval']}    1m51s
    Should Be Equal             ${settings_post['shepherd_health_check_interval']}        1s
    Should Be Equal As Numbers  ${settings_post['shepherd_health_check_retries']}         1
    Should Be Equal             ${settings_post['shepherd_metrics_collection_interval']}  1s

@@ -12,7 +12,7 @@ ${username}          mextester99
 ${password}          ${mextester06_gmail_password}
 ${email}             mextester99@gmail.com
 ${mextester99_gmail_password}  rfbixqomqidobmcb
-${server}            artifactory-qa.mobiledgex.net
+${server}            vm-registry-qa.mobiledgex.net
 ${artifactory_dummy_image_name}        mc_user_uploads_artifactory.robot 
 ${OPorgname}         oporgtester01
 ${DEVorgname}        jdevorg
