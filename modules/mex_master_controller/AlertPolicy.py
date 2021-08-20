@@ -1,10 +1,8 @@
 import logging
-import re
-import shared_variables
 
 from mex_master_controller.MexOperation import MexOperation
 
-logger = logging.getLogger('mex alertpolicy rest')
+logger = logging.getLogger(__name__)
 
 
 class AlertPolicy(MexOperation):
@@ -18,7 +16,7 @@ class AlertPolicy(MexOperation):
 
 # '{"AlertPolicy":{"annotations":{"empty":"true"},"cpu_utilization_limit":4,"description":"this is robot testcase alertpolicy","disk_utilization_limit":4,"key":{"name":"alertpolicyname","organization":"wwtdev"},"labels":{"empty":"true"},"mem_utilization_limit":4,"severity":"info","trigger_time":"30s"},"Region":"US"}'
 
-    def _build(self, alertpolicy_name=None,  alert_org=None, severity=None, cpu_utilization=None, mem_utilization=None, disk_utilization=None, active_connections=None, trigger_time=None, labels_vars=None, annotations_vars=None, description=None, use_defaults=True, auto_delete=True):
+    def _build(self, alertpolicy_name=None, alert_org=None, severity=None, cpu_utilization=None, mem_utilization=None, disk_utilization=None, active_connections=None, trigger_time=None, labels_vars=None, annotations_vars=None, description=None, use_defaults=True, auto_delete=True):
 
         alert_policy_dict = {}
         alert_key_dict = {}
@@ -40,9 +38,9 @@ class AlertPolicy(MexOperation):
             var_list = annotations_vars.split(':')
             print('varlist', var_list)
             for var in var_list:
-             print(var)
-             s = var.split('=')
-             annotations_dict[s[0]] = s[1]
+                print(var)
+                s = var.split('=')
+                annotations_dict[s[0]] = s[1]
             alert_policy_dict['annotations'] = annotations_dict
 
         labels_dict = {}
@@ -50,17 +48,17 @@ class AlertPolicy(MexOperation):
             var_list = labels_vars.split(',')
             print('varlist', var_list)
             for var in var_list:
-             print(var)
-             s = var.split('=')
-             labels_dict[s[0]] = s[1]
-            alert_policy_dict['labels'] = labels_dict       
+                print(var)
+                s = var.split('=')
+                labels_dict[s[0]] = s[1]
+            alert_policy_dict['labels'] = labels_dict
 
         if severity is not None:
             alert_policy_dict['severity'] = severity
         if trigger_time is not None:
             alert_policy_dict['trigger_time'] = trigger_time
         if description is not None:
-            alert_policy_dict['description'] = description            
+            alert_policy_dict['description'] = description
 
         if cpu_utilization is not None:
             try:
@@ -107,7 +105,7 @@ class AlertPolicy(MexOperation):
 
         return self.show(url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def delete_alert_policy(self, token=None, region=None, alertpolicy_name=None, alert_org=None, json_data=None, severity=None, cpu_utilization=None, mem_utilization=None, disk_utilization=None, active_connections=None, trigger_time=None, labels_vars=None, annotations_vars=None, description=None, use_defaults=True, auto_delete=True):
+    def delete_alert_policy(self, token=None, region=None, alertpolicy_name=None, alert_org=None, json_data=None, severity=None, cpu_utilization=None, mem_utilization=None, disk_utilization=None, active_connections=None, trigger_time=None, labels_vars=None, annotations_vars=None, description=None, use_defaults=True, use_thread=False, auto_delete=True):
         msg = self._build(token=token, region=region, alertpolicy_name=alertpolicy_name, alert_org=alert_org, severity=severity, cpu_utilization=cpu_utilization, mem_utilization=mem_utilization, disk_utilization=disk_utilization, active_connections=active_connections, trigger_time=trigger_time, labels_vars=labels_vars, annotations_vars=annotations_vars, description=description, use_defaults=use_defaults, auto_delete=auto_delete)
         msg_dict = {'alertpolicy': msg}
 
