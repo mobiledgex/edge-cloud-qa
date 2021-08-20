@@ -950,7 +950,7 @@ class MexApp(object):
     def email_with_operator_report_should_be_received(self, email_address=None, email_password=None, reporter_name=None, report_period=None, timezone=None, username=None, organization=None):
         self.operator_reporting.verify_email(email_address=email_address, email_password=email_password, reporter_name=reporter_name, report_period=report_period, timezone=timezone, username=username, organization=organization)
 
-    def get_current_date(self, timezone=None):
+    def get_current_time(self, timezone=None):
         tz = pytz.timezone(timezone)
         current_date = datetime.now(tz)
         return current_date
