@@ -33,6 +33,7 @@ app_name_automation = 'automation_api_app'
 app_name_auth_automation = 'automation_api_auth_app'
 developer_org_name_automation = 'automation_dev_org'
 flavor_name_automation = 'automation_api_flavor'
+alert_policy_name_automation = 'automation_api_alert_policy_name'
 
 operator_name_azure = 'azure'
 operator_name_gcp = 'gcp'
