@@ -38,7 +38,15 @@ class OperatorReporting(MexOperation):
             reporter_dict['Email'] = email_address
 
         if schedule is not None:
-            reporter_dict['Schedule'] = schedule
+            if schedule == 'EveryWeek':
+                value = 0
+            elif schedule == 'Every15Days':
+                value = 1
+            elif schedule == 'EveryMonth':
+                value = 3
+            else:
+                value = 4
+            reporter_dict['Schedule'] = int(value)
 
         if start_schedule_date is not None:
             reporter_dict['StartScheduleDate'] = start_schedule_date           
@@ -141,8 +149,9 @@ class OperatorReporting(MexOperation):
                                 if subject_to_check in email_subject:
                                     logger.info(f'subject{email_subject}  verified')
                                 else:
-                                    raise Exception(f'subject not found. Expected: subject={subject_to_check}. Got {email_subject}')
-                                    
+                                    logger.info(f'subject not found. Expected: subject={subject_to_check}. Got {email_subject}')
+                                    continue
+
                                 if msg.is_multipart():
                                     for part in msg.walk():
                                         ctype = part.get_content_type()
