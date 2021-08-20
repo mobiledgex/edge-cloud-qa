@@ -24,6 +24,7 @@ autoprov_policy_name_default = 'autoprovpolicy' + default_time_stamp
 autoscale_policy_name_default = 'autoscalepolicy' + default_time_stamp
 flow_settings_name_default = 'flow' + default_time_stamp
 alert_policy_name_default = 'alertrpolicy' + default_time_stamp.replace('-', '')
+max_requests_settings_name_default = 'maxreqs' + default_time_stamp
 
 first_name_default = 'firstname' + default_time_stamp
 # org_name_default = 'name' + default_time_stamp
@@ -44,3 +45,4 @@ crm_notify_server_address = '127.0.0.1'
 crm_notify_server_address_port = random.randint(49152, 65535)
 gpudriver_name_default = 'gpudriver' + default_time_stamp
 gpudriver_build_name_default = 'build' + default_time_stamp
+reporter_name_default = 'reporter' + default_time_stamp

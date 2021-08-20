@@ -198,6 +198,9 @@ class AlertReceiver(MexOperation):
                             if 'job:' in slack_msg['attachments'][0]['text']:
                                 raise Exception('job found in alert slack message')
 
+                            check_payload(slack_msg, 'Started at:')
+                            check_payload(slack_msg, '0000 UTC')
+
                         except Exception as e:
                             logger.info(f'check payload failed:{e}')
                             continue
@@ -350,11 +353,16 @@ class AlertReceiver(MexOperation):
                                         else:
                                             check_payload(f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}')
                                         # check_payload('Triggered')
+                                        check_payload('Started at:')
+                                    else:
+                                        check_payload('Alert started at')
+
+                                    check_payload('0000 UTC')
+
                                     # check_payload('job = MobiledgeX Monitoring')
 
                                     if 'job =' in payload:
                                         raise Exception('job found in alert email')
-
                                 except Exception as e:
                                     logger.info(f'check payload failed:{e}')
                                     continue

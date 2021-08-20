@@ -26,7 +26,7 @@ MC - Admin user shall be able show role assignments with no assignments
         Should Be True  len(@{showadmin}) > 0
 
         FOR  ${role}  IN  @{showadmin}	
-	    Should Be True  '${role['role']}' == 'AdminManager' or '${role['role']}' == 'BillingManager' or '${role['role']}' == 'OperatorManager' or '${role['role']}' == 'OperatorContributor' or '${role['role']}' == 'OperatorViewer' or '${role['role']}' == 'DeveloperManager' or '${role['role']}' == 'DeveloperContributor' or '${role['role']}' == 'DeveloperViewer' or '-role' in '${role['role']}'
+	    Should Be True  '${role['role']}' == 'AdminManager' or '${role['role']}' == 'AdminViewer' or '${role['role']}' == 'BillingManager' or '${role['role']}' == 'OperatorManager' or '${role['role']}' == 'OperatorContributor' or '${role['role']}' == 'OperatorViewer' or '${role['role']}' == 'DeveloperManager' or '${role['role']}' == 'DeveloperContributor' or '${role['role']}' == 'DeveloperViewer' or '-role' in '${role['role']}'
         END
 
 #MC - Admin user shall be able to assign a user role to an org

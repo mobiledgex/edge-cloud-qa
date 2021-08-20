@@ -270,8 +270,9 @@ Network Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 	
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} > 0 and ${reading[6]} > 0
+   FOR  ${reading}  IN  @{values}
+       Should Be True               ${reading[5]} > 0 and ${reading[6]} > 0
+   END
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
@@ -301,9 +302,10 @@ Metrics Should Match Influxdb
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][6]}  ${reading['recvBytes']}
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][5]}  ${reading['sendBytes']}
 #   \  ${index}=  Evaluate  ${index}+1
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['sendBytes']}   ${reading[5]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['recvBytes']}   ${reading[6]}
-   \  ${index}=  Evaluate  ${index}+1
+   FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+       Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+       Should Be Equal  ${metrics_influx_t[${index}]['sendBytes']}   ${reading[5]}
+       Should Be Equal  ${metrics_influx_t[${index}]['recvBytes']}   ${reading[6]}
+       ${index}=  Evaluate  ${index}+1
+   END
 

@@ -180,11 +180,12 @@ Metrics Should Match Influxdb
    log to console  ${metrics_influx_t}
 
    ${index}=  Set Variable  0
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+   FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+       Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
    #\  Should Be Equal  ${metrics_influx_t[${index}]['cpu']}  ${reading[9]}
 
-   \  ${index}=  Evaluate  ${index}+1
+       ${index}=  Evaluate  ${index}+1
+   END
 
 Appinst Connections Headings 
   [Arguments]  ${metrics}
