@@ -142,7 +142,7 @@ node('jenkinsSlave1'){
 
     try {
        stage('Check Load Exists') {
-          def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + tag + '\\")"'
+          def s = 'curl -s https://robot\\$qa:RIuSwsdA9naFkunkDtg7TrPOHG3YoqS8@harbor.mobiledgex.net/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + tag + '\\")"'
           def index  = sh(script: s, returnStdout: true);
 	  if(index == 'null') {
              println "${s} failed"
@@ -196,9 +196,9 @@ node('jenkinsSlave1'){
     try {
        stage('Pull Image') {
           sh 'docker system prune -af'  //remove all docker stuff without prompting
-	  sh 'docker pull registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
+	  sh 'docker pull harbor.mobiledgex.net/mobiledgex/edge-cloud:latest'
 	  
-          def s = 'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:' + tag + ' version'
+          def s = 'docker run --rm harbor.mobiledgex.net/mobiledgex/edge-cloud:' + tag + ' version'
           def index  = sh(script: s, returnStdout: true);
          // (commit_version, image_name) = index.split(',')
   	 // dir('go/src/github.com/mobiledgex/edge-cloud') {

@@ -6,11 +6,14 @@ import os
 import time
 import requests
 import CloudFlare
+import pytz
 
 import rootlb
 import kubernetes
 
+from datetime import datetime
 from mex_master_controller.AlertReceiver import AlertReceiver
+from mex_master_controller.OperatorReporting import OperatorReporting
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +27,7 @@ class MexApp(object):
         self.cf_zone_name = 'mobiledgex.net'
 
         self.alert_receiver = AlertReceiver(root_url='dummy')
+        self.operator_reporting = OperatorReporting(root_url='dummy')
 
     def ping_udp_port(self, host, port):
         data = 'ping'
@@ -942,3 +946,11 @@ class MexApp(object):
             return True
 
         raise Exception('alert receiver slack message for resolved appinstdown healthcheckfailrootlboffline was received')
+
+    def email_with_operator_report_should_be_received(self, email_address=None, email_password=None, reporter_name=None, report_period=None, timezone=None, username=None, organization=None):
+        self.operator_reporting.verify_email(email_address=email_address, email_password=email_password, reporter_name=reporter_name, report_period=report_period, timezone=timezone, username=username, organization=organization)
+
+    def get_current_time(self, timezone=None):
+        tz = pytz.timezone(timezone)
+        current_date = datetime.now(tz)
+        return current_date

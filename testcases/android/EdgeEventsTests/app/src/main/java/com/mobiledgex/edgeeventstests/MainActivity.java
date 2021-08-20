@@ -64,19 +64,19 @@ public class MainActivity extends AppCompatActivity {
     private Activity context;
 
     // QA
-//    public static String carrierName = "TDG";
-//    public static final String organizationName = "automation_dev_org";
-//    public static final String applicationName = "automation-sdk-porttest";
-//    public static final String appVersion = "1.0";
-//    public static String hostOverride = "eu-qa.dme.mobiledgex.net";
-//    public static String findCloudletCarrierOverride = "TDG"; // Allow "Any" if using "", but this likely breaks test cases.
-
-    public static String carrierName = "TDG";
+    //public static String carrierName = "TDG";
     public static final String organizationName = "automation_dev_org";
     public static final String applicationName = "automation-sdk-porttest";
     public static final String appVersion = "1.0";
     public static String hostOverride = "eu-qa.dme.mobiledgex.net";
     public static String findCloudletCarrierOverride = "TDG"; // Allow "Any" if using "", but this likely breaks test cases.
+
+    public static String carrierName = "";
+    //public static final String organizationName = "automation_dev_org";
+    //public static final String applicationName = "automation-sdk-porttest";
+    //public static final String appVersion = "1.0";
+    //public static String hostOverride = "eu-qa.dme.mobiledgex.net";
+    //public static String findCloudletCarrierOverride = "TDG"; // Allow "Any" if using "", but this likely breaks test cases.
 
     // Production
     //public static String carrierName = "TELUS";
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static int portOverride = 50051;
     public boolean useHostOverride = true;
-    public boolean useWifiOnly = true; // This also disables network switching, since the android default is WiFi.
+
 
     public static final int REQUEST_MULTIPLE_PERMISSION = 1001;
     public static final String[] permissions = new String[] { // Special Enhanced security requests.
@@ -157,29 +157,33 @@ public class MainActivity extends AppCompatActivity {
         requestPermissions(this);
         startLocationUpdates();
         me = new MatchingEngine(context);
+
         someFuture = CompletableFuture.runAsync(() -> {
             // Insert long running code here. Like get().
-            //testDefaultConfigNoChanges();                        // ECQ-3629
-            //testDefaultConfigLatencyUpdate5s();                  // ECQ-3630
-            //testDefaultConfigLatencyUpdate60s();                 // ECQ-3631
-            //testDefaultConfigLatencyUpdateNegitiveSeconds();     // ECQ-3639
-            testDefaultConfigLocationUpdate5s();                 // ECQ-
-            //testDefaultConfigLocationUpdate60s();
-            //testDefaultConfigLocationUpdateNegitiveSeconds();
-            //testDefaultConfigLatencyThreshold263();
-            //testDefaultConfigLatencyThreshold183();
-            //testDefaultConfigLatencyThreshold143();
-            //testDefaultConfigLatencyTestPort0();
-            //testDefaultConfigLatencyTestPort2015();
-            //testDefaultConfigLatencyTestPort2016();
-            //testDefaultConfigLatencyTestPort3765();
-            //testDefaultConfigLatencyTestPort8085();
-            //testDefaultConfigLatencyTestPort2085();
-            //testDefaultConfigLatencyToHighTrigger();
-            //testDefaultConfigAppHealthTrigger();
-            //testDefaultConfigCloudletStateChangeTrigger();
-            //testDefaultConfigCloudletMaintenanceTrigger();
-            //testDefaultConfigAutoMigrationOff();
+            //testDefaultConfigNoChanges();                            // ECQ-3629 and ECQ-3690
+            //testDefaultConfigLatencyUpdate5s();                      // ECQ-3630
+            //testDefaultConfigLatencyUpdate60s();                     // ECQ-3631
+            //testDefaultConfigLatencyUpdateNegitiveSeconds();         // ECQ-3639
+            //testDefaultConfigLocationUpdate5s();                     // ECQ-3640
+            //testDefaultConfigLocationUpdate60s();                    // ECQ-3675
+            //testDefaultConfigLocationUpdateNegitiveSeconds();        // ECQ-3676
+            //testDefaultConfigLatencyThresholdAbove();                // ECQ-3691
+            //testDefaultConfigLatencyThresholdBelow();                // ECQ-3892
+            //testDefaultConfigLatencyTestPort0();                     // ECQ-3696
+            //testDefaultConfigLatencyTestPortTLS();                   // ECQ-3697
+            //testDefaultConfigLatencyTestPortTCP();                   // ECQ-3698
+            //testDefaultConfigLatencyTestPortWEBSocket();             // ECQ-3699
+            //testDefaultConfigLatencyTestPortHTTP();                  // ECQ-3700
+            //testDefaultConfigLatencyTestPortNonExisting();           // ECQ-3701
+            //testDefaultConfigLatencyToHighTrigger();                 // ECQ-3702
+            //testDefaultConfigAppHealthTrigger();                     // ECQ-3703
+            //testDefaultConfigCloudletStateChangeTrigger();           // ECQ-3704
+            //testDefaultConfigCloudletMaintenanceTrigger();           // ECQ-3705 and ECQ-3706
+            //testDefaultConfigSingleInstLatencyToHighTrigger();       // ECQ-3715
+            //testDefaultConfigSingleInstCloudletStateChangeTrigger(); // ECQ-3716
+            //testDefaultConfigSingleInstCloudletMaintenanceTrigger(); // ECQ-3717
+            //testCloserCloudletTrigger(); // Not a default config test
+            //testCustomConfigAutoMigrationOff(); // Not a default config test
         });
     }
 
@@ -216,10 +220,12 @@ public class MainActivity extends AppCompatActivity {
 
     public Location getTestLocation() {
         Location location = new Location("EngineCallTestLocation");
-        location.setLatitude(33.00);
-        location.setLongitude(96.54);
-        //location.setLongitude(52.3759);
-        //location.setLatitude(9.735603);
+        // Hamburg Cloudlet Location
+        location.setLatitude(53);
+        location.setLongitude(10);
+        // Dusseldorf Cloudlet Location
+        //location.setLatitude(51.22);
+        //location.setLongitude(6.77);
         return location;
     }
 
@@ -253,7 +259,6 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, Log.getStackTraceString(ioe));
         }
     }
-
     public void testDefaultConfigNoChanges() {
         //MatchingEngine me = new MatchingEngine(context);
         Log.i(TAG, "EdgeEvent Starting Default Config Test No Changes");
@@ -261,9 +266,12 @@ public class MainActivity extends AppCompatActivity {
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
 
 
         ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+
         ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
         ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
         CountDownLatch latch = new CountDownLatch(1);
@@ -287,7 +295,9 @@ public class MainActivity extends AppCompatActivity {
         me.getEdgeEventsBus().register(er);
         try {
             Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            Log.i(TAG,"Location is set as " + location.toString());
             registerClient(me);
+
 
             // Cannot use the older API if overriding.
             AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
@@ -348,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -382,6 +393,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             Location location = getTestLocation(); // Test needs this configurable in a sensible way.
             registerClient(me);
+
+            Log.i(TAG,"Location set as " + location.toString());
 
             // Cannot use the older API if overriding.
             AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
@@ -449,6 +462,7 @@ public class MainActivity extends AppCompatActivity {
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -547,6 +561,7 @@ public class MainActivity extends AppCompatActivity {
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -648,6 +663,7 @@ public class MainActivity extends AppCompatActivity {
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -747,6 +763,7 @@ public class MainActivity extends AppCompatActivity {
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -845,6 +862,7 @@ public class MainActivity extends AppCompatActivity {
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -936,12 +954,13 @@ public class MainActivity extends AppCompatActivity {
         //  }
         //}
     }
-    public void testDefaultConfigLatencyThreshold263(){
-        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Threshold 263");
+    public void testDefaultConfigLatencyThresholdAbove(){
+        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Threshold Above");
         Future<AppClient.FindCloudletReply> response1;
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -985,8 +1004,8 @@ public class MainActivity extends AppCompatActivity {
                     .build();
 
             EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig(
-                    0,
-                    0,
+                    15,
+                    15,
                     263, 0);
 
             Log.i(TAG, "EdgeEvent Config Settings: " + edgeEventsConfig);
@@ -1038,12 +1057,13 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
-    public void testDefaultConfigLatencyThreshold183(){
-        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Threshold 183 ");
+    public void testDefaultConfigLatencyThresholdBelow(){
+        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Threshold Below ");
         Future<AppClient.FindCloudletReply> response1;
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
@@ -1075,11 +1095,11 @@ public class MainActivity extends AppCompatActivity {
         me.getEdgeEventsBus().register(er);
 
         try {
-            Location location = new Location("EngineCallTestLocation");
-            location.setLatitude(53.00);
-            location.setLongitude(10.00);
+            //Location location = new Location("EngineCallTestLocation");
+            //location.setLatitude(53.00);
+            //location.setLongitude(10.00);
 
-            //Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
             registerClient(me);
 
             // Cannot use the older API if overriding.
@@ -1087,11 +1107,11 @@ public class MainActivity extends AppCompatActivity {
                     .setCarrierName(findCloudletCarrierOverride)
                     .build();
 
-            Log.i(TAG,"EdgeEvent Setting defaultConfig latencyThresholdTriggerMs with 200");
+            Log.i(TAG,"EdgeEvent Setting defaultConfig latencyThresholdTriggerMs with 160");
             EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig(
                     0,
                     0,
-                    200, 0);
+                    160, 0);
 
             Log.i(TAG, "EdgeEvent Config Settings: " + edgeEventsConfig);
 
@@ -1148,109 +1168,13 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
-    public void testDefaultConfigLatencyThreshold143(){
-        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Threshold 143 ");
-        Future<AppClient.FindCloudletReply> response1;
-        AppClient.FindCloudletReply findCloudletReply1;
-        me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
-
-        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
-        // me.setSSLEnabled(false);
-        // me.setNetworkSwitchingEnabled(false);
-
-        // attach an EdgeEventBus to receive the server response, if any (inline class):
-        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
-        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
-        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
-        CountDownLatch latch = new CountDownLatch(1);
-        class EventReceiver2 {
-            @Subscribe
-            void HandleFindCloudlet(FindCloudletEvent fce) {
-                latencyNewCloudletResponses.add(fce);
-                Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
-            }
-
-            @Subscribe
-            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
-                errors.add(error);
-                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
-                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
-                }
-            }
-        }
-
-        EventReceiver2 er = new EventReceiver2();
-        me.getEdgeEventsBus().register(er);
-
-        try {
-            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
-            registerClient(me);
-
-            // Cannot use the older API if overriding.
-            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
-                    .setCarrierName(findCloudletCarrierOverride)
-                    .build();
-
-            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig(
-                    0,
-                    60,
-                    143, 0);
-
-            Log.i(TAG, "EdgeEvent Config Settings: " + edgeEventsConfig);
-
-            if (useHostOverride) {
-                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
-                        MatchingEngine.FindCloudletMode.PROXIMITY);
-                // start on response1
-                me.startEdgeEvents(edgeEventsConfig);
-            } else {
-                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
-                // start on response1
-                me.startEdgeEvents(edgeEventsConfig);
-            }
-            findCloudletReply1 = response1.get();
-            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
-                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
-            }else{
-                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
-            }
-
-
-            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
-
-            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
-            int expectedNum = 2;
-            Log.i(TAG, "EdgeEvent :  " + responses.size());
-            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
-            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
-            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
-
-            for (AppClient.ServerEdgeEvent s : responses) {
-                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
-                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
-            }
-
-        } catch (DmeDnsException dde) {
-            Log.e(TAG, Log.getStackTraceString(dde));
-        } catch (ExecutionException ee) {
-            Log.e(TAG, Log.getStackTraceString(ee));
-        } catch (InterruptedException ie) {
-            Log.e(TAG, Log.getStackTraceString(ie));
-        }// finally {
-        // if (me != null) {
-        //     Log.i(TAG, "Closing matching engine...");
-        //     me.close();
-        //     Log.i(TAG, "MatchingEngine closed for test.");
-        // }
-        //}
-    }
     public void testDefaultConfigLatencyTestPort0(){
         Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Test Port 0");
         Future<AppClient.FindCloudletReply> response1;
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -1345,12 +1269,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void testDefaultConfigLatencyTestPort2015(){
-        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Test Port 2015");
+    public void testDefaultConfigLatencyTestPortTLS(){
+        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Test Port TLS");
         Future<AppClient.FindCloudletReply> response1;
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -1443,12 +1368,13 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
-    public void testDefaultConfigLatencyTestPort2016(){
-        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Test Port 2016");
+    public void testDefaultConfigLatencyTestPortTCP(){
+        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Test Port TCP");
         Future<AppClient.FindCloudletReply> response1;
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -1541,12 +1467,13 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
-    public void testDefaultConfigLatencyTestPort3765(){
-        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Test Port 3765");
+    public void testDefaultConfigLatencyTestPortWEBSocket(){
+        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Test Port WEBSocket");
         Future<AppClient.FindCloudletReply> response1;
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -1640,12 +1567,13 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
-    public void testDefaultConfigLatencyTestPort8085(){
-        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Test Port 8085");
+    public void testDefaultConfigLatencyTestPortHTTP(){
+        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Test Port HTTP");
         Future<AppClient.FindCloudletReply> response1;
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -1738,8 +1666,8 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
-    public void testDefaultConfigLatencyTestPort2085(){
-        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Test Port 2085");
+    public void testDefaultConfigLatencyTestPortNonExisting(){
+        Log.i(TAG, "EdgeEvent Starting Default Config Test Latency Test Port NonExisting");
         Future<AppClient.FindCloudletReply> response1;
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
@@ -1843,6 +1771,7 @@ public class MainActivity extends AppCompatActivity {
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
 
         ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
@@ -1935,6 +1864,7 @@ public class MainActivity extends AppCompatActivity {
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -2026,12 +1956,13 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
-    public void testDefaultConfigCloudletStateChangeTrigger(){
+    public void testDefaultConfigSingleInstLatencyToHighTrigger(){
         Log.i(TAG, "EdgeEvent Starting Cloudlet Trigger Test");
         Future<AppClient.FindCloudletReply> response1;
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -2073,7 +2004,7 @@ public class MainActivity extends AppCompatActivity {
             EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig(
                     0,
                     0,
-                    200,0);
+                    300,0);
             //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
 
             Log.i(TAG, "EdgeEvent Config Settings: " + edgeEventsConfig);
@@ -2126,12 +2057,13 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
-    public void testDefaultConfigCloudletMaintenanceTrigger(){
-        Log.i(TAG, "EdgeEvent Starting Cloudlet Maintenance Trigger Test");
+    public void testDefaultConfigSingleInstCloudletStateChangeTrigger(){
+        Log.i(TAG, "EdgeEvent Starting Cloudlet Trigger Test");
         Future<AppClient.FindCloudletReply> response1;
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -2173,8 +2105,8 @@ public class MainActivity extends AppCompatActivity {
             EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig(
                     0,
                     0,
-                    200,0);
-//            edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+                    300,0);
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
 
             Log.i(TAG, "EdgeEvent Config Settings: " + edgeEventsConfig);
             //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
@@ -2226,12 +2158,240 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
-    public void testDefaultConfigAutoMigrationOff(){
+    public void testDefaultConfigSingleInstCloudletMaintenanceTrigger(){
+        Log.i(TAG, "EdgeEvent Starting Cloudlet Trigger Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                latencyNewCloudletResponses.add(fce);
+                Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig(
+                    0,
+                    0,
+                    300,0);
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+
+            Log.i(TAG, "EdgeEvent Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } //finally {
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+
+    public void testCloserCloudletTrigger(){
+        Log.i(TAG, "EdgeEvent Starting Closer Cloudlet Trigger Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.newCloudlet == null) {
+                    Log.i(TAG, "EdgeEvent Received a FIND_NOTFOUND!!");
+                }else {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            //Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            // HamburgCloudlet Location
+            Location location1 = new Location("EngineCallTestLocation");
+            location1.setLatitude(53.00);
+            location1.setLongitude(10.00);
+
+            // FrankfurtCloudlet Location
+            Location location2 = new Location("EngineCallTestLocation");
+            location2.setLatitude(50.10);
+            location2.setLongitude(8.50);
+
+            Log.i(TAG,"Location1 is set as " + location1.toString());
+
+            Log.i(TAG,"Location2 set as " + location2.toString());
+
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location1)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig(
+                    0,
+                    0,
+                    300,0);
+            edgeEventsConfig.locationUpdateConfig = null;
+//            edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+
+            Log.i(TAG, "EdgeEvent Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            Thread.sleep(30000);
+            me.getEdgeEventsConnection().postLocationUpdate(location2);
+
+            Thread.sleep(30000);
+            me.getEdgeEventsConnection().postLocationUpdate(location1);
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } //finally {
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+
+
+    public void testCustomConfigAutoMigrationOff(){
         Log.i(TAG, "\n\nEdgeEvent Starting AutoMigrate Off Test");
         Future<AppClient.FindCloudletReply> response1;
         AppClient.FindCloudletReply findCloudletReply1;
         me.setMatchingEngineLocationAllowed(true);
         me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
 
         // This EdgeEventsConnection test requires an EdgeEvents enabled server.
         // me.setSSLEnabled(false);
@@ -2278,8 +2438,8 @@ public class MainActivity extends AppCompatActivity {
 
             EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig(
                     15,
-                    5,
-                    50,0);
+                    15,
+                    250,0);
 //            edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
             me.setEnableEdgeEvents(true);
 

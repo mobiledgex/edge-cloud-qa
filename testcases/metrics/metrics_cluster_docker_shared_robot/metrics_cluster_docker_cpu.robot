@@ -268,8 +268,9 @@ CPU Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 	
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} >= 0 and ${reading[5]} < 101
+   FOR  ${reading}  IN  @{values}
+       Should Be True               ${reading[5]} >= 0 and ${reading[5]} < 101
+   END
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
@@ -294,8 +295,8 @@ Metrics Should Match Influxdb
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][0]}  ${reading['time']}
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][5]}  ${reading['cpu']}
 #   \  ${index}=  Evaluate  ${index}+1
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['cpu']}   ${reading[5]}
-   \  ${index}=  Evaluate  ${index}+1
-
+   FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+       Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+       Should Be Equal  ${metrics_influx_t[${index}]['cpu']}   ${reading[5]}
+       ${index}=  Evaluate  ${index}+1
+   END
