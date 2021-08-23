@@ -158,9 +158,9 @@ class ClusterInstance(MexOperation):
             metric_dict['selector'] = selector
         if last is not None:
             try:
-                metric_dict['last'] = int(last)
+                metric_dict['limit'] = int(last)
             except Exception:
-                metric_dict['last'] = last
+                metric_dict['limit'] = last
         if start_time is not None:
             metric_dict['starttime'] = start_time
         if end_time is not None:
