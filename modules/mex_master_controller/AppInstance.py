@@ -181,9 +181,9 @@ class AppInstance(MexOperation):
             metric_dict['selector'] = selector
         if last is not None:
             try:
-                metric_dict['last'] = int(last)
+                metric_dict['limit'] = int(last)
             except ValueError:
-                metric_dict['last'] = last
+                metric_dict['limit'] = last
         if limit is not None:
             try:
                 metric_dict['limit'] = int(limit)

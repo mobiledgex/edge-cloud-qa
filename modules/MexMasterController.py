@@ -1785,8 +1785,8 @@ class MexMasterController(MexRest):
     def update_mc_rate_limit_flow(self, token=None, flow_settings_name=None, api_name=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
         return self.ratelimitsettings.update_mc_rate_limit_flow(token=token, flow_settings_name=flow_settings_name, api_name=api_name, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
 
-    def create_reporter(self, token=None, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, use_defaults=True, use_thread=False):
-        return self.operator_reporting.create_reporter(token=token, reporter_name=reporter_name, organization=organization, email_address=email_address, schedule=schedule, start_schedule_date=start_schedule_date, timezone=timezone, use_defaults=use_defaults, use_thread=use_thread)
+    def create_reporter(self, token=None, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, auto_delete=True, use_defaults=True, use_thread=False):
+        return self.operator_reporting.create_reporter(token=token, reporter_name=reporter_name, organization=organization, email_address=email_address, schedule=schedule, start_schedule_date=start_schedule_date, timezone=timezone, auto_delete=auto_delete, use_defaults=use_defaults, use_thread=use_thread)
 
     def update_reporter(self, token=None, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, use_defaults=True, use_thread=False):
         return self.operator_reporting.update_reporter(token=token, reporter_name=reporter_name, organization=organization, email_address=email_address, schedule=schedule, start_schedule_date=start_schedule_date, timezone=timezone, use_defaults=use_defaults, use_thread=use_thread)
