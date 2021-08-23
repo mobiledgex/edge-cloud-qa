@@ -245,27 +245,27 @@ AppMetrics - get with invalid last shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=cpu  last=x  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset 
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset 
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=disk  last=x  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=mem  last=x  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=tcp  last=x  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=udp  last=x  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=network  last=x  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
 AppMetrics - get with cluster not found shall return an empty list
    [Documentation]
