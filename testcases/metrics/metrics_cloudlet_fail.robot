@@ -172,14 +172,14 @@ CloudletMetrics - get with invalid last shall return error
    # utilization
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  region=US  last=x  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    # EDGECLOUD-1332
 
    # ipusage
    ${error2}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=ipusage  region=US  last=x  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error2}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
 CloudletMetrics - get with operator not found shall return an empty list
    [Documentation]

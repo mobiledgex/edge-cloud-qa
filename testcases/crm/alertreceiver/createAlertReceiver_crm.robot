@@ -19,7 +19,7 @@ ${password}=  zudfgojfrdhqntzm
 ${mexadmin_password}=  mexadminfastedgecloudinfra
 ${email}=  mxdmnqa@gmail.com
 
-${cloudlet_name_offline}=  automationBonnCloudlet
+${cloudlet_name_offline}=  automationFrankfurtCloudlet
 
 ${user_username}=  mextester06
 ${user_password}=  mextester06123mobiledgexisbadass

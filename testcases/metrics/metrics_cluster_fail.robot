@@ -270,32 +270,32 @@ ClusterMetrics - get with invalid last shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=cpu  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=disk  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=mem  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=tcp  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=udp  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=network  last=x  cluster_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: Unmarshal type error: expected=int, got=string, field=Last, offset=
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Last\\\\" at offset
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
 # ECQ-1945
 ClusterMetrics - get with cluster not found shall return an empty list
