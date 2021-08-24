@@ -8,7 +8,7 @@ Library  String
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
 
-Test Timeout  10m
+Test Timeout  15m
 
 *** Variables ***
 ${region}=  US
@@ -114,6 +114,12 @@ CreateApp - mcctl shall be able to create/show/delete app
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  defaultflavor=${flavor_name_automation}
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=2  serverlessconfig.minreplicas=3
 
+      # accessports
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      imagepath=${docker_image}       accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        imagepath=${docker_image}       accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          imagepath=${qcow_centos_image}  accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
+
 # ECQ-2890
 CreateApp - mcctl shall handle create failures
    [Documentation]
@@ -215,7 +221,7 @@ CreateApp - mcctl shall handle create failures
       Serverless config vcpus cannot be less than 0.001  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=-1  serverlessconfig.ram=2  serverlessconfig.minreplicas=1
       Unable to parse "serverlessconfig.ram" value "-1" as uint  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=-1  serverlessconfig.minreplicas=1
 
-# ECQ-2829
+# ECQ-2891
 UpdateApp - mcctl shall handle update app 
    [Documentation]
    ...  - send UpdateApp via mcctl with various args
@@ -257,6 +263,12 @@ UpdateApp - mcctl shall handle update app
 
       appname=${app_name_k8s}  app-org=${developer}  appvers=1.0  autoprovpolicies=${autoprovpolicy_name}
       appname=${app_name_k8s}  app-org=${developer}  appvers=1.0  autoprovpolicies:empty=true
+
+      # accessports
+      appname=${app_name_k8s}     app-org=${developer}  appvers=1.0  accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
+      appname=${app_name_docker}  app-org=${developer}  appvers=1.0  accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
+      appname=${app_name_helm}    app-org=${developer}  appvers=1.0  accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
+      appname=${app_name_vm}      app-org=${developer}  appvers=1.0  accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
 
 # ECQ-3618
 UpdateApp - mcctl shall handle update failures
@@ -302,9 +314,14 @@ Success Create/Show/Delete App Via mcctl
    Should Be Equal  ${show[0]['key']['version']}  ${parms['appvers']}
    Should Be Equal  ${show[0]['image_path']}  ${parms['imagepath']}
 
-   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal  ${show[0]['image_type']}  ImageTypeDocker 
-   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal  ${show[0]['image_type']}  ImageTypeQcow
-   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal  ${show[0]['image_type']}  ImageTypeHelm
+   Run Keyword If  'accessports' in ${parms}  Should Be Equal  ${show[0]['access_ports']}  ${parms['accessports']}
+
+#   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal  ${show[0]['image_type']}  ImageTypeDocker 
+#   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal  ${show[0]['image_type']}  ImageTypeQcow
+#   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal  ${show[0]['image_type']}  ImageTypeHelm
+   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal As Numbers  ${show[0]['image_type']}  1
+   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal As Numbers  ${show[0]['image_type']}  2
+   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal As Numbers  ${show[0]['image_type']}  3
 
    Run Keyword If  'deployment' in ${parms}  Should Be Equal  ${show[0]['deployment']}  ${parms['deployment']}
 
@@ -313,10 +330,11 @@ Success Create/Show/Delete App Via mcctl
    Run Keyword If  'deployment' not in ${parms} and '${parms['imagetype']}' == 'ImageTypeQcow'    Should Be Equal  ${show[0]['deployment']}  vm
  
 
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'helm'        Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'docker'      Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   #Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   #Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'helm'        Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   #Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   #Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'docker'      Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
+   Should Be Equal As Numbers  ${show[0]['access_type']}  2
 
    Run Keyword If  'officialfqdn' in ${parms}  Should Be Equal  ${show[0]['official_fqdn']}  ${parms['officialfqdn']} 
    Run Keyword If  'androidpackagename' in ${parms}  Should Be Equal  ${show[0]['android_package_name']}  ${parms['androidpackagename']}
@@ -440,6 +458,8 @@ Success Update/Show App Via mcctl
    IF  'autoprovpolicies:empty' in ${parms}
       Should Be True  'auto_prov_policies' not in ${show[0]} 
    END
+
+   Run Keyword If  'accessports' in ${parms}  Should Be Equal  ${show[0]['access_ports']}  ${parms['accessports']}
  
 Fail Create App Via mcctl
    [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
