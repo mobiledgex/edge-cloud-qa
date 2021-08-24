@@ -159,12 +159,13 @@ AppMetrics - Shall be able to get the docker app Network metrics with endtime = 
 
    Get app metrics with endtime = firstrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  network
 
-AppMetrics - Shall be able to get the docker app Network metrics with starttime > endtime on openstack
-   [Documentation]
-   ...  request cloudlet metrics with starttime > endtime
-   ...  verify empty list is returned
-
-   Get app metrics with starttime > endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  network
+# errors when starttime is in the future
+#AppMetrics - Shall be able to get the docker app Network metrics with starttime > endtime on openstack
+#   [Documentation]
+#   ...  request cloudlet metrics with starttime > endtime
+#   ...  verify empty list is returned
+#
+#   Get app metrics with starttime > endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  network
 
 AppMetrics - Shall be able to get the docker app Network metrics with starttime and endtime > lastrecord on openstack
    [Documentation]

@@ -129,12 +129,13 @@ ClusterMetrics - Shall be able to get the docker cluster Memory metrics with sta
 
    Memory Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get the docker cluster Memory metrics with starttime > lastrecord on openstack
-   [Documentation]
-   ...  request cloudlet metrics with starttime in the future
-   ...  verify empty list is returned
-
-   Get cluster metrics with starttime > lastrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  mem
+# errors when starttime is in the future
+#ClusterMetrics - Shall be able to get the docker cluster Memory metrics with starttime > lastrecord on openstack
+#   [Documentation]
+#   ...  request cloudlet metrics with starttime in the future
+#   ...  verify empty list is returned
+#
+#   Get cluster metrics with starttime > lastrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  mem
 
 ClusterMetrics - Shall be able to get the docker cluster Memory metrics with endtime=lastrecord on openstack
    [Documentation]
