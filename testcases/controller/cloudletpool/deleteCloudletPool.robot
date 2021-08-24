@@ -4,7 +4,7 @@ Documentation  DeleteCloudletPool
 Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
 #Suite Setup  Setup
-#Suite Teardown  Cleanup Provisioning
+Suite Teardown  Cleanup Provisioning
 
 *** Test Cases ***
 # ECQ-1688
@@ -17,9 +17,12 @@ DeleteCloudletPool - deleting cloudlet pool shall delete all cloudlet pool membe
 
    ${token}=  Get Super Token
    ${pool_name}=  Get Default Cloudlet Pool Name
+   ${cloudlet_name}=  Get Default Cloudlet Name
+
+   Create Cloudlet  region=US  operator_org_name=tmus
 
    Create Cloudlet Pool         region=US  cloudlet_pool_name=${pool_name}  operator_org_name=tmus  auto_delete=${False}  token=${token}
-   Add Cloudlet Pool Member  region=US  cloudlet_pool_name=${pool_name}  operator_org_name=tmus  cloudlet_name=tmocloud-1  auto_delete=${False}  token=${token}
+   Add Cloudlet Pool Member  region=US  cloudlet_pool_name=${pool_name}  operator_org_name=tmus  cloudlet_name=${cloudlet_name}  auto_delete=${False}  token=${token}
    Add Cloudlet Pool Member  region=US  cloudlet_pool_name=${pool_name}  operator_org_name=tmus  cloudlet_name=tmocloud-2  auto_delete=${False}  token=${token}
 
    ${show_return}=   Show Cloudlet Pool  region=US  cloudlet_pool_name=${pool_name}  operator_org_name=tmus  token=${token}  use_defaults=${False} 
