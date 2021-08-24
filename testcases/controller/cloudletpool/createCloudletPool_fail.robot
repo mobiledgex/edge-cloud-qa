@@ -3,8 +3,12 @@ Documentation  CreateCloudletPool Fail
 
 Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
-Suite Setup  Setup
-Suite Teardown  Cleanup Provisioning
+Test Setup  Setup
+Test Teardown  Cleanup Provisioning
+
+*** Variables ***
+${region}=  US
+${operator}=  dmuus
 
 *** Test Cases ***
 # ECQ-1669
@@ -83,6 +87,60 @@ CreateCloudletPool - create with same name shall return error
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"GDDT\\\\",\\\\"name\\\\":\\\\"mypoool\\\\"} already exists"}
+
+# ECQ-3753
+CreateCloudletPool - creating with cloudletlist with appinst shall return error
+   [Documentation]
+   ...  - create a cloudlet and appinst
+   ...  - send CreateCloudletPool to add the cloudlet
+   ...  - verify proper error is received
+   ...  - delete the appinst
+   ...  - send CreateCloudletPool and verify it is added
+
+   ${cloudlet_name}=  Get Default Cloudlet Name
+
+   Create Cloudlet  region=US  token=${token}  operator_org_name=dmuus
+
+   Create Flavor  region=${region}
+   Create App  region=${region}  access_ports=tcp:1  token=${token}
+   ${ap}=  Create App Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=dmuus  cluster_instance_name=autoclusterxx  auto_delete=${False}
+
+   ${clist}=  Create List  ${cloudlet_name}
+   ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool  region=${region}  token=${token}  operator_org_name=${operator}  cloudlet_list=${clist}
+
+   Delete App Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=dmuus  cluster_instance_name=autoclusterxx
+   Delete Cluster Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=dmuus  cluster_name=${ap['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+
+   Create Cloudlet Pool  region=${region}  token=${token}  operator_org_name=${operator}  cloudlet_list=${clist}
+
+   Should Contain  ${error}   400
+   Should Contain  ${error}   {"message":"Cannot create CloudletPool with cloudlet ${cloudlet_name} with existing developer automation_dev_org ClusterInsts or AppInsts. To include them as part of the pool, first create an empty pool, invite the developer to the pool, then add the cloudlet to the pool."}
+
+# ECQ-3754
+CreateCloudletPool - creating with cloudletlist with clusterinst shall return error
+   [Documentation]
+   ...  - create a cloudlet and clusterinst
+   ...  - send CreateCloudletPool to add the cloudlet
+   ...  - verify proper error is received
+   ...  - delete the clusterinst
+   ...  - send CreateCloudletPool and verify it is added
+
+   ${cloudlet_name}=  Get Default Cloudlet Name
+
+   Create Cloudlet  region=US  token=${token}  operator_org_name=dmuus
+
+   Create Flavor  region=${region}
+   Create Cluster Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=dmuus  cluster_name=xxxxxx  auto_delete=${False}
+
+   ${clist}=  Create List  ${cloudlet_name}
+   ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool  region=${region}  token=${token}  operator_org_name=${operator}  cloudlet_list=${clist}
+
+   Delete Cluster Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=dmuus  cluster_name=xxxxxx
+
+   Create Cloudlet Pool  region=${region}  token=${token}  operator_org_name=${operator}  cloudlet_list=${clist}
+
+   Should Contain  ${error}   400
+   Should Contain  ${error}   {"message":"Cannot create CloudletPool with cloudlet ${cloudlet_name} with existing developer automation_dev_org ClusterInsts or AppInsts. To include them as part of the pool, first create an empty pool, invite the developer to the pool, then add the cloudlet to the pool."}
 
 *** Keywords ***
 Setup

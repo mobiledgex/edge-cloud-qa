@@ -47,7 +47,7 @@ UpdateCloudletPool - shall be able to update empty pool with 1 cloudlet
    Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
    Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
 
-   @{cloudlet_list}=  Create List  tmocloud-1
+   @{cloudlet_list}=  Create List  ${cloudlet_name}
 
    Sleep  1s
 
@@ -75,7 +75,7 @@ UpdateCloudletPool - shall be able to update empty pool with 2 cloudlets
    Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
    Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
 
-   @{cloudlet_list}=  Create List  tmocloud-1  tmocloud-2
+   @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
 
    Sleep  1s
 
@@ -98,7 +98,7 @@ UpdateCloudletPool - shall be able to update pool with 2 cloudlets to empty pool
    ...  - send UpdateCloudletPool on empty pool with 2 cloudlets
    ...  - verify pool is correct
 
-   @{cloudlet_list}=  Create List  tmocloud-1  tmocloud-2
+   @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
    ${pool_return1}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
    Should Be Equal  ${pool_return1['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return1['data']['key']['organization']}  ${organization}
@@ -128,7 +128,7 @@ UpdateCloudletPool - shall be able to update pool with same cloudlets
    ...  - send UpdateCloudletPool on pool with same cloudlets
    ...  - verify pool is correct
 
-   @{cloudlet_list}=  Create List  tmocloud-1  tmocloud-2
+   @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
@@ -159,7 +159,7 @@ UpdateCloudletPool - shall be able to update pool by removing cloudlet
    ...  - send UpdateCloudletPool on pool with 2 cloudlets to 1 cloudlet
    ...  - verify pool is correct
 
-   @{cloudlet_list}=  Create List  tmocloud-1  tmocloud-2
+   @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
@@ -191,10 +191,18 @@ UpdateCloudletPool - shall be able to update pool after adding/removing members
    ...  - send UpdateCloudletPool on pool with 2 cloudlets to 1 cloudlet
    ...  - verify pool is correct
 
-   ${region}=  Set Variable  EU
-   ${organization}=  Set Variable  GDDT
+   #${region}=  Set Variable  EU
+   #${organization}=  Set Variable  GDDT
 
-   @{cloudlet_list}=  Create List  automationBeaconCloudlet
+   ${cloudlet_name2}=  Set Variable  ${cloudlet_name}2
+   ${cloudlet_name3}=  Set Variable  ${cloudlet_name}3
+   ${cloudlet_name4}=  Set Variable  ${cloudlet_name}4
+
+   Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name2}  operator_org_name=${organization}
+   Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name3}  operator_org_name=${organization}
+   Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name4}  operator_org_name=${organization}
+
+   @{cloudlet_list}=  Create List  ${cloudlet_name}
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
@@ -203,13 +211,13 @@ UpdateCloudletPool - shall be able to update pool after adding/removing members
    Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
    Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
 
-   Add Cloudlet Pool Member  region=${region}  operator_org_name=${organization}  cloudlet_name=automationFairviewCloudlet
-   Add Cloudlet Pool Member  region=${region}  operator_org_name=${organization}  cloudlet_name=automationHawkinsCloudlet
-   Remove Cloudlet Pool Member  region=${region}  operator_org_name=${organization}  cloudlet_name=automationHawkinsCloudlet
+   Add Cloudlet Pool Member  region=${region}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name2}  #cloudlet_name=automationFairviewCloudlet
+   Add Cloudlet Pool Member  region=${region}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name3}  #cloudlet_name=automationHawkinsCloudlet
+   Remove Cloudlet Pool Member  region=${region}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name3}  #cloudlet_name=automationHawkinsCloudlet
 
    Sleep  1s
  
-   @{cloudlet_list_update}=  Create List  automationParadiseCloudlet  automationBeaconCloudlet
+   @{cloudlet_list_update}=  Create List  ${cloudlet_name4}  ${cloudlet_name}  #automationParadiseCloudlet  automationBeaconCloudlet
    ${pool_return2}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list_update}
 
    Should Be Equal  ${pool_return2['data']['key']['name']}  ${pool_name}
@@ -259,4 +267,8 @@ Setup
    Login  username=mexadmin  password=${mexadmin_password}
    ${pool_name}=  Get Default Cloudlet Pool Name
 
+   ${cloudlet_name}=  Get Default Cloudlet Name
+   Create Cloudlet  region=${region}  operator_org_name=${organization}
+
    Set Suite Variable  ${pool_name}
+   Set Suite Variable  ${cloudlet_name}
