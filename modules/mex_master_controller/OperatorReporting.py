@@ -18,8 +18,9 @@ class OperatorReporting(MexOperation):
         self.delete_url = '/auth/reporter/delete'
         self.show_url = '/auth/reporter/show'
         self.update_url = '/auth/reporter/update'
+        self.generate_url = '/auth/report/generate'
 
-    def _build(self, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None,  use_defaults=True):
+    def _build(self, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, start_time=None, end_time=None, use_defaults=True):
 
         if use_defaults:
             if reporter_name is None:
@@ -53,6 +54,12 @@ class OperatorReporting(MexOperation):
 
         if timezone is not None:
             reporter_dict['Timezone'] = timezone
+
+        if start_time is not None:
+            reporter_dict['StartTime'] = start_time
+
+        if end_time is not None:
+            reporter_dict['EndTime'] = end_time
 
         return reporter_dict
 
@@ -95,6 +102,13 @@ class OperatorReporting(MexOperation):
         msg_dict = msg
 
         return self.show(token=token, url=self.show_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+   
+    def generate_report(self, token=None, organization=None, start_time=None, end_time=None, timezone=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(organization=organization, start_time=start_time, end_time=end_time, timezone=timezone, use_defaults=use_defaults)
+        msg_dict = msg
+        thread_name = None
+
+        return self.create(token=token, url=self.generate_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, thread_name=thread_name)
 
     def verify_email(self, email_address=None, email_password=None, reporter_name=None, report_period=None, timezone=None, username=None, organization=None, server='imap.gmail.com', wait=30):
         rp = report_period.split('to')
