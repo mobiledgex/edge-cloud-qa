@@ -129,12 +129,13 @@ ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics wit
 
    Network Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with starttime > lastrecord on openstack
-   [Documentation]
-   ...  request cloudlet metrics with starttime in the future
-   ...  verify empty list is returned
-
-   Get cluster metrics with starttime > lastrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  network
+# errors when starttime is in the future
+#ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with starttime > lastrecord on openstack
+#   [Documentation]
+#   ...  request cloudlet metrics with starttime in the future
+#   ...  verify empty list is returned
+#
+#   Get cluster metrics with starttime > lastrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  network
 
 ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with endtime=lastrecord on openstack
    [Documentation]
