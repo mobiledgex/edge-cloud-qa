@@ -51,7 +51,9 @@ CreateCloudletPool - shall be able to create with 1 cloudlet in cloudlet list
    ...  - send CreateCloudletPool with 1 cloudlet in list
    ...  - verify pool is created
 
-   @{cloudlet_list}=  Create List  tmocloud-1
+   Create Cloudlet  region=${region}  operator_org_name=${organization}
+
+   @{cloudlet_list}=  Create List  ${cloudlet_name}
 
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
 
@@ -69,7 +71,9 @@ CreateCloudletPool - shall be able to create with 2 cloudlets in cloudlet list
    ...  - send CreateCloudletPool with 2 cloudlets in list
    ...  - verify pool is created
 
-   @{cloudlet_list}=  Create List  tmocloud-1  tmocloud-2
+   Create Cloudlet  region=${region}  operator_org_name=${organization}
+
+   @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
 
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
 
@@ -87,5 +91,8 @@ Setup
    Set Suite Variable  ${token}
 
    ${pool_name}=  Get Default Cloudlet Pool Name
+   ${cloudlet_name}=  Get Default Cloudlet Name
 
    Set Suite Variable  ${pool_name}
+   Set Suite Variable  ${cloudlet_name}
+

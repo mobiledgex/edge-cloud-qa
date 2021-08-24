@@ -10,7 +10,8 @@ Suite Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${operator}=  dmuus
-${cloudlet}=  tmocloud-1
+#${cloudlet}=  tmocloud-1
+${region}=  US
 
 *** Test Cases ***
 # ECQ-1658
@@ -42,7 +43,7 @@ CreateCloudletPoolMember - shall be able to create with numbers in pool name
    ${epoch}=  Convert To String  ${epoch}
 
    Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=${operator}
-   Add Cloudlet Pool Member  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=dmuus  cloudlet_name=tmocloud-1 
+   Add Cloudlet Pool Member  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=dmuus  cloudlet_name=${cloudlet}
 
    ${pool_return}=  Show Cloudlet Pool  region=US  cloudlet_pool_name=${epoch}  operator_org_name=${operator}
 
@@ -64,7 +65,7 @@ CreateCloudletPoolMember - shall be able to add multiple members to a pool
    ${epoch}=  Convert To String  ${epoch}
 
    Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=${operator}
-   Add Cloudlet Pool Member  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=dmuus  cloudlet_name=tmocloud-1
+   Add Cloudlet Pool Member  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=dmuus  cloudlet_name=${cloudlet}
    Add Cloudlet Pool Member  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=dmuus  cloudlet_name=tmocloud-2
 
    ${pool_return}=  Show Cloudlet Pool  region=US  cloudlet_pool_name=${epoch}  operator_org_name=${operator}
@@ -102,5 +103,10 @@ Setup
    Set Suite Variable  ${token}
 
    ${pool_name}=  Get Default Cloudlet Pool Name
+   ${cloudlet}=  Get Default Cloudlet Name
+
+   Create Cloudlet  region=${region}  operator_org_name=${operator}
 
    Set Suite Variable  ${pool_name}
+   Set Suite Variable  ${cloudlet}
+
