@@ -8,6 +8,7 @@ Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${operator}=  tmus
+${region}=  US
 
 *** Test Cases ***
 # ECQ-1660
@@ -80,10 +81,14 @@ CreateCloudletPoolMember - create with same name shall return error
 
    #EDGECLOUD-1716 CreateCloudletPoolMember for duplicate create should return the member name in the error
 
-   Create Cloudlet Pool  region=US  token=${token}  operator_org_name=${operator}
-   Add Cloudlet Pool Member  region=US  token=${token}  operator_org_name=tmus  cloudlet_name=tmocloud-1  
+   ${cloudlet_name}=  Get Default Cloudlet Name
 
-   ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  region=US  token=${token}  operator_org_name=tmus  cloudlet_name=tmocloud-1
+   Create Cloudlet  region=US  token=${token}  operator_org_name=tmus
+
+   Create Cloudlet Pool  region=US  token=${token}  operator_org_name=${operator}
+   Add Cloudlet Pool Member  region=US  token=${token}  operator_org_name=tmus  cloudlet_name=${cloudlet_name}
+
+   ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  region=US  token=${token}  operator_org_name=tmus  cloudlet_name=${cloudlet_name}
    
    Should Contain  ${error}   400
    Should Contain  ${error}   {"message":"Cloudlet already part of pool"}
@@ -119,6 +124,61 @@ CreateCloudletPoolMember - create cloudlet not found shall return error
    
    Should Contain  ${error}   400
    Should Contain  ${error}   {"message":"Cloudlet key {\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-1xx\\\\"} not found"}
+
+# ECQ-3751
+CreateCloudletPoolMember - adding cloudlet with appinst shall return error
+   [Documentation]
+   ...  - create a cloudlet and appinst
+   ...  - send CreateCloudletPoolMember to add the cloudlet
+   ...  - verify proper error is received
+   ...  - delete the appinst
+   ...  - send CreateCloudletPoolMember and verify it is added
+
+   ${cloudlet_name}=  Get Default Cloudlet Name
+
+   Create Cloudlet  region=US  token=${token}  operator_org_name=tmus
+
+   Create Flavor  region=${region}
+   Create App  region=${region}  access_ports=tcp:1  token=${token}
+   ${ap}=  Create App Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=tmus  cluster_instance_name=autoclusterxx  auto_delete=${False}
+
+   Create Cloudlet Pool  region=${region}  token=${token}  operator_org_name=${operator}
+
+   ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  region=${region}  token=${token}  operator_org_name=tmus  cloudlet_name=${cloudlet_name}
+
+   Delete App Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=tmus  cluster_instance_name=autoclusterxx
+   Delete Cluster Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=tmus  cluster_name=${ap['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+
+   Add Cloudlet Pool Member  region=${region}  token=${token}  operator_org_name=tmus  cloudlet_name=${cloudlet_name}
+
+   Should Contain  ${error}   400
+   Should Contain  ${error}   {"message":"Cannot add cloudlet ${cloudlet_name} to CloudletPool with existing developer automation_dev_org ClusterInsts or AppInsts which are not authorized to deploy to the CloudletPool. Please invite the developer first, or remove the developer from the Cloudlet."}
+
+# ECQ-3752
+CreateCloudletPoolMember - adding cloudlet with clusterinst shall return error
+   [Documentation]
+   ...  - create a cloudlet and clusterinst
+   ...  - send CreateCloudletPoolMember to add the cloudlet
+   ...  - verify proper error is received
+   ...  - delete the clusterinst
+   ...  - send CreateCloudletPoolMember and verify it is added
+
+   ${cloudlet_name}=  Get Default Cloudlet Name
+
+   Create Cloudlet  region=US  token=${token}  operator_org_name=tmus
+
+   Create Flavor  region=${region}
+   Create Cluster Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=tmus  auto_delete=${False}
+
+   Create Cloudlet Pool  region=${region}  token=${token}  operator_org_name=${operator}
+
+   ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  region=${region}  token=${token}  operator_org_name=tmus  cloudlet_name=${cloudlet_name}
+
+   Delete Cluster Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=tmus
+   Add Cloudlet Pool Member  region=${region}  token=${token}  operator_org_name=tmus  cloudlet_name=${cloudlet_name}
+
+   Should Contain  ${error}   400
+   Should Contain  ${error}   {"message":"Cannot add cloudlet ${cloudlet_name} to CloudletPool with existing developer automation_dev_org ClusterInsts or AppInsts which are not authorized to deploy to the CloudletPool. Please invite the developer first, or remove the developer from the Cloudlet."}
 
 *** Keywords ***
 Setup

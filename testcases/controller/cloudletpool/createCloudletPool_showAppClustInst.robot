@@ -31,9 +31,9 @@ CreateCloudletPoolAccess - OperatorManager shall be able to see developer cluste
    Create Cloudlet Pool Access Response  region=${region}  token=${devman_token}  cloudlet_pool_name=${pool_name}   cloudlet_pool_org_name=${organization}  developer_org_name=${devorg1}  decision=accept
 
    Create App  region=${region}  access_ports=tcp:1  token=${devman_token}
-   ${c}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name_fake}  developer_org_name=${devorg1}
-   ${ac}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_name=autocluster33
-   ${ap}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
+   ${c}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name}  developer_org_name=${devorg1}
+   ${ac}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_name=autocluster33
+   ${ap}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
    ${publicc}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=tmocloud-2  developer_org_name=${devorg1}
    ${publica}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=tmocloud-2  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
  
@@ -55,9 +55,9 @@ CreateCloudletPoolAccess - OperatorManager shall be able to see developer cluste
    App Should Be In List  ${app_list}  ${ac['data']['key']['app_key']['name']}
    App Should Be In List  ${app_list}  ${ap['data']['key']['app_key']['name']}
 
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Cluster Instance  region=${region}  token=${op_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name_fake}  developer_org_name=${devorg1}
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${op_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_name=autocluster33
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${op_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}r
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Cluster Instance  region=${region}  token=${op_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name}  developer_org_name=${devorg1}
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${op_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_name=autocluster33
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${op_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}r
 
 # ECQ-3409
 CreateCloudletPoolAccess - OperatorContributor shall be able to see developer cluster/appinst
@@ -77,9 +77,9 @@ CreateCloudletPoolAccess - OperatorContributor shall be able to see developer cl
    Create Cloudlet Pool Access Response  region=${region}  token=${devman_token}  cloudlet_pool_name=${pool_name}   cloudlet_pool_org_name=${organization}  developer_org_name=${devorg1}  decision=accept
 
    Create App  region=${region}  access_ports=tcp:1  token=${devman_token}
-   ${c}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name_fake}  developer_org_name=${devorg1}
-   ${ac}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_name=autocluster33
-   ${ap}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
+   ${c}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name}  developer_org_name=${devorg1}
+   ${ac}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_name=autocluster33
+   ${ap}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
    ${publicc}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=tmocloud-2  developer_org_name=${devorg1}
    ${publica}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=tmocloud-2  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
 
@@ -101,9 +101,9 @@ CreateCloudletPoolAccess - OperatorContributor shall be able to see developer cl
    App Should Be In List  ${app_list}  ${ac['data']['key']['app_key']['name']}
    App Should Be In List  ${app_list}  ${ap['data']['key']['app_key']['name']}
 
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Cluster Instance  region=${region}  token=${opcon_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name_fake}  developer_org_name=${devorg1}
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${opcon_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_name=autocluster33
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${opcon_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Cluster Instance  region=${region}  token=${opcon_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name}  developer_org_name=${devorg1}
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${opcon_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_name=autocluster33
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${opcon_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
 
 # ECQ-3410
 CreateCloudletPoolAccess - OperatorViewer shall be able to see developer cluster/appinst
@@ -123,9 +123,9 @@ CreateCloudletPoolAccess - OperatorViewer shall be able to see developer cluster
    Create Cloudlet Pool Access Response  region=${region}  token=${devman_token}  cloudlet_pool_name=${pool_name}   cloudlet_pool_org_name=${organization}  developer_org_name=${devorg1}  decision=accept
 
    Create App  region=${region}  access_ports=tcp:1  token=${devman_token}
-   ${c}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name_fake}  developer_org_name=${devorg1}
-   ${ac}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_name=autocluster33
-   ${ap}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
+   ${c}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name}  developer_org_name=${devorg1}
+   ${ac}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_name=autocluster33
+   ${ap}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
    ${publicc}=  Create Cluster Instance  region=${region}  token=${devman_token}  operator_org_name=${organization}  cloudlet_name=tmocloud-2  developer_org_name=${devorg1}
    ${publica}=  Create App Instance  region=${region}  token=${devman_token}  developer_org_name=${devorg1}  cloudlet_name=tmocloud-2  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
 
@@ -147,15 +147,16 @@ CreateCloudletPoolAccess - OperatorViewer shall be able to see developer cluster
    App Should Be In List  ${app_list}  ${ac['data']['key']['app_key']['name']}
    App Should Be In List  ${app_list}  ${ap['data']['key']['app_key']['name']}
 
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Cluster Instance  region=${region}  token=${opview_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name_fake}  developer_org_name=${devorg1}
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${opview_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_name=autocluster33
-   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${opview_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Cluster Instance  region=${region}  token=${opview_token}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name}  developer_org_name=${devorg1}
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${opview_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_name=autocluster33
+   Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region}  token=${opview_token}  developer_org_name=${devorg1}  cloudlet_name=${cloudlet_name}  operator_org_name=${organization}  cluster_instance_developer_org_name=${devorg1}
 
 *** Keywords ***
 Setup
    ${super_token}=  Get Super Token
 
    ${pool_name}=  Get Default Cloudlet Pool Name
+   ${cloudlet_name}=  Get Default Cloudlet Name
 
    Create Flavor  region=${region}  token=${super_token}
 
@@ -166,11 +167,14 @@ Setup
    ${devman_token}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
    ${devcon_token}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name_fake}
+   Create Cloudlet  region=${region}  token=${op_token}  operator_org_name=${organization}
+
+   @{cloudlet_list}=  Create List  ${cloudlet_name}
    Create Cloudlet Pool  region=${region}  token=${op_token}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
 
    Set Suite Variable  ${super_token}
    Set Suite Variable  ${pool_name}
+   Set Suite Variable  ${cloudlet_name}
    Set Suite Variable  ${op_token}
    Set Suite Variable  ${opcon_token}
    Set Suite Variable  ${opview_token}
