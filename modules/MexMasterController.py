@@ -1817,6 +1817,12 @@ class MexMasterController(MexRest):
     def generate_report(self, token=None, organization=None, start_time=None, end_time=None, timezone=None, use_defaults=True, use_thread=False):
         return self.operator_reporting.generate_report(token=token, organization=organization, start_time=start_time, end_time=end_time, timezone=timezone, use_defaults=use_defaults, use_thread=use_thread)
 
+    def show_report(self, token=None, organization=None, use_defaults=False, use_thread=False):
+        return self.operator_reporting.show_report(token=token, organization=organization, use_defaults=use_defaults, use_thread=use_thread)
+
+    def download_report(self, token=None, organization=None, filename=None, use_defaults=False, use_thread=False):
+        return self.operator_reporting.download_report(token=token, organization=organization, filename=filename, use_defaults=use_defaults, use_thread=use_thread)
+
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
             token = self.token
