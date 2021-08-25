@@ -113,7 +113,7 @@ node('jenkinsSlave1'){
          try {
             parallel builds3
          } catch(err) {
-            echo "Caught in run parallel batch 2: ${err}"
+            echo "Caught in run parallel batch 3: ${err}"
             currentBuild.result = 'FAILURE'
          }
       }
