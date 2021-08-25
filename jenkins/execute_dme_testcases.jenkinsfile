@@ -14,9 +14,11 @@ currentBuild.displayName = cycle
 
 def jobList1Parallel = ["runFindCloudletTests","runOperatorCodeTests","runOperatorCodeDmeTests","runRegisterClientTests", "runVerifyLocationTests", "runGetLocationTests", "runDmeProcessTests", "runShowDeviceTests", "runGetQosPositionKpiTests", "runDMEPersistentConnectionTests", "runRequestAppInstLatencyTests"]
 def jobList2Parallel = ["runGetFqdnListTests","runGetAppInstListTests","runShowDeviceReportTests"]
+def jobList3Parallel = ["runDMERateLimitTests"]
  
 builds1 = [:]
 builds2 = [:]
+builds3 = [:]
 
 node('jenkinsSlave1'){
     stage('Checkout') {
@@ -95,6 +97,23 @@ node('jenkinsSlave1'){
             parallel builds2
          } catch(err) {
             echo "Caught in run parallel batch 2: ${err}"
+            currentBuild.result = 'FAILURE'
+         }
+      }
+
+      stage('run WS tests parallel batch 3') {
+         for(int i=0; i < jobList3Parallel.size(); ++i) {
+            def jobName = jobList3Parallel[i];
+            echo "i1=" + jobName
+            builds3[jobName] = {
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'MasterController', value: mastercontroller), string(name: 'DMERest', value: dmerest), string(name: 'DMERestCert', value: dmerestcert), string(name: 'RunFailedOnly', value: runfailedonly)]
+            }
+         }
+
+         try {
+            parallel builds3
+         } catch(err) {
+            echo "Caught in run parallel batch 3: ${err}"
             currentBuild.result = 'FAILURE'
          }
       }
