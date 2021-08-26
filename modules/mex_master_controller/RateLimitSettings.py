@@ -78,13 +78,12 @@ class RateLimitSettings(MexOperation):
             except Exception:
                 settings_dict['max_reqs_algorithm'] = max_requests_algorithm
         if requests_per_second is not None:
-            try:
+            if isinstance(requests_per_second, int):
                 settings_dict['reqs_per_second'] = int(requests_per_second)
-            except Exception:
-                try:
-                    settings_dict['reqs_per_second'] = float(requests_per_second)
-                except Exception:
-                    settings_dict['reqs_per_second'] = requests_per_second
+            elif isinstance(requests_per_second, float):
+                settings_dict['reqs_per_second'] = float(requests_per_second)
+            else:
+                settings_dict['reqs_per_second'] = requests_per_second
         if max_requests is not None:
             try:
                 settings_dict['max_requests'] = int(max_requests)
@@ -279,6 +278,6 @@ class RateLimitSettings(MexOperation):
         msg_dict_show = None
         if 'FlowSettingsName' in msg:
             msg_show = self._buildmc(flow_settings_name=msg['FlowSettingsName'], api_name=msg['ApiName'], rate_limit_target=msg['RateLimitTarget'], flow_algorithm=msg['FlowAlgorithm'], requests_per_second=msg['ReqsPerSecond'], use_defaults=False)
-            msg_dict = msg_show
+            msg_dict_show = msg_show
 
-        return self.update(token=token, url=self.updatemc_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)
