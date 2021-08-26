@@ -497,7 +497,7 @@ def exec_testcase(z, t):
         tc = tclines[0]
         if len(tclines) > 1:
             robot_tcname = tclines[1]
-    elif '.tc.' in os.path.basename(t['tc']):
+    elif '.tc.' in os.path.basename(t['tc']) or '.tc_' in os.path.basename(t['tc']):
         tc_type = 'python'
         tc = os.path.basename(t['tc'])
     elif '.sln' in t['tc']:
