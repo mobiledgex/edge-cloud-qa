@@ -6,7 +6,8 @@ image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
 
 def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runRunConsoleTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runShowLogsTests", "runVMPoolControllerTests", "runSecurityTests", "runUserTests", "runMCConfigsTests", "runRateLimitMCTests"]
 def jobListGcp = ["runCrmTests"]
-def jobList2Parallel = ["runCloudletPoolAllTests", "runOrganizationTests", "runShowNodeTests", "runPerformance", "RunCRMResourceManagement", "runGPUDriverControllerTests"]
+def jobList2Parallel = ["runCloudletPoolAllTests", "runOrganizationTests", "runShowNodeTests", "runPerformance", "runGPUDriverControllerTests"]
+def jobList3Parallel = ["runOperatorReportingTests", "runCrmRunConsoleTests", "RunCRMResourceManagement"]
 def jobListPerformance=["Performance"]
 def jobListSequence=["runPasswordTests"]
 def jobListOwaspZAP=["OWASP ZAP"]
@@ -437,6 +438,21 @@ node('jenkinsSlave1'){
 	  }
           try {
             parallel builds2
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
+
+          // parallel 3 tests
+          for(int i=0; i < jobList3Parallel.size(); ++i) {
+             def jobName = jobList3Parallel[i];
+             echo "i1=" + jobName
+             builds3[jobName] = {
+                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             }
+          }
+          try {
+            parallel builds3
           } catch(err) {
               echo "caugh exec running tests error: ${err}"
               currentBuild.result = 'FAILURE'
