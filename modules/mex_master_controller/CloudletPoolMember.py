@@ -49,7 +49,7 @@ class CloudletPoolMember(MexOperation):
         msg_dict = {'cloudletpoolmember': msg}
 
         msg_dict_delete = None
-        if auto_delete and 'key' in msg and 'organization' in msg['key'] and 'name' in msg['key']:
+        if auto_delete and 'key' in msg and 'organization' in msg['key'] and 'name' in msg['key'] and 'cloudlet_name' in msg['key']:
             msg_delete = self._build(cloudlet_pool_name=msg['key']['name'], cloudlet_name=msg['cloudlet_name'], operator_org_name=msg['key']['organization'], use_defaults=False)
             msg_dict_delete = {'cloudletpoolmember': msg_delete}
 
