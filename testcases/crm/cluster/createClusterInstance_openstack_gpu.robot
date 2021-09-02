@@ -38,6 +38,7 @@ GPU - 1 GPU shall be allocated for K8s IpAccessShared on openstack
    ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  
    Log to Console  DONE creating cluster instance
 
+   ${rootlb}=  Catenate  SEPARATOR=.  shared  ${rootlb}
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
 
@@ -142,6 +143,7 @@ GPU - 1 GPU shall be allocated for Docker IpAccessShared on openstack
    ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker
    Log to Console  DONE creating cluster instance
 
+   ${rootlb}=  Catenate  SEPARATOR=.  shared  ${rootlb}
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
 
