@@ -290,8 +290,8 @@ class MexApp(object):
                 time.sleep(1)
         raise Exception(e_return)
 
-    def http_port_should_be_alive(self, host, port, page, tls=False):
-        logging.info(f'host:{host} port:{port} tls:{tls}')
+    def http_port_should_be_alive(self, host, port, page='automation.html', tls=False):
+        logging.info(f'host:{host} port:{port} page={page} tls:{tls}')
 
         self.wait_for_dns(host)
 
