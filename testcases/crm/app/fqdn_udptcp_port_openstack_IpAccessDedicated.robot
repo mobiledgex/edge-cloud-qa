@@ -25,7 +25,6 @@ ${mobiledgex_domain}  mobiledgex.net
 
 ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 ${docker_command}  ./server_ping_threaded.py
-${http_page}       automation.html
 
 ${test_timeout_crm}  15 min
 	
@@ -46,7 +45,7 @@ User shall be able to access 1 UDP port on openstack with IpAccessDedicated
 
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+    ${cloudlet}=  Find Cloudlet	 latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
@@ -73,7 +72,7 @@ User shall be able to access 2 UDP ports on openstack with IpAccessDedicated
 
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet	 latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 	
@@ -97,7 +96,7 @@ User shall be able to access 1 TCP port on openstack with IpAccessDedicated
     Wait For App Instance Health Check OK
 
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet	 latitude=${latitude}  longitude=${longitude}
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
@@ -120,7 +119,7 @@ User shall be able to access 2 TCP ports on openstack with IpAccessDedicated
     Wait For App Instance Health Check OK
 
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet	 latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
@@ -145,7 +144,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with IpAccessDed
     Wait For App Instance Health Check OK
 
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet	 latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_2}=  Catenate  SEPARATOR=  ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
@@ -175,14 +174,13 @@ User shall be able to access HTTP port on openstack with IpAccessDedicated
 	
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
-    ${page}=  Catenate  SEPARATOR=  /  ${http_page}
+    ${cloudlet}=  Find Cloudlet	 latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
 
     Log To Console  Waiting for k8s pod to be running
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
     Log To Console  Checking if port is alive
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[0].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[0].public_port} 
 
 User shall be able to access UDP,TCP and HTTP ports on openstack with IpAccessDedicated
     [Documentation]
@@ -198,17 +196,16 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with IpAccessDe
     Wait For App Instance Health Check OK
 
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet	 latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
 
 User shall be able to access UDP,TCP ports with port range on openstack with IpAccessDedicated
     [Documentation]
@@ -224,10 +221,9 @@ User shall be able to access UDP,TCP ports with port range on openstack with IpA
     Wait For App Instance Health Check OK
 
     Register Client
-    ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 

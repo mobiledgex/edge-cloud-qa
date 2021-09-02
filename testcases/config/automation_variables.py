@@ -69,6 +69,8 @@ server_ping_threaded_cloudconfig = 'http://35.199.188.102/apps/server_ping_threa
 robotnik_manifest = 'http://35.199.188.102/apps/automation_robotnik.yml'
 namespace_manifest = 'http://35.199.188.102/apps/automation_server_ping_threaded_namespaces.yml'
 
+http_port_page = 'automation.html'
+
 helm_image = 'https://resources.gigaspaces.com/helm-charts:gigaspaces/insightedge'
 
 # vm_console_address =  'https://hamedgecloud.telekom.de:6080/vnc_auto.html'
