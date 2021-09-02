@@ -619,6 +619,14 @@ class MexDme(MexGrpc):
 
         return event
 
+    def receive_cloudlet_update_event(self):
+        event = self.receive_edge_event()
+
+        if event.event_type != app_client_pb2.ServerEdgeEvent.EVENT_CLOUDLET_UPDATE:
+            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_CLOUDLET_UPDATE}, got {event}')
+
+        return event
+
     def receive_cloudlet_maintenance_event(self, state=None):
         event = self.receive_edge_event()
 
@@ -758,11 +766,11 @@ class MexDme(MexGrpc):
         resp = None
 
         if not verify_location_request_obj:
-            request = VerifyLocation(**kwargs).request
+            verify_location_request_obj = VerifyLocation(**kwargs).request
 
-        logger.info('verify location on {}. \n\t{}'.format(self.address, str(request).replace('\n', '\n\t')))
+        logger.info('verify location on {}. \n\t{}'.format(self.address, str(verify_location_request_obj).replace('\n', '\n\t')))
 
-        resp = self.match_engine_stub.VerifyLocation(request)
+        resp = self.match_engine_stub.VerifyLocation(verify_location_request_obj)
 
         return resp
 
