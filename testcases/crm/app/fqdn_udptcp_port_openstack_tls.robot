@@ -22,7 +22,6 @@ ${longitude}      -96.7970
 ${mobiledgex_domain}  mobiledgex.net
 
 ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
-${http_page}       automation.html
 ${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 
 ${region}=  EU
@@ -55,7 +54,6 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/shared and 
    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[3].fqdn_prefix}  ${cloudlet.fqdn}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
@@ -63,7 +61,7 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/shared and 
 
    UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[3].public_port}
 
-   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}  tls=${True}
+   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  tls=${True}
 
 # ECQ-2253
 User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated and app=k8s/lb
@@ -92,7 +90,6 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated a
    Register Client
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
@@ -101,7 +98,7 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated a
 
    UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
 
-   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  ${page}  tls=${True}
+   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  tls=${True}
 
 # ECQ-2254
 User shall be able to access TCP TLS ports with cluster=docker/dedicated and app=docker/loadbalancer 
@@ -130,7 +127,6 @@ User shall be able to access TCP TLS ports with cluster=docker/dedicated and app
    ${cloudlet}=  Find Cloudlet        latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
@@ -138,7 +134,7 @@ User shall be able to access TCP TLS ports with cluster=docker/dedicated and app
 
    UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
 
-   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  ${page}  tls=${True}
+   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  tls=${True}
 
 # direct not supported
 # ECQ-2255
@@ -202,8 +198,6 @@ User shall be able to access TCP TLS ports with cluster=docker/shared and app=do
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
-   #${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
 
    #TCP Port Should Be Alive   cluster1589497241-27719.automationparadisecloudlet.gddt.mobiledgex.net  2016  #tls=${True}
    # add 2 tcp ports
@@ -212,7 +206,7 @@ User shall be able to access TCP TLS ports with cluster=docker/shared and app=do
 
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[2].public_port}
 
-   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[3].public_port}  ${page}  #tls=${False}
+   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[3].public_port}  #tls=${False}
 
 # ECA-2257
 User shall be able to access TCP TLS ports with VM/LB deployment 
