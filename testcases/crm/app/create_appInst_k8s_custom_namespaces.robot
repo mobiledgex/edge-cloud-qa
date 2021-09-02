@@ -17,8 +17,6 @@ ${operator_name_openstack}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${http_page}       automation.html
-
 ${test_timeout_crm}  15 min
 
 ${namespace_manifest}=  http://35.199.188.102/apps/automation_server_ping_threaded_namespaces.yml
@@ -46,7 +44,7 @@ User shall be able to create a k8s app instance with with custom namespaces
 
    UDP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
 
-   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[3].public_port}  ${http_page}
+   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[3].public_port}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
 

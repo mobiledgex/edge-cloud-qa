@@ -19,7 +19,6 @@ ${longitude}=  1
 
 ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 #${docker_command}  ./server_ping_threaded.py
-${http_page}       automation.html
 
 ${region}=  EU
 
@@ -58,12 +57,11 @@ User shall be able to access TCP/UDP/HTTP ports for 2 apps on the same rootlb
    ${fqdn_tcp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[0].fqdn_prefix}  ${cloudlet1.fqdn}
    ${fqdn_udp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[1].fqdn_prefix}  ${cloudlet1.fqdn}
    ${fqdn_http1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[2].fqdn_prefix}  ${cloudlet1.fqdn}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
    Log To Console  Checking if port is alive
    TCP Port Should Be Alive  ${fqdn_tcp1}  ${cloudlet1.ports[0].public_port}
    UDP Port Should Be Alive  ${fqdn_udp1}  ${cloudlet1.ports[1].public_port}
-   HTTP Port Should Be Alive  ${fqdn_http1}  ${cloudlet1.ports[2].public_port}  ${page}
+   HTTP Port Should Be Alive  ${fqdn_http1}  ${cloudlet1.ports[2].public_port} 
 
    Log To Console  Registering Client and Finding Cloudlet for k8s
    Register Client  app_name=${app_name_k8s}
@@ -75,7 +73,7 @@ User shall be able to access TCP/UDP/HTTP ports for 2 apps on the same rootlb
    Log To Console  Checking if port is alive
    TCP Port Should Be Alive  ${fqdn_tcp2}  ${cloudlet2.ports[0].public_port}
    UDP Port Should Be Alive  ${fqdn_udp2}  ${cloudlet2.ports[1].public_port}
-   HTTP Port Should Be Alive  ${fqdn_http2}  ${cloudlet2.ports[2].public_port}  ${page}
+   HTTP Port Should Be Alive  ${fqdn_http2}  ${cloudlet2.ports[2].public_port} 
 
 # ECQ-3113
 User shall be able to access TCP/UDP ports for 2 k8s apps with same name but different versions on the same rootlb
@@ -103,7 +101,6 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with same name but dif
    ${cloudlet1}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
    ${fqdn_tcp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[0].fqdn_prefix}  ${cloudlet1.fqdn}
    ${fqdn_udp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[1].fqdn_prefix}  ${cloudlet1.fqdn}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
    Log To Console  Checking if port is alive
    TCP Port Should Be Alive  ${fqdn_tcp1}  ${cloudlet1.ports[0].public_port}
