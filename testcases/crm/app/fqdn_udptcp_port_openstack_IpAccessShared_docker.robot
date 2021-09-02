@@ -23,7 +23,6 @@ ${mobiledgex_domain}  mobiledgex.net
 
 ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 ${docker_command}  ./server_ping_threaded.py
-${http_page}       automation.html
 
 ${test_timeout_crm}  15 min
 
@@ -50,7 +49,7 @@ User shall be able to access 2 UDP and 2 TCP and HTTP ports on openstack with do
     UDP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
     UDP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[3].public_port}
 
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[4].public_port}  ${http_page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[4].public_port} 
 
 *** Keywords ***
 Setup
