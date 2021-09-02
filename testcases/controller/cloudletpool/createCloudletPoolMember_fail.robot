@@ -44,6 +44,18 @@ CreateCloudletPoolMember - create without org shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"name\\\\":\\\\"xxx\\\\"} not found"}
 
+# ECQ-3838
+CreateCloudletPoolMember - create without cloudlet name shall return error
+   [Documentation]
+   ...  - send CreateCloudletPoolMember without cloudlet name
+   ...  - verify proper error is received
+
+   Create Cloudlet Pool  region=US  operator_org_name=tmus
+   ${error}=  Run Keyword And Expect Error  *  Add Cloudlet Pool Member  region=US  cloudlet_pool_name=${pool_name}  operator_org_name=tmus  token=${token}  use_defaults=False
+
+   Should Contain   ${error}  code=400
+   Should Contain   ${error}  error={"message":"Cloudlet key {\\\\"organization\\\\":\\\\"tmus\\\\"} not found"}
+
 # ECQ-1662
 # removed since it checks the pool name exists before adding member
 #CreateCloudletPoolMember - create with invalid pool name shall return error 
