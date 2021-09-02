@@ -42,7 +42,13 @@ DmePersistentConnetion - cloudlet in maintenance mode shall not return a new clo
 
    Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation  
    Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION_INIT
-   Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
+   #Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
+   ${cloud1}=  Receive Cloudlet Update Event
+   Should Be Equal As Numbers  ${cloud1.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${cloud1.new_cloudlet.edge_events_cookie}') > 100
+   Should Be Equal  ${cloud1.new_cloudlet.fqdn}  ${fcloudlet.fqdn}
+   Should Be Equal  ${cloud1.new_cloudlet.ports}  ${fcloudlet.ports}
+   Should Be Equal  ${cloud1.new_cloudlet.cloudlet_location}  ${fcloudlet.cloudlet_location}
 
    Sleep  1s
 
@@ -55,7 +61,13 @@ DmePersistentConnetion - cloudlet in maintenance mode shall not return a new clo
 
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
    Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION_INIT
-   Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
+   #Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
+   ${cloud2}=  Receive Cloudlet Update Event
+   Should Be Equal As Numbers  ${cloud2.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${cloud2.new_cloudlet.edge_events_cookie}') > 100
+   Should Be Equal  ${cloud2.new_cloudlet.fqdn}  ${fcloudlet.fqdn}
+   Should Be Equal  ${cloud2.new_cloudlet.ports}  ${fcloudlet.ports}
+   Should Be Equal  ${cloud2.new_cloudlet.cloudlet_location}  ${fcloudlet.cloudlet_location}
 
 # ECQ-3423
 DmePersistentConnetion - cloudlet in maintenance mode shall return new cloudlet
@@ -92,7 +104,13 @@ DmePersistentConnetion - cloudlet in maintenance mode shall return new cloudlet
 
    Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
    Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION_INIT
-   Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
+   #Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
+   ${cloud2}=  Receive Cloudlet Update Event
+   Should Be Equal As Numbers  ${cloud2.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${cloud2.new_cloudlet.edge_events_cookie}') > 100
+   Should Be Equal  ${cloud2.new_cloudlet.fqdn}  ${fcloudlet.fqdn}
+   Should Be Equal  ${cloud2.new_cloudlet.ports}  ${fcloudlet.ports}
+   Should Be Equal  ${cloud2.new_cloudlet.cloudlet_location}  ${fcloudlet.cloudlet_location}
 
    Sleep  1s
 
@@ -112,7 +130,13 @@ DmePersistentConnetion - cloudlet in maintenance mode shall return new cloudlet
 
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
    Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION_INIT
-   Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
+   #Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION
+   ${cloud3}=  Receive Cloudlet Update Event
+   Should Be Equal As Numbers  ${cloud3.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${cloud3.new_cloudlet.edge_events_cookie}') > 100
+   Should Be Equal  ${cloud3.new_cloudlet.fqdn}  ${fcloudlet.fqdn}
+   Should Be Equal  ${cloud3.new_cloudlet.ports}  ${fcloudlet.ports}
+   Should Be Equal  ${cloud3.new_cloudlet.cloudlet_location}  ${fcloudlet.cloudlet_location}
 
 # ECQ-3424
 DmePersistentConnetion - cloudlet state change shall not return a new cloudlet
