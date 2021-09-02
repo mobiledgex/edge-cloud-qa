@@ -102,8 +102,14 @@ DMEPersistentConnection - shall be able to receive appinst health events
    Wait For App Instance Health Check Ok  region=${region}  app_name=${app_name}
 
    # receive the Health Check OK Event
-   Receive Appinst Health Check OK Event
-  
+   #Receive Appinst Health Check OK Event
+   ${cloud1}=  Receive Cloudlet Update Event
+   Should Be Equal As Numbers  ${cloud1.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${cloud1.new_cloudlet.edge_events_cookie}') > 100
+   Should Be Equal  ${cloud1.new_cloudlet.fqdn}  ${cloudlet.fqdn}
+   Should Be Equal  ${cloud1.new_cloudlet.ports}  ${cloudlet.ports}
+   Should Be Equal  ${cloud1.new_cloudlet.cloudlet_location}  ${cloudlet.cloudlet_location}
+
    # create 2nd app inst 
    ${appinst2}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}2
 
@@ -132,7 +138,13 @@ DMEPersistentConnection - shall be able to receive appinst health events
    Wait For App Instance Health Check Ok  region=${region}  app_name=${app_name}
 
    # receive the Health Check OK Event
-   Receive Appinst Health Check OK Event
+   #Receive Appinst Health Check OK Event
+   ${cloud2}=  Receive Cloudlet Update Event
+   Should Be Equal As Numbers  ${cloud2.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${cloud2.new_cloudlet.edge_events_cookie}') > 100
+   Should Be Equal  ${cloud2.new_cloudlet.fqdn}  ${cloudlet.fqdn}
+   Should Be Equal  ${cloud2.new_cloudlet.ports}  ${cloudlet.ports}
+   Should Be Equal  ${cloud2.new_cloudlet.cloudlet_location}  ${cloudlet.cloudlet_location}
 
    # stop rootlb to create health check fail
    ${clusterlb}=  Convert To Lowercase  ${cluster_name}.${cloudlet_name_openstack_dedicated}.${operator_name_openstack}.mobiledgex.net
@@ -140,7 +152,7 @@ DMEPersistentConnection - shall be able to receive appinst health events
 
    # receive the Health Check Server Fail Event with new cloudlet
    ${new_cloudlet1}=  Receive Appinst Health Check Rootlb Offline Event
-   log to console  ${new_cloudlet1.fqdn}
+   log to console  ${new_cloudlet1.new_cloudlet.fqdn}
    Should Be Equal As Numbers  ${new_cloudlet1.new_cloudlet.status}  1  #FIND_FOUND
    Should Be Equal             ${new_cloudlet1.new_cloudlet.fqdn}  ${appinst2['data']['uri']}
    Should Be Equal As Numbers  ${new_cloudlet1.new_cloudlet.cloudlet_location.latitude}   ${appinst2['data']['cloudlet_loc']['latitude']}
@@ -158,14 +170,20 @@ DMEPersistentConnection - shall be able to receive appinst health events
    Start Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
    # receive the Health Check OK Event
-   Receive Appinst Health Check OK Event
+   #Receive Appinst Health Check OK Event
+   ${cloud3}=  Receive Cloudlet Update Event
+   Should Be Equal As Numbers  ${cloud3.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${cloud3.new_cloudlet.edge_events_cookie}') > 100
+   Should Be Equal  ${cloud3.new_cloudlet.fqdn}  ${cloudlet.fqdn}
+   Should Be Equal  ${cloud3.new_cloudlet.ports}  ${cloudlet.ports}
+   Should Be Equal  ${cloud3.new_cloudlet.cloudlet_location}  ${cloudlet.cloudlet_location}
 
    # delete appinst to create health check fail
    Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
 
    # receive the Health Check Server Fail Event with new cloudlet
    ${new_cloudlet2}=  Receive Appinst Health Check Server Fail Event
-   log to console  ${new_cloudlet2.fqdn}
+   log to console  ${new_cloudlet2.new_cloudlet.fqdn}
    Should Be Equal As Numbers  ${new_cloudlet2.new_cloudlet.status}  1  #FIND_FOUND
    Should Be Equal             ${new_cloudlet2.new_cloudlet.fqdn}  ${appinst2['data']['uri']}
    Should Be Equal As Numbers  ${new_cloudlet2.new_cloudlet.cloudlet_location.latitude}   ${appinst2['data']['cloudlet_loc']['latitude']}
@@ -181,7 +199,7 @@ DMEPersistentConnection - shall be able to receive appinst health events
    Should Not Be Equal  ${new_cloudlet1.new_cloudlet.edge_events_cookie}  ${new_cloudlet2.new_cloudlet.edge_events_cookie}
 
    # create persist connection to new cloudlet
-   Create DME Persistent Connection  edge_events_cookie=${new_cloudlet2.edge_events_cookie}  latitude=36  longitude=-96
+   Create DME Persistent Connection  edge_events_cookie=${new_cloudlet2.new_cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
 *** Keywords ***
 Setup
