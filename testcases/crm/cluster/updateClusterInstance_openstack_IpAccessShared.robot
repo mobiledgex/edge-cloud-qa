@@ -54,11 +54,10 @@ Shall be able to update IpAccessShared k8s cluster to modify number of worker no
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
     Log To Console  Updating Cluster Instance
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_nodes=2
@@ -75,7 +74,7 @@ Shall be able to update IpAccessShared k8s cluster to modify number of worker no
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
     Log To Console  Updating Cluster Instance
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_nodes=1
@@ -88,7 +87,7 @@ Shall be able to update IpAccessShared k8s cluster to modify number of worker no
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
 
 Shall be able to update IpAccessShared k8s cluster to modify number of worker nodes with scale_with_cluster
@@ -111,11 +110,10 @@ Shall be able to update IpAccessShared k8s cluster to modify number of worker no
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
     Log To Console  Updating Cluster Instance
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_nodes=2
@@ -132,7 +130,7 @@ Shall be able to update IpAccessShared k8s cluster to modify number of worker no
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
 
 Shall be able to update IpAccessShared k8s cluster to include auto scale policy
@@ -230,11 +228,10 @@ Shall be able to update IpAccessShared k8s cluster to include auto scale policy 
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
 
 *** Keywords ***
