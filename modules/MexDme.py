@@ -9,6 +9,7 @@ import base64
 import json
 import queue
 import subprocess
+from threading import Thread
 
 from mex_grpc import MexGrpc
 
@@ -27,6 +28,21 @@ session_cookie_global = None
 edge_events_cookie_global = None
 token_server_uri_global = None
 token_global = None
+
+
+class ThreadWithReturnValue(Thread):
+    def __init__(self, group=None, target=None, name=None,
+                 args=(), kwargs={}, Verbose=None):
+        Thread.__init__(self, group, target, name, args, kwargs)
+        self._return = None
+
+    def run(self):
+        if self._target is not None:
+            self._return = self._target(*self._args, **self._kwargs)
+
+    def join(self, *args, **kwargs):
+        Thread.join(self, *args, **kwargs)
+        return self._return
 
 
 class Client():
@@ -570,12 +586,31 @@ class MexDme(MexGrpc):
 
         return resp
 
-    def receive_edge_event(self, timeout=10):
-        logger.info('receive edge event')
+#    def receive_edge_event(self, timeout=10):
+#        logger.info('receive edge event')
+#        request = next(self.edge_event_stream, 'nothing')
+#        logger.info(f'received edge event {request}')
+#
+#        return request
+
+    def receive_edge_event_thread(self):
+        print('in thread')
         request = next(self.edge_event_stream, 'nothing')
         logger.info(f'received edge event {request}')
 
         return request
+
+    def receive_edge_event(self, timeout=10):
+        logger.info('receive edge event')
+        event_thread = ThreadWithReturnValue(target=self.receive_edge_event_thread)
+        event_thread.start()
+        thread_return = event_thread.join(timeout=timeout)
+        logger.debug('event_threadreturn', thread_return)
+
+        if thread_return is None:
+            raise Exception(f'no edge event received before timeout={timeout}')
+
+        return thread_return
 
     def receive_latency_edge_request(self):
         request = self.receive_edge_event()
