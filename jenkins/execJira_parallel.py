@@ -254,14 +254,17 @@ def get_testcases(z, result, cycle_id, project_id, version_id, folder_id, folder
             logger.info("found a teststep")
             # tmp_list = {'id': s['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['issueId']}
             # tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
-            tmp_list = {'tc': sresult_content[0]['step'], 'issue_key': s['key'], 'issue_id': s['id'], 'project_id': project_id, 'version_id': version_id, 'cycle_id': cycle_id, 'folder_id': folder_id, 'folder_name': folder_name, 'defects': s['fields']['issuelinks']}
-            print(s)
-            tmp_list['defect_count'] = len(s['fields']['issuelinks'])  # need to check for issueslink section
+            try:
+                tmp_list = {'tc': sresult_content[0]['step'], 'issue_key': s['key'], 'issue_id': s['id'], 'project_id': project_id, 'version_id': version_id, 'cycle_id': cycle_id, 'folder_id': folder_id, 'folder_name': folder_name, 'defects': s['fields']['issuelinks']}
+                print(s)
+                tmp_list['defect_count'] = len(s['fields']['issuelinks'])  # need to check for issueslink section
             # if 'totalDefectCount' in s['execution']: # totalDefectCount only exists if the test has previously been executed
             #     tmp_list['defect_count'] = s['execution']['totalDefectCount']
             # else:
             #     tmp_list['defect_count'] = 0
-            logger.info("script is " + sresult_content[0]['step'])
+                logger.info("script is " + sresult_content[0]['step'])
+            except Exception as e:
+                logger.error('error getting teststep from', s['key'], 'error:', e)
         else:
             logger.info("did NOT find a teststep")
             tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['key']}
