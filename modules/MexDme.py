@@ -766,11 +766,11 @@ class MexDme(MexGrpc):
         resp = None
 
         if not get_fqdn_list_obj:
-            request = GetFqdnList(**kwargs).request
+            get_fqdn_list_obj = GetFqdnList(**kwargs).request
 
-        logger.info('get fqdn list on {}. \n\t{}'.format(self.address, str(request).replace('\n', '\n\t')))
+        logger.info('get fqdn list on {}. \n\t{}'.format(self.address, str(get_fqdn_list_obj).replace('\n', '\n\t')))
 
-        resp = self.match_engine_stub.GetFqdnList(request)
+        resp = self.match_engine_stub.GetFqdnList(get_fqdn_list_obj)
 
         if resp.status != 1:  # FL_SUCCESS
             raise Exception('get fqdn list failed:{}'.format(str(resp)))
