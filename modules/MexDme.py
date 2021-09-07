@@ -783,11 +783,11 @@ class MexDme(MexGrpc):
         resp = None
 
         if not get_app_instance_request_obj:
-            request = GetAppInstList(**kwargs).request
+            get_app_instance_request_obj = GetAppInstList(**kwargs).request
 
-        logger.info('get app instance list on {}. \n\t{}'.format(self.address, str(request).replace('\n', '\n\t')))
+        logger.info('get app instance list on {}. \n\t{}'.format(self.address, str(get_app_instance_request_obj).replace('\n', '\n\t')))
 
-        resp = self.match_engine_stub.GetAppInstList(request)
+        resp = self.match_engine_stub.GetAppInstList(get_app_instance_request_obj)
 
         if resp.status != 1:  # AI_SUCCESS
             raise Exception('get app inst list failed:{}'.format(str(resp)))
