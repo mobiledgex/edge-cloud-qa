@@ -50,7 +50,10 @@ from mex_master_controller.RestrictedOrgUpdate import RestrictedOrgUpdate
 from mex_master_controller.Controller import Controller
 from mex_master_controller.Org import Org
 from mex_master_controller.BillingOrg import BillingOrg
-
+from mex_master_controller.GpuDriver import GpuDriver
+from mex_master_controller.RateLimitSettings import RateLimitSettings
+from mex_master_controller.AlertPolicy import AlertPolicy
+from mex_master_controller.OperatorReporting import OperatorReporting
 
 import shared_variables_mc
 import shared_variables
@@ -217,6 +220,10 @@ class MexMasterController(MexRest):
         self.org = Org(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.billingorg = BillingOrg(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token,
                                      super_token=self.super_token)
+        self.gpudriver = GpuDriver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.ratelimitsettings = RateLimitSettings(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.alert_policy = AlertPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.operator_reporting = OperatorReporting(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -285,12 +292,30 @@ class MexMasterController(MexRest):
     def get_default_alert_receiver_name(self):
         return shared_variables.alert_receiver_name_default
 
+    def get_default_alert_policy_name(self):
+        return shared_variables.alert_policy_name_default
+
     def get_default_auto_provisioning_policy_name(self):
         return shared_variables.autoprov_policy_name_default
 
+    def get_default_rate_limiting_flow_name(self):
+        return shared_variables.flow_settings_name_default
+
+    def get_default_rate_limiting_max_requests_name(self):
+        return shared_variables.max_requests_settings_name_default
+
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
-    
+
+    def get_default_reporter_name(self):
+        return shared_variables.reporter_name_default
+
+    def get_default_gpudriver_name(self):
+        return shared_variables.gpudriver_name_default
+
+    def get_default_gpudriver_build_name(self):
+        return shared_variables.gpudriver_build_name_default
+
     def number_of_login_requests(self):
         return self._number_login_requests
 
@@ -691,17 +716,39 @@ class MexMasterController(MexRest):
                            last_name=None, email_address=None, json_data=None, use_defaults=True, auto_delete=True,
                            use_thread=False):
 
-        return self.billingorg.create_billing_org(token=token, billing_org_name=billing_org_name,
-                                                  billing_org_type=billing_org_type, first_name=first_name,
-                                                  last_name=last_name, email_address=email_address, json_data=json_data,
-                                                  use_defaults=use_defaults, auto_delete=auto_delete,
-                                                  use_thread=use_thread)
+        if os.environ.get('AUTOMATION_BILLING_ENABLED') == '1' or not os.environ.get('AUTOMATION_BILLING_ENABLED'):
+            return self.billingorg.create_billing_org(token=token, billing_org_name=billing_org_name,
+                                                      billing_org_type=billing_org_type, first_name=first_name,
+                                                      last_name=last_name, email_address=email_address, json_data=json_data,
+                                                      use_defaults=use_defaults, auto_delete=auto_delete,
+                                                      use_thread=use_thread)
+        else:
+            logger.info('AUTOMATION_BILLING_ENABLED not enabled. Skipping billing org create')
 
     def delete_billing_org(self, token=None, billing_org_name=None, json_data=None, use_defaults=True, auto_delete=True,
                            use_thread=False):
         return self.billingorg.delete_billing_org(token=token, billing_org_name=billing_org_name, json_data=json_data,
                                                   use_defaults=use_defaults, auto_delete=auto_delete,
                                                   use_thread=use_thread)
+
+    def show_billing_org(self,token=None, billing_org_name=None, json_data=None, use_defaults=True, auto_delete=True,
+                           use_thread=False):
+
+        return self.billingorg.show_billing_org(token=token, billing_org_name=billing_org_name, json_data=json_data,
+                                                  use_defaults=use_defaults, auto_delete=auto_delete,
+                                                  use_thread=use_thread)
+
+    def show_account_info(self, token=None, json_data=None, use_defaults=True, auto_delete=True,
+                           use_thread=False):
+
+        return self.billingorg.show_account_info(token=token, json_data=json_data, use_defaults=use_defaults,auto_delete=auto_delete,
+                           use_thread=use_thread)
+
+    def get_invoice(self, token=None, billing_org_name=None, start_date=None, end_date=None, json_data=None, use_defaults=True, auto_delete=True,
+                           use_thread=False):
+
+        return self.billingorg.get_invoice(token=token, billing_org_name=billing_org_name, start_date=start_date, end_date=end_date,
+                            json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def show_organizations(self, token=None, org_name=None, org_type=None, address=None, phone=None, public_images=None, delete_in_progress=None, edgebox_only=None, json_data=None, use_defaults=False, use_thread=False):
         if use_defaults:
@@ -1423,62 +1470,14 @@ class MexMasterController(MexRest):
     def get_show_app_instance_client_metrics_output(self):
         return self.app_instance.get_show_app_instance_client_metrics()
 
-    def create_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, developer_org_name=None,  min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.autoscale_policy.create_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def create_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, developer_org_name=None,  min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, target_cpu=None, target_memory=None, target_active_connections=None, stabilization_window_sec=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.autoscale_policy.create_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, target_cpu=target_cpu, target_memory=target_memory, target_active_connections=target_active_connections, stabilization_window_sec=stabilization_window_sec, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def delete_autoscale_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
         return self.autoscale_policy.delete_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def update_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=False, use_thread=False):
-        url = self.root_url + '/auth/ctrl/UpdateAutoScalePolicy'
-
-        payload = None
-        policy = None
-
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        if json_data !=  None:
-            payload = json_data
-        else:
-            policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes,  scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults, include_fields=True).policy
-            policy_dict = {'autoscalepolicy': policy}
-            if region is not None:
-                policy_dict['region'] = region
-
-            payload = json.dumps(policy_dict)
-
-        logger.info('update autoscalepolicy on mc at {}. \n\t{}'.format(url, payload))
-
-        def send_message():
-            self._number_updateautoscalepolicy_requests += 1
-
-            try:
-                self.post(url=url, bearer=token, data=payload)
-                
-                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-
-                if str(self.resp.status_code) != '200':
-                    self._number_updateautoscalepolicy_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-                    
-            except Exception as e:
-                self._number_updateautoscalepolicy_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            self._number_updateautoscalepolicy_requests_success += 1
-
-            resp =  self.show_autoscale_policy(region=region, token=self.super_token, policy_name=policy['key']['name'], developer_name=policy['key']['developer'], use_defaults=False)
-
-            return resp
-
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return self.decoded_data
+    def update_autoscale_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=False, use_thread=False):
+        return self.autoscale_policy.update_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def show_autoscale_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
         return self.autoscale_policy.show_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
@@ -1621,8 +1620,8 @@ class MexMasterController(MexRest):
     def delete_alert_receiver(self, token=None, receiver_name=None, type=None, severity=None, user=None, developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.alert_receiver.delete_alert_receiver(token=token, receiver_name=receiver_name, type=type, severity=severity, user=user, developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
     
-    def show_alerts(self, token=None, alert_name=None, region=None, app_name=None,  app_version=None,  developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, warning=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.alert.show_alert(token=token, alert_name=alert_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, port=port, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, scope=scope, warning=warning, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def show_alerts(self, token=None, alert_name=None, region=None, app_name=None,  app_version=None,  developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, warning=None, description=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.alert.show_alert(token=token, alert_name=alert_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, port=port, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, scope=scope, warning=warning, description=description, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def create_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None,undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.autoprov_policy.create_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count,undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
@@ -1719,8 +1718,8 @@ class MexMasterController(MexRest):
     def show_settings(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
         return self.settings.show_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread)
 
-    def update_settings(self, token=None, region=None, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_cloudlet_timeout=None, update_cloudlet_timeout=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_cloudlet_usage_metrics_retention=None, influx_db_metrics_retention=None, influx_db_downsampled_metrics_retention=None, influx_db_edge_events_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, update_trust_policy_timeout=None, dme_api_metrics_collection_interval=None, edge_events_metrics_collection_interval=None, edge_events_metrics_continuous_queries_collection_intervals=[], cleanup_reservable_auto_cluster_idletime=None, location_tile_side_length_km=None, appinst_client_cleanup_interval=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.settings.update_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread, shepherd_metrics_collection_interval=shepherd_metrics_collection_interval, shepherd_alert_evaluation_interval=shepherd_alert_evaluation_interval, shepherd_health_check_retries=shepherd_health_check_retries, shepherd_health_check_interval=shepherd_health_check_interval, auto_deploy_interval_sec=auto_deploy_interval_sec, auto_deploy_offset_sec=auto_deploy_offset_sec, auto_deploy_max_intervals=auto_deploy_max_intervals, create_cloudlet_timeout=create_cloudlet_timeout, update_cloudlet_timeout=update_cloudlet_timeout, create_app_inst_timeout=create_app_inst_timeout, update_app_inst_timeout=update_app_inst_timeout, delete_app_inst_timeout=delete_app_inst_timeout, create_cluster_inst_timeout=create_cluster_inst_timeout, update_cluster_inst_timeout=update_cluster_inst_timeout, delete_cluster_inst_timeout=delete_cluster_inst_timeout, master_node_flavor=master_node_flavor, load_balancer_max_port_range=load_balancer_max_port_range, max_tracked_dme_clients=max_tracked_dme_clients, chef_client_interval=chef_client_interval, influx_db_metrics_retention=influx_db_metrics_retention, influx_db_cloudlet_usage_metrics_retention=influx_db_cloudlet_usage_metrics_retention, influx_db_downsampled_metrics_retention=influx_db_downsampled_metrics_retention, influx_db_edge_events_metrics_retention=influx_db_edge_events_metrics_retention, cloudlet_maintenance_timeout=cloudlet_maintenance_timeout, update_vm_pool_timeout=update_vm_pool_timeout, update_trust_policy_timeout=update_trust_policy_timeout, dme_api_metrics_collection_interval=dme_api_metrics_collection_interval, edge_events_metrics_collection_interval=edge_events_metrics_collection_interval, edge_events_metrics_continuous_queries_collection_intervals=edge_events_metrics_continuous_queries_collection_intervals, cleanup_reservable_auto_cluster_idletime=cleanup_reservable_auto_cluster_idletime, location_tile_side_length_km=location_tile_side_length_km, appinst_client_cleanup_interval=appinst_client_cleanup_interval)
+    def update_settings(self, token=None, region=None, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, shepherd_metrics_scrape_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_cloudlet_timeout=None, update_cloudlet_timeout=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_cloudlet_usage_metrics_retention=None, influx_db_metrics_retention=None, influx_db_downsampled_metrics_retention=None, influx_db_edge_events_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, update_trust_policy_timeout=None, dme_api_metrics_collection_interval=None, edge_events_metrics_collection_interval=None, edge_events_metrics_continuous_queries_collection_intervals=[], cleanup_reservable_auto_cluster_idletime=None, location_tile_side_length_km=None, appinst_client_cleanup_interval=None, cluster_auto_scale_averaging_duration_sec=None, cluster_auto_scale_retry_delay=None, alert_policy_min_trigger_time=None, disable_rate_limit=None, max_num_per_ip_rate_limiters=None, resource_snapshot_thread_interval=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.settings.update_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread, shepherd_metrics_collection_interval=shepherd_metrics_collection_interval, shepherd_alert_evaluation_interval=shepherd_alert_evaluation_interval, shepherd_health_check_retries=shepherd_health_check_retries, shepherd_health_check_interval=shepherd_health_check_interval, shepherd_metrics_scrape_interval=shepherd_metrics_scrape_interval, auto_deploy_interval_sec=auto_deploy_interval_sec, auto_deploy_offset_sec=auto_deploy_offset_sec, auto_deploy_max_intervals=auto_deploy_max_intervals, create_cloudlet_timeout=create_cloudlet_timeout, update_cloudlet_timeout=update_cloudlet_timeout, create_app_inst_timeout=create_app_inst_timeout, update_app_inst_timeout=update_app_inst_timeout, delete_app_inst_timeout=delete_app_inst_timeout, create_cluster_inst_timeout=create_cluster_inst_timeout, update_cluster_inst_timeout=update_cluster_inst_timeout, delete_cluster_inst_timeout=delete_cluster_inst_timeout, master_node_flavor=master_node_flavor, load_balancer_max_port_range=load_balancer_max_port_range, max_tracked_dme_clients=max_tracked_dme_clients, chef_client_interval=chef_client_interval, influx_db_metrics_retention=influx_db_metrics_retention, influx_db_cloudlet_usage_metrics_retention=influx_db_cloudlet_usage_metrics_retention, influx_db_downsampled_metrics_retention=influx_db_downsampled_metrics_retention, influx_db_edge_events_metrics_retention=influx_db_edge_events_metrics_retention, cloudlet_maintenance_timeout=cloudlet_maintenance_timeout, update_vm_pool_timeout=update_vm_pool_timeout, update_trust_policy_timeout=update_trust_policy_timeout, dme_api_metrics_collection_interval=dme_api_metrics_collection_interval, edge_events_metrics_collection_interval=edge_events_metrics_collection_interval, edge_events_metrics_continuous_queries_collection_intervals=edge_events_metrics_continuous_queries_collection_intervals, cleanup_reservable_auto_cluster_idletime=cleanup_reservable_auto_cluster_idletime, location_tile_side_length_km=location_tile_side_length_km, appinst_client_cleanup_interval=appinst_client_cleanup_interval, cluster_auto_scale_averaging_duration_sec=cluster_auto_scale_averaging_duration_sec, cluster_auto_scale_retry_delay=cluster_auto_scale_retry_delay, alert_policy_min_trigger_time=alert_policy_min_trigger_time, disable_rate_limit=disable_rate_limit, max_num_per_ip_rate_limiters=max_num_per_ip_rate_limiters, resource_snapshot_thread_interval=resource_snapshot_thread_interval)
 
     def restrictedorg_update(self, token=None, org_name=None, edgeboxonly=False, json_data=None, use_defaults=True, use_thread=False):
         if token is None:
@@ -1733,6 +1732,96 @@ class MexMasterController(MexRest):
 
     def request_app_instance_latency(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.request_appinst_latency.request_appinst_latency(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, builds_dict={}, license_config=None, properties={}, use_defaults=True, use_thread=False, auto_delete=True):
+        return self.gpudriver.create_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, builds_dict=builds_dict, license_config=license_config, properties=properties, use_defaults=use_defaults, use_thread=use_thread, auto_delete=auto_delete)
+
+    def update_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, license_config=None, properties={}, use_defaults=True, use_thread=False):
+        return self.gpudriver.update_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, license_config=license_config, properties=properties, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, use_defaults=True, use_thread=False):
+        return self.gpudriver.delete_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, properties={}, use_defaults=True, use_thread=False):
+        return self.gpudriver.show_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, properties=properties, use_defaults=use_defaults, use_thread=use_thread)
+
+    def addbuild_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, build_name=None, build_driverpath=None, build_os=None, build_md5sum=None, build_driverpathcreds=None, build_kernelversion=None, build_hypervisorinfo=None, ignorestate=None, use_defaults=True, use_thread=False):
+        return self.gpudriver.addbuild_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, build_name=build_name, build_driverpath=build_driverpath, build_os=build_os, build_md5sum=build_md5sum, build_driverpathcreds=build_driverpathcreds, build_kernelversion=build_kernelversion, build_hypervisorinfo=build_hypervisorinfo, ignorestate=ignorestate, use_defaults=use_defaults, use_thread=use_thread)
+
+    def removebuild_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, build_name=None, use_defaults=True, use_thread=False):
+        return self.gpudriver.removebuild_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, build_name=build_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def getbuildurl_gpudriver(self, token=None, region=None, gpudriver_name=None, gpudriver_org=None, build_name=None, use_defaults=True, use_thread=False):
+        return self.gpudriver.getbuildurl_gpudriver(token=token, region=region, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, build_name=build_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_rate_limit_settings(self, token=None, region=None, flow_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.show_rate_limit_settings(token=token, region=region, flow_settings_name=flow_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_rate_limit_flow(self, token=None, region=None, flow_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.create_rate_limit_flow(token=token, region=region, flow_settings_name=flow_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_rate_limit_flow(self, token=None, region=None, flow_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.show_rate_limit_flow(token=token, region=region, flow_settings_name=flow_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_rate_limit_flow(self, token=None, region=None, flow_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.delete_rate_limit_flow(token=token, region=region, flow_settings_name=flow_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_rate_limit_flow(self, token=None, region=None, flow_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.update_rate_limit_flow(token=token, region=region, flow_settings_name=flow_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_rate_limit_max_requests(self, token=None, region=None, max_requests_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, max_requests_algorithm=None, max_requests=None, interval=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.create_rate_limit_max_requests(token=token, region=region, max_requests_settings_name=max_requests_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, max_requests_algorithm=max_requests_algorithm, max_requests=max_requests, interval=interval, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_rate_limit_max_requests(self, token=None, region=None, max_requests_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, max_requests_algorithm=None, max_requests=None, interval=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.delete_rate_limit_max_requests(token=token, region=region, max_requests_settings_name=max_requests_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, max_requests_algorithm=max_requests_algorithm, max_requests=max_requests, interval=interval, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_rate_limit_max_requests(self, token=None, region=None, max_requests_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, max_requests_algorithm=None, max_requests=None, interval=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.update_rate_limit_max_requests(token=token, region=region, max_requests_settings_name=max_requests_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, max_requests_algorithm=max_requests_algorithm, max_requests=max_requests, interval=interval, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_mc_rate_limit_flow(self, token=None, flow_settings_name=None, api_name=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.create_mc_rate_limit_flow(token=token, flow_settings_name=flow_settings_name, api_name=api_name, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_mc_rate_limit_flow(self, token=None, flow_settings_name=None, api_name=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.show_mc_rate_limit_flow(token=token, flow_settings_name=flow_settings_name, api_name=api_name, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_mc_rate_limit_flow(self, token=None, flow_settings_name=None, api_name=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.delete_mc_rate_limit_flow(token=token, flow_settings_name=flow_settings_name, api_name=api_name, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_mc_rate_limit_flow(self, token=None, flow_settings_name=None, api_name=None, rate_limit_target=None, flow_algorithm=None, requests_per_second=None, burst_size=None, use_defaults=True, use_thread=False):
+        return self.ratelimitsettings.update_mc_rate_limit_flow(token=token, flow_settings_name=flow_settings_name, api_name=api_name, rate_limit_target=rate_limit_target, flow_algorithm=flow_algorithm, requests_per_second=requests_per_second, burst_size=burst_size, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_alert_policy(self, token=None, region=None, alertpolicy_name=None, alert_org=None, severity=None, cpu_utilization=None, mem_utilization=None, disk_utilization=None, active_connections=None, trigger_time=None, labels_vars=None, annotations_vars=None, description=None, use_defaults=True, auto_delete=True):
+        return self.alert_policy.create_alert_policy(token=token, region=region, alertpolicy_name=alertpolicy_name, alert_org=alert_org, severity=severity, cpu_utilization=cpu_utilization, mem_utilization=mem_utilization, disk_utilization=disk_utilization, active_connections=active_connections, trigger_time=trigger_time, labels_vars=labels_vars, annotations_vars=annotations_vars, description=description, use_defaults=use_defaults, auto_delete=auto_delete)
+
+    def show_alert_policy(self, token=None, region=None, alertpolicy_name=None, alert_org=None, severity=None, cpu_utilization=None, mem_utilization=None, disk_utilization=None, active_connections=None, trigger_time=None, labels_vars=None, annotations_vars=None, description=None, use_defaults=True, auto_delete=True):
+        return self.alert_policy.show_alert_policy(token=token, region=region, alertpolicy_name=alertpolicy_name, alert_org=alert_org, severity=severity, cpu_utilization=cpu_utilization, mem_utilization=mem_utilization, disk_utilization=disk_utilization, active_connections=active_connections, trigger_time=trigger_time, labels_vars=labels_vars, annotations_vars=annotations_vars, description=description, use_defaults=use_defaults, auto_delete=auto_delete)
+
+    def delete_alert_policy(self, token=None, region=None, alertpolicy_name=None, alert_org=None, severity=None, cpu_utilization=None, mem_utilization=None, disk_utilization=None, active_connections=None, trigger_time=None, labels_vars=None, annotations_vars=None, description=None, use_defaults=True, auto_delete=True):
+        return self.alert_policy.delete_alert_policy(token=token, region=region, alertpolicy_name=alertpolicy_name, alert_org=alert_org, severity=severity, cpu_utilization=cpu_utilization, mem_utilization=mem_utilization, disk_utilization=disk_utilization, active_connections=active_connections, trigger_time=trigger_time, labels_vars=labels_vars, annotations_vars=annotations_vars, description=description, use_defaults=use_defaults, auto_delete=auto_delete)
+
+    def update_alert_policy(self, token=None, region=None, alertpolicy_name=None, alert_org=None, severity=None, cpu_utilization=None, mem_utilization=None, disk_utilization=None, active_connections=None, trigger_time=None, labels_vars=None, annotations_vars=None, description=None, use_defaults=True, auto_delete=True):
+        return self.alert_policy.update_alert_policy(token=token, region=region, alertpolicy_name=alertpolicy_name, alert_org=alert_org, severity=severity, cpu_utilization=cpu_utilization, mem_utilization=mem_utilization, disk_utilization=disk_utilization, active_connections=active_connections, trigger_time=trigger_time, labels_vars=labels_vars, annotations_vars=annotations_vars, description=description, use_defaults=use_defaults, auto_delete=auto_delete)
+
+    def create_reporter(self, token=None, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, auto_delete=True, use_defaults=True, use_thread=False):
+        return self.operator_reporting.create_reporter(token=token, reporter_name=reporter_name, organization=organization, email_address=email_address, schedule=schedule, start_schedule_date=start_schedule_date, timezone=timezone, auto_delete=auto_delete, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_reporter(self, token=None, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, use_defaults=True, use_thread=False):
+        return self.operator_reporting.update_reporter(token=token, reporter_name=reporter_name, organization=organization, email_address=email_address, schedule=schedule, start_schedule_date=start_schedule_date, timezone=timezone, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_reporter(self, token=None, reporter_name=None, organization=None, use_defaults=True, use_thread=False):
+        return self.operator_reporting.delete_reporter(token=token, reporter_name=reporter_name, organization=organization, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_reporter(self, token=None, reporter_name=None, organization=None, use_defaults=True, use_thread=False):
+        return self.operator_reporting.show_reporter(token=token, reporter_name=reporter_name, organization=organization, use_defaults=use_defaults, use_thread=use_thread)
+
+    def generate_report(self, token=None, organization=None, start_time=None, end_time=None, timezone=None, use_defaults=True, use_thread=False):
+        return self.operator_reporting.generate_report(token=token, organization=organization, start_time=start_time, end_time=end_time, timezone=timezone, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_report(self, token=None, organization=None, use_defaults=False, use_thread=False):
+        return self.operator_reporting.show_report(token=token, organization=organization, use_defaults=use_defaults, use_thread=use_thread)
+
+    def download_report(self, token=None, organization=None, filename=None, use_defaults=False, use_thread=False):
+        return self.operator_reporting.download_report(token=token, organization=organization, filename=filename, use_defaults=use_defaults, use_thread=use_thread)
 
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
