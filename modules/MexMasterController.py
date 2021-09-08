@@ -714,6 +714,25 @@ class MexMasterController(MexRest):
                                                   use_defaults=use_defaults, auto_delete=auto_delete,
                                                   use_thread=use_thread)
 
+    def show_billing_org(self,token=None, billing_org_name=None, json_data=None, use_defaults=True, auto_delete=True,
+                           use_thread=False):
+
+        return self.billingorg.show_billing_org(token=token, billing_org_name=billing_org_name, json_data=json_data,
+                                                  use_defaults=use_defaults, auto_delete=auto_delete,
+                                                  use_thread=use_thread)
+
+    def show_account_info(self, token=None, json_data=None, use_defaults=True, auto_delete=True,
+                           use_thread=False):
+
+        return self.billingorg.show_account_info(token=token, json_data=json_data, use_defaults=use_defaults,auto_delete=auto_delete,
+                           use_thread=use_thread)
+
+    def get_invoice(self, token=None, billing_org_name=None, start_date=None, end_date=None, json_data=None, use_defaults=True, auto_delete=True,
+                           use_thread=False):
+
+        return self.billingorg.get_invoice(token=token, billing_org_name=billing_org_name, start_date=start_date, end_date=end_date,
+                            json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
     def show_organizations(self, token=None, org_name=None, org_type=None, address=None, phone=None, public_images=None, delete_in_progress=None, edgebox_only=None, json_data=None, use_defaults=False, use_thread=False):
         if use_defaults:
             if org_name is None:

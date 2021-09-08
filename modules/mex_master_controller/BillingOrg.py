@@ -13,7 +13,9 @@ class BillingOrg(MexOperation):
         self.create_url = '/auth/billingorg/create'
         self.delete_url = '/auth/billingorg/delete'
         self.show_url = '/auth/billingorg/show'
+        self.show_account_url = '/auth/billingorg/showaccount'
         self.update_url = '/auth/billingorg/update'
+        self.get_invoice_url = '/auth/billingorg/invoice'
 
     def _build(self, billing_org_name=None, billing_org_type=None, first_name=None, last_name=None, email_address=None,
                include_fields=False, use_defaults=True):
@@ -42,6 +44,25 @@ class BillingOrg(MexOperation):
 
         return billing_org_dict
 
+    @staticmethod
+    def invoice(billing_org_name=None, start_date=None, end_date=None, use_defaults=True):
+        invoice_dict={}
+        if use_defaults:
+            if billing_org_name is None:
+                billing_org_name = shared_variables.operator_name_default
+            if start_date is None:
+                start_date = shared_variables.start_date_default
+            if end_date is None:
+                end_date = shared_variables.end_date_default
+        if billing_org_name is not None:
+            invoice_dict['name'] = billing_org_name
+        if start_date is not None:
+            invoice_dict['startdate'] = start_date
+        if end_date is not None:
+            invoice_dict['enddate'] = end_date
+
+        return invoice_dict
+
     def create_billing_org(self, token=None, billing_org_name=None, billing_org_type=None, first_name=None,
                            last_name=None, email_address=None, json_data=None, use_defaults=True, auto_delete=True,
                            use_thread=False, msg_delete=None):
@@ -69,3 +90,26 @@ class BillingOrg(MexOperation):
 
         return self.delete(token=token, url=self.delete_url, json_data=json_data, use_defaults=use_defaults,
                            use_thread=use_thread, message=msg_dict)
+
+    def show_billing_org(self,token=None, billing_org_name=None, json_data=None, use_defaults=True, auto_delete=True,
+                           use_thread=False):
+        msg = self._build(billing_org_name=billing_org_name)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.show_url, json_data=json_data, use_defaults=use_defaults,
+                           use_thread=use_thread, message=msg_dict)
+
+    def show_account_info(self, token=None, json_data=None, use_defaults=True, auto_delete=True,
+                           use_thread=False):
+
+        return self.show(token=token, url=self.show_account_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_invoice(self, token=None, billing_org_name=None, start_date=None, end_date=None, json_data=None, use_defaults=True, auto_delete=True,
+                           use_thread=False):
+        msg = self.invoice(billing_org_name=billing_org_name, start_date=start_date, end_date=end_date)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.get_invoice_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+
+
