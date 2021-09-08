@@ -5,6 +5,8 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
 Library  String
+Library  OperatingSystem
+Library  Process
 
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -63,6 +65,11 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/shared and 
 
    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  tls=${True}
 
+   Verify Ssl Certificate  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+   Verify Ssl Certificate  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+   Verify Ssl Certificate  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
+
+
 # ECQ-2253
 User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated and app=k8s/lb
    [Documentation]
@@ -100,6 +107,10 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated a
 
    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  tls=${True}
 
+   Verify Ssl Certificate  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+   Verify Ssl Certificate  ${fqdn_0}  ${cloudlet.ports[0].end_port}
+   Verify Ssl Certificate  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}
+ 
 # ECQ-2254
 User shall be able to access TCP TLS ports with cluster=docker/dedicated and app=docker/loadbalancer 
    [Documentation]
@@ -135,6 +146,10 @@ User shall be able to access TCP TLS ports with cluster=docker/dedicated and app
    UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
 
    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  tls=${True}
+
+   Verify Ssl Certificate  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+   Verify Ssl Certificate  ${fqdn_1}  ${cloudlet.ports[0].end_port}
+   Verify Ssl Certificate  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}
 
 # direct not supported
 # ECQ-2255
@@ -208,6 +223,8 @@ User shall be able to access TCP TLS ports with cluster=docker/shared and app=do
 
    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[3].public_port}  #tls=${False}
 
+   Verify Ssl Certificate  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+
 # ECA-2257
 User shall be able to access TCP TLS ports with VM/LB deployment 
     [Documentation]
@@ -233,6 +250,8 @@ User shall be able to access TCP TLS ports with VM/LB deployment
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
+    Verify Ssl Certificate  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+
 *** Keywords ***
 Setup
     ${time}=  Get Time  epoch
@@ -242,3 +261,15 @@ Setup
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
+
+Verify Ssl Certificate
+    [Arguments]  ${fqdn}  ${public_port}
+
+    ${URL}=  Catenate  SEPARATOR=:  ${fqdn}  ${public_port}
+    ${epoch_time}=  Get Time  epoch
+    ${outfile}=        Catenate  SEPARATOR=  outfile  ${epoch_time}
+
+    Run Process   curl -v https://${URL}/ --cacert letsencrypt-stg-root-x1.pem --max-time 10   shell=True  stdout=${outfile}  stderr=STDOUT
+    ${output}=  Get File  ${outfile}
+    Log To Console  ${output}
+    Should Contain  ${output}  SSL certificate verify ok
