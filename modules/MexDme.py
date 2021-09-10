@@ -376,6 +376,25 @@ class GetLocation():
 
         self.request = app_client_pb2.GetLocationRequest(**request_dict)
 
+
+class GetQosPositionKpi():
+    def __init__(self, session_cookie=None, use_defaults=True):
+
+        request_dict = {}
+        self.session_cookie = session_cookie
+
+        if session_cookie == 'default':
+            self.session_cookie = session_cookie_global
+
+        if use_defaults:
+            if not session_cookie:
+                self.session_cookie = session_cookie_global
+
+        if self.session_cookie is not None:
+            request_dict['session_cookie'] = self.session_cookie
+
+        self.request = app_client_pb2.QosPositionRequest(**request_dict)
+
 # class EdgeEventClient():
 #    def __init__(self, address, client_edge_event_obj=None, **kwargs):
 #        self.edge_event_queue = queue.SimpleQueue()
@@ -642,8 +661,8 @@ class MexDme(MexGrpc):
 
         return event
 
-    def receive_appinst_health_check_rootlb_offline_event(self):
-        event = self.receive_edge_event()
+    def receive_appinst_health_check_rootlb_offline_event(self, timeout=60):
+        event = self.receive_edge_event(timeout=timeout)
         print('*WARN*', event, event.health_check, event.error_msg)
         if event.event_type != app_client_pb2.ServerEdgeEvent.EVENT_APPINST_HEALTH:
             raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_APPINST_HEALTH}, got {event}')
@@ -654,8 +673,8 @@ class MexDme(MexGrpc):
 
         return event
 
-    def receive_cloudlet_update_event(self):
-        event = self.receive_edge_event()
+    def receive_cloudlet_update_event(self, timeout=10):
+        event = self.receive_edge_event(timeout=timeout)
 
         if event.event_type != app_client_pb2.ServerEdgeEvent.EVENT_CLOUDLET_UPDATE:
             raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_CLOUDLET_UPDATE}, got {event}')
@@ -806,6 +825,21 @@ class MexDme(MexGrpc):
         logger.info('verify location on {}. \n\t{}'.format(self.address, str(verify_location_request_obj).replace('\n', '\n\t')))
 
         resp = self.match_engine_stub.VerifyLocation(verify_location_request_obj)
+
+        return resp
+
+    def get_qos_position_kpi(self, get_qos_position_kpi_obj=None, **kwargs):
+        resp = None
+
+        if not get_qos_position_kpi_obj:
+            get_qos_position_kpi_obj = GetQosPositionKpi(**kwargs).request
+
+        logger.info('get qos position kpi on {}. \n\t{}'.format(self.address, str(get_qos_position_kpi_obj).replace('\n', '\n\t')))
+
+        resp = self.match_engine_stub.GetQosPositionKpi(get_qos_position_kpi_obj)
+
+        if resp.status != 1:  # FL_SUCCESS
+            raise Exception('get qos position kpi failed:{}'.format(str(resp)))
 
         return resp
 

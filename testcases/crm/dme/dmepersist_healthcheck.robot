@@ -34,8 +34,8 @@ ${app_version}=  1.0
 
 ${developer}=  ${developer_org_name_automation}
 
-${latitude}       32.7767
-${longitude}      -96.7970
+${cloudlet1_latitude}     1  #53  
+${cloudlet1_longitude}    1  #9 
 
 #${email_wait}=  300
 #${email_not_wait}=  30
@@ -69,7 +69,7 @@ DMEPersistentConnection - shall be able to receive appinst health events
 
    # create 2 clusterinsts
    Log To Console  Creating Cluster Instance
-   ${handle1}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated  use_thread=${True}
+   ${handle1}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated   use_thread=${True}
    ${handle2}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name}2  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated  use_thread=${True}
    Wait For Replies  ${handle1}  ${handle2}
    Log To Console  Done Creating Cluster Instance
@@ -82,12 +82,12 @@ DMEPersistentConnection - shall be able to receive appinst health events
    # register client and findcloudlet
 #   ${app_name}=  Set Variable  app1621381025-470966
    Register Client  app_name=${app_name}
-   ${cloudlet}=  Find Cloudlet  carrier_name=TDG  latitude=${latitude}  longitude=${longitude}
+   ${cloudlet}=  Find Cloudlet  carrier_name=TDG  latitude=${cloudlet1_latitude}  longitude=${cloudlet1_longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
    # create DME persist connection
-   Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
+   Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}
 
    # stop TCP port to create health check fail
    Stop TCP Port  ${fqdn_0}  ${cloudlet.ports[0].public_port}
@@ -115,7 +115,7 @@ DMEPersistentConnection - shall be able to receive appinst health events
 
    # stop TCP port to create health check fail
    Stop TCP Port  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-   Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
+   Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}   cloudlet_name=${cloudlet_name_openstack_dedicated}
 
    # receive the Health Check Server Fail Event with new cloudlet
    log to console  waiting for event
@@ -135,7 +135,7 @@ DMEPersistentConnection - shall be able to receive appinst health events
 
    # start the port back to clear the error
    Start TCP Port  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-   Wait For App Instance Health Check Ok  region=${region}  app_name=${app_name}
+   Wait For App Instance Health Check Ok  region=${region}  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}
 
    # receive the Health Check OK Event
    #Receive Appinst Health Check OK Event
@@ -171,7 +171,7 @@ DMEPersistentConnection - shall be able to receive appinst health events
 
    # receive the Health Check OK Event
    #Receive Appinst Health Check OK Event
-   ${cloud3}=  Receive Cloudlet Update Event
+   ${cloud3}=  Receive Cloudlet Update Event  timeout=60
    Should Be Equal As Numbers  ${cloud3.new_cloudlet.status}  1  #FIND_FOUND
    Should Be True  len('${cloud3.new_cloudlet.edge_events_cookie}') > 100
    Should Be Equal  ${cloud3.new_cloudlet.fqdn}  ${cloudlet.fqdn}
@@ -207,15 +207,22 @@ Setup
 #   ${emailepoch}=  Catenate  SEPARATOR=  ${user_username}  +  ${epoch}  @gmail.com
 #   ${epochusername}=  Catenate  SEPARATOR=  ${user_username}  ${epoch}
 
-   Login  username=${username}  password=${mexadmin_password}
+   ${token}=  Login  username=${username}  password=${mexadmin_password}
    Create Flavor  region=${region}
 
    ${flavor_name}=  Get Default Flavor Name
+
+   @{cloudlet_show}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  token=${token}  use_defaults=${False}
+   ${cloudlet1_latitude}=  Set Variable  ${cloudlet_show[0]['data']['location']['latitude']}
+   ${cloudlet1_longitude}=  Set Variable  ${cloudlet_show[0]['data']['location']['longitude']}
 
    ${app_name}=  Get Default App Name
    ${app_version}=  Get Default App Version
 #   ${app_org}=  Get Default Developer Organization Name
    ${cluster_name}=  Get Default Cluster Name
+
+   Set Suite Variable  ${cloudlet1_latitude}
+   Set Suite Variable  ${cloudlet1_longitude}
 
    Set Suite Variable  ${flavor_name}
    Set Suite Variable  ${app_name}
