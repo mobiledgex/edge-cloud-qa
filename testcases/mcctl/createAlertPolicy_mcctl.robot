@@ -372,6 +372,8 @@ Update Setup4    #ConnectionsFail for measurement active-connections and return 
    Run mcctl  settings update alertpolicymintriggertime=60s region=US
 
 Update Teardown
+   Run mcctl  settings update alertpolicymintriggertime=30s region=EU
+   Run mcctl  settings update alertpolicymintriggertime=30s region=US
    Run mcctl  alertpolicy delete region=${region} name=${recv_name} alert-org=${developer}    version=${version}
 
 
