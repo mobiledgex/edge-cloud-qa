@@ -74,7 +74,7 @@ class tc_getfqdnlist_ratelimit(unittest.TestCase):
         def send_message():
             global fail_list
 
-            self.getfqdnlist = mex_dme.GetAppInstList()
+            self.getfqdnlist = mex_dme.GetFqdnList()
 
             for r in range(1, num_requests + 1):
                 try:
