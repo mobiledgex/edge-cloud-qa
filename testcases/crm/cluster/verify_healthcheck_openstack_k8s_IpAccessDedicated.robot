@@ -283,15 +283,14 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
     Stop TCP Port  ${tcp_fqdn}  2015
     Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
 
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
 
 IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a range of ports
@@ -317,15 +316,14 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}
 
     Stop TCP Port  ${tcp_fqdn}  2015
     Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
 
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}
 
 
 IpAccessDedicated k8s - healthcheck shows proper state after UpdateApp
