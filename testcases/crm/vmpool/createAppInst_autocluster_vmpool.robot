@@ -80,12 +80,11 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/docker/direct
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
-   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${page}
+   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}
 
    [Teardown]  Teardown  ${vm_list}  ${node_list}
 
@@ -132,12 +131,11 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/docker/lb
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
-   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${page}
+   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}
 
    [Teardown]  Teardown  ${vm_list}  ${node_list}
 
@@ -181,12 +179,11 @@ AppInst autocluster shall create with VMPool IpAccessShared/docker/lb
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
-   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${page}
+   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}
 
    [Teardown]  Teardown  ${vm_list}  ${node_list}
 
@@ -232,12 +229,11 @@ AppInst autocluster shall create with VMPool IpAccessShared/k8s/lb nummasters=1 
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
-   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${page}
+   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}
 
    [Teardown]  Teardown  ${vm_list}  ${node_list}
 
@@ -288,12 +284,11 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/k8s/lb nummasters
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
-   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${page}
+   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}
 
    [Teardown]  Teardown  ${vm_list}  ${node_list}
 
