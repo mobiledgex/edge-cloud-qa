@@ -50,7 +50,10 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     Log To Console  Done Creating Cluster Instance
 
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  auto_delete=${False}
+
+    ${describe}=  Describe Pod  ${app_name_default}  ${cluster_name_default}  ${operator_name_openstack}  ${clusterlb}
+    Should Contain  ${describe[3]}  mex-k8s-master
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
@@ -69,6 +72,8 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     ${num_servers_node}=     Get Length  ${server_info_node}
     Should Be Equal As Numbers  ${num_servers_node}    0   # 0 nodes
 
+    Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
     Log To Console  Updating Cluster Instance
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=1
     Log To Console  Done Updating Cluster Instance
@@ -80,9 +85,14 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     ${num_servers_node}=     Get Length  ${server_info_node}
     Should Be Equal As Numbers  ${num_servers_node}    1   # 1 nodes
 
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default} 
+
+    ${describe}=  Describe Pod  ${app_name_default}  ${cluster_name_default}  ${operator_name_openstack}  ${clusterlb}
+    Should Contain  ${describe[3]}  mex-k8s-node
+
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
     Log To Console  Updating Cluster Instance
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=2
@@ -106,14 +116,14 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
 
     ${num_servers_node}=     Get Length  ${server_info_node}
-    Should Be Equal As Numbers  ${num_servers_node}    1   # 2 worker nodes
+    Should Be Equal As Numbers  ${num_servers_node}    1   # 1 worker nodes
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
     Log To Console  Updating Cluster Instance
-    Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=1
+    Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=0
     Log To Console  Done Updating Cluster Instance
 
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
