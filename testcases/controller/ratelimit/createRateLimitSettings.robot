@@ -23,9 +23,9 @@ CreateRateLimitFlow - shall be able to create with LeakyBucketAlgorithm
 
    [Template]  Flow Shall Be Created
 
-   flow_settings_name=${flow_name}  api_name=RegisterClient  rate_limit_target=AllRequests    api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=5
-   flow_settings_name=${flow_name}  api_name=Global          rate_limit_target=PerIp          api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=5
-   flow_settings_name=${flow_name}  api_name=FindCloudlet    rate_limit_target=PerUser        api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=5
+   flow_settings_name=${flow_name}  api_name=RegisterClient  rate_limit_target=AllRequests    api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=${5}
+   flow_settings_name=${flow_name}  api_name=Global          rate_limit_target=PerIp          api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=${5}
+   flow_settings_name=${flow_name}  api_name=FindCloudlet    rate_limit_target=PerUser        api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=${5}
 
 # ECQ-3731
 CreateRateLimitFlow - shall be able to create with TokenBucketAlgorithm
@@ -37,9 +37,9 @@ CreateRateLimitFlow - shall be able to create with TokenBucketAlgorithm
 
    [Template]  Flow Shall Be Created
 
-   flow_settings_name=${flow_name}  api_name=RegisterClient  rate_limit_target=AllRequests    api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=1
-   flow_settings_name=${flow_name}  api_name=Global          rate_limit_target=PerIp          api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=1
-   flow_settings_name=${flow_name}  api_name=FindCloudlet    rate_limit_target=PerUser        api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=100
+   flow_settings_name=${flow_name}  api_name=RegisterClient  rate_limit_target=AllRequests    api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=${5}  burst_size=${1}
+   flow_settings_name=${flow_name}  api_name=Global          rate_limit_target=PerIp          api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=${5}  burst_size=${1}
+   flow_settings_name=${flow_name}  api_name=FindCloudlet    rate_limit_target=PerUser        api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=${5}  burst_size=${100}
 
 # ECQ-3732
 CreateRateLimitFlow - shall be able to create max num per ip rate limiters
@@ -58,7 +58,7 @@ CreateRateLimitFlow - shall be able to create max num per ip rate limiters
 
 #   FOR  ${x}  IN RANGE  ${max['max_num_per_ip_rate_limiters']+1}
    FOR  ${x}  IN RANGE  ${flow_add}
-       Flow Shall Be Created  flow_settings_name=${flow_name}${x}  api_name=RegisterClient  rate_limit_target=PerIp  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=1
+       Flow Shall Be Created  flow_settings_name=${flow_name}${x}  api_name=RegisterClient  rate_limit_target=PerIp  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=${5}  burst_size=${1}
    END
 
    ${show2}=  Show Rate Limit Settings  region=${region}  api_name=RegisterClient  api_endpoint_type=Dme  rate_limit_target=PerIp
@@ -78,7 +78,7 @@ CreateRateLimitFlow - shall be able to create multiple TokenBucket/AllRequests f
    ${max}=  Update Settings  region=${region}  max_num_per_ip_rate_limiters=100
 
    FOR  ${x}  IN RANGE  ${flow_limit}
-       Flow Shall Be Created  flow_settings_name=${flow_name}${x}  api_name=RegisterClient  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=1
+       Flow Shall Be Created  flow_settings_name=${flow_name}${x}  api_name=RegisterClient  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=${5}  burst_size=${1}
    END
 
    ${show2}=  Show Rate Limit Settings  region=${region}  api_name=RegisterClient  api_endpoint_type=Dme  rate_limit_target=AllRequests
@@ -98,7 +98,7 @@ CreateRateLimitFlow - shall be able to create multiple LeakyBucket/PerUser flows
    ${max}=  Update Settings  region=${region}  max_num_per_ip_rate_limiters=100
 
    FOR  ${x}  IN RANGE  ${flow_limit}
-       Flow Shall Be Created  flow_settings_name=${flow_name}${x}  api_name=RegisterClient  rate_limit_target=PerUser  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=5
+       Flow Shall Be Created  flow_settings_name=${flow_name}${x}  api_name=RegisterClient  rate_limit_target=PerUser  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=${5}
    END
 
    ${show2}=  Show Rate Limit Settings  region=${region}  api_name=RegisterClient  api_endpoint_type=Dme  rate_limit_target=PerUser
@@ -115,9 +115,9 @@ CreateRateLimitMaxRequests - shall be able to create with FixedWindowAlgorithm
 
    [Template]  Max Requests Shall Be Created
 
-   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=1  interval=1m0s
-   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=PerIp        api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=1  interval=1h0m0s
-   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=PerUser      api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=1  interval=1s
+   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=${1}  interval=1m0s
+   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=PerIp        api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=${1}  interval=1h0m0s
+   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=PerUser      api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=${1}  interval=1s
 
 # ECQ-3736
 CreateRateLimitMaxRequests - shall be able to create with FixedWindowAlgorithm and existing flow
@@ -127,8 +127,8 @@ CreateRateLimitMaxRequests - shall be able to create with FixedWindowAlgorithm a
 
    [Tags]  RateLimit
 
-   Create Rate Limit Flow  region=${region}  flow_settings_name=${flow_name}  api_name=RegisterClient2  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=5
-   Create Rate Limit Max Requests  region=${region}  max_requests_settings_name=${max_reqs_name}  api_name=RegisterClient2  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=1  interval=1m
+   Create Rate Limit Flow  region=${region}  flow_settings_name=${flow_name}  api_name=RegisterClient2  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=${5}
+   Create Rate Limit Max Requests  region=${region}  max_requests_settings_name=${max_reqs_name}  api_name=RegisterClient2  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=${1}  interval=1m
 
    ${show2}=  Show Rate Limit Settings  region=${region}  api_name=RegisterClient2  api_endpoint_type=Dme  rate_limit_target=AllRequests
 
@@ -153,9 +153,9 @@ CreateRateLimitFlow - shall be able to create with existing max requests
 
    [Tags]  RateLimit
 
-   Create Rate Limit Max Requests  region=${region}  max_requests_settings_name=${max_reqs_name}  api_name=RegisterClient2  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=1  interval=1m
+   Create Rate Limit Max Requests  region=${region}  max_requests_settings_name=${max_reqs_name}  api_name=RegisterClient2  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=${1}  interval=1m
 
-   Create Rate Limit Flow  region=${region}  flow_settings_name=${flow_name}  api_name=RegisterClient2  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=5
+   Create Rate Limit Flow  region=${region}  flow_settings_name=${flow_name}  api_name=RegisterClient2  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=${5}
 
    ${show2}=  Show Rate Limit Settings  region=${region}  api_name=RegisterClient2  api_endpoint_type=Dme  rate_limit_target=AllRequests
 
