@@ -23,9 +23,9 @@ UpdateRateLimitFlow - shall be able to update flow
 
    [Template]  Flow Shall Be Updated
 
-   flow_settings_name=${flow_name}  api_name=RegisterClient  rate_limit_target=AllRequests    api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=15
-   flow_settings_name=${flow_name}  api_name=Global          rate_limit_target=PerIp          api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=10
-   flow_settings_name=${flow_name}  api_name=Global          rate_limit_target=PerUser        api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=25  burst_size=20
+   flow_settings_name=${flow_name}  api_name=RegisterClient  rate_limit_target=AllRequests    api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=${15}
+   flow_settings_name=${flow_name}  api_name=Global          rate_limit_target=PerIp          api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=${5}  burst_size=${10}
+   flow_settings_name=${flow_name}  api_name=Global          rate_limit_target=PerUser        api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=${25}  burst_size=${20}
 
 # ECQ-3729
 UpdateRateLimitMaxRequests - shall be able to update maxreqs
@@ -37,9 +37,9 @@ UpdateRateLimitMaxRequests - shall be able to update maxreqs
 
    [Template]  Max Requests Shall Be Updated
 
-   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=2  interval=2m0s
-   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=PerIp        api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=31  interval=2h0m0s
-   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=PerUser      api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=41  interval=2s
+   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=${2}  interval=2m0s
+   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=PerIp        api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=${31}  interval=2h0m0s
+   max_requests_settings_name=${max_reqs_name}  api_name=yy2  rate_limit_target=PerUser      api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=${41}  interval=2s
 
 *** Keywords ***
 Setup
@@ -55,7 +55,7 @@ Setup
 Flow Shall Be Updated
    [Arguments]  &{parms}
 
-   ${showc}=  Create Rate Limit Flow  region=${region}  flow_settings_name=${parms['flow_settings_name']}  api_name=${parms['api_name']}  rate_limit_target=${parms['rate_limit_target']}  api_endpoint_type=${parms['api_endpoint_type']}  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=5 
+   ${showc}=  Create Rate Limit Flow  region=${region}  flow_settings_name=${parms['flow_settings_name']}  api_name=${parms['api_name']}  rate_limit_target=${parms['rate_limit_target']}  api_endpoint_type=${parms['api_endpoint_type']}  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=${5}
 
    ${show}=  Update Rate Limit Flow  region=${region}  &{parms}
 
