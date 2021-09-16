@@ -19,7 +19,7 @@ UpdateCloudletPool - update without region shall return error
    ...  - send UpdateCloudletPool without region
    ...  - verify proper error is received
 
-   ${error}=  Run Keyword And Expect Error  *   Update Cloudlet Pool  token=${token}  use_defaults=False
+   ${error}=  Run Keyword And Expect Error  *   Update Cloudlet Pool  token=${token}  cloudlet_pool_name=xxautomationVMPool  operator_org_name=${organization}  use_defaults=False
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"No region specified"}
@@ -33,7 +33,8 @@ UpdateCloudletPool - update without parameters shall return error
    ${error}=  Run Keyword And Expect Error  *  Update Cloudlet Pool  region=${region}  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"CloudletPool key {} not found"}
+#   Should Contain   ${error}  error={"message":"CloudletPool key {} not found"}
+   Should Contain   ${error}  error={"message":"Invalid organization name"}
 
 # ECQ-2416
 UpdateCloudletPool - update without pool name shall return error
@@ -44,7 +45,9 @@ UpdateCloudletPool - update without pool name shall return error
    ${error}=  Run Keyword And Expect Error  *  Update Cloudlet Pool  region=US  operator_org_name=TDG  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"TDG\\\\"} not found"}
+   #Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"TDG\\\\"} not found"}
+   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name"}
+
 
 # ECQ-2417
 UpdateCloudletPool - update with CloudletPool not found shall return error
