@@ -164,7 +164,7 @@ CreateCloudletPoolMember - adding cloudlet with appinst shall return error
    Add Cloudlet Pool Member  region=${region}  token=${token}  operator_org_name=tmus  cloudlet_name=${cloudlet_name}
 
    Should Contain  ${error}   400
-   Should Contain  ${error}   {"message":"Cannot add cloudlet ${cloudlet_name} to CloudletPool with existing developer automation_dev_org ClusterInsts or AppInsts which are not authorized to deploy to the CloudletPool. Please invite the developer first, or remove the developer from the Cloudlet."}
+   Should Contain  ${error}   {"message":"Cannot add cloudlet ${cloudlet_name} to CloudletPool because it has AppInsts/ClusterInsts from developer automation_dev_org, which are not authorized to deploy to the CloudletPool. Please invite the developer first, or remove the developer from the Cloudlet."}
 
 # ECQ-3752
 CreateCloudletPoolMember - adding cloudlet with clusterinst shall return error
@@ -190,7 +190,7 @@ CreateCloudletPoolMember - adding cloudlet with clusterinst shall return error
    Add Cloudlet Pool Member  region=${region}  token=${token}  operator_org_name=tmus  cloudlet_name=${cloudlet_name}
 
    Should Contain  ${error}   400
-   Should Contain  ${error}   {"message":"Cannot add cloudlet ${cloudlet_name} to CloudletPool with existing developer automation_dev_org ClusterInsts or AppInsts which are not authorized to deploy to the CloudletPool. Please invite the developer first, or remove the developer from the Cloudlet."}
+   Should Contain  ${error}   {"message":"Cannot add cloudlet ${cloudlet_name} to CloudletPool because it has AppInsts/ClusterInsts from developer automation_dev_org, which are not authorized to deploy to the CloudletPool. Please invite the developer first, or remove the developer from the Cloudlet."}
 
 *** Keywords ***
 Setup

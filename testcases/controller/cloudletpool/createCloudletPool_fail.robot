@@ -114,7 +114,7 @@ CreateCloudletPool - creating with cloudletlist with appinst shall return error
    Create Cloudlet Pool  region=${region}  token=${token}  operator_org_name=${operator}  cloudlet_list=${clist}
 
    Should Contain  ${error}   400
-   Should Contain  ${error}   {"message":"Cannot create CloudletPool with cloudlet ${cloudlet_name} with existing developer automation_dev_org ClusterInsts or AppInsts. To include them as part of the pool, first create an empty pool, invite the developer to the pool, then add the cloudlet to the pool."}
+   Should Contain  ${error}   {"message":"Cannot add cloudlet ${cloudlet_name} to CloudletPool because it has AppInsts/ClusterInsts from developer automation_dev_org, which are not authorized to deploy to the CloudletPool. To include them as part of the pool, first create an empty pool, invite the developer to the pool, then add the cloudlet to the pool."}
 
 # ECQ-3754
 CreateCloudletPool - creating with cloudletlist with clusterinst shall return error
@@ -140,7 +140,7 @@ CreateCloudletPool - creating with cloudletlist with clusterinst shall return er
    Create Cloudlet Pool  region=${region}  token=${token}  operator_org_name=${operator}  cloudlet_list=${clist}
 
    Should Contain  ${error}   400
-   Should Contain  ${error}   {"message":"Cannot create CloudletPool with cloudlet ${cloudlet_name} with existing developer automation_dev_org ClusterInsts or AppInsts. To include them as part of the pool, first create an empty pool, invite the developer to the pool, then add the cloudlet to the pool."}
+   Should Contain  ${error}   {"message":"Cannot add cloudlet ${cloudlet_name} to CloudletPool because it has AppInsts/ClusterInsts from developer automation_dev_org, which are not authorized to deploy to the CloudletPool. To include them as part of the pool, first create an empty pool, invite the developer to the pool, then add the cloudlet to the pool."}
 
 *** Keywords ***
 Setup
