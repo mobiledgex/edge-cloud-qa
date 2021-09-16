@@ -19,8 +19,10 @@ class OperatorReporting(MexOperation):
         self.show_url = '/auth/reporter/show'
         self.update_url = '/auth/reporter/update'
         self.generate_url = '/auth/report/generate'
+        self.show_report_url = '/auth/report/show'
+        self.download_report_url = '/auth/report/download'
 
-    def _build(self, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, start_time=None, end_time=None, use_defaults=True):
+    def _build(self, reporter_name=None, organization=None, email_address=None, schedule=None, start_schedule_date=None, timezone=None, start_time=None, end_time=None, filename=None, use_defaults=True):
 
         if use_defaults:
             if reporter_name is None:
@@ -60,6 +62,9 @@ class OperatorReporting(MexOperation):
 
         if end_time is not None:
             reporter_dict['EndTime'] = end_time
+
+        if filename is not None:
+            reporter_dict['Filename'] = filename
 
         return reporter_dict
 
@@ -109,6 +114,18 @@ class OperatorReporting(MexOperation):
         thread_name = None
 
         return self.create(token=token, url=self.generate_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, thread_name=thread_name)
+
+    def show_report(self, token=None, organization=None, use_defaults=False, use_thread=False, json_data=None):
+        msg = self._build(organization=organization, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.show_report_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def download_report(self, token=None, organization=None, filename=None, use_defaults=False, use_thread=False, json_data=None):
+        msg = self._build(organization=organization, filename=filename, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.download_report_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
     def verify_email(self, email_address=None, email_password=None, reporter_name=None, report_period=None, timezone=None, username=None, organization=None, server='imap.gmail.com', wait=30):
         rp = report_period.split('to')
