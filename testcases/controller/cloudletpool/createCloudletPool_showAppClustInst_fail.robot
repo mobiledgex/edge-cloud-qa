@@ -25,7 +25,7 @@ CreateCloudletPoolAccess - Operator shall not see developer cluster/appinst with
    [Tags]  CloudletPoolAccess
 
    ${devorg1}=  Create Org  token=${super_token}  orgtype=developer
-   Create Billing Org  token=${super_token}
+   Create Billing Org  token=${super_token}  billing_org_name=${devorg1}
 
    Adduser Role  token=${super_token}  orgname=${devorg1}  username=${dev_manager_user_automation}  role=DeveloperManager
 
