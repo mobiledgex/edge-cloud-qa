@@ -207,12 +207,12 @@ class RateLimitSettings(MexOperation):
         msg_dict = {'MaxReqsRateLimitSettings': msg}
 
         msg_dict_delete = None
-        if auto_delete and 'key' in msg and 'max_reqs_settings_name' in msg['key']:
+        if auto_delete and 'key' in msg and 'max_reqs_settings_name' in msg['key'] and 'rate_limit_key' in msg['key'] and 'api_name' in msg['key']['rate_limit_key'] and 'api_endpoint_type' in msg['key']['rate_limit_key'] and 'rate_limit_target' in msg['key']['rate_limit_key']:
             msg_delete = self._build(max_requests_settings_name=msg['key']['max_reqs_settings_name'], api_name=msg['key']['rate_limit_key']['api_name'], api_endpoint_type=msg['key']['rate_limit_key']['api_endpoint_type'], rate_limit_target=msg['key']['rate_limit_key']['rate_limit_target'], use_defaults=False)
             msg_dict_delete = {'MaxReqsRateLimitSettings': msg_delete}
 
         msg_dict_show = None
-        if 'key' in msg and 'max_reqs_settings_name' in msg['key']:
+        if 'key' in msg and 'max_reqs_settings_name' in msg['key'] and 'rate_limit_key' in msg['key'] and 'api_name' in msg['key']['rate_limit_key'] and 'api_endpoint_type' in msg['key']['rate_limit_key'] and 'rate_limit_target' in msg['key']['rate_limit_key']:
             msg_show = self._build(max_requests_settings_name=msg['key']['max_reqs_settings_name'], api_name=msg['key']['rate_limit_key']['api_name'], api_endpoint_type=msg['key']['rate_limit_key']['api_endpoint_type'], rate_limit_target=msg['key']['rate_limit_key']['rate_limit_target'], use_defaults=False)
             msg_dict_show = {'MaxReqsRateLimitSettings': msg_show}
 
