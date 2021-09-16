@@ -962,4 +962,4 @@ class MexApp(object):
     def get_current_time(self, timezone=None):
         tz = pytz.timezone(timezone)
         current_date = datetime.now(tz)
-        return current_date
+        return current_date.strftime('%Y-%m-%d %H:%M:%S')
