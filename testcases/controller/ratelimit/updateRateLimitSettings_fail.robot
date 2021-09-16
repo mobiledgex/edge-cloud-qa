@@ -185,7 +185,7 @@ Update Flow Fail
 
    [Teardown]  Cleanup Provisioning
 
-   Create Rate Limit Flow  region=${region}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5
+   Create Rate Limit Flow  region=${region}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=${5}  burst_size=${5}
 
    ${error}=  Run Keyword and Expect Error  *  Update Rate Limit Flow  region=${region}  token=${token}  &{parms}
    Should Contain  ${error}  ('code=400', 'error={"message":"${message}
@@ -195,7 +195,7 @@ Update Max Requests Fail
 
    [Teardown]  Cleanup Provisioning
 
-   Create Rate Limit Max Requests  region=${region}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=5  interval=5s
+   Create Rate Limit Max Requests  region=${region}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=${5}  interval=5s
 
    ${error}=  Run Keyword and Expect Error  *  Update Rate Limit Max Requests  region=${region}  token=${token}  &{parms}
    Should Contain  ${error}  ('code=400', 'error={"message":"${message}
