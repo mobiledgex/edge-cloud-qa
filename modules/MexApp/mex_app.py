@@ -766,6 +766,15 @@ class MexApp(object):
         pod = rb.get_pod(pod_name)
         return rb.run_command_on_pod(pod, command)
 
+    def describe_pod(self, pod_name, cluster_name, operator_name, root_loadbalancer=None):
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
+        else:
+            rb = self.rootlb
+
+        return rb.describe_pod(pod_name)
+
     def run_command_on_container(self, container_name, command, cluster_name, operator_name, root_loadbalancer=None):
         rb = None
         if root_loadbalancer is not None:
