@@ -43,6 +43,7 @@ GPU - shall be able to deploy k8s shared NVidia T4 Passthru GPU app on KVM Opens
     ${app_name_default}=  Get Default App Name
 
     ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=kubernetes  developer_org_name=MobiledgeX-Samples
+    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${rootlb}
     ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
     ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name_default}
 
