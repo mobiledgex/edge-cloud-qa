@@ -1,17 +1,18 @@
 import os
 import logging
 from linux import Linux
-from kubernetes import Kubernetes
+import time
+
 
 class Rootlb(Linux):
     def __init__(self, kubeconfig=None, host=None, port=22, username='ubuntu', key_file='id_rsa', cluster_name=None, verbose=False, signed_key='signed-key', proxy_to_node=None):
         logging.debug('init')
 
         self.kubeconfig = kubeconfig
-        
+
         if kubeconfig is None:
             self.kubeconfig = host + '.kubeconfig'
-            
+
         if not os.path.isfile(key_file):
             key_file_pre = key_file
             key_file = os.environ['HOME'] + '/.ssh/' + os.path.basename(key_file)
@@ -24,7 +25,6 @@ class Rootlb(Linux):
             logging.error('caught ssh error:' + str(err1))
             raise ConnectionError
 
-
     def get_pods(self):
         cmd = f'KUBECONFIG={self.kubeconfig} kubectl get pods'
         logging.info('executing ' + cmd)
@@ -35,7 +35,6 @@ class Rootlb(Linux):
             raise Exception("cmd returned non-zero status of " + errcode)
 
         return output
-
 
     def get_deploy(self):
         cmd = f'KUBECONFIG={self.kubeconfig} kubectl get deploy -o name'
@@ -76,7 +75,7 @@ class Rootlb(Linux):
 
     def delete_pod(self, pod_name):
         real_pod_name = self.get_pod(pod_name)
-        
+
         cmd = f'KUBECONFIG={self.kubeconfig} kubectl delete pod {real_pod_name}'
         logging.info('executing ' + cmd)
         (output, err, errcode) = self.command(cmd)
@@ -89,12 +88,25 @@ class Rootlb(Linux):
                 new_pod_name = self.get_pod(pod_name=pod_name, pod_state='Running')
                 if new_pod_name != real_pod_name:
                     break
-            except:
-                sleep(1)
-                
+            except Exception:
+                time.sleep(1)
+
         if not new_pod_name:
             raise Exception(f'pod={pod_name} of Running status not found')
-        
+
+    def describe_pod(self, pod_name):
+        real_pod_name = self.get_pod(pod_name)
+
+        cmd = f'KUBECONFIG={self.kubeconfig} kubectl describe pod {real_pod_name}'
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        return output
+
     def helm_list(self):
         cmd = f'KUBECONFIG={self.kubeconfig} helm list'
         logging.info('executing ' + cmd)
@@ -162,7 +174,7 @@ class Rootlb(Linux):
         cmd = 'docker ps --format "{{.ID}}"'
         if name:
             cmd = cmd + f' --filter name=^{name}'
-            
+
         logging.info('executing ' + cmd)
         (output, err, errcode) = self.command(cmd)
         logging.debug('output=' + str(output))
@@ -172,13 +184,13 @@ class Rootlb(Linux):
 
         output = [id.rstrip() for id in output]
 
-        #ps_list = []
-        #output.pop(0)  #remove header
-        #for line in output:
+        # ps_list = []
+        # output.pop(0)  #remove header
+        # for line in output:
         #    print('*WARN*', line)
-        #    ps_dict = {'container_id': 
-        #return output[0].rstrip()
-        
+        #    ps_dict = {'container_id':
+        # return output[0].rstrip()
+
         return output
 
     def get_docker_container_info(self, container_id):
@@ -192,7 +204,7 @@ class Rootlb(Linux):
 
         print(output)
         (status, image, path) = output[0].split(' ')
-        info_dict = {'status': status, 'image': image, 'path': path} 
+        info_dict = {'status': status, 'image': image, 'path': path}
 
         return info_dict
 
@@ -202,7 +214,7 @@ class Rootlb(Linux):
         cmd = f'sudo iptables -A INPUT -p tcp --dport {port} -j DROP'
 
         output = self.run_command(cmd)
-        
+
         return output
 
     def unblock_port(self, port, target):
@@ -211,17 +223,16 @@ class Rootlb(Linux):
         cmd = f'sudo iptables -D INPUT -p tcp --dport {port} -j DROP'
 
         output = self.run_command(cmd)
-        
+
         return output
 
     def reboot(self):
         try:
             logging.info('rebooting rootlb')
             self.run_command('sudo reboot')
-        except:
+        except Exception:
             logging.info('caught reboot exception')
 
-            
     def mount_exists_on_pod(self, pod, mount):
         logging.info(f'checking if mount exists on pod={pod} mount={mount}')
 
@@ -229,16 +240,16 @@ class Rootlb(Linux):
 
         real_pod = self.get_pod(pod)
         self.run_command_on_pod(real_pod, cmd)
-        
-        #k8s = Kubernetes(kubeconfig=self.kubeconfig)
 
-        #k8s.exec_command(pod_name=real_pod, command=command)
+        # k8s = Kubernetes(kubeconfig=self.kubeconfig)
+
+        # k8s.exec_command(pod_name=real_pod, command=command)
 
     def write_file_to_pod(self, pod, mount, data=None):
         logging.info(f'writing file on pod pod={pod} mount={mount}')
 
         real_pod = self.get_pod(pod)
-        
+
         data_to_write = None
         if data:
             data_to_write = data
@@ -256,13 +267,13 @@ class Rootlb(Linux):
         logging.info(f'reading file on pod pod={pod} file={filename}')
 
         real_pod = self.get_pod(pod)
-        
+
         cmd = f'cat {filename}'
 
         output = self.run_command_on_pod(real_pod, cmd)
 
         return output
-    
+
     def run_command_on_pod(self, pod_name, command):
         kubectl_cmd = f'KUBECONFIG={self.kubeconfig} kubectl exec -it {pod_name} -- bash -c "{command}"'
 
@@ -277,7 +288,7 @@ class Rootlb(Linux):
 
     def write_file_to_node(self, node, mount, data=None):
         logging.info(f'write file to node={node} mount={mount}')
-        #network, ip = node.split('=')
+        # network, ip = node.split('=')
 
         data_to_write = None
         if data:
@@ -287,16 +298,16 @@ class Rootlb(Linux):
 
         command = f'sudo bash -c "echo {data_to_write} > /var/opt/{data_to_write}_node.txt"'
         self.run_command_on_node(node, command)
-        
+
     def run_command_on_node(self, node, command):
-        #network, ip = node.split('=')
-        #command = f'ssh -i id_rsa_mex ubuntu@{ip} \'{command}\''
-        #command = f'ubuntu@{ip} \'{command}\''
+        # network, ip = node.split('=')
+        # command = f'ssh -i id_rsa_mex ubuntu@{ip} \'{command}\''
+        # command = f'ubuntu@{ip} \'{command}\''
 
         output = self.run_command(command)
 
         return output
-    
+
     def run_command(self, cmd):
         (output, err, errcode) = self.command(cmd)
         logging.debug('output=' + str(output))
