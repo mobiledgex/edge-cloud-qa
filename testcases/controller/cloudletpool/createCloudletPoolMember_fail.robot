@@ -17,7 +17,7 @@ CreateCloudletPoolMember - create without region shall return error
    ...  - send CreateCloudletPoolMember without region
    ...  - verify proper error is received
 
-   ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  token=${token}  use_defaults=False
+   ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  token=${token}  cloudlet_pool_name=xxxxxx  operator_org_name=dmuus  cloudlet_name=tmocloud-2  use_defaults=False
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"No region specified"}
@@ -31,7 +31,8 @@ CreateCloudletPoolMember - create without parameters shall return error
    ${error}=  Run Keyword And Expect Error  *  Add Cloudlet Pool Member  region=US  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"CloudletPool key {} not found"}
+   #Should Contain   ${error}  error={"message":"CloudletPool key {} not found"}
+   Should Contain   ${error}  error={"message":"Invalid Cloudlet name"}
 
 # ECQ-2303
 CreateCloudletPoolMember - create without org shall return error
@@ -39,10 +40,11 @@ CreateCloudletPoolMember - create without org shall return error
    ...  - send CreateCloudletPoolMember with name only
    ...  - verify proper error is received
 
-   ${error}=  Run Keyword And Expect Error  *  Add Cloudlet Pool Member  region=US  cloudlet_pool_name=xxx  token=${token}  use_defaults=False
+   ${error}=  Run Keyword And Expect Error  *  Add Cloudlet Pool Member  region=US  cloudlet_pool_name=xxx  cloudlet_name=tmocloud-2  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"name\\\\":\\\\"xxx\\\\"} not found"}
+   #Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"name\\\\":\\\\"xxx\\\\"} not found"}
+   Should Contain   ${error}  error={"message":"Invalid organization name"}
 
 # ECQ-3838
 CreateCloudletPoolMember - create without cloudlet name shall return error
@@ -54,7 +56,8 @@ CreateCloudletPoolMember - create without cloudlet name shall return error
    ${error}=  Run Keyword And Expect Error  *  Add Cloudlet Pool Member  region=US  cloudlet_pool_name=${pool_name}  operator_org_name=dmuus  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Cloudlet key {\\\\"organization\\\\":\\\\"dmuus\\\\"} not found"}
+   #Should Contain   ${error}  error={"message":"Cloudlet key {\\\\"organization\\\\":\\\\"dmuus\\\\"} not found"}
+   Should Contain   ${error}  error={"message":"Invalid Cloudlet name"}
 
 # ECQ-1662
 # removed since it checks the pool name exists before adding member
