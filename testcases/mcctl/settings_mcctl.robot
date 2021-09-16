@@ -33,6 +33,9 @@ Settings - mcctl shall be able to show the settings
    Should Contain  ${settings}  delete_app_inst_timeout
    Should Contain  ${settings}  delete_cluster_inst_timeout
    Should Contain  ${settings}  influx_db_metrics_retention
+   Should Contain  ${settings}  influx_db_cloudlet_usage_metrics_retention
+   Should Contain  ${settings}  influx_db_downsampled_metrics_retention
+   Should Contain  ${settings}  influx_db_edge_events_metrics_retention
 #   Should Contain  ${settings}  load_balancer_max_port_range
    Should Contain  ${settings}  master_node_flavor
    Should Contain  ${settings}  max_tracked_dme_clients
@@ -43,6 +46,8 @@ Settings - mcctl shall be able to show the settings
    Should Contain  ${settings}  update_app_inst_timeout
    Should Contain  ${settings}  update_cluster_inst_timeout
    Should Contain  ${settings}  update_vm_pool_timeout
+   Should Contain  ${settings}  edge_events_metrics_continuous_queries_collection_intervals
+   Should Contain  ${settings}  edge_events_metrics_collection_interval
 
 # ECQ-2985
 Settings - mcctl shall be able to update the settings
@@ -62,7 +67,7 @@ Settings - mcctl shall be able to update the settings
    Run mcctl  settings update region=${region} createappinsttimeout=1m0s updateappinsttimeout=1m0s deleteappinsttimeout=1m0s createclusterinsttimeout=1m0s updateclusterinsttimeout=1m0s deleteclusterinsttimeout=1m0s
 #   Run mcctl  settings update region=${region} masternodeflavor=x1.medium loadbalancermaxportrange=1 maxtrackeddmeclients=1 chefclientinterval=1m0s influxdbmetricsretention=100h0m0s cloudletmaintenancetimeout=1s updatevmpooltimeout=1s
    Run mcctl  settings update region=${region} masternodeflavor=x1.medium maxtrackeddmeclients=1 chefclientinterval=1m0s influxdbmetricsretention=100h0m0s cloudletmaintenancetimeout=1s updatevmpooltimeout=1s
-
+   Run mcctl  settings update region=${region} edgeeventsmetricscontinuousqueriescollectionintervals:0.interval=1m10s edgeeventsmetricscontinuousqueriescollectionintervals:1.interval=2m10s edgeeventsmetricscontinuousqueriescollectionintervals:2.interval=3m10s
 
    ${settings_post}=  Run mcctl  settings show region=${region}
 
@@ -89,6 +94,20 @@ Settings - mcctl shall be able to update the settings
    Should Be Equal             ${settings_post['influx_db_metrics_retention']}   100h0m0s
    Should Be Equal             ${settings_post['cloudlet_maintenance_timeout']}  1s
    Should Be Equal             ${settings_post['update_vm_pool_timeout']}        1s
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][0]['interval']}  1m10s
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][1]['interval']}  2m10s
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][2]['interval']}  3m10s
+
+   Run mcctl  settings update region=${region} edgeeventsmetricscontinuousqueriescollectionintervals:0.interval=1m10s edgeeventsmetricscontinuousqueriescollectionintervals:1.interval=2m10s edgeeventsmetricscontinuousqueriescollectionintervals:2.interval=3m10s edgeeventsmetricscontinuousqueriescollectionintervals:0.retention=1h edgeeventsmetricscontinuousqueriescollectionintervals:1.retention=2h edgeeventsmetricscontinuousqueriescollectionintervals:2.retention=3h
+
+   ${settings_post2}=  Run mcctl  settings show region=${region}
+
+   Should Be Equal             ${settings_post2['edge_events_metrics_continuous_queries_collection_intervals'][0]['interval']}  1m10s
+   Should Be Equal             ${settings_post2['edge_events_metrics_continuous_queries_collection_intervals'][1]['interval']}  2m10s
+   Should Be Equal             ${settings_post2['edge_events_metrics_continuous_queries_collection_intervals'][2]['interval']}  3m10s
+   Should Be Equal             ${settings_post2['edge_events_metrics_continuous_queries_collection_intervals'][0]['retention']}  1h0m0s
+   Should Be Equal             ${settings_post2['edge_events_metrics_continuous_queries_collection_intervals'][1]['retention']}  2h0m0s
+   Should Be Equal             ${settings_post2['edge_events_metrics_continuous_queries_collection_intervals'][2]['retention']}  3h0m0s
 
 # ECQ-2986
 Settings - mcctl shall handle update settings failures
