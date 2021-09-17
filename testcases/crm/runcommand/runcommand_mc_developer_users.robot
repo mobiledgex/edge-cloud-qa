@@ -19,7 +19,7 @@ ${password}=   ${mextester06_gmail_password}
 #${email}=      mextester06@gmail.com
 
 ${docker_image}=  image
-${docker_image_developer}=  MobiledgeX
+#${docker_image_developer}=  ${automation_dev_org}
 ${mex_password}=  ${mexadmin_password}
 	
 *** Test Cases ***
@@ -29,13 +29,14 @@ RunCommand - DeveloperManager shall be able to do RunCommand
     ...  execute Run Command as DeveloperManager
     ...  verify RunCommand is successful
 
-    Adduser Role  username=${username_epoch}  role=DeveloperManager  orgname=${docker_image_developer}
+#    Adduser Role  username=${username_epoch}  role=DeveloperManager  orgname=${docker_image_developer}
 
-    ${token}=  Login
+#    ${token}=  Login
+     ${token}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
 
 #    ${stdout}=  Run Command  region=US  app_name=app1587252144-180521  app_version=1.0  developer_org_name=MobiledgeX  cluster_instance_name=cluster1587252144-180521  operator_org_name=dmuus  cloudlet_name=tmocloud-1  command=whoami
 
-    ${stdout}=  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
+    ${stdout}=  Run Command  region=US  command=whoami  developer_org_name=${developer_org_name_automation}
 
     Should Be Equal  ${stdout}  root\r\n
 
@@ -45,11 +46,12 @@ RunCommand - DeveloperContributor shall be able to do RunCommand
     ...  execute Run Command as DeveloperContributor
     ...  verify RunCommand is successful
 
-    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${docker_image_developer}
+#    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${docker_image_developer}
 
-    ${token}=  Login
+#    ${token}=  Login
+     ${token}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 
-    ${stdout}=  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
+    ${stdout}=  Run Command  region=US  command=whoami  developer_org_name=${developer_org_name_automation}
 
     Should Be Equal  ${stdout}  root\r\n
 
@@ -61,11 +63,12 @@ RunCommand - DeveloperViewer shall not be able to do RunCommand
 
     #EDGECLOUD-1446 RunCommand for unauthorized user returns "Forbidden, Forbidden"	
 
-    Adduser Role  username=${username_epoch}  role=DeveloperViewer  orgname=${docker_image_developer}
+#    Adduser Role  username=${username_epoch}  role=DeveloperViewer  orgname=${docker_image_developer}
 
-    ${token}=  Login
+#    ${token}=  Login
+     ${token}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
 
-    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
+    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_org_name=${developer_org_name_automation}
 
     Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
@@ -74,20 +77,20 @@ Setup
     #Create Org  orgtype=developer
     
     Create Flavor  region=US
-    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${docker_image_developer}
-    Create App  region=US   image_path=${docker_image}  developer_org_name=${docker_image_developer}
-    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${docker_image_developer}  cluster_instance_developer_org_name=${docker_image_developer}
+    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}
+    Create App  region=US   image_path=${docker_image}  developer_org_name=${developer_org_name_automation}
+    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_developer_org_name=${developer_org_name_automation}
 
-    ${epoch}=  Get Time  epoch
-    ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}
-    ${email}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
-
-    Skip Verify Email
-    Create User  username=${username_epoch}  password=${password}  email_address=${email}
-    Unlock User
-    #Verify Email
-
-    Set Suite Variable  ${username_epoch}
+#    ${epoch}=  Get Time  epoch
+#    ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+#    ${email}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+#
+#    Skip Verify Email
+#    Create User  username=${username_epoch}  password=${password}  email_address=${email}
+#    Unlock User
+#    #Verify Email
+#
+#    Set Suite Variable  ${username_epoch}
 
 Teardown
     Cleanup Provisioning
