@@ -15,6 +15,7 @@ ${adminuser}=   mextester06admin
 ${adminpass}=   mexadminfastedgecloudinfra
 
 ${region}=  US
+@{collection_intervals}=  1s  1s  1s
 
 *** Test Cases ***
 # ECQ-2988
@@ -316,6 +317,9 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"99999999h\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}\')       edge_events_metrics_collection_interval  99999999h
    ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0s"}')                                                       edge_events_metrics_collection_interval  0s
    ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0s"}')                                                       edge_events_metrics_collection_interval  -1s
+   ('code=400', 'error={"message":"All EdgeEvents continuous query collection intervals must be greater than the EdgeEventsMetricsCollectionInterval"}')     edge_events_metrics_collection_interval  1000h
+
+   ('code=400', 'error={"message":"All EdgeEvents continuous query collection intervals must be greater than the EdgeEventsMetricsCollectionInterval"}')     edge_events_metrics_continuous_queries_collection_intervals  ${collection_intervals}
 
    ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"1\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}\')              cleanup_reservable_auto_cluster_idletime  1
    ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"1x\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}\')             cleanup_reservable_auto_cluster_idletime  1x
