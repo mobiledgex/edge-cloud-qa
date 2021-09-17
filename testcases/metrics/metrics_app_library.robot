@@ -889,3 +889,14 @@ Get all app metrics with developer only
 
    [Return]  ${metricspre}
 
+Get all app metrics with developer/clusterorg only
+   [Arguments]  ${developer}  ${clusterorg}  ${selector} 
+
+   ${metricspre}=  Get App Metrics  region=${region}  developer_org_name=${developer}  cluster_instance_developer_org_name=${cluster_org}  selector=${selector}
+   log to console  ${metricspre['data'][0]}
+
+   ${num_readings}=  Get Length  ${metricspre['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   [Return]  ${metricspre}
+

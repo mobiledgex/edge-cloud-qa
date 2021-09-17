@@ -19,7 +19,7 @@ ${cloudlet_name_openstack_metrics}=   automationBonnCloudlet
 ${operator_name_openstack}=                       TDG
 ${clustername_docker}=   cluster1574731678-0317152-k8sshared
 ${developer_name}=  developer1574731678-0317152 
-
+${clusterorg}=  automation_dev_org
 ${username_admin}=  mexadmin
 ${password_admin}=  ${mexadmin_password}
 
@@ -109,6 +109,22 @@ AppMetrics - Shall be able to get all app Network metrics with developer only
    Metrics Headings Should Be Correct  ${metrics}
 
    Network Should be in Range  ${metrics}
+
+# ECQ-3891
+AppMetrics - Shall be able to get all app Network metrics with developer/clusterorg only
+   [Documentation]
+   ...  - request all app Network metrics with developer/clusterorg only
+   ...  - verify info is correct
+
+   ${metrics}=  Get all app metrics with developer/clusterorg only  ${developer_name}  ${clusterorg}  network
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
+   FOR  ${reading}  IN  @{values}
+      Should Be Equal  ${reading[4]}  ${clusterorg}
+      Should Be Equal  ${reading[7]}  ${developer_name}
+   END
 
 *** Keywords ***
 Setup
