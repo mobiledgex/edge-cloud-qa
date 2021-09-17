@@ -1,3 +1,4 @@
+# -*- coding: robot -*-
 *** Settings ***
 Documentation  runDebug
 
@@ -27,7 +28,9 @@ ${unknown_cmd_oscmd}=  Unknown cmd oscmd
 ${unknown_cmd_crmcmd}=  Unknown cmd crmcmd
 #Return for unknown command changed after 12-18-2020
 #${unknown_command_oscmd}=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,show-debug-levels,start-cpu-profile,stop-cpu-profile
-${unknown_command_oscmd}=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,dump-cloudlet-pools,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,show-debug-levels,start-cpu-profile,stop-cpu-profile
+#Return for unknown command changed edit on 9-17-2021
+# Older value=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,dump-cloudlet-pools,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,show-debug-levels,start-cpu-profile,stop-cpu-profile
+${unknown_command_oscmd}=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,dump-cloudlet-pools,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,reset-scrape-interval,set-scrape-interval,show-debug-levels,show-scrape-interval,start-cpu-profile,stop-cpu-profile
 ${not_supported}=  not supported
 ${invalid_txt}=  adjsx
 ${timeout_request}=  request timed out
@@ -66,7 +69,7 @@ ${server_mobiledgex}=  mobiledgex
 ${mcctlcmd}=  mcctl  --addr https://console-qa.mobiledgex.net:443  --skipverify region  RunDebug region\=EU type\=crm cloudlet\=automationParadiseCloudlet cmd\=oscmd args\="openstack flavor list" shell=yes
 ${count_flavor_list}=  | ID | Name | RAM | Disk | Ephemeral | VCPUs | Is Public |
 ${count_server_list}=  | ID | Name | Status | Networks | Image | Flavor |
-${time}=  40s
+${time}=  60s
 ${govc_version}=  govc version
 ${govc_host_info}=  govc host.info /packet-DFWVMW2/host/compute-cluster/139.178.87.98   
 ${govccmd}=  govccmd
