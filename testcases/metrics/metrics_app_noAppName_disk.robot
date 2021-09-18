@@ -19,6 +19,7 @@ ${cloudlet_name_openstack_metrics}=   automationBuckhornCloudlet
 ${operator_name_openstack}=                       GDDT
 ${clustername_docker}=   cluster1574731678-0317152-k8sshared
 ${developer_name}=  developer1574731678-0317152 
+${clusterorg}=  automation_dev_org
 
 ${username_admin}=  mexadmin
 ${password_admin}=  ${mexadmin_password}
@@ -109,6 +110,22 @@ AppMetrics - Shall be able to get all app Disk metrics with developer only
    Metrics Headings Should Be Correct  ${metrics}
 
    Disk Should be in Range  ${metrics}
+
+# ECQ-3889
+AppMetrics - Shall be able to get all app Disk metrics with developer/clusterorg only
+   [Documentation]
+   ...  - request all app Disk metrics with developer/clusterorg only
+   ...  - verify info is correct
+
+   ${metrics}=  Get all app metrics with developer/clusterorg only  ${developer_name}  ${clusterorg}  disk
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
+   FOR  ${reading}  IN  @{values}
+      Should Be Equal  ${reading[4]}  ${clusterorg}
+      Should Be Equal  ${reading[7]}  ${developer_name}
+   END
 
 *** Keywords ***
 Setup
