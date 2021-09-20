@@ -55,10 +55,10 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Buckhorn
         [Documentation]
         ...  do CreateCloudlet to start a CRM on buckhorn openstack
 
-        Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_buckhorn}  cloudlet_name=${cloudlet_name_openstack_buckhorn}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_buckhorn}  number_dynamic_ips=254  latitude=50.73438    longitude=7.09549  env_vars=FLAVOR_MATCH_PATTERN=m4,MEX_EXT_NETWORK=external-network-02  gpudriver_name=nvidia-450  gpudriver_org=GDDT
+        Create Cloudlet  region=US  operator_org_name=${operator_name_openstack_buckhorn}  cloudlet_name=${cloudlet_name_openstack_buckhorn}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_buckhorn}  number_dynamic_ips=254  latitude=50.73438    longitude=7.09549  env_vars=FLAVOR_MATCH_PATTERN=m4,MEX_EXT_NETWORK=external-network-02  gpudriver_name=nvidia-450  gpudriver_org=GDDT
 
-        Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_buckhorn}  operator_org_name=${operator_name_openstack_buckhorn}  mapping=gpu=${gpu_resource_name}
-        Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_buckhorn}  tags=pci=t4gpu:1
+        Add Cloudlet Resource Mapping  region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}  operator_org_name=${operator_name_openstack_buckhorn}  mapping=gpu=${gpu_resource_name}
+        Add Resource Tag  region=US  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_buckhorn}  tags=pci=t4gpu:1
 
 # ECQ-1613
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Beacon 
