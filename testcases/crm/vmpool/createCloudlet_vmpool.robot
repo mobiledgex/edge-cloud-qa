@@ -15,7 +15,7 @@ ${operator_organization}=  TDG
 ${vmpool_server_name}=  automationvmpool
 #${vmpool_server_name}=  vmpoolvm
 
-${physical_name}=  berlin
+${physical_name}=  bonn
 
 ${cloudlet_name_vmpool}=  automationVMPoolCloudlet
 ${vmpool_name}=  automationVMPool
@@ -33,7 +33,7 @@ CreateCloudlet - shall be able to create in vm pool
    #${pool_name}=  Get Default VM Pool Name
    ${org_name}=   Get Default Organization Name
 
-   ${pool_return}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_organization}  vm_pool=${vmpool_name}  platform_type=PlatformTypeVmPool  physical_name=${physical_name}  #container_version=2020-08-03-1  override_policy_container_version=${True}
+   ${pool_return}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_organization}  vm_pool=${vmpool_name}  platform_type=PlatformTypeVmPool  physical_name=${physical_name}  #container_version=2020-08-03-1  override_policy_container_version=${True}  env_vars=MEX_EXT_NETWORK=external-network-02
 
    Should Be Equal As Integers   ${pool_return['data']['platform_type']}  9  # VMPool
    Should Be Equal As Integers  ${pool_return['data']['state']}  5  # Ready
@@ -69,7 +69,7 @@ Setup
       &{ipdict}=  Create Dictionary  ${ip0[0]}  ${ip0[1]}  ${ip1[0]}  ${ip1[1]}
 
       #&{vm1}=  Create Dictionary  name=${i['Name']}  external_ip=${ext_ip[1]}  internal_ip=${int_ip[1]}
-      &{vm1}=  Create Dictionary  name=${i['Name']}  external_ip=${ipdict['external-network-shared']}  internal_ip=${ipdict['mex-k8s-net-1']}
+      &{vm1}=  Create Dictionary  name=${i['Name']}  external_ip=${ipdict['external-network-02']}  internal_ip=${ipdict['mex-k8s-net-1']}
 
       Append To List  ${pool_list}  ${vm1}       
    END 

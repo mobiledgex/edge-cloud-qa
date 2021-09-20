@@ -1,0 +1,201 @@
+description: Create a VM
+heat_template_version: '2016-10-14'
+resources:
+  vmpool-subnet:
+    properties:
+      cidr: 10.101.253.0/24
+      dns_nameservers:
+      - 1.1.1.1
+      - 1.0.0.1
+      enable_dhcp: false
+      gateway_ip: ""
+      name: mex-automationvmpool-subnet
+      network: mex-k8s-net-1
+    type: OS::Neutron::Subnet
+  vmpoolvm1-port:
+    properties:
+      fixed_ips:
+      - ip_address: 10.101.253.191
+        subnet:
+          get_resource: vmpool-subnet
+      name: mex-automationvmpool1-port
+      network_id: mex-k8s-net-1
+      port_security_enabled: true
+#      security_groups:
+#      - { get_resource: vmpool-securitygroup }
+    type: OS::Neutron::Port
+  vmpoolvm2-port:
+    properties:
+      fixed_ips:
+      - ip_address: 10.101.253.192
+        subnet:
+          get_resource: vmpool-subnet
+      name: mex-automationvmpool2-port
+      network_id: mex-k8s-net-1
+      port_security_enabled: true
+#      security_groups:
+#      - { get_resource: vmpool-securitygroup }
+    type: OS::Neutron::Port
+  vmpoolvm3-port:
+    properties:
+      fixed_ips:
+      - ip_address: 10.101.253.193
+        subnet:
+          get_resource: vmpool-subnet
+      name: mex-automationvmpool3-port
+      network_id: mex-k8s-net-1
+      port_security_enabled: true
+#      security_groups:
+#      - { get_resource: vmpool-securitygroup }
+    type: OS::Neutron::Port
+  vmpoolvm4-port:
+    properties:
+      fixed_ips:
+      - ip_address: 10.101.253.194
+        subnet:
+          get_resource: vmpool-subnet
+      name: mex-automationvmpool4-port
+      network_id: mex-k8s-net-1
+      port_security_enabled: true
+#      security_groups:
+#      - { get_resource: vmpool-securitygroup }
+    type: OS::Neutron::Port
+  vmpoolvm5-port:
+    properties:
+      fixed_ips:
+      - ip_address: 10.101.253.195
+        subnet:
+          get_resource: vmpool-subnet
+      name: mex-automationvmpool5-port
+      network_id: mex-k8s-net-1
+      port_security_enabled: true
+#      security_groups:
+#      - { get_resource: vmpool-securitygroup }
+    type: OS::Neutron::Port
+  vmpoolvm6-port:
+    properties:
+      fixed_ips:
+      - ip_address: 10.101.253.196
+        subnet:
+          get_resource: vmpool-subnet
+      name: mex-automationvmpool6-port
+      network_id: mex-k8s-net-1
+      port_security_enabled: true
+#      security_groups:
+#      - { get_resource: vmpool-securitygroup }
+    type: OS::Neutron::Port
+
+  vmpoolvm1:
+    properties:
+      config_drive: true
+      flavor: m4.medium
+      image: mobiledgex-v4.6.0
+      name: automationvmpool1
+      networks:
+      - network: external-network-02
+      - port: { get_resource: vmpoolvm1-port }
+      user_data_format: RAW
+      user_data: |
+          #cloud-config
+              bootcmd:
+               - cloud-init-per once ssh-users-ca echo "TrustedUserCAKeys trusted-user-ca-keys.pem" >> /etc/ssh/sshd_config
+              write_files:
+               - path: /etc/ssh/trusted-user-ca-keys.pem
+                 content: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDNMdc0pisApZlCx3UmLXOk6CNs5XtMLzvuiUFrRlqtkH8OWvXIEUaSG1V3oVELJkMhwdOA0p04H760omr5YC6JDVE84fCmL9zeu/cqoECS5CotqBN7QMKeVtnhgH7+SgPEDiOQrbuu5qenGBepeD474zNhZhbb+g/RgKqTy7HGXIzFzmAJWY+LuZppChLcygQROlCf/ekJ9CwVkDZf11P5XvtLnXRRwmkdRakdgBprz1VXduvssArbO097VWa+lgGkTGUgu9oDHCB6UBhrbAgvSFeN6U0/yDnS6iguwLnhPjTyUl6G2LKQVEXWLMnjkCp4stqq2vK77MTEVbhdvHUXj/PZFPivIDA1t+XrjEC7t/Yz7bfTMIJR/c0Gi56eHZ2m1zphfYPPJYQAu41h5A/h+TJKhOId6XcgJxCHMs9wg0xRAf05pS6ZxoARnqxVZDl28GAzjvX9mXjRTUCv/AXz6tOuLAcobt/kFo192q/6VTQVmPUzayJD/PFjNovIYklLzwwQwwXQ6jXlPDit7AP2Pdnz1aRQIV5dCYJyltVOF0pYkrVb8s7fgRHL9F5SoaGIq+gEED1uFhGz+usINchFOKtCh//EA1E/BpcnzHKIhrImylViDCz8UnZYbTIndlcvm6ekjM/BPz8KzVzCsV1+X62y09h4JlrZIev00s07Ww==
+                 append: true
+    type: OS::Nova::Server
+  vmpoolvm2:
+    properties:
+      config_drive: true
+      flavor: m4.medium
+      image: mobiledgex-v4.6.0
+      name: automationvmpool2
+      networks:
+      - network: external-network-02
+      - port: { get_resource: vmpoolvm2-port }
+      user_data_format: RAW
+      user_data: |
+          #cloud-config
+              bootcmd:
+               - cloud-init-per once ssh-users-ca echo "TrustedUserCAKeys trusted-user-ca-keys.pem" >> /etc/ssh/sshd_config
+              write_files:
+               - path: /etc/ssh/trusted-user-ca-keys.pem
+                 content: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDNMdc0pisApZlCx3UmLXOk6CNs5XtMLzvuiUFrRlqtkH8OWvXIEUaSG1V3oVELJkMhwdOA0p04H760omr5YC6JDVE84fCmL9zeu/cqoECS5CotqBN7QMKeVtnhgH7+SgPEDiOQrbuu5qenGBepeD474zNhZhbb+g/RgKqTy7HGXIzFzmAJWY+LuZppChLcygQROlCf/ekJ9CwVkDZf11P5XvtLnXRRwmkdRakdgBprz1VXduvssArbO097VWa+lgGkTGUgu9oDHCB6UBhrbAgvSFeN6U0/yDnS6iguwLnhPjTyUl6G2LKQVEXWLMnjkCp4stqq2vK77MTEVbhdvHUXj/PZFPivIDA1t+XrjEC7t/Yz7bfTMIJR/c0Gi56eHZ2m1zphfYPPJYQAu41h5A/h+TJKhOId6XcgJxCHMs9wg0xRAf05pS6ZxoARnqxVZDl28GAzjvX9mXjRTUCv/AXz6tOuLAcobt/kFo192q/6VTQVmPUzayJD/PFjNovIYklLzwwQwwXQ6jXlPDit7AP2Pdnz1aRQIV5dCYJyltVOF0pYkrVb8s7fgRHL9F5SoaGIq+gEED1uFhGz+usINchFOKtCh//EA1E/BpcnzHKIhrImylViDCz8UnZYbTIndlcvm6ekjM/BPz8KzVzCsV1+X62y09h4JlrZIev00s07Ww==
+                 append: true
+    type: OS::Nova::Server
+  vmpoolvm3:
+    properties:
+      config_drive: true
+      flavor: m4.small
+      image: mobiledgex-v4.6.0
+      name: automationvmpool3
+      networks:
+      - network: external-network-02
+      - port: { get_resource: vmpoolvm3-port }
+      user_data_format: RAW
+      user_data: |
+          #cloud-config
+              bootcmd:
+               - cloud-init-per once ssh-users-ca echo "TrustedUserCAKeys trusted-user-ca-keys.pem" >> /etc/ssh/sshd_config
+              write_files:
+               - path: /etc/ssh/trusted-user-ca-keys.pem
+                 content: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDNMdc0pisApZlCx3UmLXOk6CNs5XtMLzvuiUFrRlqtkH8OWvXIEUaSG1V3oVELJkMhwdOA0p04H760omr5YC6JDVE84fCmL9zeu/cqoECS5CotqBN7QMKeVtnhgH7+SgPEDiOQrbuu5qenGBepeD474zNhZhbb+g/RgKqTy7HGXIzFzmAJWY+LuZppChLcygQROlCf/ekJ9CwVkDZf11P5XvtLnXRRwmkdRakdgBprz1VXduvssArbO097VWa+lgGkTGUgu9oDHCB6UBhrbAgvSFeN6U0/yDnS6iguwLnhPjTyUl6G2LKQVEXWLMnjkCp4stqq2vK77MTEVbhdvHUXj/PZFPivIDA1t+XrjEC7t/Yz7bfTMIJR/c0Gi56eHZ2m1zphfYPPJYQAu41h5A/h+TJKhOId6XcgJxCHMs9wg0xRAf05pS6ZxoARnqxVZDl28GAzjvX9mXjRTUCv/AXz6tOuLAcobt/kFo192q/6VTQVmPUzayJD/PFjNovIYklLzwwQwwXQ6jXlPDit7AP2Pdnz1aRQIV5dCYJyltVOF0pYkrVb8s7fgRHL9F5SoaGIq+gEED1uFhGz+usINchFOKtCh//EA1E/BpcnzHKIhrImylViDCz8UnZYbTIndlcvm6ekjM/BPz8KzVzCsV1+X62y09h4JlrZIev00s07Ww==
+                 append: true
+    type: OS::Nova::Server
+  vmpoolvm4:
+    properties:
+      config_drive: true
+      flavor: m4.small
+      image: mobiledgex-v4.6.0
+      name: automationvmpool4
+      networks:
+      - network: external-network-02
+      - port: { get_resource: vmpoolvm4-port }
+      user_data_format: RAW
+      user_data: |
+          #cloud-config
+              bootcmd:
+               - cloud-init-per once ssh-users-ca echo "TrustedUserCAKeys trusted-user-ca-keys.pem" >> /etc/ssh/sshd_config
+              write_files:
+               - path: /etc/ssh/trusted-user-ca-keys.pem
+                 content: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDNMdc0pisApZlCx3UmLXOk6CNs5XtMLzvuiUFrRlqtkH8OWvXIEUaSG1V3oVELJkMhwdOA0p04H760omr5YC6JDVE84fCmL9zeu/cqoECS5CotqBN7QMKeVtnhgH7+SgPEDiOQrbuu5qenGBepeD474zNhZhbb+g/RgKqTy7HGXIzFzmAJWY+LuZppChLcygQROlCf/ekJ9CwVkDZf11P5XvtLnXRRwmkdRakdgBprz1VXduvssArbO097VWa+lgGkTGUgu9oDHCB6UBhrbAgvSFeN6U0/yDnS6iguwLnhPjTyUl6G2LKQVEXWLMnjkCp4stqq2vK77MTEVbhdvHUXj/PZFPivIDA1t+XrjEC7t/Yz7bfTMIJR/c0Gi56eHZ2m1zphfYPPJYQAu41h5A/h+TJKhOId6XcgJxCHMs9wg0xRAf05pS6ZxoARnqxVZDl28GAzjvX9mXjRTUCv/AXz6tOuLAcobt/kFo192q/6VTQVmPUzayJD/PFjNovIYklLzwwQwwXQ6jXlPDit7AP2Pdnz1aRQIV5dCYJyltVOF0pYkrVb8s7fgRHL9F5SoaGIq+gEED1uFhGz+usINchFOKtCh//EA1E/BpcnzHKIhrImylViDCz8UnZYbTIndlcvm6ekjM/BPz8KzVzCsV1+X62y09h4JlrZIev00s07Ww==
+                 append: true
+    type: OS::Nova::Server
+  vmpoolvm5:
+    properties:
+      config_drive: true
+      flavor: m4.large
+      image: mobiledgex-v4.6.0
+      name: automationvmpool5
+      networks:
+      - network: external-network-02
+      - port: { get_resource: vmpoolvm5-port }
+      user_data_format: RAW
+      user_data: |
+          #cloud-config
+              bootcmd:
+               - cloud-init-per once ssh-users-ca echo "TrustedUserCAKeys trusted-user-ca-keys.pem" >> /etc/ssh/sshd_config
+              write_files:
+               - path: /etc/ssh/trusted-user-ca-keys.pem
+                 content: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDNMdc0pisApZlCx3UmLXOk6CNs5XtMLzvuiUFrRlqtkH8OWvXIEUaSG1V3oVELJkMhwdOA0p04H760omr5YC6JDVE84fCmL9zeu/cqoECS5CotqBN7QMKeVtnhgH7+SgPEDiOQrbuu5qenGBepeD474zNhZhbb+g/RgKqTy7HGXIzFzmAJWY+LuZppChLcygQROlCf/ekJ9CwVkDZf11P5XvtLnXRRwmkdRakdgBprz1VXduvssArbO097VWa+lgGkTGUgu9oDHCB6UBhrbAgvSFeN6U0/yDnS6iguwLnhPjTyUl6G2LKQVEXWLMnjkCp4stqq2vK77MTEVbhdvHUXj/PZFPivIDA1t+XrjEC7t/Yz7bfTMIJR/c0Gi56eHZ2m1zphfYPPJYQAu41h5A/h+TJKhOId6XcgJxCHMs9wg0xRAf05pS6ZxoARnqxVZDl28GAzjvX9mXjRTUCv/AXz6tOuLAcobt/kFo192q/6VTQVmPUzayJD/PFjNovIYklLzwwQwwXQ6jXlPDit7AP2Pdnz1aRQIV5dCYJyltVOF0pYkrVb8s7fgRHL9F5SoaGIq+gEED1uFhGz+usINchFOKtCh//EA1E/BpcnzHKIhrImylViDCz8UnZYbTIndlcvm6ekjM/BPz8KzVzCsV1+X62y09h4JlrZIev00s07Ww==
+                 append: true
+    type: OS::Nova::Server
+  vmpoolvm6:
+    properties:
+      config_drive: true
+      flavor: m4.large
+      image: mobiledgex-v4.6.0
+      name: automationvmpool6
+      networks:
+      - network: external-network-02
+      - port: { get_resource: vmpoolvm6-port }
+      user_data_format: RAW
+      user_data: |
+          #cloud-config
+              bootcmd:
+               - cloud-init-per once ssh-users-ca echo "TrustedUserCAKeys trusted-user-ca-keys.pem" >> /etc/ssh/sshd_config
+              write_files:
+               - path: /etc/ssh/trusted-user-ca-keys.pem
+                 content: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDNMdc0pisApZlCx3UmLXOk6CNs5XtMLzvuiUFrRlqtkH8OWvXIEUaSG1V3oVELJkMhwdOA0p04H760omr5YC6JDVE84fCmL9zeu/cqoECS5CotqBN7QMKeVtnhgH7+SgPEDiOQrbuu5qenGBepeD474zNhZhbb+g/RgKqTy7HGXIzFzmAJWY+LuZppChLcygQROlCf/ekJ9CwVkDZf11P5XvtLnXRRwmkdRakdgBprz1VXduvssArbO097VWa+lgGkTGUgu9oDHCB6UBhrbAgvSFeN6U0/yDnS6iguwLnhPjTyUl6G2LKQVEXWLMnjkCp4stqq2vK77MTEVbhdvHUXj/PZFPivIDA1t+XrjEC7t/Yz7bfTMIJR/c0Gi56eHZ2m1zphfYPPJYQAu41h5A/h+TJKhOId6XcgJxCHMs9wg0xRAf05pS6ZxoARnqxVZDl28GAzjvX9mXjRTUCv/AXz6tOuLAcobt/kFo192q/6VTQVmPUzayJD/PFjNovIYklLzwwQwwXQ6jXlPDit7AP2Pdnz1aRQIV5dCYJyltVOF0pYkrVb8s7fgRHL9F5SoaGIq+gEED1uFhGz+usINchFOKtCh//EA1E/BpcnzHKIhrImylViDCz8UnZYbTIndlcvm6ekjM/BPz8KzVzCsV1+X62y09h4JlrZIev00s07Ww==
+                 append: true
+    type: OS::Nova::Server
