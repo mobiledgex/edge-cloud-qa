@@ -1682,6 +1682,11 @@ class MexMasterController(MexRest):
             token=self.super_token
         return self.config.update_config(token=token, skip_verify_email=skip_verify_email, use_defaults=use_defaults, use_thread=use_thread)
 
+    def billing_enable(self, billing_enable=True, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, billing_enable=billing_enable, use_defaults=use_defaults, use_thread=use_thread)
+
     def set_skip_verify_email(self, skip_verify_email=True, token=None, use_defaults=True, use_thread=False):
         if token is None:
             token=self.super_token
