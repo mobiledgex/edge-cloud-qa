@@ -20,7 +20,7 @@ CreateCloudletPoolMember - create without region shall return error
    ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"No region specified. Please invite the developer first, or remove the developer from the Cloudlet."}
+   Should Contain   ${error}  error={"message":"No region specified"}
 
 # ECQ-1661
 CreateCloudletPoolMember - create without parameters shall return error
