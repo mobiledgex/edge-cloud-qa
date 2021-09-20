@@ -751,11 +751,11 @@ class MexDme(MexGrpc):
         resp = None
 
         if not find_cloudlet_obj:
-            request = PlatformFindCloudletRequest(**kwargs).request
+            find_cloudlet_obj = PlatformFindCloudletRequest(**kwargs).request
 
-        logger.info('platform find cloudlet on {}. \n\t{}'.format(self.address, str(request).replace('\n', '\n\t')))
+        logger.info('platform find cloudlet on {}. \n\t{}'.format(self.address, str(find_cloudlet_obj).replace('\n', '\n\t')))
 
-        resp = self.match_engine_stub.PlatformFindCloudlet(request)
+        resp = self.match_engine_stub.PlatformFindCloudlet(find_cloudlet_obj)
 
         if resp.status != 1:  # FIND_FOUND
             raise Exception('platform find cloudlet not found:{}'.format(str(resp)))
