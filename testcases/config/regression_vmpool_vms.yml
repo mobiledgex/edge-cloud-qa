@@ -1,0 +1,30 @@
+region: EU
+vmpool:
+  key:
+    organization: GDDT
+    name: automationVMPool
+  vms:
+  - name: automationvmpool1
+    netinfo:
+      externalip: 37.50.144.132
+      internalip: 10.101.253.191
+  - name: automationvmpool2
+    netinfo:
+      externalip: 37.50.144.181
+      internalip: 10.101.253.192
+  - name: automationvmpool3
+    netinfo:
+      externalip: 37.50.144.235
+      internalip: 10.101.253.193
+  - name: automationvmpool4
+    netinfo:
+      externalip: 37.50.144.149
+      internalip: 10.101.253.194
+  - name: automationvmpool5
+    netinfo:
+      externalip: 37.50.144.229
+      internalip: 10.101.253.195
+  - name: automationvmpool6
+    netinfo:
+      externalip: 37.50.144.188
+      internalip: 10.101.253.196
