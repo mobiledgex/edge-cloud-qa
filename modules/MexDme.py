@@ -766,18 +766,19 @@ class MexDme(MexGrpc):
         resp = None
 
         if not get_app_official_fqdn_obj:
-            request = GetAppOfficialFqdnRequest(**kwargs).request
+            get_app_official_fqdn_obj = GetAppOfficialFqdnRequest(**kwargs).request
 
-        logger.info('get app official fqdn request on {}. \n\t{}'.format(self.address, str(request).replace('\n', '\n\t')))
+        logger.info('get app official fqdn request on {}. \n\t{}'.format(self.address, str(get_app_official_fqdn_obj).replace('\n', '\n\t')))
 
-        resp = self.match_engine_stub.GetAppOfficialFqdn(request)
+        resp = self.match_engine_stub.GetAppOfficialFqdn(get_app_official_fqdn_obj)
+
+        if resp.status != 1:  # FIND_FOUND
+            raise Exception('getappofficialfqdn error:{}'.format(str(resp)))
+
         self.client_token = resp.client_token
         self._decoded_client_token = resp.client_token
 
         self._decoded_client_token = json.loads(base64.b64decode(self.client_token).decode('ascii'))
-
-        if resp.status != 1:  # FIND_FOUND
-            raise Exception('platform find cloudlet not found:{}'.format(str(resp)))
 
         return resp
 
