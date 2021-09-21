@@ -39,7 +39,7 @@ Setup
 
    Set Suite Variable  ${adminToken}
 
-   billing enable  true
+   Billing Enable  true
 
 Cleanup Provisioning
-   billing enable  false
+   Billing Enable  false
