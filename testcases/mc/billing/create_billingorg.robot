@@ -49,6 +49,12 @@ Setup
 
    Set Suite Variable  ${adminToken}
 
+   billing enable  true
+
+Cleanup Provisioning
+
+   billing enable  false
+
 Org Should Be In List
       [Arguments]  ${account_list}  ${devorg_name}
 

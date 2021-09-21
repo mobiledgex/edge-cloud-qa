@@ -35,6 +35,8 @@ Setup
 
    Set Suite Variable  ${adminToken}
 
+   billing enable  true
+
 Org Should Be In List
       [Arguments]  ${account_list}  ${devorg_name}
 
