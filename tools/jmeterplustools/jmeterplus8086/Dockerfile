@@ -12,6 +12,7 @@ COPY stressngbash.sh /
 COPY jmeterx8086.jmx /
 COPY jmeterbash.sh /
 COPY diskbash.sh /
+COPY all_measurements.sh /
 RUN chmod +x /*.sh
 ENV APACHE_RUN_USER  www-data
 ENV APACHE_RUN_GROUP www-data
