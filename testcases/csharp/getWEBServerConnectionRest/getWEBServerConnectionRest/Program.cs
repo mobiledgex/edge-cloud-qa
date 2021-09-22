@@ -80,8 +80,8 @@ namespace RestSample
         static string orgName = "automation_dev_org";
         static string appName = "automation-sdk-porttest";
         static string appVers = "1.0";
-        static string host = "eu-qa.dme.mobiledgex.net";
-        static string fallbackDmeHost = "eu-qa.dme.mobiledgex.net";
+        static string host = "us-qa.dme.mobiledgex.net";
+        static string fallbackDmeHost = "us-qa.dme.mobiledgex.net";
 
         //Main
         // Production env
