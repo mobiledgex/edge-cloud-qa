@@ -157,16 +157,17 @@ CreateAutoScalePolicy - create with minnodes <= maxnodes shall return error
    Should Contain   ${error}   400
    Should Contain             ${error}  {"message":"Max nodes must be greater than Min nodes"}
 
+# now supported
 # ECQ-3521
-CreateAutoScalePolicy - create with minnodes=0 shall return error
-   [Documentation]
-   ...  - send CreateAutoScalePolicy with minnodes=0
-   ...  - verify proper error is received
-
-   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=0  max_nodes=1  target_cpu=10  use_defaults=False
-
-   Should Contain   ${error}   400
-   Should Contain             ${error}  {"message":"Min nodes cannot be less than 1"}
+#CreateAutoScalePolicy - create with minnodes=0 shall return error
+#   [Documentation]
+#   ...  - send CreateAutoScalePolicy with minnodes=0
+#   ...  - verify proper error is received
+#
+#   ${error}=  Run Keyword And Expect Error  *   Create Autoscale Policy  region=US  token=${token}  policy_name=mypolicy  developer_org_name=${developer_org_name_automation}  min_nodes=0  max_nodes=1  target_cpu=10  use_defaults=False
+#
+#   Should Contain   ${error}   400
+#   Should Contain             ${error}  {"message":"Min nodes cannot be less than 1"}
 
 # ECQ-3522
 CreateAutoScalePolicy - create with maxnodes too large shall return error
