@@ -3,11 +3,11 @@ Documentation  ErrorScenarios for Creating and Deleting Billing Org for Develope
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
 Test Setup  Setup
-Suite Teardown  Cleanup Provisioning
+Suite Teardown  Teardown
 
 *** Variables ***
 #${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlhdCI6MTU1NDc2MjYyNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.7hM7102kjgrAAbWWvpdJwg3PcNWd7td6D6QSxcvB6gswJUOMeoD5EvpzYnHjdHnbm4uJ7BlnHEOVr4yltZb1Rw
-${dev_orgname}=    DevOrg
+${dev_orgname}=    TestOrg
 ${op_orgname}=     OperOrg
 
 ${username}=  testuser
@@ -41,5 +41,7 @@ Setup
 
    Billing Enable  true
 
-Cleanup Provisioning
+Teardown
+
+   Cleanup Provisioning
    Billing Enable  false
