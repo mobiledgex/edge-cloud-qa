@@ -92,8 +92,8 @@ namespace RestSample
         // static string fallbackDmeHost = "wifi.dme.mobiledgex.net";
 
         // QA env 
-        static string host = "eu-qa.dme.mobiledgex.net";
-        //static string fallbackDmeHost = "eu-qa.dme.mobiledgex.net";
+        static string host = "us-qa.dme.mobiledgex.net";
+        //static string fallbackDmeHost = "us-qa.dme.mobiledgex.net";
 
         // Production env
         //static string host = "us-mexdemo.dme.mobiledgex.net";
