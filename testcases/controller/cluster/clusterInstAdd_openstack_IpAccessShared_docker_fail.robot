@@ -12,7 +12,7 @@ Test Teardown   Cleanup provisioning
 *** Variables ***
 ${cloudlet_name_openstack_shared}  automationFrankfurtCloudlet
 ${operator_name_openstack}  TDG
-${region}  EU
+${region}  US
 ${flavor_name}    x1.medium
 ${cluster_name_long}=  longnameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 

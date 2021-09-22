@@ -12,7 +12,7 @@ Test Teardown  Cleanup Provisioning
 Test Timeout    10 min
 
 *** Variables ***
-${region}=  EU
+${region}=  US
 
 ${operator_name_openstack}  TDG
 ${cloudlet_name_openstack}  automationHamburgCloudlet
