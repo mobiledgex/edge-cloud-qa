@@ -12,7 +12,7 @@ Test Timeout     ${test_timeout_crm}
 *** Variables ***
 ${cloudlet_name_openstack_gpu}  automationDusseldorfCloudlet
 ${operator_name_openstack}  TDG 
-${region}  EU
+${region}  US
 ${mobiledgex_domain}  mobiledgex.net
 ${gpu_resource_name}  mygpuresrouce
  
