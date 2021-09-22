@@ -18,7 +18,7 @@ cloudlet_name_openstack_ha1 = 'automationHamburgCloudlet'
 cloudlet_name_openstack_ha2 = 'automationDusseldorfCloudlet'
 cloudlet_name_crm = 'automationHamburgCloudlet'
 cloudlet_name_fake = 'tmocloud-1'
-cloudlet_name_offline = 'automationFrankfurtCloudlet'
+cloudlet_name_offline = 'automationAlertsCloudlet'
 
 master_node_flavor_default = 'automation_api_flavor'
 

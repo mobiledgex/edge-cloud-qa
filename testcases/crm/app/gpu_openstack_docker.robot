@@ -15,7 +15,7 @@ Test Teardown   Cleanup provisioning
 Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
-${region}=  EU
+${region}=  US
 ${gpu_resource_name}  mygpuresrouce
 
 ${cluster_flavor_name}  x1.medium
