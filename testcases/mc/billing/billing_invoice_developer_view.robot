@@ -3,11 +3,11 @@ Documentation  Developer can view Invoice of their Billing Org
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
 Test Setup  Setup
-Suite Teardown  Cleanup Provisioning
+Suite Teardown  Teardown
 
 *** Variables ***
 #${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlhdCI6MTU1NDc2MjYyNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.7hM7102kjgrAAbWWvpdJwg3PcNWd7td6D6QSxcvB6gswJUOMeoD5EvpzYnHjdHnbm4uJ7BlnHEOVr4yltZb1Rw
-${dev_orgname}=    DevOrg
+${dev_orgname}=    TestOrg
 ${op_orgname}=     OperOrg
 
 ${username}=  testuser
@@ -19,12 +19,12 @@ ${mex_password}=  ${mexadmin_password}
 
 Get Invoice for Billing Org
 
-    ${invoices}=  get invoice  billing_org_name=Test2-Billing  start_date=2021-08-26  end_date=2021-08-26
+    ${invoices}=  Get Invoice  billing_org_name=Test2-Billing  start_date=2021-08-26  end_date=2021-08-26
 
-    should be equal  ${invoices[0]['customer']['first_name']}  Test1
-    should be equal  ${invoices[0]['customer']['organization']}  Test2-Billing
-    should be equal  ${invoices[0]['line_items'][0]['period_range_end']}  2021-08-27
-    should be equal  ${invoices[0]['line_items'][0]['period_range_start']}  2021-08-25
+    Should Be Equal  ${invoices[0]['customer']['first_name']}  Test1
+    Should Be Equal  ${invoices[0]['customer']['organization']}  Test2-Billing
+    Should Be Equal  ${invoices[0]['line_items'][0]['period_range_end']}  2021-08-27
+    Should Be Equal  ${invoices[0]['line_items'][0]['period_range_start']}  2021-08-25
 
 
     Length Should Be  ${invoices}  1
@@ -34,6 +34,8 @@ Setup
    ${adminToken}=   Login  username=${username}  password=${password}
 
    Set Suite Variable  ${adminToken}
+
+   Billing Enable  true
 
 Org Should Be In List
       [Arguments]  ${account_list}  ${devorg_name}
@@ -47,3 +49,8 @@ Org Should Be In List
       END
 
    Run Keyword If  ${found} == ${False}  Fail  Account ${account_name} not found
+
+Teardown
+
+   Cleanup Provisioning
+   Billing Enable  false
