@@ -82,14 +82,15 @@ UpdateAutoScalePolicy - update with minnodes <= maxnodes shall return error
    Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=2  max_nodes=2  use_defaults=False
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Max nodes must be greater than Min nodes"}')
 
+# now supported
 # ECQ-3557
-UpdateAutoScalePolicy - update with minnodes=0 shall return error
-   [Documentation]
-   ...  - send UpdateAutoScalePolicy with minnodes=0
-   ...  - verify proper error is received
-
-   ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=0  max_nodes=1  use_defaults=False
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Min nodes cannot be less than 1"}')
+#UpdateAutoScalePolicy - update with minnodes=0 shall return error
+#   [Documentation]
+#   ...  - send UpdateAutoScalePolicy with minnodes=0
+#   ...  - verify proper error is received
+#
+#   ${error_msg}=  Run Keyword And Expect Error  *   Update Autoscale Policy  region=US  token=${token}  policy_name=${policy_name}  developer_org_name=${developer_name}  min_nodes=0  max_nodes=1  use_defaults=False
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Min nodes cannot be less than 1"}')
   
 # ECQ-3558 
 UpdateAutoScalePolicy - update with maxnodes too large shall return error
