@@ -15,7 +15,7 @@ Test Timeout    ${test_timeout_crm}
 	
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
-${region}  EU	
+${region}  US
 ${cloudlet_name_openstack_vm}  automationBuckhornCloudlet
 ${operator_name_openstack}  GDDT
 ${latitude}       32.7767
