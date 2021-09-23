@@ -46,7 +46,7 @@ UpdateCloudletPool - update without pool name shall return error
 
    Should Contain   ${error}  code=400
    #Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"TDG\\\\"} not found"}
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name"}
+   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"\\\\\""}
 
 
 # ECQ-2417
