@@ -15,7 +15,7 @@ Test Timeout    ${test_timeout_crm}
 	
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
-${region}  EU	
+${region}  US
 ${cloudlet_name_openstack_vm}  automationBonnCloudlet
 ${operator_name_openstack}  TDG
 ${latitude}       32.7767
