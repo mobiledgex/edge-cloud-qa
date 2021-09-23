@@ -42,7 +42,7 @@ CreateCloudletPool - create without pool name shall return error
    ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool  region=US  operator_org_name=GDDT  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name"}
+   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"\\\\\""}
 
 # ECQ-1671
 CreateCloudletPool - create with invalid pool name shall fails 
@@ -54,25 +54,25 @@ CreateCloudletPool - create with invalid pool name shall fails
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=-pool  operator_org_name=GDDT
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name"}
+   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"-pool\\\\\""}
 
    # $ in name 
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=p$ool  operator_org_name=GDDT
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name"}
+   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"p$ool\\\\\""}
 
    # () in name
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=p(o)ol  operator_org_name=GDDT
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name"}
+   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"p(o)ol\\\\\""}
 
    # +={}<> in name
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=+={}<>  operator_org_name=GDDT
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name"}
+   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"+={}\\\\u003c\\\\u003e\\\\\""}
 
 # ECQ-1672
 CreateCloudletPool - create with same name shall return error
