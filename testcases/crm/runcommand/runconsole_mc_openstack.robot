@@ -18,7 +18,7 @@ ${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-a
 	
 ${test_timeout_crm}  15 min
 
-${region}=  EU
+${region}=  US
 
 *** Test Cases ***
 # ECQ-2074

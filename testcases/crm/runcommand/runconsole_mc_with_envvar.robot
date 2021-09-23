@@ -26,7 +26,6 @@ ${region}=  US
 
 *** Test Cases ***
 # ECQ-3123
-
 RunConsole - DeveloperContributor shall be able to do RunConsole with envvar=novnc
     [Documentation]
     ...  execute Run Console as DeveloperContributor
@@ -42,7 +41,7 @@ RunConsole - DeveloperContributor shall be able to do RunConsole with envvar=nov
     ${stdout}=  Run Console  region=${region}  developer_org_name=${developer_org_name_automation}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}
 
     log to console  ${stdout}
-    Should Contain  ${stdout['edge_turn_addr']}  edgeturn-qa-eu.mobiledgex.net:6080
+    Should Contain  ${stdout['edge_turn_addr']}  edgeturn-qa-us.mobiledgex.net:6080
 
 
 #ECQ-3126
