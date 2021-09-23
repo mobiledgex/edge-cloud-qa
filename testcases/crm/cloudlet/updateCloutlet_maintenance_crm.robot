@@ -9,7 +9,7 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 *** Variables ***
 ${cloudlet}=  tmocloud-1
 ${operator_openstack}=  GDDT
-${region}=  EU
+${region}=  US
 
 *** Test Cases ***
 # ECQ-2453
