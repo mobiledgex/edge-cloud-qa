@@ -86,7 +86,7 @@ AccessCloudlet - Check for error 400 too many nodes matched when node-type is bl
     ...  verify too many nodes matched error 400 with description is returned
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -114,7 +114,7 @@ AccessCloudlet - Check for error 400 too many nodes matched when node-type and n
 
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
  
@@ -142,7 +142,7 @@ AccessCloudlet - Check for error 400 too many nodes matched when node-name is bl
     ...  verify too many nodes matched error 400 with description is returned
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -169,7 +169,7 @@ AccessCloudlet - Access cloudlet platform type specific check for error 400 when
     ...  verify unable to find specified cloudlet mgmt node error 400 with description is returned
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -195,7 +195,7 @@ AccessCloudlet - Access cloudlet check for error if region is not specified
     ...  verify no region specified error 400 with description is returned
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -227,7 +227,7 @@ AccessCloudlet - Access cloudlet check for error if bash commnad is not found
 
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -252,7 +252,7 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command docker
     ...  verify return information shows container info for crmserver  shepherd  cloudletPrometheus
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -282,7 +282,7 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command docker
 #${access_command2c}=  stty cols 210;docker logs --tail 100 crmserver >2&1 | grep ${testtime} 
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -319,7 +319,7 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command docker
 
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -350,7 +350,7 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command to cre
 
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -381,7 +381,7 @@ AccessCloudlet - accessCloudlet with node type platformvm and verify command exi
 
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -409,7 +409,7 @@ AccessCloudlet - accessCloudlet with node type platformvm issue a ls command wit
 
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -436,7 +436,7 @@ AccessCloudlet - Access node type sharedrootlb and verify command exit will retu
     ...  Verify exit is performed and user is returned from sharedrootlb
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -464,7 +464,7 @@ AccessCloudlet - Access node type sharedrootlb issue a ls command with exit to v
 
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
@@ -492,7 +492,7 @@ AccessCloudlet - Create and access a dedicatedrootlb cluster using command args 
     ...  verify the cluster k8s config file was created using accesscloudlet ls command
 
          ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_EU}
+    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
     ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
 
