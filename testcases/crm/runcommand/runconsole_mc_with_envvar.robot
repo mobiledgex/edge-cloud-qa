@@ -22,7 +22,7 @@ ${docker_image}=  image
 ${docker_image_developer}=  mobiledgex
 ${mex_password}=  ${mexadmin_password}
 
-${region}=  EU
+${region}=  US
 
 *** Test Cases ***
 # ECQ-3123

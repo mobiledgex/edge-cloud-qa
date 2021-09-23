@@ -14,7 +14,7 @@ Suite Teardown  Cleanup
 ${cloudlet_name_openstack_dedicated}  automationDusseldorfCloudlet
 ${operator_name_openstack}  TDG
 ${mobiledgex_domain}  mobiledgex.net
-${region}  EU
+${region}  US
 ${flavor}  automation_api_flavor
 ${default_flavor_name}   automation_api_flavor
 ${cluster_name}  k8sreservable
