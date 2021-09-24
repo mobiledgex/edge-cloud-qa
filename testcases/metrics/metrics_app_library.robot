@@ -20,7 +20,7 @@ ${password_admin}=  ${admin_manager_password}
 #${password}=  mextester06123
 #${orgname}=   metricsorg
 
-${region}=  EU
+${region}=  US
 	
 *** Keywords ***
 Get the last app metric on openstack

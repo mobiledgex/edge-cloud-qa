@@ -13,7 +13,7 @@ Test Timeout    ${test_timeout_crm}
 ${cloudlet_name_openstack_metrics}=   automationBerlinCloudletStage 
 ${operator_name_openstack}=           TDG
 ${docker_image}=  dockerimage
-${region}=  EU
+${region}=  US
 
 ${test_timeout_crm}=  32mins
 
