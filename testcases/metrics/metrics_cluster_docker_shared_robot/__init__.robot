@@ -10,9 +10,9 @@ Test Timeout  ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBerlinCloudletStage 
-${operator}=                       TDG
+${operator_name_openstack}=                       TDG
 
-${region}=  EU
+${region}=  US
 
 ${test_timeout}=  32 min
 
@@ -28,7 +28,7 @@ Setup
 
    ${t}=  Get Default Time Stamp
 
-   Create Cluster Instance  region=${region}  cluster_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  deployment=docker  ip_access=IpAccessShared 
+   Create Cluster Instance  region=${region}  cluster_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessShared 
 
    Log to Console  Waiting for metrics to be collected
    Sleep  20 mins
