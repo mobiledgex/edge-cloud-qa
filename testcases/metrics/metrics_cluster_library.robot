@@ -21,7 +21,7 @@ Library  Collections
 #${password}=  mextester06123
 #${orgname}=   metricsorg
 
-${region}=  EU
+${region}=  US
 	
 *** Keywords ***
 Get the last cluster metric on openstack
