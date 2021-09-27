@@ -16,7 +16,7 @@ ${region}=  US
 ${region_US}=  US
 ${region_EU}=  EU
 #use sleep second to check webui this give you time to reresh page to troubleshoot or inspect
-${sleep_seconds}  1seconds
+${sleep_seconds}  0seconds
 ${operator}=  packet
 ${counter}=  ${0}
 ${policy_name}=  alertpolicyrobot
