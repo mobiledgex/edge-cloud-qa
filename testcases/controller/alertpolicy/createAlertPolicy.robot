@@ -12,7 +12,6 @@ Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${developer}=  automation_dev_org
-${developer}=  MobiledgeX
 ${region}=  US
 ${region_US}=  US
 ${region_EU}=  EU
