@@ -31,7 +31,7 @@ android {
 
 dependencies {
 
-    implementation 'com.mobiledgex:matchingengine:3.0-rc2-rebuild'
+    implementation 'com.mobiledgex:matchingengine:3.0'
     //implementation 'com.mobiledgex:matchingengine:2.6.8'
     //implementation 'com.mobiledgex:matchingengine:2.6.6'
     //implementation 'com.mobiledgex:matchingengine:2.6.4-5'
