@@ -11,7 +11,7 @@ Suite Setup  Setup
 ${cloudlet_name_openstack_metrics}=   automationBeaconCloudletStage 
 ${operator_name_openstack}=           GDDT
 ${docker_image}=  dockerimage
-${region}=  EU
+${region}=  US
 
 *** Keywords ***
 Setup
