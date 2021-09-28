@@ -11,7 +11,7 @@ Suite Setup  Setup
 ${cloudlet_name_openstack_metrics}=   automationBerlinCloudletStage 
 ${operator_name_openstack}=           TDG
 ${docker_image}=  dockerimage
-${region}=  EU
+${region}=  US
 
 *** Keywords ***
 Setup
