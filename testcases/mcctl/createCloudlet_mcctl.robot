@@ -23,6 +23,8 @@ CreateCloudlet - mcctl shall be able to create/show/delete cloudlet
    ...  - send CreateCloudlet/ShowCloudlet/DeleteCloudlet via mcctl with various parms
    ...  - verify app is created/shown/deleted
 
+   [Tags]  AllianceOrg
+
    [Template]  Success Create/Show/Delete Cloudlet Via mcctl
       # trusted
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  trustpolicy=${trustpolicy_name} 
@@ -32,11 +34,18 @@ CreateCloudlet - mcctl shall be able to create/show/delete cloudlet
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkacluster=x
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkacluster=cluster  kafkauser=user  kafkapassword=password
 
+      # alliance orgs
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs=dmuus 
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs=dmuus allianceorgs=GDDT
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs:empty=true
+
 # ECQ-3086
 CreateCloudlet - mcctl shall handle create failures
    [Documentation]
    ...  - send CreateCloudlet via mcctl with various error cases
    ...  - verify proper error is received
+
+   [Tags]  AllianceOrg
 
    [Template]  Fail Create Cloudlet Via mcctl
       # missing values
@@ -53,11 +62,16 @@ CreateCloudlet - mcctl shall handle create failures
       Error: OK (200), Must specify both kafka username and password, or neither  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkauser=user 
       Error: OK (200), Must specify both kafka username and password, or neither  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkapassword=password
 
+      # alliance orgs
+      xxxx  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs=notfound
+
 # ECQ-3087
 UpdateCloudlet - mcctl shall handle update cloudlet 
    [Documentation]
    ...  - send UpdateCloudlet via mcctl with various args
    ...  - verify proper is updated
+
+   [Tags]  AllianceOrg
 
    [Setup]  Update Setup
    [Teardown]  Update Teardown
@@ -70,6 +84,10 @@ UpdateCloudlet - mcctl shall handle update cloudlet
       # kafka
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  kafkacluster=x
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  kafkacluster=cluster  kafkauser=user  kafkapassword=password
+
+      # alliance orgs
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  allianceorgs=dmuus
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  allianceorgs=dmuus allianceorgs=GDDT
 
 # ECQ-3609
 FindFlavorMatch - mcctl shall handle findflavormatch
@@ -112,7 +130,81 @@ ShowFlavorsFor - mcctl shall handle showflavorsfor
 
    ${error3}=  Run Keyword And Expect Error  *  Run mcctl  cloudlet showflavorsfor region=${region} cloudlet-org=dmuus   version=${version}
    Should Contain  ${error3}  missing required args
- 
+
+# ECQ-3957
+AddAllianceOrg - mcctl shall handle cloudlet addallianceorg
+   [Documentation]
+   ...  - send AddAllianceOrg/RemoveAllianceOrg via mcctl with various args
+   ...  - verify alliance org is updated
+
+   [Tags]  AllianceOrg
+
+   [Setup]  Update Setup
+   [Teardown]  Update Teardown
+
+   Run mcctl  cloudlet addallianceorg region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} organization=dmuus   version=${version}
+   ${show}=  Run mcctl  cloudlet show region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  version=${version}
+
+   Run mcctl  cloudlet addallianceorg region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} organization=GDDT   version=${version}
+   ${show1}=  Run mcctl  cloudlet show region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  version=${version}
+
+   Run mcctl  cloudlet removeallianceorg region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} organization=dmuus   version=${version}
+   ${show2}=  Run mcctl  cloudlet show region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  version=${version}
+
+   Run mcctl  cloudlet removeallianceorg region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} organization=GDDT   version=${version}
+   ${show3}=  Run mcctl  cloudlet show region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  version=${version}
+
+   @{alliancelist}=  Create List  dmuus
+   Should Be Equal  ${show[0]['alliance_orgs']}  ${alliancelist}
+
+   @{alliancelist}=  Create List  dmuus  GDDT
+   Should Be Equal  ${show1[0]['alliance_orgs']}  ${alliancelist}
+
+   @{alliancelist}=  Create List  GDDT
+   Should Be Equal  ${show2[0]['alliance_orgs']}  ${alliancelist}
+
+   Should Be True  'alliance_orgs' not in ${show3[0]}
+
+# ECQ-3958
+AddAllianceOrg - mcctl shall handle cloudlet addallianceorg failures
+   [Documentation]
+   ...  - send AddAllianceOrg via mcctl with various error cases
+   ...  - verify proper error is received
+
+   [Tags]  AllianceOrg
+
+   [Template]  Fail Add/Remove Alliance Org Via mcctl
+      # missing values
+      Error: missing required args  cloudlet=${cloudlet_name}
+      Error: missing required args  cloudlet-org=${cloudlet_name}
+      Error: missing required args  organization=${cloudlet_name}
+      Error: missing required args  cloudlet=${cloudlet_name} cloudlet-org=${cloudlet_name}
+      Error: missing required args  cloudlet=${cloudlet_name} organization=${cloudlet_name}
+      Error: missing required args  cloudlet-org=${cloudlet_name} organization=${cloudlet_name}
+
+      Error: Bad Request (400), Org notfound not found  cloudlet=tmocloud-2 cloudlet-org=dmuus organization=notfound
+
+      Error: Bad Request (400), Cloudlet key {"organization":"yyyy","name":"xxxx"} not found  cloudlet=xxxx cloudlet-org=yyyy organization=dmuus
+
+# ECQ-3959
+UpdateCloudlet - mcctl shall handle allianceorg clear
+   [Documentation]
+   ...  - send UpdateCloudlet with allianceorgs=empty:true via mcctl
+   ...  - verify alliance org is cleared
+
+   [Tags]  AllianceOrg
+
+   [Setup]  Update Setup
+   [Teardown]  Update Teardown
+
+   Run mcctl  cloudlet update region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} allianceorgs=dmuus allianceorgs=GDDT  version=${version}
+   ${show}=  Run mcctl  cloudlet show region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  version=${version}
+
+   Run mcctl  cloudlet update region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} allianceorgs:empty=true  version=${version}
+   ${show2}=  Run mcctl  cloudlet show region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  version=${version}
+
+   Should Not Contain  ${show2[0]}  alliance_orgs
+
 *** Keywords ***
 Setup
    ${cloudlet_name}=  Get Default Cloudlet Name
@@ -159,6 +251,14 @@ Success Create/Show/Delete Cloudlet Via mcctl
       Should Be Equal  ${show[0]['kafka_cluster']}  ${parms['kafkacluster']}
    END
 
+   IF  'allianceorgs' in ${parms}
+      @{alliancelist}=  Split String  ${parms['allianceorgs']}  ${SPACE}allianceorgs=
+      Should Be Equal  ${show[0]['alliance_orgs']}  ${alliancelist}
+   END
+   IF  'allianceorgs:empty' in ${parms}
+      Should Not Contain  ${show[0]}  alliance_orgs
+   END
+
 Update Setup
    #${cloudlet_name}=  Get Default Cloudlet Name
 
@@ -170,6 +270,8 @@ Update Setup
 
 Update Teardown
    Run mcctl  cloudlet delete region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} location.latitude=1 location.longitude=1 numdynamicips=1
+
+   Cleanup Provisioning
 
 Success Update/Show Cloudlet Via mcctl
    [Arguments]  &{parms}
@@ -201,6 +303,11 @@ Success Update/Show Cloudlet Via mcctl
       Should Be Equal  ${show[0]['kafka_cluster']}  ${parms['kafkacluster']}
    END
 
+   IF  'allianceorgs' in ${parms}
+      @{alliancelist}=  Split String  ${parms['allianceorgs']}  ${SPACE}allianceorgs=
+      Should Be Equal  ${show[0]['alliance_orgs']}  ${alliancelist}
+   END
+
 Fail Create Cloudlet Via mcctl
    [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
 
@@ -208,3 +315,16 @@ Fail Create Cloudlet Via mcctl
 
    ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudlet create region=${region} ${parmss}  version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
+
+Fail Add/Remove Alliance Org Via mcctl
+   [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
+
+   ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
+
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudlet addallianceorg region=${region} ${parmss}  version=${version}
+   Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
+
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudlet removeallianceorg region=${region} ${parmss}  version=${version}
+   Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
+
+

@@ -200,6 +200,26 @@ CreateCloudlet - shall be able to create cloudlet with kafka cluster/user/passwo
    Should Not Contain  ${cloudlet['data']}  kafka_password
    Should Be Equal  ${cloudlet['data']['kafka_cluster']}  x
 
+# ECQ-3960
+CreateCloudlet - shall be able to create cloudlet with allianceorgs
+   [Documentation]
+   ...  - send CreateCloudlet with allianceorgs
+   ...  - verify the cloudlet has the orgs defined
+
+   [Tags]  AllianceOrg
+
+   @{alliance_list}=  Create List  dmuus
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  alliance_org_list=${alliance_list}  token=${token}
+   Should Be Equal  ${cloudlet['data']['alliance_orgs']}  ${alliance_list}
+
+   @{alliance_list}=  Create List  dmuus  GDDT  packet
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}2  operator_org_name=${operator_name_fake}  alliance_org_list=${alliance_list}  token=${token}
+   Should Be Equal  ${cloudlet['data']['alliance_orgs']}  ${alliance_list}
+
+   @{alliance_list}=  Create List 
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}3  operator_org_name=${operator_name_fake}  alliance_org_list=${alliance_list}  token=${token}
+   Should Be True  'alliance_orgs' not in ${cloudlet['data']}
+
 ** Keywords **
 Setup
    ${token}=  Get Super Token
