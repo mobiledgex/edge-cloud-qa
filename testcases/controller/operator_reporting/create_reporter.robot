@@ -31,8 +31,6 @@ Shall be able to create a reporter with default arguments
     ...  Verify that email with operator report is received
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}
-    Sleep  15s
-    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     @{index}=  Split String  ${date1}  ${SPACE}
     ${current_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
@@ -40,8 +38,10 @@ Shall be able to create a reporter with default arguments
     @{index}=  Split String  ${date2}  ${SPACE}
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
 
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
+    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
-    Should Be Equal  ${reporter[0]['NextScheduleDate']}   ${next_date}
     Should Be Equal  ${reporter[0]['Timezone']}  UTC
     Should Be Equal  ${reporter[0]['Email']}  mextester06+op_manager@gmail.com
     Should Be Equal  ${reporter[0]['Username']}  op_manager_automation
@@ -62,7 +62,8 @@ Shall be able to create a reporter with future date as StartScheduleDate
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  start_schedule_date=${next_date}
-    Sleep  15s
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
     ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${next_date}
@@ -79,8 +80,6 @@ Shall be able to create a reporter with schedule of Every15Days
     ...  Verify that email with operator report is received
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  schedule=Every15Days
-    Sleep  15s
-    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     @{index}=  Split String  ${date1}  ${SPACE}
     ${current_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
@@ -88,8 +87,10 @@ Shall be able to create a reporter with schedule of Every15Days
     @{index}=  Split String  ${date2}  ${SPACE}
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
 
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
+    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
-    Should Be Equal  ${reporter[0]['NextScheduleDate']}   ${next_date}
     Should Be Equal  ${reporter[0]['Timezone']}  UTC
     Should Be Equal  ${reporter[0]['Status']}  success
     Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
@@ -106,8 +107,6 @@ Shall be able to create a reporter with schedule of EveryMonth
     ...  Verify that email with operator report is received
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  schedule=EveryMonth
-    Sleep  15s
-    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     @{index}=  Split String  ${date1}  ${SPACE}
     ${current_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
@@ -115,8 +114,10 @@ Shall be able to create a reporter with schedule of EveryMonth
     @{index}=  Split String  ${date2}  ${SPACE}
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
 
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
+    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
-    Should Be Equal  ${reporter[0]['NextScheduleDate']}   ${next_date}
     Should Be Equal  ${reporter[0]['Timezone']}  UTC
     Should Be Equal  ${reporter[0]['Status']}  success
     Should Be Equal As Numbers  ${reporter[0]['Schedule']}  3
@@ -133,8 +134,6 @@ Shall be able to create a reporter with non-default timezone
     ...  Verify that email with operator report is received
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  timezone=Asia/Kolkata
-    Sleep  15s
-    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     @{index}=  Split String  ${date1}  ${SPACE}
     ${current_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00+05:30
@@ -142,8 +141,10 @@ Shall be able to create a reporter with non-default timezone
     @{index}=  Split String  ${date2}  ${SPACE}
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00+05:30
 
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
+    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
-    Should Be Equal  ${reporter[0]['NextScheduleDate']}   ${next_date}
     Should Be Equal  ${reporter[0]['Timezone']}  Asia/Kolkata
     Should Be Equal  ${reporter[0]['Status']}  success
 
@@ -159,8 +160,6 @@ Shall be able to create a reporter with email address
     ...  Verify that email with operator report is received
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  email_address=${email1}
-    Sleep  15s
-    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     @{index}=  Split String  ${date1}  ${SPACE}
     ${current_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
@@ -168,8 +167,10 @@ Shall be able to create a reporter with email address
     @{index}=  Split String  ${date2}  ${SPACE}
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
 
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
+    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
-    Should Be Equal  ${reporter[0]['NextScheduleDate']}   ${next_date}
     Should Be Equal  ${reporter[0]['Timezone']}  UTC
     Should Be Equal  ${reporter[0]['Email']}  ${email1}
     Should Be Equal  ${reporter[0]['Status']}  success
@@ -186,8 +187,6 @@ Shall be able to create a reporter with email address and schedule
     ...  Verify that email with operator report is received
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  email_address=${email1}  schedule=Every15Days
-    Sleep  15s
-    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     @{index}=  Split String  ${date1}  ${SPACE}
     ${current_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
@@ -195,8 +194,10 @@ Shall be able to create a reporter with email address and schedule
     @{index}=  Split String  ${date2}  ${SPACE}
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
 
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
+    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
-    Should Be Equal  ${reporter[0]['NextScheduleDate']}   ${next_date}
     Should Be Equal  ${reporter[0]['Timezone']}  UTC
     Should Be Equal  ${reporter[0]['Email']}  ${email1}
     Should Be Equal  ${reporter[0]['Status']}  success
@@ -217,7 +218,8 @@ Shall be able to create a reporter with email address and StartScheduleDate
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  email_address=${email1}  start_schedule_date=${next_date}
-    Sleep  15s
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
     ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${next_date}
@@ -235,8 +237,6 @@ Shall be able to create a reporter with email address and timezone
     ...  Verify that email with operator report is received
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  email_address=${email1}  timezone=Asia/Kolkata
-    Sleep  15s
-    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     @{index}=  Split String  ${date1}  ${SPACE}
     ${current_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00+05:30
@@ -244,8 +244,10 @@ Shall be able to create a reporter with email address and timezone
     @{index}=  Split String  ${date2}  ${SPACE}
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00+05:30
 
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
+    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
-    Should Be Equal  ${reporter[0]['NextScheduleDate']}   ${next_date}
     Should Be Equal  ${reporter[0]['Timezone']}  Asia/Kolkata
     Should Be Equal  ${reporter[0]['Status']}  success
     Should Be Equal  ${reporter[0]['Email']}  ${email1}
@@ -265,7 +267,8 @@ Shall be able to create a reporter with schedule and StartScheduleDate
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  schedule=Every15Days  start_schedule_date=${next_date}
-    Sleep  15s
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
     ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${next_date}
@@ -283,8 +286,6 @@ Shall be able to create a reporter with schedule and timezone
     ...  Verify that email with operator report is received
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  schedule=Every15Days  timezone=Asia/Kolkata
-    Sleep  15s
-    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     @{index}=  Split String  ${date1}  ${SPACE}
     ${current_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00+05:30
@@ -292,8 +293,10 @@ Shall be able to create a reporter with schedule and timezone
     @{index}=  Split String  ${date2}  ${SPACE}
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00+05:30
 
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
+    ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
-    Should Be Equal  ${reporter[0]['NextScheduleDate']}   ${next_date}
     Should Be Equal  ${reporter[0]['Timezone']}  Asia/Kolkata
     Should Be Equal  ${reporter[0]['Status']}  success
     Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
@@ -313,7 +316,8 @@ Shall be able to create a reporter with StartScheduleDate and timezone
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00+05:30
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  start_schedule_date=${next_date}  timezone=Asia/Kolkata
-    Sleep  15s
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
     ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${next_date}
@@ -333,7 +337,8 @@ Shall be able to create a reporter with all optional args
     ${next_date}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00+05:30
 
     ${reporter}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  email_address=${email1}  schedule=Every15Days  start_schedule_date=${next_date}  timezone=Asia/Kolkata
-    Sleep  15s
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date}
+
     ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${next_date}
@@ -353,9 +358,6 @@ Shall be able to create 2 reporters with different timezones/schedule
 
     ${reporter1}=  Create Reporter  reporter_name=${reporter_name}  organization=${operator}
     ${reporter2}=  Create Reporter  reporter_name=${reporter_name}1  organization=${operator}  schedule=Every15Days  timezone=Asia/Kolkata
-    Sleep  20s
-    ${reporter1}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
-    ${reporter2}=  Show Reporter  reporter_name=${reporter_name}1  organization=${operator}
 
     @{index}=  Split String  ${date1}  ${SPACE}
     ${current_date1}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00Z
@@ -367,13 +369,16 @@ Shall be able to create 2 reporters with different timezones/schedule
     ${next_date1}=  Catenate  SEPARATOR=  ${index1[0]}  T00:00:00Z
     ${next_date2}=  Catenate  SEPARATOR=  ${index[0]}  T00:00:00+05:30
 
+    Wait For Next Schedule Date  reporter_name=${reporter_name}  organization=${operator}  next_schedule_date=${next_date1}
+    Wait For Next Schedule Date  reporter_name=${reporter_name}1  organization=${operator}  next_schedule_date=${next_date2}
+
+    ${reporter1}=  Show Reporter  reporter_name=${reporter_name}  organization=${operator}
     Should Be Equal  ${reporter1[0]['StartScheduleDate']}  ${current_date1}
-    Should Be Equal  ${reporter1[0]['NextScheduleDate']}   ${next_date1}
     Should Be Equal  ${reporter1[0]['Timezone']}  UTC
     Should Be Equal  ${reporter1[0]['Status']}  success
 
+    ${reporter2}=  Show Reporter  reporter_name=${reporter_name}1  organization=${operator}
     Should Be Equal  ${reporter2[0]['StartScheduleDate']}  ${current_date2}
-    Should Be Equal  ${reporter2[0]['NextScheduleDate']}   ${next_date2}
     Should Be Equal  ${reporter2[0]['Timezone']}  Asia/Kolkata
     Should Be Equal  ${reporter2[0]['Status']}  success
     Should Be Equal As Numbers  ${reporter2[0]['Schedule']}  1
