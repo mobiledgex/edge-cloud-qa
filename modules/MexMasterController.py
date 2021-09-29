@@ -1847,6 +1847,21 @@ class MexMasterController(MexRest):
     def download_report(self, token=None, organization=None, filename=None, use_defaults=False, use_thread=False):
         return self.operator_reporting.download_report(token=token, organization=organization, filename=filename, use_defaults=use_defaults, use_thread=use_thread)
 
+    def wait_for_next_schedule_date(self, token=None, reporter_name=None, organization=None, next_schedule_date=None, use_defaults=True, use_thread=False, timeout=100):
+        for x in range(1, timeout):
+            reporter = self.operator_reporting.show_reporter(token=token, reporter_name=reporter_name, organization=organization, use_defaults=use_defaults, use_thread=use_thread)
+            if reporter:
+                if reporter[0]['NextScheduleDate'] == next_schedule_date:
+                    logging.info(f'Found NextScheduleDate')
+                    return reporter
+                else:
+                    logging.debug(f'NextScheduleDate NOT found, got {reporter[0]["NextScheduleDate"]}. sleeping and trying again')
+                    time.sleep(1)
+            else:
+                logging.debug(f'reporter is NOT found. sleeping and trying again')
+
+        raise Exception(f'NextScheduleDate is NOT correct. Got {reporter[0]["NextScheduleDate"]} but expected {next_schedule_date}')
+
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
             token = self.token
