@@ -63,7 +63,7 @@ CreateCloudlet - mcctl shall handle create failures
       Error: OK (200), Must specify both kafka username and password, or neither  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkapassword=password
 
       # alliance orgs
-      xxxx  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs=notfound
+      Error: Bad Request (400), Org notfound not found  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs=notfound
 
 # ECQ-3087
 UpdateCloudlet - mcctl shall handle update cloudlet 
@@ -173,7 +173,7 @@ AddAllianceOrg - mcctl shall handle cloudlet addallianceorg failures
 
    [Tags]  AllianceOrg
 
-   [Template]  Fail Add/Remove Alliance Org Via mcctl
+   [Template]  Fail Add Alliance Org Via mcctl
       # missing values
       Error: missing required args  cloudlet=${cloudlet_name}
       Error: missing required args  cloudlet-org=${cloudlet_name}
@@ -183,6 +183,25 @@ AddAllianceOrg - mcctl shall handle cloudlet addallianceorg failures
       Error: missing required args  cloudlet-org=${cloudlet_name} organization=${cloudlet_name}
 
       Error: Bad Request (400), Org notfound not found  cloudlet=tmocloud-2 cloudlet-org=dmuus organization=notfound
+
+      Error: Bad Request (400), Cloudlet key {"organization":"yyyy","name":"xxxx"} not found  cloudlet=xxxx cloudlet-org=yyyy organization=dmuus
+
+# ECQ-3989
+AddAllianceOrg - mcctl shall handle cloudlet removeallianceorg failures
+   [Documentation]
+   ...  - send RemoveAllianceOrg via mcctl with various error cases
+   ...  - verify proper error is received
+
+   [Tags]  AllianceOrg
+
+   [Template]  Fail Remove Alliance Org Via mcctl
+      # missing values
+      Error: missing required args  cloudlet=${cloudlet_name}
+      Error: missing required args  cloudlet-org=${cloudlet_name}
+      Error: missing required args  organization=${cloudlet_name}
+      Error: missing required args  cloudlet=${cloudlet_name} cloudlet-org=${cloudlet_name}
+      Error: missing required args  cloudlet=${cloudlet_name} organization=${cloudlet_name}
+      Error: missing required args  cloudlet-org=${cloudlet_name} organization=${cloudlet_name}
 
       Error: Bad Request (400), Cloudlet key {"organization":"yyyy","name":"xxxx"} not found  cloudlet=xxxx cloudlet-org=yyyy organization=dmuus
 
@@ -316,7 +335,7 @@ Fail Create Cloudlet Via mcctl
    ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudlet create region=${region} ${parmss}  version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
-Fail Add/Remove Alliance Org Via mcctl
+Fail Add Alliance Org Via mcctl
    [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
@@ -324,7 +343,10 @@ Fail Add/Remove Alliance Org Via mcctl
    ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudlet addallianceorg region=${region} ${parmss}  version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
+Fail Remove Alliance Org Via mcctl
+   [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
+
+   ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
+
    ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudlet removeallianceorg region=${region} ${parmss}  version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
-
-
