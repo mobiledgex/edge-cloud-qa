@@ -211,7 +211,7 @@ ClientAppUsageMetrics - get with invalid limit shall return error
    Should Contain  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  limit=-1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxxxxxxInvalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.Limit of type int"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Limit cannot be negative"}')
 
 # ECQ-3575
 ClientAppUsageMetrics - get with invalid numsamples shall return error
@@ -222,10 +222,10 @@ ClientAppUsageMetrics - get with invalid numsamples shall return error
    # EDGECLOUD-5254 dme metrics with negative limit/numsamples needs better error handling
 
    ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  number_samples=x  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.NumSamples of type int"}')
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"NumSamples\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  selector=latency  number_samples=-1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxxxxxxInvalid data: json: cannot unmarshal string into Go struct field RegionClientAppUsageMetrics.Limit of type int"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"NumSamples cannot be negative"}')
 
 # ECQ-3466
 ClientAppUsageMetrics - get with cluster not found shall return an empty list

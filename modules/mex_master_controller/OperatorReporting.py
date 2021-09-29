@@ -127,7 +127,7 @@ class OperatorReporting(MexOperation):
 
         return self.show(token=token, url=self.download_report_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def verify_email(self, email_address=None, email_password=None, reporter_name=None, report_period=None, timezone=None, username=None, organization=None, server='imap.gmail.com', wait=30):
+    def verify_email(self, email_address=None, email_password=None, reporter_name=None, report_period=None, timezone=None, username=None, organization=None, server='imap.gmail.com', wait=120):
         rp = report_period.split('to')
         start_period = rp[0].strip()
         end_period = rp[1].strip()
