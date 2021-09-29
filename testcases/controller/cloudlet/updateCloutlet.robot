@@ -4,8 +4,8 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  String
 Library  Collections
 
-Test Teardown	Cleanup provisioning	
-Test Setup      Setup
+Test Teardown  Cleanup provisioning	
+Test Setup     Setup
 
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001

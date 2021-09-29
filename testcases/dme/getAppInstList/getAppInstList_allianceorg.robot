@@ -4,8 +4,8 @@ Documentation   GetAppInstList - request with alliance orgs
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
 
-Test Setup	Setup
-Test Teardown	Cleanup provisioning
+Test Setup     Setup
+Test Teardown  Cleanup provisioning
 
 *** Variables ***
 ${operator_name}  tmus

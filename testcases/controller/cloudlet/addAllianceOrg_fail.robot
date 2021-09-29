@@ -2,8 +2,8 @@
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         String
 
-Test Setup      Setup
-Test Teardown	Cleanup provisioning
+Test Setup     Setup
+Test Teardown  Cleanup provisioning
 
 *** Variables ***
 ${region}  US
@@ -32,7 +32,7 @@ AddAllianceOrg - add unknown alliance orgs to cloudlet shall return error
    [Tags]  AllianceOrg
 
    ${error}=  Run Keyword and Expect Error  *  Add Cloudlet Alliance Org  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=tmus  alliance_org_name=tmusx
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Cloudlet key {\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"xxx\\\\"} not found"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Org tmusx not found"}')
 
 # ECQ-3966
 AddAllianceOrg - add developer alliance orgs to cloudlet shall return error

@@ -1,8 +1,8 @@
 *** Settings ***
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
-Suite Setup      Setup
-Suite Teardown	Cleanup provisioning
+Suite Setup     Setup
+Suite Teardown  Cleanup provisioning
 
 *** Variables ***
 ${region}  US

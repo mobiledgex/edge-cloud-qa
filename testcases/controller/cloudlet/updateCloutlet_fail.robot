@@ -451,6 +451,8 @@ UpdateCloudlet - update with developer alliance org shall return error
 
    [Tags]  AllianceOrg
 
+   [Teardown]  Cleanup provisioning
+
    Create Org  orgtype=operator
    RestrictedOrg Update
    ${cloudlet}=  Create Cloudlet  region=${region}
@@ -470,12 +472,14 @@ UpdateCloudlet - update with unknown alliance org shall return error
 
    [Tags]  AllianceOrg
 
+   [Teardown]  Cleanup provisioning
+
    Create Org  orgtype=operator
    RestrictedOrg Update
    ${cloudlet}=  Create Cloudlet  region=${region}
 
    @{alliance_list}=  Create List  notknown
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Update Cloudlet  region=US  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}    alliance_org_list=${alliance_list}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org notknown not found"}')    Update Cloudlet  region=US  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}    alliance_org_list=${alliance_list}
 
 *** Keywords ***
 Setup
