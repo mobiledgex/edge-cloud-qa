@@ -442,6 +442,41 @@ UpdateCloudlet - update to maintenance mode when already in maintenance mode sha
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Cloudlet must be in NormalOperation before starting maintenance"}')  Update Cloudlet  region=${region}  operator_org_name=${cloudlet['data']['key']['organization']}  cloudlet_name=${cloudlet['data']['key']['name']}  maintenance_state=MaintenanceStartNoFailover  use_defaults=False
 
+# ECQ-3973
+UpdateCloudlet - update with developer alliance org shall return error
+   [Documentation]
+   ...  - send CreateCloudlet
+   ...  - send UpdateCloudlet with alliance developer org
+   ...  - verify error is returned
+
+   [Tags]  AllianceOrg
+
+   Create Org  orgtype=operator
+   RestrictedOrg Update
+   ${cloudlet}=  Create Cloudlet  region=${region}
+
+   @{alliance_list}=  Create List  automation_dev_org
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}   alliance_org_list=${alliance_list}
+
+   @{alliance_list}=  Create List  tmus  automation_dev_org
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}   alliance_org_list=${alliance_list}
+
+# ECQ-3974
+UpdateCloudlet - update with unknown alliance org shall return error
+   [Documentation]
+   ...  - send CreateCloudlet
+   ...  - send UpdateCloudlet with alliance org that doenst exist
+   ...  - verify error is returned
+
+   [Tags]  AllianceOrg
+
+   Create Org  orgtype=operator
+   RestrictedOrg Update
+   ${cloudlet}=  Create Cloudlet  region=${region}
+
+   @{alliance_list}=  Create List  notknown
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Update Cloudlet  region=US  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}    alliance_org_list=${alliance_list}
+
 *** Keywords ***
 Setup
 	${dips}    Convert To Integer     254

@@ -30,8 +30,10 @@ class Cloudlet(MexOperation):
         self.cloudletrefs_url = '/auth/ctrl/ShowCloudletRefs'
         self.findflavormatch_url = '/auth/ctrl/FindFlavorMatch'
         self.showflavorsfor_url = '/auth/ctrl/ShowFlavorsForCloudlet'
+        self.add_alliance_org_url = '/auth/ctrl/AddCloudletAllianceOrg'
+        self.remove_alliance_org_url = '/auth/ctrl/RemoveCloudletAllianceOrg'
 
-    def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, maintenance_state=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, kafka_cluster=None, kafka_user=None, kafka_password=None, flavor_name=None, include_fields=False, use_defaults=True):
+    def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, maintenance_state=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, kafka_cluster=None, kafka_user=None, kafka_password=None, flavor_name=None, alliance_org_list=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
         _operator_name_field_number = "2.1"
@@ -242,10 +244,13 @@ class Cloudlet(MexOperation):
         if flavor_name is not None:
             cloudlet_dict['flavor_name'] = flavor_name
 
-        if include_fields and _fields_list:
-            cloudlet_dict['fields'] = []
-            for field in _fields_list:
-                cloudlet_dict['fields'].append(field)
+        if alliance_org_list is not None:
+            cloudlet_dict['alliance_orgs'] = alliance_org_list
+
+#        if include_fields and _fields_list:
+#            cloudlet_dict['fields'] = []
+#            for field in _fields_list:
+#                cloudlet_dict['fields'].append(field)
 
         return cloudlet_dict
 
@@ -277,10 +282,10 @@ class Cloudlet(MexOperation):
         if end_time is not None:
             metric_dict['endtime'] = end_time
         if start_age is not None:
-            #metric_dict['startage'] = int(start_age)
+            # metric_dict['startage'] = int(start_age)
             metric_dict['startage'] = start_age
         if end_age is not None:
-            #metric_dict['endage'] = int(end_age)
+            # metric_dict['endage'] = int(end_age)
             metric_dict['endage'] = end_age
         if device_os is not None:
             metric_dict['deviceos'] = device_os
@@ -357,8 +362,8 @@ class Cloudlet(MexOperation):
 
         return info_dict
 
-    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, static_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, crm_override=None, notify_server_address=None, deployment_local=None, container_version=None, override_policy_container_version=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, kafka_cluster=None, kafka_user=None, kafka_password=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=900):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, static_ips=static_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, deployment_local=deployment_local, container_version=container_version, override_policy_container_version=override_policy_container_version, crm_override=crm_override, notify_server_address=notify_server_address, infra_api_access=infra_api_access, infra_config_flavor_name=infra_config_flavor_name, infra_config_external_network_name=infra_config_external_network_name, trust_policy=trust_policy, deployment_type=deployment_type, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, kafka_cluster=kafka_cluster, kafka_user=kafka_user, kafka_password=kafka_password, use_defaults=use_defaults)
+    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, static_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, crm_override=None, notify_server_address=None, deployment_local=None, container_version=None, override_policy_container_version=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, kafka_cluster=None, kafka_user=None, kafka_password=None, alliance_org_list=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=900):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, static_ips=static_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, deployment_local=deployment_local, container_version=container_version, override_policy_container_version=override_policy_container_version, crm_override=crm_override, notify_server_address=notify_server_address, infra_api_access=infra_api_access, infra_config_flavor_name=infra_config_flavor_name, infra_config_external_network_name=infra_config_external_network_name, trust_policy=trust_policy, deployment_type=deployment_type, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, kafka_cluster=kafka_cluster, kafka_user=kafka_user, kafka_password=kafka_password, alliance_org_list=alliance_org_list, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
 
         msg_dict_delete = None
@@ -430,8 +435,8 @@ class Cloudlet(MexOperation):
 
         return self.update(token=token, url=self.inject_info_url, show_url=self.show_info_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)
 
-    def update_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, trust_policy=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False, stream=True, stream_timeout=600):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, maintenance_state=maintenance_state, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, trust_policy=trust_policy, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, use_defaults=False, include_fields=include_fields)
+    def update_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, trust_policy=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, alliance_org_list=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False, stream=True, stream_timeout=600):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, maintenance_state=maintenance_state, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, trust_policy=trust_policy, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, alliance_org_list=alliance_org_list, use_defaults=False, include_fields=include_fields)
         msg_dict = {'cloudlet': msg}
 
         msg_dict_show = None
@@ -540,3 +545,21 @@ class Cloudlet(MexOperation):
         msg_dict = {'cloudletkey': msg['key']}
 
         return self.show(token=token, url=self.showflavorsfor_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def add_alliance_org(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, alliance_org_name=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
+        msg['organization'] = alliance_org_name
+        msg_dict = {'cloudletallianceorg': msg}
+
+        msg_dict_delete = None
+        if auto_delete and 'key' in msg and 'name' in msg['key']:
+            msg_dict_delete = msg_dict
+
+        return self.create(token=token, url=self.add_alliance_org_url, delete_url=self.remove_alliance_org_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete)
+
+    def remove_alliance_org(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, alliance_org_name=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
+        msg['organization'] = alliance_org_name
+        msg_dict = {'cloudletallianceorg': msg}
+
+        return self.create(token=token, url=self.remove_alliance_org_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict)
