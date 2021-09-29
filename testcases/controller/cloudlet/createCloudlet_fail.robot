@@ -229,6 +229,31 @@ CreateCloudlet - create without both kafka user and password shall return error
    Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Must specify both kafka username and password, or neither","code":400}}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  kafka_user=x  kafka_cluster=x
    Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Must specify both kafka username and password, or neither","code":400}}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  kafka_password=x  kafka_cluster=x
 
+# ECQ-3971
+CreateCloudlet - create with developer alliance org shall return error
+   [Documentation]
+   ...  - send CreateCloudlet with alliance developer org
+   ...  - verify error is returned
+
+   [Tags]  AllianceOrg
+
+   @{alliance_list}=  Create List  automation_dev_org
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
+
+   @{alliance_list}=  Create List  tmus  automation_dev_org
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
+
+# ECQ-3972
+CreateCloudlet - create with unknown alliance org shall return error
+   [Documentation]
+   ...  - send CreateCloudlet with alliance org of org that doesnt exist
+   ...  - verify error is returned
+
+   [Tags]  AllianceOrg
+
+   @{alliance_list}=  Create List  notknown
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org notknown not found"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
+
 ** Keywords **
 Setup
    ${token}=  Get Super Token

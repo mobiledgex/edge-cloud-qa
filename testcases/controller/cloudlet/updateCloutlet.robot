@@ -4,7 +4,8 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  String
 Library  Collections
 
-Test Teardown	Cleanup provisioning	
+Test Teardown  Cleanup provisioning	
+Test Setup     Setup
 
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001
@@ -314,3 +315,48 @@ UpdateCloudlet - shall be able to remove trust policy from cloudlet
    ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  trust_policy=${Empty}
    Should Not Contain             ${cloudlet_update['data']}  trust_policy
    Should Be Equal As Numbers  ${cloudlet_update['data']['trust_policy_state']}  1
+
+# ECQ-3961
+UpdateCloudlet - shall be able to add allianceorgs to cloudlet
+   [Documentation]
+   ...  - send CreateCloudlet without allianceorgs
+   ...  - send UpdateCloudlet with allianceorgs
+   ...  - verify cloudlet has the orgs
+
+   [Tags]  AllianceOrg
+
+   # create cloudlet without allianceorgs
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}
+   Should Not Contain             ${cloudlet['data']}  alliance_orgs
+
+   # update cloudlet with allianceorg
+   @{allianceorg}=  Create List  tmus
+   ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_list=${allianceorg}
+   Should Be Equal   ${cloudlet_update['data']['alliance_orgs']}  ${allianceorg}
+
+   @{allianceorg}=  Create List  tmus  TDG  packet
+   ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_list=${allianceorg}
+   Should Be Equal   ${cloudlet_update['data']['alliance_orgs']}  ${allianceorg}
+
+# ECQ-3962
+UpdateCloudlet - shall be able to remove allianceorgs from cloudlet
+   [Documentation]
+   ...  - send CreateCloudlet with allianceorgs
+   ...  - send UpdateCloudlet without allianceorgs
+   ...  - verify cloudlet does not have the orgs
+
+   [Tags]  AllianceOrg
+
+   # create cloudlet with allianceorgs
+   @{allianceorg}=  Create List  tmus  TDG  packet
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  alliance_org_list=${allianceorg}
+   Should Be Equal   ${cloudlet['data']['alliance_orgs']}  ${allianceorg}
+
+   # update cloudlet without allianceorg
+   @{allianceorg}=  Create List
+   ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_list=${allianceorg}
+   Should Not Contain   ${cloudlet_update['data']}  alliance_orgs
+
+*** Keywords  ***
+Setup
+   Login  username=${admin_manager_username}  password=${admin_manager_password}
