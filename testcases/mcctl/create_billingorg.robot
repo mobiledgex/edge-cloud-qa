@@ -28,7 +28,8 @@ CreateBillingOrg - mcctl shall be able to create/delete BillingOrg
 
    name=${billing_org_name}  firstname=test  lastname=bill  email=testbill@gmail.com  type=self
 
-CreateBillingOrg - mcctl shall handle create failures with name only
+### ECQ-3991 ###
+CreateBillingOrg - mcctl shall handle create failures with missing args
 
     [Documentation]
    ...  - send CreateBillingOrg via mcctl with various error cases
