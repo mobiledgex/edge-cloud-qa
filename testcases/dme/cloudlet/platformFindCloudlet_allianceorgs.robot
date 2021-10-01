@@ -56,8 +56,8 @@ PlatformFindCloudlet - request shall return cloudlet without allianceorg
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus    latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}  alliance_org_list=${allianceorgs}
 
-    ${appinst_1}=   Create App Instance  app_name=${app_name_default}  region=${region}  cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus  cluster_instance_name=autocluster
-    ${appinst_2}=   Create App Instance  app_name=${app_name_default}  region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
+    ${appinst_1}=   Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_org_name_automation}  region=${region}  cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus  cluster_instance_name=autocluster
+    ${appinst_2}=   Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_org_name_automation}  region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
 
     Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}
 
@@ -95,8 +95,8 @@ PlatformFindCloudlet - request shall return cloudlet with allianceorg
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus    latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}  alliance_org_list=${allianceorgs}
 
-    ${appinst_1}=   Create App Instance  app_name=${app_name_default}  region=${region}  cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus  cluster_instance_name=autocluster
-    ${appinst_2}=   Create App Instance  app_name=${app_name_default}  region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
+    ${appinst_1}=   Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_org_name_automation}  region=${region}  cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus  cluster_instance_name=autocluster
+    ${appinst_2}=   Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_org_name_automation}  region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
 
     Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}
 
@@ -140,8 +140,8 @@ PlatformFindCloudlet - request shall return updated cloudlet with allianceorg
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus    latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}
 
-    ${appinst_1}=   Create App Instance  app_name=${app_name_default}  region=${region}  cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus  cluster_instance_name=autocluster
-    ${appinst_2}=   Create App Instance  app_name=${app_name_default}  region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
+    ${appinst_1}=   Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_org_name_automation}  region=${region}  cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus  cluster_instance_name=autocluster
+    ${appinst_2}=   Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_org_name_automation}  region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
 
     Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}
 
@@ -197,8 +197,8 @@ PlatformFindCloudlet - request shall return cloudlet with addallianceorg allianc
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus    latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}
 
-    ${appinst_1}=   Create App Instance  app_name=${app_name_default}  region=${region}  cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus  cluster_instance_name=autocluster
-    ${appinst_2}=   Create App Instance  app_name=${app_name_default}  region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
+    ${appinst_1}=   Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_org_name_automation}  region=${region}  cloudlet_name=${cloudlet_name}tmus    operator_org_name=tmus  cluster_instance_name=autocluster
+    ${appinst_2}=   Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_org_name_automation}  region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
 
     Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}
 
@@ -241,10 +241,10 @@ Setup
     Create Flavor  region=${region}
     Create Cloudlet  region=${region}  cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude} 
     Create Cloudlet  region=${region}  cloudlet_name=${gcp_cloudlet_name}  operator_org_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
-    Create App  region=${region}  access_ports=tcp:1  official_fqdn=${samsung_uri}  #permits_platform_apps=${True}
-    ${tmus_appinst}=            Create App Instance  region=${region}  cloudlet_name=${tmus_cloudlet_name}  operator_org_name=${tmus_operator_name}  cluster_instance_name=autocluster
-    Create App Instance  region=${region}  cloudlet_name=${gcp_cloudlet_name}  operator_org_name=${gcp_operator_name}  cluster_instance_name=autocluster
-    Create App Instance  region=${region}  cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  cluster_instance_name=autocluster
+    Create App  region=${region}  developer_org_name=${developer_org_name_automation}  access_ports=tcp:1  official_fqdn=${samsung_uri}  #permits_platform_apps=${True}
+    ${tmus_appinst}=            Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${tmus_cloudlet_name}  operator_org_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${gcp_cloudlet_name}  operator_org_name=${gcp_operator_name}  cluster_instance_name=autocluster
+    Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  cluster_instance_name=autocluster
 
     ${developer_name_default}=  Get Default Developer Name
     ${app_name_default}=  Get Default App Name
