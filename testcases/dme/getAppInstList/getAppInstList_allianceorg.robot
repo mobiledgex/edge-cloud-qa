@@ -40,12 +40,12 @@ GetAppInstList - request shall return appinst with alliance orgs
     Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name5}  operator_org_name=packet  latitude=5  longitude=5  alliance_org_list=${allianceorgs}
     Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name6}  operator_org_name=att     latitude=6  longitude=6  alliance_org_list=${allianceorgs}
 
-    ${tmus_appinst_1}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_1}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_2}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_3}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_3}  operator_org_name=packet  cluster_instance_name=autocluster
-    ${tmus_appinst_4}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_4}  operator_org_name=packet  cluster_instance_name=autocluster
-    ${tmus_appinst_5}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_5}  operator_org_name=packet  cluster_instance_name=autocluster
-    ${tmus_appinst_6}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_6}  operator_org_name=att     cluster_instance_name=autocluster
+    ${tmus_appinst_1}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_1}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_2}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_3}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_3}  operator_org_name=packet  cluster_instance_name=autocluster
+    ${tmus_appinst_4}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_4}  operator_org_name=packet  cluster_instance_name=autocluster
+    ${tmus_appinst_5}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_5}  operator_org_name=packet  cluster_instance_name=autocluster
+    ${tmus_appinst_6}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_6}  operator_org_name=att     cluster_instance_name=autocluster
 
     Register Client
     ${appfqdns}=  Get App Instance List  carrier_name=${operator_name}  latitude=${mobile_latitude}  longitude=${mobile_longitude}  limit=10
@@ -78,11 +78,11 @@ GetAppInstList - request shall return appinsts with alliance orgs after UpdateCl
     Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name4}  operator_org_name=packet  latitude=4  longitude=4
     Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name5}  operator_org_name=packet  latitude=5  longitude=5
 
-    ${tmus_appinst_1}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_1}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_2}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_3}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_3}  operator_org_name=packet  cluster_instance_name=autocluster
-    ${tmus_appinst_4}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_4}  operator_org_name=packet  cluster_instance_name=autocluster
-    ${tmus_appinst_5}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_5}  operator_org_name=packet  cluster_instance_name=autocluster
+    ${tmus_appinst_1}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_1}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_2}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_3}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_3}  operator_org_name=packet  cluster_instance_name=autocluster
+    ${tmus_appinst_4}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_4}  operator_org_name=packet  cluster_instance_name=autocluster
+    ${tmus_appinst_5}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_5}  operator_org_name=packet  cluster_instance_name=autocluster
 
     Register Client
     ${appfqdns}=  Get App Instance List  carrier_name=${operator_name}  latitude=${mobile_latitude}  longitude=${mobile_longitude}  limit=10
@@ -124,11 +124,11 @@ GetAppInstList - request shall return appinsts with alliance orgs after AddAllia
     Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name4}  operator_org_name=packet  latitude=4  longitude=4
     Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name5}  operator_org_name=packet  latitude=5  longitude=5
 
-    ${tmus_appinst_1}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_1}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_2}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_3}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_3}  operator_org_name=packet  cluster_instance_name=autocluster
-    ${tmus_appinst_4}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_4}  operator_org_name=packet  cluster_instance_name=autocluster
-    ${tmus_appinst_5}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_5}  operator_org_name=packet  cluster_instance_name=autocluster
+    ${tmus_appinst_1}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_1}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_2}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_3}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_3}  operator_org_name=packet  cluster_instance_name=autocluster
+    ${tmus_appinst_4}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_4}  operator_org_name=packet  cluster_instance_name=autocluster
+    ${tmus_appinst_5}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_5}  operator_org_name=packet  cluster_instance_name=autocluster
 
     Register Client
     ${appfqdns}=  Get App Instance List  carrier_name=${operator_name}  latitude=${mobile_latitude}  longitude=${mobile_longitude}  limit=10
@@ -165,7 +165,7 @@ Setup
 
     Create Flavor  region=${region}
 
-    Create App  region=${region}  access_ports=tcp:1  #permits_platform_apps=${True}
+    Create App  region=${region}  developer_org_name=${developer_org_name_automation}  access_ports=tcp:1  #permits_platform_apps=${True}
 
     Set Suite Variable  ${cloudlet_name_3}
     Set Suite Variable  ${cloudlet_name_4}

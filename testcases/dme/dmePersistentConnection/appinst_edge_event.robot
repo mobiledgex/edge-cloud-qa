@@ -15,6 +15,10 @@ ${cloudlet2_long}=  -95.0
 ${operator}=  tmus
 ${region}=  US
 
+${packet_operator_name}  packet
+${packet_cloudlet_latitude}   36
+${packet_cloudlet_longitude}  -95
+
 *** Test Cases ***
 # ECQ-3837
 DmePersistentConnection - create of new closer appinst shall return new cloudlet
@@ -108,6 +112,92 @@ DmePersistentConnection - autoprov of new closer appinst shall return new cloudl
    Should Be Equal  ${cloud1.new_cloudlet.ports}  ${fcloudlet.ports}
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.latitude}  ${cloudlet2_lat}
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.longitude}  ${cloudlet2_long}
+
+# ECQ-3996
+DmePersistentConnection - create of new closer appinst shall return new cloudlet with alliance org
+   [Documentation]
+   ...  - create a cloudlet and appinst on tmus
+   ...  - create a cloudlet with packet and alliance org of tmus
+   ...  - create a dme persistent connection with tmus
+   ...  - create a 2nd appinst closer to the user on packet
+   ...  - verify cloudlet update event is received with packet cloudlet
+
+   [Tags]  DMEPersistentConnection  AllianceOrg
+
+   ${epoch}=  Get Time  epoch
+   ${packet_cloudlet_name}=  Catenate  SEPARATOR=  packet  ${epoch}
+
+   ${allianceorgs}=  Create List  tmus
+
+   Create Cloudlet  region=${region}  cloudlet_name=${packet_cloudlet_name}  operator_org_name=${packet_operator_name}  latitude=${packet_cloudlet_latitude}  longitude=${packet_cloudlet_longitude}  alliance_org_list=${allianceorgs}
+
+   ${r}=  Register Client
+   ${fcloudlet}=  Find Cloudlet  carrier_name=${operator}  latitude=35  longitude=-95
+   Should Be Equal As Numbers  ${fcloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${fcloudlet.edge_events_cookie}') > 100
+
+   Create DME Persistent Connection  edge_events_cookie=${fcloudlet.edge_events_cookie}  latitude=36  longitude=-96  carrier_name=tmus  data_network_type=5G  device_os=Android  device_model=Google Pixel  signal_strength=65
+
+   Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${packet_cloudlet_name}  operator_org_name=${packet_operator_name}  cluster_instance_name=autoclusteraa2
+
+   Sleep  1s
+
+   ${cloud1}=  Receive Cloudlet Update Event
+   Should Be Equal As Numbers  ${cloud1.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${cloud1.new_cloudlet.edge_events_cookie}') > 100
+   Should Match Regexp  ${cloud1.new_cloudlet.fqdn}  reservable[0-9].${packet_cloudlet_name}.${packet_operator_name}.mobiledgex.net
+   Should Be Equal  ${cloud1.new_cloudlet.ports}  ${fcloudlet.ports}
+   Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.latitude}  ${packet_cloudlet_latitude}
+   Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.longitude}  ${packet_cloudlet_longitude}
+
+# ECQ-3997
+DmePersistentConnection - create of new closer appinst shall return new cloudlet after adding alliance org
+   [Documentation]
+   ...  - create a cloudlet and appinst on tmus
+   ...  - create a cloudlet with packet without alliance org
+   ...  - create a dme persistent connection with tmus
+   ...  - create a 2nd appinst closer to the user on tmus cloudlet
+   ...  - verify cloudlet update event is received with tmus cloudlet
+   ...  - create a 3rd appinst closer to the user on packet cloudlet
+   ...  - verify cloudlet update event is received with packet cloudlet
+
+   [Tags]  DMEPersistentConnection  AllianceOrg
+
+   ${epoch}=  Get Time  epoch
+   ${packet_cloudlet_name}=  Catenate  SEPARATOR=  packet  ${epoch}
+
+   Create Cloudlet  region=${region}  cloudlet_name=${packet_cloudlet_name}  operator_org_name=${packet_operator_name}  latitude=${packet_cloudlet_latitude}  longitude=${packet_cloudlet_longitude}
+
+   ${r}=  Register Client
+   ${fcloudlet}=  Find Cloudlet  carrier_name=${operator}  latitude=35  longitude=-95
+   Should Be Equal As Numbers  ${fcloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${fcloudlet.edge_events_cookie}') > 100
+
+   Create DME Persistent Connection  edge_events_cookie=${fcloudlet.edge_events_cookie}  latitude=36  longitude=-96  carrier_name=tmus  data_network_type=5G  device_os=Android  device_model=Google Pixel  signal_strength=65
+
+   Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet2}  operator_org_name=tmus  cluster_instance_name=autoclusteraa2
+
+   ${cloud1}=  Receive Cloudlet Update Event
+   Should Be Equal As Numbers  ${cloud1.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${cloud1.new_cloudlet.edge_events_cookie}') > 100
+   Should Match Regexp  ${cloud1.new_cloudlet.fqdn}  reservable[0-9].${cloudlet2}.tmus.mobiledgex.net
+   Should Be Equal  ${cloud1.new_cloudlet.ports}  ${fcloudlet.ports}
+   Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.latitude}  ${cloudlet2_lat}
+   Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.longitude}  ${cloudlet2_long}
+
+   Add Cloudlet Alliance Org  region=${region}  cloudlet_name=${packet_cloudlet_name}  operator_org_name=${packet_operator_name}  alliance_org_name=tmus
+
+   Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${packet_cloudlet_name}  operator_org_name=${packet_operator_name}  cluster_instance_name=autoclusteraa2
+
+   Sleep  1s
+
+   ${cloud1}=  Receive Cloudlet Update Event
+   Should Be Equal As Numbers  ${cloud1.new_cloudlet.status}  1  #FIND_FOUND
+   Should Be True  len('${cloud1.new_cloudlet.edge_events_cookie}') > 100
+   Should Match Regexp  ${cloud1.new_cloudlet.fqdn}  reservable[0-9].${packet_cloudlet_name}.${packet_operator_name}.mobiledgex.net
+   Should Be Equal  ${cloud1.new_cloudlet.ports}  ${fcloudlet.ports}
+   Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.latitude}  ${packet_cloudlet_latitude}
+   Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.longitude}  ${packet_cloudlet_longitude}
 
 *** Keywords ***
 Setup Suite
