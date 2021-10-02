@@ -28,7 +28,7 @@ ${cloudlet_name_2}=  automationBeaconCloudlet
 #${slack_channel}=  channel
 #${slack_api_url}=  api
 
-${region}=  EU
+${region}=  US
 ${app_name}=  app1601997927-351176
 ${app_version}=  1.0
 

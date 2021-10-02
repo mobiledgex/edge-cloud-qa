@@ -41,8 +41,8 @@ FindCloudlet - request shall return cloudlet without allianceorg
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus    latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}  alliance_org_list=${allianceorgs}
 
-    ${appinst_1}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster  #developer_name=MobiledgeX
-    ${appinst_2}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster  #developer_name=MobiledgeX
+    ${appinst_1}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster  #developer_name=MobiledgeX
+    ${appinst_2}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster  #developer_name=MobiledgeX
 
     log to console  ${appinst_1}
     Register Client  #developer_name=MobiledgeX
@@ -71,8 +71,8 @@ FindCloudlet - request shall return cloudlet with allianceorg
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus    latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}  alliance_org_list=${allianceorgs}
 
-    ${appinst_1}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster  #developer_name=MobiledgeX
-    ${appinst_2}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster  #developer_name=MobiledgeX
+    ${appinst_1}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster  #developer_name=MobiledgeX
+    ${appinst_2}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster  #developer_name=MobiledgeX
 
     log to console  ${appinst_1}
     Register Client  #developer_name=MobiledgeX
@@ -102,8 +102,8 @@ FindCloudlet - request shall return updated cloudlet without allianceorg
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus    latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2} 
 
-    ${appinst_1}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster  #developer_name=MobiledgeX
-    ${appinst_2}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster  #developer_name=MobiledgeX
+    ${appinst_1}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster  #developer_name=MobiledgeX
+    ${appinst_2}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster  #developer_name=MobiledgeX
 
     Update Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  alliance_org_list=${allianceorgs}  use_defaults=${False}  token=${super_token}
 
@@ -138,8 +138,8 @@ FindCloudlet - request shall return updated cloudlet with allianceorg
     ${allianceorgs}=  Create List  dmuus
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus    latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}
-    ${appinst_1}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster 
-    ${appinst_2}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
+    ${appinst_1}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster 
+    ${appinst_2}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
 
     Register Client
     ${cloudlet}=  Find Cloudlet  carrier_name=dmuus  latitude=35  longitude=-95
@@ -188,8 +188,8 @@ FindCloudlet - request shall return cloudlet with addallianceorg allianceorg
 
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus    latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}
-    ${appinst_1}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster
-    ${appinst_2}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
+    ${appinst_1}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster
+    ${appinst_2}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
 
     Register Client
     ${cloudlet}=  Find Cloudlet  carrier_name=dmuus  latitude=35  longitude=-95
@@ -237,8 +237,8 @@ FindCloudlet - request shall return cloudlet with allianceorg on both cloudlets
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus    latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}  alliance_org_list=${allianceorgs_packet}
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}  alliance_org_list=${allianceorgs_dmuus}
 
-    ${appinst_1}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster  #developer_name=MobiledgeX
-    ${appinst_2}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster  #developer_name=MobiledgeX
+    ${appinst_1}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster  #developer_name=MobiledgeX
+    ${appinst_2}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster  #developer_name=MobiledgeX
 
     Register Client
     ${cloudlet}=  Find Cloudlet  carrier_name=dmuus  latitude=35  longitude=-94
@@ -274,10 +274,10 @@ FindCloudlet - request shall return cloudlet with multiple allianceorg
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}  alliance_org_list=${allianceorgs}
     Create Cloudlet  region=${region}   cloudlet_name=${cloudlet_name}gddt  operator_org_name=GDDT  latitude=${cloudlet_lat3}  longitude=${cloudlet_long3}
 
-    ${appinst_1}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster 
-    ${appinst_2}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
-    ${appinst_3}=   Create App Instance    region=${region}  cloudlet_name=attcloud-1  operator_org_name=att  cluster_instance_name=autocluster
-    ${appinst_4}=   Create App Instance    region=${region}  cloudlet_name=${cloudlet_name}gddt  operator_org_name=GDDT  cluster_instance_name=autocluster
+    ${appinst_1}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}dmuus    operator_org_name=dmuus  cluster_instance_name=autocluster 
+    ${appinst_2}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}packet  operator_org_name=packet  cluster_instance_name=autocluster
+    ${appinst_3}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=attcloud-1  operator_org_name=att  cluster_instance_name=autocluster
+    ${appinst_4}=   Create App Instance    region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}gddt  operator_org_name=GDDT  cluster_instance_name=autocluster
 
     Register Client
     ${cloudlet}=  Find Cloudlet  carrier_name=dmuus  latitude=35  longitude=-94
@@ -320,7 +320,7 @@ Setup
 
     Create Flavor  region=${region}
 
-    Create App      access_ports=${access_ports}  region=${region}  #developer_name=MobiledgeX
+    Create App      developer_org_name=${developer_org_name_automation}  access_ports=${access_ports}  region=${region}  #developer_name=MobiledgeX
     
     Set Suite Variable  ${cloudlet_name}
     Set Suite Variable  ${super_token}
