@@ -59,6 +59,109 @@ ShowFlavorsForCloudlet - shall be able to get all supported flavors for a cloudl
       List Should Not Contain Value   ${supported}  ${large_flavor_name_bad}
    END
 
+# ECQ-3998
+ShowFlavorsForCloudlet - shall be able to get all supported flavors for a cloudlet by cloudletorg only
+   [Documentation]
+   ...  - get all flavors in the region
+   ...  - get all cloudlets with a certain org
+   ...  - call FindFlavorMatch to see which flavors are supported on the cloudlets
+   ...  - call ShowFlavorsForCloudlet with cloudlet org only
+   ...  - verify it returns only the flavors supported from FindFlavorMatch
+
+   @{flavors}=  Show Flavors  region=${region}  token=${token}  use_defaults=${False}
+   @{cloudlets}=  Show Cloudlets  region=${region}  operator_org_name=${cloudlet_org}  token=${token}  use_defaults=${False}
+
+   @{passlist}=  Create List
+   @{faillist}=  Create List
+
+   FOR  ${c}  IN  @{cloudlets}
+      FOR  ${f}  IN  @{flavors}
+         ${msg}=  Run Keyword and Ignore Error  Find Flavor Match  region=${region}  cloudlet_name=${c['data']['key']['name']}  operator_org_name=${cloudlet_org}  flavor_name=${f['data']['key']['name']}
+
+         IF  '${msg[0]}' == 'PASS'
+             IF  "${f['data']['key']['name']}" not in ${passlist}
+                Append To List  ${passlist}  ${f['data']['key']['name']}
+             END
+         ELSE
+             IF  "${f['data']['key']['name']}" not in ${faillist}
+                Append To List  ${faillist}  ${f['data']['key']['name']}
+             END
+         END
+      END
+   END
+
+   @{supported}=  Create List
+   @{show}=  Show Flavors For Cloudlet  region=${region}  operator_org_name=${cloudlet_org}
+   FOR  ${sf}  IN  @{show}
+      Append To List  ${supported}  ${sf['data']['name']}
+   END
+
+   Sort List  ${passlist}
+   Sort List  ${faillist}
+   Sort List  ${supported}
+
+   Lists Should Be Equal  ${supported}  ${passlist}
+
+   List Should Contain Value  ${supported}  ${flavor_name_good}
+   List Should Contain Value  ${supported}  ${gpu_flavor_name_good}
+
+   IF  ${platform} == 11    # VCD
+      Length Should Be  ${faillist}  0  # VCD supports all flavors
+      List Should Contain Value   ${supported}  ${gpu_flavor_name_bad}
+      List Should Contain Value   ${supported}  ${large_flavor_name_bad}
+   ELSE
+      List Should Not Contain Value   ${supported}  ${gpu_flavor_name_bad}
+      List Should Not Contain Value   ${supported}  ${large_flavor_name_bad}
+   END
+
+# ECQ-3999
+ShowFlavorsForCloudlet - shall be able to get all supported flavors for a cloudlet by cloudletname only
+   [Documentation]
+   ...  - get all flavors in the region
+   ...  - get all cloudlets with a certain org
+   ...  - call FindFlavorMatch to see which flavors are supported on the cloudlets
+   ...  - call ShowFlavorsForCloudlet with cloudlet name only
+   ...  - verify it returns only the flavors supported from FindFlavorMatch
+
+   @{flavors}=  Show Flavors  region=${region}  token=${token}  use_defaults=${False}
+
+   @{passlist}=  Create List
+   @{faillist}=  Create List
+
+   FOR  ${f}  IN  @{flavors}
+      ${msg}=  Run Keyword and Ignore Error  Find Flavor Match  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  flavor_name=${f['data']['key']['name']}
+
+      IF  '${msg[0]}' == 'PASS'
+         Append To List  ${passlist}  ${f['data']['key']['name']}
+      ELSE
+        Append To List  ${faillist}  ${f['data']['key']['name']}
+      END
+   END
+
+   @{supported}=  Create List
+   @{show}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}
+   FOR  ${sf}  IN  @{show}
+      Append To List  ${supported}  ${sf['data']['name']}
+   END
+
+   Sort List  ${passlist}
+   Sort List  ${faillist}
+   Sort List  ${supported}
+
+   Lists Should Be Equal  ${supported}  ${passlist}
+
+   List Should Contain Value  ${supported}  ${flavor_name_good}
+   List Should Contain Value  ${supported}  ${gpu_flavor_name_good}
+
+   IF  ${platform} == 11    # VCD
+      Length Should Be  ${faillist}  0  # VCD supports all flavors
+      List Should Contain Value   ${supported}  ${gpu_flavor_name_bad}
+      List Should Contain Value   ${supported}  ${large_flavor_name_bad}
+   ELSE
+      List Should Not Contain Value   ${supported}  ${gpu_flavor_name_bad}
+      List Should Not Contain Value   ${supported}  ${large_flavor_name_bad}
+   END
+`
 # ECQ-3612
 ShowFlavorsForCloudlet - OperatorManager shall be able to show flavors for cloudlet
    [Documentation]
@@ -166,6 +269,22 @@ ShowFlavorsForCloudlet - DeveloperViewer shall be able to show flavors for cloud
 
    ${flavors}=  Show Flavors For Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${cloudlet_org}  token=${tokendev_viewer}
    Should Be True  len(@{flavors}) > 0
+
+# ECQ-4000
+ShowFlavorsForCloudlet - request without region shall return error
+   [Documentation]
+   ...  - call ShowFlavorsForCloudlet without region
+   ...  - verify proper error is returned
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No region specified"}')  Show Flavors For Cloudlet  token=${token}  use_defaults=${False}
+
+# ECQ-4001
+FindFlavorMatch - request without region shall return error
+   [Documentation]
+   ...  - call FindFlavorMatch without region
+   ...  - verify proper error is returned
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"No region specified"}')  Find Flavor Match  token=${token}  use_defaults=${False}
 
 ** Keywords **
 Setup

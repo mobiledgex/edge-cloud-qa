@@ -542,7 +542,10 @@ class Cloudlet(MexOperation):
 
     def show_flavors_for_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
-        msg_dict = {'cloudletkey': msg['key']}
+        if 'key' in msg:
+            msg_dict = {'cloudletkey': msg['key']}
+        else:
+            msg_dict = {'cloudletkey': {}}
 
         return self.show(token=token, url=self.showflavorsfor_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
