@@ -9,7 +9,7 @@ Jloops="-Jloops=35"
 Jusers="-Jusers=10"
 Jramptime="-Jramptime=10"
 Jport="-Jport=8086"
-Jdomain="-Jdomain=clusterdallask8s.automationdallascloudlet.packet.mobiledgex.net"
+Jdomain="-Jdomain=testappalertcluster.automationdallascloudlet.packet.mobiledgex.net"
 blue=$(tput setaf 4)
 yellow=$(tput setaf 3)
 red=$(tput setaf 1)
@@ -25,7 +25,7 @@ printf "However you can still use this script on any cluster if you use the app 
 printf "$normal Eenter 7 args $green filename.jmx -Jdelay -Jloops -Jusers -Jramptime -Jport -Jdomain$normal\n"
 echo
 printf "$normal\t./jmeterbash.sh \$1 \$2 \$3 \$4 \$5 \$6 \$7 <===== customize the 7 arguments as follows\n"
-printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 clusterdallask8s.automationdallascloudlet.packet.mobiledgex.net  <=== bash values only\n"
+printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 testappalertcluster.automationdallascloudlet.packet.mobiledgex.net  <=== bash values only\n"
 printf "$normal\t./jmeterbash.sh <jmx file> <delay ms> <seconds/loops> <users> <ramptime> <http port> <http url>  <=== \$1 \$2 \$3 \$4 \$5 \$6 \$7 value info\n"
 printf "$green \tjmeter -n -t  $jmjmxfile $Jdelay $Jloops $Jusers $Jramptime $Jport $Jdomain $normal  <==== this is jmeter with the J vars\n"
 echo
@@ -34,7 +34,7 @@ printf "$yellow easier or run predefined tests that can have some tweeks on the 
 echo
 printf "$green The bash file lets you send the values and logs the values and time you ran it\n"
 printf "$green \tjmeter -n -t  $jmjmxfile $Jdelay $Jloops $Jusers $Jramptime $Jport $Jdomain $normal  <==== jmeter with the -J vars\n"
-printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 clusterdallask8s.automationdallascloudlet.packet.mobiledgex.net  <=== bash values only\n"
+printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 testappalertcluster.automationdallascloudlet.packet.mobiledgex.net  <=== bash values only\n"
 echo $normal
 echo
 sleep 1
@@ -57,7 +57,7 @@ echo "Using 7 entered args\n"
 printf "\t./jmeterbash $1 -Jdelay=$2 -Jloops=$3 -Jusers=$4 -Jramptime=$5 -Jport=$6 -Jdomain=$7\n"
 echo $normal
 printf "$normal\t./jmeterbash.sh \$1 \$2 \$3 \$4 \$5 \$6 \$7 <===== customize the 7 arguments as follows\n"
-printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 clusterdallask8s.automationdallascloudlet.packet.mobiledgex.net <=== bash values only\n"
+printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 testappalertcluster.automationdallascloudlet.packet.mobiledgex.net <=== bash values only\n"
 printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 somecluster.somecloudlet.packet.mobiledgex.net                  <=== change cluster and dedicatedLB \n"
 printf "$normal\t./jmeterbash.sh <jmx file> <delay ms> <seconds/loops> <users> <ramptime> <http port> <http url>  <=== \$1 \$2 \$3 \$4 \$5 \$6 \$7 value info\n"
 printf "$green \tjmeter -n -t  $jmjmxfile $Jdelay $Jloops $Jusers $Jramptime $Jport $Jdomain $normal  <==== this is jmeter with the J vars\n"
@@ -67,7 +67,7 @@ printf "$yellow easier or run predefined tests that can have some tweeks on the 
 echo
 printf "$green The bash file lets you send the values and logs the values and time you ran it\n"
 printf "$green \tjmeter -n -t  $jmjmxfile $Jdelay $Jloops $Jusers $Jramptime $Jport $Jdomain $normal  <==== jmeter with the -J vars\n"
-printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 clusterdallask8s.automationdallascloudlet.packet.mobiledgex.net  <=== bash values only\n"
+printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 testappalertcluster.automationdallascloudlet.packet.mobiledgex.net  <=== bash values only\n"
 echo $normali
 sleep 1
 command  jmeter \-\n \-\t $1 -Jdelay=$2 -Jloops=$3 -Jusers=$4 -Jramptime=$5 -Jport=$6 -Jdomain=$7 &
@@ -92,7 +92,7 @@ echo "Using 8 entered args\n"
 printf "\t./jmeterbash $1 -Jdelay=$2 -Jloops=$3 -Jusers=$4 -Jramptime=$5 -Jport=$6 -Jdomain=$7 delaystart=$8\n"
 echo $normal
 printf "$normal\t./jmeterbash.sh \$1 \$2 \$3 \$4 \$5 \$6 \$7 \$8 <===== customize the 8 arguments as follows\n"
-printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 clusterdallask8s.automationdallascloudlet.packet.mobiledgex.net 30 <=== bash values only\n"
+printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 testappalertcluster.automationdallascloudlet.packet.mobiledgex.net 30 <=== bash values only\n"
 printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 somecluster.somecloudlet.packet.mobiledgex.net 30                  <=== change cluster and dedicatedLB \n"
 printf "$normal\t./jmeterbash.sh <jmx file> <delay ms> <seconds/loops> <users> <ramptime> <http port> <http url> <delaystart>  <=== \$1 \$2 \$3 \$4 \$5 \$6 \$7 \$8 value info\n"
 printf "$green \tjmeter -n -t  $jmjmxfile $Jdelay $Jloops $Jusers $Jramptime $Jport $Jdomain $normal  <==== this is jmeter with the J vars\n"
@@ -102,7 +102,7 @@ printf "$yellow easier or run predefined tests that can have some tweeks on the 
 echo
 printf "$green The bash file lets you send the values and logs the values and time you ran it\n"
 printf "$green \tjmeter -n -t  $jmjmxfile $Jdelay $Jloops $Jusers $Jramptime $Jport $Jdomain $normal  <==== jmeter with the -J vars\n"
-printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 clusterdallask8s.automationdallascloudlet.packet.mobiledgex.net 30  <=== bash values only\n"
+printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 testappalertcluster.automationdallascloudlet.packet.mobiledgex.net 30  <=== bash values only\n"
 echo $normal
 sleep $8
 command  jmeter \-\n \-\t $1 -Jdelay=$2 -Jloops=$3 -Jusers=$4 -Jramptime=$5 -Jport=$6 -Jdomain=$7 &
@@ -163,7 +163,7 @@ printf "\t./jmeterbash $1 -Jdelay=$2 -Jloops=$3 -Jusers=$4 -Jramptime=$5 -Jport=
 printf "$normal OR Eenter 7 args $green filename.jmx -Jdelay -Jloops -Jusers -Jramptime -Jport -Jdomain$normal\n"
 echo
 printf "$normal\t./jmeterbash.sh \$1 \$2 \$3 \$4 \$5 \$6 \$7 <===== customize the 7 arguments as follows\n"
-printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 clusterdallask8s.automationdallascloudlet.packet.mobiledgex.net  <=== bash values only\n"
+printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 testappalertcluster.automationdallascloudlet.packet.mobiledgex.net  <=== bash values only\n"
 printf "$normal\t./jmeterbash.sh <jmx file> <delay ms> <seconds/loops> <users> <ramptime> <http port> <http url>  <=== \$1 \$2 \$3 \$4 \$5 \$6 \$7 value info\n"
 printf "$green \tjmeter -n -t  $jmjmxfile $Jdelay $Jloops $Jusers $Jramptime $Jport $Jdomain $normal  <==== this is jmeter with the J vars\n"
 echo
@@ -172,7 +172,7 @@ printf "$yellow easier or run predefined tests that can have some tweeks on the 
 echo
 printf "$green The bash file lets you send the values and logs the values and time you ran it\n"
 printf "$green \tjmeter -n -t  $jmjmxfile $Jdelay $Jloops $Jusers $Jramptime $Jport $Jdomain $normal  <==== jmeter with the -J vars\n"
-printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 clusterdallask8s.automationdallascloudlet.packet.mobiledgex.net  <=== bash values only\n"
+printf "$normal\t./jmeterbash.sh jmeterx8086.jmx 900 35 5 5 8086 testappalertcluster.automationdallascloudlet.packet.mobiledgex.net  <=== bash values only\n"
 echo $normal
 exit;
 # command stty rows 40 cols 100
