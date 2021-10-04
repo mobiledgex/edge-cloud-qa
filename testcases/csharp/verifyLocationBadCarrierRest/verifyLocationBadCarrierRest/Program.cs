@@ -28,6 +28,11 @@ namespace RestSample
 
     class DummyDeviceInfo : DeviceInfo
     {
+        public bool IsPingSupported()
+        {
+            return true;
+        }
+
         Dictionary<string, string> DeviceInfo.GetDeviceInfo()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -50,9 +55,19 @@ namespace RestSample
             return "26201";
         }
 
+        public string GetDataNetworkPath()
+        {
+            return "GSM";
+        }
+
         public string GetMccMnc()
         {
             return "26201";
+        }
+
+        public ulong GetSignalStrength()
+        {
+            return 0;
         }
     }
 
