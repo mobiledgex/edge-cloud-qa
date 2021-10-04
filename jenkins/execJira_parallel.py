@@ -587,9 +587,9 @@ def exec_testcase(z, t):
     elif tc_type == 'csharp':
         dirname, solutionname = tc.split('/')
         tc_file = find(solutionname, os.environ['WORKSPACE'])
-        dll = os.path.dirname(tc_file) + f'/{dirname}/bin/Release/netcoreapp2.1/{dirname}.dll'
+        dll = os.path.dirname(tc_file) + f'/{dirname}/bin/Debug/netcoreapp2.1/{dirname}.dll'
         csproj = os.path.dirname(tc_file) + f'/{dirname}/{dirname}.csproj'
-        exec_cmd = f'dotnet clean {csproj} && dotnet build {tc_file} -c Release /p:Version=1.0 && dotnet {dll} > {file_output} 2>&1'
+        exec_cmd = f'dotnet clean {csproj} && dotnet build {tc_file} -c Debug /p:Version=1.0 && dotnet {dll} > {file_output} 2>&1'
     elif tc_type == 'cpp':
         dirname, cppname = tc.split('/')
         tc_file = find(cppname, os.environ['WORKSPACE'])
