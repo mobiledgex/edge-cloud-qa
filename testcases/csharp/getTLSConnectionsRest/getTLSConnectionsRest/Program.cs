@@ -24,10 +24,11 @@ using System.Text;
 using DistributedMatchEngine;
 using System.Net.Security;
 using System.Security.Authentication;
-
+using System.Security.Cryptography.X509Certificates;
 
 namespace RestSample
 {
+
     // This interface is optional but is used in the sample.
     class DummyUniqueID : UniqueID
     {
@@ -41,8 +42,14 @@ namespace RestSample
             return "";
         }
     }
+
     class DummyDeviceInfo : DeviceInfo
     {
+        public bool IsPingSupported()
+        {
+            return true;
+        }
+
         Dictionary<string, string> DeviceInfo.GetDeviceInfo()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -65,9 +72,19 @@ namespace RestSample
             return "26201";
         }
 
+        public string GetDataNetworkPath()
+        {
+            return "GSM";
+        }
+
         public string GetMccMnc()
         {
             return "26201";
+        }
+
+        public ulong GetSignalStrength()
+        {
+            return 0;
         }
     }
 
@@ -400,4 +417,8 @@ namespace RestSample
             
         }
     };
+
+    internal class StorePermission
+    {
+    }
 }
