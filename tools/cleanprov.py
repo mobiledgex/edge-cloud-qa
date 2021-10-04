@@ -17,7 +17,7 @@ logging.getLogger('mex_rest').setLevel(loglevel)
 logging.getLogger('webservice').setLevel(loglevel)
 logging.getLogger('mex_master_controller.MexOperation').setLevel(loglevel)
 
-table_list = ['appinst', 'app', 'clusterinst', 'flavor', 'autoscalepolicy', 'autoprovpolicy', 'orgcloudletpool', 'cloudletpool', 'cloudlet', 'org', 'user']
+table_list = ['appinst', 'app', 'clusterinst', 'flavor', 'autoscalepolicy', 'autoprovpolicy', 'orgcloudletpool', 'cloudletpool', 'cloudlet', 'org', 'user', 'ratelimitsettings']
 table_list_str = ','.join(table_list)
 
 region_list = ['US', 'EU']
@@ -66,6 +66,7 @@ cloudlet_keep = [{'cloudlet_name': 'automationMunichCloudlet', 'operator_name': 
 flavor_keep = [{'flavor_name':'x1.medium'},{'flavor_name':'automation_api_flavor'}]
 developer_keep = [{'developer_name':'automation_api'},{'developer_name':'mexinfradev_'}]
 operator_keep = [{'operator_name': 'TDG'},{'operator_name': 'gcp'},{'operator_name': 'tmus'},{'operator_name': 'att'},{'operator_name': 'azure'}]
+rate_limit_flow_keep = []
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -280,10 +281,12 @@ def clean_cloudlet():
                   try:
                      print(f'deleting {name}')
                      mc.delete_cloudlet(region=region, token=mc.super_token, cloudlet_name=name, operator_org_name=org, use_defaults=False)
+                     print(f'delete {name} done')
                   except Exception as e:
                      print(f'error deleting, {e}.trying with override')
                      try:
                         mc.delete_cloudlet(region=region, token=mc.super_token, cloudlet_name=name, operator_org_name=org, use_defaults=False, crm_override='IgnoreCrmAndTransientState')
+                        print(f'delete {name} with override done')
                      except Exception as e:
                         print(f'error deleting {name}, {e}.continuing to next item')
                else:
@@ -307,6 +310,30 @@ def clean_flavor():
                   try:
                      print(f'deleting {name}')
                      mc.delete_flavor(region=region, token=mc.super_token, use_defaults=False, flavor_name=name)
+                  except Exception as e:
+                     print(f'error deleting {name}, {e}.continuing to next item')
+               else:
+                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
+def clean_ratelimitsettingsflow():
+    global key_pattern
+
+    print('clean ratelimitsettingsflow')
+    app_list = mc.show_rate_limit_flow(region=region, token=mc.super_token, use_defaults=False)
+    print('applist', app_list)
+    print('key',key_pattern)
+    if len(app_list) == 0:
+        print('nothing to delete')
+    else:
+        for a in app_list:
+            name = a['data']['key']['flow_settings_name']
+            if in_rate_limit_flow_list(a):
+                print(f'keeping {name}')
+            else:
+               if pattern_re.match(name):
+                  try:
+                     print(f'deleting {name}')
+                     mc.delete_rate_limit_flow(region=region, token=mc.super_token, use_defaults=False, flow_settings_name=name, api_name=a['data']['key']['rate_limit_key']['api_name'], api_endpoint_type=a['data']['key']['rate_limit_key']['api_endpoint_type'], rate_limit_target=a['data']['key']['rate_limit_key']['rate_limit_target'])
                   except Exception as e:
                      print(f'error deleting {name}, {e}.continuing to next item')
                else:
@@ -340,6 +367,12 @@ def in_cloudlet_list(app):
     for a in cloudlet_keep:
         if a['cloudlet_name'] == app['data']['key']['name'] and a['operator_name'] == app['data']['key']['organization']:
             print('found cloudlet in cloudlet_keep list', app['data']['key']['name'], app['data']['key']['organization'])
+            return True
+
+def in_rate_limit_flow_list(app):
+    for a in rate_limit_flow_keep:
+        if a['cloudlet_name'] == app['data']['key']['name'] and a['operator_name'] == app['data']['key']['organization']:
+            print('found flow in rate_limit_flow_keep list', app['data']['key']['name'], app['data']['key']['organization'])
             return True
 
 def in_org_list(app):
@@ -383,6 +416,8 @@ for r in region_list:
             #   clean_org()
             elif table == 'orgcloudletpool':
                clean_orgcloudletpool()
+            elif table == 'ratelimitsettings':
+               clean_ratelimitsettingsflow()
 
 if 'org' in tables_arg:
    clean_org()
