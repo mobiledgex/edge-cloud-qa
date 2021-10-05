@@ -481,6 +481,42 @@ UpdateCloudlet - update with unknown alliance org shall return error
    @{alliance_list}=  Create List  notknown
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Org notknown not found"}')    Update Cloudlet  region=US  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}    alliance_org_list=${alliance_list}
 
+# ECQ-4007
+UpdateCloudlet - update with duplicate alliance org shall return error
+   [Documentation]
+   ...  - send CreateCloudlet
+   ...  - send UpdateCloudlet with same alliance org twice
+   ...  - verify error is returned
+
+   [Tags]  AllianceOrg
+
+   [Teardown]  Cleanup provisioning
+
+   Create Org  orgtype=operator
+   RestrictedOrg Update
+   ${cloudlet}=  Create Cloudlet  region=${region}
+
+   @{alliance_list}=  Create List  packet  packet
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Duplicate alliance org \\\\"packet\\\\" specified"}')    Update Cloudlet  region=US  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}    alliance_org_list=${alliance_list}
+
+# ECQ-4011
+UpdateCloudlet - update with same alliance org as own org shall return error
+   [Documentation]
+   ...  - send CreateCloudlet
+   ...  - send UpdateCloudlet with same alliance org as its own operator org
+   ...  - verify error is returned
+
+   [Tags]  AllianceOrg
+
+   [Teardown]  Cleanup provisioning
+
+   Create Org  orgtype=operator
+   RestrictedOrg Update
+   ${cloudlet}=  Create Cloudlet  region=${region}
+
+   @{alliance_list}=  Create List  ${cloudlet['data']['key']['organization']}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot add cloudlet\\'s own org \\\\"${cloudlet['data']['key']['organization']}\\\\" as alliance org"}')    Update Cloudlet  region=US  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}    alliance_org_list=${alliance_list}
+
 *** Keywords ***
 Setup
 	${dips}    Convert To Integer     254

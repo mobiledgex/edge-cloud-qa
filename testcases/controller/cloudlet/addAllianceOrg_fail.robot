@@ -45,6 +45,30 @@ AddAllianceOrg - add developer alliance orgs to cloudlet shall return error
    ${error}=  Run Keyword and Expect Error  *  Add Cloudlet Alliance Org  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=tmus  alliance_org_name=automation_dev_org
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')
 
+# ECQ-4008
+AddAllianceOrg - add same alliance org to cloudlet shall return error
+   [Documentation]
+   ...  - send AddAllianceOrg with same org
+   ...  - verify proper error is returned
+
+   [Tags]  AllianceOrg
+
+   Add Cloudlet Alliance Org  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=tmus  alliance_org_name=packet
+
+   ${error}=  Run Keyword and Expect Error  *  Add Cloudlet Alliance Org  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=tmus  alliance_org_name=packet
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Duplicate alliance org \\\\"packet\\\\" specified"}')
+
+# ECQ-4009
+AddAllianceOrg - add own org as alliance org to cloudlet shall return error
+   [Documentation]
+   ...  - send AddAllianceOrg with same org as its own org
+   ...  - verify proper error is returned
+
+   [Tags]  AllianceOrg
+
+   ${error}=  Run Keyword and Expect Error  *  Add Cloudlet Alliance Org  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=tmus  alliance_org_name=tmus
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Cannot add cloudlet\\'s own org \\\\"tmus\\\\" as alliance org"}')
+
 ** Keywords **
 Setup
    ${token}=  Get Super Token
