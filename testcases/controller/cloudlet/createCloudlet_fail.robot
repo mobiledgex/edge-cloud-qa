@@ -254,6 +254,28 @@ CreateCloudlet - create with unknown alliance org shall return error
    @{alliance_list}=  Create List  notknown
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Org notknown not found"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
 
+# ECQ-4006
+CreateCloudlet - create with duplicate alliance org shall return error
+   [Documentation]
+   ...  - send CreateCloudlet with the same alliance org twice
+   ...  - verify error is returned
+
+   [Tags]  AllianceOrg
+
+   @{alliance_list}=  Create List  packet  packet
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Duplicate alliance org \\\\"packet\\\\" specified"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
+
+# ECQ-4010
+CreateCloudlet - create with same alliance org as own org shall return error
+   [Documentation]
+   ...  - send CreateCloudlet with the same alliance org as its own operator org
+   ...  - verify error is returned
+
+   [Tags]  AllianceOrg
+
+   @{alliance_list}=  Create List  ${oper}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot add cloudlet\\'s own org \\\\"azure\\\\" as alliance org"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
+
 ** Keywords **
 Setup
    ${token}=  Get Super Token
