@@ -20,7 +20,7 @@ ${physical_name}=  bonn
 ${cloudlet_name_vmpool}=  automationVMPoolCloudlet
 ${vmpool_name}=  automationVMPool
 
-${region}=  EU
+${region}=  US
 
 *** Test Cases ***
 # ECQ-2314
