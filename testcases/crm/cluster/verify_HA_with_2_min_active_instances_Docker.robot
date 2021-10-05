@@ -12,11 +12,11 @@ Suite Setup      Setup
 Suite Teardown  Cleanup
 
 *** Variables ***
-${cloudlet1}  automationMunichCloudlet
-${cloudlet2}  automationBerlinCloudlet
+${cloudlet1}  automationBonnCloudlet
+${cloudlet2}  packet-qaregression
 ${operator_name_openstack}  TDG
 ${mobiledgex_domain}  mobiledgex.net
-${region}      EU
+${region}      US
 ${flavor}  automation_api_flavor
 ${default_flavor_name}   automation_api_flavor
 ${cluster_name}  dockerreservable
@@ -35,7 +35,7 @@ Create docker based reservable cluster instnace
 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet1}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack_packet}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
 
    Log to Console  DONE creating cluster instance
 
@@ -43,8 +43,8 @@ Create Auto Provisioning Policy
 
    Log to Console  Create Auto Provisioning Policy with 2 min active instances and add two cloudlet to the policy
 
-   &{cloudlet1}=  create dictionary  name=automationMunichCloudlet  organization=TDG
-   &{cloudlet2}=  create dictionary  name=automationBerlinCloudlet  organization=TDG
+   &{cloudlet1}=  create dictionary  name=${cloudlet1}  organization=${operator_name_openstack}
+   &{cloudlet2}=  create dictionary  name=${cloudlet2}  organization=${operator_name_openstack_packet}
    @{cloudletlist}=  create list  ${cloudlet1}  ${cloudlet2}
 
    ${policy_return}=  Create Auto Provisioning Policy  region=${region}  policy_name=${policy_name}  min_active_instances=2  max_instances=4  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}
@@ -55,10 +55,10 @@ Create App, Add Autoprovisioning Policy and Deploy an App Instance
 
    @{policy_list}=  Create List  ${policy_name}
    log to console  Creating App and App Instance
-   create app  region=EU  app_name=${app_name}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policies=@{policy_list}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
+   create app  region=${region}  app_name=${app_name}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policies=@{policy_list}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
 
    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet1}  operator_org_name=${operator_name_openstack}  token=${user_token}
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack_packet}  token=${user_token}
 
 
 Remove auto provisioning policy from App
