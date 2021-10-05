@@ -20,7 +20,7 @@ ${physical_name}=  buckhorn
 ${cloudlet_name_vmpool}=  automationVMPoolCloudlet
 ${vmpool_name}=  automationVMPool
 
-${region}=  EU
+${region}=  US
 
 *** Test Cases ***
 # ECQ-2314
