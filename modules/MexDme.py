@@ -104,7 +104,7 @@ class FindCloudletRequest():
         if use_defaults:
             if not session_cookie:
                 self.session_cookie = session_cookie_global
-            if not carrier_name:
+            if carrier_name is None:
                 self.carrier_name = shared_variables.operator_name_default
 
         loc_dict = {}
@@ -506,6 +506,8 @@ class MexDme(MexGrpc):
 
         if resp.status != 1:  # FIND_FOUND
             raise Exception('find cloudlet not found:{}'.format(str(resp)))
+
+        logger.debug('findcloudlet resp fqdn:' + resp.fqdn)
 
         edge_events_cookie_global = resp.edge_events_cookie
 
