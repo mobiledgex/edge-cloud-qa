@@ -65,7 +65,7 @@ Settings - ShowSettings should return the settings
    Should Contain  ${settings}  cluster_auto_scale_retry_delay         
    Should Contain  ${settings}  alert_policy_min_trigger_time   
 #   Should Contain  ${settings}  disable_rate_limit                 
-   Should Contain  ${settings}  max_num_per_ip_rate_limiters         
+   Should Contain  ${settings}  rate_limit_max_tracked_ips         
 
 # ECQ-2989
 Settings - UpdateSettings should update the settings
@@ -98,10 +98,10 @@ Settings - UpdateSettings should update the settings
    #Update Settings  region=${region}  master_node_flavor=x1.medium  load_balancer_max_port_range=1  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=1h0m0s  influx_db_downsampled_metrics_retention=1h0m0s  influx_db_edge_events_metrics_retention=1h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
    Update Settings  region=${region}  master_node_flavor=x1.medium  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=1h0m0s  influx_db_downsampled_metrics_retention=1h0m0s  influx_db_edge_events_metrics_retention=1h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
 
-   @{collection_intervals}=  Create List  1s  1s  1s 
+   @{collection_intervals}=  Create List  2m  2m  2m 
    Update Settings  region=${region}  update_trust_policy_timeout=1s  dme_api_metrics_collection_interval=1s  edge_events_metrics_collection_interval=1s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}  cleanup_reservable_auto_cluster_idletime=31s  location_tile_side_length_km=1  appinst_client_cleanup_interval=1h
 
-   Update Settings  region=${region}  cluster_auto_scale_averaging_duration_sec=1  cluster_auto_scale_retry_delay=1s  alert_policy_min_trigger_time=1s  disable_rate_limit=${True}  max_num_per_ip_rate_limiters=1  resource_snapshot_thread_interval=31s
+   Update Settings  region=${region}  cluster_auto_scale_averaging_duration_sec=1  cluster_auto_scale_retry_delay=1s  alert_policy_min_trigger_time=1s  disable_rate_limit=${True}  rate_limit_max_tracked_ips=1  resource_snapshot_thread_interval=31s
 
    ${settings_post}=   Show Settings  region=${region}
 
@@ -137,9 +137,9 @@ Settings - UpdateSettings should update the settings
 
    Should Be Equal             ${settings_post['dme_api_metrics_collection_interval']}   1s
    Should Be Equal             ${settings_post['edge_events_metrics_collection_interval']}   1s
-   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][0]['interval']}   1s
-   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][1]['interval']}   1s
-   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][2]['interval']}   1s
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][0]['interval']}   2m0s
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][1]['interval']}   2m0s
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][2]['interval']}   2m0s
    Should Be Equal             ${settings_post['cleanup_reservable_auto_cluster_idletime']}   31s
    Should Be Equal As Numbers  ${settings_post['location_tile_side_length_km']}               1
    Should Be Equal             ${settings_post['appinst_client_cleanup_interval']}   1h0m0s
@@ -148,7 +148,7 @@ Settings - UpdateSettings should update the settings
    Should Be Equal             ${settings_post['cluster_auto_scale_retry_delay']}  1s 
    Should Be Equal             ${settings_post['alert_policy_min_trigger_time']}  1s
    Should Be True              ${settings_post['disable_rate_limit']} 
-   Should Be Equal As Numbers  ${settings_post['max_num_per_ip_rate_limiters']}  1
+   Should Be Equal As Numbers  ${settings_post['rate_limit_max_tracked_ips']}  1
    Should Be Equal             ${settings_post['resource_snapshot_thread_interval']}  31s
 
 # ECQ-2990
@@ -405,7 +405,7 @@ Settings - user shall be able to reset the settings
    Should Be Equal             ${settings_post['cluster_auto_scale_retry_delay']}  1m0s
    Should Be Equal             ${settings_post['alert_policy_min_trigger_time']}  30s
    Should Not Contain          ${settings_post}  disable_rate_limit
-   Should Be Equal As Numbers  ${settings_post['max_num_per_ip_rate_limiters']}  10000
+   Should Be Equal As Numbers  ${settings_post['rate_limit_max_tracked_ips']}  10000
 
    Should Be Equal             ${settings_post['alert_policy_min_trigger_time']}  30s
 

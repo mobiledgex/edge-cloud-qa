@@ -7,6 +7,7 @@ Suite Teardown  Cleanup provisioning
 *** Variables ***
 ${region}  US
 ${operator_name_fake}=  tmus
+${alliance_org}=  packet
 
 *** Test Cases ***
 # ECQ-3967
@@ -20,8 +21,8 @@ AddAllianceOrg - OperatorManager shall be able to add/remove alliance org
 
    ${user_token}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
 
-   Add Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=tmus  token=${user_token}
-   Remove Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=tmus  token=${user_token}
+   Add Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=${alliance_org}  token=${user_token}
+   Remove Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=${alliance_org}  token=${user_token}
 
 # ECQ-3968
 AddAllianceOrg - OperatorContributor shall be able to add/remove alliance org
@@ -34,8 +35,8 @@ AddAllianceOrg - OperatorContributor shall be able to add/remove alliance org
 
    ${user_token}=  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
 
-   Add Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=tmus  token=${user_token}
-   Remove Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=tmus  token=${user_token}
+   Add Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=${alliance_org}  token=${user_token}
+   Remove Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=${alliance_org}  token=${user_token}
 
 # ECQ-3969
 AddAllianceOrg - OperatorViewer shall not be able to add/remove alliance org

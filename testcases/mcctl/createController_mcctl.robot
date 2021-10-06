@@ -52,9 +52,9 @@ Success Create/Show/Delete Controller Via mcctl
 	${show}=  Run mcctl  controller show
 	Run mcctl  controller delete region=${region} ${parmss}
 
-	Should Be Equal   ${show[2]['Address']}   ${parms['address']}
+	Should Be True   "${show[0]['Address']}"=="${parms['address']}" or "${show[1]['Address']}"=="${parms['address']}" or "${show[2]['Address']}"=="${parms['address']}"
 
-	Run Keyword If  'influxdb' in ${parms}  Should Be Equal  ${show[2]['InfluxDB']}  ${parms['influxdb']}
+	Run Keyword If  'influxdb' in ${parms}  Should Be True  "${show[0]['InfluxDB']}"=="${parms['influxdb']}" or "${show[0]['InfluxDB']}"=="${parms['influxdb']}" or "${show[2]['InfluxDB']}"=="${parms['influxdb']}"
 
 
 Update Setup

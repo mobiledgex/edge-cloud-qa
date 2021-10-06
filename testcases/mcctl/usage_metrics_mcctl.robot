@@ -144,7 +144,7 @@ App Setup
 Cloudlet Setup
    App Setup
 
-   @{cloudlet_list}=  Create List  tmocloud-1
+   @{cloudlet_list}=  Create List  tmocloud-2
    ${pool}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_list=${cloudlet_list}
    ${cloudletpool_name}=  Set Variable  ${pool['data']['key']['name']}
 
@@ -194,10 +194,10 @@ Success Cloudletpool Usage Via mcctl
    Should Be True  ${num_values_app} > 0
 
    FOR  ${u}  IN  @{result['data'][0]['Series'][0]['values']}
-      Should Be True  '${u[3]}' == '${cloudlet_name_fake}'
+      Should Be True  '${u[3]}' == 'tmocloud-2'
    END
    FOR  ${u}  IN  @{result['data'][1]['Series'][0]['values']}
-      Should Be True  '${u[6]}' == '${cloudlet_name_fake}'
+      Should Be True  '${u[6]}' == 'tmocloud-2'
    END
 
    IF  'showvmappsonly=${True}' in '${parmss}'
