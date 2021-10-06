@@ -151,7 +151,7 @@ class tc_findcloudlet_ratelimit(unittest.TestCase):
             correct_error = False
             if 'status = StatusCode.RESOURCE_EXHAUSTED' in r:
                 if target == 'PerIp':
-                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: client exceeded api rate limit per ip. Exceeded rate of 70.250000 requests per second.."' in r:
+                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: Client exceeded api rate limit per ip. Exceeded rate of 70.250000 requests per second.."' in r:
                         correct_error = True
                 elif target == 'AllRequests':
                     if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: Exceeded rate of 70.250000 requests per second.."' in r:
@@ -177,10 +177,10 @@ class tc_findcloudlet_ratelimit(unittest.TestCase):
             correct_error = False
             if 'status = StatusCode.RESOURCE_EXHAUSTED' in r:
                 if target == 'PerIp':
-                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: client exceeded api rate limit per ip. exceeded limit of 50, retry again in ' in r:
+                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: Client exceeded api rate limit per ip. Exceeded limit of 50, retry again in ' in r:
                         correct_error = True
                 elif target == 'AllRequests':
-                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: exceeded limit of 50, retry again in ' in r:
+                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: Exceeded limit of 50, retry again in ' in r:
                         correct_error = True
 
             expect(correct_error == True, 'status code fail. got ' + r)
@@ -207,10 +207,10 @@ class tc_findcloudlet_ratelimit(unittest.TestCase):
             correct_error = False
             if 'status = StatusCode.RESOURCE_EXHAUSTED' in r:
                 if target == 'PerIp':
-                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: client exceeded api rate limit per ip. exceeded limit of 100, retry again in ' in r:
+                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: Client exceeded api rate limit per ip. Exceeded limit of 100, retry again in ' in r:
                         correct_error = True
                 elif target == 'AllRequests':
-                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: exceeded limit of 100, retry again in ' in r:
+                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: Exceeded limit of 100, retry again in ' in r:
                         correct_error = True
 
             expect(correct_error == True, 'status code fail. got ' + r)
@@ -237,10 +237,10 @@ class tc_findcloudlet_ratelimit(unittest.TestCase):
             correct_error = False
             if 'status = StatusCode.RESOURCE_EXHAUSTED' in r:
                 if target == 'PerIp':
-                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: client exceeded api rate limit per ip. exceeded limit of 100, retry again in ' in r:
+                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: Client exceeded api rate limit per ip. Exceeded limit of 100, retry again in ' in r:
                         correct_error = True
                 elif target == 'AllRequests':
-                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: exceeded limit of 100, retry again in ' in r:
+                    if 'details = "Request for /distributed_match_engine.MatchEngineApi/FindCloudlet rate limited, please retry later. Error is: Exceeded limit of 100, retry again in ' in r:
                         correct_error = True
             expect(correct_error == True, 'status code fail. got ' + r)
 
