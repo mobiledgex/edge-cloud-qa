@@ -10,7 +10,7 @@ Test Teardown  Cleanup Provisioning
 ${organization}=  GDDT
 ${pool_name_automation}=  automationVMPool
 
-${region}=  EU
+${region}=  US
 
 *** Test Cases ***
 # ECQ-2382
