@@ -208,11 +208,11 @@ CreateCloudlet - shall be able to create cloudlet with allianceorgs
 
    [Tags]  AllianceOrg
 
-   @{alliance_list}=  Create List  dmuus
+   @{alliance_list}=  Create List  att
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  alliance_org_list=${alliance_list}  token=${token}
    Should Be Equal  ${cloudlet['data']['alliance_orgs']}  ${alliance_list}
 
-   @{alliance_list}=  Create List  dmuus  GDDT  packet
+   @{alliance_list}=  Create List  att  GDDT  packet
    ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}2  operator_org_name=${operator_name_fake}  alliance_org_list=${alliance_list}  token=${token}
    Should Be Equal  ${cloudlet['data']['alliance_orgs']}  ${alliance_list}
 
