@@ -133,7 +133,7 @@ User of Operator A shall not be able to fetch cloudlet resource usage/metrics da
 
    Run Keyword and Expect Error   ('code=403', 'error={"message":"Forbidden"}')   Get ResourceQuota Props  region=US  operator_org_name=packet  platform_type=PlatformTypeOpenstack  token=${tokenop}
 
-   Run Keyword and Expect Error   ('code=403', 'error={"message":"Forbidden"}')   Get CloudletUsage Metrics  region=US  operator_org_name=packet  cloudlet_name=packet-qaregression  selector=flavorusage  last=2  token=${tokenop}
+   Run Keyword and Expect Error   ('code=403', 'error={"message":"Forbidden"}')   Get CloudletUsage Metrics  region=US  operator_org_name=packet  cloudlet_name=packet-qaregression  selector=flavorusage  limit=2  token=${tokenop}
  
 *** Keywords ***
 Setup
@@ -161,7 +161,7 @@ Get Details
    ${resourcequotaprops}=  Get ResourceQuota Props  region=${region}  operator_org_name=${operator_name_openstack}  platform_type=PlatformTypeOpenstack  token=${optoken}
    Should Not Be EMPTY  ${resourcequotaprops}
 
-   ${metrics}=  Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  selector=flavorusage  last=2  token=${optoken}
+   ${metrics}=  Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  selector=flavorusage  limit=2  token=${optoken}
    Should Not Be EMPTY  ${metrics}
 
 Get Error
@@ -169,4 +169,4 @@ Get Error
 
    Run Keyword and Expect Error   ('code=403', 'error={"message":"Forbidden"}')   Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${devtoken}
    Run Keyword and Expect Error   ('code=403', 'error={"message":"Forbidden"}')   Get ResourceQuota Props  region=${region}  operator_org_name=${operator_name_openstack}  platform_type=PlatformTypeOpenstack  token=${devtoken}
-   Run Keyword and Expect Error   ('code=403', 'error={"message":"Forbidden"}')   Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  selector=flavorusage  last=2  token=${devtoken}
+   Run Keyword and Expect Error   ('code=403', 'error={"message":"Forbidden"}')   Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  selector=flavorusage  limit=2  token=${devtoken}
