@@ -157,7 +157,7 @@ Controller throws proper error and displays correct resource usage/metrics data 
    Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  auto_delete=False  token=${tokendev}
    Verify Resource Usage  4  14336  8
 
-   ${metrics}=  Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  selector=resourceusage  last=2  token=${tokenop}
+   ${metrics}=  Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  selector=resourceusage  limit=2  token=${tokenop}
 
    Length Should Be  ${metrics['data'][0]['Series'][0]['values']}   1
    Length Should Be  ${metrics['data'][0]['Series'][0]['columns']}  9
@@ -313,7 +313,7 @@ Cloudlet Update
 Verify ResourceUsage Metrics
    [Arguments]   ${instances}  ${ram}  ${vcpu}  ${length}
 
-   ${metrics}=  Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  selector=resourceusage  last=2  token=${tokenop}
+   ${metrics}=  Get CloudletUsage Metrics  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  selector=resourceusage  limit=2  token=${tokenop}
 
    Length Should Be  ${metrics['data'][0]['Series'][0]['values']}   ${length}
    Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['values'][0][6]}    ${instances}
