@@ -54,7 +54,7 @@ CreateRateLimitFlow - shall be able to create max num per ip rate limiters
    ${flow_limit}=  Set Variable  100
    ${flow_add}=  Evaluate  ${flow_limit} + 10
 
-   ${max}=  Update Settings  region=${region}  max_num_per_ip_rate_limiters=${flow_limit}
+   ${max}=  Update Settings  region=${region}  rate_limit_max_tracked_ips=${flow_limit}
 
 #   FOR  ${x}  IN RANGE  ${max['max_num_per_ip_rate_limiters']+1}
    FOR  ${x}  IN RANGE  ${flow_add}
@@ -75,7 +75,7 @@ CreateRateLimitFlow - shall be able to create multiple TokenBucket/AllRequests f
 
    ${flow_limit}=  Set Variable  150
 
-   ${max}=  Update Settings  region=${region}  max_num_per_ip_rate_limiters=100
+   ${max}=  Update Settings  region=${region}  rate_limit_max_tracked_ips=100
 
    FOR  ${x}  IN RANGE  ${flow_limit}
        Flow Shall Be Created  flow_settings_name=${flow_name}${x}  api_name=RegisterClient  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=${5}  burst_size=${1}
@@ -95,7 +95,7 @@ CreateRateLimitFlow - shall be able to create multiple LeakyBucket/PerUser flows
 
    ${flow_limit}=  Set Variable  150
 
-   ${max}=  Update Settings  region=${region}  max_num_per_ip_rate_limiters=100
+   ${max}=  Update Settings  region=${region}  rate_limit_max_tracked_ips=100
 
    FOR  ${x}  IN RANGE  ${flow_limit}
        Flow Shall Be Created  flow_settings_name=${flow_name}${x}  api_name=RegisterClient  rate_limit_target=PerUser  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=${5}

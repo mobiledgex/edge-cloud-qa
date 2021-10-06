@@ -65,7 +65,7 @@ CreateRateLimitFlow - createflow with missing parms shall return error
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid ApiName"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  use_defaults=${False}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid RateLimitTarget"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  use_defaults=${False}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid ApiEndpointType"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  use_defaults=${False}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid ApiEndpointType"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid FlowAlgorithm"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  use_defaults=${False}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid ReqsPerSecond 0.000000, must be greater than 0"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  use_defaults=${False}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid ReqsPerSecond 0.000000, must be greater than 0"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  use_defaults=${False}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid BurstSize 0, must be greater than 0"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  use_defaults=${False}
@@ -91,16 +91,16 @@ CreateRateLimitFlow - create with invalid parms shall return error
    # decimal burst size
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int64, but got number 5.1 for field \\\\"FlowRateLimitSettings.settings.burst_size\\\\" at offset 235"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5.1  use_defaults=${False}
 
-   # EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
+   # fixed - EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
    # invalid rate limit target
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"xInvalid JSON data: No enum value for AllRequest"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid RateLimitTarget value \\\\"AllRequest\\\\""}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
    # invalid api_endpoint_type
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"xInvalid JSON data: No enum value for Dm"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid ApiEndpointType value \\\\"Dm\\\\""}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
    # invalid flow algor
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"xInvalid JSON data: No enum value for xxx"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=xxx  requests_per_second=5  burst_size=5  use_defaults=${False}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid FlowAlgorithm 99"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=${99}  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid FlowRateLimitAlgorithm value \\\\"xxx\\\\""}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=xxx  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid FlowRateLimitAlgorithm value 99"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=${99}  requests_per_second=5  burst_size=5  use_defaults=${False}
 
 # ECQ-3724
 CreateRateLimitMaxRequests - create with invalid parms shall return error
@@ -117,12 +117,12 @@ CreateRateLimitMaxRequests - create with invalid parms shall return error
    ${error}=  Run Keyword and Expect Error  *  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11.5  interval=1m
    Should Contain  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int64, but got number 11.5 for field \\\\"MaxReqsRateLimitSettings.settings.max_requests\\\\" at offset
 
-   # EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
+   # fixed - EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
    # invalid rate limit target
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"xInvalid JSON data: No enum value for AllRequest"}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid RateLimitTarget value \\\\"AllRequest\\\\""}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
 
    # invalid api_endpoint_type
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"xInvalid JSON data: No enum value for Dm"}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid ApiEndpointType value \\\\"Dm\\\\""}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
 
    # invalid interval
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"1\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1
@@ -172,7 +172,7 @@ CreateRateLimitMaxRequests - create with missing parms shall return error
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid ApiName"}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  use_defaults=${False}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid RateLimitTarget"}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  use_defaults=${False}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid ApiEndpointType"}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  use_defaults=${False}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid ApiEndpointType"}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid MaxReqsAlgorithm"}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  use_defaults=${False}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid MaxRequests 0, must be greater than 0"}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  use_defaults=${False}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid Interval 0, must be greater than 0"}')  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=1  use_defaults=${False}
 
