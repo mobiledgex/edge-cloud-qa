@@ -78,14 +78,16 @@ class RateLimitSettings(MexOperation):
             except Exception:
                 settings_dict['max_reqs_algorithm'] = max_requests_algorithm
         if requests_per_second is not None:
-            try:
-                settings_dict['reqs_per_second'] = int(requests_per_second)
-            except Exception:
+            if isinstance(requests_per_second, str):
                 try:
-                    settings_dict['reqs_per_second'] = float(requests_per_second)
+                    settings_dict['reqs_per_second'] = int(requests_per_second)
                 except Exception:
-                    settings_dict['reqs_per_second'] = requests_per_second
-
+                    try:
+                        settings_dict['reqs_per_second'] = float(requests_per_second)
+                    except Exception:
+                        settings_dict['reqs_per_second'] = requests_per_second
+            else:
+                settings_dict['reqs_per_second'] = requests_per_second
         if max_requests is not None:
             try:
                 settings_dict['max_requests'] = int(max_requests)
