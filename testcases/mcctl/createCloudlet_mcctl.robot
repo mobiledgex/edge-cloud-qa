@@ -142,22 +142,22 @@ AddAllianceOrg - mcctl shall handle cloudlet addallianceorg
    [Setup]  Update Setup
    [Teardown]  Update Teardown
 
-   Run mcctl  cloudlet addallianceorg region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} organization=tmus   version=${version}
+   Run mcctl  cloudlet addallianceorg region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} organization=packet   version=${version}
    ${show}=  Run mcctl  cloudlet show region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  version=${version}
 
    Run mcctl  cloudlet addallianceorg region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} organization=TDG   version=${version}
    ${show1}=  Run mcctl  cloudlet show region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  version=${version}
 
-   Run mcctl  cloudlet removeallianceorg region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} organization=tmus   version=${version}
+   Run mcctl  cloudlet removeallianceorg region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} organization=packet   version=${version}
    ${show2}=  Run mcctl  cloudlet show region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  version=${version}
 
    Run mcctl  cloudlet removeallianceorg region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} organization=TDG   version=${version}
    ${show3}=  Run mcctl  cloudlet show region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  version=${version}
 
-   @{alliancelist}=  Create List  tmus
+   @{alliancelist}=  Create List  packet 
    Should Be Equal  ${show[0]['alliance_orgs']}  ${alliancelist}
 
-   @{alliancelist}=  Create List  tmus  TDG
+   @{alliancelist}=  Create List  packet  TDG
    Should Be Equal  ${show1[0]['alliance_orgs']}  ${alliancelist}
 
    @{alliancelist}=  Create List  TDG

@@ -11,8 +11,8 @@ Test Teardown  Cleanup Provisioning
 ${region}=  US
 
 *** Test Cases ***
-# ECQ-3718
-UpdateRateLimitFlow- update without region shall return error
+# ECQ-4055
+UpdateRateLimitFlow - update without region shall return error
    [Documentation]
    ...  - send UpdateRateLimitFlow without region
    ...  - verify error is returned
@@ -21,8 +21,8 @@ UpdateRateLimitFlow- update without region shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No region specified"}')  Update Rate Limit Flow  token=${token}  use_defaults=${False}
 
-# ECQ-3719
-UpdateRateLimitMaxRequests- update without region shall return error
+# ECQ-4056
+UpdateRateLimitMaxRequests - update without region shall return error
    [Documentation]
    ...  - send UpdateRateLimitMaxRequests without region
    ...  - verify error is returned
@@ -31,7 +31,7 @@ UpdateRateLimitMaxRequests- update without region shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No region specified"}')  Update Rate Limit Max Requests  token=${token}  use_defaults=${False}
 
-# ECQ-3720
+# ECQ-4057
 UpdateRateLimitFlow - update without token shall return error
    [Documentation]
    ...  - send UpdateRateLimitFlow without token
@@ -41,7 +41,7 @@ UpdateRateLimitFlow - update without token shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Update Rate Limit Flow  region=${region}  use_defaults=${False}
 
-# ECQ-3721
+# ECQ-4058
 UpdateRateLimitMaxRequests - update without token shall return error
    [Documentation]
    ...  - send UpdateRateLimitMaxRequests without token
@@ -51,7 +51,7 @@ UpdateRateLimitMaxRequests - update without token shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Update Rate Limit Max Requests  region=${region}  use_defaults=${False}
 
-# ECQ-3722
+# ECQ-4059
 UpdateRateLimitFlow - update with missing parms shall return error
    [Documentation]
    ...  - send UpdateRateLimitFlow with various missing parms 
@@ -66,7 +66,7 @@ UpdateRateLimitFlow - update with missing parms shall return error
       Invalid RateLimitTarget   flow_settings_name=${flow_name}  api_name=yy  use_defaults=${False}
       Invalid ApiEndpointType   flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  use_defaults=${False}
 
-# ECQ-3723
+# ECQ-4060
 UpdateRateLimitFlow - update with invalid parms shall return error 
    [Documentation]
    ...  - send UpdateRateLimitFlow with various invalid parms
@@ -89,18 +89,18 @@ UpdateRateLimitFlow - update with invalid parms shall return error
    # decimal burst size
    Invalid JSON data: Unmarshal error: expected int64, but got number 5.1 for field \\\\"FlowRateLimitSettings.settings.burst_size\\\\" at offset  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5.1  use_defaults=${False}
 
-   # EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
+   # fixed - EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
    # invalid rate limit target
-   xInvalid JSON data: No enum value for AllRequest  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Invalid JSON data: Invalid RateLimitTarget value \\\\"AllRequest\\\\"  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
    # invalid api_endpoint_type
-   xInvalid JSON data: No enum value for Dm  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Invalid JSON data: Invalid ApiEndpointType value \\\\"Dm\\\\"  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
    # invalid flow algor
-   xInvalid JSON data: No enum value for xxx  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=xxx  requests_per_second=5  burst_size=5  use_defaults=${False}
-   Invalid FlowAlgorithm 99  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=${99}  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Invalid JSON data: Invalid FlowRateLimitAlgorithm value \\\\"xxx\\\\""  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=xxx  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Invalid JSON data: Invalid FlowRateLimitAlgorithm value 99  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=${99}  requests_per_second=5  burst_size=5  use_defaults=${False}
 
-# ECQ-3724
+# ECQ-4061
 UpdateRateLimitMaxRequests - update with invalid parms shall return error
    [Documentation]
    ...  - send UpdateRateLimitMaxRequests with various invalid parms
@@ -116,19 +116,19 @@ UpdateRateLimitMaxRequests - update with invalid parms shall return error
    # decimal maxrequests
    Invalid JSON data: Unmarshal error: expected int64, but got number 11.5 for field \\\\"MaxReqsRateLimitSettings.settings.max_requests\\\\" at offset  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11.5  interval=1m
 
-   # EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
+   # fixed - EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
    # invalid rate limit target
-   xInvalid JSON data: No enum value for AllRequest  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
+   Invalid JSON data: Invalid RateLimitTarget value \\\\"AllRequest\\\\"  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
 
    # invalid api_endpoint_type
-   xInvalid JSON data: No enum value for Dm  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
+   Invalid JSON data: Invalid ApiEndpointType value \\\\"Dm\\\\"  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
 
    # invalid interval
    Invalid JSON data: Unmarshal duration \\\\"1\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1
    Invalid JSON data: Unmarshal duration \\\\"m\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=m
    Invalid Interval -1000000000, must be greater than 0                                                    max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=-1s
 
-# ECQ-3725
+# ECQ-4062
 UpdateRateLimitFlow - update with non-existent flow shall return error
    [Documentation]
    ...  - send UpdateRateLimitFlow for flow that doesnt exist 
@@ -141,20 +141,20 @@ UpdateRateLimitFlow - update with non-existent flow shall return error
    ${error}=  Run Keyword and Expect Error  *  Update Rate Limit Flow  region=${region}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5
    Should Be Equal  ${error}  ('code=400', 'error={"message":"FlowRateLimitSettings key {\\\\"flow_settings_name\\\\":\\\\"${flow_name}\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":1,\\\\"rate_limit_target\\\\":1}} not found"}')
 
-# ECQ-3726
+# ECQ-4063
 UpdateRateLimitMaxRequests - update with non-existent flow shall return error
    [Documentation]
-   ...  - send same UpdateRateLimitMaxRequests for flow that doesnt exist
+   ...  - send UpdateRateLimitMaxRequests for flow that doesnt exist
    ...  - verify error is returned
 
    [Tags]  RateLimit
 
-   # EDGECLOUD-5487  ratelimitsettings updateflow gives wrong error when key not found
+   # EDGECLOUD-5685 - ratelimitsettings updatemaxreqs gives wrong error when key not found 
 
    ${error}=  Run Keyword and Expect Error  *  Update Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=1  interval=1m
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"MaxReqsRateLimitSettings key {\\\\"max_reqs_settings_name\\\\":\\\\"xx\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":1,\\\\"rate_limit_target\\\\":1}} already exists"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"FlowRateLimitSettings key {\\\\"max_reqs_settings_name\\\\":\\\\"xx\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":1,\\\\"rate_limit_target\\\\":1}} not found"}')
 
-# ECQ-3727
+# ECQ-4064
 UpdateRateLimitMaxRequests - update with missing parms shall return error
    [Documentation]
    ...  - send UpdateRateLimitMaxRequests with various missing parms

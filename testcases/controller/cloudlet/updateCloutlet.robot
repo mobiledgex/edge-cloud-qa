@@ -330,11 +330,11 @@ UpdateCloudlet - shall be able to add allianceorgs to cloudlet
    Should Not Contain             ${cloudlet['data']}  alliance_orgs
 
    # update cloudlet with allianceorg
-   @{allianceorg}=  Create List  tmus
+   @{allianceorg}=  Create List  packet
    ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_list=${allianceorg}
    Should Be Equal   ${cloudlet_update['data']['alliance_orgs']}  ${allianceorg}
 
-   @{allianceorg}=  Create List  tmus  TDG  packet
+   @{allianceorg}=  Create List  TDG  packet
    ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_list=${allianceorg}
    Should Be Equal   ${cloudlet_update['data']['alliance_orgs']}  ${allianceorg}
 
@@ -348,7 +348,7 @@ UpdateCloudlet - shall be able to remove allianceorgs from cloudlet
    [Tags]  AllianceOrg
 
    # create cloudlet with allianceorgs
-   @{allianceorg}=  Create List  tmus  TDG  packet
+   @{allianceorg}=  Create List  TDG  packet
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  alliance_org_list=${allianceorg}
    Should Be Equal   ${cloudlet['data']['alliance_orgs']}  ${allianceorg}
 
