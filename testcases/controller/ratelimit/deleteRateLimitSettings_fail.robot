@@ -11,8 +11,8 @@ Test Teardown  Cleanup Provisioning
 ${region}=  US
 
 *** Test Cases ***
-# ECQ-3718
-DeleteRateLimitFlow- delete without region shall return error
+# ECQ-4045
+DeleteRateLimitFlow - delete without region shall return error
    [Documentation]
    ...  - send DeleteRateLimitFlow without region
    ...  - verify error is returned
@@ -21,8 +21,8 @@ DeleteRateLimitFlow- delete without region shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No region specified"}')  Delete Rate Limit Flow  token=${token}  use_defaults=${False}
 
-# ECQ-3719
-DeleteRateLimitMaxRequests- delete without region shall return error
+# ECQ-4046
+DeleteRateLimitMaxRequests - delete without region shall return error
    [Documentation]
    ...  - send DeleteRateLimitMaxRequests without region
    ...  - verify error is returned
@@ -31,7 +31,7 @@ DeleteRateLimitMaxRequests- delete without region shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No region specified"}')  Delete Rate Limit Max Requests  token=${token}  use_defaults=${False}
 
-# ECQ-3720
+# ECQ-4047
 DeleteRateLimitFlow - delete without token shall return error
    [Documentation]
    ...  - send DeleteRateLimitFlow without token
@@ -41,7 +41,7 @@ DeleteRateLimitFlow - delete without token shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Delete Rate Limit Flow  region=${region}  use_defaults=${False}
 
-# ECQ-3721
+# ECQ-4048
 DeleteRateLimitMaxRequests - delete without token shall return error
    [Documentation]
    ...  - send DeleteRateLimitMaxRequests without token
@@ -51,7 +51,7 @@ DeleteRateLimitMaxRequests - delete without token shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No bearer token found"}')  Delete Rate Limit Max Requests  region=${region}  use_defaults=${False}
 
-# ECQ-3722
+# ECQ-4049
 DeleteRateLimitFlow - delete flow with missing parms shall return error
    [Documentation]
    ...  - send DeleteRateLimitFlow with various missing parms 
@@ -64,7 +64,7 @@ DeleteRateLimitFlow - delete flow with missing parms shall return error
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid RateLimitTarget"}')  Delete Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  use_defaults=${False}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid ApiEndpointType"}')  Delete Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  use_defaults=${False}
 
-# ECQ-3723
+# ECQ-4050
 DeleteRateLimitFlow - delete with invalid parms shall return error 
    [Documentation]
    ...  - send DeleteRateLimitFlow with various invalid parms
@@ -72,14 +72,14 @@ DeleteRateLimitFlow - delete with invalid parms shall return error
 
    [Tags]  RateLimit
 
-   # EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
+   # fixed - EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
    # invalid rate limit target
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"xInvalid JSON data: No enum value for AllRequest"}')  Delete Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid RateLimitTarget value \\\\"AllRequest\\\\""}')  Delete Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
    # invalid api_endpoint_type
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"xInvalid JSON data: No enum value for Dm"}')  Delete Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid ApiEndpointType value \\\\"Dm\\\\""}')  Delete Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
-# ECQ-3724
+# ECQ-4051
 DeleteRateLimitMaxRequests - delete with invalid parms shall return error
    [Documentation]
    ...  - send DeleteRateLimitMaxRequests with various invalid parms
@@ -87,14 +87,14 @@ DeleteRateLimitMaxRequests - delete with invalid parms shall return error
 
    [Tags]  RateLimit
 
-   # EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
+   # fixed - EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
    # invalid rate limit target
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"xInvalid JSON data: No enum value for AllRequest"}')  Delete Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid RateLimitTarget value \\\\"AllRequest\\\\""}')  Delete Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
 
    # invalid api_endpoint_type
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"xInvalid JSON data: No enum value for Dm"}')  Delete Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid ApiEndpointType value \\\\"Dm\\\\""}')  Delete Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
 
-# ECQ-3725
+# ECQ-4052
 DeleteRateLimitFlow - delete with non-existent flow shall return error
    [Documentation]
    ...  - send DeleteRateLimitFlow on flow that doesnt exist
@@ -107,7 +107,7 @@ DeleteRateLimitFlow - delete with non-existent flow shall return error
    ${error}=  Run Keyword and Expect Error  *  Delete Rate Limit Flow  region=${region}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme 
    Should Be Equal  ${error}  ('code=400', 'error={"message":"FlowRateLimitSettings key {\\\\"flow_settings_name\\\\":\\\\"${flow_name}\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":1,\\\\"rate_limit_target\\\\":1}} not found"}')
 
-# ECQ-3726
+# ECQ-4053
 DeleteRateLimitMaxRequests - delete with non-existent max requests shall return error
    [Documentation]
    ...  - send  DeleteRateLimitMaxRequests on max requests that doesnt exist
@@ -120,7 +120,7 @@ DeleteRateLimitMaxRequests - delete with non-existent max requests shall return 
    ${error}=  Run Keyword and Expect Error  *  Delete Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme
    Should Be Equal  ${error}  ('code=400', 'error={"message":"MaxReqsRateLimitSettings key {\\\\"max_reqs_settings_name\\\\":\\\\"xx\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":1,\\\\"rate_limit_target\\\\":1}} not found"}')
 
-# ECQ-3727
+# ECQ-4054
 DeleteRateLimitMaxRequests - delete with missing parms shall return error
    [Documentation]
    ...  - send DeleteRateLimitMaxRequests with various missing parms

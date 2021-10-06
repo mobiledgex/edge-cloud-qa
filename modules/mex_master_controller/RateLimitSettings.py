@@ -78,12 +78,14 @@ class RateLimitSettings(MexOperation):
             except Exception:
                 settings_dict['max_reqs_algorithm'] = max_requests_algorithm
         if requests_per_second is not None:
-            if isinstance(requests_per_second, int):
+            try:
                 settings_dict['reqs_per_second'] = int(requests_per_second)
-            elif isinstance(requests_per_second, float):
-                settings_dict['reqs_per_second'] = float(requests_per_second)
-            else:
-                settings_dict['reqs_per_second'] = requests_per_second
+            except Exception:
+                try:
+                    settings_dict['reqs_per_second'] = float(requests_per_second)
+                except Exception:
+                    settings_dict['reqs_per_second'] = requests_per_second
+
         if max_requests is not None:
             try:
                 settings_dict['max_requests'] = int(max_requests)
@@ -237,7 +239,7 @@ class RateLimitSettings(MexOperation):
         msg_dict = {'MaxReqsRateLimitSettings': msg}
 
         msg_dict_show = None
-        if 'key' in msg and 'max_reqs_settings_name' in msg['key']:
+        if 'key' in msg and 'max_reqs_settings_name' in msg['key'] and 'rate_limit_key' in msg['key'] and 'api_name' in msg['key']['rate_limit_key'] and 'api_endpoint_type' in msg['key']['rate_limit_key'] and 'rate_limit_target' in msg['key']['rate_limit_key']:
             msg_show = self._build(max_requests_settings_name=msg['key']['max_reqs_settings_name'], api_name=msg['key']['rate_limit_key']['api_name'], api_endpoint_type=msg['key']['rate_limit_key']['api_endpoint_type'], rate_limit_target=msg['key']['rate_limit_key']['rate_limit_target'], use_defaults=False)
             msg_dict_show = {'MaxReqsRateLimitSettings': msg_show}
 

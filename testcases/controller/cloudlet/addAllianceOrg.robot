@@ -23,20 +23,20 @@ AddAllianceOrg - shall be able to add alliance orgs to a cloudlet
 
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}
 
-   Add Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=dmuus
+   Add Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=att
 
-   @{alliance_list}=  Create List  dmuus
+   @{alliance_list}=  Create List  att 
    ${cloudlet_show}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  use_defaults=${False}  token=${token}
    Should Be Equal  ${cloudlet_show[0]['data']['alliance_orgs']}  ${alliance_list}
 
    Add Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=GDDT
    Add Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=packet
 
-   @{alliance_list}=  Create List  dmuus  GDDT  packet
+   @{alliance_list}=  Create List  att  GDDT  packet
    ${cloudlet_show}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  use_defaults=${False}  token=${token}
    Should Be Equal  ${cloudlet_show[0]['data']['alliance_orgs']}  ${alliance_list}
 
-   @{alliance_list}=  Create List  dmuus  packet
+   @{alliance_list}=  Create List  att  packet
    Remove Cloudlet Alliance Org  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  alliance_org_name=GDDT
    ${cloudlet_show}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  use_defaults=${False}  token=${token}
    Should Be Equal  ${cloudlet_show[0]['data']['alliance_orgs']}  ${alliance_list}
