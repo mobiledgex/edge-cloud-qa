@@ -54,7 +54,10 @@ ClientAppUsageMetrics - operator get with no cloudlet org shall return error
    ...  - get clientappusage metrics with no cloudlet org as operator
    ...  - verify error
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name_fake}
+   ${cloudlet_name}=  Get Default Cloudlet Name
+   Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}
+
+   @{cloudlet_list}=  Create List  ${cloudlet_name}
    ${pool_return}=  Create Cloudlet Pool  region=${region}  token=${op_manager_token}  operator_org_name=${operator_name_fake}  cloudlet_list=${cloudlet_list}
    Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}  token=${op_manager_token}
    Create Cloudlet Pool Access Response    region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}  decision=accept  token=${dev_manager_token}

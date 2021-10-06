@@ -194,11 +194,33 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures when quotamaxv
       Error: Bad Request (400), Resource quota value for vCPUs is less than currently used value. Should be atleast ${vcpus_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=vCPUs  resourcequotas:0.value=${vcpus_updated_value}
       Error: Bad Request (400), Resource quota value for Instances is less than currently used value. Should be atleast ${instances_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Instances  resourcequotas:0.value=${instances_updated_value}
 
+Metrics Cloudletusage - mcctl shall handle failures
+   [Documentation]
+   ...  - send GetCloudletResourceUsage via mcctl with various error cases
+   ...  - verify proper error is received
+
+   [Template]  Fail Metrics CloudletUsage Via mcctl
+
+      # missing arguments
+      Error: Bad Request (400), Cloudlet details must be present
+      Error: Bad Request (400), Cloudlet details must be present  cloudlet=automationMunichCloudlet
+
+      # invalid values
+      Error: Bad Request (400), Cloudlet does not exist  cloudlet-org=x
+
 *** Keywords ***
 Setup
    ${cloudlet_name}=  Get Default Cloudlet Name
 
    Set Suite Variable  ${cloudlet_name}
+
+Fail Metrics CloudletUsage Via mcctl
+   [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
+
+   ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
+
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  metrics cloudletusage region=${region} selector=resourceusage ${parmss}    version=${version}
+   Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
 Fail GetCloudletResourceUsage Via mcctl
    [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
