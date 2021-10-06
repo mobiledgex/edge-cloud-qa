@@ -9,6 +9,7 @@ Test Teardown  Cleanup Provisioning
 *** Variables ***
 ${organization}=  GDDT
 ${region}=  EU
+${region_US}=  US
 
 *** Test Cases ***
 # ECQ-2357
@@ -45,7 +46,7 @@ RemoveVMPoolMember - remove without VM name shall return error
    &{vm1}=  Create Dictionary  external_ip=80.187.128.12  internal_ip=80.187.128.12 
    @{vmlist}=  Create List  ${vm1}
 
-   ${error}=  Run Keyword And Expect Error  *  Remove VM Pool Member  region=${region}  token=${token}  vm_pool_name=automationVMPool  org_name=${organization}  use_defaults=${False}
+   ${error}=  Run Keyword And Expect Error  *  Remove VM Pool Member  region=${region_US}  token=${token}  vm_pool_name=automationVMPool  org_name=${organization}  use_defaults=${False}
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Missing VM name"}
@@ -56,7 +57,7 @@ RemoveVMPoolMember - remove with unknown vm name shall return error
    ...  - send RemoveVMPoolMember with unknown vm name
    ...  - verify proper error is received
 
-   ${error}=  Run Keyword And Expect Error  *  Remove VM Pool Member  region=${region}  token=${token}  vm_pool_name=automationVMPool  org_name=${organization}  vm_name=xxxxxx
+   ${error}=  Run Keyword And Expect Error  *  Remove VM Pool Member  region=${region_US}  token=${token}  vm_pool_name=automationVMPool  org_name=${organization}  vm_name=xxxxxx
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"VM xxxxxx does not exist in the pool"}
@@ -69,7 +70,7 @@ RemoveVMPoolMember - remove while in use shall return error
 
    ${pool}=  Show VM Pool  region=${region}  vm_pool_name=automationVMPool  org_name=${organization}
 
-   ${error}=  Run Keyword And Expect Error  *  Remove VM Pool Member  region=${region}  token=${token}  vm_pool_name=automationVMPool  org_name=${organization}  vm_name=${pool[0]['data']['vms'][0]['name']}
+   ${error}=  Run Keyword And Expect Error  *  Remove VM Pool Member  region=${region_US}  token=${token}  vm_pool_name=automationVMPool  org_name=${organization}  vm_name=${pool[0]['data']['vms'][0]['name']}
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Encountered failures: Unable to delete VM ${pool[0]['data']['vms'][0]['name']}, as it is in use"}
