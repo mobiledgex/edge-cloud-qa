@@ -79,8 +79,8 @@ CreateRateLimitFlow - create with invalid parms shall return error
    [Tags]  RateLimit
 
    # create with LeakyBucket and burstsize
-   # EDGECLOUD-5465  able to create/update ratelimitsettings flow with flowalgorithm=LeakyBucketAlgorithm and burstsize=2
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid BurstSize 0, must be greater than 0"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   # fixed - EDGECLOUD-5465  able to create/update ratelimitsettings flow with flowalgorithm=LeakyBucketAlgorithm and burstsize=2
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"BurstSize does not apply for the leaky bucket algorithm"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
    # negative requests per second
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid ReqsPerSecond -5.000000, must be greater than 0"}')  Create Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=-5  burst_size=5  use_defaults=${False}
