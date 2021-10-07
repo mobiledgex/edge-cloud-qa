@@ -194,19 +194,29 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures when quotamaxv
       Error: Bad Request (400), Resource quota value for vCPUs is less than currently used value. Should be atleast ${vcpus_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=vCPUs  resourcequotas:0.value=${vcpus_updated_value}
       Error: Bad Request (400), Resource quota value for Instances is less than currently used value. Should be atleast ${instances_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Instances  resourcequotas:0.value=${instances_updated_value}
 
+# ECQ-4044
 Metrics Cloudletusage - mcctl shall handle failures
    [Documentation]
-   ...  - send GetCloudletResourceUsage via mcctl with various error cases
+   ...  - send cloudletusage metrics via mcctl with various error cases
    ...  - verify proper error is received
 
    [Template]  Fail Metrics CloudletUsage Via mcctl
 
       # missing arguments
-      Error: Bad Request (400), Cloudlet details must be present
-      Error: Bad Request (400), Cloudlet details must be present  cloudlet=automationSunnydaleCloudlet
+      Error: missing required args: selector
+      Error: Bad Request (400), Cloudlet details must be present  selector=resourceusage
+      Error: Bad Request (400), Cloudlet details must be present  selector=flavorusage
+      Error: Bad Request (400), Cloudlet details must be present  cloudlet=automationSunnydaleCloudlet selector=flavorusage
 
       # invalid values
-      Error: Bad Request (400), Cloudlet does not exist  cloudlet-org=x
+      Error: Bad Request (400), Cloudlet does not exist  cloudlet-org=x selector=resourceusage
+      Error: Bad Request (400), Invalid cloudletusage selector: x, must be one of "resourceusage", "flavorusage"  selector=x cloudlet-org=${operator_name_openstack}
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z07:00"      selector=resourceusage cloudlet-org=${operator_name_openstack} starttime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z07:00"        selector=resourceusage cloudlet-org=${operator_name_openstack} endtime=x
+      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc         selector=resourceusage cloudlet-org=${operator_name_openstack} startage=x
+      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc           selector=resourceusage cloudlet-org=${operator_name_openstack} endage=x
+      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                               selector=resourceusage cloudlet-org=${operator_name_openstack} limit=x
+      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                                          selector=resourceusage cloudlet-org=${operator_name_openstack} numsamples=x
 
 *** Keywords ***
 Setup
@@ -219,7 +229,7 @@ Fail Metrics CloudletUsage Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  metrics cloudletusage region=${region} selector=resourceusage ${parmss}    version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  metrics cloudletusage region=${region} ${parmss}    version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
 Fail GetCloudletResourceUsage Via mcctl
