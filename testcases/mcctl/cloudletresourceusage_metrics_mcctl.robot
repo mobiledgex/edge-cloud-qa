@@ -18,6 +18,7 @@ ${developer}=  MobiledgeX
 ${version}=  latest
 
 *** Test Cases ***
+# ECQ-4065
 Cloudletusage - mcctl shall be able to request resourceusage metrics
    [Documentation]
    ...  - send cloudletusage metrics with selector=resourceusage via mcctl with various parms
@@ -34,6 +35,7 @@ Cloudletusage - mcctl shall be able to request resourceusage metrics
         cloudlet-org=${operator_name_fake}  endage=1s
         cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
 
+# ECQ-4066
 Cloudletusage - mcctl shall be able to request flavorusage metrics
    [Documentation]
    ...  - send cloudletusage metrics with selector=flavorusage via mcctl with various parms
@@ -83,3 +85,4 @@ Setup
    ${result}=  Run mcctl  metrics cloudletusage region=${region} selector=flavorusage ${parmss}  version=${version}
 
    Should Be Equal  ${result['data'][0]['Series'][0]['name']}  cloudlet-flavor-usage
+
