@@ -77,8 +77,8 @@ UpdateRateLimitFlow - update with invalid parms shall return error
    [Template]  Update Flow Fail
 
    # create with LeakyBucket and burstsize
-   # EDGECLOUD-5465  able to create/update ratelimitsettings flow with flowalgorithm=LeakyBucketAlgorithm and burstsize=2
-   Invalid BurstSize 0, must be greater than 0  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   # fixed - EDGECLOUD-5465  able to create/update ratelimitsettings flow with flowalgorithm=LeakyBucketAlgorithm and burstsize=2
+   BurstSize does not apply for the leaky bucket algorithm  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=LeakyBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
    # negative requests per second
    Invalid ReqsPerSecond -5.000000, must be greater than 0  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=-5  burst_size=5  use_defaults=${False}
