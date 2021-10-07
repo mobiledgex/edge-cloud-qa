@@ -572,6 +572,12 @@ class MexDme(MexGrpc):
     def create_client_edge_event(self, client_edge_event_obj=None, **kwargs):
         response = None
 
+        check_response = True
+        if 'ignore_response' in kwargs:
+            if kwargs['ignore_response']:
+                check_response = False
+            del kwargs['ignore_response']
+
         if not client_edge_event_obj:
             request = StreamEdgeEvent(**kwargs).request
 
@@ -580,12 +586,16 @@ class MexDme(MexGrpc):
         self.edge_event_queue.put(request)
         response = next(self.edge_event_stream)
         logging.debug(f'response:{response}')
-        if kwargs['event_type'] == 3:  # EVENT_LATENCY_REQUEST
-            if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_LATENCY_PROCESSED:
-                raise Exception(f'stream edge event error. expected event_type: EVENT_LATENCY_REQUEST, got {response}')
-        if kwargs['event_type'] == 4:  # EVENT_CLOUDLET_UPDATE
-            if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_CLOUDLET_UPDATE:
-                raise Exception(f'stream edge event error. expected event_type: EVENT_CLOUDLET_UPDATE, got {response}')
+
+        if check_response:
+            if kwargs['event_type'] == 3:  # EVENT_LATENCY_REQUEST
+                if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_LATENCY_PROCESSED:
+                    raise Exception(f'stream edge event error. expected event_type: EVENT_LATENCY_PROCESSED, got {response}')
+            if kwargs['event_type'] == 4:  # EVENT_CLOUDLET_UPDATE
+                if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_CLOUDLET_UPDATE:
+                    raise Exception(f'stream edge event error. expected event_type: EVENT_CLOUDLET_UPDATE, got {response}')
+        else:
+            logging.info('ignore_response set, so not checking the reponse value and just returning it')
 
         return response
 
