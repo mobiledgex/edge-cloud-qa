@@ -30,7 +30,7 @@ cloudlet_long = -91        # this is used to calculate client distance from clou
 # cloudlet_lat = 31          # this is used to calculate client distance from cloudlet for setting latency values
 # cloudlet_long = -91        # this is used to calculate client distance from cloudlet for setting latency values
 
-num_clients = 1          # number of clients
+num_clients = 100          # number of clients
 num_latency_messages = -1  # number of latency messages to send to each client before exiting. set to 0 or less for infinite
 
 # random latency values will be generated and sent every x seconds
