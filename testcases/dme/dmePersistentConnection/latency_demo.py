@@ -28,9 +28,9 @@ cloudlet_long = -91        # this is used to calculate client distance from clou
 # app_version = '1.0'
 # operator = ''
 # cloudlet_lat = 31          # this is used to calculate client distance from cloudlet for setting latency values
-# cloudlet_long = -91        # this is used to calculate client distance from cloudlet for setting latency values1
+# cloudlet_long = -91        # this is used to calculate client distance from cloudlet for setting latency values
 
-num_clients = 100          # number of clients
+num_clients = 1          # number of clients
 num_latency_messages = -1  # number of latency messages to send to each client before exiting. set to 0 or less for infinite
 
 # random latency values will be generated and sent every x seconds
@@ -42,6 +42,7 @@ latency_value_yellow = 50             # value which will cause a yellow icon on 
 latency_value_red = 100               # value which will cause a red icon on UI
 latency_distancekm_yellow = 500      # distance in km which will send yellow latency values
 latency_distancekm_red = 2000         # distance in km which will send red latency values
+ignore_latency_response = True        # verify latency response message or not
 
 # seatle 47/-122
 # miami 25/-80
@@ -119,29 +120,30 @@ class tc(unittest.TestCase):
                     samples.append(latency_random)
                 print(f'latency samples are {samples}')
 
-                average = round(statistics.mean(samples))
-                stdev = round(statistics.stdev(samples))
-                variance = round(statistics.variance(samples))
-                num_samples = len(samples)
-                min_value = min(samples)
-                max_value = max(samples)
-
 #                sys.exit(1)
-                latency = self.client_list[x - 1].send_latency_edge_event(carrier_name=operator, data_network_type=data_network_type, signal_strength=signal_strength, latitude=coord_list[x - 1][0], longitude=coord_list[x - 1][1], samples=samples)
+                latency = self.client_list[x - 1].send_latency_edge_event(carrier_name=operator, data_network_type=data_network_type, signal_strength=signal_strength, latitude=coord_list[x - 1][0], longitude=coord_list[x - 1][1], samples=samples, ignore_response=ignore_latency_response)
 
-                latency_avg = round(latency.statistics.avg)
-                latency_std_dev = round(latency.statistics.std_dev)
-                latency_variance = round(latency.statistics.variance)
+                if not ignore_latency_response:
+                    average = round(statistics.mean(samples))
+                    stdev = round(statistics.stdev(samples))
+                    variance = round(statistics.variance(samples))
+                    num_samples = len(samples)
+                    min_value = min(samples)
+                    max_value = max(samples)
 
-                expect_equal(latency_avg, average)
-                expect_equal(latency.statistics.min, min_value)
-                expect_equal(latency.statistics.max, max_value)
-                expect_equal(latency_std_dev, stdev)
-                expect_equal(latency_variance, variance)
-                expect_equal(latency.statistics.num_samples, num_samples)
-                # expect_true(latency.statistics.timestamp.seconds > 0)
-                # expect_true(latency.statistics.timestamp.nanos > 0)
-                assert_expectations()
+                    latency_avg = round(latency.statistics.avg)
+                    latency_std_dev = round(latency.statistics.std_dev)
+                    latency_variance = round(latency.statistics.variance)
+
+                    expect_equal(latency_avg, average)
+                    expect_equal(latency.statistics.min, min_value)
+                    expect_equal(latency.statistics.max, max_value)
+                    expect_equal(latency_std_dev, stdev)
+                    expect_equal(latency_variance, variance)
+                    expect_equal(latency.statistics.num_samples, num_samples)
+                    # expect_true(latency.statistics.timestamp.seconds > 0)
+                    # expect_true(latency.statistics.timestamp.nanos > 0)
+                    assert_expectations()
 
             if num_latency_messages > 0 and batch_number >= num_latency_messages:
                 break
