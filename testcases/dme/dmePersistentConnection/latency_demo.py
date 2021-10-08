@@ -18,10 +18,14 @@ dme_address = 'us-qa.dme.mobiledgex.net:50051'
 developer_name = 'automation_dev_org'
 app_name = 'automation_api_app'
 app_version = '1.0'
-operator = 'tmus'
-cloudlet = 'tmocloud-1'
-cloudlet_lat = 31          # this is used to calculate client distance from cloudlet for setting latency values
-cloudlet_long = -91        # this is used to calculate client distance from cloudlet for setting latency values1
+# operator = 'tmus'
+# cloudlet = 'tmocloud-1'
+operator = 'att'
+cloudlet = 'attcloud-1'
+# cloudlet_lat = 31          # this is used to calculate client distance from cloudlet for setting latency values
+# cloudlet_long = -91        # this is used to calculate client distance from cloudlet for setting latency values1
+cloudlet_lat = 39          # this is used to calculate client distance from cloudlet for setting latency values
+cloudlet_long = -99        # this is used to calculate client distance from cloudlet for setting latency values1
 
 # developer_name = 'ComputerVisionInc'
 # app_name = 'ComputerVision'
@@ -30,16 +34,22 @@ cloudlet_long = -91        # this is used to calculate client distance from clou
 # cloudlet_lat = 31          # this is used to calculate client distance from cloudlet for setting latency values
 # cloudlet_long = -91        # this is used to calculate client distance from cloudlet for setting latency values
 
-num_clients = 100          # number of clients
-num_latency_messages = -1  # number of latency messages to send to each client before exiting. set to 0 or less for infinite
+num_clients = 10          # number of clients
+num_latency_messages = 10  # number of latency messages to send to each client before exiting. set to 0 or less for infinite
 
 # random latency values will be generated and sent every x seconds
-num_latency_samples = 5               # number of samples to send in latency request
+num_latency_samples = 10               # number of samples to send in latency request
 latency_min = 1                       # min latency value to send
 latency_max = 1000                    # max latency value to send
 latency_interval = 5                  # seconds to wait between sending latency. Every client will send latency then wait x seconds to send them again
-latency_value_yellow = 50             # value which will cause a yellow icon on UI
-latency_value_red = 100               # value which will cause a red icon on UI
+latency_value_green_start = 0
+latency_value_green_end = 15
+latency_value_yellow_start = 16
+latency_value_yellow_end = 60
+latency_value_red_start = 61
+latency_value_red_end = 200
+# latency_value_yellow = 50             # value which will cause a yellow icon on UI
+# latency_value_red = 100               # value which will cause a red icon on UI
 latency_distancekm_yellow = 500      # distance in km which will send yellow latency values
 latency_distancekm_red = 2000         # distance in km which will send red latency values
 ignore_latency_response = True        # verify latency response message or not
@@ -72,7 +82,7 @@ class tc(unittest.TestCase):
         self.client_list = []
 
         for x in range(1, num_clients + 1):
-            print('creating client', x)
+            logger.info('creating client', x)
             dme = mex_dme.MexDme(dme_address=dme_address)
             self.client_list.append(dme)
 
@@ -84,7 +94,7 @@ class tc(unittest.TestCase):
             long_random = random.randrange(gps_long_start, gps_long_end)
             coord_list.append([lat_random, long_random])
 
-            print(f'client {x}/{num_clients}. register/findcloudlet/persistconnection at {lat_random}/{long_random}')
+            logger.info(f'client {x}/{num_clients}. register/findcloudlet/persistconnection at {lat_random}/{long_random}')
 
             try:
                 self.register = mex_dme.Client(app_name=app_name, app_version=app_version, developer_org_name=developer_name)
@@ -94,31 +104,36 @@ class tc(unittest.TestCase):
 
                 self.client_list[x - 1].create_dme_persistent_connection(carrier_name=operator, data_network_type=data_network_type, device_os=device_os, device_model=device_model, signal_strength=signal_strength, latitude=lat_random, longitude=long_random)
             except Exception as e:
-                print('register/findcloudlet/persistconnection', x, 'failed:', e)
+                logger.error('register/findcloudlet/persistconnection', x, 'failed:', e)
 #        sys.exit(1)
         batch_number = 1
         while True:
-            print(f'sending latency batch {batch_number}')
+            logging.info(f'sending latency batch {batch_number}')
             for x in range(1, num_clients + 1):
                 distance = self.client_list[x - 1].calculate_distance(origin=[cloudlet_lat, cloudlet_long], destination=[coord_list[x - 1][0], coord_list[x - 1][1]])
-                print(f'client distance from cloudlet at {cloudlet_lat}/{cloudlet_long} and client at {coord_list[x - 1][0]}/{coord_list[x - 1][1]} is {distance} km')
+                logger.info(f'client distance from cloudlet at {cloudlet_lat}/{cloudlet_long} and client at {coord_list[x - 1][0]}/{coord_list[x - 1][1]} is {distance} km')
 
                 # samples = [x, 10.4, 4.20, 30, 440, 0.50, 6.00, 70.45]
                 samples = []
                 for latency in range(1, num_latency_samples + 1):
                     if distance >= 0 and distance < latency_distancekm_yellow:
                         latency_min_value = latency_min
-                        latency_max_value = latency_value_yellow - 1
+                        # latency_max_value = latency_value_yellow - 1
+                        latency_max_value = latency_value_yellow_start
                     elif distance >= latency_distancekm_yellow and distance < latency_distancekm_red:
-                        latency_min_value = latency_value_yellow
-                        latency_max_value = latency_value_red - 1
+                        # latency_min_value = latency_value_yellow
+                        # latency_max_value = latency_value_red - 1
+                        latency_min_value = latency_value_yellow_start
+                        latency_max_value = latency_value_yellow_end
                     elif distance >= latency_distancekm_red:
-                        latency_min_value = latency_value_red
+                        # latency_min_value = latency_value_red
+                        latency_min_value = latency_value_red_start
                         latency_max_value = latency_max
 
                     latency_random = random.randrange(latency_min_value, latency_max_value)
                     samples.append(latency_random)
-                print(f'latency samples are {samples}')
+
+                logger.info(f'latency samples are {samples}')
 
 #                sys.exit(1)
                 latency = self.client_list[x - 1].send_latency_edge_event(carrier_name=operator, data_network_type=data_network_type, signal_strength=signal_strength, latitude=coord_list[x - 1][0], longitude=coord_list[x - 1][1], samples=samples, ignore_response=ignore_latency_response)
@@ -150,9 +165,9 @@ class tc(unittest.TestCase):
 
             batch_number += 1
 
-            print(f'waiting {latency_interval}s to send next latency')
+            logger.info(f'waiting {latency_interval}s to send next latency')
             time.sleep(latency_interval)
-        print(f'sent {batch_number} latency messages')
+        logger.info(f'sent {batch_number} latency messages')
 
     @classmethod
     def tearDownClass(self):
