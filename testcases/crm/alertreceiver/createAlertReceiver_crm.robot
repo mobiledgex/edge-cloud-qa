@@ -686,14 +686,14 @@ AlertReceiver - shall be able to create/receive cloudletorg CloudletDown email/s
 
    Alert Receiver Email For Firing CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
    Alert Receiver Slack Message For Firing CloudletDown Should Be Received  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
-   ${alerts1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   ${alerts1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  alert_name=CloudletDown
    Length Should Be  ${alerts1}  1
 
    Start CRM Docker Container  ${crm_split[1]}
 
    Alert Receiver Email For Resolved CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
    Alert Receiver Slack Message For Resolved CloudletDown Should Be Received  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
-   ${alerts2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   ${alerts2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  alert_name=CloudletDown
    Length Should Be  ${alerts2}  0
 
    # add alert silence after EDGECLOUD-3461 is fixed
@@ -719,14 +719,14 @@ AlertReceiver - shall be able to create/receive cloudletname/cloudletorg Cloudle
 
    Alert Receiver Slack Message For Firing CloudletDown Should Be Received  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
    Alert Receiver Email For Firing CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
-   ${alerts1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   ${alerts1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  alert_name=CloudletDown
    Length Should Be  ${alerts1}  1
 
    Start CRM Docker Container  ${crm_split[1]}
 
    Alert Receiver Email For Resolved CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
    Alert Receiver Slack Message For Resolved CloudletDown Should Be Received  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
-   ${alerts2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   ${alerts2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  alert_name=CloudletDown
    Length Should Be  ${alerts2}  0
 
    # add alert silence after EDGECLOUD-3461 is fixed
