@@ -68,9 +68,17 @@ RemoveVMPoolMember - remove while in use shall return error
    ...  - send RemoveVMPoolMember while in use
    ...  - verify proper error is received
 
-   ${pool}=  Show VM Pool  region=${region}  vm_pool_name=automationVMPool  org_name=${organization}
+   ${pool}=  Show VM Pool  region=${region_US}  vm_pool_name=automationVMPool  org_name=${organization}
+   ${length}=  Get Length  ${pool[0]['data']['vms']}
 
-   ${error}=  Run Keyword And Expect Error  *  Remove VM Pool Member  region=${region_US}  token=${token}  vm_pool_name=automationVMPool  org_name=${organization}  vm_name=${pool[0]['data']['vms'][0]['name']}
+   FOR  ${x}  IN RANGE  0  ${length}
+       IF  'state' in ${pool[0]['data']['vms'][${x}]}
+          ${vm_name}=  Set Variable  ${pool[0]['data']['vms'][${x}]['name']}
+          EXIT FOR LOOP
+       END
+   END
+
+   ${error}=  Run Keyword And Expect Error  *  Remove VM Pool Member  region=${region_US}  token=${token}  vm_pool_name=automationVMPool  org_name=${organization}  vm_name=${vm_name}
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Encountered failures: Unable to delete VM ${pool[0]['data']['vms'][0]['name']}, as it is in use"}
