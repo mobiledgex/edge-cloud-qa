@@ -180,7 +180,7 @@ CloudletUsageMetrics - get with invalid limit shall return error
    Should Contain  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  limit=-1  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxxInvalid data: json: cannot unmarshal string into Go struct field RegionClientCloudletUsageMetrics.Limit of type int"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Limit cannot be negative"}')
 
 # ECQ-4038
 CloudletUsageMetrics - get with invalid numsamples shall return error
@@ -194,7 +194,7 @@ CloudletUsageMetrics - get with invalid numsamples shall return error
    Should Contain  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"NumSamples\\\\" at offset
 
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  number_samples=-1  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"xxxxxxxxInvalid data: json: cannot unmarshal string into Go struct field RegionClientCloudletUsageMetrics.Limit of type int"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"NumSamples cannot be negative"}')
 
 # ECQ-4039
 CloudletUsageMetrics - get with operator not found shall return error
