@@ -201,10 +201,10 @@ class tc_global_ratelimit(unittest.TestCase):
             correct_error = False
             if 'status = StatusCode.RESOURCE_EXHAUSTED' in r:
                 if target == 'PerIp':
-                    if 'rate limited, please retry later. Error is: Client exceeded api rate limit per ip. Exceeded rate of 70.250000 requests per second..' in r:
+                    if 'rate limited, please retry later. Error is: Client exceeded api rate limit per ip. Exceeded rate of 70.25 requests per second.' in r:
                         correct_error = True
                 elif target == 'AllRequests':
-                    if 'rate limited, please retry later. Error is: Exceeded rate of 70.250000 requests per second..' in r:
+                    if 'rate limited, please retry later. Error is: Exceeded rate of 70.25 requests per second.' in r:
                         correct_error = True
             expect(correct_error == True, 'status code fail. got ' + r)
         assert_expectations()
