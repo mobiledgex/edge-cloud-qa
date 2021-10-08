@@ -212,7 +212,7 @@ class Cloudlet(MexOperation):
 
         env_dict = {}
         if env_vars is not None:
-            var_list = re.split('([A-Z_]+=)', env_vars)
+            var_list = re.split('([A-Z_0-9]+=)', env_vars)
             del var_list[0]
 
             for index, var in enumerate(var_list[0::2]):

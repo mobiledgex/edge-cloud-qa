@@ -30,6 +30,8 @@ ${cloudlet_name_openstack_dusseldorf}  automationDusseldorfCloudlet
 ${operator_name_openstack_dusseldorf}  TDG
 ${physical_name_openstack_dusseldorf}  dusseldorf 
 ${operator_name_gcp}  gcp 
+${cloudlet_name_anthos}  qa-anthos
+${operator_name_anthos}  packet
 
 ${gpu_resource_name}  mygpuresrouce
 
@@ -41,6 +43,7 @@ ${test_timeout_crm}  60 min
 @{cloudlet_list}   ${cloudlet_name_openstack_hamburg}   ${cloudlet_name_openstack_munich}   ${cloudlet_name_openstack_frankfurt}   ${cloudlet_name_openstack_dusseldorf}
  
 *** Test Cases ***
+# ECQ-1474
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Hamburg 
         [Documentation]  
         ...  do CreateCloudlet to start a CRM on hamburg openstack 
@@ -70,12 +73,14 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Berlin
         Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_berlin}  operator_org_name=${operator_name_openstack_berlin}  mapping=gpu=${gpu_resource_name}
         Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_berlin}  tags=pci=t4gpu:1
 
+# ECQ-1538
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Munich 
         [Documentation]  
         ...  do CreateCloudlet to start a CRM on munich openstack 
 
         Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_munich}  cloudlet_name=${cloudlet_name_openstack_munich}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_munich}  number_dynamic_ips=254  latitude=48.1351253  longitude=11.5819806  gpudriver_name=nvidia-450  gpudriver_org=TDG
 
+# ECQ-1585
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Frankfurt 
         [Documentation]
         ...  do CreateCloudlet to start a CRM on frankfurt openstack
@@ -85,6 +90,7 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Frankfurt
         Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_frankfurt}  operator_org_name=${operator_name_openstack_frankfurt}  mapping=gpu=${gpu_resource_name}
         Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_frankfurt}  tags=pci=t4gpu:1
 
+# ECQ-1635
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Dusseldorf 
         [Documentation]
         ...  do CreateCloudlet to start a CRM on dusseldorf openstack
@@ -94,6 +100,7 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Dusseldorf
         Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_dusseldorf}  operator_org_name=${operator_name_openstack_dusseldorf}  mapping=gpu=${gpu_resource_name}
         Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_dusseldorf}  tags=pci=t4gpu:1
 
+# ECQ-????
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Packet 
         [Documentation]
         ...  do CreateCloudlet to start a CRM on packet openstack
@@ -114,6 +121,7 @@ CreateCloudlet - User shall be able to create a fake cloudlet
         Create App Instance  region=US  app_name=${app_name_automation}       app_version=1.0  developer_org_name=${developer_org_name_automation}  cluster_instance_name=autoclusterAutomation      cloudlet_name=tmocloud-1  operator_org_name=tmus  flavor_name=${flavor_name_automation}
         #Create App Instance  region=US  app_name=automation_api_auth_app  app_version=1.0  cluster_instance_name=autoclusterAutomationAuth  cloudlet_name=tmocloud-1  operator_org_name=tmus  flavor_name=automation_api_flavor
 
+# ECQ-1457
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Hamburg
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on hamburg openstack 
@@ -123,6 +131,14 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Hamburg
 
         Delete Cloudlet  region=EU  operator_org_name=${operator_name_openstack_hamburg}  cloudlet_name=${cloudlet_name_openstack_hamburg}
 
+# ECQ-4067
+CreateCloudlet - User shall be able to create a cloudlet on Anthos
+        [Documentation]
+        ...  - do CreateCloudlet to start a CRM no Anthos
+
+        Create Cloudlet  region=US  operator_org_name=${operator_name_anthos}  cloudlet_name=${cloudlet_name_anthos}  platform_type=PlatformTypeK8sBareMetal  number_dynamic_ips=8  latitude=47.60621  longitude=-122.33207  env_vars=K8S_CONTROL_ACCESS_IP=145.40.103.121,K8S_EXTERNAL_IP_RANGES=147.28.142.200/29-147.28.142.207/29,K8S_EXTERNAL_ETH_INTERFACE=bond0,K8S_INTERNAL_IP_RANGES=none,K8S_INTERNAL_ETH_INTERFACE=none
+
+# ECQ-1499
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Bonn
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on bonn openstack
@@ -132,6 +148,7 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Bonn
 
         Delete Cloudlet  region=EU  operator_org_name=${operator_name_openstack_bonn}   cloudlet_name=${cloudlet_name_openstack_bonn}
 
+# ECQ-1614
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Berlin
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on berlin openstack 
@@ -141,6 +158,7 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Berlin
 
         Delete Cloudlet  region=EU  operator_org_name=${operator_name_openstack_berlin}  cloudlet_name=${cloudlet_name_openstack_berlin}
 
+# ECQ-1537
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Munich
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on munich openstack 
@@ -150,6 +168,7 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Munich
 
         Delete Cloudlet  region=EU  operator_org_name=${operator_name_openstack_munich}  cloudlet_name=${cloudlet_name_openstack_munich}
 
+# ECQ-1586
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Frankfurt 
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on frankfurt openstack
@@ -159,6 +178,7 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Frankfurt
 
         Delete Cloudlet  region=EU  operator_org_name=${operator_name_openstack_frankfurt}  cloudlet_name=${cloudlet_name_openstack_frankfurt}
 
+# ECQ-1636
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Dusseldorf 
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on dusseldorf openstack
@@ -177,6 +197,7 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Packet
 
         Delete Cloudlet  region=US  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name_openstack_packet}
 
+# ECQ-1632
 DeleteCloudlet - User shall be able to delete a fake cloudlet
         [Documentation]
         ...  do DeleteCloudlet to delete a fake CRM 
@@ -193,6 +214,17 @@ DeleteCloudlet - User shall be able to delete a fake cloudlet
         Cleanup Clusters and Apps  region=US  cloudlet_name=attcloud-1  crm_override=IgnoreCrmAndTransientState
         Run Keyword and Continue on Failure  Delete Cloudlet  region=US  operator_org_name=att  cloudlet_name=attcloud-1
 
+# ECQ-4068
+DeleteCloudlet - User shall be able to delete a cloudlet on Anthos
+        [Documentation]
+        ...  - do DeleteCloudlet to delete a CRM on Anthos
+
+        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_anthos}
+        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_anthos}
+
+        Delete Cloudlet  region=US  operator_org_name=${operator_name_anthos}  cloudlet_name=${cloudlet_name_anthos}
+
+# ECQ-2234
 UpgradeCloudlet - User shall be able to upgrade cloudlets on Openstack Dusseldorf,Munich,Frankfurt and Hamburg
         [Documentation]
         ...  do UpgradeCloudlet to upgrade CRMs on openstack nodes
