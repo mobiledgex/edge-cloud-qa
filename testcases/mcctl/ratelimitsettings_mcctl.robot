@@ -25,11 +25,11 @@ ratelimitsettings - mcctl shall be able to create/show/delete flow
    [Template]  Success Create/Show/Delete Flow Via mcctl
   
       flowsettingsname=${flow_name}  apiname=xx  apiendpointtype=Dme  ratelimittarget=PerUser      flowalgorithm=LeakyBucketAlgorithm  reqspersecond=5
+      flowsettingsname=${flow_name}  apiname=xx  apiendpointtype=Dme  ratelimittarget=PerUser      flowalgorithm=TokenBucketAlgorithm  reqspersecond=5  burstsize=2
       flowsettingsname=${flow_name}  apiname=xx  apiendpointtype=Dme  ratelimittarget=AllRequests  flowalgorithm=TokenBucketAlgorithm  reqspersecond=5  burstsize=2
-      flowsettingsname=${flow_name}  apiname=xx  apiendpointtype=Dme  ratelimittarget=AllRequests  flowalgorithm=LeakyBucketAlgorithm  reqspersecond=5  burstsize=2
+      flowsettingsname=${flow_name}  apiname=xx  apiendpointtype=Dme  ratelimittarget=AllRequests  flowalgorithm=LeakyBucketAlgorithm  reqspersecond=5
       flowsettingsname=${flow_name}  apiname=xx  apiendpointtype=Dme  ratelimittarget=PerIp        flowalgorithm=TokenBucketAlgorithm  reqspersecond=5  burstsize=2
-      flowsettingsname=${flow_name}  apiname=xx  apiendpointtype=Dme  ratelimittarget=PerUser      flowalgorithm=LeakyBucketAlgorithm  reqspersecond=5  burstsize=2
-      flowsettingsname=${flow_name}  apiname=xx  apiendpointtype=Dme  ratelimittarget=PerIp        flowalgorithm=LeakyBucketAlgorithm  reqspersecond=5  burstsize=2
+      flowsettingsname=${flow_name}  apiname=xx  apiendpointtype=Dme  ratelimittarget=PerIp        flowalgorithm=LeakyBucketAlgorithm  reqspersecond=5
 
 # ECQ-3708
 ratelimitsettings - mcctl shall be able to create/show/delete maxreqs
@@ -98,8 +98,8 @@ ratelimitsettings - mcctl shall handle update flow
 
    [Template]  Success Update/Show Flow Via mcctl
 
-      flowsettingsname=${flow_name}  apiname=xx  ratelimittarget=AllRequests  apiendpointtype=Dme  flowalgorithm=TokenBucketAlgorithm
-      flowsettingsname=${flow_name}  apiname=xx  ratelimittarget=AllRequests  apiendpointtype=Dme  flowalgorithm=LeakyBucketAlgorithm  reqspersecond=100  burstsize=200
+      flowsettingsname=${flow_name}   apiname=xx  ratelimittarget=AllRequests  apiendpointtype=Dme  flowalgorithm=TokenBucketAlgorithm
+      flowsettingsname=${flow_name}2  apiname=xx  ratelimittarget=AllRequests  apiendpointtype=Dme  flowalgorithm=LeakyBucketAlgorithm  reqspersecond=100
 
 # ECQ-3712
 ratelimitsettings - mcctl shall be able to update maxreqs
@@ -227,9 +227,11 @@ Fail Create Maxreqs Via mcctl
 
 Update Flow Setup
    Run mcctl  ratelimitsettings createflow region=${region} flowsettingsname=${flow_name} apiname=xx apiendpointtype=Dme ratelimittarget=AllRequests flowalgorithm=TokenBucketAlgorithm reqspersecond=5 burstsize=2    version=${version}
+   Run mcctl  ratelimitsettings createflow region=${region} flowsettingsname=${flow_name}2 apiname=xx apiendpointtype=Dme ratelimittarget=AllRequests flowalgorithm=LeakyBucketAlgorithm reqspersecond=5     version=${version}
 
 Update Flow Teardown
    Run mcctl  ratelimitsettings deleteflow region=${region} flowsettingsname=${flow_name} apiname=xx apiendpointtype=Dme ratelimittarget=AllRequests flowalgorithm=TokenBucketAlgorithm reqspersecond=5 burstsize=2    version=${version}
+   Run mcctl  ratelimitsettings deleteflow region=${region} flowsettingsname=${flow_name}2 apiname=xx apiendpointtype=Dme ratelimittarget=AllRequests flowalgorithm=LeakyBucketAlgorithm reqspersecond=5    version=${version}
 
 Update Maxreqs Setup
    Run mcctl  ratelimitsettings createmaxreqs region=${region} maxreqssettingsname=${flow_name} apiname=xx apiendpointtype=Dme ratelimittarget=AllRequests maxreqsalgorithm=FixedWindowAlgorithm maxrequests=1 interval=1s  version=${version}
