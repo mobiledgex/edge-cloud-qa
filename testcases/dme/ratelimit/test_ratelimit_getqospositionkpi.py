@@ -220,10 +220,10 @@ class tc_getqospositionkpi_ratelimit(unittest.TestCase):
             print('KKKKKK', r, type(r), r['error']['grpc_code'])
             if r['error']['grpc_code'] == 8 and r['error']['http_code'] == 429:  # RESOURCE_EXHAUSTED and Too Many Requests
                 if target == 'PerIp':
-                    if r['error']['message'] == "Request for /distributed_match_engine.MatchEngineApi/GetQosPositionKpi rate limited, please retry later. error is client exceeded api rate limit per ip. Exceeded rate of 70.25 requests per second.":
+                    if r['error']['message'] == "Request for /distributed_match_engine.MatchEngineApi/GetQosPositionKpi rate limited, please retry later. error is client exceeded api rate limit per ip. Exceeded rate of 70.250000 requests per second.":
                         correct_error = True
                 elif target == 'AllRequests':
-                    if r['error']['message'] == "Request for /distributed_match_engine.MatchEngineApi/GetQosPositionKpi rate limited, please retry later. error is Exceeded rate of 70.25 requests per second.":
+                    if r['error']['message'] == "Request for /distributed_match_engine.MatchEngineApi/GetQosPositionKpi rate limited, please retry later. error is Exceeded rate of 70.250000 requests per second.":
                         correct_error = True
             expect(correct_error == True, 'status code fail. got ' + f)
         assert_expectations()
