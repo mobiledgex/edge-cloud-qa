@@ -42,6 +42,7 @@ protos_src_list = (#edgecloud_dir + 'vendor/github.com/gogo/googleapis/google/ap
                    edgecloud_dir + 'protoc-gen-cmd/protocmd/',
                    edgecloud_dir + 'protogen/',
                    edgeproto_dir + 'dme/',
+                   edgeproto_dir + 'edgeprotogen/',
                    edgeproto_dir + 'third_party/googleapis/google/api/',
 
 )
