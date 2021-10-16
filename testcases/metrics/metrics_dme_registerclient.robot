@@ -108,7 +108,10 @@ DMEMetrics - Shall be able to get DME RegisterClient metrics with starttime on o
    ...  verify info is correct
 
    ${metrics}  ${time_diff}=  Get dme metrics with starttime on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}
-   log to console  ${time_diff}
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+
+
    Metrics Headings Should Be Correct  ${metrics}
 
    Values Should Be In Range  ${metrics}  ${time_diff}
@@ -140,12 +143,13 @@ DMEMetrics - Shall be able to get the DME RegisterClient metrics with starttime=
 
    Values Should Be In Range  ${metrics}   ${time_diff}
 
-DMEMetrics - Shall be able to get the DME RegisterClient metrics with starttime > lastrecord on openstack
-   [Documentation]
-   ...  request cloudlet metrics with starttime in the future
-   ...  verify empty list is returned
-
-   Get dme metrics with starttime > lastrecord on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+# now gives an error when startime is in the future
+#DMEMetrics - Shall be able to get the DME RegisterClient metrics with starttime > lastrecord on openstack
+#   [Documentation]
+#   ...  request cloudlet metrics with starttime in the future
+#   ...  verify empty list is returned
+#
+#   Get dme metrics with starttime > lastrecord on openstack  selector=RegisterClient  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
 
 DMEMetrics - Shall be able to get the DME RegisterClient metrics with endtime=lastrecord on openstack
    [Documentation]
@@ -301,13 +305,31 @@ DMEMetrics - DeveloperViewer shall be able to get DME RegisterClient metrics
 
    Values Should be in Range  ${metrics}
 
+# getting metrics by cloudletorg is now only supported for findcloudlet
+#DMEMetrics - OperatorManager shall be able to get DME RegisterClient metrics with cloudlet-org only
+#   [Documentation]
+#   ...  request the DME RegisterClient metrics as DeveloperManager
+#   ...  verify metrics are returned
+#  
+#   @{cloudlet_list}=  Create List  tmocloud-2
+#   ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_list=${cloudlet_list}
+#   Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}
+#   Create Cloudlet Pool Access Response    region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}  decision=accept 
+#   
+#   ${metrics}=  OperatorManager shall be able to get client api usage metrics  selector=RegisterClient  operator_org_name=${operator_name_fake}
+#
+#   Metrics Headings Should Be Correct  ${metrics}
+#
+#   Values Should be in Range  ${metrics}
+
 *** Keywords ***
 Setup
    ${developer_org_name}=  Get Default Developer Name 
 
    Update Settings  region=${region}  dme_api_metrics_collection_interval=${api_collection_timer}s
+   Set Max Metrics Data Points Config  100
 
-   FOR  ${i}  IN  1..12
+   FOR  ${i}  IN RANGE  1  12
       Register Client  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name}
    END
 
@@ -322,6 +344,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  reqs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  foundOperator
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  0s
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  5ms
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  10ms
@@ -335,10 +360,10 @@ Metrics Headings Should Be Correct
    Should Be True  'cloudletorg' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'cloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'dmeId' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'cellID' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'cellID' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'method' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'foundCloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'foundOperator' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'foundCloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'foundOperator' in ${metrics['data'][0]['Series'][0]['tags']}
 
 Values Should Be In Range
   [Arguments]  ${metrics}  ${time_diff}=${None}  ${numsamples}=${100}
@@ -351,9 +376,9 @@ Values Should Be In Range
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_org_name_dme}
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet_name_dme}
    Should Be True   '${metrics['data'][0]['Series'][0]['tags']['dmeId']}'.startswith('dme-')
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['method']}  RegisterClient
 	
    # verify values
@@ -382,6 +407,9 @@ Values Should Be In Range
       IF  ${reading[1]} != ${None}    # dont check null readings which be removed later
          Should Be True   ${reading[1]} > 0
          Should Be True   ${reading[2]} >= 0
+         Should Be Equal  ${reading[3]}  0
+         Should Be Empty  ${reading[4]}
+         Should Be Empty  ${reading[5]}
          #Should Be True   ${reading[3]} >= 0
          #Should Be True   ${reading[4]} >= 0
          #Should Be True   ${reading[5]} >= 0
