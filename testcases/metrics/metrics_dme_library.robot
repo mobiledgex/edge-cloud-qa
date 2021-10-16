@@ -25,9 +25,9 @@ ${region}=  EU
 	
 *** Keywords ***
 Get the last dme metric on openstack
-   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+   [Arguments]  ${selector}  ${app_name}=${None}  ${app_version}=${None}  ${developer_org_name}=${None}  ${cloudlet_name}=${None}  ${operator_org_name}=${None}
 
-   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_org_name}  limit=1
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 2  # last record
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
@@ -1446,6 +1446,22 @@ DeveloperViewer shall not be able to get client cloudlet usage metrics
    ${userToken}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
 
    Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Get Client Cloudlet Usage Metrics  region=${region}  selector=${selector}  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  token=${userToken}
+
+OperatorManager shall be able to get client api usage metrics
+   [Arguments]  ${selector}=${None}  ${app_name}=${None}  ${app_version}=${None}  ${developer_org_name}=${None}  ${operator_org_name}=${None}
+
+   ${userToken}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
+
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  token=${userToken}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   #${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   #Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
 
 OperatorManager shall be able to get client app usage metrics
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
