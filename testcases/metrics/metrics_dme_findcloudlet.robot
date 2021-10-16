@@ -142,12 +142,13 @@ DMEMetrics - Shall be able to get the DME FindCloudlet metrics with starttime=la
 
    Values Should Be In Range  ${metrics}  ${time_diff}
 
-DMEMetrics - Shall be able to get the DME FindCloudlet metrics with starttime > lastrecord on openstack
-   [Documentation]
-   ...  request cloudlet metrics with starttime in the future
-   ...  verify empty list is returned
-
-   Get dme metrics with starttime > lastrecord on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
+# now returns an error when starttime is in the future
+#DMEMetrics - Shall be able to get the DME FindCloudlet metrics with starttime > lastrecord on openstack
+#   [Documentation]
+#   ...  request cloudlet metrics with starttime in the future
+#   ...  verify empty list is returned
+#
+#   Get dme metrics with starttime > lastrecord on openstack  selector=FindCloudlet  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version} 
 
 DMEMetrics - Shall be able to get the DME FindCloudlet metrics with endtime=lastrecord on openstack
    [Documentation]
@@ -303,11 +304,28 @@ DMEMetrics - DeveloperViewer shall be able to get DME FindCloudlet metrics
 
    Values Should be in Range  ${metrics}
 
+DMEMetrics - OperatorManager shall be able to get DME FindCloudlet metrics with cloudlet-org only
+   [Documentation]
+   ...  request the DME FindCloudlet metrics as OperatorManager
+   ...  verify metrics are returned
+
+   @{cloudlet_list}=  Create List  tmocloud-2
+   ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_list=${cloudlet_list}
+   Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}
+   Create Cloudlet Pool Access Response    region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}  decision=accept
+
+   ${metrics}=  OperatorManager shall be able to get client api usage metrics  selector=FindCloudlet  operator_org_name=${operator_name_fake}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}
+
 *** Keywords ***
 Setup
    ${developer_name}=  Get Default Developer Name 
 
    Update Settings  region=${region}  dme_api_metrics_collection_interval=${api_collection_timer}s
+   Set Max Metrics Data Points Config  100
 
    Register Client  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_name}
    Find Cloudlet	carrier_name=dmuus  latitude=36  longitude=-95
@@ -320,6 +338,10 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        dme-api
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  reqs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  foundOperator
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  0s
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  5ms
@@ -334,10 +356,10 @@ Metrics Headings Should Be Correct
    Should Be True  'cloudletorg' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'cloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'dmeId' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'cellID' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'cellID' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'method' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'foundCloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'foundOperator' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'foundCloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'foundOperator' in ${metrics['data'][0]['Series'][0]['tags']}
 
 Values Should Be In Range
   [Arguments]  ${metrics}  ${time_diff}=${None}  ${numsamples}=${100}
@@ -350,9 +372,9 @@ Values Should Be In Range
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_org_name_dme}
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet_name_dme}
    Should Be True   '${metrics['data'][0]['Series'][0]['tags']['dmeId']}'.startswith('dme-')
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['method']}  FindCloudlet
 
    IF  ${time_diff} != ${None}
@@ -374,6 +396,9 @@ Values Should Be In Range
       IF  ${reading[1]} != ${None}    # dont check null readings which be removed later
          Should Be True   ${reading[1]} > 0
          Should Be True   ${reading[2]} >= 0
+         Should Be Equal  ${reading[3]}  0
+         Should Be True   len('${reading[4]}') > 0
+         Should Be True   len('${reading[5]}') > 0
          #Should Be True   ${reading[3]} >= 0
          #Should Be True   ${reading[4]} >= 0
          #Should Be True   ${reading[5]} >= 0
