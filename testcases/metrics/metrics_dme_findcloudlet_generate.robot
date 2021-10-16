@@ -42,9 +42,16 @@ DMEMetrics - FindCloudlet shall generate metrics
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
    ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  
-   ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
 
-   Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
+   ${count}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
+      ${count}=  Evaluate  ${count}+${s['values'][0][1]}  # reqs field
+   END
+
+   #${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
+
+   #Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
+   Should Be Equal As Numbers  ${count}  10
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -71,9 +78,16 @@ DMEMetrics - FindCloudlet Not Found shall generate metrics
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
    ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
-   ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
 
-   Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
+   ${count}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
+      ${count}=  Evaluate  ${count}+${s['values'][0][1]}  # reqs field
+   END
+
+   #${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
+
+   #Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
+   Should Be Equal As Numbers  ${count}  10
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -98,8 +112,15 @@ DMEMetrics - FindCloudlet with error shall generate metrics
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
    ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
-   ${req_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
-   ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][2]}
+   ${req_count}=  Set Variable  ${0}
+   ${error_count}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
+      ${req_count}=  Evaluate  ${req_count}+${s['values'][0][1]}
+      ${error_count}=  Evaluate  ${error_count}+${s['values'][0][2]}
+   END
+
+   #${req_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
+   #${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][2]}
    Should Be Equal As Numbers  ${req_count}  4  
    Should Be Equal As Numbers  ${error_count}  4 
    Metrics Headings Should Be Correct  ${metrics}
@@ -132,6 +153,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  reqs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  foundOperator
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  0s
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  5ms
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  10ms
@@ -145,10 +169,10 @@ Metrics Headings Should Be Correct
    Should Be True  'cloudletorg' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'cloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'dmeId' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'cellID' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'cellID' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'method' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'foundCloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'foundOperator' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'foundCloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'foundOperator' in ${metrics['data'][0]['Series'][0]['tags']}
 
 Values Should Be In Range
   [Arguments]  ${metrics}  ${app}  ${cloudlet}  ${operator}
@@ -161,15 +185,18 @@ Values Should Be In Range
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_org_name_dme}
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet_name_dme}
    Should Be True   '${metrics['data'][0]['Series'][0]['tags']['dmeId']}'.startswith('dme-')
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}  ${cloudlet}
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['foundOperator']}  ${operator}
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
+   #Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}  ${cloudlet}
+   #Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['foundOperator']}  ${operator}
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['method']}  FindCloudlet
 
    # verify values
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
+      Should Be Equal  ${reading[3]}  0
+      Should Be Equal  ${reading[4]}  ${cloudlet}
+      Should Be Equal  ${reading[5]}  ${operator}
       #Should Be True   ${reading[3]} >= 0
       #Should Be True   ${reading[4]} >= 0
       #Should Be True   ${reading[5]} >= 0
@@ -191,15 +218,18 @@ Values With Error Should Be In Range
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_org_name_dme}
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet_name_dme}
    Should Be True   '${metrics['data'][0]['Series'][0]['tags']['dmeId']}'.startswith('dme-')
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['method']}  FindCloudlet
 
    # verify values
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
+      Should Be Equal  ${reading[3]}  0
+      Should Be Empty  ${reading[4]}
+      Should Be Empty  ${reading[5]}
       #Should Be True   ${reading[3]} >= 0
       #Should Be True   ${reading[4]} >= 0
       #Should Be True   ${reading[5]} >= 0

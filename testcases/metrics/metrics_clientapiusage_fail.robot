@@ -313,6 +313,24 @@ ClientApiUsageMetrics - get with invalid app/cloudlet shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  selector=api  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=${inject}  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid apporg"}')
 
+# ECQ-4089
+ClientApiUsageMetrics - get with starttime in the future shall return error
+   [Documentation]
+   ...  - get clientapiusage metrics with start time in the future
+   ...  - verify error
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=api  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2999-01-02T15:04:05Z  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Start time must be before (older than) end time"}')
+
+# ECQ-4090
+ClientApiUsageMetrics - get with RegisterClient and cloudlet/cloudlet org shall return error
+   [Documentation]
+   ...  request the DME RegisterClient metrics with cloudlet and cloudlet org
+   ...  verify error is returned
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=api  method=RegisterClient  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Cloudlet and Cloudlet org can be specified only for FindCloudlet or PlatformFindCloudlet"}')
+
 *** Keywords ***
 Setup
     ${token}=  Get Super Token

@@ -39,9 +39,14 @@ DMEMetrics - RegisterClient shall generate metrics
    Register Client  app_name=${app}
    Sleep  ${metrics_wait_time}
    ${metrics}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  
-   ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}  # reqs field
+
+   ${count}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
+      ${count}=  Evaluate  ${count}+${s['values'][0][1]}  # reqs field
+   END
  
-   Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
+   #Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
+   Should Be Equal As Numbers  ${count}  10
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -69,9 +74,14 @@ DMEMetrics - RegisterClient with cellid shall generate metrics
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
    ${metrics}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
-   ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
 
-   Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
+   ${count}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
+      ${count}=  Evaluate  ${count}+${s['values'][0][1]}  # reqs field
+   END
+
+   #Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
+   Should Be Equal As Numbers  ${count}  10
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -99,9 +109,14 @@ DMEMetrics - RegisterClient with auth shall generate metrics
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
    ${metrics}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${appauth}  app_version=${appvers}
-   ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
 
-   Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
+   ${count}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
+      ${count}=  Evaluate  ${count}+${s['values'][0][1]}  # reqs field
+   END
+
+   #Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
+   Should Be Equal As Numbers  ${count}  10
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -121,8 +136,14 @@ DMEMetrics - RegisterClient with error shall generate metrics
 
    # get appauth metrics
    ${metrics}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${appauth}  app_version=${appvers}
-   ${req_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
-   ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][2]}
+   ${req_count}=  Set Variable  ${0}
+   ${error_count}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
+      ${req_count}=  Evaluate  ${req_count}+${s['values'][0][1]} 
+      ${error_count}=  Evaluate  ${error_count}+${s['values'][0][2]}
+   END
+   #${req_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][1]}
+   #${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][2]}
    Should Be Equal As Numbers  ${req_count}  2  # should be 2 register client requests
    Should Be Equal As Numbers  ${error_count}  2  # should be 2 register client requests
    Metrics Headings Should Be Correct  ${metrics}
@@ -130,8 +151,14 @@ DMEMetrics - RegisterClient with error shall generate metrics
 
    # get app ver=2.0 metrics
    ${metrics2}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=2.0
-   ${req_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][1]}
-   ${error_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][2]}
+   ${req_count2}=  Set Variable  ${0}
+   ${error_count2}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics2['data'][0]['Series']}
+      ${req_count2}=  Evaluate  ${req_count2}+${s['values'][0][1]}
+      ${error_count2}=  Evaluate  ${error_count2}+${s['values'][0][2]}
+   END
+   #${req_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][1]}
+   #${error_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][2]}
    Should Be Equal As Numbers  ${req_count2}  1  # should be 2 register client requests
    Should Be Equal As Numbers  ${error_count2}  1  # should be 2 register client requests
    Metrics Headings Should Be Correct  ${metrics2}
@@ -139,8 +166,14 @@ DMEMetrics - RegisterClient with error shall generate metrics
 
    # get app dev=2.0 metrics
    ${metrics3}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=2.0  app_name=${app}
-   ${req_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][1]}
-   ${error_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][2]}
+   ${req_count3}=  Set Variable  ${0}
+   ${error_count3}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics3['data'][0]['Series']}
+      ${req_count3}=  Evaluate  ${req_count3}+${s['values'][0][1]}
+      ${error_count3}=  Evaluate  ${error_count3}+${s['values'][0][2]}
+   END
+   #${req_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][1]}
+   #${error_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][2]}
    Should Be Equal As Numbers  ${req_count3}  1  # should be 2 register client requests
    Should Be Equal As Numbers  ${error_count3}  1  # should be 2 register client requests
    Metrics Headings Should Be Correct  ${metrics3}
@@ -173,6 +206,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  reqs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  foundOperator
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  0s
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  5ms
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  10ms
@@ -186,10 +222,10 @@ Metrics Headings Should Be Correct
    Should Be True  'cloudletorg' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'cloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'dmeId' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'cellID' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'cellID' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'method' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'foundCloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
-   Should Be True  'foundOperator' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'foundCloudlet' in ${metrics['data'][0]['Series'][0]['tags']}
+   #Should Be True  'foundOperator' in ${metrics['data'][0]['Series'][0]['tags']}
 
 Values Should Be In Range
   [Arguments]  ${metrics}
@@ -202,15 +238,18 @@ Values Should Be In Range
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_org_name_dme}
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet_name_dme}
    Should Be True   '${metrics['data'][0]['Series'][0]['tags']['dmeId']}'.startswith('dme-')
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['method']}  RegisterClient
 
    # verify values
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
+      Should Be Equal  ${reading[3]}  0
+      Should Be Empty  ${reading[4]} 
+      Should Be Empty  ${reading[5]} 
       #Should Be True   ${reading[3]} >= 0
       #Should Be True   ${reading[4]} >= 0
       #Should Be True   ${reading[5]} >= 0
@@ -232,15 +271,18 @@ Values With Cellid Should Be In Range
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_org_name_dme}
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet_name_dme}
    Should Be True   '${metrics['data'][0]['Series'][0]['tags']['dmeId']}'.startswith('dme-')
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cellID']}'  123
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
+   #Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cellID']}'  123
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['method']}  RegisterClient
 
    # verify values
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
+      Should Be Equal  ${reading[3]}  123
+      Should Be Empty  ${reading[4]}
+      Should Be Empty  ${reading[5]}
       #Should Be True   ${reading[3]} >= 0
       #Should Be True   ${reading[4]} >= 0
       #Should Be True   ${reading[5]} >= 0
@@ -262,15 +304,18 @@ Values With Auth Should Be In Range
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_org_name_dme}
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet_name_dme}
    Should Be True   '${metrics['data'][0]['Series'][0]['tags']['dmeId']}'.startswith('dme-')
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['method']}  RegisterClient
 
    # verify values
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
+      Should Be Equal  ${reading[3]}  0
+      Should Be Empty  ${reading[4]}
+      Should Be Empty  ${reading[5]}
       #Should Be True   ${reading[3]} >= 0
       #Should Be True   ${reading[4]} >= 0
       #Should Be True   ${reading[5]} >= 0
@@ -291,9 +336,9 @@ Values With Error Should Be In Range
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudletorg']}  ${operator_org_name_dme}
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['cloudlet']}  ${cloudlet_name_dme}
    Should Be True   '${metrics['data'][0]['Series'][0]['tags']['dmeId']}'.startswith('dme-')
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
-   Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['cellID']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundCloudlet']}') == 0
+   #Should Be True   len('${metrics['data'][0]['Series'][0]['tags']['foundOperator']}') == 0
    Should Be Equal  ${metrics['data'][0]['Series'][0]['tags']['method']}  RegisterClient
 
    # verify values
@@ -310,6 +355,9 @@ Values With Error Should Be In Range
       #Should Be True   len('${reading[10]}') == 0
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
+      Should Be Equal  ${reading[3]}  0
+      Should Be Empty  ${reading[4]}
+      Should Be Empty  ${reading[5]}
       #Should Be True   ${reading[3]} >= 0
       #Should Be True   ${reading[4]} >= 0
       #Should Be True   ${reading[5]} >= 0
