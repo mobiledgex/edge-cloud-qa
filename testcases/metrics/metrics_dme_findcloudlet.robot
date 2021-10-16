@@ -265,6 +265,28 @@ DMEMetrics - Shall be able to get the DME FindCloudlet metrics with numsamples a
 
    Values Should be in Range  ${metrics}  ${time_diff}  ${5}
 
+DMEMetrics - Shall be able to get DME FindCloudlet metrics with cloudlet-org only
+   [Documentation]
+   ...  request the DME FindCloudlet metrics with cloudlet-org only
+   ...  verify metrics are returned
+
+   ${metrics}  ${metrics_influx}=  Get the last dme metric on openstack  selector=FindCloudlet  operator_org_name=${operator_name_fake} 
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}
+
+DMEMetrics - Shall be able to get DME FindCloudlet metrics with cloudlet/cloudlet-org only
+   [Documentation]
+   ...  request the DME FindCloudlet metrics with cloudlet and cloudlet-org only 
+   ...  verify metrics are returned
+
+   ${metrics}  ${metrics_influx}=  Get the last dme metric on openstack  selector=FindCloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should be in Range  ${metrics}
+
 DMEMetrics - DeveloperManager shall be able to get DME FindCloudlet metrics
    [Documentation]
    ...  request the DME FindCloudlet metrics as DeveloperManager

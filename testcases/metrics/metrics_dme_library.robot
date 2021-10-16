@@ -25,9 +25,9 @@ ${region}=  EU
 	
 *** Keywords ***
 Get the last dme metric on openstack
-   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+   [Arguments]  ${selector}  ${app_name}=${None}  ${app_version}=${None}  ${developer_org_name}=${None}  ${cloudlet_name}=${None}  ${operator_org_name}=${None}
 
-   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  limit=1
+   ${metrics}=  Get DME Metrics  region=${region}  selector=api  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_org_name}  limit=1
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 2  # last record
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
