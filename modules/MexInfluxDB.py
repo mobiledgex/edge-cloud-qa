@@ -318,6 +318,9 @@ class MexInfluxDB(WebService) :
     def get_influx_findcloudlet_metrics(self, app_name=None, app_version=None, developer_org_name=None, condition=None):
         return self.get_influx_dme_metrics(selector='FindCloudlet', app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, condition=condition)
 
+    def get_influx_platformfindcloudlet_metrics(self, app_name=None, app_version=None, developer_org_name=None, condition=None):
+        return self.get_influx_dme_metrics(selector='PlatformFindCloudlet', app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, condition=condition)
+
     def _decode_content(self):
         logging.debug('content=' + self.resp.content.decode("utf-8"))
         
