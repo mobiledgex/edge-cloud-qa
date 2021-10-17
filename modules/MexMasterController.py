@@ -1486,6 +1486,9 @@ class MexMasterController(MexRest):
     def get_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, selector=None, limit=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.get_api_metrics(method='FindCloudlet', token=token, region=region, selector=selector, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, limit=limit, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+    def get_platform_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, selector=None, limit=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_api_metrics(method='PlatformFindCloudlet', token=token, region=region, selector=selector, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, limit=limit, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
     def get_register_client_api_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, selector=None, limit=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.get_api_metrics(method='RegisterClient', token=token, region=region, selector=selector, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, limit=limit, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
