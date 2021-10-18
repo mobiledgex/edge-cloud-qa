@@ -52,7 +52,7 @@ Update Reporter - Controller throws error when invalid schedule is provided
     Create Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     ${error_msg}=  Run Keyword and Expect Error  *  Update Reporter  reporter_name=${reporter_name}  organization=${operator}  schedule=EveryDay
-    Should Contain  ${error_msg}  Invalid schedule
+    Should Contain  ${error_msg}  Invalid JSON data: Invalid ReportSchedule value 4
 
 # ECQ-3788
 Update Reporter - Controller throws error when startscheduledate is a historical date
