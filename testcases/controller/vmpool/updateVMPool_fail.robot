@@ -207,7 +207,7 @@ UpdateVMPool - update with invalid state shall return error
    ${error}=  Run Keyword and Expect Error  *  Update VM Pool  region=${region}  vm_pool_name=automationVMPool  org_name=${organization}  vm_list=${vmlist}
    Should Contain   ${error}  code=400
    #Should Contain   ${error}  error={"message":"Invalid POST data, code\=400, message\=No enum value for x"}
-   Should Contain   ${error}  error={"message":"Invalid JSON data: No enum value for x
+   Should Contain   ${error}  error={"message":"Invalid JSON data: Invalid VMState value \\\\"x\\\\"
 
    &{vm1}=  Create Dictionary  name=vm1  external_ip=1.1.1.1  internal_ip=2.2.2.2  state=99
    @{vmlist}=  Create List  ${vm1}
@@ -215,7 +215,7 @@ UpdateVMPool - update with invalid state shall return error
    ${error}=  Run Keyword and Expect Error  *  Update VM Pool  region=${region}  vm_pool_name=automationVMPool  org_name=${organization}  vm_list=${vmlist}
    Should Contain   ${error}  code=400
    #Should Contain   ${error}  error={"message":"Invalid POST data, code\=400, message\=No enum value for 99"}
-   Should Contain   ${error}  error={"message":"Invalid JSON data: No enum value for 99
+   Should Contain   ${error}  error={"message":"Invalid JSON data: Invalid VMState value \\\\"99\\\\"
 
    &{vm1}=  Create Dictionary  name=vm1  external_ip=1.1.1.1  internal_ip=2.2.2.2  state=3
    @{vmlist}=  Create List  ${vm1}
