@@ -81,7 +81,7 @@ RemoveVMPoolMember - remove while in use shall return error
    ${error}=  Run Keyword And Expect Error  *  Remove VM Pool Member  region=${region_US}  token=${token}  vm_pool_name=automationVMPool  org_name=${organization}  vm_name=${vm_name}
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Encountered failures: Unable to delete VM ${pool[0]['data']['vms'][0]['name']}, as it is in use"}
+   Should Contain   ${error}  error={"message":"Encountered failures: Unable to delete VM ${pool[0]['data']['vms'][${x}]['name']}, as it is in use"}
 
 *** Keywords ***
 Setup
