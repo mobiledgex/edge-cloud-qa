@@ -16,8 +16,10 @@ logger = logging.getLogger(__name__)
 
 
 class MexDmeRest(MexRest):
-    def __init__(self, dme_address='127.0.0.1:50051', root_cert='mex-ca.crt'):
+    def __init__(self, dme_address='127.0.0.1:50051', root_cert='mex-ca.crt', connection_timeout=3.05):
         super().__init__(address=dme_address, root_cert=root_cert)
+
+        self.connection_timeout = connection_timeout
 
         self.root_url = 'https://' + dme_address
         # self.root_cert = root_cert
@@ -73,6 +75,9 @@ class MexDmeRest(MexRest):
 
     def decoded_session_cookie(self):
         return self._decoded_session_cookie
+
+    def session_cookie(self):
+        return shared_variables.session_cookie_default
 
     def token_server_uri(self):
         return self._token_server_uri
@@ -188,7 +193,7 @@ class MexDmeRest(MexRest):
             self._number_getqospositionkpi_requests += 1
 
             try:
-                self.post(url=url, data=payload)
+                self.post(url=url, data=payload, connection_timeout=self.connection_timeout)
 
                 logger.info('response:\n' + str(self.resp.text))
 
