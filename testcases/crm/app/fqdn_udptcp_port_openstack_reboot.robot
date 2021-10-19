@@ -4,6 +4,7 @@ Documentation  use FQDN to access app on openstack after reboot
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
+Library  MexOpenstack  
 Library  String
 
 Test Setup      Setup
