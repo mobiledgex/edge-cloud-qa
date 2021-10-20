@@ -123,7 +123,7 @@ Shall be able to update IpAccessShared k8s autocluster to modify number of worke
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
-
+# ECQ-2279
 Shall be able to update IpAccessShared k8s autocluster to include auto scale policy
     [Documentation]
     ...  create an auto scale policy
@@ -179,7 +179,7 @@ Shall be able to update IpAccessShared k8s autocluster to include auto scale pol
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
-
+# ECQ-2280
 Shall be able to update IpAccessShared k8s autocluster to include auto scale policy where min_nodes > number_nodes
     [Documentation]
     ...  create an auto scale policy
