@@ -30,7 +30,7 @@ RunCommand - k8s shared shall return command result on CRM
     ...  verify RunCommand works 
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  number_nodes=${numnodes}  #flavor_name=${cluster_flavor_name}
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
@@ -56,7 +56,7 @@ RunCommand - k8s dedicated shall return command result on CRM
     ...  verify RunCommand works
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_nodes=${numnodes}  #flavor_name=${cluster_flavor_name}
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
@@ -196,7 +196,7 @@ RunCommand - k8s autocluster shall return command result on CRM
     [Tags]  ReservableCluster
 
     Log To Console  Creating App and App Instance
-    ${app}=  Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment=docker  developer_org_name=${developer_org_name_automation}
+    ${app}=  Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment=kubernetes  developer_org_name=${developer_org_name_automation}
     ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  cluster_instance_developer_org_name=MobiledgeX
 
     log to console  ${app_inst}
@@ -210,12 +210,21 @@ RunCommand - k8s autocluster shall return command result on CRM
 
     Should Be Equal  ${stdout_noid}  root\r\n
     Should Be Equal  ${stdout_id}  root\r\n
-    Should Contain   ${error}  Error: No such container: notfound 
+    Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
 
 *** Keywords ***
 Setup
     #Create Developer
     Create Flavor  region=${region}
+
+    ${cloudlet}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet_name_crm}
+    ${platform_type}=  Set Variable  ${cloudlet[0]['data']['platform_type']}
+
+    ${numnodes}=  Set Variable  1
+    IF  ${platform_type} == 12
+        ${numnodes}=  Set Variable  0
+    END
+ 
     #Log To Console  Creating Cluster Instance
     #Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}  #deployment=kubernetes  ip_access=IpAccessShared
     #Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
@@ -226,3 +235,4 @@ Setup
     #${rootlb}=  Convert To Lowercase  ${rootlb}
 
     #Set Suite Variable  ${rootlb}
+    Set Suite Variable  ${numnodes}
