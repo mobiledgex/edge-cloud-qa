@@ -1322,8 +1322,11 @@ class MexMasterController(MexRest):
                     time.sleep(1)
             else:
                 logging.debug(f'app instance is NOT found. sleeping and trying again')
-            
-        raise Exception(f'app instance is NOT ready. Got {appinstance[0]["data"]["state"]} but expected Ready')
+        
+        if appinstance:    
+            raise Exception(f'app instance is NOT ready. Got {appinstance[0]["data"]["state"]} but expected Ready')
+        else:
+            raise Exception('app instance is NOT found')
 
     def wait_for_app_instance_to_be_deleted(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=180):
         for x in range(1, timeout):
