@@ -36,7 +36,7 @@ ShowLogs - k8s shared shall return logs on CRM
     ...  verify ShowLogs works 
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  number_nodes=${numnodes}  #flavor_name=${cluster_flavor_name}
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
@@ -89,7 +89,7 @@ ShowLogs - k8s dedicated shall return logs on CRM
     ...  verify ShowLogs works
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_nodes=${numnodes}  #flavor_name=${cluster_flavor_name}
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
@@ -293,6 +293,14 @@ ShowLogs - k8s autocluster shall return logs on CRM
 
 *** Keywords ***
 Setup
+    ${cloudlet}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet_name_crm}
+    ${platform_type}=  Set Variable  ${cloudlet[0]['data']['platform_type']}
+
+    ${numnodes}=  Set Variable  1
+    IF  ${platform_type} == 12
+        ${numnodes}=  Set Variable  0
+    END
+
     #Create Developer
     Create Flavor  region=${region}
     #Log To Console  Creating Cluster Instance
@@ -305,3 +313,4 @@ Setup
     #${rootlb}=  Convert To Lowercase  ${rootlb}
 
     #Set Suite Variable  ${rootlb}
+    Set Suite Variable  ${numnodes}
