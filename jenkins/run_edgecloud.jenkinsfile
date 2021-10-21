@@ -64,7 +64,7 @@ node('jenkinsSlave1'){
     //tag = Version + '_automation_' + year + month + date
     //cycle = Version + '_automation_' + dateValue
     cycle = dateValue + '_' + Version
-    folder_list = ['openstack', 'console', 'vsphere', 'vcd', 'dme', 'sdk', 'controller', 'metrics', 'performance/security']
+    folder_list = ['openstack', 'console', 'vsphere', 'vcd', 'anthos', 'dme', 'sdk', 'controller', 'metrics', 'performance/security']
 
     tag = dateValue
     project = "${project}"
@@ -253,6 +253,7 @@ node('jenkinsSlave1'){
               add_tests_to_folder(version, project, cycle, 'openstack', 'Automated,CRM,Openstack', null)
               add_tests_to_folder(version, project, cycle, 'vsphere', 'Automated,CRM,Vsphere', null)
               add_tests_to_folder(version, project, cycle, 'vcd', 'Automated,CRM,VCD', null)
+              add_tests_to_folder(version, project, cycle, 'anthos', 'Automated,CRM,Anthos', null)
               add_tests_to_folder(version, project, cycle, 'controller', 'Automated,Controller', null)
               add_tests_to_folder(version, project, cycle, 'controller', 'Automated,MasterController', null)
               add_tests_to_folder(version, project, cycle, 'metrics', 'Automated,Metrics', null)
