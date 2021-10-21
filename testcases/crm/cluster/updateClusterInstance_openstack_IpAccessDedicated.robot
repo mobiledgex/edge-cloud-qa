@@ -6,6 +6,7 @@ Library  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_DEDICATED_ENV}
 Library  MexApp
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  String
+Library  Collections
 
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -18,7 +19,7 @@ ${cloudlet_name_openstack_dedicated}  automationBonnCloudlet
 
 ${operator_name_openstack}  TDG
 
-${region}  EU
+${region}  US
 
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -46,7 +47,7 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=0
+    ${clusterinst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=0
     Log To Console  Done Creating Cluster Instance
 
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}
@@ -68,9 +69,13 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
     ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name_default}
 
-    ${server_info_node}=    Get Server List  name=${openstack_node_name}
-    ${num_servers_node}=     Get Length  ${server_info_node}
-    Should Be Equal As Numbers  ${num_servers_node}    0   # 0 nodes
+    ${rundebug_out}=  Run Debug  cloudlet_name=${cloudlet_name_openstack_dedicated}  node_type=crm  command=oscmd  timeout=60s  args=openstack server list --name ${openstack_node_name} -f value
+    #Should Not Contain  ${rundebug_out[0]['data']['output']}  ${openstack_node_name}
+    Should Be True  'output' not in ${rundebug_out[0]['data']}  # nothing returned
+
+    #${server_info_node}=    Get Server List  name=${openstack_node_name}
+    #${num_servers_node}=     Get Length  ${server_info_node}
+    #Should Be Equal As Numbers  ${num_servers_node}    0   # 0 nodes
 
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
@@ -78,12 +83,17 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=1
     Log To Console  Done Updating Cluster Instance
 
-    ${server_info_node}=    Get Server List  name=${openstack_node_name}
-    ${server_info_master}=  Get Server List  name=${openstack_node_master}
-    ${server_info_lb}=      Get Server List  name=${clusterlb}
+    ${rundebug_out}=  Run Debug  cloudlet_name=${cloudlet_name_openstack_dedicated}  node_type=crm  command=oscmd  timeout=60s  args=openstack server list --name ${openstack_node_name} -f value
+    ${nodes}=  Split String  ${rundebug_out[0]['data']['output']}  ${\n}
+    Remove From List  ${nodes}  -1  # remove last element since it is empty
+    Length Should Be  ${nodes}  1  # 1 node 
 
-    ${num_servers_node}=     Get Length  ${server_info_node}
-    Should Be Equal As Numbers  ${num_servers_node}    1   # 1 nodes
+    #${server_info_node}=    Get Server List  name=${openstack_node_name}
+    #${server_info_master}=  Get Server List  name=${openstack_node_master}
+    #${server_info_lb}=      Get Server List  name=${clusterlb}
+
+    #${num_servers_node}=     Get Length  ${server_info_node}
+    #Should Be Equal As Numbers  ${num_servers_node}    1   # 1 nodes
 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default} 
 
@@ -94,16 +104,30 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
+    IF  '${clusterinst['data']['resources']['vms'][0]['type']}' == 'cluster-master'
+        Run Debug  cloudlet_name=${cloudlet_name_openstack_dedicated}  node_type=crm  command=oscmd  timeout=60s  args=openstack server reboot ${clusterinst['data']['resources']['vms'][0]['name']}
+        #Reboot Openstack Server  ${clusterinst['data']['resources']['vms'][0]['name']}
+    ELSE
+        Run Debug  cloudlet_name=${cloudlet_name_openstack_dedicated}  node_type=crm  command=oscmd  timeout=60s  args=openstack server reboot ${clusterinst['data']['resources']['vms'][1]['name']}
+        #Reboot Openstack Server  ${clusterinst['data']['resources']['vms'][1]['name']}
+    END
+    Sleep  60 seconds
+ 
     Log To Console  Updating Cluster Instance
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=2
     Log To Console  Done Updating Cluster Instance
 
-    ${server_info_node}=    Get Server List  name=${openstack_node_name}
-    ${server_info_master}=  Get Server List  name=${openstack_node_master}
-    ${server_info_lb}=      Get Server List  name=${clusterlb}
+    ${rundebug_out}=  Run Debug  cloudlet_name=${cloudlet_name_openstack_dedicated}  node_type=crm  command=oscmd  timeout=60s  args=openstack server list --name ${openstack_node_name} -f value
+    ${nodes}=  Split String  ${rundebug_out[0]['data']['output']}  ${\n}
+    Remove From List  ${nodes}  -1  # remove last element since it is empty
+    Length Should Be  ${nodes}  2  # 2 nodes
 
-    ${num_servers_node}=     Get Length  ${server_info_node}
-    Should Be Equal As Numbers  ${num_servers_node}    2   # 2 nodes
+    #${server_info_node}=    Get Server List  name=${openstack_node_name}
+    #${server_info_master}=  Get Server List  name=${openstack_node_master}
+    #${server_info_lb}=      Get Server List  name=${clusterlb}
+
+    #${num_servers_node}=     Get Length  ${server_info_node}
+    #Should Be Equal As Numbers  ${num_servers_node}    2   # 2 nodes
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
@@ -113,10 +137,15 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=1
     Log To Console  Done Updating Cluster Instance
 
-    ${server_info_node}=    Get Server List  name=${openstack_node_name}
+    ${rundebug_out}=  Run Debug  cloudlet_name=${cloudlet_name_openstack_dedicated}  node_type=crm  command=oscmd  timeout=60s  args=openstack server list --name ${openstack_node_name} -f value
+    ${nodes}=  Split String  ${rundebug_out[0]['data']['output']}  ${\n}
+    Remove From List  ${nodes}  -1  # remove last element since it is empty
+    Length Should Be  ${nodes}  1  # 1 nodes
 
-    ${num_servers_node}=     Get Length  ${server_info_node}
-    Should Be Equal As Numbers  ${num_servers_node}    1   # 1 worker nodes
+    #${server_info_node}=    Get Server List  name=${openstack_node_name}
+
+    #${num_servers_node}=     Get Length  ${server_info_node}
+    #Should Be Equal As Numbers  ${num_servers_node}    1   # 1 worker nodes
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
@@ -126,9 +155,12 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=0
     Log To Console  Done Updating Cluster Instance
 
-    ${server_info_node}=    Get Server List  name=${openstack_node_name}
-    ${num_servers_node}=     Get Length  ${server_info_node}
-    Should Be Equal As Numbers  ${num_servers_node}    0   # 0 worker nodes
+    ${rundebug_out}=  Run Debug  cloudlet_name=${cloudlet_name_openstack_dedicated}  node_type=crm  command=oscmd  timeout=60s  args=openstack server list --name ${openstack_node_name} -f value
+    Should Be True  'output' not in ${rundebug_out[0]['data']}  # nothing returned
+
+    #${server_info_node}=    Get Server List  name=${openstack_node_name}
+    #${num_servers_node}=     Get Length  ${server_info_node}
+    #Should Be Equal As Numbers  ${num_servers_node}    0   # 0 worker nodes
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
