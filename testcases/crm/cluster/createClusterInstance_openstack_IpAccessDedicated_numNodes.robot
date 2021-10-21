@@ -168,7 +168,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=12 on openstack
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=12  number_masters=1  ip_access=IpAccessDedicated
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  number_nodes=12  number_masters=1  ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  "node  \\d+  ${cloudlet_lowercase}  ${cluster_name}"
