@@ -35,8 +35,8 @@ CreateCloudlet - mcctl shall be able to create/show/delete cloudlet
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkacluster=cluster  kafkauser=user  kafkapassword=password
 
       # alliance orgs
-      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs=tmus 
-      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs=tmus allianceorgs=TDG
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs=att
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs=att allianceorgs=TDG
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs:empty=true
 
 # ECQ-3086
@@ -86,8 +86,8 @@ UpdateCloudlet - mcctl shall handle update cloudlet
       cloudlet=${cloudlet_name}  cloudlet-org=${operator}  kafkacluster=cluster  kafkauser=user  kafkapassword=password
 
       # alliance orgs
-      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  allianceorgs=tmus
-      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  allianceorgs=tmus allianceorgs=TDG
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  allianceorgs=att
+      cloudlet=${cloudlet_name}  cloudlet-org=${operator}  allianceorgs=att allianceorgs=TDG
 
 # ECQ-3609
 FindFlavorMatch - mcctl shall handle findflavormatch
@@ -216,7 +216,7 @@ UpdateCloudlet - mcctl shall handle allianceorg clear
    [Setup]  Update Setup
    [Teardown]  Update Teardown
 
-   Run mcctl  cloudlet update region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} allianceorgs=tmus allianceorgs=TDG  version=${version}
+   Run mcctl  cloudlet update region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} allianceorgs=att allianceorgs=TDG  version=${version}
    ${show}=  Run mcctl  cloudlet show region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  version=${version}
 
    Run mcctl  cloudlet update region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} allianceorgs:empty=true  version=${version}

@@ -421,7 +421,7 @@ UpdateCloudlet - update with trust policy on non-openstack shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_GCP"}')     Update Cloudlet  region=US  cloudlet_name=automationGcpCentralCloudlet  operator_org_name=gcp  trust_policy=${policy_return['data']['key']['name']}  use_defaults=${False}
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_VM_POOL"}')     Update Cloudlet  region=EU  cloudlet_name=automationVMPoolCloudlet  operator_org_name=TDG  trust_policy=${policy_return['data']['key']['name']}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_VM_POOL"}')     Update Cloudlet  region=US  cloudlet_name=automationVMPoolCloudlet  operator_org_name=TDG  trust_policy=${policy_return['data']['key']['name']}  use_defaults=${False}
 
 # ECQ-3480
 UpdateCloudlet - update to maintenance mode when already in maintenance mode shall return error

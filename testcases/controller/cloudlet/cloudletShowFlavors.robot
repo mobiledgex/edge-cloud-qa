@@ -161,7 +161,7 @@ ShowFlavorsForCloudlet - shall be able to get all supported flavors for a cloudl
       List Should Not Contain Value   ${supported}  ${gpu_flavor_name_bad}
       List Should Not Contain Value   ${supported}  ${large_flavor_name_bad}
    END
-`
+
 # ECQ-3612
 ShowFlavorsForCloudlet - OperatorManager shall be able to show flavors for cloudlet
    [Documentation]
