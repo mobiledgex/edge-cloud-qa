@@ -13,6 +13,7 @@ dmerestcert = "${dmerestcert}"
 number_parallel_executionsOpenstack = '6'
 number_parallel_executionsVsphere = '1'
 number_parallel_executionsVCD = '1'
+number_parallel_executionsAnthos = '1'
 
 //jobName = "${components}"
 
@@ -103,6 +104,8 @@ node('jenkinsSlave1'){
                    number_parallel_executions = number_parallel_executionsVCD
                } else if (platform == 'Vsphere') {
                    number_parallel_executions = number_parallel_executionsVsphere
+               } else if (platform == 'Anthos') {
+                   number_parallel_executions = number_parallel_executionsAnthos
                } else {
                    number_parallel_executions = number_parallel_executionsOpenstack
                }
