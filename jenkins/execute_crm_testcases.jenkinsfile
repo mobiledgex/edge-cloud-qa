@@ -23,7 +23,7 @@ def jobList1Parallel = ["runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedT
 def jobList1Parallelgcpazure = ["runCrmAzureTests", "runCrmGcpTests"]
 def jobListMaintenance = ["runCloudletMaintenanceCRMTests"]
 def jobList1Platform = ["runCrmRunCommandTests", "runCrmShowLogsTests"]
-def platform_list = ["Openstack", "VCD", "Vsphere"] 
+def platform_list = ["Openstack", "VCD", "Vsphere", "Anthos"] 
 //def jobList2Parallel = ["runGetFqdnListTests","runGetAppInstListTests"]
  
 builds1 = [:]
