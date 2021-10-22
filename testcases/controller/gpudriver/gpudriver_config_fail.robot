@@ -174,7 +174,7 @@ ClusterInst create on cloudlet mapped to incompatible GPU driver fails
 
     Update Cloudlet  region=${region}  operator_org_name=GDDT  cloudlet_name=${gpu_cloudlet}  gpudriver_name=${gpudriver_name}  gpudriver_org=GDDT
     ${error_msg}=  Run Keyword and Expect Error  *   Create Cluster Instance  region=${region}  operator_org_name=GDDT  cloudlet_name=${gpu_cloudlet}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor
-    Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Encountered failures: Create failed: failed to install GPU drivers on cluster VM: Unable to find Linux GPU driver build for kernel version 4.15.0-154-generic
+    Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Encountered failures: Create failed: failed to install GPU drivers on cluster VM: Unable to find Linux GPU driver build for kernel version 4.15.0-159-generic
 
     Update Cloudlet  region=${region}  operator_org_name=GDDT  cloudlet_name=${gpu_cloudlet}  gpudriver_name=nvidia-450  gpudriver_org=GDDT
 
@@ -189,7 +189,7 @@ ClusterInst creation of gpu flavor fails if gpudriver does not contain any build
 
     Update Cloudlet  region=${region}  operator_org_name=GDDT  cloudlet_name=${gpu_cloudlet}  gpudriver_name=${gpudriver_name}  gpudriver_org=GDDT
     ${error_msg}=  Run Keyword and Expect Error  *   Create Cluster Instance  region=${region}  operator_org_name=GDDT  cloudlet_name=${gpu_cloudlet}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor
-    Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Encountered failures: Create failed: failed to install GPU drivers on cluster VM: Unable to find Linux GPU driver build for kernel version 4.15.0-154-generic
+    Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Encountered failures: Create failed: failed to install GPU drivers on cluster VM: Unable to find Linux GPU driver build for kernel version 4.15.0-159-generic
 
     Update Cloudlet  region=${region}  operator_org_name=GDDT  cloudlet_name=${gpu_cloudlet}  gpudriver_name=nvidia-450  gpudriver_org=GDDT
 

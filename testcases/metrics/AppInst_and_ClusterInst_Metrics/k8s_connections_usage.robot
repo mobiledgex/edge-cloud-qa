@@ -119,7 +119,7 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
-   Should Be Equal As Numbers  ${metrics['data'][0]['Series'][0]['columns'][8]}  port
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  port
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  active
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  handled
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  accepts

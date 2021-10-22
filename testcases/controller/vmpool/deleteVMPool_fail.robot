@@ -76,7 +76,7 @@ DeleteVMPool - delete while in use shall return error
    ...  - send DeleteVMPool while in use
    ...  - verify proper error is received
 
-   ${error}=  Run Keyword And Expect Error  *   Delete VM Pool  region=EU  vm_pool_name=automationVMPool  org_name=GDDT
+   ${error}=  Run Keyword And Expect Error  *   Delete VM Pool  region=${region}  vm_pool_name=automationVMPool  org_name=GDDT
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"VM pool in use by Cloudlet"}
