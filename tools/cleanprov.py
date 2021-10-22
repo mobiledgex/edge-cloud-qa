@@ -339,6 +339,30 @@ def clean_ratelimitsettingsflow():
                else:
                   print(f'keeping {name} since doesnt match keypattern={key_pattern}')
 
+def clean_ratelimitsettingsmaxreqs():
+    global key_pattern
+
+    print('clean ratelimitsettingsmaxreqs')
+    app_list = mc.show_rate_limit_max_requests(region=region, token=mc.super_token, use_defaults=False)
+    print('applist', app_list)
+    print('key',key_pattern)
+    if len(app_list) == 0:
+        print('nothing to delete')
+    else:
+        for a in app_list:
+            name = a['data']['key']['max_reqs_settings_name']
+            if in_rate_limit_flow_list(a):
+                print(f'keeping {name}')
+            else:
+               if pattern_re.match(name):
+                  try:
+                     print(f'deleting {name}')
+                     mc.delete_rate_limit_max_requests(region=region, token=mc.super_token, use_defaults=False, max_requests_settings_name=name, api_name=a['data']['key']['rate_limit_key']['api_name'], api_endpoint_type=a['data']['key']['rate_limit_key']['api_endpoint_type'], rate_limit_target=a['data']['key']['rate_limit_key']['rate_limit_target'])
+                  except Exception as e:
+                     print(f'error deleting {name}, {e}.continuing to next item')
+               else:
+                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 def in_app_list(app):
     for a in app_keep:
         if a['app_name'] == app['data']['key']['name']:
@@ -418,6 +442,7 @@ for r in region_list:
                clean_orgcloudletpool()
             elif table == 'ratelimitsettings':
                clean_ratelimitsettingsflow()
+               clean_ratelimitsettingsmaxreqs()
 
 if 'org' in tables_arg:
    clean_org()
