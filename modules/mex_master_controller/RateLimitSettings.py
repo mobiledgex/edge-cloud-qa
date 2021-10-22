@@ -222,6 +222,16 @@ class RateLimitSettings(MexOperation):
 
         return self.create(token=token, url=self.createmaxreqs_url, delete_url=self.deletemaxreqs_url, show_url=self.showmaxreqs_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
 
+    def show_rate_limit_max_requests(self, token=None, region=None, max_requests_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, max_requests_algorithm=None, max_requests=None, interval=None, json_data=None, use_defaults=True, use_thread=False):
+        if use_defaults:
+            if max_requests_settings_name is None:
+                max_requests_settings_name = shared_variables.max_requests_settings_name_default
+
+        msg = self._build(max_requests_settings_name=max_requests_settings_name, api_name=api_name, api_endpoint_type=api_endpoint_type, rate_limit_target=rate_limit_target, max_requests_algorithm=max_requests_algorithm, max_requests=max_requests, interval=interval, use_defaults=use_defaults)
+        msg_dict = {'MaxReqsRateLimitSettings': msg}
+
+        return self.show(token=token, url=self.showmaxreqs_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
     def delete_rate_limit_max_requests(self, token=None, region=None, max_requests_settings_name=None, api_name=None, api_endpoint_type=None, rate_limit_target=None, max_requests_algorithm=None, max_requests=None, interval=None, json_data=None, use_defaults=True, use_thread=False):
         if use_defaults:
             if max_requests_settings_name is None:

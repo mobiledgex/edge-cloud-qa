@@ -7,24 +7,25 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-class MexRest(WebService) :
+
+class MexRest(WebService):
     decoded_data = None
-    
+
     def __init__(self, address='127.0.0.1:50051', root_cert='mex-ca.crt', key='localserver.key', client_cert='localserver.crt'):
         super().__init__()
 
-        #self.root_cert = self._findFile(root_cert)
+        # self.root_cert = self._findFile(root_cert)
 
-    def post(self, url, data=None, bearer=None, stream=False, stream_timeout=60):
-        #logging.debug(f'url={url} data={data} cert={self.root_cert}')
+    def post(self, url, data=None, bearer=None, stream=False, stream_timeout=60, connection_timeout=3.05):
+        # logging.debug(f'url={url} data={data} cert={self.root_cert}')
         logger.debug(f'url={url} data={data}')
         headers = {'Content-type': 'application/json', 'accept': 'application/json'}
-        if bearer != None:
+        if bearer is not None:
             headers['Authorization'] = 'Bearer ' + bearer
 
-        #self.resp = super().post(url=url, data=data, verify_cert=self.root_cert, headers=headers)
+        # self.resp = super().post(url=url, data=data, verify_cert=self.root_cert, headers=headers)
+        # self.resp = super().post(url=url, data=data, headers=headers, stream=stream, stream_timeout=stream_timeout, connection_timeout=connection_timeout)
         self.resp = super().post(url=url, data=data, headers=headers, stream=stream, stream_timeout=stream_timeout)
-        
         self._decode_content(stream=stream)
 
         if str(self.resp.status_code) != '200':
@@ -52,7 +53,7 @@ class MexRest(WebService) :
                         data_list.append(json.loads(data))
                     self.decoded_data = data_list
                     self.resp_text = self.decoded_data
-            except:
+            except Exception:
                 logging.debug('error decoding response content')
 
 #        datasplit = self.resp.content.decode("utf-8").splitlines()
@@ -78,7 +79,6 @@ class MexRest(WebService) :
     def _findFile(self, path):
         for dirname in sys.path:
             for ppath in Path(dirname).rglob(path):
-                if os.path.isfile(ppath) and ppath.name==path:
+                if os.path.isfile(ppath) and ppath.name == path:
                     return ppath
         raise Exception('cant find file {}'.format(path))
-
