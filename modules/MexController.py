@@ -1716,6 +1716,12 @@ class MexController(MexGrpc):
 
         return resp
 
+    def get_cloudlet_platform_type(self, token=None, region=None, operator_org_name=None, cloudlet_name=None):
+        cloudlet = self.show_cloudlets(operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=False)
+        platform_types = ['Fake', 'Dind', 'Openstack', 'Azure', 'Gcp', 'Edgebox', 'Fakeinfra', 'Vsphere', 'AwsEks', 'VmPool', 'AwsEc2', 'Vcd', 'K8SBareMetal', 'Kind', 'Kindinfra']
+
+        return platform_types[cloudlet[0].platform_type]
+
     def cloudlet_should_exist(self, cloudlet_instance=None, **kwargs):
 
         if cloudlet_instance is None:
