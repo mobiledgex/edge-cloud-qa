@@ -34,13 +34,14 @@ ${manifest_pod_name}=  server-ping-threaded-udptcphttp
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
-User shall be able to access UDP,TCP and HTTP ports on dedicated openstack with num_masters=1 and num_nodes=0
+# ECQ-1375
+User shall be able to access UDP,TCP and HTTP ports on dedicated CRM with num_masters=1 and num_nodes=0
     [Documentation]
-    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports on openstack with num_masters=1 and num_nodes=0
+    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports on CRM with num_masters=1 and num_nodes=0
     ...  verify all ports are accessible via fqdn
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_masters=1  number_nodes=0   ip_access=IpAccessDedicated  deployment=kubernetes
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_masters=1  number_nodes=0   ip_access=IpAccessDedicated  deployment=kubernetes
     Log To Console  Done Creating Cluster Instance
 
     ${cluster_name_default}=  Get Default Cluster Name
@@ -48,7 +49,7 @@ User shall be able to access UDP,TCP and HTTP ports on dedicated openstack with 
     ${rootlb_dedicated}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb_dedicated}
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
     Register Client

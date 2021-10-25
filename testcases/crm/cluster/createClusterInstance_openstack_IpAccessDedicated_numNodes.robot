@@ -43,7 +43,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=1 on CRM
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
-   IF  ${platform_type} == 2    #openstack
+   IF  '${platform_type}' == 'Openstack'
       ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
       ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
 
@@ -114,7 +114,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=3 on CRM
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=3  number_masters=1  ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
-   IF  ${platform_type} == 2    #openstack
+   IF  '${platform_type}' == 'Openstack'
       ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
       ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
 
@@ -177,7 +177,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=12 on CRM
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=12  number_masters=1  ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
-   IF  ${platform_type} == 2    #openstack
+   IF  '${platform_type}' == 'Openstack'
       ${openstack_node_name}=    Catenate  SEPARATOR=-  "node  \\d+  ${cloudlet_lowercase}  ${cluster_name}"
       ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
 
@@ -317,7 +317,7 @@ ClusterInst shall create clusterInst with IpAccessDedicated and 0 masters and 4 
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=4  number_masters=0  ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
-   IF  ${platform_type} == 2    #openstack
+   IF  '${platform_type}' == 'Openstack'
       ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
       ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
 
@@ -366,7 +366,7 @@ ClusterInst shall create with IpAccessDedicated and num_masters=0 num_nodes=0 on
    #Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
    #Should Contain  ${error_msg}   Zero NumNodes not supported yet
 
-   IF  ${platform_type} == 2    #openstack
+   IF  '${platform_type}' == 'Openstack'
       ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
       ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
 
@@ -397,8 +397,7 @@ ClusterInst shall create with IpAccessDedicated and num_masters=0 num_nodes=0 on
 
 *** Keywords ***
 Setup
-    ${cloudlet}=  Show Cloudlets  cloudlet_name=${cloudlet_name_crm}  use_defaults=${False}
-    ${platform_type}=  Set Variable  ${cloudlet[0].platform_type}
+    ${platform_type}=  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}
     Set Suite Variable  ${platform_type}
 
     ${epoch_time}=  Get Time  epoch
