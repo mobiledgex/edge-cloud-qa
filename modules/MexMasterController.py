@@ -950,6 +950,12 @@ class MexMasterController(MexRest):
     def show_cloudlets(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=False, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
         return self.cloudlet.show_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
 
+    def get_cloudlet_platform_type(self, token=None, region=None, operator_org_name=None, cloudlet_name=None):
+        cloudlet = self.show_cloudlets(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name)
+        platform_types = ['Fake', 'Dind', 'Openstack', 'Azure', 'Gcp', 'Edgebox', 'Fakeinfra', 'Vsphere', 'AwsEks', 'VmPool', 'AwsEc2', 'Vcd', 'K8SBareMetal', 'Kind', 'Kindinfra']
+
+        return platform_types[cloudlet[0]['data']['platform_type']]
+
     def show_cluster_instances(self, token=None, region=None, cluster_name=None, cloudlet_name=None, developer_org_name=None, json_data=None, use_thread=False, use_defaults=True, sort_field='cluster_name', sort_order='ascending'):
         resp_data = self.cluster_instance.show_cluster_instance(token=token, region=region, cluster_name=cluster_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, json_data=json_data, use_thread=use_thread, use_defaults=use_defaults)
 
