@@ -29,10 +29,11 @@ ${operator_name_openstack}  TDG
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
+# ECQ-1297
 Cluster with flavor less than 20g on openstack shall fail with size too small
    [Documentation]
-   ...  create a cluster on openstack with flavor of ram=512  vcpus=1  disk=1
-   ...  verify fails since it maps size=m4.tiny on openstack which has a disk of 10g. Must be at least 20g
+   ...  - create a cluster on openstack with flavor of ram=512  vcpus=1  disk=1
+   ...  - verify fails since it maps size=m4.tiny on openstack which has a disk of 10g. Must be at least 20g
 
    ${time}=  Get Time  epoch
 
@@ -41,15 +42,16 @@ Cluster with flavor less than 20g on openstack shall fail with size too small
 
    ${cluster_name}=  Get Default Cluster Name
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
    Should Contain  ${error_msg}   details = "Encountered failures: Create failed: Insufficient disk size, please specify a flavor with at least 20gb"
 
+# ECQ-1298
 Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
    [Documentation]
-   ...  create a cluster on openstack with flavor of ram=1024  vcpus=1  disk=1
-   ...  verify it allocates size=m4.small on openstack
+   ...  - create a cluster on openstack with flavor of ram=1024  vcpus=1  disk=1
+   ...  - verify it allocates size=m4.small on openstack
 
    ${time}=  Get Time  epoch
 
@@ -60,7 +62,7 @@ Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Server List  name=${cluster_name}
@@ -75,10 +77,11 @@ Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
+# ECQ-1299
 Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
    [Documentation]
-   ...  create a cluster on openstack with flavor of ram=2048  vcpus=2  disk=2
-   ...  verify it allocates size=m4.small on openstack
+   ...  - create a cluster on openstack with flavor of ram=2048  vcpus=2  disk=2
+   ...  - verify it allocates size=m4.small on openstack
 
    ${time}=  Get Time  epoch
 
@@ -89,7 +92,7 @@ Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Server List  name=${cluster_name}
@@ -104,10 +107,11 @@ Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
 
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
+# ECQ-1300
 Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    [Documentation]
-   ...  create a cluster on azure with flavor of ram=4096  vcpus=4  disk=4
-   ...  verify it allocates size=sdwan-ESC on openstack
+   ...  - create a cluster on azure with flavor of ram=4096  vcpus=4  disk=4
+   ...  - verify it allocates size=sdwan-ESC on openstack
 
    ${time}=  Get Time  epoch
 
@@ -120,7 +124,7 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    ${server_info_node}=   Set Variable   mex-k8s-master-${cloudlet_lowercase}-${cluster_name}-mobiledgex
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Server List  name=${cluster_name}
@@ -142,10 +146,11 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
 
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
+# ECQ-1301
 Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    [Documentation]
-   ...  create a cluster on openstack with flavor of ram=8192  vcpus=4  disk=40
-   ...  verify it allocates size=m4.large on openstack
+   ...  - create a cluster on openstack with flavor of ram=8192  vcpus=4  disk=40
+   ...  - verify it allocates size=m4.large on openstack
 
    ${time}=  Get Time  epoch
 
@@ -158,7 +163,7 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    ${server_info_node}=   Set Variable   mex-k8s-master-${cloudlet_lowercase}-${cluster_name}-mobiledgex
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Server List  name=${cluster_name}
@@ -176,10 +181,11 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
+# ECQ-1302
 Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    [Documentation]
-   ...  create a cluster on openstack with flavor of ram=16384  vcpus=8  disk=160
-   ...  verify it allocates size=m4.xlarge on openstack
+   ...  - create a cluster on openstack with flavor of ram=16384  vcpus=8  disk=160
+   ...  - verify it allocates size=m4.xlarge on openstack
 
    ${time}=  Get Time  epoch
 
@@ -192,7 +198,7 @@ Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    ${server_info_node}=   Set Variable   mex-k8s-master-${cloudlet_lowercase}-${cluster_name}-mobiledgex
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Server List  name=${cluster_name}
@@ -210,10 +216,11 @@ Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
+# ECQ-1303
 Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    [Documentation]
-   ...  create a cluster on openstack with flavor of ram=8192  vcpus=1  disk=1
-   ...  verify it allocates size=sdwan-ESC on openstack
+   ...  - create a cluster on openstack with flavor of ram=8192  vcpus=1  disk=1
+   ...  - verify it allocates size=sdwan-ESC on openstack
 
    ${time}=  Get Time  epoch
 
@@ -226,7 +233,7 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    ${server_info_node}=   Set Variable   mex-k8s-master-${cloudlet_lowercase}-${cluster_name}-mobiledgex
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Server List  name=${cluster_name}
@@ -244,10 +251,11 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
+# ECQ-1304
 Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
    [Documentation]
-   ...  create a cluster on openstack with flavor of ram=1024  vcpus=1  disk=160
-   ...  verify it allocates size=sdwan-ESC on openstack
+   ...  - create a cluster on openstack with flavor of ram=1024  vcpus=1  disk=160
+   ...  - verify it allocates size=sdwan-ESC on openstack
 
    ${time}=  Get Time  epoch
 
@@ -256,11 +264,11 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
-   ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_shared}
+   ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
    ${server_info_node}=   Set Variable   mex-k8s-master-${cloudlet_lowercase}-${cluster_name}-mobiledgex
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Server List  name=${cluster_name}
@@ -319,10 +327,11 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
 #
 #   Sleep  120 seconds  #wait for metrics apps to build before can delete
 
+# ECQ-1306
 Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
    [Documentation]
-   ...  create a cluster on openstack with flavor of ram=4096  vcpus=20  disk=4
-   ...  verify it fails since it cannot find a suitable flavor
+   ...  - create a cluster on openstack with flavor of ram=4096  vcpus=20  disk=4
+   ...  - verify it fails since it cannot find a suitable flavor
 
    ${time}=  Get Time  epoch
 
@@ -333,7 +342,7 @@ Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 
@@ -341,10 +350,11 @@ Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
    ${flavor_msg}=  Catenate  SEPARATOR=  No suitable platform flavor found for  ${SPACE}  ${flavor_name}  , please try a smaller flavor
    Should Contain  ${error_msg}   ${flavor_msg}
 
+# ECQ-1307
 Cluster with vcpus=1 and ram=409600 on openstack shall fail with no flavor found
    [Documentation]
-   ...  create a cluster on openstack with flavor of ram=409600  vcpus=  disk=1
-   ...  verify it fails since it cannot find a suitable flavor
+   ...  - create a cluster on openstack with flavor of ram=409600  vcpus=  disk=1
+   ...  - verify it fails since it cannot find a suitable flavor
 
    ${time}=  Get Time  epoch
 
@@ -355,7 +365,7 @@ Cluster with vcpus=1 and ram=409600 on openstack shall fail with no flavor found
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 
@@ -363,10 +373,11 @@ Cluster with vcpus=1 and ram=409600 on openstack shall fail with no flavor found
    ${flavor_msg}=  Catenate  SEPARATOR=  No suitable platform flavor found for  ${SPACE}  ${flavor_name}  , please try a smaller flavor
    Should Contain  ${error_msg}   ${flavor_msg}
 
+# ECQ-1308
 Cluster with vcpus=1 and ram=1024 and disk=1000 on openstack shall fail with no flavor found
    [Documentation]
-   ...  create a cluster on openstack with flavor of ram=1024  vcpus=1  disk=1000
-   ...  verify it fails since it cannot find a suitable flavor
+   ...  - create a cluster on openstack with flavor of ram=1024  vcpus=1  disk=1000
+   ...  - verify it fails since it cannot find a suitable flavor
 
    ${time}=  Get Time  epoch
 
@@ -377,7 +388,7 @@ Cluster with vcpus=1 and ram=1024 and disk=1000 on openstack shall fail with no 
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 

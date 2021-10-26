@@ -31,34 +31,34 @@ StreamClusterInst/StreamAppInst - shall be to do StreamClusterInst and StreamApp
    ...  - do DeleteClusterInst in a thread
    ...  - do StreamClusterInst and verify the output
 
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker  use_thread=${True}
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=IpAccessShared  deployment=kubernetes  number_masters=1  number_nodes=0  use_thread=${True}
    Sleep  5 s
-   ${output}=  Stream Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${output}=  Stream Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    ${outputstring}=  Convert To String  ${output}
    Should Contain  ${outputstring}  Creating
    Should Contain  ${outputstring}  Created ClusterInst successfully
 
-   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2000  image_type=ImageTypeDocker  access_type=loadbalancer  deployment=docker
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  use_thread=${True}
+   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2000  image_type=ImageTypeDocker  access_type=loadbalancer  deployment=kubernetes
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  use_thread=${True}
    Sleep  5 s
-   ${output_app}=  Stream App Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${output_app}=  Stream App Instance   region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    ${outputstring_app}=  Convert To String  ${output_app}
    Should Contain  ${outputstring_app}  Creating
    Should Contain  ${outputstring_app}  Created AppInst successfully
 
-   Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  use_thread=${True}
+   Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  use_thread=${True}
    Sleep  5 s
-   ${output_app2}=  Stream App Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${output_app2}=  Stream App Instance   region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    ${outputstring_app2}=  Convert To String  ${output_app2}
    Should Contain  ${outputstring_app2}  Deleting
    Should Contain  ${outputstring_app2}  Deleted AppInst successfully
 
-   Delete Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  use_thread=${True}
+   Delete Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  use_thread=${True}
    Sleep  5 s
-   ${output2}=  Stream Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   ${output2}=  Stream Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    ${outputstring2}=  Convert To String  ${output2}
    Should Contain  ${outputstring2}  Deleting
@@ -70,7 +70,7 @@ Setup
     Create Flavor  region=${region}  flavor_name=flavor${time}
 
 Teardown
-   Run Keyword and Ignore Error  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   Run Keyword and Ignore Error  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
    Run Keyword and Ignore Error  Delete App  region=${region}
-   Run Keyword and Ignore Error  Delete Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   Run Keyword and Ignore Error  Delete Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
    Run Keyword and Ignore Error  Delete Flavor  region=${region}
