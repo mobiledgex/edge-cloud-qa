@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  Cluster size for openstack with IpAccessShared and Docker
+Documentation  Cluster size for CRM with IpAccessShared and Docker
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_SHARED_ENV}
@@ -19,9 +19,9 @@ ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
 # ECQ-2016
-ClusterInst shall create with IpAccessShared/docker on openstack
+ClusterInst shall create with IpAccessShared/docker on CRM 
    [Documentation]
-   ...  create a cluster on openstack with IpAccessShared and deploymenttype=docker
+   ...  create a cluster on CRM with IpAccessShared and deploymenttype=docker
    ...  verify it creates docker vm on local address
 
    Create Flavor          ram=1024  vcpus=1  disk=1
@@ -32,18 +32,20 @@ ClusterInst shall create with IpAccessShared/docker on openstack
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=IpAccessShared  deployment=docker
    Log to Console  DONE creating cluster instance
 
-   ${openstack_node_name}=    Catenate  SEPARATOR=-  docker  vm  ${cloudlet_lowercase}  ${cluster_name}
+   IF  '${platform_type}' == 'Openstack'
+      ${openstack_node_name}=    Catenate  SEPARATOR=-  docker  vm  ${cloudlet_lowercase}  ${cluster_name}
 
-   ${server_info_node}=    Get Server List  name=${openstack_node_name}
+      ${server_info_node}=    Get Server List  name=${openstack_node_name}
 
-   Should Contain  ${server_info_node[0]["Networks"]}  mex-k8s-net
-   Should Be Equal  ${server_info_node[0]["Status"]}  ACTIVE
+      Should Contain  ${server_info_node[0]["Networks"]}  mex-k8s-net
+      Should Be Equal  ${server_info_node[0]["Status"]}  ACTIVE
 
-   ${num_servers_node}=     Get Length  ${server_info_node}
-   Should Be Equal As Numbers  ${num_servers_node}    1   # 1 nodes
+      ${num_servers_node}=     Get Length  ${server_info_node}
+      Should Be Equal As Numbers  ${num_servers_node}    1   # 1 nodes
+   END
 
    Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
    Should Contain              ${cluster_inst.node_flavor}   .small
@@ -54,12 +56,15 @@ ClusterInst shall create with IpAccessShared/docker on openstack
 
 *** Keywords ***
 Setup
+    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    Set Suite Variable  ${platform_type}
+
     ${epoch_time}=  Get Time  epoch
-    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_shared}
+    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
 
     Set Suite Variable  ${cloudlet_lowercase}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
