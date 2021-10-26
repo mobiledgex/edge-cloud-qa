@@ -5,11 +5,10 @@ import threading
 import sys
 import subprocess
 
-import shared_variables
-
 from mex_rest import MexRest
 
 logger = logging.getLogger(__name__)
+
 
 class MexOperation(MexRest):
     counter_dict = {'show': {'req_attempts': 0,
@@ -47,7 +46,7 @@ class MexOperation(MexRest):
 
     def show(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, stream=False, stream_timeout=None):
         resp = self.send(message_type='show', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, stream=stream, stream_timeout=stream_timeout)
- 
+
         if isinstance(resp, dict):
             return [resp]
         else:
@@ -58,29 +57,30 @@ class MexOperation(MexRest):
 
     def send(self, message_type, token=None, url=None, delete_url=None, delete_autocluster_url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, delete_message=None, delete_autocluster_message=None, show_message=None, thread_name='thread_name', stream=False, stream_timeout=5):
         url = self.root_url + url
- 
+
         payload = None
         msg_dict = None
- 
-        if use_defaults == True:
-            if token == None: token = self.token
- 
-        if json_data !=  None:
+
+        if use_defaults:
+            if token is None:
+                token = self.token
+
+        if json_data is not None:
             payload = json_data
         else:
             msg_dict = message
-           
+
         if region is not None:
             msg_dict['region'] = region
-            
+
         payload = json.dumps(msg_dict)
-            
+
         logger.info(f'{message_type} at {url}. \n\t{payload}')
 
         def send_message(thread_name='Thread'):
             self.counter_dict[message_type]['req_attempts'] += 1
             show_resp = None
-            
+
             try:
                 self.post(url=url, bearer=token, data=payload, stream=stream, stream_timeout=stream_timeout)
                 logger.info(f'{url} response:{self.resp.status_code} {self.resp_text}')
@@ -150,29 +150,32 @@ class MexOperation(MexRest):
                         raise Exception('ERROR: GPU driver build not added successfully:' + str(self.resp_text))
                 else:
                     logger.info(f'not checking specific url response for {url}')
-                #elif url.endswith('UpdateCloudlet'):
+                # elif url.endswith('UpdateCloudlet'):
                 #    if 'Updated Cloudlet successfully' in str(self.resp.text) or 'Upgraded Cloudlet successfully' in str(self.resp.text) or 'Cloudlet updated successfully' in str(self.resp.text):
                 #        pass
                 #    else:
                 #        raise Exception('ERROR: Cloudlet not updated successfully:' + str(self.resp.text))
             except Exception as e:
-                logger.info('operation failed:' + str(sys.exc_info()))
+                logger.info(f'operation failed: {e} {sys.exc_info()}')
                 self.counter_dict[message_type]['req_fail'] += 1
 
                 if use_thread and self.thread_queue:
                     logger.info(f'adding {thread_name} to thread_queue')
-                    self.thread_queue.put({thread_name:sys.exc_info()})
-                  
-                # have seen case where timeout exception is thrown but post was successful. Dont throw exception if 200 anyway 
-                #if self.resp.status_code:
-                #    if self.resp.status_code != 200: 
+                    self.thread_queue.put({thread_name: sys.exc_info()})
+
+                # have seen case where timeout exception is thrown but post was successful. Dont throw exception if 200 anyway
+                # if self.resp.status_code:
+                #    if self.resp.status_code != 200:
                 #        #if self.thread_queue:
                 #        #    logging.info(f'adding {thread_name} to thread_queue')
                 #        #    self.thread_queue.put({thread_name:sys.exc_info()})
                 #        raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
 
                 if stream:
-                    fail_text = self.stream_output_str[-1]  # assume error is always the last line
+                    try:
+                        fail_text = self.stream_output_str[-1]  # assume error is always the last line
+                    except Exception:
+                        fail_text = self.stream_output_str
                 else:
                     fail_text = self.resp_text
 
@@ -189,14 +192,14 @@ class MexOperation(MexRest):
                     show_token = self.super_token
                 else:
                     show_token = token
-                #resp = self.send(message_type='show', region=region, url=show_url, token=self.super_token, message=show_message, use_defaults=False)
+                # resp = self.send(message_type='show', region=region, url=show_url, token=self.super_token, message=show_message, use_defaults=False)
                 show_resp = self.send(message_type='show', region=region, url=show_url, token=show_token, message=show_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout)
 
                 if delete_autocluster_url and delete_autocluster_message:
                     if message['appinst']['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster') or 'real_cluster_name' in message['appinst']:
                         delete_autocluster_message['clusterinst']['key']['cluster_key']['name'] = show_resp[0]['data']['real_cluster_name']
                         logger.debug(f'adding autocluster message to delete stack with super token: {delete_autocluster_message}')
-                        self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_autocluster_url, region=region, token=self.super_token, message=delete_autocluster_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
+                        self.prov_stack.append(lambda: self.send(message_type='delete', url=delete_autocluster_url, region=region, token=self.super_token, message=delete_autocluster_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
 
             if message and delete_message:
                 if token is None:
@@ -206,7 +209,7 @@ class MexOperation(MexRest):
                     logger.debug(f'adding message to delete stack with passed token: {delete_message}')
                     delete_token = token
 
-                self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_url, region=region, token=delete_token, message=delete_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
+                self.prov_stack.append(lambda: self.send(message_type='delete', url=delete_url, region=region, token=delete_token, message=delete_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
 
             return show_resp
 
@@ -216,20 +219,21 @@ class MexOperation(MexRest):
             t.start()
             return t
         else:
-            resp = send_message()
+            send_message()
             if stream:
                 return self.stream_output
             else:
                 return self.decoded_data
 
     def run(self, message_type='run', token=None, command=None, region=None, timeout=120, json_data=None, use_defaults=True, use_thread=False, thread_name='thread_name'):
-        if use_defaults == True:
-            if token == None: token = self.token
+        if use_defaults:
+            if token is None:
+                token = self.token
 
         cmd_docker = 'docker pull registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest > /dev/null && docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
         cmd = f'{cmd_docker} {command} --token {token}'
         logger.info(f'running cmd: {cmd}')
-        
+
         def send_message():
             self.counter_dict[message_type]['req_attempts'] += 1
 
@@ -237,9 +241,9 @@ class MexOperation(MexRest):
                 process = subprocess.Popen(cmd,
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.PIPE,
-                                           #timeout=timeout,
+                                           # timeout=timeout,
                                            shell=True
-                )                
+                                           )
 
                 stdout = [line.decode('utf-8') for line in process.stdout.readlines()]
                 stderr = [line.decode('utf-8') for line in process.stderr.readlines()]
@@ -249,16 +253,17 @@ class MexOperation(MexRest):
                     if 'Error' in line:
                         raise Exception(f'error={stdout}')
             except subprocess.CalledProcessError as e:
-                print('*WARN*','cpe',e)
+                logger.error(f'CalledProcessError {e}')
             except Exception as e:
+                logger.error(f'subprocesserror {e}')
                 self.counter_dict[message_type]['req_fail'] += 1
-                #raise Exception(f'error3={e}')
+                # raise Exception(f'error3={e}')
                 raise
 
             self.counter_dict[message_type]['req_success'] += 1
 
             return stdout
-        
+
         if use_thread is True:
             t = threading.Thread(target=send_message)
             t.start()
