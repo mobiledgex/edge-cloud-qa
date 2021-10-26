@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Create cluster instances with mixed case clustername on openstack
+Documentation   Create cluster instances with mixed case clustername 
 
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library         String
@@ -18,21 +18,25 @@ ${test_timeout_crm}  15 min
 
 *** Test Cases ***
 # ECQ-1199
-CRM shall be able to create a cluster instances with mixed case clustername for openstack
+CRM shall be able to create a cluster instances with mixed case clustername
     [Documentation]
-    ...  Create a clusters and cluster instances with a clustername of MyCluster  on openstack
-    ...  Verify created successfully
+    ...  - Create a clusters and cluster instances with a clustername of MyCluster  on openstack
+    ...  - Verify created successfully
 
     ${epoch_time}=  Get Time  epoch
 
     ${cluster_name_1}=  Catenate  SEPARATOR=  MyCluster  ${epoch_time}  
 
-    #Create Cluster		cluster_name=${cluster_name_1}  default_flavor_name=${flavor_name}
-    #Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_name=${cluster_name_1}  #flavor_name=${flavor_name}
-    Create Cluster Instance    cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_name=${cluster_name_1}  #flavor_name=${flavor_name}
-
-    #sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
+    Create Cluster Instance    cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_name=${cluster_name_1}  number_nodes=${numnodes}  #flavor_name=${flavor_name}
 
 *** Keywords ***
 Setup
+    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    IF  '${platform_type}' == 'K8SBareMetal'
+        ${numnodes}=  Set Variable  0
+    ELSE
+        ${numnodes}=  Set Variable  1
+    END
+    Set Suite Variable  ${numnodes}
+
    Create Flavor

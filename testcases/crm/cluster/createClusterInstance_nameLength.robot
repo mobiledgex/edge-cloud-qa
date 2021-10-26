@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Create cluster instances with long name on opentstack
+Documentation   Create cluster instances with long name
 
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library         String
@@ -23,40 +23,44 @@ ${cluster_name_openstack}=  longnameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
-CRM shall be able to create a cluster instances with 64 chars on openstack
+# ECQ-1277
+CRM shall be able to create a cluster instances with 64 chars
     [Documentation]
-    ...  Create a clusters and cluster instances with a clustername of 64 chars on openstack
-    ...  Verify created successfully
+    ...  - Create a clusters and cluster instances with a clustername of 64 chars
+    ...  - Verify created successfully
 
-    #Create Cluster              cluster_name=${cluster_name}  default_flavor_name=${flavor_name}
-    Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_name=${cluster_name}  #flavor_name=${flavor_name}
+    Create Cluster Instance	cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_name=${cluster_name}  number_nodes=${numnodes}  #flavor_name=${flavor_name}
 
-    #Sleep  120 s
-
-CRM shall be able to create a cluster instances with long name on openstack
+# ECQ-1278
+CRM shall be able to create a cluster instances with long name
     [Documentation]
-    ...  Create a clusters and cluster instances with a clustername of long name on openstack
-    ...  Verify created successfully
+    ...  - Create a clusters and cluster instances with a clustername of long name
+    ...  - Verify created successfully
 
     ${cluster_name_openstack_length}=  Get Length   ${cluster_name_openstack}
     log to console   Length of cluster name=${cluster_name_openstack_length}
-    #Create Cluster              cluster_name=${cluster_name_long}  default_flavor_name=${flavor_name}
-    Create Cluster Instance     cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_name=${cluster_name_openstack}  #flavor_name=${flavor_name}
+    Create Cluster Instance     cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_name=${cluster_name_openstack}  number_nodes=${numnodes}  #flavor_name=${flavor_name}
 
-    #Sleep  120 s
-
+# ECQ-1599
 CRM shall be able to create a cluster instances with long name on azure
     [Documentation]
-    ...  Create a clusters and cluster instances with a clustername of long name on azure
-    ...  Verify created successfully
+    ...  - Create a clusters and cluster instances with a clustername of long name on azure
+    ...  - Verify created successfully
 
-    #Create Cluster              cluster_name=${cluster_name_long}  default_flavor_name=${flavor_name}
     Create Cluster Instance     cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  cluster_name=${cluster_name_azure}  #flavor_name=${flavor_name}
 
     Sleep  1 s
 
 *** Keywords ***
 Setup
+    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    IF  '${platform_type}' == 'K8SBareMetal'
+        ${numnodes}=  Set Variable  0
+    ELSE
+        ${numnodes}=  Set Variable  1
+    END
+    Set Suite Variable  ${numnodes}
+
     ${time}=  Get Time  epoch
     Create Flavor  flavor_name=flavor${time}
 
