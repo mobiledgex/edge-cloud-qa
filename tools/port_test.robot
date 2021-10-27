@@ -9,16 +9,16 @@ Test Timeout   1 min
 # server-ping-theaded3-udp.buckhorncluster.automationbuckhorncloudlet.gddt.mobiledgex.net
 # automation-sdk-porttest-udp.automationfairviewcloudlet.gddt.mobiledgex.net
 # 4015 is the default for starting stopped ports		
-${udp_fqdn}       automation-sdk-porttest-udp.automationfairviewcloudlet.gddt.mobiledgex.net
-${tcp_fqdn}       automation-sdk-porttest-tcp.automationfairviewcloudlet.gddt.mobiledgex.net
-${http_fqdn}      automation-sdk-porttest-tcp.automationfairviewcloudlet.gddt.mobiledgex.net
+${udp_fqdn}       reservable0.automationbuckhorncloudlet.gddt.mobiledgex.net
+${tcp_fqdn}       shared.automationbuckhorncloudlet.gddt.mobiledgex.net
+${http_fqdn}      reservable0.automationbuckhorncloudlet.gddt.mobiledgex.net
 
-${udp_port}   2015
+${udp_port}   2016
 ${tls_port}   2015
-${tcp_port}   2016
+${tcp_port}   10006
 ${http_port}  8085
 
-${http_page}  /automation.html
+${http_page}  automation.html
 
 *** Test Cases ***
 User shall be able to access port on openstack
@@ -26,6 +26,9 @@ User shall be able to access port on openstack
     ...  deploy app with 1 UDP port
     ...  verify the port as accessible via fqdn
 
+    ${r}=  Write To App Volume Mount  host=${tcp_fqdn}  port=${tcp_port}  # will use default file and file contents from MexApp
+    ${d}=  Read From App Volume Mount  host=${tcp_fqdn}  port=${tcp_port}  data_file=${r[0]}
+    log to console  read data is ${d[1]} from ${d[0]}
     #Egress Port Should Be Accessible  vm=cpc1598321065115894dkerprivplcy.dfwvmw2.packet.mobiledgex.net  host=35.199.188.102  protocol=tcp  port=2015
 
     #Stop TCP Port  ${tcp_fqdn}  ${tcp_port}

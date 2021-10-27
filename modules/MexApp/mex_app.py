@@ -226,6 +226,42 @@ class MexApp(object):
 
         return return_data
 
+    def write_to_app_volume_mount(self, host, port, data_file=None, data=None, wait_time=0, tls=False):
+        if not data_file:
+            data_file = f'/data/{time.time()}.txt'
+        if not data:
+            data = 'volumemountdata'
+        data = f'writefile:{data_file}:{data}'
+        logging.info(f'writing data file {data_file}')
+        return_data_list = None
+        try:
+            return_data = self._send_tcp_data(host, port, data).decode('utf-8')
+            return_data_list = return_data.split(',')
+        except Exception as e:
+            logging.error(f'tcp exception caught:{e}')
+            raise Exception(e)
+
+        if len(return_data) <= 0 or 'error' in return_data:
+            raise Exception(f'correct data not received from server. {return_data}')
+
+        return return_data_list
+
+    def read_from_app_volume_mount(self, host, port, data_file, wait_time=0, tls=False):
+        data = f'readfile:{data_file}'
+        logging.info(f'reading data file {data_file}')
+        return_data_list = None
+        try:
+            return_data = self._send_tcp_data(host, port, data).decode('utf-8')
+            return_data_list = return_data.split(',')
+        except Exception as e:
+            logging.error(f'tcp exception caught:{e}')
+            raise Exception(e)
+
+        if len(return_data) <= 0 or 'error' in return_data:
+            raise Exception(f'correct data not received from server. {return_data}')
+
+        return return_data_list
+
     def make_http_request(self, host, port, page, tls=False, verify_cert=None):
         url = f'http://{host}:{port}/{page}'
         if tls:
