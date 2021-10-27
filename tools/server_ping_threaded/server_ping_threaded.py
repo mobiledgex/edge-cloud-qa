@@ -126,6 +126,30 @@ def start_tcp_ping(thread_name, port):
                         version_data = version_file.read()
                     writefile(f'start_tcp_ping version is {version_data} thread={thread_name} port={port}')
                     conn.sendall(bytes(version_data, encoding='utf-8'))
+                elif 'writefile' in decoded_data:
+                    command, path, data = decoded_data.split(':')
+                    writefile(f'write {data} to {path}')
+                    read_data = ''
+                    try:
+                        with open(path, 'a') as data_file:
+                            data_file.write(data)
+                        with open(path, 'r') as data_file_read:
+                            read_data = data_file_read.read()
+                    except Exception as e:
+                        writefile(f'writefile error {e}')
+                        read_data = f'error: {e}'
+                    conn.sendall(bytes(f'{path},{read_data}', encoding='utf-8'))
+                elif 'readfile' in decoded_data:
+                    command, path = decoded_data.split(':')
+                    writefile(f'read from {path}')
+                    read_data = ''
+                    try:
+                        with open(path, 'r') as data_file_read:
+                            read_data = data_file_read.read()
+                    except Exception as e:
+                        writefile(f'readfile error {e}')
+                        read_data = f'error: {e}'
+                    conn.sendall(bytes(f'{path},{read_data}', encoding='utf-8'))
                 elif decoded_data == 'ping':
                     writefile('start_tcp_ping ping received thread={thread_name} port={port}')
                     conn.sendall(bytes('pong', encoding='utf-8'))

@@ -91,7 +91,7 @@ spec:
       - name: docker-qa.mobiledgex.net
       containers:
       - name: server-ping-threaded-udptcphttpapp
-        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
+        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0
         imagePullPolicy: Always
         ports:
         - containerPort: 2016
