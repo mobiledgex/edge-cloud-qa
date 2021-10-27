@@ -27,6 +27,7 @@ ${uri_9}  automation09.platos.com
 ${uri_10}  automation10.platos.com
 
 *** Test Cases ***
+# ECQ-1024
 GetFqdnList - request shall only return apps with permits_platform_apps=True
     [Documentation]
     ...  registerClient with platos app
