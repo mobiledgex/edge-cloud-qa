@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  use FQDN to access app on openstack with docker and IpAccessDedicated and autocluster
+Documentation  use FQDN to access app with docker and IpAccessDedicated and autocluster
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
@@ -28,17 +28,18 @@ ${http_page}       automation.html
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
-User shall be able to access 2 UDP and 2 TCP ports on openstack with docker and autocluster
+# ECQ-1333
+User shall be able to access 2 UDP and 2 TCP ports with docker and autocluster
     [Documentation]
     ...  deploy app with 2 UDP and 2 TCP ports with docker and autocluster
     ...  verify all ports are accessible via fqdn
 
     Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  image_type=ImageTypeDocker  deployment=docker  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}
 
     Wait For App Instance Health Check OK
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_crm}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_2}=  Catenate  SEPARATOR=  ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
@@ -57,7 +58,7 @@ Setup
     #Create Developer
     Create Flavor
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cluster_name}=  Get Default Cluster Name

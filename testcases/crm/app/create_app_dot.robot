@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  Create an app instance on openstack with a dot in the appname
+Documentation  Create an app instance on CRM with a dot in the appname
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
@@ -32,10 +32,11 @@ ${docker_command}  ./server_ping_threaded.py
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
-User shall be able to create an app instance on openstack with a dot in the app name
+# ECQ-1137
+User shall be able to create an app instance on CRM with a dot in the app name
     [Documentation]
-    ...  create an app instance on openstack with a dot in the app name. Such as 'my.app'
-    ...  verify the app is create with the dot removed. Such as 'myapp'
+    ...  - create an app instance on CRM with a dot in the app name. Such as 'my.app'
+    ...  - verify the app is create with the dot removed. Such as 'myapp'
 
     ${epoch_time}=  Get Time  epoch
     ${app_name}=    Catenate  SEPARATOR=.  app  ${epoch_time}
@@ -44,7 +45,7 @@ User shall be able to create an app instance on openstack with a dot in the app 
 
     Log To Console  Creating App and App Instance
     Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #   default_flavor_name=flavor1550592128-673488   cluster_name=cl1550691984-633559 
-    ${appInst}=  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
+    ${appInst}=  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
     ${version}=  Set Variable  ${appInst.key.app_key.version}
     ${version}=  Remove String  ${version}  .
 
@@ -64,15 +65,22 @@ User shall be able to create an app instance on openstack with a dot in the app 
 
 *** Keywords ***
 Setup
+    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    IF  '${platform_type}' == 'K8SBareMetal'
+        ${numnodes}=  Set Variable  0
+    ELSE
+        ${numnodes}=  Set Variable  ${None}
+    END
+
     #Create Developer
     Create Flavor
     #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=${numnodes}  #flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}

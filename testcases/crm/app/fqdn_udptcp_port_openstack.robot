@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  use FQDN to access app on openstack
+Documentation  use FQDN to access app
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
@@ -36,23 +36,23 @@ ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
 # ECQ-1089
-User shall be able to access 1 UDP port on openstack
+User shall be able to access 1 UDP port on CRM
     [Documentation]
-    ...  deploy app with 1 UDP port
-    ...  verify the port as accessible via fqdn
+    ...  - deploy app with 1 UDP port
+    ...  - verify the port as accessible via fqdn
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
     Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
 	
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
-    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_crm}
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
@@ -64,17 +64,17 @@ User shall be able to access 1 UDP port on openstack
    #UDP Port Should Be Alive  10.101.8.2  2015
 
 # ECQ-1090
-User shall be able to access 2 UDP ports on openstack
+User shall be able to access 2 UDP ports on CRM
     [Documentation]
-    ...  deploy app with 2 UDP ports
-    ...  verify both ports are accessible via fqdn
+    ...  - deploy app with 2 UDP ports
+    ...  - verify both ports are accessible via fqdn
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
     Create App  image_path=${docker_image}  access_ports=udp:2015,udp:2016  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
 
@@ -91,16 +91,16 @@ User shall be able to access 2 UDP ports on openstack
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
 # ECQ-1091
-User shall be able to access 1 TCP port on openstack
+User shall be able to access 1 TCP port on CRM
     [Documentation]
-    ...  deploy app with 1 TCP port
-    ...  verify the port as accessible via fqdn
+    ...  - deploy app with 1 TCP port
+    ...  - verify the port as accessible via fqdn
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
 
@@ -115,16 +115,16 @@ User shall be able to access 1 TCP port on openstack
     TCP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
 
  # ECQ-1092
-User shall be able to access 2 TCP ports on openstack
+User shall be able to access 2 TCP ports on CRM
     [Documentation]
-    ...  deploy app with 2 TCP ports
-    ...  verify both ports are accessible via fqdn
+    ...  - deploy app with 2 TCP ports
+    ...  - verify both ports are accessible via fqdn
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
 
@@ -139,10 +139,10 @@ User shall be able to access 2 TCP ports on openstack
     TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
 # ECQ-1093
-User shall be able to access 2 UDP and 2 TCP ports on openstack
+User shall be able to access 2 UDP and 2 TCP ports on CRM
     [Documentation]
-    ...  deploy app with 2 UDP and 2 TCP ports
-    ...  verify all ports are accessible via fqdn
+    ...  - deploy app with 2 UDP and 2 TCP ports
+    ...  - verify all ports are accessible via fqdn
 
     # EDGECLOUD-324 Creating an app with tcp and udp ports sets the fqdnprefix to tcp for both ports
 
@@ -150,7 +150,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
 
@@ -170,23 +170,23 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack
     UDP Port Should Be Alive  ${fqdn_3}  ${cloudlet.ports[3].public_port}
 
 # ECQ-1313
-User shall be able to access HTTP port on openstack
+User shall be able to access HTTP port on CRM
     [Documentation]
-    ...  deploy app with HTTP port
-    ...  verify the port as accessible via fqdn
+    ...  - deploy app with HTTP port
+    ...  - verify the port as accessible via fqdn
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
     Create App  image_path=${docker_image}  access_ports=tcp:8085  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
 	
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
-    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_crm}
 
     Log To Console  Waiting for k8s pod to be running
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
@@ -195,16 +195,16 @@ User shall be able to access HTTP port on openstack
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[0].public_port} 
 
 # ECQ-1314
-User shall be able to access UDP,TCP and HTTP ports on openstack
+User shall be able to access UDP,TCP and HTTP ports on CRM
     [Documentation]
-    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports
-    ...  verify all ports are accessible via fqdn
+    ...  - deploy app with 1 UDP and 1 TCP and 1 HTTP ports
+    ...  - verify all ports are accessible via fqdn
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
 
@@ -221,16 +221,16 @@ User shall be able to access UDP,TCP and HTTP ports on openstack
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
 
 # ECQ-2267
-User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
+User shall be able to access UDP,TCP and HTTP ports on CRM with manifest
     [Documentation]
-    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest
-    ...  verify all ports are accessible via fqdn
+    ...  - deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest
+    ...  - verify all ports are accessible via fqdn
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  deployment_manifest=${manifest_url}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
 
@@ -246,7 +246,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
 
 # ECQ-2994
-User shall be able to access UDP,TCP and HTTP ports on openstack with manifest with externalports != interalports
+User shall be able to access UDP,TCP and HTTP ports on CRM with manifest with externalports != interalports
     [Documentation]
     ...  - deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest when port and targetport have different values
     ...  - verify all ports are accessible via fqdn
@@ -255,7 +255,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest w
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2116,udp:2115,tcp:8185  command=${docker_command}  deployment_manifest=${manifest_different_ports_url}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
 
@@ -271,16 +271,16 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest w
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
 
 # ECQ-2268
-User shall be able to access UDP,TCP and HTTP ports on openstack with manifest and no image_path
+User shall be able to access UDP,TCP and HTTP ports on CRM with manifest and no image_path
     [Documentation]
-    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest and no image_path
-    ...  verify all ports are accessible via fqdn
+    ...  - deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest and no image_path
+    ...  - verify all ports are accessible via fqdn
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=no_default  access_ports=tcp:2016,udp:2015,tcp:8085  deployment_manifest=${manifest_url}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
 
@@ -297,6 +297,13 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest a
 
 *** Keywords ***
 Setup
+    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    IF  '${platform_type}' == 'K8SBareMetal'
+        ${numnodes}=  Set Variable  0
+    ELSE
+        ${numnodes}=  Set Variable  ${None}
+    END
+
     #Create Developer
     #${time}=  Get Time  epoch
     ${time}=  Get Current Date  result_format=epoch
@@ -304,10 +311,10 @@ Setup
     #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=${numnodes}  #flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
