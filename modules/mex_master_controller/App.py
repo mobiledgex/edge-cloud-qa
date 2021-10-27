@@ -15,8 +15,10 @@ class App(MexOperation):
         self.delete_url = '/auth/ctrl/DeleteApp'
         self.show_url = '/auth/ctrl/ShowApp'
         self.update_url = '/auth/ctrl/UpdateApp'
+        self.addalertpolicyapp_url = '/auth/ctrl/AddAppAlertPolicy'
+        self.removealertpolicyapp_url = '/auth/ctrl/RemoveAppAlertPolicy'
 
-    def _build(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None, scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], allow_serverless=None, serverless_config_vcpus=None, serverless_config_ram=None, serverless_config_min_replicas=None, include_fields=False, use_defaults=True):
+    def _build(self, app_name=None, app_version=None, app_org=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None, scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], allow_serverless=None, serverless_config_vcpus=None, serverless_config_ram=None, serverless_config_min_replicas=None, alert_policies=None, alert_policy_name=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
         _app_name_field_number = "2.2"
@@ -111,6 +113,8 @@ class App(MexOperation):
         if app_version:
             app_key_dict['version'] = app_version
             _fields_list.append(_app_version_field_number)
+        if alert_policies is not None:
+            app_key_dict['alertpolices'] = alert_policies
         if developer_org_name is not None:
             app_key_dict['organization'] = developer_org_name
             _fields_list.append(_developer_name_field_number)
@@ -167,7 +171,7 @@ class App(MexOperation):
             try:
                 serverless_dict['vcpus'] = float(serverless_config_vcpus)
             except Exception:
-                serverless_dict['vcpus'] = serverless_config_vcpus 
+                serverless_dict['vcpus'] = serverless_config_vcpus
         if serverless_config_ram is not None:
             try:
                 serverless_dict['ram'] = int(serverless_config_ram)
@@ -214,8 +218,8 @@ class App(MexOperation):
 
         return app_dict
 
-    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None, scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], allow_serverless=None, serverless_config_vcpus=None, serverless_config_ram=None, serverless_config_min_replicas=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path, md5=md5, cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policies=auto_prov_policies, access_type=access_type, configs_kind=configs_kind, configs_config=configs_config, skip_hc_ports=skip_hc_ports, trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, allow_serverless=allow_serverless, serverless_config_vcpus=serverless_config_vcpus, serverless_config_ram=serverless_config_ram, serverless_config_min_replicas=serverless_config_min_replicas, use_defaults=use_defaults)
+    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None, scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], allow_serverless=None, serverless_config_vcpus=None, serverless_config_ram=None, serverless_config_min_replicas=None, alert_policies=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path, md5=md5, cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policies=auto_prov_policies, access_type=access_type, configs_kind=configs_kind, configs_config=configs_config, skip_hc_ports=skip_hc_ports, trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, allow_serverless=allow_serverless, serverless_config_vcpus=serverless_config_vcpus, serverless_config_ram=serverless_config_ram, serverless_config_min_replicas=serverless_config_min_replicas, alert_policies=alert_policies, use_defaults=use_defaults)
         msg_dict = {'app': msg}
 
         msg_dict_delete = None
@@ -252,3 +256,40 @@ class App(MexOperation):
             msg_dict_show = {'app': msg_show}
 
         return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, show_msg=msg_dict_show, message=msg_dict)
+
+    def _build_alerts(self, app_name=None, app_version=None, app_org=None, alert_policy=None, include_fields=False, use_defaults=False):
+
+        alerts_dict = {}
+        app_key_dict = {}
+
+        if alert_policy is not None:
+            alerts_dict['alert_policy'] = alert_policy
+
+        if app_name is not None:
+            app_key_dict['name'] = app_name
+        if app_org is not None:
+            app_key_dict['organization'] = app_org
+        if app_version is not None:
+            app_key_dict['version'] = app_version
+
+        if app_key_dict:
+            alerts_dict['app_key'] = app_key_dict
+
+        return alerts_dict
+
+    def add_alert_policy_app(self, token=None, region=None, app_org=None, app_name=None, app_version=None, alert_policy=None, json_data=None, use_defaults=None, use_thread=False, auto_delete=True):
+        msg = self._build_alerts(app_name=app_name, alert_policy=alert_policy, app_org=app_org, app_version=app_version, use_defaults=use_defaults)
+        msg_dict = {'appalertpolicy': msg}
+        msg_dict_delete = None
+        if auto_delete:
+            msg_delete = self._build_alerts(app_name=app_name, alert_policy=alert_policy, app_org=app_org, app_version=app_version, use_defaults=False)
+            msg_dict_delete = {'appalertpolicy': msg_delete}
+        msg_dict_show = None
+
+        return self.create(token=token, url=self.addalertpolicyapp_url, delete_url=self.removealertpolicyapp_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
+
+    def remove_alert_policy_app(self, token=None, region=None, app_org=None, app_name=None, app_version=None, alert_policy=None, json_data=None, use_defaults=None, use_thread=False, auto_delete=True):
+        msg = self._build_alerts(app_name=app_name, alert_policy=alert_policy, app_org=app_org, app_version=app_version, use_defaults=use_defaults)
+        msg_dict = {'appalertpolicy': msg}
+
+        return self.delete(token=token, url=self.removealertpolicyapp_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
