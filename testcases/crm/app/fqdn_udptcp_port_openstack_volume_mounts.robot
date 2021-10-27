@@ -1,11 +1,12 @@
 *** Settings ***
-Documentation  use FQDN to access app on openstack with volume mounts
+Documentation  use FQDN to access app on CRM with volume mounts
 
-Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_SHARED_ENV}
 Library  MexApp
 Library  String
+Library  Collections
 
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -33,30 +34,24 @@ ${manifest_pod_name}=  server-ping-threaded-udptcphttp
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
-User shall be able to access UDP,TCP and HTTP ports on openstack with volume mounts
+# ECQ-1384
+User shall be able to access UDP,TCP and HTTP ports on CRM with volume mounts
     [Documentation]
-    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest volume mounts
-    ...  verify mounts
-    ...  verify all ports are accessible via fqdn
+    ...  - deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest volume mounts
+    ...  - verify mounts
+    ...  - verify all ports are accessible via fqdn
 
-    ${cluster_name_default}=  Get Default Cluster Name
-    ${app_name_default}=  Get Default App Name
-
-    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  deployment_manifest=${manifest_url}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  deployment_manifest=${manifest_url}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
 
-    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
-    ${server_info_node}=    Get Server List  name=${openstack_node_name}
-   
-    Write File to Node  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}  data=${cluster_name_default}  
+    #Write File to Node  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}  data=${cluster_name_default}  
 
-    #Mount Should Exist on Pod  pod_name=server-ping-threaded-udptcphttp  mount=/data  operator_name=${operator_name_openstack}  cluster_name=cluster1585343784-147785  root_loadbalancer=automationfrankfurtcloudlet.tdg.mobiledgex.net
-	
-    Mount Should Exist on Pod  root_loadbalancer=${rootlb}  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack} 
+    #Mount Should Exist on Pod  root_loadbalancer=${rootlb}  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm} 
 
-    Wait For App Instance Health Check OK
+    Wait For App Instance Health Check OK  region=${region}
+
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
@@ -66,21 +61,31 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with volume mou
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
 
+    ${write_return}=  Write To App Volume Mount  host=${cloudlet.fqdn}  port=${cloudlet.ports[0].public_port}  data=${cluster_name_default}
+    Should Be Equal  ${write_return[1]}  ${cluster_name_default}
+
 *** Keywords ***
 Setup
-    #Create Developer
-    Create Flavor
-    #Create Cluster   #default_flavor_name=${cluster_flavor_name}
-    #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
+    ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    IF  '${platform_type}' == 'K8SBareMetal'
+        ${numnodes}=  Set Variable  0
+    ELSE
+        ${numnodes}=  Set Variable  1
+    END
+    Set Suite Variable  ${platform_type}
+
+    Create Flavor  region=${region} 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=${numnodes}  #flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
-    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_shared}
+    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
+
+    ${cluster_name_default}=  Get Default Cluster Name
 
     Set Suite Variable  ${cloudlet_lowercase}
-
+    Set Suite Variable  ${cluster_name_default}
     Set Suite Variable  ${rootlb}
