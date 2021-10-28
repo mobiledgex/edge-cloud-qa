@@ -41,9 +41,9 @@ ${test_timeout_crm}  15 min
 
 *** Test Cases ***
 # ECQ-2167
-User shall be able to create VM/LB deployment on openstack
+User shall be able to create VM/LB deployment on CRM
     [Documentation]
-    ...  deploy VM app with a Load Balancer on openstack 
+    ...  deploy VM app with a Load Balancer on CRM 
     ...  verify security groups are correct
 
     [Teardown]  Teardown  ${openstack_image}
@@ -53,7 +53,7 @@ User shall be able to create VM/LB deployment on openstack
     ${crm_ip}=  Fetch From Left  ${crm_networks[1]}  "
  
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
 
    # verify md5 in createappinst stream
    ${app_inst_stream_output}=  Get Create App Instance Stream
@@ -115,16 +115,25 @@ User shall be able to create VM/LB deployment on openstack
 #   @{sec_groups}=  Split To Lines  ${server_show['security_groups']} 
 #   Length Should Be  ${sec_groups}  2
 
-# update after controller is fixed for artifactoryFQDN value
-User shall be able to create VM deployment with md5 argument on openstack
+# ECQ-4101
+User shall be able to create VM deployment with md5 argument on CRM
     [Documentation]
-    ...  deploy VM app on openstack
-    ...  verify security groups are correct
+    ...  - deploy VM app on CRM with md5 arg
+    ...  - verify security groups are correct
 
     [Teardown]  Teardown  ${openstack_image}
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:23-2016,udp:2015-40000   access_type=direct    region=${region}   #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
+    # image path is built like this
+    # in.ImagePath = *artifactoryFQDN + "repo-" +
+    #    in.Key.Organization + "/" +
+    #    in.Key.Name + ".qcow2#md5:" + in.Md5Sum
+
+    ${image_split}=  Split String  ${qcow_centos_image}  \#
+    ${md5_split}=  Split String  ${image_split[1]}  :
+   
+    Create App  image_type=ImageTypeQCOW  deployment=vm  app_name=server_ping_threaded_centos7  developer_org_name=MobiledgeX  image_path=no_default  md5_sum=${md5_split[1]}  access_ports=tcp:1023-2016,udp:2015-4050  access_type=loadbalancer  region=${region} 
+    #Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${image_split[0]}  md5_sum=${md5_split[1]}  access_ports=tcp:1023-2016,udp:2015-4050  access_type=loadbalancer  region=${region}   #default_flavor_name=${cluster_flavor_name}
+    ${app_inst}=  Create App Instance  app_name=server_ping_threaded_centos7  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
 
    # verify md5 in createappinst stream
    ${app_inst_stream_output}=  Get Create App Instance Stream
@@ -156,12 +165,15 @@ User shall be able to create VM/LB deployment without ports
     ...  - verify appinst mapped ports is empty
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=${Empty}   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
 
     Should Be Equal  ${app_inst['data']['mapped_ports']}  ${None}
  
 *** Keywords ***
 Setup
+   ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+   Set Suite Variable  ${platform_type}
+
    Create Flavor  disk=80  region=${region}
 
    ${cluster_name_default}=  Get Default Cluster Name
@@ -170,7 +182,7 @@ Setup
    ${version_default}=  Get Default App Version
 
    ${developer_name_default}=  Replace String  ${developer_name_default}  _  -
-   ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_vm}  ${operator_name_openstack}  ${mobiledgex_domain}
+   ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
    ${rootlb}=  Convert To Lowercase  ${rootlb}
    ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
    ${vm}=  Remove String  ${vm}  .
