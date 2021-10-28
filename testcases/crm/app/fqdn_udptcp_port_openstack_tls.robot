@@ -9,7 +9,7 @@ Library  OperatingSystem
 Library  Process
 
 Test Setup      Setup
-Test Teardown   Cleanup provisioning
+#Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
@@ -81,7 +81,7 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated a
    #EDGECLOUD-2794 envoy not starting for docker dedicated with tls
 
    Log To Console  Creating Cluster Instance
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=0
    Log To Console  Done Creating Cluster Instance
 
    ${cluster_name_default}=  Get Default Cluster Name
@@ -225,11 +225,11 @@ User shall be able to access TCP TLS ports with cluster=docker/shared and app=do
 
    Verify Ssl Certificate  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
-# ECA-2257
+# ECQ-2257
 User shall be able to access TCP TLS ports with VM/LB deployment 
     [Documentation]
-    ...  deploy VM app with a Load Balancer on openstack with UDP and  TCP TLS port 
-    ...  verify all ports are accessible via fqdn
+    ...  - deploy VM app with a Load Balancer on CRM with UDP and  TCP TLS port 
+    ...  - verify all ports are accessible via fqdn
 
     # EDGECLOUD-3226 TLS connections not working for VM behind a loadbalancer
 
@@ -240,7 +240,7 @@ User shall be able to access TCP TLS ports with VM/LB deployment
     Create Flavor  region=${region}  flavor_name=flavor${time}1  disk=80
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016:tls,tcp:2015,udp:2015,tcp:8085   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
 
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -257,7 +257,7 @@ Setup
     ${time}=  Get Time  epoch
     Create Flavor  region=${region}  flavor_name=flavor${time}
     
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
