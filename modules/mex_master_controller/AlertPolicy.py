@@ -106,7 +106,7 @@ class AlertPolicy(MexOperation):
         return self.show(url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
     def delete_alert_policy(self, token=None, region=None, alertpolicy_name=None, alert_org=None, json_data=None, severity=None, cpu_utilization=None, mem_utilization=None, disk_utilization=None, active_connections=None, trigger_time=None, labels_vars=None, annotations_vars=None, description=None, use_defaults=True, use_thread=False, auto_delete=True):
-        msg = self._build(token=token, region=region, alertpolicy_name=alertpolicy_name, alert_org=alert_org, severity=severity, cpu_utilization=cpu_utilization, mem_utilization=mem_utilization, disk_utilization=disk_utilization, active_connections=active_connections, trigger_time=trigger_time, labels_vars=labels_vars, annotations_vars=annotations_vars, description=description, use_defaults=use_defaults, auto_delete=auto_delete)
+        msg = self._build(alertpolicy_name=alertpolicy_name, alert_org=alert_org, severity=severity, cpu_utilization=cpu_utilization, mem_utilization=mem_utilization, disk_utilization=disk_utilization, active_connections=active_connections, trigger_time=trigger_time, labels_vars=labels_vars, annotations_vars=annotations_vars, description=description, use_defaults=use_defaults, auto_delete=auto_delete)
         msg_dict = {'alertpolicy': msg}
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
