@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  use FQDN to access app on openstack with IpAccessDedicated and volume mounts
+Documentation  use FQDN to access app on CRM with IpAccessDedicated and volume mounts
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
@@ -36,26 +36,24 @@ ${manifest_pod_name}=  server-ping-threaded-udptcphttp
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
-User shall be able to access UDP and TCP ports on openstack with IpAccessDedicated and volume mounts
+# ECQ-1385
+User shall be able to access UDP and TCP ports on CRM with IpAccessDedicated and volume mounts
     [Documentation]
-    ...  deploy app with 1 UDP and 1 TCP ports and volume mounts
-    ...  verify mounts
-    ...  verify all ports are accessible via fqdn
-
-    ${cluster_name_default}=  Get Default Cluster Name
-    ${app_name_default}=  Get Default App Name
+    ...  - deploy app with 1 UDP and 1 TCP ports and volume mounts
+    ...  - verify mounts
+    ...  - verify all ports are accessible via fqdn
 
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015  deployment_manifest=${manifest_url}
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
 
-    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
-    ${server_info_node}=    Get Server List  name=${openstack_node_name}
+    #${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
+    #${server_info_node}=    Get Server List  name=${openstack_node_name}
    
-    Write File to Node  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}  data=${cluster_name_default}  #root_loadbalancer=${rootlb} 
+    #Write File to Node  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}  data=${cluster_name_default}  #root_loadbalancer=${rootlb} 
 	
-    Mount Should Exist on Pod  root_loadbalancer=${rootlb}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}
+    #Mount Should Exist on Pod  root_loadbalancer=${rootlb}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client  #app_name=app1579992291-485193  developer_org_name=mobiledgex  app_version=1.0
@@ -66,12 +64,15 @@ User shall be able to access UDP and TCP ports on openstack with IpAccessDedicat
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
+    ${write_return}=  Write To App Volume Mount  host=${cloudlet.fqdn}  port=${cloudlet.ports[0].public_port}  data=${cluster_name_default}
+    Should Be Equal  ${write_return[1]}  ${cluster_name_default}
+
 *** Keywords ***
 Setup
     #Create Developer
     Create Flavor  region=${region}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_nodes=0
     Log To Console  Done Creating Cluster Instance
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
@@ -82,6 +83,10 @@ Setup
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_dedicated}
 
-    Set Suite Variable  ${cloudlet_lowercase}
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
 
+    Set Suite Variable  ${cloudlet_lowercase}
+    Set Suite Variable  ${cluster_name_default}
+    Set Suite Variable  ${app_name_default}
     Set Suite Variable  ${rootlb}

@@ -37,8 +37,8 @@ ${test_timeout_crm}  15 min
 # ECQ-1375
 User shall be able to access UDP,TCP and HTTP ports on dedicated CRM with num_masters=1 and num_nodes=0
     [Documentation]
-    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports on CRM with num_masters=1 and num_nodes=0
-    ...  verify all ports are accessible via fqdn
+    ...  - deploy app with 1 UDP and 1 TCP and 1 HTTP ports on CRM with num_masters=1 and num_nodes=0
+    ...  - verify all ports are accessible via fqdn
 
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_masters=1  number_nodes=0   ip_access=IpAccessDedicated  deployment=kubernetes
@@ -64,20 +64,21 @@ User shall be able to access UDP,TCP and HTTP ports on dedicated CRM with num_ma
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
 
-User shall be able to access UDP,TCP and HTTP ports on shared openstack with num_masters=1 and num_nodes=0
+# ECQ-1539
+User shall be able to access UDP,TCP and HTTP ports on shared CRM with num_masters=1 and num_nodes=0
     [Documentation]
-    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports on openstack with num_masters=1 and num_nodes=0
-    ...  verify all ports are accessible via fqdn
+    ...  - deploy app with 1 UDP and 1 TCP and 1 HTTP ports on CRM with num_masters=1 and num_nodes=0
+    ...  - verify all ports are accessible via fqdn
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_masters=1  number_nodes=0   ip_access=IpAccessShared  deployment=kubernetes
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_masters=1  number_nodes=0   ip_access=IpAccessShared  deployment=kubernetes
     Log To Console  Done Creating Cluster Instance
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
     Register Client
@@ -99,13 +100,13 @@ Setup
     #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
 
-    ${rootlb_dedicated}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
-    ${rootlb_dedicated}=  Convert To Lowercase  ${rootlb_dedicated}
+    #${rootlb_dedicated}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
+    #${rootlb_dedicated}=  Convert To Lowercase  ${rootlb_dedicated}
 
-    ${rootlb_shared}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
-    ${rootlb_shared}=  Convert To Lowercase  ${rootlb_shared}
+    #${rootlb_shared}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    #${rootlb_shared}=  Convert To Lowercase  ${rootlb_shared}
 
 
-    Set Suite Variable  ${rootlb_dedicated}
-    Set Suite Variable  ${rootlb_shared}
+    #Set Suite Variable  ${rootlb_dedicated}
+    #Set Suite Variable  ${rootlb_shared}
 
