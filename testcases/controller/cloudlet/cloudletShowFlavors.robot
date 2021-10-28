@@ -7,7 +7,7 @@ Test Setup      Setup
 Test Teardown	Cleanup provisioning
 
 *** Variables ***
-${region}  EU
+${region}  US
 ${cloudlet}=  ${cloudlet_name_crm}
 ${cloudlet_org}=  ${operator_name_crm}
 
