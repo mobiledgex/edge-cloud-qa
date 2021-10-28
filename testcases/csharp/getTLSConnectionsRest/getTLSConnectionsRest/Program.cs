@@ -22,40 +22,44 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text;
 using DistributedMatchEngine;
+using DistributedMatchEngine.Mel;
 using System.Net.Security;
 using System.Security.Authentication;
-using System.Security.Cryptography.X509Certificates;
 
 namespace RestSample
 {
-
     // This interface is optional but is used in the sample.
     class DummyUniqueID : UniqueID
     {
         string UniqueID.GetUniqueIDType()
         {
-            return "";
+            return "dummyModel";
         }
 
         string UniqueID.GetUniqueID()
         {
-            return "";
+            return "abcdef0123456789";
         }
     }
 
     class DummyDeviceInfo : DeviceInfo
     {
-        public bool IsPingSupported()
-        {
-            return true;
-        }
+        DummyCarrierInfo carrierInfo = new DummyCarrierInfo();
 
         Dictionary<string, string> DeviceInfo.GetDeviceInfo()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            dict["one"] = "ONE";
-            dict["two"] = "TWO";
+            dict["DataNetworkPath"] = carrierInfo.GetDataNetworkPath();
+            dict["CarrierName"] = carrierInfo.GetCurrentCarrierName();
+            dict["SignalStrength"] = carrierInfo.GetSignalStrength().ToString();
+            dict["DeviceModel"] = "C#SDK";
+            dict["DeviceOS"] = "TestOS";
             return dict;
+        }
+
+        public bool IsPingSupported()
+        {
+            return true;
         }
 
     }
@@ -72,20 +76,29 @@ namespace RestSample
             return "26201";
         }
 
-        public string GetDataNetworkPath()
-        {
-            return "GSM";
-        }
-
         public string GetMccMnc()
         {
             return "26201";
         }
 
+        public string GetDataNetworkPath()
+        {
+            return "GSM";
+        }
+
         public ulong GetSignalStrength()
         {
-            return 0;
+            return 2;
         }
+    }
+
+    public class TestMelMessaging : MelMessagingInterface
+    {
+        public bool IsMelEnabled() { return false; }
+        public string GetMelVersion() { return ""; }
+        public string GetUid() { return ""; }
+        public string SetToken(string token, string app_name) { return ""; }
+        public string GetManufacturer() { return "DummyManufacturer"; }
     }
 
     class Program
@@ -408,6 +421,10 @@ namespace RestSample
             catch (Exception e)
             {
                 Console.WriteLine("TLS socket exception is " + e);
+                if (e.InnerException != null)
+                {
+                    Console.WriteLine("Inner Exception: " + e.InnerException.Message);
+                }
                 Console.WriteLine("TLSTest Case Failed!!!");
                 Environment.Exit(1);
             }
