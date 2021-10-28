@@ -20,10 +20,10 @@ number_parallel_executionsAnthos = '1'
 currentBuild.displayName = cycle
 
 //def jobList1Parallel = ["runCrmOpenstackTests", "runCrmAzureTests", "runCrmGcpTests", "runRunCommandTests"]
-def jobList1Parallel = ["runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackGpuTests", "runCrmOpenstackVmTests", "runCrmRunDebugTests", "runCrmVMPoolTests", "runCrmAutoProvTests", "runCrmAccessCloudletTests", "runCrmAlertReceiverTests"]
+def jobList1Parallel = ["runCrmOpenstackGpuTests", "runCrmRunDebugTests", "runCrmVMPoolTests", "runCrmAutoProvTests", "runCrmAccessCloudletTests", "runCrmAlertReceiverTests"]
 def jobList1Parallelgcpazure = ["runCrmAzureTests", "runCrmGcpTests"]
 def jobListMaintenance = ["runCloudletMaintenanceCRMTests"]
-def jobList1Platform = ["runCrmRunCommandTests", "runCrmShowLogsTests"]
+def jobList1Platform = ["runCrmRunCommandTests", "runCrmShowLogsTests", "runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackVmTests"]
 def platform_list = ["Openstack", "VCD", "Vsphere", "Anthos"] 
 //def jobList2Parallel = ["runGetFqdnListTests","runGetAppInstListTests"]
  
