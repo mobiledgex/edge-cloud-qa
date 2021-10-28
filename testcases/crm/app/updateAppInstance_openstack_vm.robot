@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  use UpdateAppInst to manage VM based App Inst on openstack
+Documentation  use UpdateAppInst to manage VM based App Inst on CRM
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
@@ -128,9 +128,9 @@ ${test_timeout_crm}  30 min
 # ECQ-2260
 User shall be able to poweroff/poweron VM based App Inst with AccessTypeLoadBalancer
     [Documentation]
-    ...  create VM based App Inst on openstack with AccessTypeLoadBalancer
-    ...  UpdateAppInst to poweroff/poweron the VM
-    ...  Verify the power state using openstack API
+    ...  - create VM based App Inst on CRM with AccessTypeLoadBalancer
+    ...  - UpdateAppInst to poweroff/poweron the VM
+    ...  - Verify the power state using openstack API
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
@@ -148,7 +148,7 @@ User shall be able to poweroff/poweron VM based App Inst with AccessTypeLoadBala
     ${checksum}=  Set Variable  ${array[2]}
 
     ${image_name}=  Catenate  SEPARATOR=-  ${image}  ${checksum}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -161,7 +161,7 @@ User shall be able to poweroff/poweron VM based App Inst with AccessTypeLoadBala
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
     Log To Console  Updating App Instance
-    Update App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOff
+    Update App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOff
     Sleep  10s
 
     ${vm_info}=  Get Server List  name=${vm}
@@ -173,7 +173,7 @@ User shall be able to poweroff/poweron VM based App Inst with AccessTypeLoadBala
     END
 
     Log To Console  Updating App Instance
-    Update App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOn
+    Update App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOn
     Sleep  10s
 
     ${vm_info}=  Get Server List  name=${vm}
@@ -197,9 +197,9 @@ User shall be able to poweroff/poweron VM based App Inst with AccessTypeLoadBala
 # ECQ-2261
 User shall be able to reboot VM based App Inst with AccessTypeLoadBalancer
     [Documentation]
-    ...  create VM based App Inst on openstack with AccessTypeLoadBalancer
-    ...  UpdateAppInst to reboot the VM
-    ...  Verify the power state using openstack API
+    ...  - create VM based App Inst on CRM with AccessTypeLoadBalancer
+    ...  - UpdateAppInst to reboot the VM
+    ...  - Verify the power state using openstack API
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
@@ -217,7 +217,7 @@ User shall be able to reboot VM based App Inst with AccessTypeLoadBalancer
     ${checksum}=  Set Variable  ${array[2]}
 
     ${image_name}=  Catenate  SEPARATOR=-  ${image}  ${checksum}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -225,7 +225,7 @@ User shall be able to reboot VM based App Inst with AccessTypeLoadBalancer
     ${time_before_reboot}=  Set Variable  ${node_info['updated']}
 
     Log To Console  Updating App Instance
-    Update App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}  powerstate=Reboot
+    Update App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}  powerstate=Reboot
     Sleep  10s
 
     ${vm_info}=  Get Server List  name=${vm}
