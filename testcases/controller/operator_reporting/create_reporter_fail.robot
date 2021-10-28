@@ -49,7 +49,7 @@ Create Reporter - Controller throws error when invalid schedule is provided
     ...  Controller throws error
 
     ${error_msg}=  Run Keyword and Expect Error  *  Create Reporter  reporter_name=${reporter_name}  organization=${operator}  schedule=EveryDay
-    Should Contain  ${error_msg}  Invalid reporter schedule
+    Should Contain  ${error_msg}  Invalid ReportSchedule
 
 # ECQ-3772
 Create Reporter - Controller throws error when startscheduledate is a historical date
