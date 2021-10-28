@@ -15,6 +15,8 @@ class App(MexOperation):
         self.delete_url = '/auth/ctrl/DeleteApp'
         self.show_url = '/auth/ctrl/ShowApp'
         self.update_url = '/auth/ctrl/UpdateApp'
+        self.addalertpolicyapp_url = '/auth/ctrl/AddAppAlertPolicy'
+        self.removealertpolicyapp_url = '/auth/ctrl/RemoveAppAlertPolicy'
 
     def _build(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5_sum=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None, scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], allow_serverless=None, serverless_config_vcpus=None, serverless_config_ram=None, serverless_config_min_replicas=None, alert_policies=None, include_fields=False, use_defaults=True):
 
@@ -111,6 +113,8 @@ class App(MexOperation):
         if app_version:
             app_key_dict['version'] = app_version
             _fields_list.append(_app_version_field_number)
+        if alert_policies is not None:
+            app_key_dict['alertpolices'] = alert_policies
         if developer_org_name is not None:
             app_key_dict['organization'] = developer_org_name
             _fields_list.append(_developer_name_field_number)
@@ -254,3 +258,40 @@ class App(MexOperation):
             msg_dict_show = {'app': msg_show}
 
         return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, show_msg=msg_dict_show, message=msg_dict)
+
+    def _build_alerts(self, app_name=None, app_version=None, app_org=None, alert_policy=None, include_fields=False, use_defaults=False):
+
+        alerts_dict = {}
+        app_key_dict = {}
+
+        if alert_policy is not None:
+            alerts_dict['alert_policy'] = alert_policy
+
+        if app_name is not None:
+            app_key_dict['name'] = app_name
+        if app_org is not None:
+            app_key_dict['organization'] = app_org
+        if app_version is not None:
+            app_key_dict['version'] = app_version
+
+        if app_key_dict:
+            alerts_dict['app_key'] = app_key_dict
+
+        return alerts_dict
+
+    def add_alert_policy_app(self, token=None, region=None, app_org=None, app_name=None, app_version=None, alert_policy=None, json_data=None, use_defaults=None, use_thread=False, auto_delete=True):
+        msg = self._build_alerts(app_name=app_name, alert_policy=alert_policy, app_org=app_org, app_version=app_version, use_defaults=use_defaults)
+        msg_dict = {'appalertpolicy': msg}
+        msg_dict_delete = None
+        if auto_delete:
+            msg_delete = self._build_alerts(app_name=app_name, alert_policy=alert_policy, app_org=app_org, app_version=app_version, use_defaults=False)
+            msg_dict_delete = {'appalertpolicy': msg_delete}
+        msg_dict_show = None
+
+        return self.create(token=token, url=self.addalertpolicyapp_url, delete_url=self.removealertpolicyapp_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
+
+    def remove_alert_policy_app(self, token=None, region=None, app_org=None, app_name=None, app_version=None, alert_policy=None, json_data=None, use_defaults=None, use_thread=False, auto_delete=True):
+        msg = self._build_alerts(app_name=app_name, alert_policy=alert_policy, app_org=app_org, app_version=app_version, use_defaults=use_defaults)
+        msg_dict = {'appalertpolicy': msg}
+
+        return self.delete(token=token, url=self.removealertpolicyapp_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)

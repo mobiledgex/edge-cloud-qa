@@ -933,7 +933,7 @@ class MexMasterController(MexRest):
 
             reverse = True if sort_order == 'descending' else False
             if sort_field == 'app_name':
-                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['app_key']['name'].casefold(),reverse=reverse)
+                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse)
 
             return resp_data
 
