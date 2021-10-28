@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  use FQDN to access app on openstack after reboot
+Documentation  use FQDN to access app on CRM after reboot
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
@@ -31,18 +31,19 @@ ${manifest_pod_name}=  server-ping-threaded-udptcphttp
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
-User shall be able to access UDP,TCP and HTTP ports on openstack after reboot
+# ECQ-1379
+User shall be able to access UDP,TCP and HTTP ports on CRM after reboot
     [Documentation]
-    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports
-    ...  verify all ports are accessible via fqdn
-    ...  reboot rootlb
-    ...  verify all ports are accessible via fqdn after reboot
+    ...  - deploy app with 1 UDP and 1 TCP and 1 HTTP ports
+    ...  - verify all ports are accessible via fqdn
+    ...  - reboot rootlb
+    ...  - verify all ports are accessible via fqdn after reboot
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -65,15 +66,22 @@ User shall be able to access UDP,TCP and HTTP ports on openstack after reboot
  
 *** Keywords ***
 Setup
+    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    IF  '${platform_type}' == 'K8SBareMetal'
+        ${numnodes}=  Set Variable  0
+    ELSE
+        ${numnodes}=  Set Variable  ${None}
+    END
+
     #Create Developer
     Create Flavor
     #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=${numnodes}  #flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
