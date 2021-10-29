@@ -170,10 +170,11 @@ class App(MexOperation):
         if allow_serverless:
             app_dict['allow_serverless'] = allow_serverless
         if serverless_config_vcpus is not None:
-            try:
-                serverless_dict['vcpus'] = float(serverless_config_vcpus)
-            except Exception:
-                serverless_dict['vcpus'] = serverless_config_vcpus
+            serverless_dict['vcpus'] = serverless_config_vcpus
+            # try:
+            #    serverless_dict['vcpus'] = float(serverless_config_vcpus)
+            # except Exception:
+            #    serverless_dict['vcpus'] = serverless_config_vcpus
         if serverless_config_ram is not None:
             try:
                 serverless_dict['ram'] = int(serverless_config_ram)

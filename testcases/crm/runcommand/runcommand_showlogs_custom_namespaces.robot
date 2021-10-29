@@ -33,7 +33,7 @@ RunCommand - shall be able to do runcommand and showlogs on appinst with custom 
     ${cluster_name}=    Catenate  SEPARATOR=  autocluster  ${epoch_time}
 
     Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,tcp:8085  image_path=no_default  deployment_manifest=${namespace_manifest}  image_type=ImageTypeDocker  access_type=loadbalancer  deployment=kubernetes  #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  timeout=1500
+    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  timeout=1500
 
     ${rc_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=hostname
 
