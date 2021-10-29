@@ -825,7 +825,7 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlet
    ${numrules_post}=  Get Length  ${policy_post['data']['outbound_security_rules']}
    Should Be Equal As Numbers  ${numrules_post}  3
 
-   ${cloudlet_post}=  Show Cloudlets  region=${region}  operator_org_name=${operator_name_fake}
+   ${cloudlet_post}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}
    Should Be Equal             ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
    Should Be Equal As Numbers  ${cloudlet_post[0]['data']['trust_policy_state']}  5
 

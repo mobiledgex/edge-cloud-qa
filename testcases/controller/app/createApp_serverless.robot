@@ -132,12 +132,12 @@ CreateApp - serverless apps with serverless vcpus less than 0.001 shall fail
    [Tags]  Serverless
 
    ${error1}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  developer_org_name=${developer_org_name}  app_version=1.0  allow_serverless=${True}  serverless_config_vcpus=0.00001
-   Should Be Equal  ${error1}  ('code=400', 'error={"message":"Serverless config vcpus cannot be less than 0.001"}')
+   Should Be Equal  ${error1}  ('code=400', 'error={"message":"Serverless config vcpus cannot have precision less than 0.001"}')
 
    ${app_name}=  Get Default App Name
    ${token}=  Get Super Token
-   ${error2}=  Run Keyword and Expect Error  *  Create App  region=${region}  token=${token}  app_name=${app_name}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  developer_org_name=${developer_org_name}  app_version=1.0  allow_serverless=${True}  serverless_config_vcpus=0.00001  use_defaults=${False}
-   Should Be Equal  ${error2}  ('code=400', 'error={"message":"Serverless config vcpus cannot be less than 0.001"}')
+   ${error2}=  Run Keyword and Expect Error  *  Create App  region=${region}  token=${token}  app_name=${app_name}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  developer_org_name=${developer_org_name}  app_version=1.0  allow_serverless=${True}  serverless_config_vcpus=0.00001  default_flavor_name=x1.medium  use_defaults=${False}
+   Should Be Equal  ${error2}  ('code=400', 'error={"message":"Serverless config vcpus cannot have precision less than 0.001"}')
 
 # ECQ-3498
 CreateApp - serverless apps with scale with cluster shall fail
