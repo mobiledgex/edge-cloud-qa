@@ -792,6 +792,15 @@ class MexApp(object):
 
         return rb.run_command_on_node(node, command)
 
+    def delete_pod(self, pod_name, cluster_name, operator_name, root_loadbalancer=None):
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
+        else:
+            rb = self.rootlb
+
+        return rb.delete_pod(pod_name)
+
     def run_command_on_pod(self, pod_name, command, cluster_name, operator_name, root_loadbalancer=None):
         rb = None
         if root_loadbalancer is not None:
