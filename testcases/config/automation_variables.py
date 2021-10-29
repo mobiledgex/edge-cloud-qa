@@ -17,7 +17,7 @@ cloudlet_name_anthos = 'qa-anthos'
 cloudlet_name_openstack_packet = 'packet-qaregression'
 cloudlet_name_openstack_ha1 = 'automationHamburgCloudlet'
 cloudlet_name_openstack_ha2 = 'automationDusseldorfCloudlet'
-cloudlet_name_crm = 'automationHamburgCloudlet'
+cloudlet_name_crm = 'automationBonnCloudlet'
 cloudlet_name_fake = 'tmocloud-1'
 cloudlet_name_offline = 'automationAlertsCloudlet'
 
