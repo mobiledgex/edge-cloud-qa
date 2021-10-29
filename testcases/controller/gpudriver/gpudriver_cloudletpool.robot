@@ -110,7 +110,7 @@ Setup
     Adduser Role  username=${usernamedev2_epoch}  orgname=${org_name2}  role=DeveloperManager  token=${super_token}
     ${tokendev2}=  Login  username=${usernamedev2_epoch}  password=${password}
 
-    Adduser Role  username=${op_manager_user_automation}  orgname=GDDT  role=OperatorManager  token=${super_token}
+    Run Keyword and Ignore Error  Adduser Role  username=${op_manager_user_automation}  orgname=GDDT  role=OperatorManager  token=${super_token}
     ${op1_token}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
     ${op2_token}=  Login  username=testop1  password=c1C-[L3-g_AV[
 
