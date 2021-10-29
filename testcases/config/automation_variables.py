@@ -73,7 +73,7 @@ namespace_manifest = 'http://35.199.188.102/apps/automation_server_ping_threaded
 
 http_port_page = 'automation.html'
 
-helm_image = 'https://resources.gigaspaces.com/helm-charts:gigaspaces/insightedge'
+helm_image = 'https://ealenn.github.io/charts:ealenn/echo-server'
 
 # vm_console_address =  'https://hamedgecloud.telekom.de:6080/vnc_auto.html'
 vm_console_address = 'https://bonnedgecloud.telekom.de:6080/vnc_auto.html'
