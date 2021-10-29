@@ -1,0 +1,84 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: demo-pv-claim
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: server-ping-threaded-udptcphttpapp
+  name: server-ping-threaded-udptcphttp-tcpservice 
+spec:
+  ports:
+  - name: tcp2016
+    port: 2016 
+    protocol: TCP
+    targetPort: 2016
+  selector:
+    run: server-ping-threaded-udptcphttpapp
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-ping-threaded-udptcphttp-udpservice
+  labels:
+    run: server-ping-threaded-udptcphttpapp
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 2015
+    targetPort: 2015
+    protocol: UDP
+    name: udp2015
+  selector:
+    run: server-ping-threaded-udptcphttpapp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: server-ping-threaded-udptcphttp-deployment 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: server-ping-threaded-udptcphttpapp
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        mex-app: server-ping-threaded-udptcphttp-deployment 
+        run: server-ping-threaded-udptcphttpapp 
+    spec:
+      containers:
+      - image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0
+        imagePullPolicy: Always
+        name: server-ping-threaded-udptcphttp-deployment
+        ports:
+        - containerPort: 2016 
+          protocol: TCP
+        - containerPort: 2015
+          protocol: UDP
+        command:
+         - "./server_ping_threaded.py"
+        volumeMounts:
+        - mountPath: /data
+          name: demo-pv-storage
+      volumes:
+       - name: demo-pv-storage
+         persistentVolumeClaim:
+           claimName: demo-pv-claim
+      imagePullSecrets:
+      - name: docker-qa.mobiledgex.net
+
+
