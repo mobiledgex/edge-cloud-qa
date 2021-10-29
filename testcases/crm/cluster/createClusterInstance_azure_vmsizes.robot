@@ -22,6 +22,7 @@ ${operator_name}        azure
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
+# ECQ-1280
 Cluster with vcpus=1 and ram=1024 on azure shall be Standard_DS1_v2
    [Documentation]
    ...  create a cluster on azure with flavor of ram=1024  vcpus=1  disk=1
@@ -41,6 +42,7 @@ Cluster with vcpus=1 and ram=1024 on azure shall be Standard_DS1_v2
 
    Sleep  1m  #because of EDGECLOUD-574.  helm fails to create on azure so cleanup tries to delete prometheus if we cleanup too quickly
 
+# ECQ-1281
 Cluster with vcpus=2 and ram=2048 on azure shall be Standard_DS2_v2
    [Documentation]
    ...  create a cluster on azure with flavor of ram=2048  vcpus=2  disk=2
@@ -60,6 +62,7 @@ Cluster with vcpus=2 and ram=2048 on azure shall be Standard_DS2_v2
 
    Sleep  1m  #because of EDGECLOUD-574.  helm fails to create on azure so cleanup tries to delete prometheus if we cleanup too quickly
 
+# ECQ-1282
 Cluster with vcpus=4 and ram=4096 on azure shall be Standard_DS3_v2
    [Documentation]
    ...  create a cluster on azure with flavor of ram=4096  vcpus=4  disk=4
@@ -78,7 +81,8 @@ Cluster with vcpus=4 and ram=4096 on azure shall be Standard_DS3_v2
    Should Be Equal  ${cluster_inst.node_flavor}     Standard_DS3_v2
 
    Sleep  1m  #because of EDGECLOUD-574.  helm fails to create on azure so cleanup tries to delete prometheus if we cleanup too quickly
-	
+
+# ECQ-1283	
 Cluster with vcpus=1 and num_nodes=4 on azure shall be Standard_DS1_v2
    [Documentation]
    ...  create a cluster on azure with flavor of ram=1024  vcpus=4  disk=4 and num_nodes=4
@@ -98,7 +102,8 @@ Cluster with vcpus=1 and num_nodes=4 on azure shall be Standard_DS1_v2
    Should Be Equal  ${cluster_inst.node_flavor}     Standard_DS1_v2
 
    Sleep  1m  #because of EDGECLOUD-574.  helm fails to create on azure so cleanup tries to delete prometheus if we cleanup too quickly
-	
+
+# ECQ-1284	
 Cluster with vcpus=20 and ram=4096 on azure shall fail with quota limit
    [Documentation]
    ...  create a cluster on azure with flavor of ram=4096  vcpus=20  disk=4

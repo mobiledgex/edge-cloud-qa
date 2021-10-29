@@ -34,7 +34,7 @@ RunCommand - shall be able to do runcommand and showlogs on appinst with multipl
     ${cluster_name}=    Catenate  SEPARATOR=  autocluster  ${epoch_time}
 
     ${app}=  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:30090  deployment_manifest=${robotnik_manifest}
-    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  timeout=1500
+    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  timeout=1500
 #    ${app_inst}=  Show App Instances  region=${region}  app_name=app1624835677-42721  use_defaults=${False}
 
     log to console  ${app_inst}

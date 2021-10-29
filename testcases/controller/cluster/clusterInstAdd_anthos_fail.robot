@@ -29,6 +29,16 @@ CreateClusterInst - create a clusterinst with deployment=docker for anthos shoul
 
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Platform PLATFORM_TYPE_K8S_BARE_METAL only supports kubernetes-based deployments"}')
 
+# ECQ-4102
+CreateClusterInst - create a clusterinst with shared volume mounts for anthos should fail
+    [Documentation]
+    ...  - create a cluster instance with shared volume mounts for anthos
+    ...  - verify correct error occurs
+
+    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  operator_org_name=${operator_name_anthos}  cloudlet_name=${cloudlet_name_anthos}  deployment=kubernetes  shared_volume_size=1
+
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"Shared volumes not supported on PLATFORM_TYPE_K8S_BARE_METAL"}')
+
 *** Keywords ***
 Setup
     Create Flavor  region=US

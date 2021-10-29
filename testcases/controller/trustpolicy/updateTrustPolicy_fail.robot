@@ -158,11 +158,11 @@ UpdateTrustPolicy - update with invalid minport shall return error
 
    &{rule}=  Create Dictionary  protocol=tcp
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid min port range: 0"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid min port: 0"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=0  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid min port range: 0"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid min port: 0"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=x  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
@@ -178,7 +178,7 @@ UpdateTrustPolicy - update with invalid minport shall return error
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=65536  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid min port range: 65536"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid min port: 65536"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
 # ECQ-3041
 UpdateTrustPolicy - update with invalid maxport shall return error
@@ -208,7 +208,7 @@ UpdateTrustPolicy - update with invalid maxport shall return error
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=65536  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid max port range: 65536"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid max port: 65536"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
 # ECQ-3042
 UpdateTrustPolicy - update with icmp and port range shall return error
