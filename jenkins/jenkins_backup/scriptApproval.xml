@@ -1,0 +1,23 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<scriptApproval plugin="script-security@1.74">
+  <approvedScriptHashes>
+    <string>017d0db438428731cd600b6ebda805065433520f</string>
+  </approvedScriptHashes>
+  <approvedSignatures>
+    <string>method java.util.Calendar add int int</string>
+    <string>method java.util.Calendar getTime</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DateGroovyMethods getAt java.util.Date int</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DateGroovyMethods minus java.util.Date int</string>
+  </approvedSignatures>
+  <aclApprovedSignatures/>
+  <approvedClasspathEntries/>
+  <pendingScripts/>
+  <pendingSignatures>
+    <pendingSignature>
+      <context/>
+      <signature>staticMethod java.lang.String valueOf char[]</signature>
+      <dangerous>false</dangerous>
+    </pendingSignature>
+  </pendingSignatures>
+  <pendingClasspathEntries/>
+</scriptApproval>

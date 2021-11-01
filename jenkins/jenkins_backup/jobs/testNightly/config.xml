@@ -1,0 +1,128 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.25">
+  <actions>
+    <org.jenkinsci.plugins.workflow.multibranch.JobPropertyTrackerAction plugin="workflow-multibranch@2.20">
+      <jobPropertyDescriptors>
+        <string>hudson.model.ParametersDefinitionProperty</string>
+      </jobPropertyDescriptors>
+    </org.jenkinsci.plugins.workflow.multibranch.JobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>Branch</name>
+          <description>Branch to build</description>
+          <defaultValue>master</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Version</name>
+          <description></description>
+          <defaultValue>Nimbus</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Project</name>
+          <description></description>
+          <defaultValue>ECQ</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.57">
+    <script>import java.text.SimpleDateFormat
+
+def jobList1Parallel = [&quot;runControllerTests&quot;, &quot;runDMETests&quot;, &quot;runCSharpTests&quot;, &quot;runCrmTests&quot;]
+builds1 = [:]
+
+node(&apos;jenkinsSlave1&apos;){
+    date = new Date()
+    sdate = new SimpleDateFormat(&quot;yyyMMdd&quot;)
+    //year = date[Calendar.YEAR]
+    //month = date[Calendar.MONTH] + 1
+    //date = date.getAt(Calendar.DATE)
+    //tag = Version + &apos;_automation_&apos; + year + month + date
+    tag = Version + &apos;_automation_&apos; + sdate.format(date)
+    project = &quot;${project}&quot;
+
+    currentBuild.displayName = &quot;${params.Branch}&quot; + &quot;: &quot; + tag
+    try {
+       stage(&apos;Checkout&apos;) {
+          dir(&apos;go/src/github.com/mobiledgex/edge-cloud&apos;) {
+             git branch: &apos;master&apos;,
+             credentialsId: &apos;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&apos;,
+             url: &apos;https://github.com/mobiledgex/edge-cloud.git&apos;
+          }
+          dir(&apos;go/src/github.com/mobiledgex&apos;) {
+             checkout([$class: &apos;GitSCM&apos;,
+                branches: [[name: &apos;master&apos;]],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: &apos;SparseCheckoutPaths&apos;,  sparseCheckoutPaths:[[$class:&apos;SparseCheckoutPath&apos;, path:&apos;jenkins/*&apos;],[$class:&apos;SparseCheckoutPath&apos;, path:&apos;modules/*&apos;]]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: &apos;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&apos;,
+                url: &apos;https://github.com/mobiledgex/edge-cloud-qa.git&apos;]]])
+          }
+       }
+        stage(&quot;Git Describe&quot;) {
+            dir(&apos;go/src/github.com/mobiledgex/edge-cloud&apos;) {
+                gitdesc = sh(label: &apos;Git Describe&apos;, returnStdout: true, script: &quot;git describe --tags&quot;).trim()
+            }
+            currentBuild.displayName = currentBuild.displayName + &apos;: &apos; + gitdesc
+            echo &quot;Git Build Descriptor: ${gitdesc}&quot;
+        }
+        stage(&quot;Git Commit Hash&quot;) {
+            dir(&apos;go/src/github.com/mobiledgex/edge-cloud&apos;) {
+                gitsha = sh(label: &apos;Git Commit Hash&apos;, returnStdout: true, script: &quot;git rev-parse HEAD&quot;).trim()
+            }
+            echo &quot;Git Commit Hash: ${gitsha}&quot;
+        }
+        stage(&apos;dep ensure&apos;) {
+          dir(&apos;go/src/github.com/mobiledgex/edge-cloud&apos;) {
+             sh &apos;export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;dep ensure -vendor-only&apos;
+          }
+       }
+       stage(&apos;make tools&apos;) {
+           dir(&apos;go/src/github.com/mobiledgex/edge-cloud&apos;) {
+              sh &apos;export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make tools&apos;
+           }
+       }
+       stage(&apos;regular make&apos;) {
+          dir(&apos;go/src/github.com/mobiledgex/edge-cloud&apos;) {
+             sh &apos;export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make clean;make&apos;
+          }
+       }
+       stage(&apos;make build-docker&apos;) {
+          dir(&apos;go/src/github.com/mobiledgex/edge-cloud&apos;) {
+              sh label: &apos;Build Docker&apos;, script: &quot;&quot;&quot;#!/bin/bash
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin
+export GOROOT=/usr/local/go
+export GOPATH=$WORKSPACE/go
+
+echo $HOME
+cat ~/docker_password.txt \\
+    | docker login registry.mobiledgex.net:5000 --username mobiledgex --password-stdin
+cat ~/docker_ci_password.txt \\
+    | docker login registry.mobiledgex.net:5009 --username mex-ci --password-stdin
+make build-docker TAG=$tag ADDLTAGS=&quot;registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$gitdesc registry.mobiledgex.net:5009/mobiledgex/edge-cloud:$gitsha&quot;
+export AUTOMATION_DOCKERTAG=$tag&quot;&quot;&quot;
+          }
+       }
+    } catch (e) {
+       dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
+          def status = -1
+       }
+       error(&apos;Aborting the build&apos;)
+    }
+}
+       </script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
