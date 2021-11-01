@@ -17,10 +17,6 @@
     <id>577</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.25">
-    <job>runCrmShowLogsTests</job>
-    <id>809</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.25">
     <job>runCrmRunCommandTests</job>
     <id>874</id>
   </flow-owner>
