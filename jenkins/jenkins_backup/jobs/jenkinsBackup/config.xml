@@ -1,0 +1,93 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty plugin="build-failure-analyzer@1.27.1">
+      <doNotScan>false</doNotScan>
+    </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>master</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>00 12 * * *</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+# Jenkins Configuraitons Directory
+pwd
+echo $JENKINS_HOME
+cd $JENKINS_HOME
+cd edge-cloud-qa/jenkins/jenkins_backup
+ls
+whoami
+git config -l
+
+# copy general config
+cp $JENKINS_HOME/*.xml .
+
+# copy jobs config
+for dir in $JENKINS_HOME/jobs/*
+do
+    realdir=${dir##*/}
+    echo mkdir jobs/${realdir} cp $JENKINS_HOME/jobs/${realdir}/*.xml jobs/${realdir}
+    mkdir -p jobs/&quot;${realdir}&quot; &amp;&amp; cp $JENKINS_HOME/jobs/&quot;${realdir}&quot;/*.xml jobs/&quot;${realdir}&quot;
+done
+
+# copy userContent
+mkdir -p userContent &amp;&amp; cp $JENKINS_HOME/userContent/* userContent
+
+# copy users config
+mkdir -p users &amp;&amp; cp $JENKINS_HOME/users/*.xml users
+for dir in $JENKINS_HOME/users/*/ 
+do
+    realdir=${dir::-1}
+    realdir=${realdir##*/}
+    echo mkdir users/${realdir} cp $JENKINS_HOME/users/${realdir}/*.xml users/${realdir}
+    mkdir -p users/&quot;${realdir}&quot; &amp;&amp; cp $JENKINS_HOME/users/&quot;${realdir}&quot;/*.xml users/&quot;${realdir}&quot;
+done
+
+
+git status
+git add .
+git status
+# Add general configurations, job configurations, and user content
+#git add -- *.xml jobs/*/*.xml userContent/* ansible/*
+
+# only add user configurations if they exist
+#if [ -d users ]; then
+#    user_configs=`ls users/*/config.xml`
+
+#    if [ -n &quot;$user_configs&quot; ]; then
+#        git add $user_configs
+#    fi
+#fi
+
+# mark as deleted anything that&apos;s been, well, deleted
+#to_remove=`git status | grep &quot;deleted&quot; | awk &apos;{print $3}&apos;`
+
+#if [ -n &quot;$to_remove&quot; ]; then
+#    git rm --ignore-unmatch $to_remove
+#fi
+#
+#echo commit
+git commit -m &quot;Automated Jenkins commit&quot;
+#
+git push -q -u origin master
+#echo push
+#git push</command>
+      <configuredLocalRules/>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

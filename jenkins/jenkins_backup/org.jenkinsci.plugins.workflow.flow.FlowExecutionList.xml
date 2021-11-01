@@ -1,0 +1,39 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<list>
+  <flow-owner plugin="workflow-job@2.25">
+    <job>runEdgecloud</job>
+    <id>1113</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.25">
+    <job>runCrmTests</job>
+    <id>784</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.25">
+    <job>runCrmOpenstackSharedTests</job>
+    <id>573</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.25">
+    <job>runCrmOpenstackDedicatedTests</job>
+    <id>577</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.25">
+    <job>runCrmShowLogsTests</job>
+    <id>809</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.25">
+    <job>runCrmRunCommandTests</job>
+    <id>874</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.25">
+    <job>runCrmRunCommandTests</job>
+    <id>873</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.25">
+    <job>runCrmOpenstackVmTests</job>
+    <id>565</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.25">
+    <job>runCrmRunCommandTests</job>
+    <id>875</id>
+  </flow-owner>
+</list>

@@ -1,0 +1,9 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<com.anchore.jenkins.plugins.anchore.AnchoreBuilder_-DescriptorImpl plugin="anchore-container-scanner@1.0.22">
+  <debug>false</debug>
+  <engineurl>http://35.222.155.38:8228/v1</engineurl>
+  <engineuser>admin</engineuser>
+  <enginepass>{AQAAABAAAAAQV9jNbqCM1deBFRP5g8FBlSj+l/BveVboKeh12ytPs84=}</enginepass>
+  <engineverify>false</engineverify>
+  <enabled>false</enabled>
+</com.anchore.jenkins.plugins.anchore.AnchoreBuilder_-DescriptorImpl>
