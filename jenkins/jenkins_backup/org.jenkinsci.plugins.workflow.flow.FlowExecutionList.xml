@@ -13,18 +13,6 @@
     <id>573</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.25">
-    <job>runCrmOpenstackDedicatedTests</job>
-    <id>577</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.25">
-    <job>runCrmRunCommandTests</job>
-    <id>873</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.25">
-    <job>runCrmOpenstackVmTests</job>
-    <id>565</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.25">
     <job>runCrmRunCommandTests</job>
     <id>875</id>
   </flow-owner>
