@@ -21,7 +21,7 @@ ${ntype_shep}=  shepherd
 ${ntype_crm}=  crm
 ${stop-cpu-profile}=  stop-cpu-profile
 ${region}=  EU
-${cloudlet_name_openstack_dedicated}  automationDusseldorfCloudlet
+${cloudlet_name_crm}  automationDusseldorfCloudlet
 ${unknown_cmd}=  Unknown cmd
 ${unknown_cmd1}=  ('code=400('code=400', 'error={"message":"Forbidden"}')
 ${unknown_cmd_oscmd}=  Unknown cmd oscmd
@@ -30,7 +30,7 @@ ${unknown_cmd_crmcmd}=  Unknown cmd crmcmd
 #${unknown_command_oscmd}=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,show-debug-levels,start-cpu-profile,stop-cpu-profile
 #Return for unknown command changed edit on 9-17-2021
 # Older value=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,dump-cloudlet-pools,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,show-debug-levels,start-cpu-profile,stop-cpu-profile
-${unknown_command_oscmd}=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,dump-cloudlet-pools,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,reset-scrape-interval,set-scrape-interval,show-debug-levels,show-scrape-interval,start-cpu-profile,stop-cpu-profile
+${unknown_command_oscmd}=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,dump-cloudlet-pools,dump-notify-state,dump-stack-trace,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,reset-scrape-interval,set-scrape-interval,show-debug-levels,show-scrape-interval,start-cpu-profile,stop-cpu-profile
 ${not_supported}=  not supported
 ${invalid_txt}=  adjsx
 ${timeout_request}=  request timed out
@@ -84,7 +84,7 @@ RunDebug - use govccmd with args to check version
     ...  verify args="govc version" returns version info
 
 
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_vsphere}  command=${govccmd}  args=${govc_version}  node_type=${ntype_crm}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=${govccmd}  args=${govc_version}  node_type=${ntype_crm}  timeout=${time}
 
     ${version}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${version}  0.23.0
@@ -95,7 +95,7 @@ RunDebug - use govccmd with args to check host information
     ...  send runDebug specifying govccmd for cmd=
     ...  verify args="govc host.info" returns vshphere host info
 
-    ${run_debug_out}=    Run Debug  cloudlet_name=${cloudlet_name_vsphere}  command=${govccmd}  args=${govc_host_info}  node_type=${ntype_crm}  timeout=${time}
+    ${run_debug_out}=    Run Debug  cloudlet_name=${cloudlet_name_crm}  command=${govccmd}  args=${govc_host_info}  node_type=${ntype_crm}  timeout=${time}
     ${string_output}=  Set Variable  ${run_debug_out}[-1][data][output]
 
 
@@ -112,16 +112,16 @@ RunDebug - cmd node_type set to shepherd and cmd stop-cpu-profile timeout 5s
     ...  verify stop-cpu-profile on shepherd node_type
 
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${stop-cpu-profile}  node_type=${ntype_shep}  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=${stop-cpu-profile}  node_type=${ntype_shep}  timeout=${time}
 
       ${cnt}=  Get Length  ${node}      
 
       Run Keyword If   ${cnt} < 2  Get Output Type  ELSE  Get Zero Output Type
 
-      ${error}=  Run Keyword And Expect Error  *  Run Debug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=  node_type=
+      ${error}=  Run Keyword And Expect Error  *  Run Debug  cloudlet_name=${cloudlet_name_crm}  command=  node_type=
       Should Contain  ${error}  ('code=400', 'error={"message":"No cmd specified"}')
 
-      ${cmd_invalid}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${invalid_txt}  node_type=
+      ${cmd_invalid}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=${invalid_txt}  node_type=
 
       ${cnt}=  Get Length  ${cmd_invalid}
 
@@ -136,17 +136,17 @@ RunDebug - cmd stop-cpu-profile without specifying node_type timeout 8s
     ...  verify stop-cpu-profile applied to both node types
 
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${stop-cpu-profile}  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=${stop-cpu-profile}  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
       Run Keyword If   ${cnt} < 2  Get Output First Last  ELSE  Get Zero Output First Last 
 
 
-      ${error}=  Run Keyword And Expect Error  *  Run Debug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=
+      ${error}=  Run Keyword And Expect Error  *  Run Debug  cloudlet_name=${cloudlet_name_crm}  command=
       Should Contain  ${error}  ('code=400', 'error={"message":"No cmd specified"}')
 
-      ${cmd_invalid}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${invalid_txt}  timeout=${time}
+      ${cmd_invalid}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=${invalid_txt}  timeout=${time}
       
       ${cnt}=  Get Length  ${cmd_invalid}
 
@@ -158,7 +158,7 @@ RunDebug - cmd disable-debug-levels request should return information
     ...  send runDebug cmd disable-debug-levels
     ...  verify type output disable-debug-levels is returned
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-debug-levels  node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-debug-levels  node_type=shepherd  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -170,7 +170,7 @@ RunDebug - cmd disable-debug-levels second request should return information
     ...  send runDebug cmd disable-debug-levels
     ...  verify output disable-debug-levels is returned
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-debug-levels  node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-debug-levels  node_type=shepherd  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -183,7 +183,7 @@ RunDebug - cmd enable-debug-levels request should return information
     ...  send runDebug cmd enable-debug-levels
     ...  verify output enable-debug-levels is returned
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-debug-levels  node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-debug-levels  node_type=shepherd  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -195,7 +195,7 @@ RunDebug - cmd enable-debug-levels a second time should return information
     ...  send runDebug cmd enable-debug-levels a second time
     ...  verify output enable-debug-levels is returned
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-debug-levels  node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-debug-levels  node_type=shepherd  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -208,7 +208,7 @@ RunDebug - cmd get-mem-profile request should return information
     ...  verify cmd get-mem-profile returns a valid mem profile requested
     ...  verify decoded output with go returns valid mem top table
           
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=get-mem-profile  node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=get-mem-profile  node_type=shepherd  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -221,7 +221,7 @@ RunDebug - cmd get-mem-profile request twice in a row should return information
     ...  verify cmd get-mem-profile returns a valid mem profile requested
     ...  verify decoded output with go returns valid mem top table
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=get-mem-profile  node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=get-mem-profile  node_type=shepherd  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -234,7 +234,7 @@ RunDebug - cmd refresh-internal-certs request should return information
     ...  verify refresh-internal-certs returns triggered refresh for both node types
     ...  verify type crm and shepherd return triggered refresh
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  #node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  #node_type=shepherd  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -247,8 +247,8 @@ RunDebug - cmd refresh-internal-certs for node type shepherd
     ...  send runDebug cmd refresh-internal-certs for node type shepherd
     ...  verify cmd refresh-internal-certs triggers refresh for node type shepherd
 
-      #RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=${ntype_shep}  timeout=${time}
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=${ntype_shep}  timeout=${time}
+      #RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=${ntype_shep}  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=${ntype_shep}  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -260,8 +260,8 @@ RunDebug - cmd refresh-internal-certs for node type crm
     ...  send runDebug cmd refresh-internal-certs on node tyep crm
     ...  verify cmd refresh-internal-certs triggers refresh for node type crm
 
-      #RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=${ntype_crm}  timeout=${time}
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=${ntype_crm}  timeout=${time}
+      #RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=${ntype_crm}  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=${ntype_crm}  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -273,7 +273,7 @@ RunDebug - cmd show-debug-levels for node type shepherd should return informatio
     ...  send runDebug cmd show-debug-levels for node type shepherd
     ...  verify show-debug-levels returns information requested for node type shepherd
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=show-debug-levels  node_type=${ntype_shep}  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=show-debug-levels  node_type=${ntype_shep}  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -286,7 +286,7 @@ RunDebug - cmd show-debug-levels for node type crm should return information
     ...  send runDebug cmd show-debug-levels for node type crm
     ...  verify show-debug-levels returns information requested for node type crm
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=show-debug-levels  node_type=${ntype_crm}  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=show-debug-levels  node_type=${ntype_crm}  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -299,8 +299,8 @@ RunDebug - cmd start-cpu-profile for node type shepherd from already started sta
     ...  send runDebug cmd start-cpu-profile when profile is already started for node type shepherd
     ...  verify show-start-cpu-profile returns cpu profiling already in progress for node type shepherd
 
-      RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+      RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -314,8 +314,8 @@ RunDebug - cmd start-cpu-profile for node type shepherd from stop state
     ...  send runDebug cmd start-cpu-profile when profile is already stopped for node type shepherd
     ...  verify show-start-cpu-profile returns cpu profiling in progress for node type shepherd
 
-      RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+      RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -329,8 +329,8 @@ RunDebug - cmd show-stop-cpu-profile that is already in progress for node type s
     ...  send runDebug cmd stop-cpu-profile that is already in progress for node type shepherd
     ...  verify stop-cpu-profile for node type shepherd returns base64 mem output
 
-      RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+      RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -343,8 +343,8 @@ RunDebug - cmd show-stop-cpu-profile for already stopped cpu profile for node ty
     ...  send runDebug cmd stop-cpu-profile for node type shepherd
     ...  verify stop-cpu-profile for node type shepherd returns no cpu profile in progress 
 
-      RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+      RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -357,8 +357,8 @@ RunDebug - cmd show-stop-cpu-profile not already in progress for node type crm
     ...  send runDebug cmd stop-cpu-profile
     ...  verify stop-cpu-profile for node type crm returns no cpu profile in progress
 
-      RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
+      RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -378,7 +378,7 @@ RunDebug - cmd=oscmd args openstack flavor list node type crm on targeted crm sh
     ...  verify args openstack flavor list output is returned
 
 
-      ${stack}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
+      ${stack}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
 
       ${cnt}=  Get Length  ${stack}
 
@@ -397,7 +397,7 @@ RunDebug - blanket cmd=oscmd args openstack flavor list EU only node type crm cl
     ...  send runDebug cmd args openstack flavor list query to all EU crm cloudlets
     ...  verify args openstack flavor list output is returned for openstack crm type only
 
-      ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
+      ${stack}=  RunDebug  region=${region}  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
 
       ${cnt}=  Get Length  ${stack}
       
@@ -417,7 +417,7 @@ RunDebug - targeted cmd=oscmd args openstack server list on dedicated cloudlet n
     ...  send runDebug cmd args openstack server list on automationDusseldorfCloudlet 
     ...  verify args openstack flavor list output is returned for targeted cloudlet node type crm
 
-      ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
+      ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
 
       ${cnt}=  Get Length  ${stack}
 
@@ -437,7 +437,7 @@ RunDebug - cmd=oscmd args openstack server list on all cloudlets node type crm s
     ...  send runDebug cmd args openstack server list on all cloudlets
     ...  verify args openstack server list output is returned for all crm node type only
 
-      ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
+      ${stack}=  RunDebug  region=${region}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
       ${cnt}=  Get Length  ${stack}
 
       Run Keyword If   ${cnt} < 2  Get Output Type17  ELSE  Get Zero Output Type17
@@ -448,7 +448,7 @@ RunDebug - cmd=oscmd args openstack flavor list on all cloudlets node type sheph
     ...  send runDebug cmd args openstack flavor list on all cloudlets
     ...  verify args openstack flavor list output returns not valid command for all shepherd node type
 
-      ${all_shepherd}=  RunDebug  region=EU  command=oscmd  args=openstack flavor list  node_type=${ntype_shep}
+      ${all_shepherd}=  RunDebug  region=${region}  command=oscmd  args=openstack flavor list  node_type=${ntype_shep}
 
       ${cnt}=  Get Length  ${all_shepherd}
 
@@ -462,7 +462,7 @@ RunDebug - cmd=oscmd args openstack server list on targeted cloudlet node type s
     ...  send runDebug cmd args openstack server list on all cloudlets
     ...  verify args openstack server list output returns not valid command for node type shepherd 
 
-      ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_shep}  timeout=${time}
+      ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack server list  node_type=${ntype_shep}  timeout=${time}
 
       ${cnt}=  Get Length  ${stack}
 
@@ -476,7 +476,7 @@ RunDebug - cmd=crmcmd args ls on targeted cloudlet node type crm is valid
     ...  send runDebug cmd=crmcmd ls on targeted cloudlet
     ...  verify args ls output returns valid data for node type crm
 
-      ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=crmcmd  args=ls  node_type=${ntype_crm}  timeout=${time}
+      ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=crmcmd  args=ls  node_type=${ntype_crm}  timeout=${time}
 
       ${cnt}=  Get Length  ${stack}
 
@@ -489,7 +489,7 @@ RunDebug - cmd=crmcmd args ls on targeted cloudlet node type shepherd is invalid
     ...  send runDebug cmd=crmcmd ls on targeted node tyep shepherd cloudlet
     ...  verify cmd=crmcmd args ls output is not valid for node type shepherd
 
-      ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=crmcmd  args=ls  node_type=${ntype_shep}  timeout=${time}
+      ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=crmcmd  args=ls  node_type=${ntype_shep}  timeout=${time}
 
       ${cnt}=  Get Length  ${stack}
 
@@ -503,7 +503,7 @@ RunDebug - timeout option test for request times out on blanket request oscmd se
     ...  verify args openstack server list output returns request timed out for all cloudlets
     ...  verify RunDebug returns list of cloudlets queried despite timeout
 
-      ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=5ms
+      ${stack}=  RunDebug  region=${region}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=5ms
 
       ${cnt}=  Get Length  ${stack}
       Should Be True   ${cnt} > 0
@@ -517,7 +517,7 @@ RunDebug - timeout option test for request times out on target cloudlet request 
     ...  verify args openstack server list output returns request timed out for all cloudlets
     ...  verify RunDebug returns cloudlet quiried despite timeout
 
-      ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=5ms
+      ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=5ms
 
       ${cnt}=  Get Length  ${stack}
 
@@ -532,7 +532,7 @@ RunDebug - cmd disable-sample-logging node_type shepherd request should return i
     ...  send runDebug cmd disable-sample-logs for node type shepherd
     ...  verify output disabled log sampling for node type shepherd is returned
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
       ${cnt}=  Get Length  ${node}
 
       Run Keyword If   ${cnt} < 2  Get Output Type22  ELSE  Get Zero Output Type22
@@ -544,7 +544,7 @@ RunDebug - cmd disable-sample-logging node_type shepherd second request should r
     ...  send runDebug cmd disable-sample-logging more than once for node type shepherd
     ...  verify output sends disabled log sampling for each request for node type shepherd
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
       ${cnt}=  Get Length  ${node}
 
       Run Keyword If   ${cnt} < 2  Get Output Type23  ELSE  Get Zero Output Type23
@@ -556,7 +556,7 @@ RunDebug - cmd enable-sample-logging request node_type shepherd should return in
     ...  send runDebug cmd enable-sample-logging for node type shepherd
     ...  verify output enabled log sampling for node type shepherd is returned
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  node_type=shepherd  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -570,12 +570,12 @@ RunDebug - cmd enable-sample-logging node_type shepherd second request should re
     ...  verify output sends enabled log sampling for each request for node type shepherd
 
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  node_type=shepherd  timeout=${time}
       ${cnt}=  Get Length  ${node}
 
       Run Keyword If   ${cnt} < 2  Get Output Type24  ELSE  Get Zero Output Type24
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=shepherd  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  node_type=shepherd  timeout=${time}
       ${cnt}=  Get Length  ${node}
 
       Run Keyword If   ${cnt} < 2  Get Output Type24  ELSE  Get Zero Output Type24
@@ -587,7 +587,7 @@ RunDebug - cmd enable-sample-logging node_type not specified will set crm and sh
     ...  send runDebug cmd enable-sample-logging a second time
     ...  verify output enabled log sampling for both node types is returned
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -600,7 +600,7 @@ RunDebug - cmd enable-sample-logging request node_type crm should return informa
     ...  send runDebug cmd enable-sample-logging
     ...  verify output log sampling enabled for node type crm is returned
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=crm  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  node_type=crm  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -613,7 +613,7 @@ RunDebug - cmd disable-sample-logging request node_type crm should return inform
     ...  send runDebug cmd disable-sample-logging
     ...  verify output log sampling disabled for node type crm is returned
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=crm  timeout=${time}
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-sample-logging  node_type=crm  timeout=${time}
 
       ${cnt}=  Get Length  ${node}
 
@@ -625,7 +625,7 @@ RunDebug - blanket request to enable-sample-logging will set all cloudlet node t
     ...  send runDebug enable-sample-logging node type shepherd on all cloudlets
     ...  verify  output is returned for all crm node type shepherd and unknown cmd for non os crm
 
-      ${sample}=  RunDebug  region=EU  command=enable-sample-logging  node_type=${ntype_shep}  timeout=${time}
+      ${sample}=  RunDebug  region=${region}  command=enable-sample-logging  node_type=${ntype_shep}  timeout=${time}
 
       ${cnt}=  Get Length  ${sample}
 
@@ -638,7 +638,7 @@ RunDebug - blanket request to enable-sample-logging will set all cloudlet node t
     ...  send runDebug enable-sample-logging node type shepherd on all cloudlets
     ...  verify  output is returned for all crm node type shepherd and unknown cmd for non os crm
 
-      ${sample}=  RunDebug  region=EU  command=enable-sample-logging  node_type=${ntype_crm}  timeout=${time}
+      ${sample}=  RunDebug  region=${region}  command=enable-sample-logging  node_type=${ntype_crm}  timeout=${time}
 
       ${cnt}=  Get Length  ${sample}
 
@@ -651,42 +651,42 @@ RunDebug - blanket request to enable-sample-logging will set all cloudlet node t
 
 
 Get Output Type
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${stop-cpu-profile}  node_type=${ntype_shep}  timeout=${time} 
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=${stop-cpu-profile}  node_type=${ntype_shep}  timeout=${time} 
     ${type}=  Set Variable  ${node[0]['data']['node']['type']}
     ${output}=  Set Variable  ${node[0]['data']['output']}
     Should Be Equal  ${type}  ${ntype_shep}
     Should Contain  ${output}  ${no_cpu_inprog}
 
 Get Zero Output Type
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${stop-cpu-profile}  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=${stop-cpu-profile}  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${output}=  Set Variable  ${node}[0][data][output]
     Should Be Equal  ${type}  ${ntype_shep}
     Should Contain  ${output}  ${no_cpu_inprog}
 
 Get Output Type1
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-debug-levels  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-debug-levels  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['output']}
     Should Contain  ${type}  disabled debug levels
 
 Get Zero Output Type1
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-debug-levels  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-debug-levels  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${type}  disabled debug levels
 
 Get Output Type2
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-debug-levels  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-debug-levels  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['output']}
     Should Contain  ${type}  enabled debug levels
 
 Get Zero Output Type2
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-debug-levels  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-debug-levels  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${type}  enabled debug levels
 
 Get Output Type3
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=get-mem-profile  node_type=shepherd  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=get-mem-profile  node_type=shepherd  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=get-mem-profile  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=get-mem-profile  node_type=shepherd  timeout=${time}
     ${memtype}=  Set Variable  ${node[0]['data']['output']}
     Create File  /tmp/output.base64  ${memtype}
     Run Process  cat /tmp/output.base64 | base64 --decode  stdout=/tmp/mem.pprof  shell=yes
@@ -701,8 +701,8 @@ Get Output Type3
     Should Contain  ${results.stdout}  ${go_top_nodes}
 
 Get Zero Output Type3
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=get-mem-profile  node_type=shepherd  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=get-mem-profile  node_type=shepherd  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=get-mem-profile  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=get-mem-profile  node_type=shepherd  timeout=${time}
     ${memtype}=  Set Variable  ${node}[0][data][output]
     Create File  /tmp/output.base64  ${memtype}
     Run Process  cat /tmp/output.base64 | base64 --decode  stdout=/tmp/mem.pprof  shell=yes
@@ -717,20 +717,20 @@ Get Zero Output Type3
     Should Contain  ${results.stdout}  ${go_top_nodes}
 
 Get Output Type4
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  #node_type=shepherd  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  #node_type=shepherd  timeout=${time}
-    ${type}=  Set Variable  ${node}[data][node][type]
-    ${type2}=  Set Variable  ${node}[data][node][type]
-    ${refresh}=  Set Variable  ${node}[data][output]
-    ${refresh2}=  Set Variable  ${node}[data][output]
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  #node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  #node_type=shepherd  timeout=${time}
+    ${type}=  Set Variable  ${node}[0][data][node][type]
+    ${type2}=  Set Variable  ${node}[-1][data][node][type]
+    ${refresh}=  Set Variable  ${node}[0][data][output]
+    ${refresh2}=  Set Variable  ${node}[-1][data][output]
     Should Contain Any  ${type}  ${ntype_shep}  ${ntype_crm}
     Should Contain Any  ${type2}  ${ntype_shep}  ${ntype_crm}
     Should Contain  ${refresh}  triggered refresh
     Should Contain  ${refresh2}  triggered refresh
 
 Get Zero Output Type4
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  #node_type=shepherd  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  #node_type=shepherd  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  #node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  #node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${type2}=  Set Variable  ${node}[-1][data][node][type]
     ${refresh}=  Set Variable  ${node}[0][data][output]
@@ -741,136 +741,136 @@ Get Zero Output Type4
     Should Contain  ${refresh2}  triggered refresh
 
 Get Output Type5
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['node']['type']}
     ${refresh}=  Set Variable  ${node[0]['data']['output']}
     Should Contain  ${refresh}  triggered refresh
     Should Contain  ${type}  ${ntype_shep}
 
 Get Zero Output Type5
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${refresh}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${refresh}  triggered refresh
     Should Contain  ${type}  ${ntype_shep}
 
 Get Output Type6
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=${ntype_crm}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=${ntype_crm}  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['node']['type']}
     ${refresh}=  Set Variable  ${node[0]['data']['output']}
     Should Contain  ${refresh}  triggered refresh
     Should Contain  ${type}  ${ntype_crm}
 
 Get Zero Output Type6
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=${ntype_crm}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=${ntype_crm}  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${refresh}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${refresh}  triggered refresh
     Should Contain  ${type}  ${ntype_crm}
 
 Get Output Type7
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=show-debug-levels  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=show-debug-levels  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['node']['type']}
     ${levels}=  Set Variable  ${node[0]['data']['output']}
     Should Contain  ${type}  ${ntype_shep}
     Should Contain Any  ${levels}  api  notify  infra  metric  mongoose
 
 Get Zero Output Type7
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=show-debug-levels  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=show-debug-levels  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${levels}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${type}  ${ntype_shep}
     Should Contain Any  ${levels}  api  notify  infra  metric  mongoose
 
 Get Output Type8
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=show-debug-levels  node_type=${ntype_crm}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=show-debug-levels  node_type=${ntype_crm}  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['node']['type']}
     ${levels}=  Set Variable  ${node[0]['data']['output']}
     Should Contain  ${type}  ${ntype_crm}
     Should Contain Any  ${levels}  api  notify  infra  metric  other
 
 Get Zero Output Type8
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=show-debug-levels  node_type=${ntype_crm}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=show-debug-levels  node_type=${ntype_crm}  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${levels}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${type}  ${ntype_crm}
     Should Contain Any  ${levels}  api  notify  infra  metric  other
 
 Get Output Type9
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['node']['type']}
     ${pprof}=  Set Variable  ${node[0]['data']['output']}
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${pprof}  ${in_progress_base64}
 
 Get Zero Output Type9
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${pprof}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${pprof}  ${in_progress_base64}
 
 Get Output Type10
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['node']['type']}
     ${pprof}=  Set Variable  ${node[0]['data']['output']}
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${pprof}  ${started_base64}
 
 Get Zero Output Type10
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${pprof}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${pprof}  ${started_base64}
 
 Get Output Type11
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['node']['type']}
     ${pprof}=  Set Variable  ${node[0]['data']['output']}
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${pprof}  ${mem_prof_64base}
 
 Get Zero Output Type11
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=start-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${pprof}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${pprof}  ${mem_prof_64base}
 
 Get Output Type12
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['node']['type']}
     ${pprof}=  Set Variable  ${node[0]['data']['output']}
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${pprof}  ${not_progress_base64}
 
 Get Zero Output Type12
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${pprof}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${pprof}  ${not_progress_base64}
 
 Get Output Type13
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['node']['type']}
     ${pprof}=  Set Variable  ${node[0]['data']['output']}
     Should Contain  ${type}  ${ntype_crm}
     Should Contain  ${pprof}  ${not_progress_base64}
 
 Get Zero Output Type13
-    RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
+    RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=stop-cpu-profile  node_type=${ntype_crm}  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${pprof}=  Set Variable  ${node}[0][data][output]
     Should Contain  ${type}  ${ntype_crm}
@@ -878,7 +878,7 @@ Get Zero Output Type13
 
 
 Get Output Type14
-    ${stack}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
+    ${stack}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
     ${output}=  Set Variable  ${stack[0]['data']['output']}
     Should Contain  ${output}  ${server_id}
     Should Contain  ${output}  ${server_name}
@@ -888,7 +888,7 @@ Get Output Type14
     Should Contain  ${output}  ${server_ispublic}
 
 Get Zero Output Type14
-    ${stack}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
+    ${stack}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
     ${output}=  Set Variable  ${stack}[0][data][output]
     Should Contain  ${output}  ${server_id}
     Should Contain  ${output}  ${server_name}
@@ -899,7 +899,7 @@ Get Zero Output Type14
 
 
 Get Output Type15
-    ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
+    ${stack}=  RunDebug  region=${region}  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
     @{Enabled}=  Create List   ${count_flavor_list}    
     @{Node_Type}=  Create List  ${ntype_crm}
     Append To List    ${Enabled}    ${stack}[data] Should Contain Any  ${count_flavor_list}  [output]
@@ -914,7 +914,7 @@ Get Output Type15
 
 Get Zero Output Type15
 
-    ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}    
+    ${stack}=  RunDebug  region=${region}  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}    
     ${cnt}=  Get Length  ${stack}
          @{Enabled}=  Create List   ${count_flavor_list}
          @{Node_Type}=  Create List  ${ntype_crm}
@@ -933,7 +933,7 @@ Get Zero Output Type15
 
 
 Get Output Type16
-    ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
+    ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
     Should Contain Any  ${stack[0]['data']['output']}  ${server_id}  ${unknown_cmd_oscmd}
     Should Contain Any  ${stack[0]['data']['output']}  ${server_name}  ${unknown_cmd_oscmd}
     Should Contain Any  ${stack[0]['data']['output']}  ${server_status}  ${unknown_cmd_oscmd}
@@ -944,7 +944,7 @@ Get Output Type16
     Should Contain Any  ${stack[0]['data']['node']['type']}  ${ntype_crm}  ${unknown_cmd_oscmd}
 
 Get Zero Output Type16
-    ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
+    ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
     Should Contain Any  ${stack}[0][data][output]  ${server_id}  ${unknown_cmd_oscmd}
     Should Contain Any  ${stack}[0][data][output]  ${server_name}  ${unknown_cmd_oscmd}
     Should Contain Any  ${stack}[0][data][output]  ${server_status}  ${unknown_cmd_oscmd}
@@ -956,7 +956,7 @@ Get Zero Output Type16
 
 
 Get Output Type17
-    ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
+    ${stack}=  RunDebug  region=${region}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
     @{Enabled}=  Create List   ${count_server_list}
     @{Node_Type}=  Create List  ${ntype_crm}
     Append To List    ${Enabled}    ${stack}[data] Should Contain Any  ${count_server_list}  [output]
@@ -970,7 +970,7 @@ Get Output Type17
     Should Be True  ${passvalue} <= ${count_ntype}
 
 Get Zero Output Type17
-    ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
+    ${stack}=  RunDebug  region=${region}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
     ${cnt}=  Get Length  ${stack}
          @{Enabled}=  Create List   ${count_server_list}
          @{Node_Type}=  Create List  ${ntype_crm}
@@ -987,14 +987,14 @@ Get Zero Output Type17
      Should Be True  ${passvalue} < ${count_ntype}
 
 Get Output Type18
-    ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_shep}  timeout=${time}
+    ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack server list  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${stack[0]['data']['node']['type']}
     ${output}=  Set Variable  ${stack[0]['data']['output']}
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${output}  ${unknown_cmd_oscmd}
 
 Get Output Type17A
-    ${sample}=  RunDebug  region=EU   command=oscmd  args=openstack flavor list  node_type=${ntype_shep}  timeout=${time}
+    ${sample}=  RunDebug  region=${region}   command=oscmd  args=openstack flavor list  node_type=${ntype_shep}  timeout=${time}
     @{Unknown_Cmd}=  Create List
     @{Node_Type}=  Create List
     @{Timeout}=  Create List
@@ -1013,7 +1013,7 @@ Get Output Type17A
 
 Get Zero Output Type17A
 
-    ${sample}=  RunDebug  region=EU   command=oscmd  args=openstack flavor list  node_type=${ntype_shep}  timeout=${time}
+    ${sample}=  RunDebug  region=${region}   command=oscmd  args=openstack flavor list  node_type=${ntype_shep}  timeout=${time}
     ${cnt}=  Get Length  ${sample}
          @{Unknown_Cmd}=  Create List
          @{Node_Type}=  Create List
@@ -1034,14 +1034,14 @@ Get Zero Output Type17A
          Should Be True  ${passvalue} < ${count_ntype}
 
 Get Zero Output Type18
-    ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_shep}  timeout=${time}
+    ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack server list  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${stack}[0][data][node][type]
     ${output}=  Set Variable  ${stack}[0][data][output]
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${output}  ${unknown_cmd_oscmd}
 
 Get Output Type19
-    ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=crmcmd  args=ls  node_type=${ntype_crm}  timeout=${time}
+    ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=crmcmd  args=ls  node_type=${ntype_crm}  timeout=${time}
     ${type}=  Set Variable  ${stack[0]['data']['node']['type']}
     ${output}=  Set Variable  ${stack[0]['data']['output']}
     Should Contain  ${type}  ${ntype_crm}
@@ -1049,7 +1049,7 @@ Get Output Type19
     Should Contain  ${output}  ${bin}
 
 Get Zero Output Type19
-    ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=crmcmd  args=ls  node_type=${ntype_crm}  timeout=${time}
+    ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=crmcmd  args=ls  node_type=${ntype_crm}  timeout=${time}
     ${type}=  Set Variable  ${stack}[0][data][node][type]
     ${output}=  Set Variable  ${stack}[0][data][output]
     Should Contain  ${type}  ${ntype_crm}
@@ -1057,42 +1057,42 @@ Get Zero Output Type19
     Should Contain  ${output}  ${bin}
 
 Get Output Type20
-    ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=crmcmd  args=ls  node_type=${ntype_shep}  timeout=${time}
+    ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=crmcmd  args=ls  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${stack[0]['data']['node']['type']}
     ${output}=  Set Variable  ${stack[0]['data']['output']}
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${output}  ${unknown_cmd_crmcmd}
 
 Get Zero Output Type20
-    ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=crmcmd  args=ls  node_type=${ntype_shep}  timeout=${time}
+    ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=crmcmd  args=ls  node_type=${ntype_shep}  timeout=${time}
     ${type}=  Set Variable  ${stack}[0][data][node][type]
     ${output}=  Set Variable  ${stack}[0][data][output]
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${output}  ${unknown_cmd_crmcmd}
 
 Get Output Type21
-    ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=5ms
+    ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=5ms
     ${cnt}=  Get Length  ${stack}
     Should Be True  ${cnt} > 0
     Should Be Equal  ${stack[0]['data']['output']}  ${timeout_request}
     Should Be True   ${cnt} > 0
 
 Get Zero Output Type21
-    ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=5ms
+    ${stack}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=5ms
     ${cnt}=  Get Length  ${stack}
     Should Be True  ${cnt} > 0
     Should Be Equal  ${stack}[0][data][output]  ${timeout_request}
     Should Be True   ${cnt} > 0
 
 Get Output Type22
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['output']}
     ${type2}=  Set Variable  ${node[0]['data']['node']['type']}
     Should Contain  ${type}  disabled log sampling
     Should Contain  ${type2}  shepherd
 
 Get Zero Output Type22
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][output]
     ${type2}=  Set Variable  ${node}[-1][data][node][type]
     Should Contain  ${type}  disabled log sampling
@@ -1100,45 +1100,45 @@ Get Zero Output Type22
 
 
 Get Output Type23
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['output']}
     ${type2}=  Set Variable  ${node[0]['data']['node']['type']}
     Should Contain  ${type}  disabled log sampling
     Should Contain  ${type2}  shepherd
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['output']}
     ${type2}=  Set Variable  ${node[0]['data']['node']['type']}
     Should Contain  ${type}  disabled log sampling
     Should Contain  ${type2}  shepherd
 
 Get Zero Output Type23
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][output]
     ${type2}=  Set Variable  ${node}[-1][data][node][type]
     Should Contain  ${type}  disabled log sampling
     Should Contain  ${type2}  shepherd
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-sample-logging  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][output]
     ${type2}=  Set Variable  ${node}[-1][data][node][type]
     Should Contain  ${type}  disabled log sampling
     Should Contain  ${type2}  shepherd
 
 Get Output Type24
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['output']}
     ${type2}=  Set Variable  ${node[0]['data']['node']['type']}
     Should Contain  ${type}  enabled log sampling
     Should Contain  ${type2}  shepherd
 
 Get Zero Output Type24
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=shepherd  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  node_type=shepherd  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][output]
     ${type2}=  Set Variable  ${node}[-1][data][node][type]
     Should Contain  ${type}  enabled log sampling
     Should Contain  ${type2}  shepherd
 
 Get Output Type25
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  timeout=${time}
     ${type}=  Set Variable  ${node}[data][output]
     ${type2}=  Set Variable  ${node}[data][node][type]
     ${type3}=  Set Variable  ${node}[data][output]}
@@ -1149,7 +1149,7 @@ Get Output Type25
     Should Contain Any  ${type4}  crm  shepherd
 
 Get Zero Output Type25
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][output]
     ${type2}=  Set Variable  ${node}[0][data][node][type]
     ${type3}=  Set Variable  ${node}[-1][data][output]}
@@ -1160,35 +1160,35 @@ Get Zero Output Type25
     Should Contain Any  ${type4}  crm  shepherd
 
 Get Output Type26
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=crm  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  node_type=crm  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['output']}
     ${type2}=  Set Variable  ${node[0]['data']['node']['type']}
     Should Contain  ${type}  enabled log sampling
     Should Contain  ${type2}  crm
 
 Get Zero Output Type26
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=crm  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  node_type=crm  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][output]
     ${type2}=  Set Variable  ${node}[-1][data][node][type]
     Should Contain  ${type}  enabled log sampling
     Should Contain  ${type2}  crm
 
 Get Output Type27
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=crm  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-sample-logging  node_type=crm  timeout=${time}
     ${type}=  Set Variable  ${node[0]['data']['output']}
     ${type2}=  Set Variable  ${node[0]['data']['node']['type']}
     Should Contain  ${type}  disabled log sampling
     Should Contain  ${type2}  crm
 
 Get Zero Output Type27
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=crm  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=disable-sample-logging  node_type=crm  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][output]
     ${type2}=  Set Variable  ${node}[-1][data][node][type]
     Should Contain  ${type}  disabled log sampling
     Should Contain  ${type2}  crm
 
 Get Output Type28
-    ${sample}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=${ntype_shep}  timeout=${time}
+    ${sample}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  node_type=${ntype_shep}  timeout=${time}
     @{Enabled}=  Create List 
     @{Node_Type}=  Create List  ${ntype_shep}
     Append To List    ${Enabled}    ${sample}[data][output]
@@ -1206,7 +1206,7 @@ Get Output Type28
 
 Get Zero Output Type28
 
-    ${sample}=  RunDebug  region=EU  command=enable-sample-logging  node_type=${ntype_shep}  timeout=${time}
+    ${sample}=  RunDebug  region=${region}  command=enable-sample-logging  node_type=${ntype_shep}  timeout=${time}
     ${cnt}=  Get Length  ${sample}
          @{Enabled}=  Create List  
          @{Node_Type}=  Create List  ${ntype_shep}
@@ -1225,7 +1225,7 @@ Get Zero Output Type28
          Should Be True  ${passvalue} < ${count_ntype}
 
 Get Output Type29
-    ${sample}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=${ntype_crm}  timeout=${time} 
+    ${sample}=  RunDebug  region=${region}  cloudlet_name=${cloudlet_name_crm}  command=enable-sample-logging  node_type=${ntype_crm}  timeout=${time} 
     @{Enabled}=  Create List  
     @{Node_Type}=  Create List  ${ntype_crm}
     Append To List    ${Enabled}    ${sample}[data][output]
@@ -1241,7 +1241,7 @@ Get Output Type29
 #    Should Contain Any  ${sample}[data][node][type]  ${ntype_crm}
 
 Get Zero Output Type29
-    ${sample}=  RunDebug  region=EU  command=enable-sample-logging  node_type=${ntype_crm}  timeout=${time}
+    ${sample}=  RunDebug  region=${region}  command=enable-sample-logging  node_type=${ntype_crm}  timeout=${time}
     ${cnt}=  Get Length  ${sample}
          @{Enabled}=  Create List 
          @{Node_Type}=  Create List  ${ntype_crm}
@@ -1260,7 +1260,7 @@ Get Zero Output Type29
          Should Be True  ${passvalue} < ${count_ntype}
 
 Get Zero Output First Last
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${stop-cpu-profile}  timeout=${time}
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=${stop-cpu-profile}  timeout=${time}
     ${type}=  Set Variable  ${node}[0][data][node][type]
     ${type2}=  Set Variable  ${node}[-1][data][node][type]
     ${type3}=  Set Variable  ${node}[0][data][output]
@@ -1272,11 +1272,11 @@ Get Zero Output First Last
 
 
 Get Output First Last
-    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${stop-cpu-profile}  timeout=${time}
-    ${type}=  Set Variable  ${node}[data][node][type]
-    ${type2}=  Set Variable  ${node}[data][node][type]
-    ${type3}=  Set Variable  ${node}[data][output]
-    ${type4}=  Set Variable  ${node}[data][output]
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=${stop-cpu-profile}  timeout=${time}
+    ${type}=  Set Variable  ${node}[0][data][node][type]
+    ${type2}=  Set Variable  ${node}[-1][data][node][type]
+    ${type3}=  Set Variable  ${node}[0][data][output]
+    ${type4}=  Set Variable  ${node}[-1][data][output]
     Should Contain Any  ${type}  ${ntype_shep}  ${ntype_crm}
     Should Contain Any  ${type2}  ${ntype_shep}  ${ntype_crm}
     Should Be Equal  ${type3}  ${no_cpu_inprog}
@@ -1284,12 +1284,12 @@ Get Output First Last
 
 
 Check Invalid
-    ${cmd_invalid}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${invalid_txt}  timeout=${time}
-    ${check_invalid}=  Set Variable  ${cmd_invalid}[data][output]
+    ${cmd_invalid}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=${invalid_txt}  timeout=${time}
+    ${check_invalid}=  Set Variable  ${cmd_invalid}[0][data][output]
     Should Contain  ${check_invalid}  ${unknown_cmd}
 
 Check Zero Invalid
-    ${cmd_invalid}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${invalid_txt}  timeout=${time}
+    ${cmd_invalid}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=${invalid_txt}  timeout=${time}
     ${check_invalid}=  Set Variable  ${cmd_invalid}[0][data][output]
     Should Contain  ${check_invalid}  ${unknown_cmd}
 

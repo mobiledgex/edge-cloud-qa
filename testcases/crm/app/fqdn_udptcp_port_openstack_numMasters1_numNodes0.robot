@@ -46,7 +46,7 @@ User shall be able to access UDP,TCP and HTTP ports on dedicated CRM with num_ma
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
-    ${rootlb_dedicated}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb_dedicated}
+    #${rootlb_dedicated}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb_dedicated}
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  
     Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
