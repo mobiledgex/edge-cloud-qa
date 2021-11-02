@@ -43,7 +43,7 @@ User shall be able to access UDP and TCP ports on CRM with IpAccessDedicated and
     ...  - verify mounts
     ...  - verify all ports are accessible via fqdn
 
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015  deployment_manifest=${manifest_url}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015  deployment_manifest=${manifest_url}  allow_serverless=${allow_serverless}
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
@@ -70,6 +70,15 @@ User shall be able to access UDP and TCP ports on CRM with IpAccessDedicated and
 *** Keywords ***
 Setup
     #Create Developer
+    ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    IF  '${platform_type}' == 'K8SBareMetal'
+        ${allow_serverless}=  Set Variable  ${True}
+    ELSE
+        ${allow_serverless}=  Set Variable  ${None}
+    END
+    Set Suite Variable  ${platform_type}
+    Set Suite Variable  ${allow_serverless}
+
     Create Flavor  region=${region}
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_nodes=0
