@@ -23,6 +23,7 @@ ${qcow_centos_image}   https://artifactory-qa.mobiledgex.net/artifactory/repo-ld
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
+# ECQ-1906
 GPU - CreateClusterInst shall fail if gpu=0
    [Documentation]
    ...  create a cluster on openstack with 0 GPU
