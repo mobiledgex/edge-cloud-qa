@@ -676,7 +676,7 @@ class Cloudlet():
         
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  access_type=None, scale_with_cluster=False, official_fqdn=None, include_fields=False, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  access_type=None, scale_with_cluster=False, official_fqdn=None, allow_serverless=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
 
@@ -698,6 +698,7 @@ class App():
         self.scale_with_cluster = scale_with_cluster
         self.official_fqdn = official_fqdn
         self.access_type = access_type
+        self.allow_serverless = allow_serverless
         
         if self.image_type and isinstance(self.image_type, str):
             self.image_type = self.image_type.casefold()
@@ -831,7 +832,9 @@ class App():
             app_dict['scale_with_cluster'] = True
         if self.official_fqdn:
             app_dict['official_fqdn'] = self.official_fqdn
-            
+        if self.allow_serverless:
+            app_dict['allow_serverless'] = self.allow_serverless
+ 
         self.app = app_pb2.App(**app_dict)
 
         shared_variables.app_name_default = self.app_name
