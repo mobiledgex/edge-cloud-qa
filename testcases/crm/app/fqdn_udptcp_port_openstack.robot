@@ -9,7 +9,7 @@ Library  DateTime
 #Variables       shared_variables.py
 
 Test Setup      Setup
-Test Teardown   Cleanup provisioning
+#Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
@@ -297,22 +297,15 @@ User shall be able to access UDP,TCP and HTTP ports on CRM with manifest and no 
 
 *** Keywords ***
 Setup
-    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
-    IF  '${platform_type}' == 'K8SBareMetal'
-        ${numnodes}=  Set Variable  0
-    ELSE
-        ${numnodes}=  Set Variable  ${None}
-    END
-
-    #Create Developer
-    #${time}=  Get Time  epoch
     ${time}=  Get Current Date  result_format=epoch
     Create Flavor  flavor_name=flavor${time}
-    #Create Cluster   #default_flavor_name=${cluster_flavor_name}
-    #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=${numnodes}  #flavor_name=${cluster_flavor_name}
-    Log To Console  Done Creating Cluster Instance
+
+    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    IF  '${platform_type}' != 'K8SBareMetal'
+        Log To Console  Creating Cluster Instance
+        Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=1  #flavor_name=${cluster_flavor_name}
+        Log To Console  Done Creating Cluster Instance
+    END
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
