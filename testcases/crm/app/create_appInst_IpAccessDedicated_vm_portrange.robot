@@ -28,7 +28,7 @@ ${region}=  EU
 
 *** Test Cases ***
 # ECQ-3359
-User shall be able to create app with large port range on openstack with VM and access_type=loadbalancer
+User shall be able to create app with large port range on CRM with VM and access_type=loadbalancer
    [Documentation]
    ...  - deploy app with large port range with vm
    ...  - verify ports are added to security group
@@ -39,9 +39,9 @@ User shall be able to create app with large port range on openstack with VM and 
 
    Log To Console  Creating App and App Instance
    Create App  region=${region}  image_path=${qcow_centos_image}  access_ports=udp:1-10000,tcp:2000-2999  skip_hc_ports=tcp:2000-2014,tcp:2017-2999  image_type=ImageTypeQcow  access_type=loadbalancer  deployment=vm  #default_flavor_name=${cluster_flavor_name}
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  #cluster_instance_name=${cluster_name_default}
 
-   ${server_info_crm}=      Get Server List  name=${cloudlet_name_openstack_dedicated}.${operator_name_openstack}.pf
+   ${server_info_crm}=      Get Server List  name=${cloudlet_name_crm}.${operator_name_crm}.pf
    ${crm_networks}=  Split String  ${server_info_crm[0]['Networks']}  =
    ${crm_ip}=  Fetch From Left  ${crm_networks[1]}  "
 
@@ -78,7 +78,7 @@ Setup
     Log To Console  Creating Cluster Instance
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cluster_name}=  Get Default Cluster Name

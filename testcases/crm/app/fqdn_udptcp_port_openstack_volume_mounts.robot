@@ -66,18 +66,15 @@ User shall be able to access UDP,TCP and HTTP ports on CRM with volume mounts
 
 *** Keywords ***
 Setup
+    Create Flavor  region=${region}
+
     ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
-    IF  '${platform_type}' == 'K8SBareMetal'
-        ${numnodes}=  Set Variable  0
-    ELSE
-        ${numnodes}=  Set Variable  1
+    IF  '${platform_type}' != 'K8SBareMetal'
+        Log To Console  Creating Cluster Instance
+        Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  #flavor_name=${cluster_flavor_name}
+        Log To Console  Done Creating Cluster Instance
     END
     Set Suite Variable  ${platform_type}
-
-    Create Flavor  region=${region} 
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=${numnodes}  #flavor_name=${cluster_flavor_name}
-    Log To Console  Done Creating Cluster Instance
 
     ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
