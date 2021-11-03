@@ -723,7 +723,10 @@ class App():
             if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
             #if ip_access is None: self.ip_access = 3 # default to shared
             if access_ports is None: self.access_ports = 'tcp:1234'
-            
+            if allow_serverless is None:
+                if shared_variables.platform_type == 'K8SBareMetal':
+                    self.allow_serverless = True
+                      
             if self.image_type == 'imagetypedocker':
                 if self.image_path is None:
                     self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
@@ -1722,6 +1725,8 @@ class MexController(MexGrpc):
     def get_cloudlet_platform_type(self, token=None, region=None, operator_org_name=None, cloudlet_name=None):
         cloudlet = self.show_cloudlets(operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=False)
         platform_types = ['Fake', 'Dind', 'Openstack', 'Azure', 'Gcp', 'Edgebox', 'Fakeinfra', 'Vsphere', 'AwsEks', 'VmPool', 'AwsEc2', 'Vcd', 'K8SBareMetal', 'Kind', 'Kindinfra']
+
+        shared_variables.platform_type = platform_types[cloudlet[0].platform_type]
 
         return platform_types[cloudlet[0].platform_type]
 

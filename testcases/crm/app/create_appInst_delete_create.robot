@@ -29,10 +29,10 @@ ${test_timeout_crm}  15 min
 # ECQ-1138
 User shall be able to create/delete/create an app instance on CRM
     [Documentation]
-    ...  create app and app instance on CRM
-    ...  delete the app instance
-    ...  create the app instance again
-    ...  verify app instance is created both times
+    ...  - create app and app instance on CRM
+    ...  - delete the app instance
+    ...  - create the app instance again
+    ...  - verify app instance is created both times
 
     ${epoch_time}=  Get Time  epoch
     ${app_name}=    Catenate  SEPARATOR=  app  ${epoch_time}
@@ -62,21 +62,14 @@ User shall be able to create/delete/create an app instance on CRM
 
 *** Keywords ***
 Setup
-    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
-    IF  '${platform_type}' == 'K8SBareMetal'
-        ${numnodes}=  Set Variable  0
-    ELSE
-        ${numnodes}=  Set Variable  ${None}
-    END
-
-    #Create Developer
     Create Flavor
-    #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
-    #Create Cluster   default_flavor_name=${cluster_flavor_name}
-    #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=${numnodes}  #flavor_name=${cluster_flavor_name}
-    Log To Console  Done Creating Cluster Instance
+
+    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    IF  '${platform_type}' != 'K8SBareMetal'
+        Log To Console  Creating Cluster Instance
+        Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  #flavor_name=${cluster_flavor_name}
+        Log To Console  Done Creating Cluster Instance
+    END
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
