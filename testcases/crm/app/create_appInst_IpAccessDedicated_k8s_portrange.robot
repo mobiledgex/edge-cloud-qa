@@ -32,7 +32,7 @@ ${region}=  EU
 
 *** Test Cases ***
 # ECQ-3360
-User shall be able to create app with large port range on openstack with k8s and access_type=loadbalancer
+User shall be able to create app with large port range on CRM with k8s and access_type=loadbalancer
    [Documentation]
    ...  - deploy app with large port range with k8s
    ...  - verify ports are added to security group
@@ -42,10 +42,10 @@ User shall be able to create app with large port range on openstack with k8s and
    ${app_name_default}=  Get Default App Name
 
    Log To Console  Creating App and App Instance
-   Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2001-3000,tcp:2000-2999  skip_hc_ports=tcp:2000-2014,tcp:2017-2999  command=${docker_command}  image_type=ImageTypeDocker  access_type=loadbalancer  deployment=kubernetes  #default_flavor_name=${cluster_flavor_name}
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+   Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2001-3000,tcp:2000-2999  skip_hc_ports=tcp:2000-2014,tcp:2017-2999  command=${docker_command}  image_type=ImageTypeDocker  access_type=loadbalancer  deployment=kubernetes  allow_serverless=${allow_serverless}  #default_flavor_name=${cluster_flavor_name}
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
-   ${server_info_crm}=      Get Server List  name=${cloudlet_name_openstack_dedicated}.${operator_name_openstack}.pf
+   ${server_info_crm}=      Get Server List  name=${cloudlet_name_crm}.${operator_name_crm}.pf
    ${crm_networks}=  Split String  ${server_info_crm[0]['Networks']}  =
    ${crm_ip}=  Fetch From Left  ${crm_networks[1]}  "
 
@@ -79,11 +79,21 @@ User shall be able to create app with large port range on openstack with k8s and
 *** Keywords ***
 Setup
     Create Flavor  region=${region}
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  deployment=kubernetes
-    Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+
+    IF  '${platform_type}' == 'K8SBareMetal'
+        ${allow_serverless}=  Set Variable  ${True}
+    ELSE
+        Log To Console  Creating Cluster Instance
+        Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  deployment=kubernetes
+        Log To Console  Done Creating Cluster Instance
+        ${allow_serverless}=  Set Variable  ${None}
+    END
+    Set Suite Variable  ${platform_type}
+    Set Suite Variable  ${allow_serverless}
+
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cluster_name}=  Get Default Cluster Name

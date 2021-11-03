@@ -45,24 +45,24 @@ User shall be able to redeploy docker image with same name
     Push Image To Docker  username=${username1}  password=${password}  server=${gitlab_server}  org_name=${orgname}  app_name=${app_name}  app_version=${app_version_old}  gitlab_app_name=${app_name}:99
  
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  developer_org_name=${orgname}
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=IpAccessDedicated  deployment=docker  developer_org_name=${orgname}
     Log To Console  Done Creating Cluster Instance
 
     ${gitlab_image}=  Set Variable  ${gitlab_server}/${orgname}/images/${app_name}:99
 
     Create App  region=${region}  access_ports=tcp:2015  image_path=${gitlab_image}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${orgname}  app_version=1.0  auto_delete=${False}
-    ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${orgname}  cluster_instance_developer_org_name=${orgname}  auto_delete=${False}
+    ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  developer_org_name=${orgname}  cluster_instance_developer_org_name=${orgname}  auto_delete=${False}
 
     ${version_old}=  Get App Version   ${appinst['data']['uri']}  2015
     Should Be Equal  ${version_old}  pong
 
-    Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${orgname}  cluster_instance_developer_org_name=${orgname}
+    Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  developer_org_name=${orgname}  cluster_instance_developer_org_name=${orgname}
     Delete App  region=${region}  developer_org_name=${orgname}
 
     Push Image To Docker  username=${username1}  password=${password}  server=${gitlab_server}  org_name=${orgname}  app_name=${app_name}  app_version=${app_version_new}  gitlab_app_name=${app_name}:99
 
     Create App  region=${region}  access_ports=tcp:2015  image_path=${gitlab_image}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${orgname}  app_version=1.0
-    ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${orgname}  cluster_instance_developer_org_name=${orgname}
+    ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  developer_org_name=${orgname}  cluster_instance_developer_org_name=${orgname}
 
     ${version_old}=  Get App Version   ${appinst['data']['uri']}  2015
     Should Be Equal  ${version_old.strip()}  ${app_version_new}
