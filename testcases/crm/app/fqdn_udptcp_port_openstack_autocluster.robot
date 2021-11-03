@@ -62,6 +62,8 @@ Setup
     #Create Developer
     Create Flavor
 
+    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+
     #${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
     #${rootlb}=  Convert To Lowercase  ${rootlb}
 

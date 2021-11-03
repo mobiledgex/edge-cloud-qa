@@ -42,7 +42,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when replica
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command} 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -62,7 +62,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when replica
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  command=${docker_command}  allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  command=${docker_command} 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -83,7 +83,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,tcp:4015  command=${docker_command}  allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,tcp:4015  command=${docker_command} 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -127,7 +127,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016,tcp:4015  command=${docker_command}  allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016,tcp:4015  command=${docker_command} 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -169,7 +169,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016:tls  command=${docker_command}  allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016:tls  command=${docker_command} 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -200,7 +200,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016  command=${docker_command}   allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016  command=${docker_command} 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -232,7 +232,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckOk when TCP port with skip_
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  command=${docker_command}  skip_hc_ports=tcp:2016  allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  command=${docker_command}  skip_hc_ports=tcp:2016 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -269,7 +269,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,tcp:8085  command=${docker_command}  skip_hc_ports=tcp:2015,tcp:2016  allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,tcp:8085  command=${docker_command}  skip_hc_ports=tcp:2015,tcp:2016 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -303,7 +303,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016,tcp:8085  command=${docker_command}  skip_hc_ports=tcp:2015-2016  allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016,tcp:8085  command=${docker_command}  skip_hc_ports=tcp:2015-2016 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -337,7 +337,7 @@ IpAccessDedicated k8s - healthcheck shows proper state after UpdateApp
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command} 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  auto_delete=False
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -383,16 +383,12 @@ Setup
 
     ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
-    IF  '${platform_type}' == 'K8SBareMetal'
-        ${allow_serverless}=  Set Variable  ${True}
-    ELSE
+    IF  '${platform_type}' != 'K8SBareMetal'
         Log To Console  Creating Cluster Instance
         Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_nodes=1
         Log To Console  Done Creating Cluster Instance
-        ${allow_serverless}=  Set Variable  ${None}
     END
     Set Suite Variable  ${platform_type}
-    Set Suite Variable  ${allow_serverless}
 
     ${cluster_name_default}=  Get Default Cluster Name
 

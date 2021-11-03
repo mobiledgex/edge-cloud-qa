@@ -40,15 +40,17 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/shared and 
 
    #EDGECLOUD-2796 unable to terminate https tls connections
 
-   Log To Console  Creating Cluster Instance
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessShared  number_masters=1  number_nodes=1 
-   Log To Console  Done Creating Cluster Instance
+   IF  '${platform_type}' != 'K8SBareMetal'
+      Log To Console  Creating Cluster Instance
+      Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crmk}  deployment=kubernetes  ip_access=IpAccessShared  number_masters=1  number_nodes=1 
+      Log To Console  Done Creating Cluster Instance
+   END
 
    ${cluster_name_default}=  Get Default Cluster Name
    ${app_name_default}=  Get Default App Name
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016:tls,tcp:8085:tls,udp:2016  deployment=kubernetes  image_type=ImageTypeDocker  access_type=loadbalancer 
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
    
@@ -80,9 +82,11 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated a
    #EDGECLOUD-2796 unable to terminate https tls connections
    #EDGECLOUD-2794 envoy not starting for docker dedicated with tls
 
-   Log To Console  Creating Cluster Instance
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=0
-   Log To Console  Done Creating Cluster Instance
+   IF  '${platform_type}' != 'K8SBareMetal'
+      Log To Console  Creating Cluster Instance
+      Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=0
+      Log To Console  Done Creating Cluster Instance
+   END
 
    ${cluster_name_default}=  Get Default Cluster Name
    ${app_name_default}=  Get Default App Name
@@ -90,7 +94,7 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated a
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016:tls,tcp:8085:tls,udp:2016  image_type=ImageTypeDocker  access_type=loadbalancer
    #Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016:tls,http:8085:tls,udp:2016  image_type=ImageTypeDocker  access_type=loadbalancer
 
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -125,12 +129,12 @@ User shall be able to access TCP TLS ports with cluster=docker/dedicated and app
    #EDGECLOUD-2796 unable to terminate https tls connections
    # EDGECLOUD-3192 - TLS connections not working with port ranges
 
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=IpAccessDedicated  deployment=docker
 
    #Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016:tls,tcp:2015:tls,tcp:8085:tls,udp:2016  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016:tls,tcp:8085:tls,udp:2016  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
 
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -201,10 +205,10 @@ User shall be able to access TCP TLS ports with cluster=docker/shared and app=do
 
    #EDGECLOUD-2794 envoy not starting for docker dedicated with tls
 
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=IpAccessShared  deployment=docker
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016:tls,tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -256,7 +260,10 @@ User shall be able to access TCP TLS ports with VM/LB deployment
 Setup
     ${time}=  Get Time  epoch
     Create Flavor  region=${region}  flavor_name=flavor${time}
-    
+   
+    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    Set Suite Variable  ${platform_type}
+ 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
