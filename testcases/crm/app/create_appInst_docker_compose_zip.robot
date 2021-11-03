@@ -70,7 +70,7 @@ User shall be able to deploy docker compose zip filed from artifactory
     ${compose_artifactory}=  Set Variable  https://${artifactory_server}/artifactory/repo-${orgname}/${docker_compose_zip}
 
     Create App  region=${region}  token=${super_token}  access_ports=tcp:8008,tcp:8011  image_path=${docker_image}  deployment_manifest=${compose_artifactory}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=loadbalancer
-    Create App Instance  region=${region}  token=${super_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
+    Create App Instance  region=${region}  token=${super_token}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
 
     Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest  node=${server_info_node[0]['Networks']}
     Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=postgres:latest  node=${server_info_node[0]['Networks']}
@@ -86,7 +86,7 @@ User shall be able to deploy docker compose zip filed from url
     ${app_name_default}=  Get Default App Name
 
     Create App  region=${region}  access_ports=tcp:8008,tcp:8011  image_path=${docker_image}  deployment_manifest=${docker_compose_zip_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=loadbalancer
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
 
     Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest  node=${server_info_node[0]['Networks']}
     Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=postgres:latest  node=${server_info_node[0]['Networks']}
@@ -102,7 +102,7 @@ User shall be able to deploy docker compose zip filed from url with no image_pat
     ${app_name_default}=  Get Default App Name
 
     Create App  region=${region}  access_ports=tcp:8008,tcp:8011  image_path=no_default  deployment_manifest=${docker_compose_zip_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=loadbalancer
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
 
     Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest  node=${server_info_node[0]['Networks']}
     Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=postgres:latest  node=${server_info_node[0]['Networks']}
@@ -131,16 +131,16 @@ Setup
 #    Verify Email Via MC  token=${user_token}
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  number_masters=0  number_nodes=0  deployment=docker  developer_org_name=${developer_org_name}
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=IpAccessDedicated  number_masters=0  number_nodes=0  deployment=docker  developer_org_name=${developer_org_name}
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cluster_name}=  Get Default Cluster Name
     ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
    
-    ${cloudlet_lowercase}=  Convert To Lowercase  ${cloudlet_name_openstack_dedicated}
+    ${cloudlet_lowercase}=  Convert To Lowercase  ${cloudlet_name_crm}
     ${openstack_node_name}=    Catenate  SEPARATOR=-  docker  vm  ${cloudlet_lowercase}  ${cluster_name}
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
  

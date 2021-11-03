@@ -25,15 +25,13 @@ CRM shall be able to Create 2 cluster instances on the same cloudlet
     ...  - Create 2 clusters and cluster instances on the same cloudlet
     ...  - Verify both are created successfully
 
-    # need to update for anthos once EDGECLOUD-5758 is fixed
-
     ${epoch_time}=  Get Time  epoch
 
     ${cluster_name_1}=  Catenate  SEPARATOR=  cl  ${epoch_time}  
     ${cluster_name_2}=  Catenate  SEPARATOR=  ${cluster_name_1}  2
 
-    ${cluster1}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_name=${cluster_name_1}  number_masters=1  number_nodes=${numnodes} 
-    ${cluster2}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_name=${cluster_name_2}  number_masters=1  number_nodes=${numnodes} 
+    ${cluster1}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_name=${cluster_name_1}  number_masters=1  number_nodes=1
+    ${cluster2}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_name=${cluster_name_2}  number_masters=1  number_nodes=1
 
     Sleep  20s  # wait for resources to be populated
 
@@ -68,16 +66,11 @@ CRM shall be able to Create 2 cluster instances on the same cloudlet
     node should not ping server  root_loadbalancer=${rootlb}  node=${node22}  server=${node11}
     node should not ping server  root_loadbalancer=${rootlb}  node=${node22}  server=${node12}
 
-
-#    sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
-
 # ECQ-3477
 CRM shall be able to Create 2 docker cluster instances on the same cloudlet
     [Documentation]
     ...  - Create 2 docker cluster instances on the same cloudlet
     ...  - Verify both are created successfully
-
-    # need to update for anthos once EDGECLOUD-5758 is fixed
 
     ${epoch_time}=  Get Time  epoch
 
@@ -111,12 +104,5 @@ CRM shall be able to Create 2 docker cluster instances on the same cloudlet
 *** Keywords ***
 Setup
     ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
-    IF  '${platform_type}' == 'K8SBareMetal'
-        ${numnodes}=  Set Variable  0
-    ELSE
-        ${numnodes}=  Set Variable  1
-    END
 
     Create Flavor  region=${region}
-
-    Set Suite Variable  ${numnodes}
