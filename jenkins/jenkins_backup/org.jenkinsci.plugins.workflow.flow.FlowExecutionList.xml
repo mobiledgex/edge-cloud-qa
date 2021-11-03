@@ -1,27 +1,2 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<list>
-  <flow-owner plugin="workflow-job@2.25">
-    <job>runEdgecloud</job>
-    <id>1115</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.25">
-    <job>runCrmTests</job>
-    <id>785</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.25">
-    <job>runCrmOpenstackSharedTests</job>
-    <id>578</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.25">
-    <job>runCrmOpenstackDedicatedTests</job>
-    <id>583</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.25">
-    <job>runCrmAutoProvTests</job>
-    <id>278</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.25">
-    <job>runCrmAlertReceiverTests</job>
-    <id>235</id>
-  </flow-owner>
-</list>
+<list/>
