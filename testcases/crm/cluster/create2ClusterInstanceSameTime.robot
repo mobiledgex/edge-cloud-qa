@@ -38,11 +38,7 @@ CRM shall be able to Create 2 cluster instances at the same time
 *** Keywords ***
 Setup
     ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
-    IF  '${platform_type}' == 'K8SBareMetal'
-        ${numnodes}=  Set Variable  0
-    ELSE
-        ${numnodes}=  Set Variable  1
-    END
+    ${numnodes}=  Set Variable  1
 
     Create Flavor 
 
