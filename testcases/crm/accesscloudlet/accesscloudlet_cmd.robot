@@ -85,23 +85,23 @@ AccessCloudlet - Check for error 400 too many nodes matched when node-type is bl
     ...  verify platformvm is not accessible
     ...  verify too many nodes matched error 400 with description is returned
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
 
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-
-      ${error}=  Run Keyword And Expect Error  *  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command}  node_type= 
+      ${error}=  Run Keyword And Expect Error  *  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command}  node_type= 
       Should Contain  ${error}  ('code=400', 'error={"message":"Too many nodes matched, please specify type and name from:
       Log to Console  \n\n${error}
 
@@ -113,23 +113,23 @@ AccessCloudlet - Check for error 400 too many nodes matched when node-type and n
     ...  verify too many nodes matched error 400 with description is returned
 
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
- 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+# 
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-
-      ${error}=  Run Keyword And Expect Error  *  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command}  node_type=  node_name=
+      ${error}=  Run Keyword And Expect Error  *  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command}  node_type=  node_name=
       Should Contain  ${error}  ('code=400', 'error={"message":"Too many nodes matched, please specify type and name from:
       Log to Console  \n\n${error}
 
@@ -141,23 +141,23 @@ AccessCloudlet - Check for error 400 too many nodes matched when node-name is bl
     ...  verify platformvm is not accessible
     ...  verify too many nodes matched error 400 with description is returned
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
 
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-
-      ${error}=  Run Keyword And Expect Error  *  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command}  node_name=
+      ${error}=  Run Keyword And Expect Error  *  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command}  node_name=
       Should Contain  ${error}  ('code=400', 'error={"message":"Too many nodes matched, please specify type and name from:
       Log to Console  \n\n${error}
 
@@ -168,22 +168,22 @@ AccessCloudlet - Access cloudlet platform type specific check for error 400 when
     ...  verify platformvm is not accessible
     ...  verify unable to find specified cloudlet mgmt node error 400 with description is returned
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-      ${error}=  Run Keyword And Expect Error  *  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  command=${access_command}  node_type=${invalid}  region=${region}
+      ${error}=  Run Keyword And Expect Error  *  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  command=${access_command}  node_type=${invalid}  region=${region}
       Should Contain  ${error}  ('code=400', 'error={"message":"Unable to find specified cloudlet mgmt node, list of valid nodes:
       Log to Console  \n\n${error}
 
@@ -194,24 +194,24 @@ AccessCloudlet - Access cloudlet check for error if region is not specified
     ...  verify platformvm is not accessible
     ...  verify no region specified error 400 with description is returned
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
-
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
 #('code=400', 'error={"message":"no region specified"}')
 
-      ${error}=  Run Keyword And Expect Error  *  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=  command=${access_command}  node_type=${platformvm} node_name=
+      ${error}=  Run Keyword And Expect Error  *  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=  command=${access_command}  node_type=${platformvm} node_name=
       Should Contain  ${error}  ('code=400', 'error={"message":"No region specified"}') 
       Log to Console  \n\n${error}
 
@@ -226,22 +226,22 @@ AccessCloudlet - Access cloudlet check for error if bash commnad is not found
 #Return: 'bash: =: command not found\r\n
 
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-      ${nobash}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${notabashcommand+}   node_type=${platformvm}  node_name=
+      ${nobash}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${notabashcommand+}   node_type=${platformvm}  node_name=
       Should Contain  ${nobash}   command not found
       Log to Console  \n\n:${nobash}
 
@@ -251,22 +251,22 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command docker
     ...  send accessCloudlet by node_type platformvm and send docker ps
     ...  verify return information shows container info for crmserver  shepherd  cloudletPrometheus
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-      ${prompt}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command}  node_type=${platformvm}  node_name=
+      ${prompt}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command}  node_type=${platformvm}  node_name=
       Should Contain Any  ${prompt}  crmserver  shepherd  cloudletPrometheus
       Log to Console  \n\n${prompt}
 
@@ -281,22 +281,22 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command docker
 #${access_command2}=  stty cols 210;docker logs --tail 10 crmserver
 #${access_command2c}=  stty cols 210;docker logs --tail 100 crmserver >2&1 | grep ${testtime} 
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-       ${prompt2}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command2}  node_type=${platformvm}  node_name=
+       ${prompt2}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command2}  node_type=${platformvm}  node_name=
        Should Contain Any  ${prompt2}  INFO
        Log to Console  \n\n${prompt2}
 
@@ -318,22 +318,22 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command docker
 #${access_command2b}=  stty cols 210;docker logs --tail 10 shepherd
 
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-       ${prompt2}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command2b}  node_type=${platformvm}  node_name=
+       ${prompt2}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command2b}  node_type=${platformvm}  node_name=
        Should Contain Any  ${prompt2}  INFO
        Log to Console  \n\n${prompt2}
 
@@ -349,26 +349,26 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command to cre
 #${access_command3a}= rm logme;ls -l
 
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-      ${prompt3}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command3}  node_type=${platformvm}  node_name=
+      ${prompt3}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command3}  node_type=${platformvm}  node_name=
       Should Contain Any  ${prompt3}  logme
       Log to Console  \n\n${prompt3}
 
-      ${prompt3a}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command3a}  node_type=${platformvm}  node_name=
+      ${prompt3a}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command3a}  node_type=${platformvm}  node_name=
       Should Not Contain Any  ${prompt3a}  logme
       Log to Console  \n\n${prompt3a}
 
@@ -380,22 +380,22 @@ AccessCloudlet - accessCloudlet with node type platformvm and verify command exi
     ...  Verify exit is performed and user is returned from platformvm
 
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-      ${prompt_exit}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command_exit0}  node_type=${platformvm}  node_name=
+      ${prompt_exit}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command_exit0}  node_type=${platformvm}  node_name=
       ${cnt}=  Get Length  ${prompt_exit}
       Should Be True  ${cnt} <= 0 
       Log to Console  \n\n${prompt_exit}
@@ -408,22 +408,22 @@ AccessCloudlet - accessCloudlet with node type platformvm issue a ls command wit
     ...  Verify ls -l and exit are performed and user is returned from platformvm
 
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-      ${prompt_exit2}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command_exit2}  node_type=${platformvm}  node_name=
+      ${prompt_exit2}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command_exit2}  node_type=${platformvm}  node_name=
       ${cnt}=  Get Length  ${prompt_exit2}
       Should Be True  ${cnt} >= 0
       Log to Console  \n\n${prompt_exit2}
@@ -435,22 +435,22 @@ AccessCloudlet - Access node type sharedrootlb and verify command exit will retu
     ...  Verify accesscloudlet can access the sharedrootlb and exit
     ...  Verify exit is performed and user is returned from sharedrootlb
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-      ${prompt_exit}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command_exit0}  node_type=${sharedrootlb}  node_name=
+      ${prompt_exit}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command_exit0}  node_type=${sharedrootlb}  node_name=
       ${cnt}=  Get Length  ${prompt_exit}
       Should Be True  ${cnt} <= 0
       Log to Console  \n\n${prompt_exit}
@@ -463,22 +463,22 @@ AccessCloudlet - Access node type sharedrootlb issue a ls command with exit to v
     ...  Verify ls -l and exit are performed and user is returned from sharedrootlb
 
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
-
-      ${prompt_exit2}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command_exit2}  node_type=${sharedrootlb}  node_name=
+      ${prompt_exit2}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command_exit2}  node_type=${sharedrootlb}  node_name=
       ${cnt}=  Get Length  ${prompt_exit2}
       Should Be True  ${cnt} >= 0
       Log to Console  \n\n${prompt_exit2}
@@ -491,30 +491,30 @@ AccessCloudlet - Create and access a dedicatedrootlb cluster using command args 
     ...  verify arguments stty cols 200;docker ps;ls -l;whoami;docker images;docker version;exit execute
     ...  verify the cluster k8s config file was created using accesscloudlet ls command
 
-         ${region}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
-
-         ${operator_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
-
-         ${cloudlet_name}=    Set Variable If
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
-    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
+#         ${region}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'          ${region_US}
+#
+#         ${operator_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${operator_name_openstack}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${operator_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${operator_name_vcd}
+#
+#         ${cloudlet_name}=    Set Variable If
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'     ${cloudlet_name_openstack_shared}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'       ${cloudlet_name_vsphere}
+#    ...  '${cloudlet_platform_type}' == 'PlatformTypeVCD'           ${cloudlet_name_vcd}
 
       Create Flavor  region=${region}
       Log To Console  Creating Cluster Instance
-      Create Cluster Instance  cluster_name=${cluster_name_access_cloudlet}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=1  region=${region}  #flavor_name=${cluster_flavor_name}
+      Create Cluster Instance  cluster_name=${cluster_name_access_cloudlet}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=1  region=${region}  #flavor_name=${cluster_flavor_name}
       Log To Console  Done Creating Cluster Instance
 
-      ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name}  ${operator_name}  ${mobiledgex_domain}
+      ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
       ${rootlb}=  Convert To Lowercase  ${rootlb}
 
-      ${clusterk8sconfigfile}=  Catenate  SEPARATOR=.  ${cluster_name_access_cloudlet}  ${operator_name}  kubeconfig   #cluster-16accesscloudlet.GDDT.kubeconfig
+      ${clusterk8sconfigfile}=  Catenate  SEPARATOR=.  ${cluster_name_access_cloudlet}  ${operator_name_crm}  kubeconfig   #cluster-16accesscloudlet.GDDT.kubeconfig
 
 
       ${cloudnodes}=  Show Cloudlet Info  region=${region}  cloudlet_name=${cloudlet_name}
@@ -529,15 +529,15 @@ AccessCloudlet - Create and access a dedicatedrootlb cluster using command args 
 #${command4_return4}=  CONTAINER ID
 #${command5_return5}=  REPOSITORY
 
-      ${prompt4}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command4}  node_name=${rootlb}
+      ${prompt4}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command4}  node_name=${rootlb}
       Should Contain Any  ${prompt4}  ${command4_return4}
       Log to Console  \n\n${prompt4}
 
-      ${prompt5}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command5}  node_name=${rootlb}
+      ${prompt5}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command5}  node_name=${rootlb}
       Should Contain Any  ${prompt5}  ${command5_return5}
       Log to Console  \n\n${prompt5}
 
-      ${prompt6}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command6}  node_name=${rootlb}
+      ${prompt6}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command6}  node_name=${rootlb}
       Should Contain Any  ${prompt6}  ${clusterk8sconfigfile}
       Log to Console  \n\n${prompt6}
 

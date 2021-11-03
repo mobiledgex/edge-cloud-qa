@@ -24,6 +24,7 @@ ${docker_command}  ./server_ping_threaded.py
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
+# ECQ-1287
 User shall be able to access 1 UDP port on gcp
     [Documentation]
     ...  deploy app with 1 UDP port on gcp
