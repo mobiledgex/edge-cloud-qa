@@ -20,10 +20,10 @@ number_parallel_executionsAnthos = '1'
 currentBuild.displayName = cycle
 
 //def jobList1Parallel = ["runCrmOpenstackTests", "runCrmAzureTests", "runCrmGcpTests", "runRunCommandTests"]
-def jobList1Parallel = ["runCrmOpenstackGpuTests", "runCrmRunDebugTests", "runCrmVMPoolTests", "runCrmAutoProvTests", "runCrmAccessCloudletTests", "runCrmAlertReceiverTests"]
+def jobList1Parallel = ["runCrmOpenstackGpuTests", "runCrmVMPoolTests", "runCrmAutoProvTests"]
 def jobList1Parallelgcpazure = ["runCrmAzureTests", "runCrmGcpTests"]
 def jobListMaintenance = ["runCloudletMaintenanceCRMTests"]
-def jobList1Platform = ["runCrmRunCommandTests", "runCrmShowLogsTests", "runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackVmTests"]
+def jobList1Platform = ["runCrmRunCommandTests", "runCrmShowLogsTests", "runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackVmTests", "runCrmRunDebugTests", "runCrmAccessCloudletTests", "runCrmAlertReceiverTests"]
 def platform_list = ["Openstack", "VCD", "Vsphere", "Anthos"] 
 //def jobList2Parallel = ["runGetFqdnListTests","runGetAppInstListTests"]
  
@@ -124,7 +124,10 @@ node('jenkinsSlave1'){
       }
 
       stage('run CRM Maintenance') {
-         build job: jobListMaintenance[0], parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controllerazuregcp), string(name: 'MasterController', value: mastercontroller), string(name: 'DME', value: dmeazuregcp), string(name: 'CommitVersion', value: commit_version)]
+         for(int i2=0; i2 < platform_list.size(); ++i2) {
+            def platform = platform_list[i2]
+            build job: jobListMaintenance[0], parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controllerazuregcp), string(name: 'MasterController', value: mastercontroller), string(name: 'DME', value: dmeazuregcp), string(name: 'CommitVersion', value: commit_version), string(name: 'Platform', value: platform)]
+         }
       }
 
 //      stage('run WS tests parallel batch 2') {
