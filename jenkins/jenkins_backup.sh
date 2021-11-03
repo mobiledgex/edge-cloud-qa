@@ -7,6 +7,8 @@ cd edge-cloud-qa/jenkins/jenkins_backup
 whoami
 git config -l
 
+git pull -q
+
 # copy general config
 cp $JENKINS_HOME/*.xml .
 
