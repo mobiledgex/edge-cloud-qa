@@ -37,11 +37,13 @@ User shall be able to create an app instance on CRM with deployment=helm and IpA
     ...  - create an app instance on CRM with deployment=helm and IpAccessShared
     ...  - verify the app is created
 
-    Create App  region=${region}  image_path=${helm_image}  access_ports=tcp:2015  deployment=helm  image_type=ImageTypeHelm  annotations=version=0.3.1  configs_kind=helmCustomizationYaml  configs_config=${helm_config}
+    Create App  region=${region}  image_path=${helm_image}  access_ports=tcp:2015  deployment=helm  image_type=ImageTypeHelm  annotations=version=0.3.1  configs_kind=helmCustomizationYaml  configs_config=${helm_config}  allow_serverless=${allow_serverless}
 
-    Log To Console  Creating Cluster Instance
-    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  number_nodes=${numnodes}
-    Log To Console  Done Creating Cluster Instance
+    IF  '${platform_type}' != 'K8SBareMetal'
+        Log To Console  Creating Cluster Instance
+        ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  number_nodes=${numnodes}
+        Log To Console  Done Creating Cluster Instance
+    END
 
 #    EDGECLOUD-1444 helm app not created when CreateClusterInst and CreateAppInst is done quickly
 #    Sleep  60secs
@@ -70,11 +72,13 @@ User shall be able to create an app instance on CRM with deployment=helm and IpA
 
     #EDGECLOUD-1444 helm app not created when CreateClusterInst and CreateAppInst is done quickly
    
-    Create App  region=${region}  image_path=${helm_image}  access_ports=tcp:2015  deployment=helm  image_type=ImageTypeHelm  annotations=version=0.3.1  configs_kind=helmCustomizationYaml  configs_config=${helm_config}
- 
-    Log To Console  Creating Cluster Instance
-    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_nodes=${numnodes}
-    Log To Console  Done Creating Cluster Instance
+    Create App  region=${region}  image_path=${helm_image}  access_ports=tcp:2015  deployment=helm  image_type=ImageTypeHelm  annotations=version=0.3.1  configs_kind=helmCustomizationYaml  configs_config=${helm_config}  allow_serverless=${allow_serverless}
+
+    IF  '${platform_type}' != 'K8SBareMetal'
+        Log To Console  Creating Cluster Instance
+        ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_nodes=${numnodes}
+        Log To Console  Done Creating Cluster Instance
+    END
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
@@ -101,11 +105,13 @@ User shall be able to create an app instance on CRM with deployment=helm and a d
 
     ${epoch_time}=  Get Time  epoch
     ${app_name}=    Catenate  SEPARATOR=.  app  ${epoch_time}
-    Create App  region=${region}  app_name=${app_name}  image_path=${helm_image}  access_ports=tcp:2015  deployment=helm  image_type=ImageTypeHelm  annotations=version=0.3.1  configs_kind=helmCustomizationYaml  configs_config=${helm_config}
+    Create App  region=${region}  app_name=${app_name}  image_path=${helm_image}  access_ports=tcp:2015  deployment=helm  image_type=ImageTypeHelm  annotations=version=0.3.1  configs_kind=helmCustomizationYaml  configs_config=${helm_config}  allow_serverless=${allow_serverless}
 
-    Log To Console  Creating Cluster Instance
-    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  number_nodes=${numnodes}
-    Log To Console  Done Creating Cluster Instance
+    IF  '${platform_type}' != 'K8SBareMetal'
+        Log To Console  Creating Cluster Instance
+        ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  number_nodes=${numnodes}
+        Log To Console  Done Creating Cluster Instance
+    END
 
     #EDGECLOUD-1439 unable to create a helm appinst with a dot in the app name 
     #Sleep  60secs
@@ -122,12 +128,13 @@ User shall be able to create an app instance on CRM with deployment=helm and a d
 Setup
     ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
     IF  '${platform_type}' == 'K8SBareMetal'
-        ${numnodes}=  Set Variable  0
+        ${allow_serverless}=  Set Variable  ${True}
     ELSE
-        ${numnodes}=  Set Variable  1
+        ${allow_serverless}=  Set Variable  ${None}
     END
     Set Suite Variable  ${platform_type}
-    Set Suite Variable  ${numnodes}
+    Set Suite Variable  ${allow_serverless}
+
 
     Create Flavor  region=${region}
 
