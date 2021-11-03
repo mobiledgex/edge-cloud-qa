@@ -676,7 +676,7 @@ class Cloudlet():
         
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  access_type=None, scale_with_cluster=False, official_fqdn=None, include_fields=False, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  access_type=None, scale_with_cluster=False, official_fqdn=None, allow_serverless=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
 
@@ -698,6 +698,7 @@ class App():
         self.scale_with_cluster = scale_with_cluster
         self.official_fqdn = official_fqdn
         self.access_type = access_type
+        self.allow_serverless = allow_serverless
         
         if self.image_type and isinstance(self.image_type, str):
             self.image_type = self.image_type.casefold()
@@ -722,7 +723,10 @@ class App():
             if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
             #if ip_access is None: self.ip_access = 3 # default to shared
             if access_ports is None: self.access_ports = 'tcp:1234'
-            
+            if allow_serverless is None:
+                if shared_variables.platform_type == 'K8SBareMetal':
+                    self.allow_serverless = True
+                      
             if self.image_type == 'imagetypedocker':
                 if self.image_path is None:
                     self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
@@ -831,7 +835,9 @@ class App():
             app_dict['scale_with_cluster'] = True
         if self.official_fqdn:
             app_dict['official_fqdn'] = self.official_fqdn
-            
+        if self.allow_serverless:
+            app_dict['allow_serverless'] = self.allow_serverless
+ 
         self.app = app_pb2.App(**app_dict)
 
         shared_variables.app_name_default = self.app_name
@@ -1719,6 +1725,8 @@ class MexController(MexGrpc):
     def get_cloudlet_platform_type(self, token=None, region=None, operator_org_name=None, cloudlet_name=None):
         cloudlet = self.show_cloudlets(operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=False)
         platform_types = ['Fake', 'Dind', 'Openstack', 'Azure', 'Gcp', 'Edgebox', 'Fakeinfra', 'Vsphere', 'AwsEks', 'VmPool', 'AwsEc2', 'Vcd', 'K8SBareMetal', 'Kind', 'Kindinfra']
+
+        shared_variables.platform_type = platform_types[cloudlet[0].platform_type]
 
         return platform_types[cloudlet[0].platform_type]
 

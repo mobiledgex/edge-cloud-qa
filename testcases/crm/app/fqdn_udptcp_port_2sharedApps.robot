@@ -33,27 +33,27 @@ User shall be able to access TCP/UDP/HTTP ports for 2 apps on the same rootlb
    ...  - verify all the port as accessible via fqdn
 
    Log to Console  \nCreating docker shared IP cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_docker}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker  #flavor_name=${flavor_name_medium}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_docker}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=IpAccessShared  deployment=docker  #flavor_name=${flavor_name_medium}  developer_org_name=${developer_organization_name}
    Log to Console  \nCreating cluster instance done
 
    Log to Console  \nCreating k8s shared IP cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8s}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  #flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8s}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  #flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
    Log to Console  \nCreating cluster instance done
 
    Log To Console  Creating App and App Instance
    Create App  region=${region}  app_name=${app_name_docker}  deployment=docker  access_type=loadbalancer  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085   #command=${docker_command}  developer_org_name=${developer_organization_name}  default_flavor_name=${flavor_name_medium}
-   Create App Instance  region=${region}  app_name=${app_name_docker}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_docker}
+   Create App Instance  region=${region}  app_name=${app_name_docker}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_docker}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_docker}
-   App Instance Should Exist  region=${region}  app_name=${app_name_docker}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   App Instance Should Exist  region=${region}  app_name=${app_name_docker}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    Create App  region=${region}  app_name=${app_name_k8s}  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  #command=${docker_command}  developer_org_name=${developer_organization_name}  default_flavor_name=${flavor_name_small}
-   Create App Instance  region=${region}  app_name=${app_name_k8s}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_k8s}
+   Create App Instance  region=${region}  app_name=${app_name_k8s}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_k8s}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8s}
-   App Instance Should Exist  region=${region}  app_name=${app_name_k8s}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   App Instance Should Exist  region=${region}  app_name=${app_name_k8s}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    Log To Console  Registering Client and Finding Cloudlet for docker
    Register Client  app_name=${app_name_docker}
-   ${cloudlet1}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet1}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_crm}
    ${fqdn_tcp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[0].fqdn_prefix}  ${cloudlet1.fqdn}
    ${fqdn_udp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[1].fqdn_prefix}  ${cloudlet1.fqdn}
    ${fqdn_http1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[2].fqdn_prefix}  ${cloudlet1.fqdn}
@@ -65,7 +65,7 @@ User shall be able to access TCP/UDP/HTTP ports for 2 apps on the same rootlb
 
    Log To Console  Registering Client and Finding Cloudlet for k8s
    Register Client  app_name=${app_name_k8s}
-   ${cloudlet2}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet2}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_crm}
    ${fqdn_tcp2}=  Catenate  SEPARATOR=  ${cloudlet2.ports[0].fqdn_prefix}  ${cloudlet2.fqdn}
    ${fqdn_udp2}=  Catenate  SEPARATOR=  ${cloudlet2.ports[1].fqdn_prefix}  ${cloudlet2.fqdn}
    ${fqdn_http2}=  Catenate  SEPARATOR=  ${cloudlet2.ports[2].fqdn_prefix}  ${cloudlet2.fqdn}
@@ -81,24 +81,26 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with same name but dif
    ...  - deploy 2 shared k8s apps with same name but different version with with 1 TCP/UDP/ port
    ...  - verify all the port as accessible via fqdn
 
-   Log to Console  \nCreating k8s shared IP cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8s}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  #flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
-   Log to Console  \nCreating cluster instance done
+   IF  '${platform_type}' != 'K8SBareMetal'
+      Log to Console  \nCreating k8s shared IP cluster instance
+      ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8s}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  #flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
+      Log to Console  \nCreating cluster instance done
+   END
 
    Log To Console  Creating App and App Instance
-   Create App  region=${region}  app_name=${app_name_k8s}  app_version=1.0  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  access_ports=tcp:2015,udp:2015
-   Create App Instance  region=${region}  app_name=${app_name_k8s}  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_k8s}
+   Create App  region=${region}  app_name=${app_name_k8s}  app_version=1.0  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  access_ports=tcp:2015,udp:2015 
+   Create App Instance  region=${region}  app_name=${app_name_k8s}  app_version=1.0  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_k8s}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8s}  app_version=1.0
-   #App Instance Should Exist  region=${region}  app_name=${app_name_docker}  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   #App Instance Should Exist  region=${region}  app_name=${app_name_docker}  app_version=1.0  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    Create App  region=${region}  app_name=${app_name_k8s}  app_version=2.0  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:2016
-   Create App Instance  region=${region}  app_name=${app_name_k8s}  app_version=2.0  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_k8s}
+   Create App Instance  region=${region}  app_name=${app_name_k8s}  app_version=2.0  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_k8s}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8s}  app_version=2.0
-   #App Instance Should Exist  region=${region}  app_name=${app_name_k8s}  app_version=2.0  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   #App Instance Should Exist  region=${region}  app_name=${app_name_k8s}  app_version=2.0  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    Log To Console  Registering Client and Finding Cloudlet for docker
    Register Client  app_name=${app_name_k8s}  app_version=1.0
-   ${cloudlet1}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet1}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_crm}
    ${fqdn_tcp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[0].fqdn_prefix}  ${cloudlet1.fqdn}
    ${fqdn_udp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[1].fqdn_prefix}  ${cloudlet1.fqdn}
 
@@ -108,7 +110,7 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with same name but dif
 
    Log To Console  Registering Client and Finding Cloudlet for k8s
    Register Client  app_name=${app_name_k8s}  app_version=2.0
-   ${cloudlet2}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet2}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_crm}
    ${fqdn_tcp2}=  Catenate  SEPARATOR=  ${cloudlet2.ports[0].fqdn_prefix}  ${cloudlet2.fqdn}
    ${fqdn_udp2}=  Catenate  SEPARATOR=  ${cloudlet2.ports[1].fqdn_prefix}  ${cloudlet2.fqdn}
 
@@ -118,6 +120,9 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with same name but dif
 
 *** Keywords ***
 Setup
+    ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    Set Suite Variable  ${platform_type}
+
    Create Flavor  region=${region}
 
    ${app_name_default}=  Get Default App Name
@@ -136,6 +141,6 @@ Setup
 
 Teardown
    Cleanup provisioning
-   App Instance Should Not Exist  region=${region}  app_name=${app_name_k8s}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
-   App Instance Should Not Exist  region=${region}  app_name=${app_name_docker}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   App Instance Should Not Exist  region=${region}  app_name=${app_name_k8s}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+   App Instance Should Not Exist  region=${region}  app_name=${app_name_docker}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 

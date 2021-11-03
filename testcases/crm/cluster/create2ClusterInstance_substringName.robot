@@ -36,17 +36,11 @@ CRM shall be able to create 2 clusterInst with one name a substring of the other
     Create Cluster Instance	cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_name=${cluster_name_default}  number_nodes=${numnodes}  #flavor_name=${flavor_name}
     Create Cluster Instance	cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_name=${cluster_name_2}   number_nodes=${numnodes}      #flavor_name=${flavor_name}
 
-#    sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
-	
 *** Keywords ***
 Setup
     ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
-    IF  '${platform_type}' == 'K8SBareMetal'
-        ${numnodes}=  Set Variable  0
-    ELSE
-        ${numnodes}=  Set Variable  1
-    END
-
+    ${numnodes}=  Set Variable  1
+    
     Create Flavor
     #Create Developer
     #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  

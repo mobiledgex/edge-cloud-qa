@@ -40,15 +40,17 @@ User shall be able to access UDP,TCP and HTTP ports on dedicated CRM with num_ma
     ...  - deploy app with 1 UDP and 1 TCP and 1 HTTP ports on CRM with num_masters=1 and num_nodes=0
     ...  - verify all ports are accessible via fqdn
 
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_masters=1  number_nodes=0   ip_access=IpAccessDedicated  deployment=kubernetes
-    Log To Console  Done Creating Cluster Instance
-
+    IF  '${platform_type}' != 'K8SBareMetal'    
+        Log To Console  Creating Cluster Instance
+        Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_masters=1  number_nodes=0   ip_access=IpAccessDedicated  deployment=kubernetes
+        Log To Console  Done Creating Cluster Instance
+    END
+ 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
-    ${rootlb_dedicated}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb_dedicated}
+    #${rootlb_dedicated}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb_dedicated}
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  
+    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command} 
     Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
@@ -58,7 +60,6 @@ User shall be able to access UDP,TCP and HTTP ports on dedicated CRM with num_ma
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb_dedicated}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
-
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
@@ -70,9 +71,11 @@ User shall be able to access UDP,TCP and HTTP ports on shared CRM with num_maste
     ...  - deploy app with 1 UDP and 1 TCP and 1 HTTP ports on CRM with num_masters=1 and num_nodes=0
     ...  - verify all ports are accessible via fqdn
 
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_masters=1  number_nodes=0   ip_access=IpAccessShared  deployment=kubernetes
-    Log To Console  Done Creating Cluster Instance
+    IF  '${platform_type}' != 'K8SBareMetal'
+        Log To Console  Creating Cluster Instance
+        Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_masters=1  number_nodes=0   ip_access=IpAccessShared  deployment=kubernetes
+        Log To Console  Done Creating Cluster Instance
+    END
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
@@ -95,6 +98,10 @@ User shall be able to access UDP,TCP and HTTP ports on shared CRM with num_maste
 
 *** Keywords ***
 Setup
+    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+
+    Set Suite Variable  ${platform_type}
+
     #Create Developer
     Create Flavor
     #Create Cluster   #default_flavor_name=${cluster_flavor_name}
