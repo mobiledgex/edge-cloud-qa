@@ -552,11 +552,17 @@ def exec_testcase(z, t):
             logger.info(f'executing on pool={next_crm}')
             region = next_crm['region']
             cloudlet = next_crm['cloudlet']
+            cloudlet_openrc = cloudlet
             operator = next_crm['operator']
             var_override_cmd = f'--variable {crm_pool_var}:{cloudlet} --variable operator_name_openstack:{operator} --variable operator_name_crm:{operator} --variable region:{region}'
 
             env_file = find(f'automation_env_{region}.sh', os.environ['WORKSPACE'])
-            openstack_file = find(f'openrc_{cloudlet}.mex', os.environ['WORKSPACE'])
+
+            # only openstack needs the openrc file so set to Bonn if not openstack. This is so non Openstack tests will still execute
+            if os.environ['Platform'] != 'Openstack':
+                cloudlet_openrc = 'automationBonnCloudlet'
+
+            openstack_file = find(f'openrc_{cloudlet_openrc}.mex', os.environ['WORKSPACE'])
             logger.info(f'using env_file={env_file} openstack_file={openstack_file}')
 
             my_env['AUTOMATION_OPENSTACK_DEDICATED_ENV'] = openstack_file

@@ -59,6 +59,10 @@ class App(MexOperation):
             if access_ports is None:
                 access_ports = 'tcp:1234'
 
+            if allow_serverless is None:
+                if shared_variables.platform_type == 'K8SBareMetal':
+                    allow_serverless = True
+
             if image_path and image_path.lower() == 'no_default':
                 # dont set the path
                 pass
