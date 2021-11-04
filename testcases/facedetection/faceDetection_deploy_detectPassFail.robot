@@ -41,11 +41,12 @@ ${app_template}    http://35.199.188.102/apps/apptemplate.yaml
 ${region}=  EU
 	
 *** Test Cases ***
+# ECQ-1139
 Facedetection server shall recognize faces
     [Documentation]
-    ...  deploy the facedetection server
-    ...  verify it detects known faces
-    ...  verify it fails on non faces
+    ...  - deploy the facedetection server
+    ...  - verify it detects known faces
+    ...  - verify it fails on non faces
 
     ${epoch_time}=  Get Time  epoch
     ${app_name}=    Catenate  SEPARATOR=  facedetect  ${epoch_time}
@@ -55,15 +56,15 @@ Facedetection server shall recognize faces
 
     Log To Console  Creating App and App Instance
     Create App           region=${region}  app_name=${app_name}  image_path=${docker_image_gpu}  access_ports=${facedetection_ports}  configs_kind=envVarsYaml  configs_config=${config}  deployment=kubernetes  default_flavor_name=${cluster_flavor_name}  #default_flavor_name=flavor1550017240-694686
-    Create App Instance  region=${region}  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name}  flavor_name=${cluster_flavor_name} 
+    Create App Instance  region=${region}  app_name=${app_name}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  flavor_name=${cluster_flavor_name} 
 
     Log To Console  Registering Client and Finding Cloudlet
     Register Client  app_name=${app_name}
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name}
+    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_crm}
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     #Log To Console  Waiting for k8s pod to be running
-    #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name}
+    #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name}  operator_name=${operator_name_crm}  pod_name=${app_name}
 
     Sleep  60  # wait for process to be up
 
@@ -99,10 +100,10 @@ Setup
     #Create Cluster   default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name}  deployment=kubernetes  number_masters=1  number_nodes=1
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  number_masters=1  number_nodes=1
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
