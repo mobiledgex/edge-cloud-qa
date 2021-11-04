@@ -1,0 +1,49 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.42">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.9.2"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.9.2">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty plugin="build-failure-analyzer@1.27.1">
+      <doNotScan>false</doNotScan>
+    </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.94">
+    <script>build_name = &quot;andybuild&quot;
+currentBuild.displayName = build_name
+
+pipeline{
+    agent { label &apos;jenkinsGcpSlave1&apos;}
+    stages {
+        stage(&apos;Checkout&apos;) {
+            steps {
+              //sh &apos;docke system prune -af&apos;  //remove all docker stuff without prompting
+              sh &apos;docker ps&apos;
+              echo &apos;pass docker prune failed. mayber already running&apos;
+              dir(&apos;go/src/github.com/mobiledgex/protos&apos;) {
+                 sh &apos;ls&apos;
+              }
+
+            }
+        }
+    
+    }
+    post {
+        success { echo &apos;pass&apos; }
+        failure { echo &apos;pass docker prune failed. mayber already running&apos; }
+    }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
