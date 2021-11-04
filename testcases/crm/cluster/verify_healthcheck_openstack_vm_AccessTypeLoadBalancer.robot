@@ -24,11 +24,12 @@ ${image_name}    server_ping_threaded_centos7
 ${test_timeout_crm}  30 min
 
 *** Test Cases ***
+# ECQ-2531
 VM - healthcheck shows HealthCheckFailRootlbOffline when docker container is stopped on rootlb 
     [Documentation]
-    ...  create VM based App Inst on openstack with AccessTypeLoadBalancer
-    ...  stop docker container on rootlb and verify healthcheck
-    ...  start docker container and verify healthcheck
+    ...  - create VM based App Inst on openstack with AccessTypeLoadBalancer
+    ...  - stop docker container on rootlb and verify healthcheck
+    ...  - start docker container and verify healthcheck
 
     #EDGECLOUD-3577 - Healthcheck does not work for VM based app instance behind Loadbalancerr
     ${cluster_name_default}=  Get Default Cluster Name
@@ -36,7 +37,7 @@ VM - healthcheck shows HealthCheckFailRootlbOffline when docker container is sto
     ${developer_name_default}=  Get Default Developer Name
     ${version_default}=  Get Default App Version
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_vm}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
     ${developer_name_default}=  Replace String  ${developer_name_default}  _  -
     ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
@@ -45,7 +46,7 @@ VM - healthcheck shows HealthCheckFailRootlbOffline when docker container is sto
 
     Log To Console  Creating App and App Instance
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015   access_type=loadbalancer  region=${region}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -63,12 +64,12 @@ VM - healthcheck shows HealthCheckFailRootlbOffline when docker container is sto
     Start Docker Container Rootlb  root_loadbalancer=${clusterlb}
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
-
+# ECQ-2532
 VM - healthcheck shows HealthCheckFailServerFail when VM is powered off 
     [Documentation]
-    ...  create VM based App Inst on openstack with AccessTypeLoadBalancer
-    ...  UpdateAppInst to poweroff the VM and verify healthcheck
-    ...  UpdateAppInst to poweron the VM and verify healthcheck
+    ...  - create VM based App Inst on openstack with AccessTypeLoadBalancer
+    ...  - UpdateAppInst to poweroff the VM and verify healthcheck
+    ...  - UpdateAppInst to poweron the VM and verify healthcheck
 
     #EDGECLOUD-3577 - Healthcheck does not work for VM based app instance behind Loadbalancer
     ${cluster_name_default}=  Get Default Cluster Name
@@ -76,7 +77,7 @@ VM - healthcheck shows HealthCheckFailServerFail when VM is powered off
     ${developer_name_default}=  Get Default Developer Name
     ${version_default}=  Get Default App Version
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_vm}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
     ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
     ${vm}=  Remove String  ${vm}  .
@@ -84,7 +85,7 @@ VM - healthcheck shows HealthCheckFailServerFail when VM is powered off
 
     Log To Console  Creating App and App Instance
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015   access_type=loadbalancer  region=${region}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}
+    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -97,7 +98,7 @@ VM - healthcheck shows HealthCheckFailServerFail when VM is powered off
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
     Log To Console  Updating App Instance
-    Update App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOff
+    Update App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOff
     Sleep  10s
 
     ${vm_info}=  Get Server List  name=${vm}
@@ -111,7 +112,7 @@ VM - healthcheck shows HealthCheckFailServerFail when VM is powered off
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Log To Console  Updating App Instance
-    Update App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOn
+    Update App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOn
     Sleep  10s
 
     ${vm_info}=  Get Server List  name=${vm}

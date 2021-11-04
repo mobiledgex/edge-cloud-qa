@@ -46,17 +46,19 @@ CreateApp - User shall be able to create k8s IpAccessDedicated with envVarsYaml 
 
     ${config}=  Set Variable  - name: CrmValue${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  #flavor_name=${cluster_flavor_name}
-    Log To Console  Done Creating Cluster Instance
+    IF  '${platform_type}' != 'K8SBareMetal'
+        Log To Console  Creating Cluster Instance
+        Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  #flavor_name=${cluster_flavor_name}
+        Log To Console  Done Creating Cluster Instance
+    END
 
     Create App           region=${region}  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  configs_kind=envVarsYaml  configs_config=${config}  #default_flavor_name=flavor1583873482-5017228
     ${app_name_default}=  Get Default App Name
     log to console  ${app_name_default} 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
-    ${export1}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  command=echo \\\$CrmValue
-    ${export2}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  command=echo \\\$CrmValue2
+    ${export1}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue
+    ${export2}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue2
 
     ${openstack_master_name}=    Catenate  SEPARATOR=-  master  ${cloudlet_lowercase}  ${cluster_name_default}
     ${server_info_node}=    Get Server List  name=${openstack_master_name}
@@ -72,17 +74,19 @@ CreateApp - User shall be able to create k8s IpAccessDedicated with envVarsYaml 
     ...  deploy k8s dedicated app with envVarsYaml and Deployment.ClusterIp via URL
     ...  verify variables are exported
 
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  #flavor_name=${cluster_flavor_name}
-    Log To Console  Done Creating Cluster Instance
+    IF  '${platform_type}' != 'K8SBareMetal'
+        Log To Console  Creating Cluster Instance
+        Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  #flavor_name=${cluster_flavor_name}
+        Log To Console  Done Creating Cluster Instance
+    END
 
     Create App           region=${region}  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  configs_kind=envVarsYaml  configs_config=${configs_envvars_url}  #default_flavor_name=flavor1583873482-5017228
     ${app_name_default}=  Get Default App Name
     log to console  ${app_name_default}
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
-    ${export1}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  command=echo \\\$CrmValue
-    ${export2}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  command=echo \\\$CrmValue2
+    ${export1}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue
+    ${export2}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue2
 
     ${openstack_master_name}=    Catenate  SEPARATOR=-  master  ${cloudlet_lowercase}  ${cluster_name_default}
     ${server_info_node}=    Get Server List  name=${openstack_master_name}
@@ -130,13 +134,16 @@ CreateApp - User shall be able to create k8s IpAccessDedicated with envVarsYaml 
 Setup
     Create Flavor  region=${region}
 
+    ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    Set Suite Variable  ${platform_type}
+
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
-    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_dedicated}
+    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
 
     Set Suite Variable  ${cloudlet_lowercase}
 

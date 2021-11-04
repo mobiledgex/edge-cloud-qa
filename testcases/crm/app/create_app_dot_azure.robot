@@ -25,10 +25,11 @@ ${docker_command}  ./server_ping_threaded.py
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
+# ECQ-1309
 User shall be able to create an app instance on azure with a dot in the app name
     [Documentation]
-    ...  create an app instance on azure with a dot in the app name. Such as 'my.app'
-    ...  verify the app is create with the dot removed. Such as 'myapp'
+    ...  - create an app instance on azure with a dot in the app name. Such as 'my.app'
+    ...  - verify the app is create with the dot removed. Such as 'myapp'
 
     ${epoch_time}=  Get Time  epoch
     ${app_name}=    Catenate  SEPARATOR=.  app  ${epoch_time}

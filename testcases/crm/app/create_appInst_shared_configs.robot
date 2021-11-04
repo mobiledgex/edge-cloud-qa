@@ -206,7 +206,7 @@ CreateApp - User shall be able to create docker IpAccessShared with Configs parm
     Create App           region=${region}  deployment=docker  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  configs_kind=envVarsYaml  configs_config=${config}  #default_flavor_name=flavor1583873482-5017228
     ${app_name_default}=  Get Default App Name
     log to console  ${app_name_default}
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     ${export1}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue
     ${export2}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue2

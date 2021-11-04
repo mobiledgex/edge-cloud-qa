@@ -24,13 +24,13 @@ ${region}=  US
 # ECQ-2074
 RunConsole - console URL shall be returned on openstack
    [Documentation]
-   ...  deploy VM app instance 
-   ...  verify RunConsole works and console url returns 200
+   ...  - deploy VM app instance 
+   ...  - verify RunConsole works and console url returns 200
 
    Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  #developer_name=${developer_artifactory}  #default_flavor_name=${cluster_flavor_name}
-   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  #developer_name=${developer_artifactory}  cluster_instance_developer_name=${developer_artifactory}
+   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  #developer_name=${developer_artifactory}  cluster_instance_developer_name=${developer_artifactory}
 
-   ${console}=  Run Console  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+   ${console}=  Run Console  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster
    log to console  ${console} ${console['console']['url']}
 
    Create Session  console  ${console['console']['url']} 
