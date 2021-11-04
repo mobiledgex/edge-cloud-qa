@@ -5,9 +5,8 @@
     <string>OldData</string>
     <string>jenkins.security.QueueItemAuthenticatorMonitor</string>
   </disabledAdministrativeMonitors>
-  <version>2.249.2</version>
-  <installStateName>RESTART</installStateName>
-  <numExecutors>2</numExecutors>
+  <version>2.303.2</version>
+  <numExecutors>1</numExecutors>
   <mode>NORMAL</mode>
   <useSecurity>true</useSecurity>
   <authorizationStrategy class="hudson.security.ProjectMatrixAuthorizationStrategy">
