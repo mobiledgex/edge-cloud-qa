@@ -2,98 +2,58 @@
 <list>
   <flow-owner plugin="workflow-job@2.42">
     <job>runEdgecloud</job>
-    <id>1119</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runDMETests</job>
-    <id>965</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runVMPoolControllerTests</job>
-    <id>361</id>
+    <id>1120</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runControllerTests</job>
-    <id>1053</id>
+    <id>1055</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
-    <job>runAppTests</job>
-    <id>991</id>
+    <job>runDMETests</job>
+    <id>967</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
-    <job>runAppInstTests</job>
-    <id>912</id>
+    <job>runCloudletPoolAllTests</job>
+    <id>638</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runCloudletPoolTests</job>
+    <id>622</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runMcctlTests</job>
-    <id>414</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runAutoScalePolicyTests</job>
-    <id>202</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runSettingsTests</job>
-    <id>388</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runRateLimitTests</job>
-    <id>127</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runFlavorTests</job>
-    <id>1011</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runFindCloudletTests</job>
-    <id>1028</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runOperatorCodeDmeTests</job>
-    <id>362</id>
+    <id>416</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runVerifyLocationTests</job>
-    <id>929</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runGetQosPositionKpiTests</job>
-    <id>569</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runShowDeviceTests</job>
-    <id>589</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runGetLocationTests</job>
-    <id>844</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runDmeProcessTests</job>
-    <id>839</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runDMEPersistentConnectionTests</job>
-    <id>338</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runDMECRMPersistentConnectionTests</job>
-    <id>94</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runRegisterClientTests</job>
-    <id>991</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runRequestAppInstLatencyTests</job>
-    <id>337</id>
+    <id>931</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runOperatorCodeTests</job>
-    <id>664</id>
+    <id>666</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
-    <job>runCrmTests</job>
-    <id>786</id>
+    <job>runDmeProcessTests</job>
+    <id>841</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runOperatorCodeDmeTests</job>
+    <id>364</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runShowDeviceTests</job>
+    <id>591</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runDMECRMPersistentConnectionTests</job>
+    <id>96</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runRequestAppInstLatencyTests</job>
+    <id>339</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runGetLocationTests</job>
+    <id>846</id>
   </flow-owner>
 </list>
