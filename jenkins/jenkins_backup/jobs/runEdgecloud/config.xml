@@ -46,7 +46,7 @@
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2.94">
-    <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.1">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@4.10.0">
       <configVersion>2</configVersion>
       <userRemoteConfigs>
         <hudson.plugins.git.UserRemoteConfig>
@@ -75,5 +75,5 @@
     <lightweight>true</lightweight>
   </definition>
   <triggers/>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
 </flow-definition>
