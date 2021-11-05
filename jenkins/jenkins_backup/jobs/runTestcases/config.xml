@@ -7,6 +7,14 @@
       <triggers/>
       <parameters>
         <string>Components</string>
+        <string>DMERest</string>
+        <string>Project</string>
+        <string>VariableFile</string>
+        <string>RunFailedOnly</string>
+        <string>Controller</string>
+        <string>DME</string>
+        <string>Cycle</string>
+        <string>MasterController</string>
         <string>CommitVersion</string>
       </parameters>
       <options/>
@@ -15,6 +23,15 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.6"/>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>20</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
     <com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty plugin="build-failure-analyzer@1.27.1">
       <doNotScan>false</doNotScan>
     </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
@@ -22,6 +39,42 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>Components</name>
+          <defaultValue>Automated</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Cycle</name>
+          <defaultValue>2021-11-05_CirrusR3.1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Project</name>
+          <defaultValue>ECQ</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MasterController</name>
+          <defaultValue>console-qa.mobiledgex.net:443</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Controller</name>
+          <defaultValue>mexplat-qa-us.ctrl.mobiledgex.net:55001</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DME</name>
+          <defaultValue>us-qa.dme.mobiledgex.net:50051</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DMERest</name>
+          <defaultValue>us-qa.dme.mobiledgex.net:38001</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>VariableFile</name>
+          <defaultValue>automation_variables.py</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -29,26 +82,54 @@
           <defaultValue>master</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RunFailedOnly</name>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Version</name>
+          <defaultValue>Stratus</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MasterControllerCert</name>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DMERestCert</name>
+          <defaultValue>mex-ca.crt</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Folder</name>
+          <defaultValue>controller</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.94">
-    <script>build_name = &quot;andybuild&quot;
-currentBuild.displayName = build_name
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
+    <script>currentBuild.displayName = &apos;andy&apos;
 
 pipeline{
-    agent { label &apos;master&apos; }
+    agent { label &apos;jenkinsGcpSlave1&apos; }
     parameters {
-        string( name: &apos;Components&apos;)
-        string( name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;) }
+        string( name: &apos;Components&apos;, defaultValue: &apos;Automated&apos;)
+        string( name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
+        string( name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
+        string( name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
+        string( name: &apos;Controller&apos;, defaultValue: &apos;mexplat-qa-us.ctrl.mobiledgex.net:55001&apos;)
+        string( name: &apos;DME&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:50051&apos;)
+        string( name: &apos;DMERest&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:38001&apos;)
+        string( name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
+        string( name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
+        booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false, description: &apos;&apos;)
+    }
+
     stages {
         stage(&apos;Checkout&apos;) {
-            agent { label &apos;jenkinsGcpSlave2&apos; }
             steps {
-                sh &apos;whoami&apos;
-                sh &apos;id&apos;
-                sh &apos;groups&apos;
-                sh &apos;docker ps&apos;  //remove all docker stuff without prompting
+                sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
                 echo &apos;docker prune failed. mayber already running&apos;
                 // delete old protos before git and build
                 dir(&apos;go/src/github.com/mobiledgex/protos&apos;) {
@@ -88,7 +169,6 @@ pipeline{
                    credentialsId: &apos;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&apos;,
                    url: &apos;https://github.com/mobiledgex/edge-proto.git&apos;
                 }
-
                 dir(&apos;go/src/github.com/mobiledgex/edge-cloud&apos;) {
                    sh &apos;rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*&apos;
 
@@ -112,10 +192,11 @@ pipeline{
                 failure { echo &apos;checkout failed&apos; }
             }
         }
+
         stage(&quot;build protos&quot;) {
             steps {
                 dir(&apos;go/src/github.com/mobiledgex/tools&apos;) {
-                    sh(script:&apos;/usr/bin/python3 ./build_protos.py --sourcedir $WORKSPAC/go/src/github.com/mobiledgex/edge-cloud/ --sourcedir_proto $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/ --qadir $WORKSPACE/go/src/github.com/mobiledgex&apos;);
+                    sh(script:&apos;/usr/bin/python3 ./build_protos.py --sourcedir $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/ --sourcedir_proto $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/ --qadir $WORKSPACE/go/src/github.com/mobiledgex&apos;);
                 }
             }
             post {
