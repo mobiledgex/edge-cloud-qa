@@ -1,11 +1,15 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<scriptApproval plugin="script-security@1.74">
+<scriptApproval plugin="script-security@1.78">
   <approvedScriptHashes>
     <string>017d0db438428731cd600b6ebda805065433520f</string>
   </approvedScriptHashes>
   <approvedSignatures>
+    <string>field hudson.model.Run project</string>
+    <string>method hudson.model.AbstractItem setDescription java.lang.String</string>
+    <string>method hudson.model.AbstractItem setDisplayName java.lang.String</string>
     <string>method java.util.Calendar add int int</string>
     <string>method java.util.Calendar getTime</string>
+    <string>method org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper getRawBuild</string>
     <string>staticMethod org.codehaus.groovy.runtime.DateGroovyMethods getAt java.util.Date int</string>
     <string>staticMethod org.codehaus.groovy.runtime.DateGroovyMethods minus java.util.Date int</string>
   </approvedSignatures>

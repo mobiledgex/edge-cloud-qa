@@ -6,21 +6,26 @@
       <jobProperties/>
       <triggers/>
       <parameters>
+        <string>Platform</string>
+        <string>Controller</string>
+        <string>Cycle</string>
+        <string>OpenStackEnv</string>
         <string>Components</string>
         <string>DMERest</string>
         <string>Project</string>
+        <string>Area</string>
         <string>VariableFile</string>
+        <string>InfluxDB</string>
         <string>RunFailedOnly</string>
-        <string>Controller</string>
         <string>DME</string>
-        <string>Cycle</string>
         <string>MasterController</string>
         <string>CommitVersion</string>
       </parameters>
       <options/>
     </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
   </actions>
-  <description></description>
+  <description>NEW JOB DESCRIPTION</description>
+  <displayName>NEW JOB DISPLAY NAME</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.6"/>
@@ -78,6 +83,16 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
+          <name>InfluxDB</name>
+          <defaultValue>notset</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>OpenStackEnv</name>
+          <defaultValue>notset</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>CommitVersion</name>
           <defaultValue>master</defaultValue>
           <trim>false</trim>
@@ -86,18 +101,21 @@
           <name>RunFailedOnly</name>
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>Platform</name>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>Controller</string>
+              <string>Openstack</string>
+              <string>VCD</string>
+              <string>Vshpere</string>
+              <string>Anthos</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>Version</name>
-          <defaultValue>Stratus</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>MasterControllerCert</name>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>DMERestCert</name>
-          <defaultValue>mex-ca.crt</defaultValue>
+          <name>Area</name>
+          <defaultValue>flavor</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -109,26 +127,37 @@
     </hudson.model.ParametersDefinitionProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
-    <script>currentBuild.displayName = &apos;andy&apos;
+    <script>currentBuild.displayName = cycle + &apos;_&apos; + platform + area
+
+contoller_components = [&quot;Automated&quot;, &quot;Controller&quot;, &quot;Flavor&quot;]
 
 pipeline{
     agent { label &apos;jenkinsGcpSlave1&apos; }
     parameters {
-        string( name: &apos;Components&apos;, defaultValue: &apos;Automated&apos;)
-        string( name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
-        string( name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
-        string( name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
-        string( name: &apos;Controller&apos;, defaultValue: &apos;mexplat-qa-us.ctrl.mobiledgex.net:55001&apos;)
-        string( name: &apos;DME&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:50051&apos;)
-        string( name: &apos;DMERest&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:38001&apos;)
-        string( name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
-        string( name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
-        booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false, description: &apos;&apos;)
+        string(name: &apos;Components&apos;, defaultValue: &apos;Automated&apos;)
+        string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
+        string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
+        string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
+        string(name: &apos;Controller&apos;, defaultValue: &apos;mexplat-qa-us.ctrl.mobiledgex.net:55001&apos;)
+        string(name: &apos;DME&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:50051&apos;)
+        string(name: &apos;DMERest&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:38001&apos;)
+        string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
+        string(name: &apos;InfluxDB&apos;, defaultValue: &apos;notset&apos;)
+        string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
+        string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
+        booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
+        choice(name: &apos;Platform&apos;, choices: [&apos;Controller&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
 
     stages {
         stage(&apos;Checkout&apos;) {
             steps {
+                script {
+                    currentBuild.rawBuild.project.description = &apos;NEW JOB DESCRIPTION&apos;
+                    currentBuild.rawBuild.project.setDisplayName(&apos;NEW JOB DISPLAY NAME&apos;)
+                }
+
                 sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
                 echo &apos;docker prune failed. mayber already running&apos;
                 // delete old protos before git and build
@@ -201,6 +230,17 @@ pipeline{
             }
             post {
                 failure { echo &quot;build_protos.py failed&quot; }
+            }
+        }
+        
+        stage(&quot;execute tests&quot;) {
+            steps {
+                dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
+                    sh(script:&apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=&apos; + controller + &apos;;export AUTOMATION_DME_ADDRESS=&apos; + dme + &apos;;export AUTOMATION_DME_REST_ADDRESS=&apos; + dmerest + &apos;;export AUTOMATION_OPENSTACK_DEDICATED_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_SHARED_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_VM_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_GPU_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_OFFLINE_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_MC_ADDRESS=&apos; + mastercontroller + &apos;;export AUTOMATION_MC_CERT=&apos; + &apos;;export AUTOMATION_INFLUXDB_ADDRESS=&apos; + influxdb + &apos;;export AUTOMATION_OPENSTACK_VMPOOL_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_VGPU_ENV=&apos; + openstackenv + &apos;;./execJira_parallel.py&apos;)
+                }
+            }
+            post {
+                failure { echo &quot;execJira.py failed for&quot;}
             }
         }
     }
