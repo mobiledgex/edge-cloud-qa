@@ -45,7 +45,7 @@
       </triggers>
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2.94">
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
     <scm class="hudson.plugins.git.GitSCM" plugin="git@4.10.0">
       <configVersion>2</configVersion>
       <userRemoteConfigs>
