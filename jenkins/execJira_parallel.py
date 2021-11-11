@@ -95,7 +95,7 @@ def main():
     if 'Version' in os.environ:
         version = os.environ['Version']
     else:
-        version = cycle.split('-')[1]
+        version = cycle.split('_')[1]
     project = os.environ['Project']
     folder = None
     component = os.environ['Components']
