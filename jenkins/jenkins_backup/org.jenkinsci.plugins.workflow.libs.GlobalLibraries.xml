@@ -1,4 +1,31 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<org.jenkinsci.plugins.workflow.libs.GlobalLibraries plugin="workflow-cps-global-lib@2.12">
-  <libraries class="empty-list"/>
+<org.jenkinsci.plugins.workflow.libs.GlobalLibraries plugin="workflow-cps-global-lib@545.v7b28cce323cf">
+  <libraries>
+    <org.jenkinsci.plugins.workflow.libs.LibraryConfiguration>
+      <name>jenkins_shared_library</name>
+      <retriever class="org.jenkinsci.plugins.workflow.libs.SCMSourceRetriever">
+        <scm class="jenkins.plugins.git.GitSCMSource" plugin="git@4.10.0">
+          <id>9a90d92c-bc77-4fae-a7ed-2e39e88c4168</id>
+          <remote>https://github.com/mobiledgex/edge-cloud-qa.git</remote>
+          <credentialsId>79b116ea-d7ac-4d6c-928d-49b79e5f9bef</credentialsId>
+          <traits>
+            <jenkins.plugins.git.traits.BranchDiscoveryTrait/>
+            <jenkins.plugins.git.traits.SparseCheckoutPathsTrait>
+              <extension class="hudson.plugins.git.extensions.impl.SparseCheckoutPaths">
+                <sparseCheckoutPaths>
+                  <hudson.plugins.git.extensions.impl.SparseCheckoutPath>
+                    <path>jenkins</path>
+                  </hudson.plugins.git.extensions.impl.SparseCheckoutPath>
+                </sparseCheckoutPaths>
+              </extension>
+            </jenkins.plugins.git.traits.SparseCheckoutPathsTrait>
+          </traits>
+        </scm>
+      </retriever>
+      <defaultVersion>master</defaultVersion>
+      <implicit>false</implicit>
+      <allowVersionOverride>true</allowVersionOverride>
+      <includeInChangesets>true</includeInChangesets>
+    </org.jenkinsci.plugins.workflow.libs.LibraryConfiguration>
+  </libraries>
 </org.jenkinsci.plugins.workflow.libs.GlobalLibraries>

@@ -25,7 +25,6 @@
     </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
   </actions>
   <description>NEW JOB DESCRIPTION</description>
-  <displayName>runTestcases</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.6"/>
@@ -44,7 +43,6 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>Components</name>
-          <defaultValue>Automatedxx</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -127,16 +125,33 @@
     </hudson.model.ParametersDefinitionProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
-    <script>last_component = components.split(&apos;,&apos;)[-1]
-//currentBuild.displayName = cycle + &apos;_&apos; + platform + area
-currentBuild.displayName = cycle + &apos;_&apos; + platform + last_component
+    <script>//currentBuild.displayName = cycle + &apos;_&apos; + platform + area
+currentBuild.displayName = cycle
 
-contoller_components = [&quot;Automated&quot;, &quot;Controller&quot;, &quot;Flavor&quot;]
+automated_component = &quot;Automated&quot;
+controller_components = [automated_component, &quot;Controller&quot;]
+testcase_components = [
+    controller_components + &quot;Flavor&quot;,
+    controller_components + &quot;OperatorCode&quot;,
+    controller_components + &quot;Controller&quot;,
+    controller_components + &quot;ClusterInst&quot;,
+    controller_components + &quot;App&quot;,
+    controller_components + &quot;Cloudlet&quot;,
+    controller_components + &quot;AppInst&quot;,
+    controller_components + &quot;TrustPolicy&quot;,
+    controller_components + &quot;AlertReceiver&quot;,
+    [automated_component] + &quot;Mcctl&quot;,
+    controller_components + &quot;Settings&quot;,
+    controller_components + &quot;AutoScale&quot;,
+    controller_components + &quot;RateLimit&quot;,
+    controller_components + &quot;AlertPolicy&quot;,
+    ]
+
 
 pipeline{
-    agent { label &apos;jenkinsGcpSlave1&apos; }
+    agent { label &apos;jenkinsSlave1&apos; }
     parameters {
-        string(name: &apos;Components&apos;, defaultValue: &apos;Automatedxx&apos;)
+        string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
         string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
         string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
@@ -153,96 +168,21 @@ pipeline{
     }
 
     stages {
-        stage(&apos;Checkout&apos;) {
-            steps {
-                script {
-                    currentBuild.rawBuild.project.description = &apos;NEW JOB DESCRIPTION&apos;
-                    currentBuild.rawBuild.project.setDisplayName(&apos;runTestcases&apos;)
-                }
-
-                sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
-                echo &apos;docker prune failed. mayber already running&apos;
-                // delete old protos before git and build
-                dir(&apos;go/src/github.com/mobiledgex/protos&apos;) {
-                    sh &apos;rm -rf *&apos;
-                }
-
-                dir(&apos;go/src/github.com/mobiledgex/edge-cloud-sampleapps&apos;) {
-                    git branch: &apos;master&apos;,
-                    credentialsId: &apos;79b116ea-d7ac-4d6c-928d-49b79e5f9bef&apos;,
-                    url: &apos;https://github.com/mobiledgex/edge-cloud-sampleapps.git&apos;
-                }
-
-                dir(&apos;go/src/github.com/mobiledgex&apos;) {
-                    checkout([$class: &apos;GitSCM&apos;,
-                        branches: [[name: &apos;master&apos;]],
-                        doGenerateSubmoduleConfigurations: false,
-                        extensions: [
-                            [$class: &apos;SparseCheckoutPaths&apos;,  sparseCheckoutPaths:[
-                            [$class:&apos;SparseCheckoutPath&apos;, path:&apos;testcases/*&apos;],
-                            [$class:&apos;SparseCheckoutPath&apos;, path:&apos;jenkins/*&apos;],
-                            [$class:&apos;SparseCheckoutPath&apos;, path:&apos;modules/*&apos;],
-                            [$class:&apos;SparseCheckoutPath&apos;, path:&apos;protos/*&apos;],
-                            [$class:&apos;SparseCheckoutPath&apos;, path:&apos;tools/*&apos;],
-                            [$class:&apos;SparseCheckoutPath&apos;, path:&apos;certs/*&apos;]
-                            ]]
-                        ],
-                        submoduleCfg: [],
-                        userRemoteConfigs: [[credentialsId: &apos;79b116ea-d7ac-4d6c-928d-49b79e5f9bef&apos;,
-                        url: &apos;https://github.com/mobiledgex/edge-cloud-qa.git&apos;]]])
-
-                        //unstash &apos;edge-cloud_stash&apos;
-                }
-
-                dir(&apos;go/src/github.com/mobiledgex/edge-proto&apos;) {
-                   sh &apos;rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*&apos;
-                   git branch: CommitVersion,
-                   credentialsId: &apos;79b116ea-d7ac-4d6c-928d-49b79e5f9bef&apos;,
-                   url: &apos;https://github.com/mobiledgex/edge-proto.git&apos;
-                }
-                dir(&apos;go/src/github.com/mobiledgex/edge-cloud&apos;) {
-                   sh &apos;rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*&apos;
-
-                   checkout([$class: &apos;GitSCM&apos;,
-                       branches: [[name: CommitVersion]],
-                       doGenerateSubmoduleConfigurations: false,
-                       extensions: [
-                           [$class: &apos;SparseCheckoutPaths&apos;,  sparseCheckoutPaths:[
-                           [$class:&apos;SparseCheckoutPath&apos;, path:&apos;edgeproto/*&apos;],
-                           [$class:&apos;SparseCheckoutPath&apos;, path:&apos;d-match-engine/dme-proto/*&apos;],
-                           [$class:&apos;SparseCheckoutPath&apos;, path:&apos;protoc-gen-cmd/protocmd/*&apos;],
-                           [$class:&apos;SparseCheckoutPath&apos;, path:&apos;protogen/*&apos;]
-                           ]]
-                       ],
-                       submoduleCfg: [],
-                       userRemoteConfigs: [[credentialsId: &apos;79b116ea-d7ac-4d6c-928d-49b79e5f9bef&apos;,
-                       url: &apos;https://github.com/mobiledgex/edge-cloud.git&apos;]]])
-                }
-            }
-            post {
-                failure { echo &apos;checkout failed&apos; }
-            }
-        }
-
-        stage(&quot;build protos&quot;) {
-            steps {
-                dir(&apos;go/src/github.com/mobiledgex/tools&apos;) {
-                    sh(script:&apos;/usr/bin/python3 ./build_protos.py --sourcedir $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/ --sourcedir_proto $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/ --qadir $WORKSPACE/go/src/github.com/mobiledgex&apos;);
-                }
-            }
-            post {
-                failure { echo &quot;build_protos.py failed&quot; }
-            }
-        }
-        
         stage(&quot;execute tests&quot;) {
             steps {
-                dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
-                    sh(script:&apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=&apos; + controller + &apos;;export AUTOMATION_DME_ADDRESS=&apos; + dme + &apos;;export AUTOMATION_DME_REST_ADDRESS=&apos; + dmerest + &apos;;export AUTOMATION_OPENSTACK_DEDICATED_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_SHARED_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_VM_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_GPU_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_OFFLINE_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_MC_ADDRESS=&apos; + mastercontroller + &apos;;export AUTOMATION_MC_CERT=&apos; + &apos;;export AUTOMATION_INFLUXDB_ADDRESS=&apos; + influxdb + &apos;;export AUTOMATION_OPENSTACK_VMPOOL_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_VGPU_ENV=&apos; + openstackenv + &apos;;./execJira_parallel.py&apos;)
+                script {
+                    builds = [:]
+                    testcase_components.eachWithIndex { value, index-&gt;
+                        echo &quot;${value}&quot;
+                        builds[&quot;${value[-1]}&quot;] = {
+                            build job: &apos;runTestcases&apos;, parameters: [string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), string(name: &apos;Project&apos;, value: project), string(name: &apos;Cycle&apos;, value: cycle), string(name: &apos;Controller&apos;, value: controller), string(name: &apos;MasterController&apos;, value: mastercontroller), string(name: &apos;VariableFile&apos;, value: variablefile), booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                        }
+                    }
+                    parallel builds
                 }
             }
             post {
-                failure { echo &quot;execJira.py failed for&quot;}
+                failure { echo &quot;run controller tests failed&quot;}
             }
         }
     }
