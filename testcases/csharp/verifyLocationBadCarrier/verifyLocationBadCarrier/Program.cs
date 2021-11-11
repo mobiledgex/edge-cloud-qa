@@ -1,9 +1,12 @@
-﻿using System;
-using Grpc.Core;
-using System.Net;
+﻿// ECQ-1101
+
+
+using System;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 // MobiledgeX Matching Engine API.
 using DistributedMatchEngine;
@@ -12,14 +15,26 @@ namespace MexGrpcSampleConsoleApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             // This test case still passes with a bac carrier
             Console.WriteLine("VerifyLocationBadCarrier Test Case");
 
-
             var mexGrpcLibApp = new MexGrpcLibApp();
-            mexGrpcLibApp.RunSampleFlow();
+            try
+            {
+                await mexGrpcLibApp.RunSampleFlow();
+            }
+            catch (AggregateException ae)
+            {
+                Console.Error.WriteLine("Exception running sample: " + ae.Message);
+                Console.Error.WriteLine("Excetpion stack trace: " + ae.StackTrace);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine("Exception running sample: " + e.Message);
+                Console.Error.WriteLine("Excetpion stack trace: " + e.StackTrace);
+            }
         }
     }
 
@@ -36,38 +51,110 @@ namespace MexGrpcSampleConsoleApp
         }
     }
 
+    class DummyCarrierInfo : CarrierInfo
+    {
+        public ulong GetCellID()
+        {
+            return 0;
+        }
+
+        public string GetCurrentCarrierName()
+        {
+            return "";
+        }
+
+        public string GetMccMnc()
+        {
+            return "";
+        }
+
+        public string GetDataNetworkType()
+        {
+            return "";
+        }
+
+        public ulong GetSignalStrength()
+        {
+            return 0;
+        }
+    }
+
+    // This interface is optional but is used in the sample.
+    class DummyUniqueID : UniqueID
+    {
+        string UniqueID.GetUniqueIDType()
+        {
+            return "dummyModel";
+        }
+
+        string UniqueID.GetUniqueID()
+        {
+            return "abcdef0123456789";
+        }
+    }
+
+    class DummyDeviceInfo : DeviceInfoApp
+    {
+
+        public DeviceInfoDynamic GetDeviceInfoDynamic()
+        {
+            DeviceInfoDynamic DeviceInfoDynamic = new DeviceInfoDynamic()
+            {
+                CarrierName = "tmus",
+                DataNetworkType = "GSM",
+                SignalStrength = 0
+            };
+            return DeviceInfoDynamic;
+        }
+
+        public DeviceInfoStatic GetDeviceInfoStatic()
+        {
+            DeviceInfoStatic DeviceInfoStatic = new DeviceInfoStatic()
+            {
+                DeviceModel = "Samsung",
+                DeviceOs = "Android 11"
+            };
+            return DeviceInfoStatic;
+        }
+
+        public bool IsPingSupported()
+        {
+            return true;
+        }
+    }
+
     class MexGrpcLibApp
     {
         Loc location;
         string sessionCookie;
         //string expSessionCookie = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDk1Njc1MzcsImlhdCI6MTU0OTQ4MTEzNywia2V5Ijp7InBlZXJpcCI6IjEwLjEzOC4wLjkiLCJkZXZuYW1lIjoiYXV0b21hdGlvbl9hcGkiLCJhcHBuYW1lIjoiYXV0b21hdGlvbl9hcGlfYXBwIiwiYXBwdmVycyI6IjEuMCIsImtpZCI6Nn19.d_UaPU9LJSqowEQfPHnXNgtpmTj84HTGL5t8PDpyz5ZBuIXxWKjd4YYdOa2qWe5sQrLy594fdmo-Pi-8Hp8sSg";
 
-        //string dmeHost = null; // DME server hostname or ip.
         string dmeHost = "us-qa.dme.mobiledgex.net"; // DME server hostname or ip.
-        //string dmeHost = "mexdemo.dme.mobiledgex.net"; // DME server hostname or ip.
-        int dmePort = 50051; // DME port.
+        uint dmePort = 50051; // DME port.
+        
+        MatchingEngine me;
 
-        MatchEngineApi.MatchEngineApiClient client;
-
-        public void RunSampleFlow()
+        public async Task RunSampleFlow()
         {
+            me = new MatchingEngine(
+                //netInterface: new SimpleNetInterface(new MacNetworkInterfaceName()),
+                netInterface: new SimpleNetInterface(new LinuxNetworkInterfaceName()),
+                carrierInfo: new DummyCarrierInfo(),
+                deviceInfo: new DummyDeviceInfo(),
+                uniqueID: new DummyUniqueID());
+            me.useOnlyWifi = true;
+            me.useSSL = true; // false --> Local testing only.
+
             location = getLocation();
             string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
             string uri = dmeHost + ":" + dmePort;
-            //string devName = "MobiledgeX”;
-            //string appName = "MobiledgeX SDK Demo”;
-            string devName = "mobiledgex";
+            string orgName = "automation_dev_org";
             string appName = "automation_api_app";
+            string appVers = "1.0";
 
-            // Channel:
-
-            ChannelCredentials channelCredentials = new SslCredentials();
-            Channel channel = new Channel(uri, channelCredentials);
-
-            client = new DistributedMatchEngine.MatchEngineApi.MatchEngineApiClient(channel);
-
-            var registerClientRequest = CreateRegisterClientRequest(devName, appName, "1.0");
-            var regReply = client.RegisterClient(registerClientRequest);
+            var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVers);
+            var regReply = await me.RegisterClient(host: dmeHost, port: dmePort, registerClientRequest);
+            Console.WriteLine("RegisterClient Reply Status :  " + regReply.Status);
 
             //Console.WriteLine("RegisterClient Reply: " + regReply);
             //Console.WriteLine("RegisterClient TokenServerURI: " + regReply.TokenServerURI);
@@ -98,10 +185,107 @@ namespace MexGrpcSampleConsoleApp
             //Extract the sessiontoken contents
             char[] delimiterChars = { ',', '{', '}' };
             string[] words = jwtPayload.Split(delimiterChars);
+            long expTime = 0;
+            long iatTime = 0;
+            bool expParse = false;
+            bool iatParse = false;
+            string peer;
+            string org;
+            string app;
+            string appver;
+
+            foreach (var word in words)
+            {
+                if (word.Length > 7)
+                {
+                    //Console.WriteLine(word);
+                    if (word.Substring(1, 3) == "exp")
+                    {
+                        expParse = long.TryParse(word.Substring(7, 10), out expTime);
+                    }
+                    if (word.Substring(1, 3) == "iat")
+                    {
+                        iatParse = long.TryParse(word.Substring(7, 10), out iatTime);
+                    }
+                    if (expParse && iatParse)
+                    {
+                        int divider = 60;
+                        long tokenTime = expTime - iatTime;
+                        tokenTime /= divider;
+                        tokenTime /= divider;
+                        int expLen = 24;
+                        expParse = false;
+                        if (tokenTime != expLen)
+                        {
+                            Console.WriteLine("Session Cookie Exparation Time not 24 Hours:  " + tokenTime);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Session Cookie Exparation Time correct:  " + tokenTime);
+                        }
+                    }
+                    if (word.Substring(1, 6) == "peerip")
+                    {
+                        peer = word.Substring(10);
+                        peer = peer.Substring(0, peer.Length - 1);
+                        string pattern = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
+                        if (System.Text.RegularExpressions.Regex.IsMatch(peer, pattern))
+                        {
+                            Console.WriteLine("Peerip Expression Matched!  " + peer);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Peerip Expression Didn't Match!  " + peer);
+                            Environment.Exit(1);
+                        }
+                    }
+                    if (word.Substring(1, 7) == "orgname")
+                    {
+                        org = word.Substring(11);
+                        org = org.Substring(0, org.Length - 1);
+                        if (org != orgName)
+                        {
+                            Console.WriteLine("Orgname Didn't Match!  " + org);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Orgname Matched!  " + org);
+                        }
+                    }
+                    if (word.Substring(1, 7) == "appname")
+                    {
+                        app = word.Substring(11);
+                        app = app.Substring(0, app.Length - 1);
+                        if (app != appName)
+                        {
+                            Console.WriteLine("AppName Didn't Match!  " + app);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            Console.WriteLine("AppName Matched!  " + app);
+                        }
+                    }
+                    if (word.Substring(1, 7) == "appvers")
+                    {
+                        appver = word.Substring(11, 3);
+                        if (appver != "1.0")
+                        {
+                            Console.WriteLine("App Version Didn't Match!  " + appver);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            Console.WriteLine("App Version Matched!  " + appver);
+                        }
+                    }
+
+                }
 
 
-
-
+            }
 
             // Request the token from the TokenServer:
             string token = null;
@@ -127,8 +311,10 @@ namespace MexGrpcSampleConsoleApp
             {
                 // Async version can also be used. Blocking:
                 // This test case still passes with a bac carrier
-                Console.WriteLine("Verifying Location:");
-                var verifyResponse = VerifyLocation(token);
+                var carrierName = getCarrierName();
+                Console.WriteLine("\nVerifying Location:");
+                var verifyLocationRequest = me.CreateVerifyLocationRequest(location);
+                var verifyResponse = await me.VerifyLocation(host: dmeHost, port: dmePort, verifyLocationRequest);
                 Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
                 Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GpsLocationAccuracyKm);
                 Console.WriteLine("Testcase Pass!");
@@ -152,12 +338,12 @@ namespace MexGrpcSampleConsoleApp
         }
 
 
-        RegisterClientRequest CreateRegisterClientRequest(string devName, string appName, string appVersion)
+        RegisterClientRequest CreateRegisterClientRequest(string orgName, string appName, string appVersion)
         {
             var request = new RegisterClientRequest
             {
                 Ver = 1,
-                DevName = devName,
+                OrgName = orgName,
                 AppName = appName,
                 AppVers = appVersion
             };
@@ -262,28 +448,12 @@ namespace MexGrpcSampleConsoleApp
             return token;
         }
 
-        VerifyLocationReply VerifyLocation(string token)
-        {
-            var verifyLocationRequest = CreateVerifyLocationRequest(getCarrierName(), getLocation(), token);
-            var verifyResult = client.VerifyLocation(verifyLocationRequest);
-            Console.WriteLine("Using Carrier: " + getCarrierName());
-            return verifyResult;
-        }
-
-        FindCloudletReply FindCloudlet()
-        {
-            // Create a synchronous request for FindCloudlet using RegisterClient reply's Session Cookie (TokenServerURI is now invalid):
-            var findCloudletRequest = CreateFindCloudletRequest(getCarrierName(), getLocation());
-            var findCloudletReply = client.FindCloudlet(findCloudletRequest);
-
-            return findCloudletReply;
-        }
 
         // TODO: The app must retrieve form they platform this case sensitive value before each DME GRPC call.
         // The device is potentially mobile and may have data roaming.
         String getCarrierName()
         {
-            // This test case still passes with a bac carrier
+            // This test case still passes with a bad carrier
             return "xx";
         }
 
