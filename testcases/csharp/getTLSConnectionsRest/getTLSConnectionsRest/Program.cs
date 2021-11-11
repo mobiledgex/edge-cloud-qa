@@ -25,6 +25,8 @@ using DistributedMatchEngine;
 using DistributedMatchEngine.Mel;
 using System.Net.Security;
 using System.Security.Authentication;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
 namespace RestSample
 {
@@ -191,14 +193,78 @@ namespace RestSample
             return req;
         }
 
+        static string file = "../../../../../letsencrypt-stg-root-x1.pem";
+
         async static Task Main(string[] args)
         {
             try
             {
+                Console.WriteLine("\r\nExists Certs Name and Location");
+                Console.WriteLine("------ ----- -------------------------");
+
+                foreach (StoreLocation storeLocation in (StoreLocation[])
+                    Enum.GetValues(typeof(StoreLocation)))
+                {
+                    foreach (StoreName storeName in (StoreName[])
+                        Enum.GetValues(typeof(StoreName)))
+                    {
+                        X509Store store1 = new X509Store(storeName, storeLocation);
+
+                        try
+                        {
+                            store1.Open(OpenFlags.OpenExistingOnly);
+
+                            Console.WriteLine("Yes    {0,4}  {1}, {2}",
+                                store1.Certificates.Count, store1.Name, store1.Location);
+                        }
+                        catch (CryptographicException)
+                        {
+                            Console.WriteLine("No           {0}, {1}",
+                                store1.Name, store1.Location);
+                        }
+                    }
+                    Console.WriteLine();
+                }
+
+
+                X509Certificate2 mycert = new X509Certificate2(file);
+                X509Store store = new X509Store(StoreName.Root, StoreLocation.CurrentUser);
+                store.Open(OpenFlags.ReadWrite);
+                store.Add(mycert);
+
+
+                Console.WriteLine("OutSide  " + mycert.GetExpirationDateString());
+                Console.WriteLine(mycert.Issuer);
+                Console.WriteLine(mycert.GetEffectiveDateString());
+                Console.WriteLine(mycert.GetNameInfo(X509NameType.SimpleName, true));
+                Console.WriteLine(mycert.HasPrivateKey);
+                Console.WriteLine(mycert.SubjectName.Name);
+
+
+                X509Certificate2Collection collection = store.Certificates.Find(X509FindType.FindBySubjectName, "(STAGING) Pretend Pear X1", true);
+                Console.WriteLine(collection.Count);
+                if (collection.Count != 0)
+                {
+                    Console.WriteLine("Got it!");
+                    foreach (X509Certificate2 cert in collection)
+                    {
+                        Console.WriteLine("In the Foreach");
+                        Console.WriteLine(cert.GetExpirationDateString());
+                        Console.WriteLine(cert.Issuer);
+                        Console.WriteLine(cert.GetEffectiveDateString());
+                        Console.WriteLine(cert.GetNameInfo(X509NameType.SimpleName, true));
+                        Console.WriteLine(cert.HasPrivateKey);
+                        Console.WriteLine(cert.SubjectName.Name);
+                    }
+
+                }
+
+                store.Close();
+
                 Console.WriteLine("Get TLS Connections Testcase!!");
 
-                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
                 me.SetTimeout(15000);
 
                 FindCloudletReply findCloudletInfo = null;

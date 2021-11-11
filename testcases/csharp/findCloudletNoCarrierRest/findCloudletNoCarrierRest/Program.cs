@@ -3,7 +3,8 @@
 using System;
 using System.Threading.Tasks;
 using DistributedMatchEngine;
-using DistributedMatchEngine.Mel;
+using DistributedMatchEngine.Mel
+    ;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -310,6 +311,7 @@ namespace RestSample
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
                 }
             }
             catch (InvalidTokenServerTokenException itste)
