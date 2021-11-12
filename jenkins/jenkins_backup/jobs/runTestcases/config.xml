@@ -106,6 +106,7 @@
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>Controller</string>
+              <string>DME</string>
               <string>Openstack</string>
               <string>VCD</string>
               <string>Vshpere</string>
@@ -118,11 +119,6 @@
           <defaultValue>flavor</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>Folder</name>
-          <defaultValue>controller</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -131,10 +127,10 @@
 //currentBuild.displayName = cycle + &apos;_&apos; + platform + area
 currentBuild.displayName = cycle + &apos;_&apos; + platform + last_component
 
-contoller_components = [&quot;Automated&quot;, &quot;Controller&quot;, &quot;Flavor&quot;]
+//contoller_components = [&quot;Automated&quot;, &quot;Controller&quot;, &quot;Flavor&quot;]
 
 pipeline{
-    agent { label &apos;jenkinsGcpSlave1&apos; }
+    agent { label &apos;jenkinsSlave1&apos; }
     parameters {
         string(name: &apos;Components&apos;, defaultValue: &apos;Automatedxx&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
@@ -148,24 +144,24 @@ pipeline{
         string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        choice(name: &apos;Platform&apos;, choices: [&apos;Controller&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        choice(name: &apos;Platform&apos;, choices: [&apos;Controller&apos;, &apos;DME&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
 
     stages {
         stage(&apos;Checkout&apos;) {
             steps {
-                script {
-                    currentBuild.rawBuild.project.description = &apos;NEW JOB DESCRIPTION&apos;
-                    currentBuild.rawBuild.project.setDisplayName(&apos;runTestcases&apos;)
-                }
+                //script {
+                //    currentBuild.rawBuild.project.description = &apos;NEW JOB DESCRIPTION&apos;
+                //    currentBuild.rawBuild.project.setDisplayName(&apos;runTestcases&apos;)
+                //}
 
-                sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
-                echo &apos;docker prune failed. mayber already running&apos;
+                //sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
+                //echo &apos;docker prune failed. mayber already running&apos;
                 // delete old protos before git and build
-                dir(&apos;go/src/github.com/mobiledgex/protos&apos;) {
-                    sh &apos;rm -rf *&apos;
-                }
+                //dir(&apos;go/src/github.com/mobiledgex&apos;) {
+                //    sh &apos;rm -rf *&apos;
+                //}
 
                 dir(&apos;go/src/github.com/mobiledgex/edge-cloud-sampleapps&apos;) {
                     git branch: &apos;master&apos;,
@@ -174,6 +170,7 @@ pipeline{
                 }
 
                 dir(&apos;go/src/github.com/mobiledgex&apos;) {
+                    sh &apos;rm -rf *&apos;
                     checkout([$class: &apos;GitSCM&apos;,
                         branches: [[name: &apos;master&apos;]],
                         doGenerateSubmoduleConfigurations: false,

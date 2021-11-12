@@ -32,6 +32,14 @@
     <hudson.plugins.favorite.user.FavoriteUserProperty plugin="favorite@2.3.2">
       <data class="concurrent-hash-map">
         <entry>
+          <string>runDmeTestcases</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>runControllerTestcases</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
           <string>runTestcases</string>
           <boolean>true</boolean>
         </entry>
