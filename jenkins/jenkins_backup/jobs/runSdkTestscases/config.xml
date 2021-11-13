@@ -105,15 +105,23 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>Platform</name>
-          <choices>
-            <string>DME</string>
-            <string>Controller</string>
-            <string>Openstack</string>
-            <string>VCD</string>
-            <string>Vshpere</string>
-            <string>Anthos</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>SDK</string>
+              <string>Controller</string>
+              <string>DME</string>
+              <string>Openstack</string>
+              <string>VCD</string>
+              <string>Vshpere</string>
+              <string>Anthos</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Folder</name>
+          <defaultValue>controller</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -121,28 +129,13 @@
     <script>currentBuild.displayName = cycle
 
 automated_component = &quot;Automated&quot;
-dme_components = [automated_component, &quot;DME&quot;]
-crm_components = [automated_component, &quot;CRM&quot;]
-
-testcase_components1 = [
-    crm_components + &quot;DMEPersistentConnection&quot;,
-    dme_components + &quot;FindCloudlet&quot;,
-    dme_components + &quot;OperatorCode&quot;,
-    dme_components + &quot;RegisterClient&quot;,
-    dme_components + &quot;VerifyLocation&quot;,
-    dme_components + &quot;GetLocation&quot;,
-    dme_components + &quot;ShowDevice&quot;,
-    dme_components + &quot;GetQosPositionKpi&quot;,
-    dme_components + &quot;DMEPersistentConnection&quot;,
-    dme_components + &quot;RequestAppInstLatency&quot;,
+sdk_components = [automated_component, &quot;SDK&quot;]
+testcase_components = [
+    sdk_components + &quot;CPP&quot;,
+    sdk_components + &quot;CSharp&quot;,
     ]
 
-testcase_components2 = [
-    dme_components + &quot;GetFqdnList&quot;,
-    dme_components + &quot;GetAppInstList&quot;,
-    dme_components + &quot;ShowDeviceReport&quot;,
-    ]
-    
+
 pipeline{
     agent { label &apos;jenkinsSlave1&apos; }
     parameters {
@@ -159,16 +152,17 @@ pipeline{
         string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        choice(name: &apos;Platform&apos;, choices: [&apos;DME&apos;, &apos;Controller&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        choice(name: &apos;Platform&apos;, choices: [&apos;SDK&apos;, &apos;Controller&apos;, &apos;DME&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
 
     stages {
-        stage(&quot;execute tests group 1&quot;) {
+        stage(&quot;execute tests&quot;) {
             steps {
+                slackSend channel: &quot;#qa-automation&quot;, color: &quot;good&quot;, message: &quot;Hello Leon&quot;
                 script {
                     builds = [:]
-                    testcase_components1.eachWithIndex { value, index-&gt;
+                    testcase_components.eachWithIndex { value, index-&gt;
                         echo &quot;${value}&quot;
                         builds[&quot;${value[-1]}&quot;] = {
                             build job: &apos;runTestcases&apos;, parameters: [
@@ -185,45 +179,15 @@ pipeline{
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
                     }
-                    catchError {
-                        parallel builds
-                    }
+                    parallel build
                 }
             }
             post {
-                failure { echo &quot;run group 1 tests failed&quot;}
-            }
-        }
-
-        stage(&quot;execute tests group 2&quot;) {
-            steps {
-                script {
-                    builds = [:]
-                    testcase_components2.eachWithIndex { value, index-&gt;
-                        echo &quot;${value}&quot;
-                        builds[&quot;${value[-1]}&quot;] = {
-                            build job: &apos;runTestcases&apos;, parameters: [
-                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller), 
-                                string(name: &apos;DME&apos;, value: dme),
-                                string(name: &apos;DMERest&apos;, value: dmerest),
-                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;Platform&apos;, value: platform),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
-                        }
-                    }
-                    parallel builds
-                }
-            }
-            post {
-                failure { echo &quot;run group 2 tests failed&quot;}
+                failure { echo &quot;run SDK tests failed&quot;}
             }
         }
     }
+
 }
 </script>
     <sandbox>true</sandbox>
