@@ -127,6 +127,9 @@
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
     <script>currentBuild.displayName = cycle
+slackurl = &apos;https://mobiledgex.slack.com/services/hooks/jenkins-ci/&apos;
+slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
+slackchannel = &apos;#qa-automation&apos;
 
 automated_component = &quot;Automated&quot;
 sdk_components = [automated_component, &quot;SDK&quot;]
@@ -159,7 +162,8 @@ pipeline{
     stages {
         stage(&quot;execute tests&quot;) {
             steps {
-                slackSend channel: &quot;#qa-automation&quot;, color: &quot;good&quot;, message: &quot;Hello Leon&quot;
+                slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting SDK tests&quot;
+                
                 script {
                     builds = [:]
                     testcase_components.eachWithIndex { value, index-&gt;
@@ -183,7 +187,13 @@ pipeline{
                 }
             }
             post {
-                failure { echo &quot;run SDK tests failed&quot;}
+                failure { 
+                    echo &quot;run SDK tests failed&quot;
+                    slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Finished SDK tests with failure&quot;
+                }
+                success {
+                    slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Finished SDK tests with success&quot;
+                }
             }
         }
     }
