@@ -1,0 +1,413 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.42">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.9.2"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.9.2">
+      <jobProperties/>
+      <triggers/>
+      <parameters>
+        <string>DMERestCert</string>
+        <string>Controller</string>
+        <string>OpenStackEnv</string>
+        <string>DMERest</string>
+        <string>Project</string>
+        <string>VariableFile</string>
+        <string>BuildDate</string>
+        <string>Version</string>
+        <string>InfluxDB</string>
+        <string>RunFailedOnly</string>
+        <string>DME</string>
+        <string>MasterController</string>
+        <string>CommitVersion</string>
+      </parameters>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>NEW JOB DESCRIPTION</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.6"/>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>20</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty plugin="build-failure-analyzer@1.27.1">
+      <doNotScan>false</doNotScan>
+    </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>BuildDate</name>
+          <description>YYYY-MM-DD or &quot;today&quot;</description>
+          <defaultValue>today</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Project</name>
+          <defaultValue>ECQ</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Version</name>
+          <defaultValue>CirrusR3.1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MasterController</name>
+          <defaultValue>console-qa.mobiledgex.net:443</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Controller</name>
+          <defaultValue>mexplat-qa-us.ctrl.mobiledgex.net:55001</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DME</name>
+          <defaultValue>us-qa.dme.mobiledgex.net:50051</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DMERest</name>
+          <defaultValue>us-qa.dme.mobiledgex.net:38001</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DMERestCert</name>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>VariableFile</name>
+          <defaultValue>automation_variables.py</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>InfluxDB</name>
+          <defaultValue>notset</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>OpenStackEnv</name>
+          <defaultValue>notset</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CommitVersion</name>
+          <defaultValue>master</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RunFailedOnly</name>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
+    <script>import java.text.SimpleDateFormat
+
+slackurl = &apos;https://mobiledgex.slack.com/services/hooks/jenkins-ci/&apos;
+slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
+slackchannel = &apos;#qa-automation&apos;
+gitcred = &apos;79b116ea-d7ac-4d6c-928d-49b79e5f9bef&apos;
+dateValue = &apos;notset&apos;
+cycle = &apos;notset&apos;
+
+def slack_fail(message) {
+    slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;danger&quot;, message: message
+}
+def slack_warning(message) {
+    slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;warning&quot;, message: message
+}
+
+def add_tests_to_folder(version, project, cycle, folder, components=null, components_omit=null) {
+    def status = -1
+    def s = &apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version &apos; + version + &apos; --project &apos; + project + &apos; --cycle &apos; + cycle +  &apos; --folder &apos; + folder
+    if (components != null) {
+        s = s + &apos; --component &apos; + components
+    }
+    if (components_omit != null) {
+        s = s + &apos; --componentOmit &apos; + components_omit
+    }
+    status = sh(script: s, returnStatus: true);
+    println status
+    if(status != 0) {
+        println &quot;copyTestsToRelease.py failed&quot;
+        currentBuild.result = &apos;FAILURE&apos;
+        throw new Exception(&quot;Copy tests to release failed&quot;)
+    }
+}
+
+pipeline{
+    agent { label &apos;jenkinsSlave1&apos; }
+    parameters {
+        string(name: &apos;BuildDate&apos;, defaultValue: &apos;today&apos;, description: &apos;YYYY-MM-DD or &quot;today&quot;&apos;)
+        string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
+        string(name: &apos;Version&apos;, defaultValue: &apos;CirrusR3.1&apos;)
+        string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
+        string(name: &apos;Controller&apos;, defaultValue: &apos;mexplat-qa-us.ctrl.mobiledgex.net:55001&apos;)
+        string(name: &apos;DME&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:50051&apos;)
+        string(name: &apos;DMERest&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:38001&apos;)
+        string(name: &apos;DMERestCert&apos;, defaultValue: &apos;&apos;)
+        string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
+        string(name: &apos;InfluxDB&apos;, defaultValue: &apos;notset&apos;)
+        string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
+        string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
+        booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
+        //choice(name: &apos;Platform&apos;, choices: [&apos;SDK&apos;, &apos;Controller&apos;, &apos;DME&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
+    }
+
+    stages {
+        stage(&apos;Checkout&apos;) {
+            steps {
+                script {
+                    date = new Date()
+                    sdate = new SimpleDateFormat(&quot;yyy-MM-dd&quot;)
+                    Calendar cal = Calendar.getInstance()
+                    
+                    if(params.BuildDate == &quot;today&quot;) {
+                        dateValue = sdate.format(date)
+                    } else {
+                        dateValue = params.BuildDate
+                    }
+                    echo dateValue
+
+                    cycle = dateValue + &apos;_&apos; + params.Version
+                    currentBuild.displayName = cycle
+
+                }
+                
+//                dir(&apos;go/src/github.com/mobiledgex&apos;) {
+//                    checkout([$class: &apos;GitSCM&apos;,
+//                        branches: [[name: &apos;master&apos;]],
+//                        doGenerateSubmoduleConfigurations: false,
+//                        extensions: [
+//                            [$class: &apos;SparseCheckoutPaths&apos;,  sparseCheckoutPaths:[[$class:&apos;SparseCheckoutPath&apos;, path:&apos;jenkins/*&apos;],[$class:&apos;SparseCheckoutPath&apos;, path:&apos;modules/*&apos;],[$class:&apos;SparseCheckoutPath&apos;, path:&apos;tools/*&apos;],[$class:&apos;SparseCheckoutPath&apos;, path:&apos;testcases/config/*&apos;]]]
+//                        ],
+//                        submoduleCfg: [],
+//                        userRemoteConfigs: [[credentialsId: gitcred,
+//                        url: &apos;https://github.com/mobiledgex/edge-cloud-qa.git&apos;]]])
+//                }
+//                dir(&apos;go/src/github.com/mobiledgex/edge-cloud&apos;) {
+//                    sh &apos;rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*&apos;
+//                    checkout([$class: &apos;GitSCM&apos;,
+//                        branches: [[name: &apos;master&apos;]],
+//                        doGenerateSubmoduleConfigurations: false,
+//                        extensions: [
+//                            [$class: &apos;SparseCheckoutPaths&apos;,  sparseCheckoutPaths:[
+//                                [$class:&apos;SparseCheckoutPath&apos;, path:&apos;edgeproto/*&apos;],
+//                                [$class:&apos;SparseCheckoutPath&apos;, path:&apos;d-match-engine/dme-proto/*&apos;],
+//                                [$class:&apos;SparseCheckoutPath&apos;, path:&apos;protoc-gen-cmd/protocmd/*&apos;],
+//                                [$class:&apos;SparseCheckoutPath&apos;, path:&apos;protogen/*&apos;]
+//                            ]]
+//                        ],
+//                        submoduleCfg: [],
+//                        userRemoteConfigs: [[credentialsId: gitcred,
+//                        url: &apos;https://github.com/mobiledgex/edge-cloud.git&apos;]]])
+//                }
+                dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra&apos;) {
+                    sh &apos;rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*&apos;
+                    checkout([$class: &apos;GitSCM&apos;,
+                        branches: [[name: &apos;master&apos;]],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [
+                            [$class: &apos;SparseCheckoutPaths&apos;,  sparseCheckoutPaths:[[$class:&apos;SparseCheckoutPath&apos;, path:&apos;chef/*&apos;],[$class:&apos;SparseCheckoutPath&apos;, path:&apos;ansible/*&apos;]]]
+                        ],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[credentialsId: gitcred,
+                        url: &apos;https://github.com/mobiledgex/edge-cloud-infra.git&apos;]]])
+                }
+//                dir(&apos;go/src/github.com/mobiledgex/edge-proto&apos;) {
+//                    sh &apos;rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*&apos;
+//                    git branch: &apos;master&apos;, credentialsId: gitcred, url: &apos;https://github.com/mobiledgex/edge-proto.git&apos;
+//                }
+            }
+            post {
+                failure { 
+                    slack_fail(&quot;Checkout failed&quot;)
+                }
+            }
+        }
+        
+        stage(&apos;Check Load Exists&apos;) {
+            steps {
+                script {
+                    def s = &apos;curl -s https://robot\\$qa:RIuSwsdA9naFkunkDtg7TrPOHG3YoqS8@harbor.mobiledgex.net/v2/mobiledgex/edge-cloud/tags/list | jq &quot;.tags | index(\\&quot;&apos; + dateValue + &apos;\\&quot;)&quot;&apos;
+                    def index  = sh(script: s, returnStdout: true);
+                    if(index == &apos;null&apos;) {
+                        println &quot;${s} failed&quot;
+                        currentBuild.result = &apos;FAILURE&apos;
+                    }
+                }
+            }
+            post {
+                failure { 
+                    slack_fail(&quot;Load check failed for &quot; + dateValue)
+                }
+            }
+        }
+
+        stage(&apos;Chef Deploy&apos;) {
+            steps {
+                dir(&apos;/home/jenkins/workspace/upgradeEdgecloud/go/src/github.com/mobiledgex/edge-cloud-infra/chef/policyfiles&apos;) {
+                    sh &quot;echo \&quot;override[&apos;qa&apos;][&apos;edgeCloudVersion&apos;] = &apos;&quot; + dateValue + &quot;&apos;\&quot; &gt;&gt; docker_crm.rb &amp;&amp; rm docker_crm.lock.json &amp;&amp; chef install docker_crm.rb &quot;
+                }
+            }
+            post {
+                failure { 
+                    slack_fail(&quot;Chef deploy failed for &quot; + dateValue)
+                }
+            }
+        }
+
+        stage(&apos;Pull Image&apos;) {
+            steps {
+                sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
+                sh &apos;docker pull harbor.mobiledgex.net/mobiledgex/edge-cloud:latest&apos;
+                sh &apos;docker run --rm harbor.mobiledgex.net/mobiledgex/edge-cloud:&apos; + dateValue + &apos; version&apos;
+            }
+            post {
+                failure { 
+                    slack_fail(&quot;PUlling image failed for &quot; + dateValue)
+                }
+            }
+        }
+
+        stage(&apos;Create Cycle&apos;) {
+            steps {
+                dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
+                    script {
+                        add_pre = &apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version &apos; + params.Version + &apos; --project &apos; + params.Project + &apos; --cycle &apos; + cycle
+                    }
+                    echo &quot;addpre ${add_pre}&quot;
+                    sh add_pre    
+                    
+                    sh add_pre + &apos; --folder controller&apos;
+                    add_tests_to_folder(version, project, cycle, &apos;controller&apos;, &apos;Automated,Controller&apos;, null)
+                    add_tests_to_folder(version, project, cycle, &apos;controller&apos;, &apos;Automated,MasterController&apos;, null)
+
+                    sh &apos;${add_pre} --folder dme&apos;
+                    add_tests_to_folder(version, project, cycle, &apos;dme&apos;, &apos;Automated,DME&apos;, &apos;SDK,Metrics,Performance&apos;)
+
+                    sh &apos;${add_pre} --folder sdk&apos;
+                    add_tests_to_folder(version, project, cycle, &apos;sdk&apos;, &apos;Automated,SDK&apos;, null)
+                    
+                    sh &apos;${add_pre} --folder openstack&apos;
+                    add_tests_to_folder(version, project, cycle, &apos;openstack&apos;, &apos;Automated,CRM,Openstack&apos;, null)
+
+                    sh &apos;${add_pre} --folder vshpere&apos;
+                    add_tests_to_folder(version, project, cycle, &apos;vsphere&apos;, &apos;Automated,CRM,Vsphere&apos;, null)
+                    
+                    sh &apos;${add_pre} --folder vcd&apos;
+                    add_tests_to_folder(version, project, cycle, &apos;vcd&apos;, &apos;Automated,CRM,VCD&apos;, null)
+                    
+                    sh &apos;${add_pre} --folder anthos&apos;
+                    add_tests_to_folder(version, project, cycle, &apos;anthos&apos;, &apos;Automated,CRM,Anthos&apos;, null)
+
+                    sh &apos;${add_pre} --folder metrics&apos;
+                    add_tests_to_folder(version, project, cycle, &apos;metrics&apos;, &apos;Automated,Metrics&apos;, null)
+
+                    sh &apos;${add_pre} --folder performance/security&apos;
+                    add_tests_to_folder(version, project, cycle, &apos;performance/security&apos;, &apos;Automated,Performance&apos;, null)
+                    add_tests_to_folder(version, project, cycle, &apos;performance/security&apos;, &apos;Automated,Security&apos;, null)
+                    
+                    sh &apos;${add_pre} --folder console&apos;
+                   // add_tests_to_folder(version, project, cycle, &apos;console&apos;, &apos;Automated,WebUI&apos;, null)
+                }
+            }
+            post {
+                failure { 
+                    slack_fail(&quot;Create cycle and copy tests failed for &quot; + dateValue)
+                }
+            }
+
+        }
+        
+        stage(&apos;Delete CRMs&apos;) {
+            steps {
+                catchError {
+                    build job: &apos;runTestcases&apos;, parameters: [
+                        string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, DeleteCloudlet&apos;), 
+                        string(name: &apos;Project&apos;, value: project), 
+                        string(name: &apos;Cycle&apos;, value: cycle), 
+                        string(name: &apos;MasterController&apos;, value: mastercontroller),
+                        string(name: &apos;Platform&apos;, value: &apos;Openstack&apos;),
+                        string(name: &apos;VariableFile&apos;, value: variablefile), 
+                        string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+                }
+            }
+            post {
+                failure { slack_warning(&apos;Delete CRM failed for ${dateValue}. Continue anyway&apos;) }
+            }
+        }
+
+        stage(&apos;Create CRMs&apos;) {
+            steps {
+                catchError {
+                    build job: &apos;runTestcases&apos;, parameters: [
+                        string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, CreateCloudlet&apos;), 
+                        string(name: &apos;Project&apos;, value: project), 
+                        string(name: &apos;Cycle&apos;, value: cycle), 
+                        string(name: &apos;MasterController&apos;, value: mastercontroller),
+                        string(name: &apos;Platform&apos;, value: &apos;Openstack&apos;),
+                        string(name: &apos;VariableFile&apos;, value: variablefile), 
+                        string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+                }
+            }
+            post {
+                failure { slack_warning(&apos;Create CRM failed for ${dateValue}. Continue anyway&apos;) }
+            }
+        }
+
+        stage(&quot;execute tests&quot;) {
+            steps {
+                fail(&apos;dddd&apos;)
+                slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting SDK tests&quot;
+                
+                script {
+                    builds = [:]
+                    testcase_components.eachWithIndex { value, index-&gt;
+                        echo &quot;${value}&quot;
+                        builds[&quot;${value[-1]}&quot;] = {
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;DME&apos;, value: dme),
+                                string(name: &apos;DMERest&apos;, value: dmerest),
+                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
+                                string(name: &apos;Platform&apos;, value: platform),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                        }
+                    }
+                    parallel build
+                }
+            }
+            post {
+                failure { 
+                    echo &quot;run SDK tests failed&quot;
+                    //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Finished SDK tests with failure&quot;
+                }
+                success {
+                    echo &apos;success&apos;
+                    //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Finished SDK tests with success&quot;
+                }
+            }
+        }
+    }
+
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

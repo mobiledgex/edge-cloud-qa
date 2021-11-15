@@ -108,19 +108,26 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>Platform</name>
-          <choices>
-            <string>Controller</string>
-            <string>DME</string>
-            <string>SDK</string>
-            <string>Openstack</string>
-            <string>VCD</string>
-            <string>Vshpere</string>
-            <string>Anthos</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>Controller</string>
+              <string>DME</string>
+              <string>SDK</string>
+              <string>Openstack</string>
+              <string>VCD</string>
+              <string>Vshpere</string>
+              <string>Anthos</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>Area</name>
           <defaultValue>flavor</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NumberParallelExecutions</name>
+          <defaultValue>1</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -151,6 +158,7 @@ pipeline{
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
         choice(name: &apos;Platform&apos;, choices: [&apos;Controller&apos;, &apos;DME&apos;, &apos;SDK&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
+        string(name: &apos;NumberParallelExecutions&apos;, defaultValue: &apos;1&apos;)
     }
 
     stages {
