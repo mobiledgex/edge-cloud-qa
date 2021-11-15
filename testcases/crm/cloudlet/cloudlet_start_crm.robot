@@ -141,12 +141,12 @@ CreateCloudlet - User shall be able to create a cloudlet on Anthos
 # ECQ-1499
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Bonn
         [Documentation]
-        ...  do DeleteCloudlet to delete a CRM on bonn openstack
+        ...  - do DeleteCloudlet to delete a CRM on bonn openstack
 
-        Delete All App Instances      region=EU  cloudlet_name=${cloudlet_name_openstack_bonn}
-        Delete All Cluster Instances  region=EU  cloudlet_name=${cloudlet_name_openstack_bonn}
+        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_bonn}
+        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_bonn}
 
-        Delete Cloudlet  region=EU  operator_org_name=${operator_name_openstack_bonn}   cloudlet_name=${cloudlet_name_openstack_bonn}
+        Delete Cloudlet  region=US  operator_org_name=${operator_name_openstack_bonn}   cloudlet_name=${cloudlet_name_openstack_bonn}
 
 # ECQ-1614
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Berlin
