@@ -146,7 +146,7 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Bonn
         Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_bonn}
         Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_bonn}
 
-        Delete Cloudlet  region=US  operator_org_name=${operator_name_openstack_bonn}   cloudlet_name=${cloudlet_name_openstack_bonn}
+        Delete Cloudlet  region=US  token=${token}  operator_org_name=${operator_name_openstack_bonn}   cloudlet_name=${cloudlet_name_openstack_bonn}  use_defaults=${False}
 
 # ECQ-1614
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Berlin
@@ -156,7 +156,7 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Berlin
         Delete All App Instances      region=EU  cloudlet_name=${cloudlet_name_openstack_berlin}
         Delete All Cluster Instances  region=EU  cloudlet_name=${cloudlet_name_openstack_berlin}
 
-        Delete Cloudlet  region=EU  operator_org_name=${operator_name_openstack_berlin}  cloudlet_name=${cloudlet_name_openstack_berlin}
+        Delete Cloudlet  region=EU  token=${token}  operator_org_name=${operator_name_openstack_berlin}  cloudlet_name=${cloudlet_name_openstack_berlin}  use_defaults=${False}
 
 # ECQ-1537
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Munich
@@ -242,6 +242,9 @@ UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Packet
 Setup
    ${version}  Get Environment Variable  AUTOMATION_VERSION  version_not_set
    Set Suite Variable  ${version}
+
+   ${token}=  Get Super Token
+   Set Suite Variable  ${token}
 
 Cleanup Clusters and Apps
    [Arguments]  ${region}  ${cloudlet_name}  ${crm_override}=${None}
