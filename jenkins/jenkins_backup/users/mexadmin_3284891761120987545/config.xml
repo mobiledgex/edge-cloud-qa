@@ -44,6 +44,10 @@
           <boolean>true</boolean>
         </entry>
         <entry>
+          <string>runRegression</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
           <string>runTestcases</string>
           <boolean>true</boolean>
         </entry>
