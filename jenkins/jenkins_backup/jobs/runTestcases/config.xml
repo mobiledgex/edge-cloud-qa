@@ -6,7 +6,9 @@
       <jobProperties/>
       <triggers/>
       <parameters>
+        <string>NumberParallelExecutions</string>
         <string>Platform</string>
+        <string>CRMPoolVshpere</string>
         <string>DMERestCert</string>
         <string>Controller</string>
         <string>Cycle</string>
@@ -14,10 +16,13 @@
         <string>Components</string>
         <string>DMERest</string>
         <string>Project</string>
+        <string>CRMPoolAnthos</string>
         <string>Area</string>
         <string>VariableFile</string>
+        <string>CRMPoolVCD</string>
         <string>InfluxDB</string>
         <string>RunFailedOnly</string>
+        <string>CRMPoolOpenstack</string>
         <string>DME</string>
         <string>MasterController</string>
         <string>CommitVersion</string>
@@ -106,6 +111,22 @@
           <name>RunFailedOnly</name>
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPoolOpenstack</name>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPoolVshpere</name>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPoolVCD</name>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPoolAnthos</name>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>Platform</name>
           <choices class="java.util.Arrays$ArrayList">
@@ -135,6 +156,7 @@
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
     <script>last_component = components.split(&apos;,&apos;)[-1]
+version = cycle.split(&apos;_&apos;)[0]
 //currentBuild.displayName = cycle + &apos;_&apos; + platform + area
 currentBuild.displayName = cycle + &apos;_&apos; + platform + last_component
 
@@ -156,6 +178,10 @@ pipeline{
         string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
+        string(name: &apos;CRMPoolOpenstack&apos;, defaultValue: &apos;&apos;)
+        string(name: &apos;CRMPoolVshpere&apos;, defaultValue: &apos;&apos;)
+        string(name: &apos;CRMPoolVCD&apos;, defaultValue: &apos;&apos;)
+        string(name: &apos;CRMPoolAnthos&apos;, defaultValue: &apos;&apos;)
         choice(name: &apos;Platform&apos;, choices: [&apos;Controller&apos;, &apos;DME&apos;, &apos;SDK&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
         string(name: &apos;NumberParallelExecutions&apos;, defaultValue: &apos;1&apos;)
@@ -248,7 +274,7 @@ pipeline{
         stage(&quot;execute tests&quot;) {
             steps {
                 dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
-                    sh(script:&apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=&apos; + controller + &apos;;export AUTOMATION_DME_ADDRESS=&apos; + dme + &apos;;export AUTOMATION_DME_REST_ADDRESS=&apos; + dmerest + &apos;;export AUTOMATION_DME_CERT=&apos; + dmerestcert + &apos;;export AUTOMATION_OPENSTACK_DEDICATED_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_SHARED_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_VM_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_GPU_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_OFFLINE_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_MC_ADDRESS=&apos; + mastercontroller + &apos;;export AUTOMATION_MC_CERT=&apos; + &apos;;export AUTOMATION_INFLUXDB_ADDRESS=&apos; + influxdb + &apos;;export AUTOMATION_OPENSTACK_VMPOOL_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_VGPU_ENV=&apos; + openstackenv + &apos;;./execJira_parallel.py&apos;)
+                    sh(script:&apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=&apos; + controller + &apos;;export AUTOMATION_DME_ADDRESS=&apos; + dme + &apos;;export AUTOMATION_DME_REST_ADDRESS=&apos; + dmerest + &apos;;export AUTOMATION_VERSION=&apos; + version + &apos;;export AUTOMATION_DME_CERT=&apos; + dmerestcert + &apos;;export AUTOMATION_OPENSTACK_DEDICATED_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_SHARED_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_VM_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_GPU_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_OFFLINE_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_MC_ADDRESS=&apos; + mastercontroller + &apos;;export AUTOMATION_MC_CERT=&apos; + &apos;;export AUTOMATION_INFLUXDB_ADDRESS=&apos; + influxdb + &apos;;export AUTOMATION_OPENSTACK_VMPOOL_ENV=&apos; + openstackenv + &apos;;export AUTOMATION_OPENSTACK_VGPU_ENV=&apos; + openstackenv + &apos;;./execJira_parallel.py&apos;)
                 }
             }
             post {

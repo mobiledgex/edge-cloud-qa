@@ -117,6 +117,9 @@ gitcred = &apos;79b116ea-d7ac-4d6c-928d-49b79e5f9bef&apos;
 dateValue = &apos;notset&apos;
 cycle = &apos;notset&apos;
 
+def slack_good(message) {
+    slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: message
+}
 def slack_fail(message) {
     slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;danger&quot;, message: message
 }
@@ -165,8 +168,13 @@ pipeline{
     stages {
         stage(&apos;Checkout&apos;) {
             steps {
+                input(message: &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;)
+                echo &apos;input&apos;
+//                timeout(time:4, unit:&apos;HOURS&apos;) {
+//                    input(message: &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;)
+//                }
                 script {
-                    date = new Date()
+                    date = new Date()x
                     sdate = new SimpleDateFormat(&quot;yyy-MM-dd&quot;)
                     Calendar cal = Calendar.getInstance()
                     
@@ -179,7 +187,7 @@ pipeline{
 
                     cycle = dateValue + &apos;_&apos; + params.Version
                     currentBuild.displayName = cycle
-
+                    slack_good(&apos;Starting regression for &apos; + cycle)
                 }
                 
 //                dir(&apos;go/src/github.com/mobiledgex&apos;) {
@@ -229,7 +237,7 @@ pipeline{
             }
             post {
                 failure { 
-                    slack_fail(&quot;Checkout failed&quot;)
+                    slack_fail(&apos;Checkout failed for &apos; + dateValue + &apos;. Aborting&apos;)
                 }
             }
         }
@@ -247,7 +255,7 @@ pipeline{
             }
             post {
                 failure { 
-                    slack_fail(&quot;Load check failed for &quot; + dateValue)
+                    slack_fail(&quot;Load check failed for &quot; + dateValue + &apos;. Aborting&apos;)
                 }
             }
         }
@@ -260,7 +268,7 @@ pipeline{
             }
             post {
                 failure { 
-                    slack_fail(&quot;Chef deploy failed for &quot; + dateValue)
+                    slack_fail(&quot;Chef deploy failed for &quot; + dateValue + &apos;. Aborting&apos;)
                 }
             }
         }
@@ -273,7 +281,7 @@ pipeline{
             }
             post {
                 failure { 
-                    slack_fail(&quot;PUlling image failed for &quot; + dateValue)
+                    slack_fail(&quot;Pulling image failed for &quot; + dateValue + &apos;. Aborting&apos;)
                 }
             }
         }
@@ -291,66 +299,189 @@ pipeline{
                     add_tests_to_folder(version, project, cycle, &apos;controller&apos;, &apos;Automated,Controller&apos;, null)
                     add_tests_to_folder(version, project, cycle, &apos;controller&apos;, &apos;Automated,MasterController&apos;, null)
 
-                    sh &apos;${add_pre} --folder dme&apos;
+                    sh add_pre + &apos; --folder dme&apos;
                     add_tests_to_folder(version, project, cycle, &apos;dme&apos;, &apos;Automated,DME&apos;, &apos;SDK,Metrics,Performance&apos;)
 
-                    sh &apos;${add_pre} --folder sdk&apos;
+                    sh add_pre + &apos; --folder sdk&apos;
                     add_tests_to_folder(version, project, cycle, &apos;sdk&apos;, &apos;Automated,SDK&apos;, null)
                     
-                    sh &apos;${add_pre} --folder openstack&apos;
+                    sh add_pre + &apos; --folder openstack&apos;
                     add_tests_to_folder(version, project, cycle, &apos;openstack&apos;, &apos;Automated,CRM,Openstack&apos;, null)
 
-                    sh &apos;${add_pre} --folder vshpere&apos;
+                    sh add_pre + &apos; --folder vshpere&apos;
                     add_tests_to_folder(version, project, cycle, &apos;vsphere&apos;, &apos;Automated,CRM,Vsphere&apos;, null)
                     
-                    sh &apos;${add_pre} --folder vcd&apos;
+                    sh add_pre + &apos; --folder vcd&apos;
                     add_tests_to_folder(version, project, cycle, &apos;vcd&apos;, &apos;Automated,CRM,VCD&apos;, null)
                     
-                    sh &apos;${add_pre} --folder anthos&apos;
+                    sh add_pre + &apos; --folder anthos&apos;
                     add_tests_to_folder(version, project, cycle, &apos;anthos&apos;, &apos;Automated,CRM,Anthos&apos;, null)
 
-                    sh &apos;${add_pre} --folder metrics&apos;
+                    sh add_pre + &apos; --folder metrics&apos;
                     add_tests_to_folder(version, project, cycle, &apos;metrics&apos;, &apos;Automated,Metrics&apos;, null)
 
-                    sh &apos;${add_pre} --folder performance/security&apos;
+                    sh add_pre + &apos; --folder performance/security&apos;
                     add_tests_to_folder(version, project, cycle, &apos;performance/security&apos;, &apos;Automated,Performance&apos;, null)
                     add_tests_to_folder(version, project, cycle, &apos;performance/security&apos;, &apos;Automated,Security&apos;, null)
                     
-                    sh &apos;${add_pre} --folder console&apos;
+                    sh add_pre + &apos; --folder console&apos;
                    // add_tests_to_folder(version, project, cycle, &apos;console&apos;, &apos;Automated,WebUI&apos;, null)
                 }
             }
             post {
                 failure { 
-                    slack_fail(&quot;Create cycle and copy tests failed for &quot; + dateValue)
+                    slack_fail(&quot;Create cycle and copy tests failed for &quot; + dateValue + &apos;. Aborting&apos;)
                 }
             }
 
         }
         
         stage(&apos;Delete CRMs&apos;) {
-            steps {
-                catchError {
-                    build job: &apos;runTestcases&apos;, parameters: [
-                        string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, DeleteCloudlet&apos;), 
-                        string(name: &apos;Project&apos;, value: project), 
-                        string(name: &apos;Cycle&apos;, value: cycle), 
-                        string(name: &apos;MasterController&apos;, value: mastercontroller),
-                        string(name: &apos;Platform&apos;, value: &apos;Openstack&apos;),
-                        string(name: &apos;VariableFile&apos;, value: variablefile), 
-                        string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+            parallel {
+                stage(&apos;Delete Openstack&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, DeleteCloudlet&apos;), 
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;Platform&apos;, value: &apos;Openstack&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;CRMPoolOpenstack&apos;, value: &apos;&apos;),
+                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+                        }
+                    }
+                    post {
+                        unstable { slack_warning(&apos;Delete Openstack CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                    }
                 }
-            }
-            post {
-                failure { slack_warning(&apos;Delete CRM failed for ${dateValue}. Continue anyway&apos;) }
+                stage(&apos;Delete Anthos&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, DeleteCloudlet&apos;), 
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;Platform&apos;, value: &apos;Anthos&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+                        }
+                    }
+                    post {
+                        unstable { slack_warning(&apos;Delete Anthos CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                    }
+                }
+                stage(&apos;Delete Fake&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, DeleteCloudlet&apos;), 
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;Platform&apos;, value: &apos;Controller&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+                        }
+                    }
+                    post {
+                        unstable { slack_warning(&apos;Delete Fake CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                    }
+                }
             }
         }
 
+        stage(&apos;Deploy backend in K8s&apos;) {
+            steps {
+                dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra/ansible&apos;) {
+                    ech &apos;deploy&apos;
+//                    // fix known_hosts file since recreating the server causes a mismatch in the file
+//                    sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationbonncloudlet.tdg.mobiledgex.net&quot;&apos;
+//                    sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationhamburgcloudlet.tdg.mobiledgex.net&quot;&apos;
+//
+//                    sh &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;./deploy.sh -V &apos; + dateValue + &apos; qa&apos;
+//                    //sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
+//
+//                    sleep 60  // wait for all pods to come up
+//
+//                    // defrag etcd
+//                    sh &apos;kubectl config use-context mexplat-qa-us;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+//                    sh &apos;kubectl config use-context mexplat-qa-eu;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+                }
+            }
+            post {
+                failure { 
+                    slack_warning(&apos;Deploy failed for &apos; + dateValue + &apos;. Requesting input to continue&apos;) 
+                    //input message &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;, ok: &apos;Yes&apos;
+                    
+                }
+            }
+        }
+        
         stage(&apos;Create CRMs&apos;) {
+            parallel {
+                stage(&apos;Create Openstack&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, CreateCloudlet&apos;), 
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;Platform&apos;, value: &apos;Openstack&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;CRMPoolOpenstack&apos;, value: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;),
+                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+                        }
+                    }
+                    post {
+                        unstable { slack_warning(&apos;Create Openstack CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                    }
+                }
+                stage(&apos;Create Anthos&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, CreateCloudlet&apos;), 
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;Platform&apos;, value: &apos;Anthos&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+                        }
+                    }
+                    post {
+                        unstable { slack_warning(&apos;Create Anthos CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                    }
+                }
+                stage(&apos;Create Fake&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, CreateCloudlet&apos;), 
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;Platform&apos;, value: &apos;Controller&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+                        }
+                    }
+                    post {
+                        unstable { slack_warning(&apos;Create Fake CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                    }
+                }
+            }
+        }
+
+        stage(&apos;Upgrade Cloudlets&apos;) {
             steps {
-                catchError {
+                catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
                     build job: &apos;runTestcases&apos;, parameters: [
-                        string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, CreateCloudlet&apos;), 
+                        string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, UpgradeCloudlet&apos;), 
                         string(name: &apos;Project&apos;, value: project), 
                         string(name: &apos;Cycle&apos;, value: cycle), 
                         string(name: &apos;MasterController&apos;, value: mastercontroller),
@@ -360,10 +491,10 @@ pipeline{
                 }
             }
             post {
-                failure { slack_warning(&apos;Create CRM failed for ${dateValue}. Continue anyway&apos;) }
+                unstable { slack_warning(&apos;Upgrade Openstack CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
             }
         }
-
+        
         stage(&quot;execute tests&quot;) {
             steps {
                 fail(&apos;dddd&apos;)
