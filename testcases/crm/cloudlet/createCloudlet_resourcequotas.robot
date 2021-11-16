@@ -16,7 +16,7 @@ ${region}=  EU
 ${developer}=  mobiledgex
 
 ${operator_name_openstack}  TDG
-${physical_name_openstack}  munich
+${physical_name_crm}  bonn
 
 ${username}=   mextester06
 ${password}=   ${mextester06_gmail_password}
@@ -30,7 +30,7 @@ UpdateCloudlet to add/modify resource quotas and default_resource_alert_threshol
    ...  - Update Cloudlet to modify resource quotas and default_resource_alert_threshold
 
    # create cloudlet without resource quotas
-   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  token=${tokenop}
+   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_crm}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  env_vars=${env_vars}  token=${tokenop}
 
    &{resource1}=  Create Dictionary  name=RAM  value=14336  alert_threshold=75
    &{resource2}=  Create Dictionary  name=vCPUs  value=8    alert_threshold=80
@@ -39,7 +39,7 @@ UpdateCloudlet to add/modify resource quotas and default_resource_alert_threshol
    @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}  ${resource4}
 
    #update cloudlet to add resource quotas
-   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
+   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
 
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['value']}  14336
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['value']}  8
@@ -56,7 +56,7 @@ UpdateCloudlet to add/modify resource quotas and default_resource_alert_threshol
    @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}  ${resource4}
 
    #update cloudlet to modify resource quotas and default_resource_alert_threshold
-   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  default_resource_alert_threshold=70  token=${tokenop}
+   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  default_resource_alert_threshold=70  token=${tokenop}
    Should Be Equal As Numbers   ${cloudlet1['data']['default_resource_alert_threshold']}  70
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['value']}  8192
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['value']}  4
@@ -75,7 +75,7 @@ CreateCloudlet with resource quotas and UpdateCloudlet to add/modify them
    @{resource_list}=  Create List  ${resource1}  ${resource2}
 
    # create cloudlet with 2 types of resource quotas
-   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  token=${tokenop}
+   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_crm}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  env_vars=${env_vars}  token=${tokenop}
 
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['value']}  14336
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['value']}  8
@@ -87,7 +87,7 @@ CreateCloudlet with resource quotas and UpdateCloudlet to add/modify them
    Append To List  ${resource_list}  ${resource3}  ${resource4}
 
    #update cloudlet to add 2 other resource quotas
-   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
+   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
 
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['value']}  14336
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['value']}  8
@@ -105,19 +105,27 @@ Setup
    ${cloudlet_name}=  Get Default Cloudlet Name
    ${org_name}=  Get Default Organization Name
 
-   ${epoch}=  Get Time  epoch
-   ${usernameop_epoch}=  Catenate  SEPARATOR=  ${username}  op  ${epoch}
-   ${emailop}=  Catenate  SEPARATOR=  ${username}  op  +  ${epoch}  @gmail.com
+   IF  'Bonn' in '${cloudlet_name_crm}'
+      ${env_vars}=  Set Variable  FLAVOR_MATCH_PATTERN=m4,MEX_EXT_NETWORK=external-network-02
+   ELSE
+      ${env_vars}=  Set Variable  ${None}
+   END
 
-   Skip Verify Email
-   Create User  username=${usernameop_epoch}  password=${password}  email_address=${emailop}
-   Unlock User
-
-   Adduser Role  username=${usernameop_epoch}  orgname=${operator_name_openstack}  role=OperatorManager  
-
-   ${tokenop}=  Login  username=${usernameop_epoch}  password=${password}
+#   ${epoch}=  Get Time  epoch
+#   ${usernameop_epoch}=  Catenate  SEPARATOR=  ${username}  op  ${epoch}
+#   ${emailop}=  Catenate  SEPARATOR=  ${username}  op  +  ${epoch}  @gmail.com
+#
+#   Skip Verify Email
+#   Create User  username=${usernameop_epoch}  password=${password}  email_address=${emailop}
+#   Unlock User
+#
+#   Adduser Role  username=${usernameop_epoch}  orgname=${operator_name_openstack}  role=OperatorManager  
+#
+#   ${tokenop}=  Login  username=${usernameop_epoch}  password=${password}
+   ${tokenop}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
 
    Set Suite Variable  ${cloudlet_name}
    Set Suite Variable  ${tokenop}
 
+   Set Suite Variable  ${env_vars}
 
