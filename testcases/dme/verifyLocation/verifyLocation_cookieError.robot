@@ -3,6 +3,7 @@ Documentation  VerifyLocation - various cookie erors
 
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Library  DateTime
 #Variables       shared_variables.py
 
 *** Variables ***
@@ -92,5 +93,6 @@ Setup
     #Create Developer
     Create Flavor
     #Create Cluster
-    Create App              
+    ${epoch}=  Get Current Date  result_format=epoch
+    Create App  app_name=app${epoch}
 
