@@ -19,5 +19,5 @@ manifest_3 = """- id: 3
   contentsubtype: yaml
   content: """
 
-manifest_3_private_key = ".*BEGIN RSA PRIVATE KEY[\s\S]{100,}END RSA PRIVATE KEY"  # key with 100+ chars
+manifest_3_private_key = ".*BEGIN\n    RSA PRIVATE KEY[\s\S]{100,}END RSA PRIVATE KEY"  # key with 100+ chars
 manifest_3_crm_access_key = ".*path: /root/accesskey/accesskey.pem[\s\S]*-----BEGIN PRIVATE KEY-----[\s\S]{20,}[\s\S]{100,}"
