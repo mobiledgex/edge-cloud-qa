@@ -122,30 +122,16 @@
     <script>currentBuild.displayName = cycle
 
 automated_component = &quot;Automated&quot;
-controller_components = [automated_component, &quot;Controller&quot;]
+controller_components = [automated_component, &quot;MasterController&quot;]
 testcase_components = [
-    controller_components + &quot;Flavor&quot;,
-    controller_components + &quot;OperatorCode&quot;,
-    controller_components + &quot;ControllerSpecific&quot;,
-    controller_components + &quot;ClusterInst&quot;,
-    controller_components + &quot;App&quot;,
-    controller_components + &quot;Cloudlet&quot;,
-    controller_components + &quot;AppInst&quot;,
-    controller_components + &quot;TrustPolicy&quot;,
-    controller_components + &quot;AlertReceiver&quot;,
-//    [automated_component] + &quot;Mcctl&quot;,
-    controller_components + &quot;Settings&quot;,
-    controller_components + &quot;AutoScale&quot;,
-    controller_components + &quot;RateLimit&quot;,
-    controller_components + &quot;AlertPolicy&quot;,
-    controller_components + &quot;RunCommand&quot;,
-    controller_components + &quot;ShowLogs&quot;,
-    controller_components + &quot;RunConsole&quot;,
-//    controller_components + &quot;Billing&quot;,
-    controller_components + &quot;VMPool&quot;,
-    controller_components + &quot;GPUDriver&quot;,
-    controller_components + &quot;OperatorReporting&quot;,
-
+    controller_components + &quot;Account&quot;,
+    controller_components + &quot;UserRole&quot;,
+    controller_components + &quot;User&quot;,
+    controller_components + &quot;Configs&quot;,
+    automated_component + &quot;Mcctl&quot;,
+    controller_components + &quot;Billing&quot;,
+    controller_components + &quot;ShowNode&quot;,
+    controller_components + &quot;Organization&quot;,
     ]
 
 
@@ -164,7 +150,7 @@ pipeline{
         string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        choice(name: &apos;Platform&apos;, choices: [&apos;Controller&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        choice(name: &apos;Platform&apos;, choices: [&apos;MC&apos;, &apos;Controller&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
 
@@ -183,7 +169,7 @@ pipeline{
                 }
             }
             post {
-                failure { echo &quot;run controller tests failed&quot;}
+                failure { echo &quot;run MC tests failed&quot;}
             }
         }
     }

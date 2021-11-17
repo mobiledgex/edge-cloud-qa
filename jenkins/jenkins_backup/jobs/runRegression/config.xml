@@ -168,13 +168,8 @@ pipeline{
     stages {
         stage(&apos;Checkout&apos;) {
             steps {
-                input(message: &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;)
-                echo &apos;input&apos;
-//                timeout(time:4, unit:&apos;HOURS&apos;) {
-//                    input(message: &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;)
-//                }
                 script {
-                    date = new Date()x
+                    date = new Date()
                     sdate = new SimpleDateFormat(&quot;yyy-MM-dd&quot;)
                     Calendar cal = Calendar.getInstance()
                     
@@ -238,6 +233,7 @@ pipeline{
             post {
                 failure { 
                     slack_fail(&apos;Checkout failed for &apos; + dateValue + &apos;. Aborting&apos;)
+                    input(message: &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;)
                 }
             }
         }
@@ -297,7 +293,10 @@ pipeline{
                     
                     sh add_pre + &apos; --folder controller&apos;
                     add_tests_to_folder(version, project, cycle, &apos;controller&apos;, &apos;Automated,Controller&apos;, null)
-                    add_tests_to_folder(version, project, cycle, &apos;controller&apos;, &apos;Automated,MasterController&apos;, null)
+                    
+                    sh add_pre + &apos; --folder mastercontroller&apos;
+                    add_tests_to_folder(version, project, cycle, &apos;mastercontroller&apos;, &apos;Automated,MasterController&apos;, null)
+                    add_tests_to_folder(version, project, cycle, &apos;mastercontroller&apos;, &apos;Automated,Mcctl&apos;, null)
 
                     sh add_pre + &apos; --folder dme&apos;
                     add_tests_to_folder(version, project, cycle, &apos;dme&apos;, &apos;Automated,DME&apos;, &apos;SDK,Metrics,Performance&apos;)
@@ -395,26 +394,28 @@ pipeline{
 
         stage(&apos;Deploy backend in K8s&apos;) {
             steps {
-                dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra/ansible&apos;) {
-                    ech &apos;deploy&apos;
-//                    // fix known_hosts file since recreating the server causes a mismatch in the file
-//                    sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationbonncloudlet.tdg.mobiledgex.net&quot;&apos;
-//                    sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationhamburgcloudlet.tdg.mobiledgex.net&quot;&apos;
+                catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
+                    dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra/ansible&apos;) {
+                        ech &apos;deploy&apos;
+//                        // fix known_hosts file since recreating the server causes a mismatch in the file
+//                        sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationbonncloudlet.tdg.mobiledgex.net&quot;&apos;
+//                        sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationhamburgcloudlet.tdg.mobiledgex.net&quot;&apos;
 //
-//                    sh &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;./deploy.sh -V &apos; + dateValue + &apos; qa&apos;
-//                    //sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
+//                        sh &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;./deploy.sh -V &apos; + dateValue + &apos; qa&apos;
+//                        //sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
 //
-//                    sleep 60  // wait for all pods to come up
+//                        sleep 60  // wait for all pods to come up
 //
-//                    // defrag etcd
-//                    sh &apos;kubectl config use-context mexplat-qa-us;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
-//                    sh &apos;kubectl config use-context mexplat-qa-eu;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+//                        // defrag etcd
+//                        sh &apos;kubectl config use-context mexplat-qa-us;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+//                        sh &apos;kubectl config use-context mexplat-qa-eu;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+                    }
                 }
             }
             post {
-                failure { 
+                unstable { 
                     slack_warning(&apos;Deploy failed for &apos; + dateValue + &apos;. Requesting input to continue&apos;) 
-                    //input message &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;, ok: &apos;Yes&apos;
+                    input message: &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;
                     
                 }
             }
@@ -496,17 +497,12 @@ pipeline{
         }
         
         stage(&quot;execute tests&quot;) {
-            steps {
-                fail(&apos;dddd&apos;)
-                slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting SDK tests&quot;
-                
-                script {
-                    builds = [:]
-                    testcase_components.eachWithIndex { value, index-&gt;
-                        echo &quot;${value}&quot;
-                        builds[&quot;${value[-1]}&quot;] = {
-                            build job: &apos;runTestcases&apos;, parameters: [
-                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
+            parallel {
+                stage(&apos;SDK Tests&apos;) {
+                    steps {
+                        slack_good(&apos;Starting SDK tests&apos;)
+                        script {
+                            build job: &apos;runSdkTestcases&apos;, parameters: [
                                 string(name: &apos;Project&apos;, value: project), 
                                 string(name: &apos;Cycle&apos;, value: cycle), 
                                 string(name: &apos;Controller&apos;, value: controller), 
@@ -514,23 +510,137 @@ pipeline{
                                 string(name: &apos;DME&apos;, value: dme),
                                 string(name: &apos;DMERest&apos;, value: dmerest),
                                 string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;Platform&apos;, value: platform),
+                                string(name: &apos;Platform&apos;, value: &apos;SDK&apos;),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
                     }
-                    parallel build
+                    post {
+                        failure { 
+                            echo &quot;run SDK tests failed&quot;
+                            slack_fail(&apos;Finished SDK tests with failure&apos;)
+                        }
+                        success { 
+                            echo &quot;run SDK tests passed&quot;
+                            slack_fail(&apos;Finished SDK tests with pass&apos;)
+                        }
+                    }
                 }
-            }
-            post {
-                failure { 
-                    echo &quot;run SDK tests failed&quot;
-                    //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Finished SDK tests with failure&quot;
+                stage(&apos;DME Tests&apos;) {
+                    steps {
+                        slack_good(&apos;Starting DME tests&apos;)
+                        script {
+                            build job: &apos;runDmeTestcases&apos;, parameters: [
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;DME&apos;, value: dme),
+                                string(name: &apos;DMERest&apos;, value: dmerest),
+                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
+                                string(name: &apos;Platform&apos;, value: &apos;DME&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                        }
+                    }
+                    post {
+                        failure { 
+                            echo &quot;run DNE tests failed&quot;
+                            slack_fail(&apos;Finished DME tests with failure&apos;)
+                        }
+                        success { 
+                            echo &quot;run DME tests passed&quot;
+                            slack_fail(&apos;Finished DME tests with pass&apos;)
+                        }
+                    }
                 }
-                success {
-                    echo &apos;success&apos;
-                    //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Finished SDK tests with success&quot;
+                stage(&apos;Controller Tests&apos;) {
+                    steps {
+                        slack_good(&apos;Starting Controller tests&apos;)
+                        script {
+                            build job: &apos;runDmeTestcases&apos;, parameters: [
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;DME&apos;, value: dme),
+                                string(name: &apos;DMERest&apos;, value: dmerest),
+                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
+                                string(name: &apos;Platform&apos;, value: &apos;Controller&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                        }
+                    }
+                    post {
+                        failure { 
+                            echo &quot;run Controller tests failed&quot;
+                            slack_fail(&apos;Finished Controller tests with failure&apos;)
+                        }
+                        success { 
+                            echo &quot;run Controller tests passed&quot;
+                            slack_fail(&apos;Finished Controller tests with pass&apos;)
+                        }
+                    }
                 }
+              
+                stage(&apos;MasterController Tests&apos;) {
+                    steps {
+                        slack_good(&apos;Starting MasterController tests&apos;)
+                        script {
+                            build job: &apos;runDmeTestcases&apos;, parameters: [
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;DME&apos;, value: dme),
+                                string(name: &apos;DMERest&apos;, value: dmerest),
+                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
+                                string(name: &apos;Platform&apos;, value: &apos;MC&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                        }
+                    }
+                    post {
+                        failure { 
+                            echo &quot;run MasterController tests failed&quot;
+                            slack_fail(&apos;Finished MasterController tests with failure&apos;)
+                        }
+                        success { 
+                            echo &quot;run MasterController tests passed&quot;
+                            slack_fail(&apos;Finished MasterController tests with pass&apos;)
+                        }
+                    }
+                }
+  
+                stage(&apos;Anthos Tests&apos;) {
+                    steps {
+                        slack_good(&apos;Starting Anthos tests&apos;)
+                        script {
+                            build job: &apos;runCrmTestcases&apos;, parameters: [
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;DME&apos;, value: dme),
+                                string(name: &apos;DMERest&apos;, value: dmerest),
+                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
+                                string(name: &apos;Platform&apos;, value: &apos;Anthos&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                        }
+                    }
+                    post {
+                        failure { 
+                            echo &quot;run Anthos tests failed&quot;
+                            slack_fail(&apos;Finished Anthos tests with failure&apos;)
+                        }
+                        success { 
+                            echo &quot;run Anthos tests passed&quot;
+                            slack_fail(&apos;Finished Anthos tests with pass&apos;)
+                        }
+                    }
+                }
+              
             }
         }
     }

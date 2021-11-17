@@ -122,35 +122,19 @@
     <script>currentBuild.displayName = cycle
 
 automated_component = &quot;Automated&quot;
-controller_components = [automated_component, &quot;Controller&quot;]
-testcase_components = [
-    controller_components + &quot;Flavor&quot;,
-    controller_components + &quot;OperatorCode&quot;,
-    controller_components + &quot;ControllerSpecific&quot;,
-    controller_components + &quot;ClusterInst&quot;,
-    controller_components + &quot;App&quot;,
-    controller_components + &quot;Cloudlet&quot;,
-    controller_components + &quot;AppInst&quot;,
-    controller_components + &quot;TrustPolicy&quot;,
-    controller_components + &quot;AlertReceiver&quot;,
-//    [automated_component] + &quot;Mcctl&quot;,
-    controller_components + &quot;Settings&quot;,
-    controller_components + &quot;AutoScale&quot;,
-    controller_components + &quot;RateLimit&quot;,
-    controller_components + &quot;AlertPolicy&quot;,
-    controller_components + &quot;RunCommand&quot;,
-    controller_components + &quot;ShowLogs&quot;,
-    controller_components + &quot;RunConsole&quot;,
-//    controller_components + &quot;Billing&quot;,
-    controller_components + &quot;VMPool&quot;,
-    controller_components + &quot;GPUDriver&quot;,
-    controller_components + &quot;OperatorReporting&quot;,
+crm_components = [automated_component, &quot;CRM&quot;]
 
+testcase_components = [
+    crm_components + &quot;ClusterInst&quot;,
     ]
 
+node_name = &apos;notset&apos;
+if platform == &apos;Anthos&apos; {
+    node_name = &apos;jenkinsGcpSlave2&apos;
+}
 
 pipeline{
-    agent { label &apos;jenkinsSlave1&apos; }
+    agent { label node_name }
     parameters {
         string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
@@ -164,7 +148,7 @@ pipeline{
         string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        choice(name: &apos;Platform&apos;, choices: [&apos;Controller&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        choice(name: &apos;Platform&apos;, choices: [&apos;MC&apos;, &apos;Controller&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
 
@@ -183,7 +167,7 @@ pipeline{
                 }
             }
             post {
-                failure { echo &quot;run controller tests failed&quot;}
+                failure { echo &quot;run MC tests failed&quot;}
             }
         }
     }
