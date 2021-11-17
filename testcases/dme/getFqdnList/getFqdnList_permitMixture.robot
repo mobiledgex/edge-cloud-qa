@@ -37,35 +37,41 @@ GetFqdnList - request shall only return apps with permits_platform_apps=True
       Register Client	developer_org_name=${platos_developer_name}  app_name=${platos_app_name}
       ${appfqdns}=  Get Fqdn List
 
-      Should Be Equal             ${appfqdns[0].app_name}  ${app_1.key.name}
-      Should Be Equal             ${appfqdns[0].app_vers}  ${app_1.key.version}
-      Should Be Equal             ${appfqdns[0].org_name}  ${app_1.key.organization}
-      Should Be Equal             ${appfqdns[0].fqdns[0]}     ${app_1.official_fqdn}
+      ${appindex}=  Set Variable  ${0}
+      FOR  ${a}  IN  @{appfqdns}
+         Exit For Loop IF  '${a.app_name}' == '${app_1.key.name}'
+         ${appindex}=  Evaluate  ${appindex}+1
+      END
 
-      Should Be Equal             ${appfqdns[1].app_name}  ${app_3.key.name}
-      Should Be Equal             ${appfqdns[1].app_vers}  ${app_3.key.version}
-      Should Be Equal             ${appfqdns[1].org_name}  ${app_3.key.organization}
-      Should Be Equal             ${appfqdns[1].fqdns[0]}     ${app_3.official_fqdn}
+      Should Be Equal             ${appfqdns[${appindex}+0].app_name}  ${app_1.key.name}
+      Should Be Equal             ${appfqdns[${appindex}+0].app_vers}  ${app_1.key.version}
+      Should Be Equal             ${appfqdns[${appindex}+0].org_name}  ${app_1.key.organization}
+      Should Be Equal             ${appfqdns[${appindex}+0].fqdns[0]}     ${app_1.official_fqdn}
 
-      Should Be Equal             ${appfqdns[2].app_name}  ${app_4.key.name}
-      Should Be Equal             ${appfqdns[2].app_vers}  ${app_4.key.version}
-      Should Be Equal             ${appfqdns[2].org_name}  ${app_4.key.organization}
-      Should Be Equal             ${appfqdns[2].fqdns[0]}     ${app_4.official_fqdn}
+      Should Be Equal             ${appfqdns[${appindex}+1].app_name}  ${app_3.key.name}
+      Should Be Equal             ${appfqdns[${appindex}+1].app_vers}  ${app_3.key.version}
+      Should Be Equal             ${appfqdns[${appindex}+1].org_name}  ${app_3.key.organization}
+      Should Be Equal             ${appfqdns[${appindex}+1].fqdns[0]}     ${app_3.official_fqdn}
 
-      Should Be Equal             ${appfqdns[3].app_name}  ${app_7.key.name}
-      Should Be Equal             ${appfqdns[3].app_vers}  ${app_7.key.version}
-      Should Be Equal             ${appfqdns[3].org_name}  ${app_7.key.organization}
-      Should Be Equal             ${appfqdns[3].fqdns[0]}     ${app_7.official_fqdn}
+      Should Be Equal             ${appfqdns[${appindex}+2].app_name}  ${app_4.key.name}
+      Should Be Equal             ${appfqdns[${appindex}+2].app_vers}  ${app_4.key.version}
+      Should Be Equal             ${appfqdns[${appindex}+2].org_name}  ${app_4.key.organization}
+      Should Be Equal             ${appfqdns[${appindex}+2].fqdns[0]}     ${app_4.official_fqdn}
 
-      Should Be Equal             ${appfqdns[4].app_name}  ${app_8.key.name}
-      Should Be Equal             ${appfqdns[4].app_vers}  ${app_8.key.version}
-      Should Be Equal             ${appfqdns[4].org_name}  ${app_8.key.organization}
-      Should Be Equal             ${appfqdns[4].fqdns[0]}     ${app_8.official_fqdn}
+      Should Be Equal             ${appfqdns[${appindex}+3].app_name}  ${app_7.key.name}
+      Should Be Equal             ${appfqdns[${appindex}+3].app_vers}  ${app_7.key.version}
+      Should Be Equal             ${appfqdns[${appindex}+3].org_name}  ${app_7.key.organization}
+      Should Be Equal             ${appfqdns[${appindex}+3].fqdns[0]}     ${app_7.official_fqdn}
 
-      Should Be Equal             ${appfqdns[5].app_name}  ${app_9.key.name}
-      Should Be Equal             ${appfqdns[5].app_vers}  ${app_9.key.version}
-      Should Be Equal             ${appfqdns[5].org_name}  ${app_9.key.organization}
-      Should Be Equal             ${appfqdns[5].fqdns[0]}     ${app_9.official_fqdn}
+      Should Be Equal             ${appfqdns[${appindex}+4].app_name}  ${app_8.key.name}
+      Should Be Equal             ${appfqdns[${appindex}+4].app_vers}  ${app_8.key.version}
+      Should Be Equal             ${appfqdns[${appindex}+4].org_name}  ${app_8.key.organization}
+      Should Be Equal             ${appfqdns[${appindex}+4].fqdns[0]}     ${app_8.official_fqdn}
+
+      Should Be Equal             ${appfqdns[${appindex}+5].app_name}  ${app_9.key.name}
+      Should Be Equal             ${appfqdns[${appindex}+5].app_vers}  ${app_9.key.version}
+      Should Be Equal             ${appfqdns[${appindex}+5].org_name}  ${app_9.key.organization}
+      Should Be Equal             ${appfqdns[${appindex}+5].fqdns[0]}     ${app_9.official_fqdn}
 
       Length Should Be   ${appfqdns}  ${appcount} 
 
