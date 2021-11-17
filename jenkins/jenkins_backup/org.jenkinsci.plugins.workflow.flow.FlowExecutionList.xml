@@ -2,6 +2,10 @@
 <list>
   <flow-owner plugin="workflow-job@2.42">
     <job>runRegression</job>
-    <id>49</id>
+    <id>58</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>265</id>
   </flow-owner>
 </list>

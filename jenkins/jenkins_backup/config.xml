@@ -272,7 +272,9 @@
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
         <string>runControllerTestcases</string>
+        <string>runCrmTestcases</string>
         <string>runDmeTestcases</string>
+        <string>runMcTestscases</string>
         <string>runRegression</string>
         <string>runSdkTestscases</string>
         <string>runTestcases</string>
