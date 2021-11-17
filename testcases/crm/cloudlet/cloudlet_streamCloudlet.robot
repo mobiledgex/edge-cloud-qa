@@ -3,13 +3,15 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 
 Test Timeout   32 min 
 
+Test Setup  Setup
 Test Teardown  Teardown
 
 *** Variables ***
 ${cloudlet_name_openstack_fairview}  automationFairviewCloudlet
 ${operator_name_openstack_fairview}  GDDT
 ${physical_name_openstack_fairview}  fairview
-${region}  EU
+${physical_name_crm}  buckhorn
+${region}  US
 
 ${test_timeout_crm}  60 min
 
@@ -22,22 +24,31 @@ StreamCloudlet - shall be able to streamcloudlet for Create/Delete cloudlet
    ...  - do DeleteCloudlet in a thread
    ...  - do StreamCloudlet and verify the DeleteCloudlet output
 
-   Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_fairview}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_fairview}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  use_thread=${True}
+   Create Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_crm}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  env_vars=${env_vars}  use_thread=${True}
    Sleep  5s
-   ${output}=  Stream Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_fairview}
+   ${output}=  Stream Cloudlet  region=${region}  operator_org_name=${operator_name_crm}
 
    ${outputstring}=  Convert To String  ${output}
    Should Contain  ${outputstring}  Sourcing access variables
    Should Contain Any  ${outputstring}  Created Cloudlet successfully  Deleted Cloudlet successfully
 
-   Delete Cloudlet  region=EU  operator_org_name=${operator_name_openstack_fairview}  use_thread=${True}
+   Delete Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  use_thread=${True}
    Sleep  5s
-   ${output2}=  Stream Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_fairview}
+   ${output2}=  Stream Cloudlet  region=${region}  operator_org_name=${operator_name_crm}
 
    ${outputstring2}=  Convert To String  ${output2}
    Should Contain  ${outputstring2}  Deleting cloudlet 
    Should Contain Any  ${outputstring2}  Deleted Cloudlet successfully
 
 *** Keywords ***
+Setup
+   IF  'Buckhorn' in '${cloudlet_name_crm}'
+      ${env_vars}=  Set Variable  FLAVOR_MATCH_PATTERN=m4,MEX_EXT_NETWORK=external-network-02
+   ELSE
+      ${env_vars}=  Set Variable  ${None}
+   END
+
+   Set Suite Variable  ${env_vars}
+
 Teardown
-   Run Keyword and Ignore Error  Delete Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_fairview}
+   Run Keyword and Ignore Error  Delete Cloudlet  region=${region}  operator_org_name=${operator_name_crm}
