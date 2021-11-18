@@ -11,7 +11,6 @@
         <string>Controller</string>
         <string>Cycle</string>
         <string>OpenStackEnv</string>
-        <string>Components</string>
         <string>DMERest</string>
         <string>Project</string>
         <string>VariableFile</string>
@@ -41,10 +40,6 @@
     </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
-        <hudson.model.StringParameterDefinition>
-          <name>Components</name>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>Cycle</name>
           <defaultValue>2021-11-05_CirrusR3.1</defaultValue>
@@ -105,13 +100,15 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>Platform</name>
-          <choices>
-            <string>DME</string>
-            <string>Controller</string>
-            <string>Openstack</string>
-            <string>VCD</string>
-            <string>Vshpere</string>
-            <string>Anthos</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>DME</string>
+              <string>Controller</string>
+              <string>Openstack</string>
+              <string>VCD</string>
+              <string>Vshpere</string>
+              <string>Anthos</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
@@ -144,9 +141,9 @@ testcase_components2 = [
     ]
     
 pipeline{
-    agent { label &apos;jenkinsSlave1&apos; }
+    agent { label &apos;jenkinsGcpSlave2&apos; }
     parameters {
-        string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
+//        string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
         string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
         string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)

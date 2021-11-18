@@ -352,7 +352,7 @@ pipeline{
                         }
                     }
                     post {
-                        unstable { slack_warning(&apos;Delete Openstack CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                        failure { slack_warning(&apos;Delete Openstack CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
                     }
                 }
                 stage(&apos;Delete Anthos&apos;) {
@@ -369,7 +369,7 @@ pipeline{
                         }
                     }
                     post {
-                        unstable { slack_warning(&apos;Delete Anthos CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                        failure { slack_warning(&apos;Delete Anthos CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
                     }
                 }
                 stage(&apos;Delete Fake&apos;) {
@@ -386,7 +386,7 @@ pipeline{
                         }
                     }
                     post {
-                        unstable { slack_warning(&apos;Delete Fake CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                        failure { slack_warning(&apos;Delete Fake CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
                     }
                 }
             }
@@ -413,10 +413,10 @@ pipeline{
                 }
             }
             post {
-                unstable { 
+                failure { 
                     slack_warning(&apos;Deploy failed for &apos; + dateValue + &apos;. Requesting input to continue&apos;) 
                     input message: &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;
-                    
+                    slack_good(&apos;Regression proceeding for &apos; + dateValue)
                 }
             }
         }
@@ -558,7 +558,7 @@ pipeline{
                     steps {
                         slack_good(&apos;Starting Controller tests&apos;)
                         script {
-                            build job: &apos;runDmeTestcases&apos;, parameters: [
+                            build job: &apos;runControllerTestcases&apos;, parameters: [
                                 string(name: &apos;Project&apos;, value: project), 
                                 string(name: &apos;Cycle&apos;, value: cycle), 
                                 string(name: &apos;Controller&apos;, value: controller), 
@@ -587,7 +587,7 @@ pipeline{
                     steps {
                         slack_good(&apos;Starting MasterController tests&apos;)
                         script {
-                            build job: &apos;runDmeTestcases&apos;, parameters: [
+                            build job: &apos;runMcTestcases&apos;, parameters: [
                                 string(name: &apos;Project&apos;, value: project), 
                                 string(name: &apos;Cycle&apos;, value: cycle), 
                                 string(name: &apos;Controller&apos;, value: controller), 
