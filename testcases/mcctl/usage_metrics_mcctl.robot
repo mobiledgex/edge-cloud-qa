@@ -109,7 +109,7 @@ Usage - mcctl shall handle usage failures
       #Unable to parse "vmonly" value "x" as bool: invalid syntax, valid values are true, false  app  cloudlet-org=dmuus  vmonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
       Error: parsing arg "vmonly\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false  app  cloudlet-org=dmuus  vmonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
 
-      Error: Bad Request (400), Unable to retrieve CloudletPool info  cloudletpool  cloudletpool=x  cloudletpoolorg=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
+      #Error: Bad Request (400), Unable to retrieve CloudletPool info  cloudletpool  cloudletpool=x  cloudletpoolorg=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z  #returns empty list now
       #Unable to parse "showvmappsonly" value "x" as bool: invalid syntax, valid values are true, false  cloudletpool  cloudletpool=x  cloudletpoolorg=x  showvmappsonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
       Error: parsing arg "showvmappsonly\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false  cloudletpool  cloudletpool=x  cloudletpoolorg=x  showvmappsonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
 

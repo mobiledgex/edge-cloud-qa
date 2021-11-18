@@ -39,6 +39,7 @@ number_failed = 0
 number_passed = 0
 delay_between_tests = 10
 testcase_timeout = '60m'
+failed_list = []
 
 crm_pool_round_robin = None
 crm_pool_var = None
@@ -403,6 +404,7 @@ def exec_testcases_parallel(z, tc_queue, num_executors, failed_only):
     global found_failure
     global number_passed
     global number_failed
+    global failed_list
     global crm_pool_round_robin
 
     num_testcases = tc_queue.qsize()
@@ -416,6 +418,7 @@ def exec_testcases_parallel(z, tc_queue, num_executors, failed_only):
         found_failure = 0
     print('found_failure', found_failure)
     print('number_testcases', num_testcases, 'number_passed', number_passed, 'number_failed', number_failed)
+    print('failed testcases:', failed_list)
 
     return found_failure
 
@@ -459,6 +462,7 @@ def exec_testcase(z, t):
     global number_failed
     global crm_pool_round_robin
     global crm_pool_var
+    global failed_list
 
     region = 'notset'
     cloudlet = 'notset'
@@ -471,6 +475,7 @@ def exec_testcase(z, t):
         logger.info('skipping execution of {}. does not contain a testcase'.format(t['issue_key']))
         found_failure = 1  # consider it a failure if the teststep is missing
         number_failed += 1
+        failed_list.append(t['issue_key'])
         # continue  # go to the next testcase. probably should have put the rest of the code in else statement but this was added later
         return
 
@@ -639,6 +644,7 @@ def exec_testcase(z, t):
         logger.info('test failed:' + t['issue_key'])
         found_failure = 1
         number_failed += 1
+        failed_list.append(t['issue_key'])
         logger.info("exec cmd failed. return code=: " + str(err.returncode))
         logger.info("exec cmd failed. stdout=: " + str(err.stdout))
         logger.info("exec cmd failed. stderr=: " + str(err.stderr))
