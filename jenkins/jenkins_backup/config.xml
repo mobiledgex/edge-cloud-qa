@@ -274,9 +274,9 @@
         <string>runControllerTestcases</string>
         <string>runCrmTestcases</string>
         <string>runDmeTestcases</string>
-        <string>runMcTestscases</string>
+        <string>runMcTestcases</string>
         <string>runRegression</string>
-        <string>runSdkTestscases</string>
+        <string>runSdkTestcases</string>
         <string>runTestcases</string>
       </jobNames>
       <jobFilters/>
