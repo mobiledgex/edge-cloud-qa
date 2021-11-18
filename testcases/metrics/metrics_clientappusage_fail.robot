@@ -256,7 +256,7 @@ ClientAppUsageMetrics - get with cloudlet not found shall return an empty list
    ...  - get clientappusage metrics with cloudlet not found
    ...  - verify empty list is returned
 
-   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet_name_openstack_metrics  app_name=automation_api_app  app_version=1.0  operator_org_name=TDG  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=${cloudlet_name_openstack_metrics}  app_name=automation_api_app  app_version=1.0  operator_org_name=TDG  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
@@ -266,7 +266,7 @@ ClientAppUsageMetrics - get with appname not found shall return an empty list
    ...  - get clientappusage metrics with cloudlet not found
    ...  - verify empty list is returned
 
-   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet_name_openstack_metrics  app_name=xx  app_version=1.0  operator_org_name=TDG  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   ${metrics}=  Get Client App Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=${cloudlet_name_openstack_metrics}  app_name=xx  app_version=1.0  operator_org_name=TDG  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
