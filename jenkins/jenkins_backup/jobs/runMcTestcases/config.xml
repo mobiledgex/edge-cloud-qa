@@ -100,13 +100,14 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>Platform</name>
-          <choices>
-            <string>MC</string>
-            <string>Controller</string>
-            <string>Openstack</string>
-            <string>VCD</string>
-            <string>Vshpere</string>
-            <string>Anthos</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>Controller</string>
+              <string>Openstack</string>
+              <string>VCD</string>
+              <string>Vshpere</string>
+              <string>Anthos</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -121,19 +122,21 @@
     <script>currentBuild.displayName = cycle
 
 automated_component = &quot;Automated&quot;
-crm_components = [automated_component, &quot;CRM&quot;]
-
+controller_components = [automated_component, &quot;MasterController&quot;]
 testcase_components = [
-    crm_components + &quot;ClusterInst&quot;,
+    controller_components + &quot;Account&quot;,
+    controller_components + &quot;UserRole&quot;,
+    controller_components + &quot;User&quot;,
+    controller_components + &quot;Configs&quot;,
+    automated_component + &quot;Mcctl&quot;,
+    controller_components + &quot;Billing&quot;,
+    controller_components + &quot;ShowNode&quot;,
+    controller_components + &quot;Organization&quot;,
     ]
 
-node_name = &apos;notset&apos;
-if(platform == &apos;Anthos&apos;) {
-    node_name = &apos;jenkinsGcpSlave2&apos;
-}
 
 pipeline{
-    agent { label node_name }
+    agent { label &apos;jenkinsSlave1&apos; }
     parameters {
         string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
