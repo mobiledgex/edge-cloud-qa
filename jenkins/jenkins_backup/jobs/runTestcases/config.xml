@@ -7,6 +7,7 @@
       <triggers/>
       <parameters>
         <string>NumberParallelExecutions</string>
+        <string>SlaveNode</string>
         <string>Platform</string>
         <string>CRMPoolVshpere</string>
         <string>DMERestCert</string>
@@ -48,6 +49,11 @@
     </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNode</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>Components</name>
           <defaultValue>Automatedxx</defaultValue>
@@ -129,16 +135,15 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>Platform</name>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>Controller</string>
-              <string>DME</string>
-              <string>SDK</string>
-              <string>Openstack</string>
-              <string>VCD</string>
-              <string>Vshpere</string>
-              <string>Anthos</string>
-            </a>
+          <choices>
+            <string>MC</string>
+            <string>Controller</string>
+            <string>DME</string>
+            <string>SDK</string>
+            <string>Openstack</string>
+            <string>VCD</string>
+            <string>Vshpere</string>
+            <string>Anthos</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -163,8 +168,9 @@ currentBuild.displayName = cycle + &apos;_&apos; + platform + last_component
 //contoller_components = [&quot;Automated&quot;, &quot;Controller&quot;, &quot;Flavor&quot;]
 
 pipeline{
-    agent { label &apos;jenkinsSlave1&apos; }
+    agent { label SlaveNode }
     parameters {
+        string(name: &apos;SlaveNode&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
         string(name: &apos;Components&apos;, defaultValue: &apos;Automatedxx&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
         string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
@@ -182,7 +188,7 @@ pipeline{
         string(name: &apos;CRMPoolVshpere&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;CRMPoolVCD&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;CRMPoolAnthos&apos;, defaultValue: &apos;&apos;)
-        choice(name: &apos;Platform&apos;, choices: [&apos;Controller&apos;, &apos;DME&apos;, &apos;SDK&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        choice(name: &apos;Platform&apos;, choices: [&apos;MC&apos;, &apos;Controller&apos;, &apos;DME&apos;, &apos;SDK&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
         string(name: &apos;NumberParallelExecutions&apos;, defaultValue: &apos;1&apos;)
     }
