@@ -141,7 +141,7 @@ testcase_components2 = [
     ]
     
 pipeline{
-    agent { label &apos;jenkinsGcpSlave2&apos; }
+    agent { label &apos;jenkinsSlave1&apos; }
     parameters {
 //        string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
