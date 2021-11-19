@@ -10,9 +10,9 @@
         <string>Controller</string>
         <string>Cycle</string>
         <string>OpenStackEnv</string>
-        <string>Components</string>
         <string>DMERest</string>
         <string>Project</string>
+        <string>CRMPoolAnthos</string>
         <string>VariableFile</string>
         <string>InfluxDB</string>
         <string>RunFailedOnly</string>
@@ -40,10 +40,6 @@
     </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
-        <hudson.model.StringParameterDefinition>
-          <name>Components</name>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>Cycle</name>
           <defaultValue>2021-11-05_CirrusR3.1</defaultValue>
@@ -98,22 +94,24 @@
           <name>RunFailedOnly</name>
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
-        <hudson.model.ChoiceParameterDefinition>
-          <name>Platform</name>
-          <choices>
-            <string>MC</string>
-            <string>Controller</string>
-            <string>Openstack</string>
-            <string>VCD</string>
-            <string>Vshpere</string>
-            <string>Anthos</string>
-          </choices>
-        </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>Folder</name>
-          <defaultValue>controller</defaultValue>
+          <name>CRMPoolAnthos</name>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>Platform</name>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>MC</string>
+              <string>Controller</string>
+              <string>Openstack</string>
+              <string>VCD</string>
+              <string>Vshpere</string>
+              <string>Anthos</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -123,19 +121,40 @@
 automated_component = &quot;Automated&quot;
 crm_components = [automated_component, &quot;CRM&quot;]
 
-testcase_components = [
+testcase_components1 = [
     crm_components + &quot;ClusterInst&quot;,
-    ]
+    crm_components + &quot;AppInst&quot;,
+    crm_components + &quot;RunCommand&quot;,
+    crm_components + &quot;ShowLogs&quot;,
+    crm_components + &quot;RunDebug&quot;,
+    crm_components + &quot;AccessCloudlet&quot;,
+    crm_components + &quot;AlertReciever&quot;,
+    crm_components + &quot;GPU&quot;,
+    crm_components + &quot;VMPool&quot;,
+    crm_components + &quot;AutoProvisioning&quot;,
+   
+]
+
+testcase_components2 = [
+    crm_components + &quot;CloudletMaintenance&quot;,
+]
 
 node_name = &apos;notset&apos;
 if(platform == &apos;Anthos&apos;) {
+    testcase_components1 = testcase_components1.minus(&quot;ClusterInst&quot;)
+    testcase_components1 = testcase_components1.minus(&quot;GPU&quot;)
+    testcase_components1 = testcase_components1.minus(&quot;VMPool&quot;)
+    testcase_components1 = testcase_components1.minus(&quot;AutoProvisioning&quot;)
+    
     node_name = &apos;jenkinsGcpSlave2&apos;
+} else {
+        node_name = &apos;jenkinsGcpSlave1&apos;
 }
 
 pipeline{
     agent { label node_name }
     parameters {
-        string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
+//        string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
         string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
         string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
@@ -147,28 +166,69 @@ pipeline{
         string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
+        string(name: &apos;CRMPoolAnthos&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
         choice(name: &apos;Platform&apos;, choices: [&apos;MC&apos;, &apos;Controller&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
 
     stages {
-        stage(&quot;execute tests&quot;) {
+        stage(&quot;execute tests 1&quot;) {
             steps {
                 script {
                     builds = [:]
-                    testcase_components.eachWithIndex { value, index-&gt;
+                    testcase_components1.eachWithIndex { value, index-&gt;
                         echo &quot;${value}&quot;
                         builds[&quot;${value[-1]}&quot;] = {
-                            build job: &apos;runTestcases&apos;, parameters: [string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), string(name: &apos;Project&apos;, value: project), string(name: &apos;Cycle&apos;, value: cycle), string(name: &apos;Controller&apos;, value: controller), string(name: &apos;MasterController&apos;, value: mastercontroller), string(name: &apos;VariableFile&apos;, value: variablefile), booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: node_name),
+                                string(name: &apos;Platform&apos;, value: platform),
+                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller), 
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
                     }
                     parallel builds
                 }
             }
             post {
-                failure { echo &quot;run MC tests failed&quot;}
+                failure { echo &quot;run tests1 failed&quot;}
             }
         }
+   
+        stage(&quot;execute tests 2&quot;) {
+            steps {
+                script{
+                    builds = [:]
+                    testcase_components2.eachWithIndex { value, index-&gt;
+                        echo &quot;${value}&quot;
+                        builds[&quot;${value[-1]}&quot;] = {
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: node_name),
+                                string(name: &apos;Platform&apos;, value: platform),
+                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller), 
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                        }
+                    }
+                    parallel builds
+                }
+            }
+            post {
+                failure { echo &quot;run tests2 failed&quot;}
+            }
+        }
+       
+        
     }
 
 }
