@@ -83,6 +83,7 @@ def main():
     parser = argparse.ArgumentParser(description='copy tests to release')
     parser.add_argument('--version_from_load', action='store_true')
     parser.add_argument('--failed_only', action='store_true')
+    parser.add_argument('--test_timeout', default='1m')
 
     args = parser.parse_args()
 
@@ -90,6 +91,9 @@ def main():
 
     global crm_pool_round_robin
     global crm_pool_var
+    global testcase_timeout
+
+    testcase_timeout = args.test_timeout
 
     print(os.environ)
     cycle = os.environ['Cycle']
