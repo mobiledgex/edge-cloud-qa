@@ -33,7 +33,6 @@
     </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
   </actions>
   <description>NEW JOB DESCRIPTION</description>
-  <displayName>runTestcases</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.6"/>
@@ -134,21 +133,6 @@
           <name>CRMPoolAnthos</name>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.ChoiceParameterDefinition>
-          <name>Platform</name>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>MC</string>
-              <string>Controller</string>
-              <string>DME</string>
-              <string>SDK</string>
-              <string>Openstack</string>
-              <string>VCD</string>
-              <string>Vshpere</string>
-              <string>Anthos</string>
-            </a>
-          </choices>
-        </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>Area</name>
           <defaultValue>flavor</defaultValue>
@@ -162,6 +146,11 @@
         <hudson.model.StringParameterDefinition>
           <name>TestTimeout</name>
           <defaultValue>60m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Folder</name>
+          <defaultValue>sdk</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>

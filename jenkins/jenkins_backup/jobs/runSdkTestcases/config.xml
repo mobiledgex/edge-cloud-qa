@@ -122,7 +122,7 @@ slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
 slackchannel = &apos;#qa-automation&apos;
 
 automated_component = &quot;Automated&quot;
-sdk_components = [automated_component, &quot;SDK&quot;]
+sdk_components = [automated_component]  //, &quot;SDK&quot;]
 testcase_components = [
     sdk_components + &quot;CPP&quot;,
     sdk_components + &quot;CSharp&quot;,
