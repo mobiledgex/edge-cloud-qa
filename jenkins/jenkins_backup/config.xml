@@ -246,6 +246,7 @@
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
         <string>runCPPTests</string>
+        <string>runCsharp2</string>
         <string>runCSharpTests</string>
       </jobNames>
       <jobFilters/>
@@ -273,6 +274,7 @@
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
         <string>runControllerTestcases</string>
         <string>runCrmTestcases</string>
+        <string>runCsharp3</string>
         <string>runDmeTestcases</string>
         <string>runMcTestcases</string>
         <string>runRegression</string>
