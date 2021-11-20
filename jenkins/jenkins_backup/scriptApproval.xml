@@ -2,6 +2,9 @@
 <scriptApproval plugin="script-security@1.78">
   <approvedScriptHashes>
     <string>017d0db438428731cd600b6ebda805065433520f</string>
+    <string>35068f29e55b876a17f08430d28d02e9797a8f85</string>
+    <string>bf983d62014f6656fe95365871bcceeefe384f25</string>
+    <string>c8897d92e9a7de52e16776527c47e7121ac0c097</string>
   </approvedScriptHashes>
   <approvedSignatures>
     <string>field hudson.model.Run project</string>
