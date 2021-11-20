@@ -1,0 +1,156 @@
+last_component = components.split(',')[-1]
+version = cycle.split('_')[0]
+//currentBuild.displayName = cycle + '_' + platform + area
+currentBuild.displayName = cycle + '_' + platform + last_component
+
+//contoller_components = ["Automated", "Controller", "Flavor"]
+
+pipeline{
+    agent { label SlaveNode }
+    parameters {
+        string(name: 'SlaveNode', defaultValue: 'jenkinsSlave1')
+        string(name: 'Components', defaultValue: 'Automatedxx')
+        string(name: 'Cycle', defaultValue: '2021-11-05_CirrusR3.1')
+        string(name: 'Project', defaultValue: 'ECQ')
+        string(name: 'MasterController', defaultValue: 'console-qa.mobiledgex.net:443')
+        string(name: 'Controller', defaultValue: 'mexplat-qa-us.ctrl.mobiledgex.net:55001')
+        string(name: 'DME', defaultValue: 'us-qa.dme.mobiledgex.net:50051')
+        string(name: 'DMERest', defaultValue: 'us-qa.dme.mobiledgex.net:38001')
+        string(name: 'DMERestCert', defaultValue: '')
+        string(name: 'VariableFile', defaultValue: 'automation_variables.py')
+        string(name: 'InfluxDB', defaultValue: 'notset')
+        string(name: 'OpenStackEnv', defaultValue: 'notset')
+        string(name: 'CommitVersion', defaultValue: 'master')
+        booleanParam(name: 'RunFailedOnly', defaultValue: false)
+        string(name: 'CRMPoolOpenstack', defaultValue: '')
+        string(name: 'CRMPoolVshpere', defaultValue: '')
+        string(name: 'CRMPoolVCD', defaultValue: '')
+        string(name: 'CRMPoolAnthos', defaultValue: '')
+        choice(name: 'Platform', choices: ['MC', 'Controller', 'DME', 'SDK', 'Openstack', 'VCD', 'Vshpere', 'Anthos'], description: '')
+        string(name: 'Area', defaultValue: 'flavor')
+        string(name: 'NumberParallelExecutions', defaultValue: '1')
+        string(name: 'TestTimeout', defaultValue: '60m')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                //script {
+                //    currentBuild.rawBuild.project.description = 'NEW JOB DESCRIPTION'
+                //    currentBuild.rawBuild.project.setDisplayName('runTestcases')
+                //}
+
+                //sh 'docker system prune -af'  //remove all docker stuff without prompting
+                //echo 'docker prune failed. mayber already running'
+                // delete old protos before git and build
+                //dir('go/src/github.com/mobiledgex') {
+                //    sh 'rm -rf *'
+                //}
+
+                dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps') {
+                    git branch: 'master',
+                    credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                    url: 'https://github.com/mobiledgex/edge-cloud-sampleapps.git'
+                }
+
+                dir('go/src/github.com/mobiledgex') {
+                    sh 'rm -rf *'
+                    checkout([$class: 'GitSCM',
+                        branches: [[name: 'master']],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [
+                            [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                            [$class:'SparseCheckoutPath', path:'testcases/*'],
+                            [$class:'SparseCheckoutPath', path:'jenkins/*'],
+                            [$class:'SparseCheckoutPath', path:'modules/*'],
+                            [$class:'SparseCheckoutPath', path:'protos/*'],
+                            [$class:'SparseCheckoutPath', path:'tools/*'],
+                            [$class:'SparseCheckoutPath', path:'certs/*']
+                            ]]
+                        ],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                        url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+
+                        //unstash 'edge-cloud_stash'
+                }
+
+                dir('go/src/github.com/mobiledgex/edge-proto') {
+                   sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*'
+                   git branch: CommitVersion,
+                   credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                   url: 'https://github.com/mobiledgex/edge-proto.git'
+                }
+                dir('go/src/github.com/mobiledgex/edge-cloud') {
+                   sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*'
+
+                   checkout([$class: 'GitSCM',
+                       branches: [[name: CommitVersion]],
+                       doGenerateSubmoduleConfigurations: false,
+                       extensions: [
+                           [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                           [$class:'SparseCheckoutPath', path:'edgeproto/*'],
+                           [$class:'SparseCheckoutPath', path:'d-match-engine/dme-proto/*'],
+                           [$class:'SparseCheckoutPath', path:'protoc-gen-cmd/protocmd/*'],
+                           [$class:'SparseCheckoutPath', path:'protogen/*']
+                           ]]
+                       ],
+                       submoduleCfg: [],
+                       userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                       url: 'https://github.com/mobiledgex/edge-cloud.git']]])
+                }
+            }
+            post {
+                failure { echo 'checkout failed' }
+            }
+        }
+
+        stage("build protos") {
+            steps {
+                dir('go/src/github.com/mobiledgex/tools') {
+                    sh(script:'/usr/bin/python3 ./build_protos.py --sourcedir $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/ --sourcedir_proto $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/ --qadir $WORKSPACE/go/src/github.com/mobiledgex');
+                }
+            }
+            post {
+                failure { echo "build_protos.py failed" }
+            }
+        }
+        
+        stage("execute tests") {
+            steps {
+                dir('go/src/github.com/mobiledgex/jenkins') {
+                    script {
+                        runfailedonly_arg = ""
+                        if(String.valueOf(params.RunFailedOnly) == "true") {
+                            runfailedonly_arg = "--failed_only"
+                        }
+                    }
+
+                    sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;' +
+                              'export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin' +
+                              ';export AUTOMATION_CONTROLLER_ADDRESS=' + controller + 
+                              ';export AUTOMATION_DME_ADDRESS=' + dme + 
+                              ';export AUTOMATION_DME_REST_ADDRESS=' + dmerest + 
+                              ';export AUTOMATION_VERSION=' + version + 
+                              ';export AUTOMATION_DME_CERT=' + dmerestcert + 
+                              ';export AUTOMATION_OPENSTACK_DEDICATED_ENV=' + openstackenv + 
+                              ';export AUTOMATION_OPENSTACK_SHARED_ENV=' + openstackenv + 
+                              ';export AUTOMATION_OPENSTACK_VM_ENV=' + openstackenv + 
+                              ';export AUTOMATION_OPENSTACK_GPU_ENV=' + openstackenv + 
+                              ';export AUTOMATION_OPENSTACK_OFFLINE_ENV=' + openstackenv + 
+                              ';export AUTOMATION_MC_ADDRESS=' + mastercontroller + 
+                              ';export AUTOMATION_MC_CERT=' + 
+                              ';export AUTOMATION_INFLUXDB_ADDRESS=' + influxdb + 
+                              ';export AUTOMATION_OPENSTACK_VMPOOL_ENV=' + openstackenv + 
+                              ';export AUTOMATION_OPENSTACK_VGPU_ENV=' + openstackenv + 
+                              ';./execJira_parallel.py --test_timeout=' + params.TestTimeout + ' ' + runfailedonly_arg)
+                }
+            }
+            post {
+                failure { echo "execJira.py failed for"}
+            }
+        }
+    }
+
+}
+
