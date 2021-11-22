@@ -1,7 +1,7 @@
 last_component = components.split(',')[-1]
 version = cycle.split('_')[0]
 //currentBuild.displayName = cycle + '_' + platform + area
-currentBuild.displayName = cycle + '_' + platform + last_component
+currentBuild.displayName = cycle + '_' + testtarget + last_component
 
 //contoller_components = ["Automated", "Controller", "Flavor"]
 
@@ -26,7 +26,7 @@ pipeline{
         string(name: 'CRMPoolVshpere', defaultValue: '')
         string(name: 'CRMPoolVCD', defaultValue: '')
         string(name: 'CRMPoolAnthos', defaultValue: '')
-        choice(name: 'Platform', choices: ['MC', 'Controller', 'DME', 'SDK', 'Openstack', 'VCD', 'Vshpere', 'Anthos'], description: '')
+        choice(name: 'TestTarget', choices: ['MC', 'Controller', 'DME', 'SDK', 'Openstack', 'VCD', 'Vshpere', 'Anthos'], description: '')
         string(name: 'Area', defaultValue: 'flavor')
         string(name: 'NumberParallelExecutions', defaultValue: '1')
         string(name: 'TestTimeout', defaultValue: '60m')
