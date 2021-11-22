@@ -18,12 +18,13 @@
 // ECQ-4107
 
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Net;
-using System.Net.Sockets;
+using System.Net.Security;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -171,6 +172,10 @@ namespace MexGrpcSampleConsoleApp
             string appName = "automation-sdk-porttest";
             string appVers = "1.0";
             string developerAuthToken = "";
+
+            string aWebSocketServerFqdn = "";
+            AppPort appPort = null;
+            int myPort = 0;
 
             //Set the location in the location server
             //Console.WriteLine("Seting the location in the Location Server");
@@ -344,6 +349,20 @@ namespace MexGrpcSampleConsoleApp
                 Console.WriteLine("FindCloudlet FQDN: " + findCloudletResponse.Fqdn);
                 Console.WriteLine("FindCloudlet Latitude: " + findCloudletResponse.CloudletLocation.Latitude);
                 Console.WriteLine("FindCloudlet Longitude: " + findCloudletResponse.CloudletLocation.Longitude);
+                foreach (AppPort p in findCloudletResponse.Ports)
+                {
+                    if (p.InternalPort == 2015)
+                    {
+                        appPort = p;
+                    }
+                    Console.WriteLine("Port: fqdn_prefix: " + p.FqdnPrefix +
+                          ", protocol: " + p.Proto +
+                          ", public_port: " + p.PublicPort +
+                          ", internal_port: " + p.InternalPort +
+                          ", end_port: " + p.EndPort);
+                }
+                aWebSocketServerFqdn = me.GetHost(findCloudletResponse, appPort);
+                myPort = me.GetPort(appPort, 2015);
             }
             else
             {
@@ -357,79 +376,74 @@ namespace MexGrpcSampleConsoleApp
             // To test the UDP, TCP, and TLS ports send a "ping" to each port and recieve a "pong"
             // To test the WS pport send a text message and receive it backwards, send a binary message and receive it back unaltered
             // To test the HTTP port send "automation.html" and get the automation.html file
-            string message = "";
             string test = "ping";
-            string aWebSocketServerFqdn = appName + "-tcp." + findCloudletResponse.Fqdn;
+            string message = test;
+            byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
             string receiveMessage = "";
 
             Dictionary<int, DistributedMatchEngine.AppPort> tlsAppPortDict = new Dictionary<int, DistributedMatchEngine.AppPort>();
 
             Console.WriteLine("TLS Port Testing\n");
             tlsAppPortDict = me.GetTCPAppPorts(findCloudletResponse);
-            var check = false;
             foreach (KeyValuePair<int, DistributedMatchEngine.AppPort> kvp in tlsAppPortDict)
             {
                 if (kvp.Key == 2015)
                 {
                     try
                     {
-                        Console.WriteLine("Starting TLS Port Testing");
-                        Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-                        message = test;
-                        byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
-                        Socket tlsConnection = await me.GetTCPConnection(findCloudletResponse, kvp.Value, kvp.Key, 10000);
-                        Console.WriteLine("Socket Connected?  " + tlsConnection.Connected);
+                        //MatchingEngine.ServerRequiresClientCertificateAuthentication(true);
+                        SslStream stream = await me.GetTCPTLSConnection(findCloudletResponse, appPort, myPort, 10000, true);
+                        Console.WriteLine("Authenticated");
 
-                        tlsConnection.Send(bytesMessage);
+                        stream.Write(bytesMessage, 0, bytesMessage.Length);
+                        await Task.Delay(500);
+                        Console.WriteLine("Message Sent: " + message.ToString());
 
-                        Console.WriteLine("\nMessage Sent: " + message);
-                        byte[] buffer = new byte[message.Length * 4]; // C# chars are unicode-16 bits
-                        int numRead = tlsConnection.Receive(buffer);
-                        byte[] readBuffer = new byte[numRead];
-                        Array.Copy(buffer, readBuffer, numRead);
-                        receiveMessage = Encoding.ASCII.GetString(readBuffer);
+                        stream.Flush();
 
-                        Console.WriteLine("Received Message: " + receiveMessage);
+                        byte[] readBuffer = new byte[4];
+                        stream.Read(readBuffer);
+                        receiveMessage = Encoding.UTF8.GetString(readBuffer);
+
+                        //Console.WriteLine("Received Message: " + receiveMessage);
+                        //Console.WriteLine("Received Message Length: " + receiveMessage.Length);
+
+                        stream.Close();
 
                         if (receiveMessage == "pong")
                         {
-                            Console.WriteLine("TLS Get Connection worked!: ");
+                            Console.WriteLine("TLS Get Connection worked!");
                             Console.WriteLine("Received Message: " + receiveMessage);
-                            check = true;
-                            tlsConnection.Close();
+                            stream.Close();
                         }
                         else
                         {
-                            Console.WriteLine("TLS Get Connection DID NOT work!: " + receiveMessage);
-                            tlsConnection.Close();
+                            Console.WriteLine("Pong not Recieved!!! TLS Test Case Failed!!!!");
+                            stream.Close();
                             Environment.Exit(1);
+
                         }
+                    }
+                    catch (AuthenticationException e)
+                    {
+                        Console.WriteLine("Authentication Exception is " + e.Message);
+                        Console.WriteLine("TLS Test Case Failed!!!");
+                        Environment.Exit(1);
                     }
                     catch (GetConnectionException e)
                     {
                         Console.WriteLine("TLS GetConnectionException is " + e.Message);
-                        Console.WriteLine("Test Case Failed!!!");
-                        Environment.Exit(1);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("TLS socket exception is " + e);
-                        Console.WriteLine("Test Case Failed!!!");
+                        Console.WriteLine("TLS Test Case Failed!!!");
                         Environment.Exit(1);
                     }
                     Console.WriteLine("\nTLS Connection Port " + kvp.Key + " finished.");
                 }
             }
-            if (check == true)
-            {
-                Console.WriteLine("\nGetTLSConnections GRPC Testcase Passed!!");
-                Environment.Exit(0);
-            }
-            else
-            {
-                Console.WriteLine("\nGetTLSConnections GRPC Testcase Failed!!");
-                Environment.Exit(1);
-            }
+            Console.WriteLine("Test TLS Connection finished.\n");
+
+            Console.WriteLine("TLS Connections Test Case Passed!!!");
+            Environment.Exit(0);
+
         }
 
 
