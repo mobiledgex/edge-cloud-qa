@@ -109,6 +109,10 @@ def main():
         component = component + ' ,' + os.environ['Platform']
         folder = os.environ['Platform'].lower()
         crm_pool_name = crm_pool_name + os.environ['Platform']
+    if 'TestTarget' in os.environ:    # will replace Platform
+        component = component + ' ,' + os.environ['TestTarget']
+        folder = os.environ['TestTarget'].lower()
+        crm_pool_name = crm_pool_name + os.environ['TestTarget']
     if 'Folder' in os.environ:
         folder = os.environ['Folder']
 
@@ -570,8 +574,8 @@ def exec_testcase(z, t):
 
             env_file = find(f'automation_env_{region}.sh', os.environ['WORKSPACE'])
 
-            # only openstack needs the openrc file so set to Buckhorn if not openstack. This is so non Openstack tests will still execute
-            if os.environ['Platform'] != 'Openstack':
+            # only openstack needs the openrc file so set to Buckhorn if not openstack. This is so non Openstack tests will still execute.  Not sure I need this???
+            if os.environ['Platform'] != 'Openstack' or os.environ['TestTarget'] != 'Openstack':
                 cloudlet_openrc = 'automationBuckhornCloudlet'
 
             openstack_file = find(f'openrc_{cloudlet_openrc}.mex', os.environ['WORKSPACE'])
