@@ -276,6 +276,7 @@ namespace RestSample
                     }
 
                 }
+                loc = null;
                 var findCloudletRequest = me.CreateFindCloudletRequest(loc,                                                    carrierName);
 
                 // Async:
