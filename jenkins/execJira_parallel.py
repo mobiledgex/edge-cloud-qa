@@ -575,8 +575,8 @@ def exec_testcase(z, t):
             env_file = find(f'automation_env_{region}.sh', os.environ['WORKSPACE'])
 
             # only openstack needs the openrc file so set to Buckhorn if not openstack. This is so non Openstack tests will still execute.  Not sure I need this???
-            if os.environ['Platform'] != 'Openstack' or os.environ['TestTarget'] != 'Openstack':
-                cloudlet_openrc = 'automationBuckhornCloudlet'
+            # if os.environ['Platform'] != 'Openstack' or os.environ['TestTarget'] != 'Openstack':
+            #     cloudlet_openrc = 'automationBuckhornCloudlet'
 
             openstack_file = find(f'openrc_{cloudlet_openrc}.mex', os.environ['WORKSPACE'])
             logger.info(f'using env_file={env_file} openstack_file={openstack_file}')
