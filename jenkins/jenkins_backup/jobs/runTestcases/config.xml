@@ -8,7 +8,6 @@
       <parameters>
         <string>NumberParallelExecutions</string>
         <string>SlaveNode</string>
-        <string>Platform</string>
         <string>CRMPoolVshpere</string>
         <string>DMERestCert</string>
         <string>Controller</string>
@@ -21,6 +20,7 @@
         <string>Area</string>
         <string>VariableFile</string>
         <string>CRMPoolVCD</string>
+        <string>TestTarget</string>
         <string>InfluxDB</string>
         <string>RunFailedOnly</string>
         <string>CRMPoolOpenstack</string>
@@ -40,7 +40,7 @@
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
         <daysToKeep>-1</daysToKeep>
-        <numToKeep>50</numToKeep>
+        <numToKeep>30</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -135,7 +135,7 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
-          <name>Platform</name>
+          <name>TestTarget</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>MC</string>
@@ -193,7 +193,7 @@
         </hudson.plugins.git.extensions.impl.SparseCheckoutPaths>
       </extensions>
     </scm>
-    <scriptPath>jenkins/execute_testcases.jenkinsfile</scriptPath>
+    <scriptPath>jenkins/runTestcases_declarative.jenkinsfile</scriptPath>
     <lightweight>true</lightweight>
   </definition>
   <triggers/>
