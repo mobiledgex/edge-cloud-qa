@@ -6,7 +6,6 @@
       <jobProperties/>
       <triggers/>
       <parameters>
-        <string>Platform</string>
         <string>Controller</string>
         <string>Cycle</string>
         <string>OpenStackEnv</string>
@@ -14,6 +13,7 @@
         <string>Project</string>
         <string>CRMPoolAnthos</string>
         <string>VariableFile</string>
+        <string>TestTarget</string>
         <string>InfluxDB</string>
         <string>RunFailedOnly</string>
         <string>DME</string>
@@ -100,11 +100,9 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
-          <name>Platform</name>
+          <name>TestTarget</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
-              <string>MC</string>
-              <string>Controller</string>
               <string>Openstack</string>
               <string>VCD</string>
               <string>Vshpere</string>
@@ -140,7 +138,7 @@ testcase_components2 = [
 ]
 
 node_name = &apos;notset&apos;
-if(platform == &apos;Anthos&apos;) {
+if(testtarget == &apos;Anthos&apos;) {
     testcase_components1 = testcase_components1.minus(&quot;ClusterInst&quot;)
     testcase_components1 = testcase_components1.minus(&quot;GPU&quot;)
     testcase_components1 = testcase_components1.minus(&quot;VMPool&quot;)
@@ -167,7 +165,7 @@ pipeline{
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
         string(name: &apos;CRMPoolAnthos&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
-        choice(name: &apos;Platform&apos;, choices: [&apos;MC&apos;, &apos;Controller&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        choice(name: &apos;TestTarget&apos;, choices: [&apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
 
@@ -181,7 +179,7 @@ pipeline{
                         builds[&quot;${value[-1]}&quot;] = {
                             build job: &apos;runTestcases&apos;, parameters: [
                                 string(name: &apos;SlaveNode&apos;, value: node_name),
-                                string(name: &apos;Platform&apos;, value: platform),
+                                string(name: &apos;TestTarget&apos;, value: testtarget),
                                 string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
                                 string(name: &apos;Project&apos;, value: project), 
                                 string(name: &apos;Cycle&apos;, value: cycle), 
@@ -209,7 +207,7 @@ pipeline{
                         builds[&quot;${value[-1]}&quot;] = {
                             build job: &apos;runTestcases&apos;, parameters: [
                                 string(name: &apos;SlaveNode&apos;, value: node_name),
-                                string(name: &apos;Platform&apos;, value: platform),
+                                string(name: &apos;TestTarget&apos;, value: testtarget),
                                 string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
                                 string(name: &apos;Project&apos;, value: project), 
                                 string(name: &apos;Cycle&apos;, value: cycle), 

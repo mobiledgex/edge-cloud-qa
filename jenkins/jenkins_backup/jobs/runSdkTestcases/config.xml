@@ -6,7 +6,6 @@
       <jobProperties/>
       <triggers/>
       <parameters>
-        <string>Platform</string>
         <string>DMERestCert</string>
         <string>Controller</string>
         <string>Cycle</string>
@@ -14,6 +13,7 @@
         <string>DMERest</string>
         <string>Project</string>
         <string>VariableFile</string>
+        <string>TestTarget</string>
         <string>InfluxDB</string>
         <string>RunFailedOnly</string>
         <string>DME</string>
@@ -99,19 +99,18 @@
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
-          <name>Platform</name>
+          <name>TestTarget</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>SDK</string>
-              <string>Controller</string>
-              <string>DME</string>
-              <string>Openstack</string>
-              <string>VCD</string>
-              <string>Vshpere</string>
-              <string>Anthos</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeout</name>
+          <defaultValue>1m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -145,7 +144,9 @@ pipeline{
         string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        choice(name: &apos;Platform&apos;, choices: [&apos;SDK&apos;, &apos;Controller&apos;, &apos;DME&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        //choice(name: &apos;Platform&apos;, choices: [&apos;SDK&apos;, &apos;Controller&apos;, &apos;DME&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        choice(name: &apos;TestTarget&apos;, choices: [&apos;SDK&apos;], description: &apos;&apos;)
+        choice(name: &apos;TestTimeout&apos; defaultValue: &apos;1m&apos;)
         //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
 
@@ -168,7 +169,8 @@ pipeline{
                                 string(name: &apos;DME&apos;, value: dme),
                                 string(name: &apos;DMERest&apos;, value: dmerest),
                                 string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;Platform&apos;, value: platform),
+                                string(name: &apos;TestTarget&apos;, value: testtarget),
+                                string(name: &apos;TestTimeout&apos;, value: testtimeout)
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
