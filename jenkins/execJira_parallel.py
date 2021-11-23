@@ -83,7 +83,7 @@ def main():
     parser = argparse.ArgumentParser(description='copy tests to release')
     parser.add_argument('--version_from_load', action='store_true')
     parser.add_argument('--failed_only', action='store_true')
-    parser.add_argument('--test_timeout', default='1m')
+    parser.add_argument('--test_timeout', default='60m')
 
     args = parser.parse_args()
 
