@@ -17,6 +17,7 @@
         <string>InfluxDB</string>
         <string>RunFailedOnly</string>
         <string>DME</string>
+        <string>TestTimeout</string>
         <string>MasterController</string>
         <string>CommitVersion</string>
       </parameters>
@@ -146,7 +147,7 @@ pipeline{
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
         //choice(name: &apos;Platform&apos;, choices: [&apos;SDK&apos;, &apos;Controller&apos;, &apos;DME&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         choice(name: &apos;TestTarget&apos;, choices: [&apos;SDK&apos;], description: &apos;&apos;)
-        choice(name: &apos;TestTimeout&apos; defaultValue: &apos;1m&apos;)
+        string(name: &apos;TestTimeout&apos;, defaultValue: &apos;1m&apos;)
         //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
 
@@ -170,7 +171,7 @@ pipeline{
                                 string(name: &apos;DMERest&apos;, value: dmerest),
                                 string(name: &apos;DMERestCert&apos;, value: dmerestcert),
                                 string(name: &apos;TestTarget&apos;, value: testtarget),
-                                string(name: &apos;TestTimeout&apos;, value: testtimeout)
+                                string(name: &apos;TestTimeout&apos;, value: testtimeout),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
