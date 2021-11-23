@@ -30,38 +30,42 @@ ${since}=  45s
 
 *** Test Cases ***
 # ECQ-1887
-ShowLogs - k8s shared shall return logs on openstack
+ShowLogs - k8s shared shall return logs on CRM
     [Documentation]
-    ...  deploy k8s shared app 
-    ...  verify ShowLogs works 
+    ...  - deploy k8s shared app 
+    ...  - verify ShowLogs works 
 
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}  deployment=kubernetes  ip_access=IpAccessShared
+    IF  '${platform_type}' != 'K8SBareMetal'
+        Log To Console  Creating Cluster Instance
+        ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  flavor_name=${cluster_flavor_name}  deployment=kubernetes  ip_access=IpAccessShared
+        ${cluster_developer_name}=  Set Variable  ${cluster['data']['key']['organization']}
+        ${cluster_name}=  Set Variable  ${cluster['data']['key']['cluster_key']['name']}
+    END
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
-    ${app_inst}=  Create App Instance  region=${region}  #cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  developer_name=${developer_name}  cluster_instance_developer_name=${developer_name}
+    Create App  region=${region}  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2015  default_flavor_name=${cluster_flavor_name}  allow_serverless=${allow_serverless}
+    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}  #cluster_instance_name=${cluster_name_default}  developer_name=${developer_name}  cluster_instance_developer_name=${developer_name}
     Sleep  10 seconds  # wait for app to fully start
 
     # without containerid
-    ${stdout_noid}=  Show Logs  region=${region}
+    ${stdout_noid}=  Show Logs  region=${region}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with containerid
-    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}
+    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with timestamps
-    ${stdout_timestamps}=  Show Logs  region=${region}  tail=3  time_stamps=${True}
+    ${stdout_timestamps}=  Show Logs  region=${region}  tail=3  time_stamps=${True}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with tail
-    ${stdout_tail}=  Show Logs  region=${region}  tail=1
+    ${stdout_tail}=  Show Logs  region=${region}  tail=1  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with since
     Sleep  60 
-    TCP Port Should Be Alive  ${app_inst['data']['mapped_ports'][0]['fqdn_prefix']}${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
+    TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
     ${stdout_since}=  Show Logs  region=${region}  since=${since}
 
     # with wrong containerid
-    ${error}=  Run Keyword and Expect Error  *  Show Logs  region=${region}  container_id=notfound
+    ${error}=  Run Keyword and Expect Error  *  Show Logs  region=${region}  container_id=notfound  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found 
 
@@ -83,41 +87,45 @@ ShowLogs - k8s shared shall return logs on openstack
     Length Should Be  ${stdout_since_lines}        2
 
 # ECQ-1888
-ShowLogs - k8s dedicated shall return logs on openstack
+ShowLogs - k8s dedicated shall return logs on CRM
     [Documentation]
-    ...  deploy k8s dedicated app
-    ...  verify ShowLogs works
+    ...  - deploy k8s dedicated app
+    ...  - verify ShowLogs works
 
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}  deployment=kubernetes  ip_access=IpAccessDedicated
+    IF  '${platform_type}' != 'K8SBareMetal'
+        Log To Console  Creating Cluster Instance
+        ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  flavor_name=${cluster_flavor_name}  deployment=kubernetes  ip_access=IpAccessDedicated
+        ${cluster_developer_name}=  Set Variable  ${cluster['data']['key']['organization']}
+        ${cluster_name}=  Set Variable  ${cluster['data']['key']['cluster_key']['name']}
+    END
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
-    ${app_inst}=  Create App Instance  region=${region}  #cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  developer_name=${developer_name}  cluster_instance_developer_name=${developer_name}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  default_flavor_name=${cluster_flavor_name}  allow_serverless=${allow_serverless}
+    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}  dedicated_ip=${dedicatedip}
     Sleep  10 seconds  # wait for app to fully start
 
     log to console  ${app_inst}
     ${token}=  Login
 
     # without containerid
-    ${stdout_noid}=  Show Logs  region=${region}
+    ${stdout_noid}=  Show Logs  region=${region}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with containerid
-    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}
+    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with timestamps
-    ${stdout_timestamps}=  Show Logs  region=${region}  tail=3  time_stamps=${True}
+    ${stdout_timestamps}=  Show Logs  region=${region}  tail=3  time_stamps=${True}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with tail
-    ${stdout_tail}=  Show Logs  region=${region}  tail=1
+    ${stdout_tail}=  Show Logs  region=${region}  tail=1  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with since
     Sleep  60 
-    TCP Port Should Be Alive  ${app_inst['data']['mapped_ports'][0]['fqdn_prefix']}${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
-    ${stdout_since}=  Show Logs  region=${region}  since=${since}
+    TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
+    ${stdout_since}=  Show Logs  region=${region}  since=${since}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with wrong containerid
-    ${error}=  Run Keyword and Expect Error  *  Show Logs  region=${region}  container_id=notfound
+    ${error}=  Run Keyword and Expect Error  *  Show Logs  region=${region}  container_id=notfound  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
 
@@ -277,16 +285,19 @@ ShowLogs - k8s autocluster shall return logs on CRM
 
     [Tags]  ReservableCluster
 
+    ${random_num}=  Generate Random String  10  0123456789
+    ${cluster_name}=  Set Variable  autocluster${random_num}
+
     Log To Console  Creating App and App Instance
-    ${app}=  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  deployment=kubernetes  developer_org_name=${developer_org_name_automation}
-    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app['data']['key']['name']}  cluster_instance_developer_org_name=MobiledgeX
+    ${app}=  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  deployment=kubernetes  developer_org_name=${developer_org_name_automation}  allow_serverless=${allow_serverless}
+    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX  cleanup_cluster_instance=${cleanup_cluster}
     Sleep  10 seconds  # wait for app to fully start
 
     # without containerid
-    ${stdout_noid}=  Show Logs  region=${region}  cluster_instance_name=autocluster${app['data']['key']['name']}  cluster_instance_developer_org_name=MobiledgeX
+    ${stdout_noid}=  Show Logs  region=${region}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX
 
     # with containerid
-    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  cluster_instance_name=autocluster${app['data']['key']['name']}  cluster_instance_developer_org_name=MobiledgeX
+    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX
 
     Should Contain   ${stdout_id}  all threads started
     Should Contain   ${stdout_noid}  all threads started
@@ -304,4 +315,27 @@ Setup
     #${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
     #${rootlb}=  Convert To Lowercase  ${rootlb}
 
+    ${epoch}=  Get Time  epoch
+    ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+
+    ${cluster_name}=  Set Variable  cluster${epoch}
+
+    IF  '${platform_type}' == 'K8SBareMetal'
+        ${allow_serverless}=  Set Variable  ${True}
+        ${cluster_developer_name}=  Set Variable  MobiledgeX
+        ${cleanup_cluster}=  Set Variable  ${False}
+        ${dedicatedip}=  Set Variable  ${True}
+    ELSE
+        ${allow_serverless}=  Set Variable  ${None}
+        ${cleanup_cluster}=  Set Variable  ${True}
+        ${cluster_developer_name}=  Get Default Developer Name
+        ${dedictedip}=  Set Variable  ${None}
+    END
+    Set Suite Variable  ${platform_type}
+    Set Suite Variable  ${allow_serverless}
+    Set Suite Variable  ${cluster_developer_name}
+    Set Suite Variable  ${cluster_name}
+    Set Suite Variable  ${cleanup_cluster}
+    Set Suite Variable  ${dedicatedip}
+    Set Suite Variable  ${epoch}
     #Set Suite Variable  ${rootlb}

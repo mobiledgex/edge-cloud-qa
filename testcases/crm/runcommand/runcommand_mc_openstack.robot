@@ -37,7 +37,7 @@ RunCommand - k8s shared shall return command result on CRM
     END
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  #command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}  allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  default_flavor_name=${cluster_flavor_name}  allow_serverless=${allow_serverless}
     ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}  #cluster_instance_name=${cluster_name_default}  developer_name=${developer_name}  cluster_instance_developer_name=${developer_name}
 
     log to console  ${app_inst}
@@ -67,7 +67,7 @@ RunCommand - k8s dedicated shall return command result on CRM
     END
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}  allow_serverless=${allow_serverless}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  default_flavor_name=${cluster_flavor_name}  allow_serverless=${allow_serverless}
     ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}  #cluster_instance_name=${cluster_name_default}  developer_name=${developer_name}  cluster_instance_developer_name=${developer_name}
 
     log to console  ${app_inst}
