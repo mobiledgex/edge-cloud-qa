@@ -23,7 +23,7 @@ class AppInstance(MexOperation):
         self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
         self.root_url = root_url
 
-    def _build(self, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, real_cluster_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, powerstate=None, configs_kind=None, configs_config=None, use_defaults=True, include_fields=False):
+    def _build(self, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, real_cluster_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, powerstate=None, configs_kind=None, configs_config=None, dedicated_ip=None, use_defaults=True, include_fields=False):
 
         _fields_list = []
         _power_state_field_number = '31'
@@ -142,6 +142,8 @@ class AppInstance(MexOperation):
         if powerstate is not None:
             appinst_dict['power_state'] = power_state
             _fields_list.append(_power_state_field_number)
+        if dedicated_ip is not None:
+            appinst_dict['dedicated_ip'] = dedicated_ip
 
         if configs_kind:
             configs_dict['kind'] = configs_kind
@@ -231,8 +233,8 @@ class AppInstance(MexOperation):
 
         return client_dict
 
-    def create_app_instance(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, real_cluster_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=600):
-        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, real_cluster_name=real_cluster_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, crm_override=crm_override, use_defaults=use_defaults)
+    def create_app_instance(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, real_cluster_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, dedicated_ip=None, cleanup_cluster_instance=True, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=600):
+        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, real_cluster_name=real_cluster_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, crm_override=crm_override, dedicated_ip=dedicated_ip, use_defaults=use_defaults)
         msg_dict = {'appinst': msg}
 
         thread_name = None
@@ -251,7 +253,7 @@ class AppInstance(MexOperation):
             cluster_org = None
 
         if auto_delete and 'key' in msg:
-            if 'cluster_key' in msg['key']['cluster_inst_key']:
+            if cleanup_cluster_instance and 'cluster_key' in msg['key']['cluster_inst_key']:
                 if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster') or 'real_cluster_name' in msg:
                     # msg['key']['cluster_inst_key']['cluster_key']['name'] = msg['key']['cluster_inst_key']['cluster_key']['name'].lower()
                     clusterinst = ClusterInstance(root_url=self.root_url)
