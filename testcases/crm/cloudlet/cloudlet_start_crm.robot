@@ -63,6 +63,9 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Buckhorn
         Add Cloudlet Resource Mapping  region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}  operator_org_name=${operator_name_openstack_buckhorn}  mapping=gpu=${gpu_resource_name}
         Add Resource Tag  region=US  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_buckhorn}  tags=pci=t4gpu:1
 
+        Create Cluster Instance  region=US  cluster_name=porttestcluster  cloudlet_name=${cloudlet_name_openstack_buckhorn}  operator_org_name=${operator_name_openstack_buckhorn}  deployment=kubernetes  flavor_name=${flavor_name_automation}  ip_access=IpAccessDedicated
+        Create App Instance  region=US  app_name=automation-sdk-porttest  app_version=1.0  developer_org_name=${developer_org_name_automation}  cluster_instance_name=porttestcluster  cloudlet_name=${cloudlet_name_openstack_buckhorn}  operator_org_name=${operator_name_openstack_buckhorn}  flavor_name=${flavor_name_automation}
+
 # ECQ-1613
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Beacon 
         [Documentation]  
@@ -145,6 +148,7 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Buckhorn
 
         Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}
         Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}
+        Delete All Auto Provisioning Policies  region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}
 
         Delete Cloudlet  region=US  token=${token}  operator_org_name=${operator_name_openstack_buckhorn}   cloudlet_name=${cloudlet_name_openstack_buckhorn}  use_defaults=${False}
 
@@ -251,5 +255,3 @@ Cleanup Clusters and Apps
   
    Run Keyword and Ignore Error  Delete All App Instances      region=${region}  cloudlet_name=${cloudlet_name}  crm_override=${crm_override}
    Run Keyword and Ignore Error  Delete All Cluster Instances  region=${region}  cloudlet_name=${cloudlet_name}  crm_override=${crm_override}
-
-
