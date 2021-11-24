@@ -39,10 +39,10 @@ RunDebug - developer viewer does not have permission to use command to return de
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
 
-      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd 
+      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd 
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
-      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
+      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack flavor list  node_type=shepherd
       Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
@@ -59,10 +59,10 @@ RunDebug - developer manager does not have permission to use command to return d
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
 
-      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd
+      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
-      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
+      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack flavor list  node_type=shepherd
       Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
@@ -79,10 +79,10 @@ RunDebug - developer contributor does not have permission to use command to retu
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
 
-      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd
+      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
-      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
+      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack flavor list  node_type=shepherd
       Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
@@ -99,7 +99,7 @@ RunDebug - mexadmin has permission to use command to return device information f
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${supertoken}
 
-      ${node}=  RunDebug  token=${supertoken}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  #node_type=shepherd
+      ${node}=  RunDebug  token=${supertoken}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  #node_type=shepherd
 
       ${type}=  Set Variable  ${node}[0][data][node][type]
       ${type2}=  Set Variable  ${node}[-1][data][node][type]
@@ -124,10 +124,10 @@ RunDebug - operator viewer does not have permission to use command to return dev
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
-      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd
+      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
-      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
+      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack flavor list  node_type=shepherd
       Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
@@ -144,10 +144,10 @@ RunDebug - operator manager does not have permission to use command to return de
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
 
-      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd
+      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
-      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
+      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack flavor list  node_type=shepherd
       Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
@@ -164,10 +164,10 @@ RunDebug - operator contributor does not have permission to use command to retur
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
 
-      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd
+      ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
-      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
+      ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=oscmd  args=openstack flavor list  node_type=shepherd
       Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
@@ -184,7 +184,7 @@ RunDebug - mexadmin has permission to use command to return device information f
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${supertoken}
 
-      ${node}=  RunDebug  token=${supertoken}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  #node_type=shepherd
+      ${node}=  RunDebug  token=${supertoken}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  #node_type=shepherd
 
       ${type}=  Set Variable  ${node}[0][data][node][type]
       ${type2}=  Set Variable  ${node}[-1][data][node][type]
