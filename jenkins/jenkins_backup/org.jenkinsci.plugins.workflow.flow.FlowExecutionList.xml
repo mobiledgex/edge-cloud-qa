@@ -2,14 +2,14 @@
 <list>
   <flow-owner plugin="workflow-job@2.42">
     <job>runEdgecloud</job>
-    <id>1145</id>
+    <id>1146</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runCrmTests</job>
-    <id>794</id>
+    <id>795</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runCrmOpenstackSharedTests</job>
-    <id>610</id>
+    <id>614</id>
   </flow-owner>
 </list>
