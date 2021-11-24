@@ -550,6 +550,7 @@ def exec_testcase(z, t):
     if tc_type == 'robot':
         robot_file = find(tc, os.environ['WORKSPACE'])
         xml_output = file_output + '.xml'
+        report_output = file_output + '.html'
         var_cmd = ''
         variable_file = ''
         var_override_cmd = ''
@@ -599,9 +600,9 @@ def exec_testcase(z, t):
             logger.debug(f'my_env={my_env}')
 
         if robot_tcname:
-            exec_cmd = f'export PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} {var_override_cmd} --outputdir /tmp --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
+            exec_cmd = f'export PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} {var_override_cmd} --outputdir /tmp --report {report_output} --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
         else:
-            exec_cmd = f'export PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} {var_override_cmd} --outputdir /tmp --output {xml_output} --log {file_output} {robot_file}'
+            exec_cmd = f'export PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} {var_override_cmd} --outputdir /tmp --report {report_output} --output {xml_output} --log {file_output} {robot_file}'
         # file_output = '/tmp/log.html'
         file_extension = '.html'
     elif tc_type == 'python':
