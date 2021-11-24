@@ -190,7 +190,9 @@ pipeline{
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
                     }
-                    parallel builds
+                    catchError {
+                        parallel builds
+                    }
                 }
             }
             post {
