@@ -8,6 +8,7 @@ Library  Process
 Library  OperatingSystem
 Library  Collections
 Library  String
+Library  DateTime
 
 #Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -688,11 +689,13 @@ Get Output Type3
     RunDebug  cloudlet_name=${cloudlet_name_crm}  command=get-mem-profile  node_type=shepherd  timeout=${time}
     ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=get-mem-profile  node_type=shepherd  timeout=${time}
     ${memtype}=  Set Variable  ${node[0]['data']['output']}
-    Create File  /tmp/output.base64  ${memtype}
-    Run Process  cat /tmp/output.base64 | base64 --decode  stdout=/tmp/mem.pprof  shell=yes
+    ${time}=  Get Current Date  result_format=epoch
+    Create File  /tmp/output${time}.base64  ${memtype}
+    Run Process  cat /tmp/output${time}.base64 | base64 --decode  stdout=/tmp/mem.pprof  shell=yes
+    Remove File  /tmp/output${time}.base64
     ${results}=  Run Process  /usr/local/go/bin/go  tool  pprof  --top  /tmp/mem.pprof  shell=yes
     Log  stdout=${results.stdout} stderr=${results.stderr}
-    Create File  /tmp/top.file  ${results.stdout}
+    #Create File  /tmp/top.file  ${results.stdout}
     Should Contain  ${memtype}  ${mem_prof_64base}
 #    Should Contain  ${results.stdout}  ${go_top_kb}
     Should Contain  ${results.stdout}  ${go_top_flat}
@@ -704,11 +707,13 @@ Get Zero Output Type3
     RunDebug  cloudlet_name=${cloudlet_name_crm}  command=get-mem-profile  node_type=shepherd  timeout=${time}
     ${node}=  RunDebug  cloudlet_name=${cloudlet_name_crm}  command=get-mem-profile  node_type=shepherd  timeout=${time}
     ${memtype}=  Set Variable  ${node}[0][data][output]
-    Create File  /tmp/output.base64  ${memtype}
-    Run Process  cat /tmp/output.base64 | base64 --decode  stdout=/tmp/mem.pprof  shell=yes
+    ${time}=  Get Current Date  result_format=epoch
+    Create File  /tmp/output${time}.base64  ${memtype}
+    Run Process  cat /tmp/output${time}.base64 | base64 --decode  stdout=/tmp/mem.pprof  shell=yes
+    Remove File  /tmp/output${time}.base64
     ${results}=  Run Process  /usr/local/go/bin/go  tool  pprof  --top  /tmp/mem.pprof  shell=yes
     Log  stdout=${results.stdout} stderr=${results.stderr}
-    Create File  /tmp/top.file  ${results.stdout}
+    #Create File  /tmp/top.file  ${results.stdout}
     Should Contain  ${memtype}  ${mem_prof_64base}
 #    Should Contain  ${results.stdout}  ${go_top_kb}
     Should Contain  ${results.stdout}  ${go_top_flat}
