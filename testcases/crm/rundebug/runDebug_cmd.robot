@@ -691,9 +691,10 @@ Get Output Type3
     ${memtype}=  Set Variable  ${node[0]['data']['output']}
     ${time}=  Get Current Date  result_format=epoch
     Create File  /tmp/output${time}.base64  ${memtype}
-    Run Process  cat /tmp/output${time}.base64 | base64 --decode  stdout=/tmp/mem.pprof  shell=yes
+    Run Process  cat /tmp/output${time}.base64 | base64 --decode  stdout=/tmp/mem${time}.pprof  shell=yes
     Remove File  /tmp/output${time}.base64
-    ${results}=  Run Process  /usr/local/go/bin/go  tool  pprof  --top  /tmp/mem.pprof  shell=yes
+    ${results}=  Run Process  /usr/local/go/bin/go  tool  pprof  --top  /tmp/mem${time}.pprof  shell=yes
+    Remove File  /tmp/mem${time}.pprof
     Log  stdout=${results.stdout} stderr=${results.stderr}
     #Create File  /tmp/top.file  ${results.stdout}
     Should Contain  ${memtype}  ${mem_prof_64base}
@@ -709,9 +710,10 @@ Get Zero Output Type3
     ${memtype}=  Set Variable  ${node}[0][data][output]
     ${time}=  Get Current Date  result_format=epoch
     Create File  /tmp/output${time}.base64  ${memtype}
-    Run Process  cat /tmp/output${time}.base64 | base64 --decode  stdout=/tmp/mem.pprof  shell=yes
+    Run Process  cat /tmp/output${time}.base64 | base64 --decode  stdout=/tmp/mem${time}.pprof  shell=yes
     Remove File  /tmp/output${time}.base64
-    ${results}=  Run Process  /usr/local/go/bin/go  tool  pprof  --top  /tmp/mem.pprof  shell=yes
+    ${results}=  Run Process  /usr/local/go/bin/go  tool  pprof  --top  /tmp/mem${time}.pprof  shell=yes
+    Remove File  /tmp/mem${time}.pprof
     Log  stdout=${results.stdout} stderr=${results.stderr}
     #Create File  /tmp/top.file  ${results.stdout}
     Should Contain  ${memtype}  ${mem_prof_64base}
