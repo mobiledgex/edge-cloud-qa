@@ -49,7 +49,7 @@ class AppInstance(MexOperation):
             if not cluster_instance_name:
                 cluster_instance_name = shared_variables.cluster_name_default
             if not cluster_instance_developer_org_name:
-                if cluster_instance_name.startswith('autocluster'):
+                if cluster_instance_name.startswith('autocluster') or shared_variables.platform_type == 'K8SBareMetal':
                     cluster_instance_developer_org_name = 'MobiledgeX'
                 else:
                     cluster_instance_developer_org_name = developer_org_name
@@ -253,7 +253,7 @@ class AppInstance(MexOperation):
             cluster_org = None
 
         if auto_delete and 'key' in msg:
-            if cleanup_cluster_instance and 'cluster_key' in msg['key']['cluster_inst_key']:
+            if cleanup_cluster_instance and shared_variables.platform_type != 'K8SBareMetal' and 'cluster_key' in msg['key']['cluster_inst_key']:
                 if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster') or 'real_cluster_name' in msg:
                     # msg['key']['cluster_inst_key']['cluster_key']['name'] = msg['key']['cluster_inst_key']['cluster_key']['name'].lower()
                     clusterinst = ClusterInstance(root_url=self.root_url)
