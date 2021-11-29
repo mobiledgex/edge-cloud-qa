@@ -265,8 +265,8 @@ pipeline{
 
         stage(&apos;Chef Deploy&apos;) {
             steps {
-                dir(&apos;/home/jenkins/workspace/upgradeEdgecloud/go/src/github.com/mobiledgex/edge-cloud-infra/chef/policyfiles&apos;) {
-                    sh &quot;echo \&quot;override[&apos;qa&apos;][&apos;edgeCloudVersion&apos;] = &apos;&quot; + dateValue + &quot;&apos;\&quot; &gt;&gt; docker_crm.rb &amp;&amp; rm docker_crm.lock.json &amp;&amp; chef install docker_crm.rb &quot;
+                dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra/chef/policyfiles&apos;) {
+                    sh &quot;echo \&quot;override[&apos;qa&apos;][&apos;edgeCloudVersion&apos;] = &apos;&quot; + dateValue + &quot;&apos;\&quot; &gt;&gt; docker_crm.rb &amp;&amp; rm -f docker_crm.lock.json &amp;&amp; chef install docker_crm.rb &quot;
                 }
             }
             post {
@@ -640,7 +640,8 @@ pipeline{
                                 string(name: &apos;DMERestCert&apos;, value: dmerestcert),
                                 string(name: &apos;Platform&apos;, value: &apos;Anthos&apos;),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
+                                //string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
+                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolAnthos),
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
                     }
@@ -656,6 +657,36 @@ pipeline{
                     }
                 }
               
+                stage(&apos;Vsphere Tests&apos;) {
+                    steps {
+                        slack_good(&apos;Starting Vshpere tests&apos;)
+                        script {
+                            build job: &apos;runCrmTestcases&apos;, parameters: [
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;DME&apos;, value: dme),
+                                string(name: &apos;DMERest&apos;, value: dmerest),
+                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
+                                string(name: &apos;Platform&apos;, value: &apos;Vsphere&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolVsphere),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                        }
+                    }
+                    post {
+                        failure { 
+                            echo &quot;run Vsphere tests failed&quot;
+                            slack_fail(&apos;Finished Vsphere tests with failure&apos;)
+                        }
+                        success { 
+                            echo &quot;run Vsphere tests passed&quot;
+                            slack_fail(&apos;Finished Vsphere tests with pass&apos;)
+                        }
+                    }
+                }
+
             }
         }
     }
