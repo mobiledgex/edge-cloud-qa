@@ -6,12 +6,12 @@
       <jobProperties/>
       <triggers/>
       <parameters>
+        <string>CRMPool</string>
         <string>Controller</string>
         <string>Cycle</string>
         <string>OpenStackEnv</string>
         <string>DMERest</string>
         <string>Project</string>
-        <string>CRMPoolAnthos</string>
         <string>VariableFile</string>
         <string>TestTarget</string>
         <string>InfluxDB</string>
@@ -94,11 +94,6 @@
           <name>RunFailedOnly</name>
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>CRMPoolAnthos</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
           <choices class="java.util.Arrays$ArrayList">
@@ -110,6 +105,11 @@
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPool</name>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -144,9 +144,11 @@ if(testtarget == &apos;Anthos&apos;) {
     testcase_components1 = testcase_components1.minus(&quot;VMPool&quot;)
     testcase_components1 = testcase_components1.minus(&quot;AutoProvisioning&quot;)
     
-    node_name = &apos;jenkinsGcpSlave2&apos;
+    node_name = &apos;jenkinsSlave1&apos;
+} else if(testtarget == &apos;VSphere&apos;) {
+    node_name = &apos;jenkinsSlave2&apos;
 } else {
-        node_name = &apos;jenkinsGcpSlave1&apos;
+    node_name = &apos;jenkinsGcpSlave1&apos;
 }
 
 pipeline{
@@ -164,7 +166,8 @@ pipeline{
         string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        string(name: &apos;CRMPoolAnthos&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
+        //string(name: &apos;CRMPoolAnthos&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
+        string(name: &apos;CRMPool&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
         choice(name: &apos;TestTarget&apos;, choices: [&apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
@@ -186,7 +189,8 @@ pipeline{
                                 string(name: &apos;Controller&apos;, value: controller), 
                                 string(name: &apos;MasterController&apos;, value: mastercontroller), 
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
+                                //string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
+                                string(name: &apos;CRMPool&apos;, value: params.CRMPool), 
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
                     }
@@ -216,7 +220,8 @@ pipeline{
                                 string(name: &apos;Controller&apos;, value: controller), 
                                 string(name: &apos;MasterController&apos;, value: mastercontroller), 
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
+                                //string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
+                                string(name: &apos;CRMPool&apos;, value: params.CRMPool),
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
                     }
