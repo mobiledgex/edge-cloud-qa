@@ -112,7 +112,7 @@ def main():
     if 'TestTarget' in os.environ:    # will replace Platform
         component = component + ' ,' + os.environ['TestTarget']
         folder = os.environ['TestTarget'].lower()
-        crm_pool_name = crm_pool_name + os.environ['TestTarget']
+    #    crm_pool_name = crm_pool_name + os.environ['TestTarget']
     if 'Folder' in os.environ:
         folder = os.environ['Folder']
 
