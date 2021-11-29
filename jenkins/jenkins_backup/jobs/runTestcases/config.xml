@@ -136,17 +136,15 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>MC</string>
-              <string>Controller</string>
-              <string>DME</string>
-              <string>SDK</string>
-              <string>Openstack</string>
-              <string>VCD</string>
-              <string>Vshpere</string>
-              <string>Anthos</string>
-            </a>
+          <choices>
+            <string>MC</string>
+            <string>Controller</string>
+            <string>DME</string>
+            <string>SDK</string>
+            <string>Openstack</string>
+            <string>VCD</string>
+            <string>Vshpere</string>
+            <string>Anthos</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -162,6 +160,10 @@
         <hudson.model.StringParameterDefinition>
           <name>TestTimeout</name>
           <defaultValue>60m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPool</name>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
