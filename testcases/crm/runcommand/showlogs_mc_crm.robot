@@ -318,7 +318,7 @@ Setup
         ${allow_serverless}=  Set Variable  ${None}
         ${cleanup_cluster}=  Set Variable  ${True}
         ${cluster_developer_name}=  Get Default Developer Name
-        ${dedictedip}=  Set Variable  ${None}
+        ${dedicatedip}=  Set Variable  ${None}
     END
     Set Suite Variable  ${platform_type}
     Set Suite Variable  ${allow_serverless}
