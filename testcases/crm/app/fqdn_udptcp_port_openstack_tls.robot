@@ -34,15 +34,15 @@ ${test_timeout_crm}  15 min
 # ECQ-2252
 User shall be able to access TCP and HTTP TLS ports with cluster=k8s/shared and app=k8s/lb
    [Documentation]
-   ...  deploy k8s/shared clusterinst 
-   ...  deploy k8s/lb app with 2 TCP TLS and 1 HTTP TLS port and UDP non-TLS port
-   ...  verify all ports are accessible via fqdn
+   ...  - deploy k8s/shared clusterinst 
+   ...  - deploy k8s/lb app with 2 TCP TLS and 1 HTTP TLS port and UDP non-TLS port
+   ...  - verify all ports are accessible via fqdn
 
    #EDGECLOUD-2796 unable to terminate https tls connections
 
    IF  '${platform_type}' != 'K8SBareMetal'
       Log To Console  Creating Cluster Instance
-      Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crmk}  deployment=kubernetes  ip_access=IpAccessShared  number_masters=1  number_nodes=1 
+      Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  number_masters=1  number_nodes=1 
       Log To Console  Done Creating Cluster Instance
    END
 
@@ -261,7 +261,7 @@ Setup
     ${time}=  Get Time  epoch
     Create Flavor  region=${region}  flavor_name=flavor${time}
    
-    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
     Set Suite Variable  ${platform_type}
  
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
