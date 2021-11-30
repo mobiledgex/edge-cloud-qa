@@ -25,6 +25,11 @@
       <signature>staticMethod java.lang.String valueOf char[]</signature>
       <dangerous>false</dangerous>
     </pendingSignature>
+    <pendingSignature>
+      <context/>
+      <signature>method java.lang.String join java.lang.CharSequence java.lang.CharSequence[]</signature>
+      <dangerous>false</dangerous>
+    </pendingSignature>
   </pendingSignatures>
   <pendingClasspathEntries/>
 </scriptApproval>
