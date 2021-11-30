@@ -60,33 +60,8 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>Controller</name>
-          <defaultValue>mexplat-qa-us.ctrl.mobiledgex.net:55001</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>DME</name>
-          <defaultValue>us-qa.dme.mobiledgex.net:50051</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>DMERest</name>
-          <defaultValue>us-qa.dme.mobiledgex.net:38001</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
           <name>VariableFile</name>
           <defaultValue>automation_variables.py</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>InfluxDB</name>
-          <defaultValue>notset</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>OpenStackEnv</name>
-          <defaultValue>notset</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -99,27 +74,21 @@
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
-          <name>Platform</name>
+          <name>TestTarget</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
-              <string>Controller</string>
-              <string>Openstack</string>
-              <string>VCD</string>
-              <string>Vshpere</string>
-              <string>Anthos</string>
+              <string>MasterController</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>Folder</name>
-          <defaultValue>controller</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
     <script>currentBuild.displayName = cycle
+//slackurl = &apos;https://mobiledgex.slack.com/services/hooks/jenkins-ci/&apos;
+//slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
+//slackchannel = &apos;#qa-automation&apos;
 
 automated_component = &quot;Automated&quot;
 controller_components = [automated_component, &quot;MasterController&quot;]
@@ -138,31 +107,39 @@ testcase_components = [
 pipeline{
     agent { label &apos;jenkinsSlave1&apos; }
     parameters {
+        string(name: &apos;SlaveNode&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
         string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
         string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
         string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
-        string(name: &apos;Controller&apos;, defaultValue: &apos;mexplat-qa-us.ctrl.mobiledgex.net:55001&apos;)
-        string(name: &apos;DME&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:50051&apos;)
-        string(name: &apos;DMERest&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:38001&apos;)
         string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
-        string(name: &apos;InfluxDB&apos;, defaultValue: &apos;notset&apos;)
-        string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        choice(name: &apos;Platform&apos;, choices: [&apos;MC&apos;, &apos;Controller&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
-        //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
+        choice(name: &apos;TestTarget&apos;, choices: [&apos;MasterController&apos;], description: &apos;&apos;)
+        string(name: &apos;TestTimeout&apos;, defaultValue: &apos;2m&apos;)
     }
 
     stages {
         stage(&quot;execute tests&quot;) {
             steps {
+                //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting MC tests&quot;
+
                 script {
                     builds = [:]
                     testcase_components.eachWithIndex { value, index-&gt;
                         echo &quot;${value}&quot;
                         builds[&quot;${value[-1]}&quot;] = {
-                            build job: &apos;runTestcases&apos;, parameters: [string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), string(name: &apos;Project&apos;, value: project), string(name: &apos;Cycle&apos;, value: cycle), string(name: &apos;Controller&apos;, value: controller), string(name: &apos;MasterController&apos;, value: mastercontroller), string(name: &apos;VariableFile&apos;, value: variablefile), booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: slavenode), 
+                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller), 
+                                string(name: &apos;VariableFile&apos;, value: variablefile),
+                                string(name: &apos;TestTarget&apos;, value: testtarget),
+                                string(name: &apos;TestTimeout&apos;, value: testtimeout),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
                     }
                     parallel builds

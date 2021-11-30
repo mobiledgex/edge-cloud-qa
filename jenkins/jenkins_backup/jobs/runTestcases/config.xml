@@ -8,7 +8,7 @@
       <parameters>
         <string>NumberParallelExecutions</string>
         <string>SlaveNode</string>
-        <string>CRMPoolVshpere</string>
+        <string>CRMPool</string>
         <string>DMERestCert</string>
         <string>Controller</string>
         <string>Cycle</string>
@@ -16,14 +16,10 @@
         <string>Components</string>
         <string>DMERest</string>
         <string>Project</string>
-        <string>CRMPoolAnthos</string>
-        <string>Area</string>
         <string>VariableFile</string>
-        <string>CRMPoolVCD</string>
         <string>TestTarget</string>
         <string>InfluxDB</string>
         <string>RunFailedOnly</string>
-        <string>CRMPoolOpenstack</string>
         <string>DME</string>
         <string>TestTimeout</string>
         <string>MasterController</string>
@@ -40,7 +36,7 @@
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
         <daysToKeep>-1</daysToKeep>
-        <numToKeep>30</numToKeep>
+        <numToKeep>50</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -119,39 +115,25 @@
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>CRMPoolOpenstack</name>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>CRMPoolVshpere</name>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>CRMPoolVCD</name>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>CRMPoolAnthos</name>
+          <name>CRMPool</name>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices>
-            <string>MC</string>
-            <string>Controller</string>
-            <string>DME</string>
-            <string>SDK</string>
-            <string>Openstack</string>
-            <string>VCD</string>
-            <string>Vshpere</string>
-            <string>Anthos</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>MasterController</string>
+              <string>Controller</string>
+              <string>DME</string>
+              <string>SDK</string>
+              <string>Openstack</string>
+              <string>VCD</string>
+              <string>Vsphere</string>
+              <string>Anthos</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>Area</name>
-          <defaultValue>flavor</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>NumberParallelExecutions</name>
           <defaultValue>1</defaultValue>
@@ -160,10 +142,6 @@
         <hudson.model.StringParameterDefinition>
           <name>TestTimeout</name>
           <defaultValue>60m</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>CRMPool</name>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
