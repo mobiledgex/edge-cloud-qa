@@ -94,27 +94,30 @@
           <name>RunFailedOnly</name>
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPool</name>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>Openstack</string>
               <string>VCD</string>
-              <string>Vshpere</string>
+              <string>Vsphere</string>
               <string>Anthos</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>CRMPool</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
     <script>currentBuild.displayName = cycle
+//slackurl = &apos;https://mobiledgex.slack.com/services/hooks/jenkins-ci/&apos;
+//slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
+//slackchannel = &apos;#qa-automation&apos;
 
 automated_component = &quot;Automated&quot;
 crm_components = [automated_component, &quot;CRM&quot;]
@@ -126,7 +129,7 @@ testcase_components1 = [
     crm_components + &quot;ShowLogs&quot;,
     crm_components + &quot;RunDebug&quot;,
     crm_components + &quot;AccessCloudlet&quot;,
-    crm_components + &quot;AlertReciever&quot;,
+    crm_components + &quot;AlertReceiver&quot;,
     crm_components + &quot;GPU&quot;,
     crm_components + &quot;VMPool&quot;,
     crm_components + &quot;AutoProvisioning&quot;,
@@ -139,15 +142,32 @@ testcase_components2 = [
 
 node_name = &apos;notset&apos;
 if(testtarget == &apos;Anthos&apos;) {
-    testcase_components1 = testcase_components1.minus(&quot;ClusterInst&quot;)
-    testcase_components1 = testcase_components1.minus(&quot;GPU&quot;)
-    testcase_components1 = testcase_components1.minus(&quot;VMPool&quot;)
-    testcase_components1 = testcase_components1.minus(&quot;AutoProvisioning&quot;)
+    echo &quot;testtarget is Anthos&quot;
+    testcase_components1 = testcase_components1.minus([crm_components + &quot;ClusterInst&quot;])
+    testcase_components1 = testcase_components1.minus([crm_components + &quot;GPU&quot;])
+    testcase_components1 = testcase_components1.minus([crm_components + &quot;VMPool&quot;])
+    testcase_components1 = testcase_components1.minus([crm_components + &quot;AutoProvisioning&quot;])
     
     node_name = &apos;jenkinsSlave1&apos;
-} else if(testtarget == &apos;VSphere&apos;) {
+} else if(testtarget == &apos;Vsphere&apos;) {
+    echo &quot;testtarget is Vsphere&quot;
+    testcase_components1 = testcase_components1.minus([crm_components + &quot;GPU&quot;])
+    testcase_components1 = testcase_components1.minus([crm_components + &quot;VMPool&quot;])
+    testcase_components1 = testcase_components1.minus([crm_components + &quot;AutoProvisioning&quot;])
+
     node_name = &apos;jenkinsSlave2&apos;
+} else if(testtarget == &apos;VCD&apos;) {
+    echo &quot;testtarget is VCD&quot;
+    testcase_components1 = testcase_components1.minus([crm_components + &quot;GPU&quot;])
+    testcase_components1 = testcase_components1.minus([crm_components + &quot;VMPool&quot;])
+    testcase_components1 = testcase_components1.minus([crm_components + &quot;AutoProvisioning&quot;])
+
+    node_name = &apos;jenkinsGcpSlave2&apos;
+} else if(testtarget == &apos;Openstack&apos;) {
+    echo &quot;testtarget is Openstack&quot;
+    node_name = &apos;jenkinsGcpSlave1&apos;
 } else {
+    echo &quot;testtarget is something else:${testtarget}&quot;
     node_name = &apos;jenkinsGcpSlave1&apos;
 }
 
@@ -168,13 +188,15 @@ pipeline{
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
         //string(name: &apos;CRMPoolAnthos&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
         string(name: &apos;CRMPool&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
-        choice(name: &apos;TestTarget&apos;, choices: [&apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        choice(name: &apos;TestTarget&apos;, choices: [&apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vsphere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
 
     stages {
         stage(&quot;execute tests 1&quot;) {
             steps {
+                //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting ${testtarget} tests&quot;
+
                 script {
                     builds = [:]
                     testcase_components1.eachWithIndex { value, index-&gt;

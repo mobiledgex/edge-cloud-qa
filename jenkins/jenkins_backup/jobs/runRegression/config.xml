@@ -13,10 +13,13 @@
         <string>Project</string>
         <string>CRMPoolAnthos</string>
         <string>VariableFile</string>
+        <string>CRMPoolVCD</string>
+        <string>CRMPoolVsphere</string>
         <string>BuildDate</string>
         <string>Version</string>
         <string>InfluxDB</string>
         <string>RunFailedOnly</string>
+        <string>CRMPoolOpenstack</string>
         <string>DME</string>
         <string>MasterController</string>
         <string>CommitVersion</string>
@@ -82,8 +85,23 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
+          <name>CRMPoolOpenstack</name>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;},{&quot;cloudlet&quot;:&quot;packet-qaregression&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>CRMPoolAnthos</name>
           <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPoolVCD</name>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationDallasCloudlet&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPoolVsphere</name>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;DFWVMW2&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -162,7 +180,10 @@ pipeline{
         string(name: &apos;DME&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:50051&apos;)
         string(name: &apos;DMERest&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:38001&apos;)
         string(name: &apos;DMERestCert&apos;, defaultValue: &apos;&apos;)
+        string(name: &apos;CRMPoolOpenstack&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;},{&quot;cloudlet&quot;:&quot;packet-qaregression&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
         string(name: &apos;CRMPoolAnthos&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
+        string(name: &apos;CRMPoolVCD&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationDallasCloudlet&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
+        string(name: &apos;CRMPoolVsphere&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;DFWVMW2&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
         string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
         string(name: &apos;InfluxDB&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
@@ -524,7 +545,7 @@ pipeline{
                                 string(name: &apos;DME&apos;, value: dme),
                                 string(name: &apos;DMERest&apos;, value: dmerest),
                                 string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;Platform&apos;, value: &apos;SDK&apos;),
+                                string(name: &apos;TestTarget&apos;, value: &apos;SDK&apos;),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
@@ -532,11 +553,11 @@ pipeline{
                     post {
                         failure { 
                             echo &quot;run SDK tests failed&quot;
-                            slack_fail(&apos;Finished SDK tests with failure&apos;)
+                            slack_fail(&apos;Finished SDK tests with failures&apos;)
                         }
                         success { 
                             echo &quot;run SDK tests passed&quot;
-                            slack_fail(&apos;Finished SDK tests with pass&apos;)
+                            slack_good(&apos;Finished SDK tests with pass&apos;)
                         }
                     }
                 }
@@ -552,7 +573,7 @@ pipeline{
                                 string(name: &apos;DME&apos;, value: dme),
                                 string(name: &apos;DMERest&apos;, value: dmerest),
                                 string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;Platform&apos;, value: &apos;DME&apos;),
+                                string(name: &apos;TestTarget&apos;, value: &apos;DME&apos;),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
@@ -560,17 +581,17 @@ pipeline{
                     post {
                         failure { 
                             echo &quot;run DNE tests failed&quot;
-                            slack_fail(&apos;Finished DME tests with failure&apos;)
+                            slack_fail(&apos;Finished DME tests with failures&apos;)
                         }
                         success { 
                             echo &quot;run DME tests passed&quot;
-                            slack_fail(&apos;Finished DME tests with pass&apos;)
+                            slack_good(&apos;Finished DME tests with pass&apos;)
                         }
                     }
                 }
                 stage(&apos;Controller Tests&apos;) {
                     steps {
-                        slack_good(&apos;Starting Controller tests&apos;)
+                        slack_good(&apos;Starting Controller Tests&apos;)
                         script {
                             build job: &apos;runControllerTestcases&apos;, parameters: [
                                 string(name: &apos;Project&apos;, value: project), 
@@ -580,7 +601,7 @@ pipeline{
                                 string(name: &apos;DME&apos;, value: dme),
                                 string(name: &apos;DMERest&apos;, value: dmerest),
                                 string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;Platform&apos;, value: &apos;Controller&apos;),
+                                string(name: &apos;TestTarget&apos;, value: &apos;Controller&apos;),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
@@ -588,11 +609,11 @@ pipeline{
                     post {
                         failure { 
                             echo &quot;run Controller tests failed&quot;
-                            slack_fail(&apos;Finished Controller tests with failure&apos;)
+                            slack_fail(&apos;Finished Controller tests with failures&apos;)
                         }
                         success { 
                             echo &quot;run Controller tests passed&quot;
-                            slack_fail(&apos;Finished Controller tests with pass&apos;)
+                            slack_good(&apos;Finished Controller tests with pass&apos;)
                         }
                     }
                 }
@@ -609,7 +630,7 @@ pipeline{
                                 string(name: &apos;DME&apos;, value: dme),
                                 string(name: &apos;DMERest&apos;, value: dmerest),
                                 string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;Platform&apos;, value: &apos;MC&apos;),
+                                string(name: &apos;TestTarget&apos;, value: &apos;MasterController&apos;),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                         }
@@ -617,11 +638,11 @@ pipeline{
                     post {
                         failure { 
                             echo &quot;run MasterController tests failed&quot;
-                            slack_fail(&apos;Finished MasterController tests with failure&apos;)
+                            slack_fail(&apos;Finished MasterController tests with failures&apos;)
                         }
                         success { 
                             echo &quot;run MasterController tests passed&quot;
-                            slack_fail(&apos;Finished MasterController tests with pass&apos;)
+                            slack_good(&apos;Finished MasterController tests with pass&apos;)
                         }
                     }
                 }
@@ -638,7 +659,7 @@ pipeline{
                                 string(name: &apos;DME&apos;, value: dme),
                                 string(name: &apos;DMERest&apos;, value: dmerest),
                                 string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;Platform&apos;, value: &apos;Anthos&apos;),
+                                string(name: &apos;TestTarget&apos;, value: &apos;Anthos&apos;),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 //string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
                                 string(name: &apos;CRMPool&apos;, value: params.CRMPoolAnthos),
@@ -648,18 +669,18 @@ pipeline{
                     post {
                         failure { 
                             echo &quot;run Anthos tests failed&quot;
-                            slack_fail(&apos;Finished Anthos tests with failure&apos;)
+                            slack_fail(&apos;Finished Anthos tests with failures&apos;)
                         }
                         success { 
                             echo &quot;run Anthos tests passed&quot;
-                            slack_fail(&apos;Finished Anthos tests with pass&apos;)
+                            slack_good(&apos;Finished Anthos tests with pass&apos;)
                         }
                     }
                 }
               
                 stage(&apos;Vsphere Tests&apos;) {
                     steps {
-                        slack_good(&apos;Starting Vshpere tests&apos;)
+                        slack_good(&apos;Starting Vsphere tests&apos;)
                         script {
                             build job: &apos;runCrmTestcases&apos;, parameters: [
                                 string(name: &apos;Project&apos;, value: project), 
@@ -669,7 +690,7 @@ pipeline{
                                 string(name: &apos;DME&apos;, value: dme),
                                 string(name: &apos;DMERest&apos;, value: dmerest),
                                 string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;Platform&apos;, value: &apos;Vsphere&apos;),
+                                string(name: &apos;TestTarget&apos;, value: &apos;Vsphere&apos;),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 string(name: &apos;CRMPool&apos;, value: params.CRMPoolVsphere),
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
@@ -678,11 +699,69 @@ pipeline{
                     post {
                         failure { 
                             echo &quot;run Vsphere tests failed&quot;
-                            slack_fail(&apos;Finished Vsphere tests with failure&apos;)
+                            slack_fail(&apos;Finished Vsphere tests with failures&apos;)
                         }
                         success { 
                             echo &quot;run Vsphere tests passed&quot;
-                            slack_fail(&apos;Finished Vsphere tests with pass&apos;)
+                            slack_good(&apos;Finished Vsphere tests with pass&apos;)
+                        }
+                    }
+                }
+                stage(&apos;VCD Tests&apos;) {
+                    steps {
+                        slack_good(&apos;Starting VCD tests&apos;)
+                        script {
+                            build job: &apos;runCrmTestcases&apos;, parameters: [
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;DME&apos;, value: dme),
+                                string(name: &apos;DMERest&apos;, value: dmerest),
+                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
+                                string(name: &apos;TestTarget&apos;, value: &apos;VCD&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolVCD),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                        }
+                    }
+                    post {
+                        failure { 
+                            echo &quot;run VCD tests failed&quot;
+                            slack_fail(&apos;Finished VCD tests with failures&apos;)
+                        }
+                        success { 
+                            echo &quot;run VCD tests passed&quot;
+                            slack_good(&apos;Finished VCD tests with pass&apos;)
+                        }
+                    }
+                }
+                stage(&apos;Openstack Tests&apos;) {
+                    steps {
+                        slack_good(&apos;Starting Openstack tests&apos;)
+                        script {
+                            build job: &apos;runCrmTestcases&apos;, parameters: [
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;DME&apos;, value: dme),
+                                string(name: &apos;DMERest&apos;, value: dmerest),
+                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
+                                string(name: &apos;TestTarget&apos;, value: &apos;Openstack&apos;),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolOpenstack),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                        }
+                    }
+                    post {
+                        failure { 
+                            echo &quot;run Openstack tests failed&quot;
+                            slack_fail(&apos;Finished Openstack tests with failures&apos;)
+                        }
+                        success { 
+                            echo &quot;run Openstack tests passed&quot;
+                            slack_good(&apos;Finished Openstack tests with pass&apos;)
                         }
                     }
                 }
