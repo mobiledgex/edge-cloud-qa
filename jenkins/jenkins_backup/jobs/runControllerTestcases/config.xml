@@ -6,17 +6,15 @@
       <jobProperties/>
       <triggers/>
       <parameters>
-        <string>Platform</string>
-        <string>Controller</string>
-        <string>Cycle</string>
-        <string>OpenStackEnv</string>
         <string>Components</string>
-        <string>DMERest</string>
         <string>Project</string>
+        <string>SlaveNode</string>
         <string>VariableFile</string>
-        <string>InfluxDB</string>
+        <string>TestTarget</string>
         <string>RunFailedOnly</string>
-        <string>DME</string>
+        <string>Controller</string>
+        <string>TestTimeout</string>
+        <string>Cycle</string>
         <string>MasterController</string>
         <string>CommitVersion</string>
       </parameters>
@@ -40,6 +38,11 @@
     </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNode</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>Components</name>
           <trim>false</trim>
@@ -80,12 +83,15 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>Controller</string>
-            </a>
+          <choices>
+            <string>Controller</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeout</name>
+          <defaultValue>2m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
