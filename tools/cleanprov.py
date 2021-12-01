@@ -17,7 +17,7 @@ logging.getLogger('mex_rest').setLevel(loglevel)
 logging.getLogger('webservice').setLevel(loglevel)
 logging.getLogger('mex_master_controller.MexOperation').setLevel(loglevel)
 
-table_list = ['appinst', 'app', 'clusterinst', 'flavor', 'autoscalepolicy', 'autoprovpolicy', 'orgcloudletpool', 'cloudletpool', 'cloudlet', 'org', 'user', 'ratelimitsettings']
+table_list = ['appinst', 'app', 'clusterinst', 'flavor', 'autoscalepolicy', 'autoprovpolicy', 'orgcloudletpool', 'cloudletpool', 'cloudlet', 'billingorg', 'org', 'user', 'ratelimitsettings']
 table_list_str = ','.join(table_list)
 
 region_list = ['US', 'EU']
@@ -153,6 +153,26 @@ def clean_org():
                     crm_override = 1
                     try:
                         mc.delete_org(orgname=name, use_defaults=False, token=mc.super_token)
+                    except Exception as e:
+                        print(f'error deleting {name}. {e}. .continuing to next item')
+                else:
+                    print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
+def clean_billingorg():
+    print('clean billing org')
+    org_list = mc.show_billing_org(token=mc.super_token, use_defaults=False)
+    if len(org_list) == 0:
+        print('nothing to delete')
+    else:
+        for a in org_list:
+            name = a['Name']
+            if in_org_list(a):
+                print(f'keeping {name}')
+            else:
+                if pattern_re.match(name):
+                    print(f'deleting {name}')
+                    try:
+                        mc.delete_billing_org(billing_org_name=name, use_defaults=False, token=mc.super_token)
                     except Exception as e:
                         print(f'error deleting {name}. {e}. .continuing to next item')
                 else:
@@ -436,6 +456,8 @@ for r in region_list:
                clean_autoscalepolicy()
             elif table == 'user':
                clean_user()
+            elif table == 'billingorg':
+               clean_billingorg()
             #elif table == 'org':
             #   clean_org()
             elif table == 'orgcloudletpool':
