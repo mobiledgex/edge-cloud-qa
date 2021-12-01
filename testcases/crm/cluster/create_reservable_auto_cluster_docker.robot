@@ -40,7 +40,7 @@ Add Cloudlet to Auto Provisioning Policy
    [Tags]  ReservableCluster
 
    log to console  Add Cloudlet to Auto Provisioning Policy
-   ${add_cloudlet}=  Add Auto Provisioning Policy Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_dedicated}  policy_name=${policy_name}  developer_org_name=${orgname}  token=${user_token}
+   ${add_cloudlet}=  Add Auto Provisioning Policy Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  policy_name=${policy_name}  developer_org_name=${orgname}  token=${user_token}
 
 Create App, Add Autoprovisioning Policy and Deploy an App Instance
    [Tags]  ReservableCluster
@@ -52,19 +52,19 @@ Create App, Add Autoprovisioning Policy and Deploy an App Instance
 
    log to console  Registering Client and Finding Cloudlet
    Register Client  developer_org_name=${orgname}  app_version=v1
-   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_openstack}
+   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
    sleep  1 minutes
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
 
 #   wait for cluster instance to be ready  region=${region}  cluster_name=reservable0  cloudlet_name=${cloudlet_name_openstack_dedicated}  token=${user_token}
 
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
    Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name}
-   ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    log to console  Deployed Autoprovision App Successfully!
 
    Should Be Equal As Numbers  ${cloudlet.status}  1
@@ -98,7 +98,7 @@ Setup
 
 Cleanup
     delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
-    delete cluster instance  region=${region}  cluster_name=reservable0  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
+    delete cluster instance  region=${region}  cluster_name=reservable0  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${super_token}
     cleanup provisioning
 
 

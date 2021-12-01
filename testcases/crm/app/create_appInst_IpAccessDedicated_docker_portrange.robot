@@ -34,17 +34,17 @@ ${region}=  EU
 # ECQ-2169
 User shall be able to create app with large port range on openstack with docker and access_type=loadbalancer
    [Documentation]
-   ...  deploy app with large port range with docker
-   ...  verify ports are added to security group
+   ...  - deploy app with large port range with docker
+   ...  - verify ports are added to security group
 
    ${cluster_name_default}=  Get Default Cluster Name
    ${app_name_default}=  Get Default App Name
 
    Log To Console  Creating App and App Instance
    Create App  region=${region}  image_path=${docker_image}  access_ports=udp:1-10000,tcp:2000-2999  skip_hc_ports=tcp:2000-2014,tcp:2017-2999  command=${docker_command}  image_type=ImageTypeDocker  access_type=loadbalancer  deployment=docker  #default_flavor_name=${cluster_flavor_name}
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
-   ${server_info_crm}=      Get Server List  name=${cloudlet_name_openstack_dedicated}.${operator_name_openstack}.pf
+   ${server_info_crm}=      Get Server List  name=${cloudlet_name_crm}.${operator_name_crm}.pf
    ${crm_networks}=  Split String  ${server_info_crm[0]['Networks']}  =
    ${crm_ip}=  Fetch From Left  ${crm_networks[1]}  "
 
@@ -81,10 +81,10 @@ User shall be able to create app with large port range on openstack with docker 
 Setup
     Create Flavor  region=${region}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  number_masters=0  number_nodes=0  deployment=docker
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=IpAccessDedicated  number_masters=0  number_nodes=0  deployment=docker
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cluster_name}=  Get Default Cluster Name
