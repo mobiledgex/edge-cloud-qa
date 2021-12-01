@@ -27,13 +27,13 @@ ${password}=  ${mextester06_gmail_password}
 
 
 *** Test Cases ***
-
+# ECQ-2171
 Create docker based reservable cluster instnace
    [Documentation]
    ...  create a dedicated reservabe docker cluster instnace
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
    Log to Console  DONE creating cluster instance
 
 Create Auto Provisioning Policy
@@ -45,7 +45,7 @@ Create Auto Provisioning Policy
 Add Cloudlet to Auto Provisioning Policy
 
    log to console  Add Cloudlet to Auto Provisioning Policy
-   ${add_cloudlet}=  Add Auto Provisioning Policy Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_dedicated}  policy_name=${policy_name}  developer_org_name=${orgname}  token=${user_token}
+   ${add_cloudlet}=  Add Auto Provisioning Policy Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  policy_name=${policy_name}  developer_org_name=${orgname}  token=${user_token}
 
 Create App, Add Autoprovisioning Policy and Deploy an App Instance
 
@@ -58,7 +58,7 @@ Create App, Add Autoprovisioning Policy and Deploy an App Instance
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=TDG
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=autocluster-autoprov  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster-autoprov  token=${user_token}
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
    Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name}
