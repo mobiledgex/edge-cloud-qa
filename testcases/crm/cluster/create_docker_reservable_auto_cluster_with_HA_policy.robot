@@ -33,7 +33,7 @@ Create Auto Provisioning Policy
 
    Log to Console  Create Auto Provisioning Policy
 
-   &{cloudlet1}=  create dictionary  name=${cloudlet_name_openstack_dedicated}  organization=${operator_name_openstack}
+   &{cloudlet1}=  create dictionary  name=${cloudlet_name_crm}  organization=${operator_name_crm}
    @{cloudletlist}=  create list  ${cloudlet1}
 
    ${policy_return}=  Create Auto Provisioning Policy  region=${region}  policy_name=${policy_name}  min_active_instances=1  max_instances=1  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}
@@ -47,15 +47,15 @@ Create App, Add Autoprovisioning Policy and Deploy an App Instance
    log to console  Creating App and App Instance
    create app  region=${region}  app_name=${app_name}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policies=@{policy_list}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
    sleep  1 minutes
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}  #cluster_instance_name=${cluster_name}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}  #cluster_instance_name=${cluster_name}
 
 Delete app instance and verify auto deployment works again
    [Tags]  ReservableCluster
 
     delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
     sleep  1 minutes
-    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}  #cluster_instance_name=${cluster_name}
-    ${appInst}=  Show App Instances  region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}
+    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}  #cluster_instance_name=${cluster_name}
+    ${appInst}=  Show App Instances  region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
     ${reservable_cluster_name}=  Set Variable  ${appInst[0]['data']['real_cluster_name']}
     Set Suite Variable  ${reservable_cluster_name}
 
@@ -90,7 +90,7 @@ Setup
 
 
 Cleanup
-    delete cluster instance  region=${region}  cluster_name=${reservable_cluster_name}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
+    delete cluster instance  region=${region}  cluster_name=${reservable_cluster_name}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${super_token}
 
     cleanup provisioning
 
