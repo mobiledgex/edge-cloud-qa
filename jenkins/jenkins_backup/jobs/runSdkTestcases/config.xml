@@ -6,19 +6,12 @@
       <jobProperties/>
       <triggers/>
       <parameters>
-        <string>DMERestCert</string>
-        <string>Controller</string>
-        <string>Cycle</string>
-        <string>OpenStackEnv</string>
-        <string>DMERest</string>
         <string>Project</string>
-        <string>VariableFile</string>
+        <string>SlaveNode</string>
         <string>TestTarget</string>
-        <string>InfluxDB</string>
         <string>RunFailedOnly</string>
-        <string>DME</string>
         <string>TestTimeout</string>
-        <string>MasterController</string>
+        <string>Cycle</string>
         <string>CommitVersion</string>
       </parameters>
       <options/>
@@ -42,6 +35,11 @@
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
+          <name>SlaveNode</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>Cycle</name>
           <defaultValue>2021-11-05_CirrusR3.1</defaultValue>
           <trim>false</trim>
@@ -62,10 +60,8 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>SDK</string>
-            </a>
+          <choices>
+            <string>SDK</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>

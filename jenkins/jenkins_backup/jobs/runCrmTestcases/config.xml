@@ -114,7 +114,7 @@
     </hudson.model.ParametersDefinitionProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
-    <script>currentBuild.displayName = cycle
+    <script>currentBuild.displayName = cycle + &apos;_&apos; + testtarget
 //slackurl = &apos;https://mobiledgex.slack.com/services/hooks/jenkins-ci/&apos;
 //slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
 //slackchannel = &apos;#qa-automation&apos;
