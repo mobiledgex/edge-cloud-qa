@@ -7,7 +7,7 @@ Library  String
 #Variables       shared_variables.py
 
 Test Setup      Setup
-Test Teardown   Cleanup provisioning
+Test Teardown   Cleanup 
 
 Test Timeout    ${test_timeout_crm} 
 	
@@ -75,3 +75,7 @@ Setup
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
+
+Cleanup
+    Run Keyword and Ignore Error  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    Cleanup Provisioning
