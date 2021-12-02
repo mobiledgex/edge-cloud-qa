@@ -19,13 +19,13 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance mode
    ...  - verify maintenance_state is correct
 
    ${ret1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_crm}     cloudlet_name=${cloudlet_name_crm}     maintenance_state=MaintenanceStart      use_defaults=False
-   Should Be Equal As Integers  ${ret1['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
+   Should Be Equal  ${ret1['data']['maintenance_state']}  UnderMaintenance
 
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_crm}     cloudlet_name=${cloudlet_name_crm}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret2['data']}  maintenance_state  # we dont show 0 vaules
 
    ${ret3}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_crm}     cloudlet_name=${cloudlet_name_crm}     maintenance_state=MaintenanceStartNoFailover      use_defaults=False
-   Should Be Equal As Integers  ${ret3['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
+   Should Be Equal  ${ret3['data']['maintenance_state']}  UnderMaintenance
 
    ${ret4}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_crm}     cloudlet_name=${cloudlet_name_crm}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret4['data']}  maintenance_state  # we dont show 0 vaules
@@ -39,13 +39,13 @@ UpdateCloudlet - shall be able to put openstack vmpool cloudlet in maintenance m
    ...  - verify maintenance_state is correct
 
    ${ret1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}     cloudlet_name=${cloudlet_name_vmpool}     maintenance_state=MaintenanceStart      use_defaults=False
-   Should Be Equal As Integers  ${ret1['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
+   Should Be Equal  ${ret1['data']['maintenance_state']}  UnderMaintenance
 
    ${ret2}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}     cloudlet_name=${cloudlet_name_vmpool}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret2['data']}  maintenance_state  # we dont show 0 vaules
 
    ${ret3}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}     cloudlet_name=${cloudlet_name_vmpool}     maintenance_state=MaintenanceStartNoFailover      use_defaults=False
-   Should Be Equal As Integers  ${ret3['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
+   Should Be Equal  ${ret3['data']['maintenance_state']}  UnderMaintenance 
 
    ${ret4}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}     cloudlet_name=${cloudlet_name_vmpool}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret4['data']}  maintenance_state  # we dont show 0 vaules
@@ -80,13 +80,13 @@ UpdateCloudlet - shall be able to put GCP cloudlet in maintenance mode
    ...  - verify maintenance_state is correct
 
    ${ret1}=  Update Cloudlet  region=${region_gcp}  operator_org_name=${operator_name_gcp}     cloudlet_name=${cloudlet_name_gcp}     maintenance_state=MaintenanceStart      use_defaults=False
-   Should Be Equal As Integers  ${ret1['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
+   Should Be Equal  ${ret1['data']['maintenance_state']}  UnderMaintenance 
 
    ${ret2}=  Update Cloudlet  region=${region_gcp}  operator_org_name=${operator_name_gcp}     cloudlet_name=${cloudlet_name_gcp}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret2['data']}  maintenance_state  # we dont show 0 vaules
 
    ${ret3}=  Update Cloudlet  region=${region_gcp}  operator_org_name=${operator_name_gcp}     cloudlet_name=${cloudlet_name_gcp}     maintenance_state=MaintenanceStartNoFailover      use_defaults=False
-   Should Be Equal As Integers  ${ret3['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
+   Should Be Equal  ${ret3['data']['maintenance_state']}  UnderMaintenance 
 
    ${ret4}=  Update Cloudlet  region=${region_gcp}  operator_org_name=${operator_name_gcp}     cloudlet_name=${cloudlet_name_gcp}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret4['data']}  maintenance_state  # we dont show 0 vaules
@@ -100,13 +100,13 @@ UpdateCloudlet - shall be able to put Azure cloudlet in maintenance mode
    ...  - verify maintenance_state is correct
 
    ${ret1}=  Update Cloudlet  region=${region_azure}  operator_org_name=${operator_name_azure}     cloudlet_name=${cloudlet_name_azure}     maintenance_state=MaintenanceStart      use_defaults=False
-   Should Be Equal As Integers  ${ret1['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
+   Should Be Equal  ${ret1['data']['maintenance_state']}  UnderMaintenance 
 
    ${ret2}=  Update Cloudlet  region=${region_azure}  operator_org_name=${operator_name_azure}     cloudlet_name=${cloudlet_name_azure}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret2['data']}  maintenance_state  # we dont show 0 vaules
 
    ${ret3}=  Update Cloudlet  region=${region_azure}  operator_org_name=${operator_name_azure}     cloudlet_name=${cloudlet_name_azure}     maintenance_state=MaintenanceStartNoFailover      use_defaults=False
-   Should Be Equal As Integers  ${ret3['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
+   Should Be Equal  ${ret3['data']['maintenance_state']}  UnderMaintenance 
 
    ${ret4}=  Update Cloudlet  region=${region_azure}  operator_org_name=${operator_name_azure}     cloudlet_name=${cloudlet_name_azure}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret4['data']}  maintenance_state  # we dont show 0 vaules

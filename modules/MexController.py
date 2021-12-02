@@ -1722,8 +1722,10 @@ class MexController(MexGrpc):
 
         return resp
 
-    def get_cloudlet_platform_type(self, token=None, region=None, operator_org_name=None, cloudlet_name=None):
-        cloudlet = self.show_cloudlets(operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=False)
+    def get_cloudlet_platform_type(self, cloudlet_instance=None, **kwargs):
+        kwargs['use_defaults'] = False
+        cloudlet = self.show_cloudlets(cloudlet_instance, **kwargs)
+
         platform_types = ['Fake', 'Dind', 'Openstack', 'Azure', 'Gcp', 'Edgebox', 'Fakeinfra', 'Vsphere', 'AwsEks', 'VmPool', 'AwsEc2', 'Vcd', 'K8SBareMetal', 'Kind', 'Kindinfra']
 
         shared_variables.platform_type = platform_types[cloudlet[0].platform_type]
@@ -2108,7 +2110,7 @@ class MexController(MexGrpc):
             resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_org_name=app_instance.key.app_key.organization, cloudlet_name=app_instance.key.cluster_inst_key.cloudlet_key.name, operator_org_name=app_instance.key.cluster_inst_key.cloudlet_key.organization, cluster_instance_name=app_instance.key.cluster_inst_key.cluster_key.name, use_defaults=False)
 
             if auto_delete:
-                if resp[0].real_cluster_name:
+                if shared_variables.platform_type != 'K8SBareMetal' and resp[0].real_cluster_name:
                     self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_name=resp[0].real_cluster_name, developer_org_name=resp[0].key.cluster_inst_key.organization, cloudlet_name=resp[0].key.cluster_inst_key.cloudlet_key.name, operator_org_name=resp[0].key.cluster_inst_key.cloudlet_key.organization))
 
                 if del_thread:
