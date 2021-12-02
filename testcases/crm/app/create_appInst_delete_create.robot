@@ -34,6 +34,12 @@ User shall be able to create/delete/create an app instance on CRM
     ...  - create the app instance again
     ...  - verify app instance is created both times
 
+#   log to console  ${app_deleted}
+#   ${app_deleted}=  Set Variable  ${True}
+#   Set Suite Variable  ${app_deleted}  ${True}
+#
+#   log to console  ${app_deleted}
+#   xxxx
     ${epoch_time}=  Get Time  epoch
     ${app_name}=    Catenate  SEPARATOR=  app  ${epoch_time}
 
@@ -44,18 +50,19 @@ User shall be able to create/delete/create an app instance on CRM
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name} 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}   cluster_instance_name=${cluster_name_default}  auto_delete=${False}
-    App Instance Should Exist
+    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}   cluster_instance_name=${cluster_name_default}
 
     #Log To Console  Waiting for k8s pod to be running
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
     # delete the app instance
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
-    App Instance Should Not Exist
+    Set Suite Variable  ${app_deleted}  ${True}
+    App Instance Should Not Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}   cluster_instance_name=${cluster_name_default}
 
     # create the app instance again	
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
-    App Instance Should Exist
+    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}   cluster_instance_name=${cluster_name_default}
 
     #Log To Console  Waiting for k8s pod to be running
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
@@ -74,8 +81,14 @@ Setup
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
+    ${app_deleted}=  Set Variable  ${False}
+    Set Global Variable  ${app_deleted}
     Set Suite Variable  ${rootlb}
 
 Cleanup
-    Run Keyword and Ignore Error  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    log to console  ${app_deleted}
+    IF  ${app_deleted} == ${False}
+        Run Keyword and Ignore Error  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    END
+
     Cleanup Provisioning
