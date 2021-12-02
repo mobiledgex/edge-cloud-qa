@@ -954,11 +954,10 @@ class MexMasterController(MexRest):
 
     def get_cloudlet_platform_type(self, token=None, region=None, operator_org_name=None, cloudlet_name=None):
         cloudlet = self.show_cloudlets(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name)
-        platform_types = {'Fake':'', 'Dind':'', 'Openstack':'', 'Azure':'', 'Gcp':'', 'Edgebox':'', 'Fakeinfra':'', 'Vsphere':'', 'AwsEks':'', 'VmPool':'', 'AwsEc2':'', 'Vcd':'', 'K8SBareMetal':'', 'Kind':'', 'Kindinfra':''}
+        
+        shared_variables.platform_type = cloudlet[0]['data']['platform_type'] 
 
-        shared_variables.platform_type = platform_types[cloudlet[0]['data']['platform_type']]
-
-        return platform_types[cloudlet[0]['data']['platform_type']]
+        return cloudlet[0]['data']['platform_type']
 
     def show_cluster_instances(self, token=None, region=None, cluster_name=None, cloudlet_name=None, developer_org_name=None, json_data=None, use_thread=False, use_defaults=True, sort_field='cluster_name', sort_order='ascending'):
         resp_data = self.cluster_instance.show_cluster_instance(token=token, region=region, cluster_name=cluster_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, json_data=json_data, use_thread=use_thread, use_defaults=use_defaults)
