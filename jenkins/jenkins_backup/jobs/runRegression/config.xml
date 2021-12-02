@@ -532,23 +532,26 @@ pipeline{
         }
         
         stage(&quot;execute tests&quot;) {
+            stage(&apos;Cleanup Existing Regression Provisioning&apos;) {
+                steps{
+                    build job: &apos;cleanupAutomationProvisioning&apos;
+                }
+            }
             parallel {
                 stage(&apos;SDK Tests&apos;) {
                     steps {
                         slack_good(&apos;Starting SDK tests&apos;)
-                        script {
-                            build job: &apos;runSdkTestcases&apos;, parameters: [
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller),
-                                string(name: &apos;DME&apos;, value: dme),
-                                string(name: &apos;DMERest&apos;, value: dmerest),
-                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;TestTarget&apos;, value: &apos;SDK&apos;),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
-                        }
+                        build job: &apos;runSdkTestcases&apos;, parameters: [
+                            string(name: &apos;Project&apos;, value: project), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;Controller&apos;, value: controller), 
+                            string(name: &apos;MasterController&apos;, value: mastercontroller),
+                            string(name: &apos;DME&apos;, value: dme),
+                            string(name: &apos;DMERest&apos;, value: dmerest),
+                            string(name: &apos;DMERestCert&apos;, value: dmerestcert),
+                            string(name: &apos;TestTarget&apos;, value: &apos;SDK&apos;),
+                            string(name: &apos;VariableFile&apos;, value: variablefile), 
+                            booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
                     }
                     post {
                         failure { 
