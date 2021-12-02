@@ -6,7 +6,6 @@
       <jobProperties/>
       <triggers/>
       <parameters>
-        <string>Components</string>
         <string>Project</string>
         <string>SlaveNode</string>
         <string>VariableFile</string>
@@ -41,10 +40,6 @@
         <hudson.model.StringParameterDefinition>
           <name>SlaveNode</name>
           <defaultValue>jenkinsSlave1</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>Components</name>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -83,8 +78,10 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices>
-            <string>Controller</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>Controller</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -133,7 +130,7 @@ pipeline{
     agent { label &apos;jenkinsSlave1&apos; }
     parameters {
         string(name: &apos;SlaveNode&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
-        string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
+        //string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
         string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
         string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)

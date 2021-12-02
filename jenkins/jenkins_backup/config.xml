@@ -272,6 +272,7 @@
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
+        <string>cleanupAutomationProvisioning</string>
         <string>runControllerTestcases</string>
         <string>runCrmTestcases</string>
         <string>runCsharp3</string>
