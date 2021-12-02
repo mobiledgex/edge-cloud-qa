@@ -9,7 +9,7 @@ Library  OperatingSystem
 Library  Process
 
 Test Setup      Setup
-#Test Teardown   Cleanup provisioning
+Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	

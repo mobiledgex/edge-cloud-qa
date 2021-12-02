@@ -517,10 +517,10 @@ AccessCloudlet - Create and access a dedicatedrootlb cluster using command args 
       ${clusterk8sconfigfile}=  Catenate  SEPARATOR=.  ${cluster_name_access_cloudlet}  ${operator_name_crm}  kubeconfig   #cluster-16accesscloudlet.GDDT.kubeconfig
 
 
-      ${cloudnodes}=  Show Cloudlet Info  region=${region}  cloudlet_name=${cloudlet_name}
+      ${cloudnodes}=  Show Cloudlet Info  region=${region}  cloudlet_name=${cloudlet_name_crm}
       Log To Console  \n${cloudnodes}     #need this info to see the return of the node types and names and verify what was seen prior to run
       
-      ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name_access_cloudlet}  ${cloudlet_name}  ${operator_name}  ${mobiledgex_domain}
+      ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name_access_cloudlet}  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
       ${rootlb}=  Convert To Lowercase  ${rootlb}
 
 #${access_command4}=  stty cols 210;docker ps;ls -l;whoami;exit

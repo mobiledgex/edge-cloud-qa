@@ -954,7 +954,7 @@ class MexMasterController(MexRest):
 
     def get_cloudlet_platform_type(self, token=None, region=None, operator_org_name=None, cloudlet_name=None):
         cloudlet = self.show_cloudlets(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name)
-        platform_types = ['Fake', 'Dind', 'Openstack', 'Azure', 'Gcp', 'Edgebox', 'Fakeinfra', 'Vsphere', 'AwsEks', 'VmPool', 'AwsEc2', 'Vcd', 'K8SBareMetal', 'Kind', 'Kindinfra']
+        platform_types = {'Fake':'', 'Dind':'', 'Openstack':'', 'Azure':'', 'Gcp':'', 'Edgebox':'', 'Fakeinfra':'', 'Vsphere':'', 'AwsEks':'', 'VmPool':'', 'AwsEc2':'', 'Vcd':'', 'K8SBareMetal':'', 'Kind':'', 'Kindinfra':''}
 
         shared_variables.platform_type = platform_types[cloudlet[0]['data']['platform_type']]
 
