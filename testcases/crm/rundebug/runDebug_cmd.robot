@@ -70,7 +70,7 @@ ${server_mobiledgex}=  mobiledgex
 ${mcctlcmd}=  mcctl  --addr https://console-qa.mobiledgex.net:443  --skipverify region  RunDebug region\=EU type\=crm cloudlet\=automationDusseldorfCloudlet cmd\=oscmd args\="openstack flavor list" shell=yes
 ${count_flavor_list}=  | ID | Name | RAM | Disk | Ephemeral | VCPUs | Is Public |
 ${count_server_list}=  | ID | Name | Status | Networks | Image | Flavor |
-${time}=  60s
+${time}=  90s
 ${govc_version}=  govc version
 ${govc_host_info}=  govc host.info /packet-DFWVMW2/host/compute-cluster/139.178.87.98   
 ${govccmd}=  govccmd

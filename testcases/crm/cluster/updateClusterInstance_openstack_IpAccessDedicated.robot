@@ -40,6 +40,8 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     [Documentation]
     ...  increase and reduce the number of slave nodes 
 
+    [Teardown]  Cleanup AutoDelete
+
     #EDGECLOUD-3133 - After UpdateClusterInst to increase the number of worker nodes , App Inst is no longer running 
 
     ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
@@ -67,6 +69,7 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     Number Of Worker Nodes Should Be  0
 
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Set Suite Variable  ${app_deleted}  ${True}
 
     Log To Console  Updating Cluster Instance
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=1
@@ -248,6 +251,8 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
 
 *** Keywords ***
 Setup
+    Set Suite Variable  ${app_deleted}  ${False}
+
     ${platform_type}=  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}
     Set Suite Variable  ${platform_type}
 
@@ -257,11 +262,11 @@ Setup
     Set Suite Variable  ${app_name_default}
 
     ${super_token}=  Get Super Token
-    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_dedicated}
+    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
     Set Suite Variable  ${cloudlet_lowercase}
     Set Suite Variable  ${super_token}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
     Set Suite Variable  ${rootlb}
 
@@ -300,4 +305,11 @@ Reboot Master Node
             Run Debug  cloudlet_name=${cloudlet_name_crm}  node_type=crm  command=oscmd  timeout=60s  args=openstack server reboot ${clusterinst['data']['resources']['vms'][1]['name']}
         END
     END
+
+Cleanup AutoDelete
+    IF  ${app_deleted} == ${False}
+        Run Keyword and Ignore Error  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    END
+
+    Cleanup Provisioning
 
