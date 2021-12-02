@@ -34,12 +34,6 @@ User shall be able to create/delete/create an app instance on CRM
     ...  - create the app instance again
     ...  - verify app instance is created both times
 
-#   log to console  ${app_deleted}
-#   ${app_deleted}=  Set Variable  ${True}
-#   Set Suite Variable  ${app_deleted}  ${True}
-#
-#   log to console  ${app_deleted}
-#   xxxx
     ${epoch_time}=  Get Time  epoch
     ${app_name}=    Catenate  SEPARATOR=  app  ${epoch_time}
 
