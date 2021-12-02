@@ -54,6 +54,7 @@ from mex_master_controller.GpuDriver import GpuDriver
 from mex_master_controller.RateLimitSettings import RateLimitSettings
 from mex_master_controller.AlertPolicy import AlertPolicy
 from mex_master_controller.OperatorReporting import OperatorReporting
+from mex_master_controller.Usage import Usage
 
 import shared_variables_mc
 import shared_variables
@@ -224,6 +225,7 @@ class MexMasterController(MexRest):
         self.ratelimitsettings = RateLimitSettings(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.alert_policy = AlertPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)        
         self.operator_reporting = OperatorReporting(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.usage = Usage(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -1189,7 +1191,7 @@ class MexMasterController(MexRest):
 
         return resp_data
 
-    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, timeout=600, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, timeout=900, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
         if developer_org_name is None:
             if self.organization_name:
                 developer_org_name = self.organization_name
@@ -1480,6 +1482,9 @@ class MexMasterController(MexRest):
         """ Sends cloudlet showflavorsfor
         """
         return self.cloudlet.show_flavors_for_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_app_usage(self, token=None, region=None, app_name=None, app_version=None, developer_org_name=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.usage.get_app_usage(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def get_cluster_metrics(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
       return self.cluster_instance.get_cluster_metrics(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
