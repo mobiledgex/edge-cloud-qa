@@ -9,7 +9,7 @@ Library  DateTime
 #Variables       shared_variables.py
 
 Test Setup      Setup
-#Test Teardown   Cleanup provisioning
+Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
