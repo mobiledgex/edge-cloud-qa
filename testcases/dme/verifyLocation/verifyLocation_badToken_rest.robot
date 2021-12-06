@@ -26,7 +26,7 @@ VerifyLocation REST - request with bad token shall return LOC_ERROR_UNAUTHORIZED
       log to console  ${verify_reply}
 
       #Should Be Equal             ${verify_reply['gps_location_status']}  LOC_ERROR_UNAUTHORIZED
-      Should Be Equal             ${verify_reply['gps_location_status']}  LocErrorUnauthorized 
+      Should Be Equal             ${verify_reply['gps_location_status']}  ErrorUnauthorized 
       Should Be Equal As Numbers  ${verify_reply['gps_location_accuracy_km']}  -1
 
 VerifyLocation REST - request with empty token shall return 'verifyloc token required'
