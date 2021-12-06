@@ -6,21 +6,30 @@
       <jobProperties/>
       <triggers/>
       <parameters>
-        <string>DMERestCert</string>
-        <string>Controller</string>
+        <string>SlaveNodeVsphere</string>
+        <string>SlaveNodeAnthos</string>
         <string>OpenStackEnv</string>
         <string>DMERest</string>
-        <string>Project</string>
         <string>CRMPoolAnthos</string>
+        <string>SlaveNodeController</string>
+        <string>Version</string>
+        <string>SlaveNodeScans</string>
+        <string>CRMPoolOpenstack</string>
+        <string>SlaveNodeMasterController</string>
+        <string>DME</string>
+        <string>DMERestCert</string>
+        <string>SlaveNodeDME</string>
+        <string>SlaveNodeSDK</string>
+        <string>Controller</string>
+        <string>Project</string>
+        <string>SlaveNodeOpenstack</string>
         <string>VariableFile</string>
         <string>CRMPoolVCD</string>
         <string>CRMPoolVsphere</string>
+        <string>SlaveNodeVCD</string>
         <string>BuildDate</string>
-        <string>Version</string>
         <string>InfluxDB</string>
         <string>RunFailedOnly</string>
-        <string>CRMPoolOpenstack</string>
-        <string>DME</string>
         <string>MasterController</string>
         <string>CommitVersion</string>
       </parameters>
@@ -128,6 +137,51 @@
           <name>RunFailedOnly</name>
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeSDK</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeDME</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeController</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeMasterController</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeScans</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeOpenstack</name>
+          <defaultValue>jenkinsGcpSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeVCD</name>
+          <defaultValue>jenkinsGcpSlave2</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeVsphere</name>
+          <defaultValue>jenkinsSlave2</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeAnthos</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -189,6 +243,15 @@ pipeline{
         string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
+        string(name: &apos;SlaveNodeSDK&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNodeDME&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNodeController&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNodeMasterController&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNodeScans&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNodeOpenstack&apos;, defaultValue: &apos;jenkinsGcpSlave1&apos;)
+        string(name: &apos;SlaveNodeVCD&apos;, defaultValue: &apos;jenkinsGcpSlave2&apos;)
+        string(name: &apos;SlaveNodeVsphere&apos;, defaultValue: &apos;jenkinsSlave2&apos;)
+        string(name: &apos;SlaveNodeAnthos&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
         //choice(name: &apos;Platform&apos;, choices: [&apos;SDK&apos;, &apos;Controller&apos;, &apos;DME&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
@@ -210,6 +273,7 @@ pipeline{
 
                     cycle = dateValue + &apos;_&apos; + params.Version
                     currentBuild.displayName = cycle
+                    fail &quot;andy&quot;
                     slack_good(&apos;Starting regression for &apos; + cycle)
                 }
                 
@@ -532,26 +596,19 @@ pipeline{
         }
         
         stage(&quot;execute tests&quot;) {
-            stage(&apos;Cleanup Existing Regression Provisioning&apos;) {
-                steps{
-                    build job: &apos;cleanupAutomationProvisioning&apos;
-                }
-            }
+//            steps{
+//                    build job: &apos;cleanupAutomationProvisioning&apos;
+//            }
             parallel {
                 stage(&apos;SDK Tests&apos;) {
                     steps {
                         slack_good(&apos;Starting SDK tests&apos;)
                         build job: &apos;runSdkTestcases&apos;, parameters: [
-                            string(name: &apos;Project&apos;, value: project), 
+                            string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeSDK), 
+                            string(name: &apos;Project&apos;, value: params.Project), 
                             string(name: &apos;Cycle&apos;, value: cycle), 
-                            string(name: &apos;Controller&apos;, value: controller), 
-                            string(name: &apos;MasterController&apos;, value: mastercontroller),
-                            string(name: &apos;DME&apos;, value: dme),
-                            string(name: &apos;DMERest&apos;, value: dmerest),
-                            string(name: &apos;DMERestCert&apos;, value: dmerestcert),
                             string(name: &apos;TestTarget&apos;, value: &apos;SDK&apos;),
-                            string(name: &apos;VariableFile&apos;, value: variablefile), 
-                            booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                            booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                     }
                     post {
                         failure { 
@@ -567,19 +624,18 @@ pipeline{
                 stage(&apos;DME Tests&apos;) {
                     steps {
                         slack_good(&apos;Starting DME tests&apos;)
-                        script {
-                            build job: &apos;runDmeTestcases&apos;, parameters: [
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller),
-                                string(name: &apos;DME&apos;, value: dme),
-                                string(name: &apos;DMERest&apos;, value: dmerest),
-                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;TestTarget&apos;, value: &apos;DME&apos;),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
-                        }
+                        build job: &apos;runDmeTestcases&apos;, parameters: [
+                            string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeDME), 
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;Controller&apos;, value: params.Controller), 
+                            string(name: &apos;MasterController&apos;, value: params.MasterController),
+                            string(name: &apos;DME&apos;, value: params.DME),
+                            string(name: &apos;DMERest&apos;, value: params.DMERest),
+                            string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                            string(name: &apos;TestTarget&apos;, value: &apos;DME&apos;),
+                            string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                            booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                     }
                     post {
                         failure { 
@@ -595,19 +651,18 @@ pipeline{
                 stage(&apos;Controller Tests&apos;) {
                     steps {
                         slack_good(&apos;Starting Controller Tests&apos;)
-                        script {
-                            build job: &apos;runControllerTestcases&apos;, parameters: [
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller),
-                                string(name: &apos;DME&apos;, value: dme),
-                                string(name: &apos;DMERest&apos;, value: dmerest),
-                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;TestTarget&apos;, value: &apos;Controller&apos;),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
-                        }
+                        build job: &apos;runControllerTestcases&apos;, parameters: [
+                            string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeController), 
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Cycle&apos;, value: params.Cycle), 
+                            string(name: &apos;Controller&apos;, value: params.Controller), 
+                            string(name: &apos;MasterController&apos;, value: params.MasterController),
+                            string(name: &apos;DME&apos;, value: params.DME),
+                            string(name: &apos;DMERest&apos;, value: params.DMERest),
+                            string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                            string(name: &apos;TestTarget&apos;, value: &apos;Controller&apos;),
+                            string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                            booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                     }
                     post {
                         failure { 
@@ -624,19 +679,14 @@ pipeline{
                 stage(&apos;MasterController Tests&apos;) {
                     steps {
                         slack_good(&apos;Starting MasterController tests&apos;)
-                        script {
-                            build job: &apos;runMcTestcases&apos;, parameters: [
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller),
-                                string(name: &apos;DME&apos;, value: dme),
-                                string(name: &apos;DMERest&apos;, value: dmerest),
-                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;TestTarget&apos;, value: &apos;MasterController&apos;),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
-                        }
+                        build job: &apos;runMcTestcases&apos;, parameters: [
+                            string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeMasterController), 
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;MasterController&apos;, value: params.MasterController),
+                            string(name: &apos;TestTarget&apos;, value: &apos;MasterController&apos;),
+                            string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                            booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                     }
                     post {
                         failure { 
@@ -653,21 +703,19 @@ pipeline{
                 stage(&apos;Anthos Tests&apos;) {
                     steps {
                         slack_good(&apos;Starting Anthos tests&apos;)
-                        script {
-                            build job: &apos;runCrmTestcases&apos;, parameters: [
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller),
-                                string(name: &apos;DME&apos;, value: dme),
-                                string(name: &apos;DMERest&apos;, value: dmerest),
-                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;TestTarget&apos;, value: &apos;Anthos&apos;),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                //string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
-                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolAnthos),
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
-                        }
+                        build job: &apos;runCrmTestcases&apos;, parameters: [
+                            string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeAnthos), 
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;Controller&apos;, value: params.Controller), 
+                            string(name: &apos;MasterController&apos;, value: params.MasterController),
+                            string(name: &apos;DME&apos;, value: params.DME),
+                            string(name: &apos;DMERest&apos;, value: params.DMERest),
+                            string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                            string(name: &apos;TestTarget&apos;, value: &apos;Anthos&apos;),
+                            string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                            string(name: &apos;CRMPool&apos;, value: params.CRMPoolAnthos),
+                            booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                     }
                     post {
                         failure { 
@@ -684,20 +732,19 @@ pipeline{
                 stage(&apos;Vsphere Tests&apos;) {
                     steps {
                         slack_good(&apos;Starting Vsphere tests&apos;)
-                        script {
-                            build job: &apos;runCrmTestcases&apos;, parameters: [
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller),
-                                string(name: &apos;DME&apos;, value: dme),
-                                string(name: &apos;DMERest&apos;, value: dmerest),
-                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;TestTarget&apos;, value: &apos;Vsphere&apos;),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolVsphere),
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
-                        }
+                        build job: &apos;runCrmTestcases&apos;, parameters: [
+                            string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeVsphere), 
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;Controller&apos;, value: params.Controller), 
+                            string(name: &apos;MasterController&apos;, value: params.MasterController),
+                            string(name: &apos;DME&apos;, value: params.DME),
+                            string(name: &apos;DMERest&apos;, value: params.DMERest),
+                            string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                            string(name: &apos;TestTarget&apos;, value: &apos;Vsphere&apos;),
+                            string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                            string(name: &apos;CRMPool&apos;, value: params.CRMPoolVsphere),
+                            booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                     }
                     post {
                         failure { 
@@ -713,20 +760,19 @@ pipeline{
                 stage(&apos;VCD Tests&apos;) {
                     steps {
                         slack_good(&apos;Starting VCD tests&apos;)
-                        script {
-                            build job: &apos;runCrmTestcases&apos;, parameters: [
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller),
-                                string(name: &apos;DME&apos;, value: dme),
-                                string(name: &apos;DMERest&apos;, value: dmerest),
-                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;TestTarget&apos;, value: &apos;VCD&apos;),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolVCD),
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
-                        }
+                        build job: &apos;runCrmTestcases&apos;, parameters: [
+                            string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeVCD), 
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;Controller&apos;, value: params.Controller), 
+                            string(name: &apos;MasterController&apos;, value: params.MasterController),
+                            string(name: &apos;DME&apos;, value: params.DME),
+                            string(name: &apos;DMERest&apos;, value: params.DMERest),
+                            string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                            string(name: &apos;TestTarget&apos;, value: &apos;VCD&apos;),
+                            string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                            string(name: &apos;CRMPool&apos;, value: params.CRMPoolVCD),
+                            booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                     }
                     post {
                         failure { 
@@ -742,20 +788,19 @@ pipeline{
                 stage(&apos;Openstack Tests&apos;) {
                     steps {
                         slack_good(&apos;Starting Openstack tests&apos;)
-                        script {
-                            build job: &apos;runCrmTestcases&apos;, parameters: [
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller),
-                                string(name: &apos;DME&apos;, value: dme),
-                                string(name: &apos;DMERest&apos;, value: dmerest),
-                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;TestTarget&apos;, value: &apos;Openstack&apos;),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolOpenstack),
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
-                        }
+                        build job: &apos;runCrmTestcases&apos;, parameters: [
+                            string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeOpenstack), 
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;Controller&apos;, value: params.Controller), 
+                            string(name: &apos;MasterController&apos;, value: params.MasterController),
+                            string(name: &apos;DME&apos;, value: params.DME),
+                            string(name: &apos;DMERest&apos;, value: params.DMERest),
+                            string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                            string(name: &apos;TestTarget&apos;, value: &apos;Openstack&apos;),
+                            string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                            string(name: &apos;CRMPool&apos;, value: params.CRMPoolOpenstack),
+                            booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                     }
                     post {
                         failure { 
@@ -765,6 +810,25 @@ pipeline{
                         success { 
                             echo &quot;run Openstack tests passed&quot;
                             slack_good(&apos;Finished Openstack tests with pass&apos;)
+                        }
+                    }
+                }
+                stage(&apos;Scans&apos;) {
+                    steps {
+                        slack_good(&apos;Starting scan tests&apos;)
+                            build job: &apos;runScans&apos;, parameters: [
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeScans)
+                                ]
+                    }
+                    post {
+                        failure { 
+                            echo &quot;run scan tests failed&quot;
+                            slack_fail(&apos;Finished scan tests with failures&apos;)
+                        }
+                        success { 
+                            echo &quot;run scan tests passed&quot;
+                            slack_good(&apos;Finished scan tests with pass&apos;)
                         }
                     }
                 }
