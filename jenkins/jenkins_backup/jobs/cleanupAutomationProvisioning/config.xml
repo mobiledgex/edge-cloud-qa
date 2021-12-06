@@ -7,17 +7,16 @@
       <triggers/>
       <parameters>
         <string>App</string>
+        <string>AutoProvPolicy</string>
         <string>SlaveNode</string>
         <string>RateLimitSettings</string>
         <string>Organization</string>
         <string>User</string>
-        <string>OrgCloudletPool</string>
         <string>BillingOrganization</string>
-        <string>Appinst</string>
-        <string>Flavor</string>
-        <string>AutoProvPolicy</string>
+        <string>AppInst</string>
         <string>AutoScalePolicy</string>
         <string>ClusterInst</string>
+        <string>Flavor</string>
         <string>Cloudlet</string>
       </parameters>
       <options/>
@@ -54,7 +53,7 @@
           <defaultValue>true</defaultValue>
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
-          <name>Appinst</name>
+          <name>AppInst</name>
           <defaultValue>true</defaultValue>
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
@@ -104,7 +103,7 @@ pipeline{
         string(name: &apos;SlaveNode&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
         booleanParam(name: &apos;BillingOrganization&apos;, defaultValue: true)
         booleanParam(name: &apos;Organization&apos;, defaultValue: true)
-        booleanParam(name: &apos;Appinst&apos;, defaultValue: true)
+        booleanParam(name: &apos;AppInst&apos;, defaultValue: true)
         booleanParam(name: &apos;App&apos;, defaultValue: true)
         booleanParam(name: &apos;ClusterInst&apos;, defaultValue: true)
         booleanParam(name: &apos;Flavor&apos;, defaultValue: true)

@@ -278,7 +278,10 @@
         <string>runCsharp3</string>
         <string>runDmeTestcases</string>
         <string>runMcTestcases</string>
+        <string>runNmapScan</string>
+        <string>runOwaspScan</string>
         <string>runRegression</string>
+        <string>runScans</string>
         <string>runSdkTestcases</string>
         <string>runTestcases</string>
       </jobNames>
