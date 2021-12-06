@@ -180,7 +180,7 @@ def clean_billingorg():
 
 def clean_user():
     print('clean user')
-    org_list = mc.show_users(token=mc.super_token, use_defaults=False)
+    org_list = mc.show_user(token=mc.super_token, use_defaults=False)
     
     if len(org_list) == 0:
         print('nothing to delete')
@@ -225,7 +225,10 @@ def clean_appinst():
                         mc.delete_app_instance(region=region, app_name=name, app_version=version, developer_org_name=org, cluster_instance_name=clustername, cluster_instance_developer_org_name=clusterorg, cloudlet_name=cloudletname, operator_org_name=cloudletorg, use_defaults=False, token=mc.super_token, crm_override=crm_override)
                     except Exception as e:
                         print(f'error deleting {name}, {e}.continuing to next item')
-                        mc.delete_app_instance(region=region, app_name=name, app_version=version, developer_org_name=org, cluster_instance_name=clustername, cluster_instance_developer_org_name=clusterorg, cloudlet_name=cloudletname, operator_org_name=cloudletorg, use_defaults=False, token=mc.super_token, crm_override='IgnoreCrmAndTransientState')
+                        try:
+                            mc.delete_app_instance(region=region, app_name=name, app_version=version, developer_org_name=org, cluster_instance_name=clustername, cluster_instance_developer_org_name=clusterorg, cloudlet_name=cloudletname, operator_org_name=cloudletorg, use_defaults=False, token=mc.super_token, crm_override='IgnoreCrmAndTransientState')
+                        except Exception as e:
+                            print(f'error deleting {name} with override, {e}.continuing to next item')
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
 
@@ -339,7 +342,11 @@ def clean_ratelimitsettingsflow():
     global key_pattern
 
     print('clean ratelimitsettingsflow')
-    app_list = mc.show_rate_limit_flow(region=region, token=mc.super_token, use_defaults=False)
+    try:
+        app_list = mc.show_rate_limit_flow(region=region, token=mc.super_token, use_defaults=False)
+    except Exception as e:
+        print(f'error showing ratelimit settings, {e}.continuing to next item')
+        return
     print('applist', app_list)
     print('key',key_pattern)
     if len(app_list) == 0:
@@ -363,7 +370,12 @@ def clean_ratelimitsettingsmaxreqs():
     global key_pattern
 
     print('clean ratelimitsettingsmaxreqs')
-    app_list = mc.show_rate_limit_max_requests(region=region, token=mc.super_token, use_defaults=False)
+    try:
+        app_list = mc.show_rate_limit_max_requests(region=region, token=mc.super_token, use_defaults=False)
+    except Exception as e:
+        print(f'error showing ratelimit max request settings, {e}.continuing to next item')
+        return
+
     print('applist', app_list)
     print('key',key_pattern)
     if len(app_list) == 0:
