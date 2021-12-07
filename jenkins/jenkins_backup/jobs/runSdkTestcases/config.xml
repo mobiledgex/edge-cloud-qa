@@ -60,8 +60,10 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices>
-            <string>SDK</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>SDK</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -109,14 +111,13 @@ pipeline{
                         echo &quot;${value}&quot;
                         builds[&quot;${value[-1]}&quot;] = {
                             build job: &apos;runTestcases&apos;, parameters: [
-                                string(name: &apos;SlaveNode&apos;, value: slavenode),
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNode),
                                 string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;TestTarget&apos;, value: testtarget),
-                                string(name: &apos;TestTimeout&apos;, value: testtimeout),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: params.Cycle), 
+                                string(name: &apos;TestTarget&apos;, value: params.TestTarget),
+                                string(name: &apos;TestTimeout&apos;, value: params.TestTimeout),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                         }
                     }
                     parallel builds
