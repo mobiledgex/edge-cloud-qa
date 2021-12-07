@@ -155,7 +155,7 @@ class MexDmeRest(MexRest):
                     self._number_findCloudlet_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
-                if self.decoded_data['status'] != 'FIND_FOUND':  # FIND_FOUND
+                if self.decoded_data['status'] != 'Found':  # FIND_FOUND
                     raise Exception(f'find cloudlet not found:{self.decoded_data}')
 
                 # for data in self.decoded_data:
@@ -201,7 +201,7 @@ class MexDmeRest(MexRest):
                     self._number_getqospositionkpi_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
-                if self.decoded_data['result']['status'] != 'RS_SUCCESS':
+                if self.decoded_data['result']['status'] != 'Success':
                     raise Exception(f'get qos position kpi failed:{self.decoded_data}')
 
             except Exception as e:
@@ -220,9 +220,9 @@ class MexDmeRest(MexRest):
             resp = send_message()
             return resp
 
-    def verify_location(self, session_cookie=None, token=None, carrier_name=None, latitude=None, longitude=None, use_defaults=True, use_thread=False):
+    def verify_location(self, session_cookie=None, token=None, carrier_name=None, latitude=None, longitude=None, cell_id=None, use_defaults=True, use_thread=False):
 
-        client = mex_dme_classes.VerifyLocationRequestObject(session_cookie=session_cookie, token=token, carrier_name=carrier_name, latitude=latitude, longitude=longitude, use_defaults=use_defaults)
+        client = mex_dme_classes.VerifyLocationRequestObject(session_cookie=session_cookie, token=token, carrier_name=carrier_name, latitude=latitude, longitude=longitude, cell_id=cell_id, use_defaults=use_defaults)
 
         url = self.root_url + '/v1/verifylocation'
         # payload = MessageToJson(client.request)
