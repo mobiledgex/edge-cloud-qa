@@ -123,6 +123,7 @@ automated_component = &quot;Automated&quot;
 crm_components = [automated_component, &quot;CRM&quot;]
 
 testcase_components1 = [
+    crm_components + &quot;Cloudlet&quot;,
     crm_components + &quot;ClusterInst&quot;,
     crm_components + &quot;AppInst&quot;,
     crm_components + &quot;RunCommand&quot;,
