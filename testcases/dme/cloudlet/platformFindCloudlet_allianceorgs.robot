@@ -62,7 +62,8 @@ PlatformFindCloudlet - request shall return cloudlet without allianceorg
     Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}
 
     ${fqdn}=  Get App Official FQDN  latitude=35  longitude=-94
-    Should Be Equal  ${fqdn.ports[0].proto}  ${tmus_appinst['data']['mapped_ports'][0]['proto']}
+    #Should Be Equal  ${fqdn.ports[0].proto}  ${tmus_appinst['data']['mapped_ports'][0]['proto']}
+    Should Be Equal As Integers  ${fqdn.ports[0].proto}  1
     Should Be Equal  ${fqdn.ports[0].internal_port}  ${tmus_appinst['data']['mapped_ports'][0]['internal_port']}
     Length Should Be  ${fqdn.ports}  1
 
@@ -101,7 +102,8 @@ PlatformFindCloudlet - request shall return cloudlet with allianceorg
     Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}
 
     ${fqdn}=  Get App Official FQDN  latitude=32  longitude=-94
-    Should Be Equal  ${fqdn.ports[0].proto}  ${tmus_appinst['data']['mapped_ports'][0]['proto']}
+    #Should Be Equal  ${fqdn.ports[0].proto}  ${tmus_appinst['data']['mapped_ports'][0]['proto']}
+    Should Be Equal As Integers  ${fqdn.ports[0].proto}  1
     Should Be Equal  ${fqdn.ports[0].internal_port}  ${tmus_appinst['data']['mapped_ports'][0]['internal_port']}
     Length Should Be  ${fqdn.ports}  1
 
@@ -146,7 +148,8 @@ PlatformFindCloudlet - request shall return updated cloudlet with allianceorg
     Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}
 
     ${fqdn}=  Get App Official FQDN  latitude=32  longitude=-94
-    Should Be Equal  ${fqdn.ports[0].proto}  ${tmus_appinst['data']['mapped_ports'][0]['proto']}
+    #Should Be Equal  ${fqdn.ports[0].proto}  ${tmus_appinst['data']['mapped_ports'][0]['proto']}
+    Should Be Equal As Integers  ${fqdn.ports[0].proto}  1
     Should Be Equal  ${fqdn.ports[0].internal_port}  ${tmus_appinst['data']['mapped_ports'][0]['internal_port']}
     Length Should Be  ${fqdn.ports}  1
 
@@ -203,7 +206,8 @@ PlatformFindCloudlet - request shall return cloudlet with addallianceorg allianc
     Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}
 
     ${fqdn}=  Get App Official FQDN  latitude=32  longitude=-94
-    Should Be Equal  ${fqdn.ports[0].proto}  ${tmus_appinst['data']['mapped_ports'][0]['proto']}
+    #Should Be Equal  ${fqdn.ports[0].proto}  ${tmus_appinst['data']['mapped_ports'][0]['proto']}
+    Should Be Equal As Integers  ${fqdn.ports[0].proto}  1
     Should Be Equal  ${fqdn.ports[0].internal_port}  ${tmus_appinst['data']['mapped_ports'][0]['internal_port']}
     Length Should Be  ${fqdn.ports}  1
 
@@ -272,7 +276,8 @@ Verify PlatformFindCloudlet
     Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${latitude}
     Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${longitude}
 
-    Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst['data']['mapped_ports'][0]['proto']}  #LProtoTCP
+    #Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst['data']['mapped_ports'][0]['proto']}  #LProtoTCP
+    Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          1  #LProtoTCP
     Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst['data']['mapped_ports'][0]['internal_port']}
     Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst['data']['mapped_ports'][0]['public_port']}
 
