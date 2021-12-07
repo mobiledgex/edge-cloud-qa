@@ -188,7 +188,8 @@ Verify AppInst
     Should Be Equal             ${appfqdn.appinstances[0].app_name}                 ${appinst['data']['key']['app_key']['name']}
     Should Be Equal             ${appfqdn.appinstances[0].app_vers}                 ${appinst['data']['key']['app_key']['version']}
     Should Be Equal             ${appfqdn.appinstances[0].fqdn}                    ${appinst['data']['uri']}
-    Should Be Equal             ${appfqdn.appinstances[0].ports[0].proto}          ${appinst['data']['mapped_ports'][0]['proto']}
+    #Should Be Equal             ${appfqdn.appinstances[0].ports[0].proto}          ${appinst['data']['mapped_ports'][0]['proto']}
+    Should Be Equal As Numbers  ${appfqdn.appinstances[0].ports[0].proto}          1
     Should Be Equal             ${appfqdn.appinstances[0].ports[0].internal_port}  ${appinst['data']['mapped_ports'][0]['internal_port']}
     Should Be Equal             ${appfqdn.appinstances[0].ports[0].public_port}    ${appinst['data']['mapped_ports'][0]['public_port']}
     ${decoded_edge_cookie}=  Decode Cookie  ${appfqdn.appinstances[0].edge_events_cookie}
