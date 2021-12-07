@@ -93,7 +93,7 @@ Shall be able to create a reporter with schedule of Every15Days
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
     Should Be Equal  ${reporter[0]['Timezone']}  UTC
     Should Be Equal  ${reporter[0]['Status']}  success
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
+    Should Be Equal  ${reporter[0]['Schedule']}  Every15Days
 
     Find Report Period  UTC  Every15Days
     Email With Operator Report Should Be Received  email_password=${mextester06_gmail_password}  email_address=${email}  reporter_name=${reporter_name}  report_period=${report_period}  timezone=UTC  username=${op_manager_user_automation}  organization=${operator}
@@ -120,7 +120,7 @@ Shall be able to create a reporter with schedule of EveryMonth
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
     Should Be Equal  ${reporter[0]['Timezone']}  UTC
     Should Be Equal  ${reporter[0]['Status']}  success
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  3
+    Should Be Equal  ${reporter[0]['Schedule']}  EveryMonth
 
     Find Report Period  UTC  EveryMonth
     Email With Operator Report Should Be Received  email_password=${mextester06_gmail_password}  email_address=${email}  reporter_name=${reporter_name}  report_period=${report_period}  timezone=UTC  username=${op_manager_user_automation}  organization=${operator}
@@ -201,7 +201,7 @@ Shall be able to create a reporter with email address and schedule
     Should Be Equal  ${reporter[0]['Timezone']}  UTC
     Should Be Equal  ${reporter[0]['Email']}  ${email1}
     Should Be Equal  ${reporter[0]['Status']}  success
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
+    Should Be Equal  ${reporter[0]['Schedule']}  Every15Days
 
     Find Report Period  UTC  Every15Days
     Email With Operator Report Should Be Received  email_password=${password1}  email_address=${email1}  reporter_name=${reporter_name}  report_period=${report_period}  timezone=UTC  username=${op_manager_user_automation}  organization=${operator}
@@ -275,7 +275,7 @@ Shall be able to create a reporter with schedule and StartScheduleDate
     Should Be Equal  ${reporter[0]['NextScheduleDate']}   ${next_date}
     Should Be Equal  ${reporter[0]['Timezone']}  UTC
     Should Not Be Equal  ${reporter[0]['Status']}  success
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
+    Should Be Equal  ${reporter[0]['Schedule']}  Every15Days
 
 # ECQ-3765
 Shall be able to create a reporter with schedule and timezone
@@ -299,7 +299,7 @@ Shall be able to create a reporter with schedule and timezone
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
     Should Be Equal  ${reporter[0]['Timezone']}  Asia/Kolkata
     Should Be Equal  ${reporter[0]['Status']}  success
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
+    Should Be Equal  ${reporter[0]['Schedule']}  Every15Days
 
     Find Report Period  Asia/Kolkata  Every15Days
     Email With Operator Report Should Be Received  email_password=${mextester06_gmail_password}  email_address=${email}  reporter_name=${reporter_name}  report_period=${report_period}  timezone=Asia/Kolkata  username=${op_manager_user_automation}  organization=${operator}
@@ -346,7 +346,7 @@ Shall be able to create a reporter with all optional args
     Should Be Equal  ${reporter[0]['Timezone']}  Asia/Kolkata
     Should Not Be Equal  ${reporter[0]['Status']}  success
     Should Be Equal  ${reporter[0]['Email']}  ${email1}
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
+    Should Be Equal  ${reporter[0]['Schedule']}  Every15Days
 
 # ECQ-3768
 Shall be able to create 2 reporters with different timezones/schedule
@@ -381,7 +381,7 @@ Shall be able to create 2 reporters with different timezones/schedule
     Should Be Equal  ${reporter2[0]['StartScheduleDate']}  ${current_date2}
     Should Be Equal  ${reporter2[0]['Timezone']}  Asia/Kolkata
     Should Be Equal  ${reporter2[0]['Status']}  success
-    Should Be Equal As Numbers  ${reporter2[0]['Schedule']}  1
+    Should Be Equal  ${reporter2[0]['Schedule']}  Every15Days
 
     Find Report Period  Asia/Kolkata  Every15Days
     Email With Operator Report Should Be Received  email_password=${mextester06_gmail_password}  email_address=${email}  reporter_name=${reporter_name}1  report_period=${report_period}  timezone=Asia/Kolkata  username=${op_manager_user_automation}  organization=${operator}
