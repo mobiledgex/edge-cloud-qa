@@ -31,52 +31,52 @@ CreateApp - mcctl shall be able to create/show/delete app
 
    [Template]  Success Create/Show/Delete App Via mcctl
       # no protocol 
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  imagepath=${docker_image}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  imagepath=${docker_image}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  imagepath=${docker_image}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  imagepath=${docker_image}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}  defaultflavor=${flavor_name_automation}
 
       # officialfqdn and androidpackagename
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  officialfqdn=automation.com  
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}   officialfqdn=automation.com 
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}   officialfqdn=automation.com 
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}   officialfqdn=automation.com 
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  androidpackagename=automation.android.com  
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}     androidpackagename=automation.android.com
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}     androidpackagename=automation.android.com
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}     androidpackagename=automation.android.com
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  officialfqdn=automation.com  androidpackagename=automation.android.com
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}   officialfqdn=automation.com  androidpackagename=automation.android.com
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}   officialfqdn=automation.com  androidpackagename=automation.android.com
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}   officialfqdn=automation.com  androidpackagename=automation.android.com
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  officialfqdn=automation.com  defaultflavor=${flavor_name_automation}  
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}   officialfqdn=automation.com  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}   officialfqdn=automation.com  defaultflavor=${flavor_name_automation} 
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}   officialfqdn=automation.com  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  androidpackagename=automation.android.com  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}     androidpackagename=automation.android.com  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}     androidpackagename=automation.android.com  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}     androidpackagename=automation.android.com  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  officialfqdn=automation.com  androidpackagename=automation.android.com  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}   officialfqdn=automation.com  androidpackagename=automation.android.com  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}   officialfqdn=automation.com  androidpackagename=automation.android.com   defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}   officialfqdn=automation.com  androidpackagename=automation.android.com  defaultflavor=${flavor_name_automation}
 
       # authpublickey
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  authpublickey="${vm_public_key}"
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  authpublickey="${vm_public_key}"  
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}    authpublickey="${vm_public_key}"
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}    authpublickey="${vm_public_key}"
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  authpublickey="${vm_public_key}"  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  authpublickey="${vm_public_key}"   defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}    authpublickey="${vm_public_key}"  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}    authpublickey="${vm_public_key}"  defaultflavor=${flavor_name_automation}
 
       # manifest
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  deploymentmanifest="${manifest_string}"
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  deploymentmanifest="${manifest_string}"
-      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  deploymentmanifest="${manifest_string}"
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest="${cloudconfig_string}"
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=${server_ping_threaded_cloudconfig}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  deploymentmanifest=${manifest_url}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  deploymentmanifest=${manifest_url}
-      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  deploymentmanifest=${manifest_url}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  deploymentmanifest="${manifest_string}"  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  deploymentmanifest="${manifest_string}"  defaultflavor=${flavor_name_automation}
+      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  deploymentmanifest="${manifest_string}"  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest="${cloudconfig_string}"  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=${server_ping_threaded_cloudconfig}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  deploymentmanifest=${manifest_url}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  deploymentmanifest=${manifest_url}  defaultflavor=${flavor_name_automation}
+      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  deploymentmanifest=${manifest_url}  defaultflavor=${flavor_name_automation}
 
       # scalewithcluster
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=${True}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=${False}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=${True}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=${False}  defaultflavor=${flavor_name_automation}
 
       # configs
       # EDGECLOUD-3163 Support envVarsYaml config for CreateApp on docker
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config="${envvars_config}" 
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config="${envvars_config}"
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=${envvars_url}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config=${envvars_url}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config="${envvars_config}"  configs:1.kind=envVarsYaml  configs:1.config="${envvars_config}"
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=${envvars_url}  configs:1.kind=envVarsYaml  configs:1.config=${envvars_url}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config="${envvars_config}"  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config="${envvars_config}"  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=${envvars_url}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config=${envvars_url}  defaultflavor=${flavor_name_automation}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config="${envvars_config}"  configs:1.kind=envVarsYaml  configs:1.config="${envvars_config}"  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=${envvars_url}  configs:1.kind=envVarsYaml  configs:1.config=${envvars_url}  defaultflavor=${flavor_name_automation}
 
       # autoprovpolicies
       #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          imagepath=${qcow_centos_image}  defaultflavor=${flavor_name_automation}  autoprovpolicies=${autoprov_name}1  vm not supported
@@ -89,36 +89,36 @@ CreateApp - mcctl shall be able to create/show/delete app
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        imagepath=${docker_image}       defaultflavor=${flavor_name_automation}  autoprovpolicies=${autoprov_name}1 autoprovpolicies=${autoprov_name}2
 
       # trusted
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${True}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${False}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${True}  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${False}  defaultflavor=${flavor_name_automation}
       #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}  direct no longer supported
       #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${False}  direct no longer supported
 
       # requiredoutboundconnections
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.port=0  requiredoutboundconnections:0.remoteip=1.1.1.1
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.remoteip=1.1.1.1
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=udp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=udp  requiredoutboundconnections:1.remoteip=1.1.1.1  requiredoutboundconnections:1.port=2
-      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=icmp  requiredoutboundconnections:1.remoteip=1.1.1.1  
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=tcp  requiredoutboundconnections:1.remoteip=1.1.1.1  requiredoutboundconnections:1.port=2
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.port=0  requiredoutboundconnections:0.remoteip=1.1.1.1  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.remoteip=1.1.1.1  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=udp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=udp  requiredoutboundconnections:1.remoteip=1.1.1.1  requiredoutboundconnections:1.port=2  defaultflavor=${flavor_name_automation}
+      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=icmp  requiredoutboundconnections:1.remoteip=1.1.1.1  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=tcp  requiredoutboundconnections:1.remoteip=1.1.1.1  requiredoutboundconnections:1.port=2  defaultflavor=${flavor_name_automation}
 
       # serverless
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${False}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${False}  defaultflavor=${flavor_name_automation}
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  defaultflavor=${flavor_name_automation}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=2  serverlessconfig.minreplicas=3
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=2  serverlessconfig.minreplicas=3  defaultflavor=${flavor_name_automation}
 
       # accessports
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      imagepath=${docker_image}       accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        imagepath=${docker_image}       accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          imagepath=${qcow_centos_image}  accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      imagepath=${docker_image}       accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        imagepath=${docker_image}       accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          imagepath=${qcow_centos_image}  accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800  defaultflavor=${flavor_name_automation}
 
 # ECQ-2890
 CreateApp - mcctl shall handle create failures
@@ -131,14 +131,14 @@ CreateApp - mcctl shall handle create failures
 
    [Template]  Fail Create App Via mcctl
       # missing values
-      Error: Bad Request (400), Unknown image type IMAGE_TYPE_UNKNOWN  appname=${app_name}  app-org=${developer}  appvers=1.0
+      Error: Bad Request (400), Unknown image type IMAGE_TYPE_UNKNOWN  appname=${app_name}  app-org=${developer}  appvers=1.0  defaultflavor=${flavor_name_automation}
 
       # autoprovpolicies
-      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}  autoprovpolicies=x
-      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  autoprovpolicies=x
-      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker   deployment=docker  imagepath=${docker_image}  autoprovpolicies=x
-      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  autoprovpolicies=x
-      Error: Bad Request (400), Policy key {"organization":"${developer}"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}  autoprovpolicies=
+      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}  autoprovpolicies=x  defaultflavor=${flavor_name_automation}
+      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  autoprovpolicies=x  defaultflavor=${flavor_name_automation}
+      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker   deployment=docker  imagepath=${docker_image}  autoprovpolicies=x  defaultflavor=${flavor_name_automation}
+      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  autoprovpolicies=x  defaultflavor=${flavor_name_automation}
+      Error: Bad Request (400), Policy key {"organization":"${developer}"} not found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}  autoprovpolicies=  defaultflavor=${flavor_name_automation}
 
       # authpublickey
       Error: Bad Request (400), Failed to parse public key: ssh: no key found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  imagepath=${qcow_centos_image}  authpublickey=x
@@ -148,20 +148,20 @@ CreateApp - mcctl shall handle create failures
 
       # deployment manifest
       # EDGECLOUD-4002  CreateApp should validate for proper helm chart and docker compose when using deploymentmanifest
-      Error: Bad Request (400), Invalid deployment manifest, only cloud-init script support, must start with \'#cloud-config\'  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=${manifest_url}
-      Error: Bad Request (400), Invalid deployment manifest, only cloud-init script support, must start with \'#cloud-config\'  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=x
-      Error: Bad Request (400), Invalid deployment manifest, parse kubernetes deployment yaml failed  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker   deployment=kubernetes  imagepath=${docker_image}  deploymentmanifest=x
-      Error: Bad Request (400), Invalid deployment manifest, parse kubernetes deployment yaml failed  appname=${app_name}1  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker   deployment=docker  imagepath=${docker_image}  deploymentmanifest=x
+      Error: Bad Request (400), Invalid deployment manifest, only cloud-init script support, must start with \'#cloud-config\'  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=${manifest_url}  defaultflavor=${flavor_name_automation}
+      Error: Bad Request (400), Invalid deployment manifest, only cloud-init script support, must start with \'#cloud-config\'  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=x  defaultflavor=${flavor_name_automation}
+      Error: Bad Request (400), Invalid deployment manifest, parse kubernetes deployment yaml failed  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker   deployment=kubernetes  imagepath=${docker_image}  deploymentmanifest=x  defaultflavor=${flavor_name_automation}
+      Error: Bad Request (400), Invalid deployment manifest, parse kubernetes deployment yaml failed  appname=${app_name}1  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker   deployment=docker  imagepath=${docker_image}  deploymentmanifest=x  defaultflavor=${flavor_name_automation}
       Error: Bad Request (400), Manifest is not used for Helm deployments. Use config files for customizations  appname=${app_name}2  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm   deployment=helm  imagepath=${docker_image}  deploymentmanifest=x
 
       # scalewithcluster
       Error: Bad Request (400), App scaling is only supported for Kubernetes deployments  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=${True}
       Error: Bad Request (400), App scaling is only supported for Kubernetes deployments  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=${True}
       Error: Bad Request (400), App scaling is only supported for Kubernetes deployments  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  scalewithcluster=${True}
-      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  scalewithcluster=x
-      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
-      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
-      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
+      Error: parsing arg "scalewithcluster\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  scalewithcluster=x
+      Error: parsing arg "scalewithcluster\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
+      Error: parsing arg "scalewithcluster\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
+      Error: parsing arg "scalewithcluster\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
 
 
       # androidpackagename and officialfqdn - no errors
@@ -177,7 +177,7 @@ CreateApp - mcctl shall handle create failures
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=nvVarsYam
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=nvVarsYam
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}3  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  configs:0.kind=nvVarsYaml
-     Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=x
+     Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=x  defaultflavor=${flavor_name_automation}
       #Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}4  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=x
       #Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}6  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config=x  we dont support helm config verifcation since it is freeform
       Error: Bad Request (400), Invalid Config Kind(envVarsYaml) for deployment type(vm)  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml
@@ -187,14 +187,14 @@ CreateApp - mcctl shall handle create failures
       Error: Bad Request (400), Invalid Config Kind(envVarsYaml) for deployment type(helm)  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config="${envvars_config}"
 
       # trusted
-      Unable to parse "trusted" value "x" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  trusted=x
-      Unable to parse "trusted" value "x" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=x
-      Unable to parse "trusted" value "xTrue}" as bool: invalid syntax, valid values are true, false  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=xTrue}
-      Unable to parse "trusted" value "a" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=a
-      Unable to parse "trusted" value "r" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=r
-      Unable to parse "trusted" value "cccccc" as bool: invalid syntax, valid values are true, false  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=cccccc
-      Unable to parse "trusted" value "111" as bool: invalid syntax, valid values are true, false     appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=111
-      Unable to parse "trusted" value "-1" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=-1
+      Error: parsing arg "trusted\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  trusted=x
+      Error: parsing arg "trusted\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=x
+      Error: parsing arg "trusted\=xTrue}" failed: unable to parse "xTrue}" as bool: invalid syntax, valid values are true, false  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=xTrue}
+      Error: parsing arg "trusted\=a" failed: unable to parse "a" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=a
+      Error: parsing arg "trusted\=r" failed: unable to parse "r" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=r
+      Error: parsing arg "trusted\=cccccc" failed: unable to parse "cccccc" as bool: invalid syntax, valid values are true, false  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=cccccc
+      Error: parsing arg "trusted\=111" failed: unable to parse "111" as bool: invalid syntax, valid values are true, false     appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=111
+      Error: parsing arg "trusted\=-1" failed: unable to parse "-1" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=-1
       #Unable to parse "trusted" value "no" as bool: invalid syntax, valid values are true, false      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=no  direct not supported
       #Unable to parse "trusted" value "yes" as bool: invalid syntax, valid values are true, false     appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=yes  direct not supported
 
@@ -210,16 +210,16 @@ CreateApp - mcctl shall handle create failures
       Error: Bad Request (400), Invalid remote IP:  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=  # remove the ports
 
       # serverless
-      Error: Bad Request (400), Serverless config vcpus cannot be less than 0.001  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}
+      #Error: Bad Request (400), Serverless config vcpus cannot be less than 0.001  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  defaultflavor=${flavor_name_automation}
       Error: Bad Request (400), Serverless config vcpus cannot be less than 0.001  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=.000001  serverlessconfig.ram=2  serverlessconfig.minreplicas=3
       Error: Bad Request (400), Serverless config cannot be specified without allow serverless true  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${False}  serverlessconfig.vcpus=.000001  serverlessconfig.ram=2  serverlessconfig.minreplicas=3
       Error: Bad Request (400), Serverless config cannot be specified without allow serverless true  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  serverlessconfig.vcpus=.01  serverlessconfig.ram=2  serverlessconfig.minreplicas=3
       Unable to parse "serverlessconfig.minreplicas" value "x" as uint: invalid syntax  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  allowserverless=${True}  serverlessconfig.vcpus=.01  serverlessconfig.ram=2  serverlessconfig.minreplicas=x
       Unable to parse "serverlessconfig.vcpus" value "x" as float64: invalid syntax  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=x  serverlessconfig.ram=2  serverlessconfig.minreplicas=1
-      Unable to parse "serverlessconfig.ram" value "x" as uint: invalid syntax  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=x  serverlessconfig.minreplicas=1
-      Unable to parse "serverlessconfig.minreplicas" value "-1" as uint  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=1  serverlessconfig.minreplicas=-1
+      Error: parsing arg "serverlessconfig.ram\=x" failed: unable to parse "x" as uint: invalid syntax  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=x  serverlessconfig.minreplicas=1
+      Error: parsing arg "serverlessconfig.minreplicas\=-1" failed: unable to parse "-1" as uint: invalid syntax  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=1  serverlessconfig.minreplicas=-1
       Serverless config vcpus cannot be less than 0.001  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=-1  serverlessconfig.ram=2  serverlessconfig.minreplicas=1
-      Unable to parse "serverlessconfig.ram" value "-1" as uint  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=-1  serverlessconfig.minreplicas=1
+      Error: parsing arg "serverlessconfig.ram\=-1" failed: unable to parse "-1" as uint: invalid syntax  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=-1  serverlessconfig.minreplicas=1
 
 # ECQ-2891
 UpdateApp - mcctl shall handle update app 
@@ -319,9 +319,9 @@ Success Create/Show/Delete App Via mcctl
 #   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal  ${show[0]['image_type']}  ImageTypeDocker 
 #   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal  ${show[0]['image_type']}  ImageTypeQcow
 #   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal  ${show[0]['image_type']}  ImageTypeHelm
-   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal As Numbers  ${show[0]['image_type']}  1
-   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal As Numbers  ${show[0]['image_type']}  2
-   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal As Numbers  ${show[0]['image_type']}  3
+   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal   ${show[0]['image_type']}  Docker
+   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal     ${show[0]['image_type']}  Qcow
+   Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal     ${show[0]['image_type']}  Helm
 
    Run Keyword If  'deployment' in ${parms}  Should Be Equal  ${show[0]['deployment']}  ${parms['deployment']}
 
@@ -334,7 +334,7 @@ Success Create/Show/Delete App Via mcctl
    #Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'helm'        Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
    #Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
    #Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'docker'      Should Be Equal  ${show[0]['access_type']}  AccessTypeLoadBalancer
-   Should Be Equal As Numbers  ${show[0]['access_type']}  2
+   Should Be Equal  ${show[0]['access_type']}  LoadBalancer
 
    Run Keyword If  'officialfqdn' in ${parms}  Should Be Equal  ${show[0]['official_fqdn']}  ${parms['officialfqdn']} 
    Run Keyword If  'androidpackagename' in ${parms}  Should Be Equal  ${show[0]['android_package_name']}  ${parms['androidpackagename']}
@@ -401,9 +401,9 @@ Update Setup
    Run mcctl  autoprovpolicy create region=${region} name=${autoprovpolicy_name} app-org=${developer} deployclientcount=1 minactiveinstances=1 cloudlets:0.key.organization=dmuus cloudlets:0.key.name=tmocloud-1
 
    Run mcctl  app create region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=kubernetes imagepath=${docker_image} defaultflavor=automation_api_flavor autoprovpolicies=${autoprovpolicy_name}0  version=${version}
-   Run mcctl  app create region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=docker imagepath=${docker_image}  version=${version}
-   Run mcctl  app create region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0 imagetype=ImageTypeHelm deployment=helm imagepath=${docker_image}  version=${version}
-   Run mcctl  app create region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0 imagetype=ImageTypeQcow deployment=vm imagepath=${qcow_centos_image}  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=docker imagepath=${docker_image} defaultflavor=automation_api_flavor  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0 imagetype=ImageTypeHelm deployment=helm imagepath=${docker_image} defaultflavor=automation_api_flavor  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0 imagetype=ImageTypeQcow deployment=vm imagepath=${qcow_centos_image} defaultflavor=automation_api_flavor  version=${version}
 
 Update Teardown
    Run mcctl  app delete region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0  version=${version}
@@ -428,16 +428,16 @@ Success Update/Show App Via mcctl
 
    Run Keyword If  'imagepath' in ${parms}  Should Be Equal  ${show[0]['image_path']}  ${parms['imagepath']} 
 
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDirect'  Should Be Equal As Numbers  ${show[0]['access_type']}  1
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeLoadBalancer'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'docker'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'helm'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'vm'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDirect'  Should Be Equal   ${show[0]['access_type']}  Direct
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeLoadBalancer'  Should Be Equal   ${show[0]['access_type']}  LoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'docker'  Should Be Equal   ${show[0]['access_type']}  LoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal   ${show[0]['access_type']}  LoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'helm'  Should Be Equal   ${show[0]['access_type']}  LoadBalancer
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'vm'  Should Be Equal     ${show[0]['access_type']}  LoadBalancer
 
-   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal As Numbers  ${show[0]['image_type']}  1
-   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal As Numbers  ${show[0]['image_type']}  2
-   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal As Numbers  ${show[0]['image_type']}  3
+   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal   ${show[0]['image_type']}  Docker
+   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal     ${show[0]['image_type']}  Qcow
+   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal     ${show[0]['image_type']}  Helm
 
    Run Keyword If  'trusted' in ${parms}  Run Keyword If  ${parms['trusted']} == ${True}  Should Be Equal  ${show[0]['trusted']}  ${True}
    ...  ELSE  Should Not Contain  ${show[0]}  trusted
