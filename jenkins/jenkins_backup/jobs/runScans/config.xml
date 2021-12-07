@@ -63,7 +63,10 @@ pipeline{
                 stage(&quot;nmap&quot;) {
                     steps {
                         //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting SDK tests&quot;
-                        build job: &apos;runNmapScan&apos; 
+                        build job: &apos;runNmapScan&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNode), 
+                                string(name: &apos;Cycle&apos;, value: params.Cycle) 
+                                ]
                     }
                     post {
                         failure { 
@@ -79,7 +82,10 @@ pipeline{
                 stage(&apos;OWASP ZAP&apos;) {
                     steps {
                         //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting SDK tests&quot;
-                        build job: &apos;runOwaspScan&apos; 
+                        build job: &apos;runOwaspScan&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNode), 
+                                string(name: &apos;Cycle&apos;, value: params.Cycle) 
+                                ]
                     }
                     post {
                         failure { 
