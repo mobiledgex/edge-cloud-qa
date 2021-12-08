@@ -141,11 +141,11 @@ ClusterInst/AppInst creation of gpu flavor on a cloudlet not mapped to GPU drive
     Update Cloudlet  region=${region}  operator_org_name=GDDT  cloudlet_name=${cloudlet_name}  gpudriver_name=${Empty}
 
     ${error_msg}=  Run Keyword and Expect Error  *   Create Cluster Instance  region=${region}  operator_org_name=GDDT  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor
-    Should Contain  ${error_msg}  'code=400', 'error={"message":"No GPU driver associated with cloudlet {GDDT ${cloudlet_name}}"}
+    Should Contain  ${error_msg}  'code=400', 'error={"message":"No GPU driver associated with cloudlet {GDDT ${cloudlet_name} }"}
 
     Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015  default_flavor_name=automation_gpu_flavor
     ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  operator_org_name=GDDT  cloudlet_name=${cloudlet_name}  cluster_instance_name=autocluster1
-    Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"No GPU driver associated with cloudlet {GDDT ${cloudlet_name}}","code":400}}'
+    Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"No GPU driver associated with cloudlet {GDDT ${cloudlet_name} }","code":400}}'
 
 # ECQ-3666
 Deletion of GpuDriver is use by Cloudlet fails
