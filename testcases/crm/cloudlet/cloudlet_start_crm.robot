@@ -146,8 +146,9 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Buckhorn
         [Documentation]
         ...  - do DeleteCloudlet to delete a CRM on buckhorn openstack
 
-        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}
-        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}
+        Cleanup Clusters and Apps  region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}
+#        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}
+#        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}
         Delete All Auto Provisioning Policies  region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}
 
         Delete Cloudlet  region=US  token=${token}  operator_org_name=${operator_name_openstack_buckhorn}   cloudlet_name=${cloudlet_name_openstack_buckhorn}  use_defaults=${False}
@@ -155,10 +156,12 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Buckhorn
 # ECQ-1614
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Beacon
         [Documentation]
-        ...  do DeleteCloudlet to delete a CRM on beacon openstack 
+        ...  - do DeleteCloudlet to delete a CRM on beacon openstack 
 
-        Delete All App Instances      region=EU  cloudlet_name=${cloudlet_name_openstack_beacon}
-        Delete All Cluster Instances  region=EU  cloudlet_name=${cloudlet_name_openstack_beacon}
+        Cleanup Clusters and Apps  region=EU  cloudlet_name=${cloudlet_name_openstack_beacon}
+#        Delete All App Instances      region=EU  cloudlet_name=${cloudlet_name_openstack_beacon}
+#        Delete All Cluster Instances  region=EU  cloudlet_name=${cloudlet_name_openstack_beacon}
+        Delete All Auto Provisioning Policies  region=EU  cloudlet_name=${cloudlet_name_openstack_beacon}
 
         Delete Cloudlet  region=EU  token=${token}  operator_org_name=${operator_name_openstack_beacon}  cloudlet_name=${cloudlet_name_openstack_beacon}  use_defaults=${False}
 
@@ -223,8 +226,10 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Anthos
         [Documentation]
         ...  - do DeleteCloudlet to delete a CRM on Anthos
 
-        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_anthos}
-        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_anthos}
+        Cleanup Clusters and Apps  region=US  cloudlet_name=${cloudlet_name_anthos}
+#        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_anthos}
+#        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_anthos}
+        Delete All Auto Provisioning Policies  region=US  cloudlet_name=${cloudlet_name_anthos}
 
         Delete Cloudlet  region=US  token=${token}  operator_org_name=${operator_name_anthos}  cloudlet_name=${cloudlet_name_anthos}  use_defaults=${False}
 
