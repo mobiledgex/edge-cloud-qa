@@ -18,6 +18,7 @@ developer_name = 'automation_dev_org'
 app_name = 'automation_api_app'
 app_version = '1.0'
 operator = 'dmuus'
+region = 'US'
 
 num_requests = 1
 num_threads = 500  # 500
@@ -41,6 +42,8 @@ class tc_findcloudlet_ratelimit(unittest.TestCase):
 
         register = mex_dme.Client(app_name=app_name, app_version=app_version, developer_org_name=developer_name)
         self.register_result = self.dme.register_client(register.client)
+
+        self.mc.update_settings(region=region, disable_rate_limit = False)
 
     def calculate_rate_percent(self, requests_per_second):
         rate_minus_percent = (requests_per_second - (requests_per_second * self.rate_diff_percent / 100))
@@ -345,6 +348,8 @@ class tc_findcloudlet_ratelimit(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         self.mc.cleanup_provisioning()
+        self.mc.update_settings(region=region, disable_rate_limit = True)
+
         print('ffff', fail_list)
 
 
