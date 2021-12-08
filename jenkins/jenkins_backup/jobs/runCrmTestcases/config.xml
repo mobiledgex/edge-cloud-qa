@@ -185,6 +185,7 @@ pipeline{
         string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
         string(name: &apos;InfluxDB&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
+        string(name: &apos;NumberParallelExecutions&apos;, defaultValue: &apos;2&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
         //string(name: &apos;CRMPoolAnthos&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
@@ -205,16 +206,17 @@ pipeline{
                         builds[&quot;${value[-1]}&quot;] = {
                             build job: &apos;runTestcases&apos;, parameters: [
                                 string(name: &apos;SlaveNode&apos;, value: node_name),
-                                string(name: &apos;TestTarget&apos;, value: testtarget),
+                                string(name: &apos;TestTarget&apos;, value: params.TestTarget),
                                 string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller), 
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: params.Cycle), 
+                                string(name: &apos;Controller&apos;, value: params.Controller), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController), 
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
                                 //string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
                                 string(name: &apos;CRMPool&apos;, value: params.CRMPool), 
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                                string(name: &apos;NumberParallelExecutions&apos;, value: params.NumberParallelExecutions),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                         }
                     }
                     catchError {

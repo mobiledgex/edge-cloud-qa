@@ -113,6 +113,8 @@ pipeline{
         booleanParam(name: &apos;User&apos;, defaultValue: true)
         //booleanParam(name: &apos;OrgCloudletPool&apos;, defaultValue: true)
         booleanParam(name: &apos;RateLimitSettings&apos;, defaultValue: true)
+        booleanParam(name: &apos;TrustPolicy&apos;, defaultValue: true)
+        booleanParam(name: &apos;TrustPolicyException&apos;, defaultValue: true)
     }
 
     stages {
@@ -175,6 +177,12 @@ pipeline{
                         //}
                         if (String.valueOf(params.RateLimitSettings) == &apos;true&apos;) {
                             table_list = table_list + &apos;ratelimitsettings,&apos;
+                        }
+                        if (String.valueOf(params.TrustPolicy) == &apos;true&apos;) {
+                            table_list = table_list + &apos;trustpolicy,&apos;
+                        }
+                        if (String.valueOf(params.TrustPolicyException) == &apos;true&apos;) {
+                            table_list = table_list + &apos;trustpolicyexception,&apos;
                         }
 
                         table_list = table_list.substring(0, table_list.length() - 1)

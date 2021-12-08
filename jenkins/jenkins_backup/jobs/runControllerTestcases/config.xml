@@ -125,30 +125,29 @@ testcase_components = [
 
     ]
 
+testcase_components2 = [
+    controller_components + &quot;CloudletPool&quot;,
+    controller_components + &quot;CloudletPoolMember&quot;,
+    controller_components + &quot;OrgCloudlet&quot;
+]
 
 pipeline{
     agent { label &apos;jenkinsSlave1&apos; }
     parameters {
         string(name: &apos;SlaveNode&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
-        //string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
         string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
         string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
         string(name: &apos;Controller&apos;, defaultValue: &apos;mexplat-qa-us.ctrl.mobiledgex.net:55001&apos;)
-        //string(name: &apos;DME&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:50051&apos;)
-        //string(name: &apos;DMERest&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:38001&apos;)
         string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
-        //string(name: &apos;InfluxDB&apos;, defaultValue: &apos;notset&apos;)
-        //string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
         choice(name: &apos;TestTarget&apos;, choices: [&apos;Controller&apos;], description: &apos;&apos;)
         string(name: &apos;TestTimeout&apos;, defaultValue: &apos;2m&apos;)
-        //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
 
     stages {
-        stage(&quot;execute tests&quot;) {
+        stage(&quot;execute tests 1&quot;) {
             steps {
                 //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting Controller tests&quot;
 
@@ -170,15 +169,48 @@ pipeline{
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                         }
                     }
-                    parallel builds
+                    catchError {
+                        parallel builds
+                    }
                 }
             }
             post {
-                failure { echo &quot;run controller tests failed&quot;}
+                failure { echo &quot;run controller tests 1 failed&quot;}
+            }
+        }
+ 
+        stage(&quot;execute tests 2&quot;) {
+            steps {
+                //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting Controller tests&quot;
+
+                script {
+                    builds = [:]
+                    testcase_components2.eachWithIndex { value, index-&gt;
+                        echo &quot;${value}&quot;
+                        builds[&quot;${value[-1]}&quot;] = {
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNode), 
+                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: params.Cycle), 
+                                string(name: &apos;Controller&apos;, value: params.Controller), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController), 
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                                string(name: &apos;TestTarget&apos;, value: params.TestTarget),
+                                string(name: &apos;TestTimeout&apos;, value: params.TestTimeout),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
+                        }
+                    }
+                    catchError {
+                        parallel builds
+                    }
+                }
+            }
+            post {
+                failure { echo &quot;run controller tests 2 failed&quot;}
             }
         }
     }
-
 }
 </script>
     <sandbox>true</sandbox>

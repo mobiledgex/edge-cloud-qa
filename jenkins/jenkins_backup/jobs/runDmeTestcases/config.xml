@@ -95,8 +95,10 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices>
-            <string>DME</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>DME</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -136,6 +138,10 @@ testcase_components2 = [
     dme_components + &quot;ShowDeviceReport&quot;,
     ]
     
+ testcase_components3 = [
+    dme_components + &quot;RateLimit&quot;
+    ]
+   
 pipeline{
     agent { label &apos;jenkinsSlave1&apos; }
     parameters {
@@ -165,19 +171,19 @@ pipeline{
                         echo &quot;${value}&quot;
                         builds[&quot;${value[-1]}&quot;] = {
                             build job: &apos;runTestcases&apos;, parameters: [
-                                string(name: &apos;SlaveNode&apos;, value: slavenode),
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNode),
                                 string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller),
-                                string(name: &apos;DME&apos;, value: dme),
-                                string(name: &apos;DMERest&apos;, value: dmerest),
-                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;TestTarget&apos;, value: testtarget),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                string(name: &apos;TestTimeout&apos;, value: testtimeout),
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: params.Cycle), 
+                                string(name: &apos;Controller&apos;, value: params.Controller), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+                                string(name: &apos;DME&apos;, value: params.DME),
+                                string(name: &apos;DMERest&apos;, value: params.DMERest),
+                                string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                                string(name: &apos;TestTarget&apos;, value: params.TestTarget),
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                                string(name: &apos;TestTimeout&apos;, value: params.TestTimeout),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                         }
                     }
                     catchError {
@@ -198,26 +204,60 @@ pipeline{
                         echo &quot;${value}&quot;
                         builds[&quot;${value[-1]}&quot;] = {
                             build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNode),
                                 string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller), 
-                                string(name: &apos;DME&apos;, value: dme),
-                                string(name: &apos;DMERest&apos;, value: dmerest),
-                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
-                                string(name: &apos;TestTarget&apos;, value: testtarget),
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: params.Cycle), 
+                                string(name: &apos;Controller&apos;, value: params.Controller), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController), 
+                                string(name: &apos;DME&apos;, value: params.DME),
+                                string(name: &apos;DMERest&apos;, value: params.DMERest),
+                                string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                                string(name: &apos;TestTarget&apos;, value: params.TestTarget),
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                         }
                     }
-                    parallel builds
+                    catchError {
+                        parallel builds
+                    }
                 }
             }
             post {
                 failure { echo &quot;run group 2 tests failed&quot;}
             }
         }
+        
+        stage(&quot;execute tests group 3&quot;) {
+            steps {
+                script {
+                    builds = [:]
+                    testcase_components3.eachWithIndex { value, index-&gt;
+                        echo &quot;${value}&quot;
+                        builds[&quot;${value[-1]}&quot;] = {
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNode),
+                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: params.Cycle), 
+                                string(name: &apos;Controller&apos;, value: params.Controller), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController), 
+                                string(name: &apos;DME&apos;, value: params.DME),
+                                string(name: &apos;DMERest&apos;, value: params.DMERest),
+                                string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                                string(name: &apos;TestTarget&apos;, value: params.TestTarget),
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
+                        }
+                    }
+                    parallel builds
+                }
+            }
+            post {
+                failure { echo &quot;run group 3 tests failed&quot;}
+            }
+        }
+
     }
 }
 </script>
