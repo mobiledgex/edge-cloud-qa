@@ -22,13 +22,8 @@ pipeline{
         string(name: 'OpenStackEnv', defaultValue: 'notset')
         string(name: 'CommitVersion', defaultValue: 'master')
         booleanParam(name: 'RunFailedOnly', defaultValue: false)
-//        string(name: 'CRMPoolOpenstack', defaultValue: '')
-//        string(name: 'CRMPoolVshpere', defaultValue: '')
-//        string(name: 'CRMPoolVCD', defaultValue: '')
-//        string(name: 'CRMPoolAnthos', defaultValue: '')
         string(name: 'CRMPool', defaultValue: '{"cloudlet_name_crm":[{"cloudlet":"qa-anthos","operator":"packet","region":"US"}]}')
         choice(name: 'TestTarget', choices: ['MasterController', 'Controller', 'DME', 'SDK', 'Openstack', 'VCD', 'Vsphere', 'Anthos', 'Console'], description: '')
-//        string(name: 'Area', defaultValue: 'flavor')
         string(name: 'NumberParallelExecutions', defaultValue: '1')
         string(name: 'TestTimeout', defaultValue: '60m')
     }
@@ -131,26 +126,34 @@ pipeline{
                         if(String.valueOf(params.RunFailedOnly) == "true") {
                             runfailedonly_arg = "--failed_only"
                         }
-                    }
-
-                    sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;' +
-                              'export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin' +
-                              ';export AUTOMATION_CONTROLLER_ADDRESS=' + controller + 
-                              ';export AUTOMATION_DME_ADDRESS=' + dme + 
-                              ';export AUTOMATION_DME_REST_ADDRESS=' + dmerest + 
-                              ';export AUTOMATION_VERSION=' + version + 
-                              ';export AUTOMATION_DME_CERT=' + dmerestcert + 
-                              ';export AUTOMATION_OPENSTACK_DEDICATED_ENV=' + openstackenv + 
-                              ';export AUTOMATION_OPENSTACK_SHARED_ENV=' + openstackenv + 
-                              ';export AUTOMATION_OPENSTACK_VM_ENV=' + openstackenv + 
-                              ';export AUTOMATION_OPENSTACK_GPU_ENV=' + openstackenv + 
-                              ';export AUTOMATION_OPENSTACK_OFFLINE_ENV=' + openstackenv + 
-                              ';export AUTOMATION_MC_ADDRESS=' + mastercontroller + 
-                              ';export AUTOMATION_MC_CERT=' + 
-                              ';export AUTOMATION_INFLUXDB_ADDRESS=' + influxdb + 
-                              ';export AUTOMATION_OPENSTACK_VMPOOL_ENV=' + openstackenv + 
-                              ';export AUTOMATION_OPENSTACK_VGPU_ENV=' + openstackenv + 
-                              ';./execJira_parallel.py --test_timeout=' + params.TestTimeout + ' ' + runfailedonly_arg)
+                        
+                        if(params.SlaveNode == 'jenkinsWindowsSelenium') {
+                            sh(script:'export PYTHONPATH=$WORKSPACE\\\\go\\\\src\\\\github.com\\\\mobiledgex\\\\modules;' +
+                                      'export PATH=$PATH:$WORKSPACE\\\\go\\\\src\\\\github.com\\\\mobiledgex\\\\tools;' +
+                                      'export AUTOMATION_CONSOLE_ADDRESS=' + console + ';' +
+                                      'export AUTOMATION_MC_ADDRESS=' + mc + ';' +
+                                      'export AUTOMATION_MC_CERT=' + mc_cert + ';' +
+                                      'python ./execJira.py');
+                        else {
+                            sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;' +
+                                      'export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin' +
+                                      ';export AUTOMATION_CONTROLLER_ADDRESS=' + controller + 
+                                      ';export AUTOMATION_DME_ADDRESS=' + dme + 
+                                      ';export AUTOMATION_DME_REST_ADDRESS=' + dmerest + 
+                                      ';export AUTOMATION_VERSION=' + version + 
+                                      ';export AUTOMATION_DME_CERT=' + dmerestcert + 
+                                      ';export AUTOMATION_OPENSTACK_DEDICATED_ENV=' + openstackenv + 
+                                      ';export AUTOMATION_OPENSTACK_SHARED_ENV=' + openstackenv + 
+                                      ';export AUTOMATION_OPENSTACK_VM_ENV=' + openstackenv + 
+                                      ';export AUTOMATION_OPENSTACK_GPU_ENV=' + openstackenv + 
+                                      ';export AUTOMATION_OPENSTACK_OFFLINE_ENV=' + openstackenv + 
+                                      ';export AUTOMATION_MC_ADDRESS=' + mastercontroller + 
+                                      ';export AUTOMATION_MC_CERT=' + 
+                                      ';export AUTOMATION_INFLUXDB_ADDRESS=' + influxdb + 
+                                      ';export AUTOMATION_OPENSTACK_VMPOOL_ENV=' + openstackenv + 
+                                      ';export AUTOMATION_OPENSTACK_VGPU_ENV=' + openstackenv + 
+                                      ';./execJira_parallel.py --test_timeout=' + params.TestTimeout + ' ' + runfailedonly_arg)
+                        }
                 }
             }
             post {
