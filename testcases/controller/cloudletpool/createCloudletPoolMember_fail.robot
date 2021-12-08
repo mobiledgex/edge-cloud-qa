@@ -138,7 +138,7 @@ CreateCloudletPoolMember - create cloudlet not found shall return error
    ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  region=US  token=${token}  operator_org_name=dmuus  cloudlet_name=tmocloud-1xx
    
    Should Contain  ${error}   400
-   Should Contain  ${error}   {"message":"Cloudlet key {\\\\"organization\\\\":\\\\"dmuus\\\\",\\\\"name\\\\":\\\\"tmocloud-1xx\\\\"} not found"}
+   Should Contain  ${error}   {"message":"Cloudlets tmocloud-1xx not found"}
 
 # ECQ-3751
 CreateCloudletPoolMember - adding cloudlet with appinst shall return error
