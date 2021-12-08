@@ -17,6 +17,7 @@ mc_address = os.getenv('AUTOMATION_MC_ADDRESS', '127.0.0.1:55001')
 developer_name = 'automation_dev_org'
 app_name = 'automation_api_app'
 app_version = '1.0'
+region = 'US'
 
 num_requests = 1
 num_threads = 500  # 500
@@ -37,6 +38,8 @@ class tc_registerclient_ratelimit(unittest.TestCase):
 
         self.mc = mex_master.MexMasterController(mc_address=mc_address)
         self.flow_name_token = self.mc.get_default_rate_limiting_flow_name() + 'token'
+
+        self.mc.update_settings(region=region, disable_rate_limit = False)
 
     def calculate_rate_percent(self, requests_per_second):
         rate_minus_percent = (requests_per_second - (requests_per_second * self.rate_diff_percent / 100))
@@ -342,6 +345,8 @@ class tc_registerclient_ratelimit(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         self.mc.cleanup_provisioning()
+        self.mc.update_settings(region=region, disable_rate_limit = True)
+
         print('ffff', fail_list)
 
 
