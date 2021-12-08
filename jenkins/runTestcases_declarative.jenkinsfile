@@ -27,7 +27,7 @@ pipeline{
 //        string(name: 'CRMPoolVCD', defaultValue: '')
 //        string(name: 'CRMPoolAnthos', defaultValue: '')
         string(name: 'CRMPool', defaultValue: '{"cloudlet_name_crm":[{"cloudlet":"qa-anthos","operator":"packet","region":"US"}]}')
-        choice(name: 'TestTarget', choices: ['MasterController', 'Controller', 'DME', 'SDK', 'Openstack', 'VCD', 'Vsphere', 'Anthos'], description: '')
+        choice(name: 'TestTarget', choices: ['MasterController', 'Controller', 'DME', 'SDK', 'Openstack', 'VCD', 'Vsphere', 'Anthos', 'Console'], description: '')
 //        string(name: 'Area', defaultValue: 'flavor')
         string(name: 'NumberParallelExecutions', defaultValue: '1')
         string(name: 'TestTimeout', defaultValue: '60m')
@@ -48,11 +48,11 @@ pipeline{
                 //    sh 'rm -rf *'
                 //}
 
-                dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps') {
-                    git branch: 'master',
-                    credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-                    url: 'https://github.com/mobiledgex/edge-cloud-sampleapps.git'
-                }
+                //dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps') {
+                //    git branch: 'master',
+                //   credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                //    url: 'https://github.com/mobiledgex/edge-cloud-sampleapps.git'
+                //}
 
                 dir('go/src/github.com/mobiledgex') {
                     sh 'rm -rf *'
@@ -109,7 +109,13 @@ pipeline{
         stage("build protos") {
             steps {
                 dir('go/src/github.com/mobiledgex/tools') {
-                    sh(script:'/usr/bin/python3 ./build_protos.py --sourcedir $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/ --sourcedir_proto $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/ --qadir $WORKSPACE/go/src/github.com/mobiledgex');
+                    script {
+                        if(params.SlaveNode == 'jenkinsWindowsSelenium') {
+                            echo('slavenode is jenkinsWindowsSelenium. Skipping')
+                        } else {
+                            sh(script:'/usr/bin/python3 ./build_protos.py --sourcedir $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/ --sourcedir_proto $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/ --qadir $WORKSPACE/go/src/github.com/mobiledgex');
+                        }
+                    }
                 }
             }
             post {
