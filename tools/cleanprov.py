@@ -17,7 +17,7 @@ logging.getLogger('mex_rest').setLevel(loglevel)
 logging.getLogger('webservice').setLevel(loglevel)
 logging.getLogger('mex_master_controller.MexOperation').setLevel(loglevel)
 
-table_list = ['appinst', 'app', 'clusterinst', 'flavor', 'autoscalepolicy', 'autoprovpolicy', 'orgcloudletpool', 'cloudletpool', 'cloudlet', 'billingorg', 'org', 'user', 'ratelimitsettings']
+table_list = ['appinst', 'app', 'clusterinst', 'flavor', 'autoscalepolicy', 'autoprovpolicy', 'orgcloudletpool', 'cloudletpool', 'cloudlet', 'billingorg', 'org', 'user', 'ratelimitsettings', 'trustpolicy', 'trustpolicyexception']
 table_list_str = ','.join(table_list)
 
 region_list = ['US', 'EU']
@@ -395,6 +395,64 @@ def clean_ratelimitsettingsmaxreqs():
                else:
                   print(f'keeping {name} since doesnt match keypattern={key_pattern}')
 
+def clean_trustpolicy():
+    global key_pattern
+
+    print('clean trustpolicy')
+    try:
+        app_list = mc.show_trust_policy(region=region, token=mc.super_token, use_defaults=False)
+    except Exception as e:
+        print(f'error showing trustpolicy, {e}.continuing to next item')
+        return
+
+    print('applist', app_list)
+    print('key',key_pattern)
+    if len(app_list) == 0:
+        print('nothing to delete')
+    else:
+        for a in app_list:
+            name = a['data']['key']['name']
+            if in_trustpolicy_list(a):
+                print(f'keeping {name}')
+            else:
+               if pattern_re.match(name):
+                  try:
+                     print(f'deleting {name}')
+                     mc.delete_trust_policy(region=region, token=mc.super_token, use_defaults=False, policy_name=name, operator_org_name=a['data']['key']['organization'])
+                  except Exception as e:
+                     print(f'error deleting {name}, {e}.continuing to next item')
+               else:
+                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
+def clean_trustpolicyexception():
+    global key_pattern
+
+    print('clean trustpolicyexception')
+    try:
+        app_list = mc.show_trust_policy_exception(region=region, token=mc.super_token, use_defaults=False)
+    except Exception as e:
+        print(f'error showing trustpolicyexception, {e}.continuing to next item')
+        return
+
+    print('applist', app_list)
+    print('key',key_pattern)
+    if len(app_list) == 0:
+        print('nothing to delete')
+    else:
+        for a in app_list:
+            name = a['data']['key']['Name']
+            if in_trustpolicyexception_list(a):
+                print(f'keeping {name}')
+            else:
+               if pattern_re.match(name):
+                  try:
+                     print(f'deleting {name}')
+                     mc.delete_trust_policy_exception(region=region, token=mc.super_token, use_defaults=False, policy_name=name, app_name=a['data']['key']['app_key']['name'], developer_org_name=a['data']['key']['app_key']['organization'], app_version=a['data']['key']['app_key']['version'], cloudlet_pool_name=a['data']['key']['cloudlet_pool_key']['name'], cloudlet_pool_org_name=a['data']['key']['cloudlet_pool_key']['organization'])
+                  except Exception as e:
+                     print(f'error deleting {name}, {e}.continuing to next item')
+               else:
+                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 def in_app_list(app):
     for a in app_keep:
         if a['app_name'] == app['data']['key']['name']:
@@ -446,12 +504,20 @@ def in_autoprovpolicy_list(app):
 
 def in_autoscalepolicy_list(app):
     return False
+
+def in_trustpolicy_list(app):
+    return False
+
+def in_trustpolicyexception_list(app):
+    return False
  
 for r in region_list:
    if r in region_arg:
       region = r
       for table in table_list:
          if table in tables_arg:
+            if table == 'trustpolicyexception':
+               clean_trustpolicyexception()
             if table == 'appinst':
                clean_appinst()
             elif table == 'app':
@@ -462,6 +528,8 @@ for r in region_list:
                clean_flavor()
             elif table == 'cloudlet':
                clean_cloudlet()
+            if table == 'trustpolicy':
+               clean_trustpolicy()
             elif table == 'autoprovpolicy':
                clean_autoprovpolicy()
             elif table == 'autoscalepolicy':
