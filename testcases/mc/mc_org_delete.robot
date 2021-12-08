@@ -226,6 +226,7 @@ MC - Verify an org can not be deleted while an associated cluster inst exists
 	Unlock User
 	${user2Token}=   Login    username=${username2}    password=${password}
 	Create Org    orgname=${orgname}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${user2Token}    use_defaults=${False}   auto_delete=${False}
+        Create Billing Org  billing_org_name=${orgname}  token=${adminToken}  auto_delete=${False}
 	Create Cluster Instance  region=US  cluster_name=${cluster_name}  cloudlet_name=tmocloud-1  operator_org_name=tmus  developer_org_name=${orgname}  flavor_name=automation_api_flavor  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  auto_delete=${False}
 	Run Keyword and Expect Error  *  Delete Org   orgname=${orgname}   token=${adminToken}      use_defaults=${False}
 	${body}=          Response Body
@@ -233,6 +234,7 @@ MC - Verify an org can not be deleted while an associated cluster inst exists
 
 	${rsp}=  Delete Cluster Instance  region=US  cluster_name=${cluster_name}   cloudlet_name=tmocloud-1   operator_org_name=tmus   developer_org_name=${orgname}
 
+        Delete Billing Org  billing_org_name=${orgname}  token=${adminToken}
 	Delete Org   orgname=${orgname}   token=${adminToken}      use_defaults=${False}
 	${body}=          Response Body
 	Should Be Equal              ${body}         {"message":"Organization deleted"}
@@ -266,6 +268,7 @@ MC - Verify an org can not be deleted while an associated app exists
 	Unlock User
 	${user2Token}=   Login    username=${username2}    password=${password}
 	Create Org    orgname=${orgname}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${user2Token}    use_defaults=${False}   auto_delete=${False}
+        Create Billing Org  billing_org_name=${orgname}  token=${adminToken}  auto_delete=${False}
 	Create Cluster Instance  region=US  cluster_name=${cluster_name}  cloudlet_name=tmocloud-1  operator_org_name=tmus  developer_org_name=${orgname}  flavor_name=automation_api_flavor  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  auto_delete=${False}
 	Create App  region=US  app_name=${appname}  app_version=1.0  developer_org_name=${orgname}  image_type=ImageTypeDocker  cluster_name=${cluster_name}  default_flavor_name=automation_api_flavor  auto_delete=${False}
 
@@ -277,6 +280,7 @@ MC - Verify an org can not be deleted while an associated app exists
 
         ${rsp}=  Delete App  region=US  app_name=${appname}  app_version=1.0  developer_org_name=${orgname}
 
+        Delete Billing Org  billing_org_name=${orgname}  token=${adminToken}
 	Delete Org   orgname=${orgname}   token=${adminToken}      use_defaults=${False}
 	${body}=          Response Body
 	Should Be Equal              ${body}         {"message":"Organization deleted"}
@@ -304,10 +308,12 @@ MC - Verify an org can not be deleted while an associated app instance exists
 	${appname}=  Catenate  SEPARATOR=   app   ${epoch}
 	#${message}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some App, AppInst, ClusterInst"}
         ${message}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some App, AppInst, ClusterInst
+        Skip Verify Email
 	Create User       username=${username2}     password=${password}     email_address=${email2}   auto_delete=${False} 
 	Unlock User
 	${user2Token}=   Login    username=${username2}    password=${password}
 	Create Org    orgname=${orgname}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${user2Token}    use_defaults=${False}   auto_delete=${False}
+        Create Billing Org  billing_org_name=${orgname}  token=${adminToken}  auto_delete=${False}
 	Create Cluster Instance  region=US  cluster_name=${cluster_name}  cloudlet_name=tmocloud-1  operator_org_name=tmus  developer_org_name=${orgname}  flavor_name=automation_api_flavor  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  auto_delete=${False}
 	Create App  region=US  app_name=${appname}  app_version=1.0  developer_org_name=${orgname}  image_type=ImageTypeDocker  cluster_name=${cluster_name}  default_flavor_name=automation_api_flavor  auto_delete=${False}
 
@@ -321,6 +327,7 @@ MC - Verify an org can not be deleted while an associated app instance exists
         ${rsp}=  Delete App Instance  token=${user2Token}  region=US  app_name=${appname}  app_version=1.0  developer_org_name=${orgname}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  cloudlet_name=tmocloud-1  operator_org_name=tmus  use_defaults=${False}
         ${rsp}=  Delete App  region=US  app_name=${appname}  app_version=1.0  developer_org_name=${orgname}
 	${rsp}=  Delete Cluster Instance  region=US  cluster_name=${cluster_name}   cloudlet_name=tmocloud-1   operator_org_name=tmus   developer_org_name=${orgname}
+        Delete Billing Org  billing_org_name=${orgname}  token=${adminToken}
 	Delete Org   orgname=${orgname}   token=${adminToken}      use_defaults=${False}
 	${body}=          Response Body
 	Should Be Equal              ${body}         {"message":"Organization deleted"}
