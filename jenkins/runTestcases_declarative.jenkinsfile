@@ -154,6 +154,7 @@ pipeline{
                                       ';export AUTOMATION_OPENSTACK_VGPU_ENV=' + openstackenv + 
                                       ';./execJira_parallel.py --test_timeout=' + params.TestTimeout + ' ' + runfailedonly_arg)
                         }
+                    }
                 }
             }
             post {
