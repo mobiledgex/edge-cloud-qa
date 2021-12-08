@@ -85,7 +85,7 @@ Operator Contributor shall be able to create/update/view/delete reporter
     ${reporter}=  Show Reporter  reporter_name=${reporter_name}  organization=tmus
     Should Be Equal  ${reporter[0]['Name']}  ${reporter_name}
     ${reporter}=  Update Reporter  reporter_name=${reporter_name}  organization=tmus  schedule=Every15Days
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
+    Should Be Equal   ${reporter[0]['Schedule']}  Every15Days
     Delete Reporter  reporter_name=${reporter_name}  organization=tmus
 
 # ECQ-3809
