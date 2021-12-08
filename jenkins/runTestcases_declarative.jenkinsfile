@@ -22,7 +22,7 @@ pipeline{
         string(name: 'CommitVersion', defaultValue: 'master')
         booleanParam(name: 'RunFailedOnly', defaultValue: false)
         string(name: 'CRMPool', defaultValue: '{"cloudlet_name_crm":[{"cloudlet":"qa-anthos","operator":"packet","region":"US"}]}')
-        choice(name: 'TestTarget', choices: ['MasterController', 'Controller', 'DME', 'SDK', 'Openstack', 'VCD', 'Vsphere', 'Anthos', 'Console'], description: '')
+        choice(name: 'TestTarget', choices: ['MasterController', 'Controller', 'DME', 'SDK', 'Openstack', 'VCD', 'Vsphere', 'Anthos', 'WebUI'], description: '')
         string(name: 'NumberParallelExecutions', defaultValue: '1')
         string(name: 'TestTimeout', defaultValue: '60m')
     }
