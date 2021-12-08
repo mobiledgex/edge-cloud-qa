@@ -134,7 +134,7 @@ pipeline{
                                       'export AUTOMATION_MC_ADDRESS=' + mc + ';' +
                                       'export AUTOMATION_MC_CERT=' + mc_cert + ';' +
                                       'python ./execJira.py');
-                        else {
+                        } else {
                             sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;' +
                                       'export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin' +
                                       ';export AUTOMATION_CONTROLLER_ADDRESS=' + controller + 
