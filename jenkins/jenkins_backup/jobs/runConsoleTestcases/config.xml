@@ -6,15 +6,12 @@
       <jobProperties/>
       <triggers/>
       <parameters>
-        <string>Components</string>
         <string>Project</string>
         <string>SlaveNode</string>
-        <string>VariableFile</string>
         <string>TestTarget</string>
         <string>RunFailedOnly</string>
         <string>TestTimeout</string>
         <string>Cycle</string>
-        <string>MasterController</string>
         <string>CommitVersion</string>
       </parameters>
       <options/>
@@ -43,10 +40,6 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>Components</name>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
           <name>Cycle</name>
           <defaultValue>2021-11-05_CirrusR3.1</defaultValue>
           <trim>false</trim>
@@ -54,21 +47,6 @@
         <hudson.model.StringParameterDefinition>
           <name>Project</name>
           <defaultValue>ECQ</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>MasterController</name>
-          <defaultValue>console-qa.mobiledgex.net:443</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>VariableFile</name>
-          <defaultValue>automation_variables.py</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>CommitVersion</name>
-          <defaultValue>master</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
@@ -79,13 +57,13 @@
           <name>TestTarget</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
-              <string>MasterController</string>
+              <string>Console</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>TestTimeout</name>
-          <defaultValue>2m</defaultValue>
+          <defaultValue>5m</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -98,51 +76,34 @@
 //slackchannel = &apos;#qa-automation&apos;
 
 automated_component = &quot;Automated&quot;
-controller_components = [automated_component, &quot;MasterController&quot;]
-testcase_components = [
-    controller_components + &quot;Account&quot;,
-    controller_components + &quot;UserRole&quot;,
-    controller_components + &quot;User&quot;,
-    controller_components + &quot;Configs&quot;,
-    automated_component + &quot;Mcctl&quot;,
-    controller_components + &quot;Billing&quot;,
-    controller_components + &quot;ShowNode&quot;,
-    controller_components + &quot;Organization&quot;
-    ]
-
+console_components = [automated_component, &quot;WebUI&quot;]  //, &quot;SDK&quot;]
 
 pipeline{
     agent { label &apos;jenkinsSlave1&apos; }
     parameters {
         string(name: &apos;SlaveNode&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
-        string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
         string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
-        string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
-        string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
-        string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        choice(name: &apos;TestTarget&apos;, choices: [&apos;MasterController&apos;], description: &apos;&apos;)
-        string(name: &apos;TestTimeout&apos;, defaultValue: &apos;2m&apos;)
+        choice(name: &apos;TestTarget&apos;, choices: [&apos;Console&apos;], description: &apos;&apos;)
+        string(name: &apos;TestTimeout&apos;, defaultValue: &apos;5m&apos;)
     }
 
     stages {
         stage(&quot;execute tests&quot;) {
             steps {
-                //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting MC tests&quot;
-
+                //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting SDK tests&quot;
+                
                 script {
                     builds = [:]
                     testcase_components.eachWithIndex { value, index-&gt;
                         echo &quot;${value}&quot;
                         builds[&quot;${value[-1]}&quot;] = {
                             build job: &apos;runTestcases&apos;, parameters: [
-                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNode), 
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNode),
                                 string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
                                 string(name: &apos;Project&apos;, value: params.Project), 
                                 string(name: &apos;Cycle&apos;, value: params.Cycle), 
-                                string(name: &apos;MasterController&apos;, value: params.MasterController),
-                                string(name: &apos;VariableFile&apos;, value: params.VariableFile),
                                 string(name: &apos;TestTarget&apos;, value: params.TestTarget),
                                 string(name: &apos;TestTimeout&apos;, value: params.TestTimeout),
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
@@ -152,7 +113,14 @@ pipeline{
                 }
             }
             post {
-                failure { echo &quot;run MC tests failed&quot;}
+                failure { 
+                    echo &quot;run Console tests failed&quot;
+                    //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;fail&quot;, message: &quot;Finished SDK tests with failure&quot;
+                }
+                success {
+                    echo &quot;run Console tests passed&quot;
+                    //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Finished SDK tests with success&quot;
+                }
             }
         }
     }
