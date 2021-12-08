@@ -131,7 +131,7 @@ pipeline{
                                       'export PATH=$PATH:$WORKSPACE\\\\go\\\\src\\\\github.com\\\\mobiledgex\\\\tools;' +
                                       'export AUTOMATION_CONSOLE_ADDRESS=' + params.Console + ';' +
                                       'export AUTOMATION_MC_ADDRESS=' + params.MasterController + ';' +
-                                      'export AUTOMATION_MC_CERT=; +
+                                      'export AUTOMATION_MC_CERT=;' +
                                       'python ./execJira.py');
                         } else {
                             sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;' +
