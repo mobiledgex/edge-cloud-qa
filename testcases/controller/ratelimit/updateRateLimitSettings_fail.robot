@@ -136,10 +136,10 @@ UpdateRateLimitFlow - update with non-existent flow shall return error
 
    [Tags]  RateLimit
 
-   # EDGECLOUD-5487  ratelimitsettings updateflow gives wrong error when key not found 
+   # EDGECLOUD-5487  ratelimitsettings updateflow gives wrong error when key not found  - closed
 
    ${error}=  Run Keyword and Expect Error  *  Update Rate Limit Flow  region=${region}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"FlowRateLimitSettings key {\\\\"flow_settings_name\\\\":\\\\"${flow_name}\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":1,\\\\"rate_limit_target\\\\":1}} not found"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"FlowRateLimitSettings key {\\\\"flow_settings_name\\\\":\\\\"${flow_name}\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":\\\\"Dme\\\\",\\\\"rate_limit_target\\\\":\\\\"AllRequests\\\\"}} not found"}')
 
 # ECQ-4063
 UpdateRateLimitMaxRequests - update with non-existent flow shall return error
@@ -152,7 +152,7 @@ UpdateRateLimitMaxRequests - update with non-existent flow shall return error
    # EDGECLOUD-5685 - ratelimitsettings updatemaxreqs gives wrong error when key not found 
 
    ${error}=  Run Keyword and Expect Error  *  Update Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=1  interval=1m
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"FlowRateLimitSettings key {\\\\"max_reqs_settings_name\\\\":\\\\"xx\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":1,\\\\"rate_limit_target\\\\":1}} not found"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"FlowRateLimitSettings key {\\\\"max_reqs_settings_name\\\\":\\\\"xx\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":\\\\"Dme\\\\",\\\\"rate_limit_target\\\\":\\\\"AllRequests\\\\"}} not found"}')
 
 # ECQ-4064
 UpdateRateLimitMaxRequests - update with missing parms shall return error
@@ -179,6 +179,12 @@ Setup
 
    ${max_requests_name}=  Get Default Rate Limiting Max Requests Name
    Set Suite Variable  ${max_requests_name}
+
+   Update Settings  region=${region}  disable_rate_limit=${False}
+
+Teardown
+   Cleanup Provisioning
+   Update Settings  region=${region}  disable_rate_limit=${True}
 
 Update Flow Fail
    [Arguments]  ${message}  &{parms}
