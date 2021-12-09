@@ -33,15 +33,16 @@ Clientapiusage - mcctl shall be able to request clientapiusage api metrics
       selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0
 #      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation
 #      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cloudlet=${cloudlet_dme}
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cloudlet=${cloudlet_dme}  cloudlet-org=${operator_dme}
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cloudlet=${cloudlet_dme}  cloudlet-org=${operator_dme}  method=FindCloudlet
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cloudlet=${cloudlet_dme}  cloudlet-org=${operator_dme}  method=RegisterClient
-      selector=api  cloudlet=${cloudlet_dme}  cloudlet-org=${operator_dme}  method=PlatformFindCloudlet
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cloudlet=${cloudlet_dme}  cloudlet-org=${operator_dme}  method=VerifyLocation
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cloudlet=${cloudlet_dme}  cellid=0
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cloudlet=${cloudlet_dme}  limit=1
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cloudlet=${cloudlet_dme}  limit=1  starttime=${start_date}  endtime=${end_date}
+      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}
+      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}
+      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=FindCloudlet
+      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=RegisterClient
+      selector=api  app-org=${developer_org_name_automation}  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=PlatformFindCloudlet
+      selector=api  cloudlet-org=${operator_name_fake}  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=PlatformFindCloudlet
+      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=VerifyLocation
+      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  cellid=0
+      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  limit=1
+      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  limit=1  starttime=${start_date}  endtime=${end_date}
       selector=api  app-org=${developer_org_name_automation}  numsamples=1
       selector=api  app-org=${developer_org_name_automation}  numsamples=1  starttime=${start_date}  endtime=${end_date}
       selector=api  app-org=${developer_org_name_automation}  startage=12h
