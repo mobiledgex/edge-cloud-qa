@@ -5,7 +5,7 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  String
      
 Test Setup  Setup
-Test Teardown  Cleanup Provisioning
+Test Teardown  Teardown
 
 *** Variables ***
 ${region}=  US
@@ -105,7 +105,7 @@ DeleteRateLimitFlow - delete with non-existent flow shall return error
    ${flow_name}=  Get Default Rate Limiting Flow Name
 
    ${error}=  Run Keyword and Expect Error  *  Delete Rate Limit Flow  region=${region}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme 
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"FlowRateLimitSettings key {\\\\"flow_settings_name\\\\":\\\\"${flow_name}\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":1,\\\\"rate_limit_target\\\\":1}} not found"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"FlowRateLimitSettings key {\\\\"flow_settings_name\\\\":\\\\"${flow_name}\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":\\\\"Dme\\\\",\\\\"rate_limit_target\\\\":\\\\"AllRequests\\\\"}} not found"}')
 
 # ECQ-4053
 DeleteRateLimitMaxRequests - delete with non-existent max requests shall return error
@@ -118,7 +118,7 @@ DeleteRateLimitMaxRequests - delete with non-existent max requests shall return 
    ${flow_name}=  Get Default Rate Limiting Max Requests Name
 
    ${error}=  Run Keyword and Expect Error  *  Delete Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"MaxReqsRateLimitSettings key {\\\\"max_reqs_settings_name\\\\":\\\\"xx\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":1,\\\\"rate_limit_target\\\\":1}} not found"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"MaxReqsRateLimitSettings key {\\\\"max_reqs_settings_name\\\\":\\\\"xx\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":\\\\"Dme\\\\",\\\\"rate_limit_target\\\\":\\\\"AllRequests\\\\"}} not found"}')
 
 # ECQ-4054
 DeleteRateLimitMaxRequests - delete with missing parms shall return error
@@ -137,3 +137,10 @@ DeleteRateLimitMaxRequests - delete with missing parms shall return error
 Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
+
+   Update Settings  region=${region}  disable_rate_limit=${False}
+
+Teardown
+   Cleanup Provisioning
+   Update Settings  region=${region}  disable_rate_limit=${True}
+
