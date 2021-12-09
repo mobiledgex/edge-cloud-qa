@@ -28,75 +28,77 @@ pipeline{
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                //script {
-                //    currentBuild.rawBuild.project.description = 'NEW JOB DESCRIPTION'
-                //    currentBuild.rawBuild.project.setDisplayName('runTestcases')
-                //}
+        waitUntil {
+            stage('Checkout') {
+                steps {
+                    //script {
+                    //    currentBuild.rawBuild.project.description = 'NEW JOB DESCRIPTION'
+                    //    currentBuild.rawBuild.project.setDisplayName('runTestcases')
+                    //}
 
-                //sh 'docker system prune -af'  //remove all docker stuff without prompting
-                //echo 'docker prune failed. mayber already running'
-                // delete old protos before git and build
-                //dir('go/src/github.com/mobiledgex') {
-                //    sh 'rm -rf *'
-                //}
+                    //sh 'docker system prune -af'  //remove all docker stuff without prompting
+                    //echo 'docker prune failed. mayber already running'
+                    // delete old protos before git and build
+                    //dir('go/src/github.com/mobiledgex') {
+                    //    sh 'rm -rf *'
+                    //}
 
-                //dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps') {
-                //    git branch: 'master',
-                //   credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-                //    url: 'https://github.com/mobiledgex/edge-cloud-sampleapps.git'
-                //}
+                    //dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps') {
+                    //    git branch: 'master',
+                    //   credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                    //    url: 'https://github.com/mobiledgex/edge-cloud-sampleapps.git'
+                    //}
 
-                dir('go/src/github.com/mobiledgex') {
-                    sh 'rm -rf *'
-                    checkout([$class: 'GitSCM',
-                        branches: [[name: 'master']],
-                        doGenerateSubmoduleConfigurations: false,
-                        extensions: [
-                            [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
-                            [$class:'SparseCheckoutPath', path:'testcases/*'],
-                            [$class:'SparseCheckoutPath', path:'jenkins/*'],
-                            [$class:'SparseCheckoutPath', path:'modules/*'],
-                            [$class:'SparseCheckoutPath', path:'protos/*'],
-                            [$class:'SparseCheckoutPath', path:'tools/*'],
-                            [$class:'SparseCheckoutPath', path:'certs/*']
-                            ]]
-                        ],
-                        submoduleCfg: [],
-                        userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-                        url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+                    dir('go/src/github.com/mobiledgex') {
+                        sh 'rm -rf *'
+                        checkout([$class: 'GitSCM',
+                            branches: [[name: 'master']],
+                            doGenerateSubmoduleConfigurations: false,
+                            extensions: [
+                                [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                                [$class:'SparseCheckoutPath', path:'testcases/*'],
+                                [$class:'SparseCheckoutPath', path:'jenkins/*'],
+                                [$class:'SparseCheckoutPath', path:'modules/*'],
+                                [$class:'SparseCheckoutPath', path:'protos/*'],
+                                [$class:'SparseCheckoutPath', path:'tools/*'],
+                                [$class:'SparseCheckoutPath', path:'certs/*']
+                                ]]
+                            ],
+                            submoduleCfg: [],
+                            userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                            url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
 
-                        //unstash 'edge-cloud_stash'
+                            //unstash 'edge-cloud_stash'
+                    }
+
+                    dir('go/src/github.com/mobiledgex/edge-proto') {
+                       sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*'
+                       git branch: CommitVersion,
+                       credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                       url: 'https://github.com/mobiledgex/edge-proto.git'
+                    }
+                    dir('go/src/github.com/mobiledgex/edge-cloud') {
+                       sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*'
+    
+                       checkout([$class: 'GitSCM',
+                           branches: [[name: CommitVersion]],
+                           doGenerateSubmoduleConfigurations: false,
+                           extensions: [
+                               [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                               [$class:'SparseCheckoutPath', path:'edgeproto/*'],
+                               [$class:'SparseCheckoutPath', path:'d-match-engine/dme-proto/*'],
+                               [$class:'SparseCheckoutPath', path:'protoc-gen-cmd/protocmd/*'],
+                               [$class:'SparseCheckoutPath', path:'protogen/*']
+                               ]]
+                           ],
+                           submoduleCfg: [],
+                           userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                           url: 'https://github.com/mobiledgex/edge-cloud.git']]])
+                    }
                 }
-
-                dir('go/src/github.com/mobiledgex/edge-proto') {
-                   sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*'
-                   git branch: CommitVersion,
-                   credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-                   url: 'https://github.com/mobiledgex/edge-proto.git'
+                post {
+                    failure { echo 'checkout failed' }
                 }
-                dir('go/src/github.com/mobiledgex/edge-cloud') {
-                   sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*'
-
-                   checkout([$class: 'GitSCM',
-                       branches: [[name: CommitVersion]],
-                       doGenerateSubmoduleConfigurations: false,
-                       extensions: [
-                           [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
-                           [$class:'SparseCheckoutPath', path:'edgeproto/*'],
-                           [$class:'SparseCheckoutPath', path:'d-match-engine/dme-proto/*'],
-                           [$class:'SparseCheckoutPath', path:'protoc-gen-cmd/protocmd/*'],
-                           [$class:'SparseCheckoutPath', path:'protogen/*']
-                           ]]
-                       ],
-                       submoduleCfg: [],
-                       userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-                       url: 'https://github.com/mobiledgex/edge-cloud.git']]])
-                }
-            }
-            post {
-                failure { echo 'checkout failed' }
             }
         }
 
