@@ -19,6 +19,7 @@
         <string>VariableFile</string>
         <string>TestTarget</string>
         <string>InfluxDB</string>
+        <string>Console</string>
         <string>RunFailedOnly</string>
         <string>DME</string>
         <string>TestTimeout</string>
@@ -91,6 +92,11 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
+          <name>Console</name>
+          <defaultValue>https://console-qa.mobiledgex.net</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>VariableFile</name>
           <defaultValue>automation_variables.py</defaultValue>
           <trim>false</trim>
@@ -131,6 +137,7 @@
               <string>VCD</string>
               <string>Vsphere</string>
               <string>Anthos</string>
+              <string>WebUI</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
