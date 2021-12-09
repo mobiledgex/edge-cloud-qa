@@ -12,7 +12,6 @@
         <string>RunFailedOnly</string>
         <string>TestTimeout</string>
         <string>Cycle</string>
-        <string>CommitVersion</string>
       </parameters>
       <options/>
     </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
@@ -36,7 +35,7 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>SlaveNode</name>
-          <defaultValue>jenkinsSlave1</defaultValue>
+          <defaultValue>jenkinsWindowsSelenium</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -76,16 +75,16 @@
 //slackchannel = &apos;#qa-automation&apos;
 
 automated_component = &quot;Automated&quot;
-console_components = [automated_component, &quot;WebUI&quot;]  //, &quot;SDK&quot;]
+testcase_components = [[automated_component]]
 
 pipeline{
-    agent { label &apos;jenkinsSlave1&apos; }
+    agent { label slavenode }
     parameters {
-        string(name: &apos;SlaveNode&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNode&apos;, defaultValue: &apos;jenkinsWindowsSelenium&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
         string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        choice(name: &apos;TestTarget&apos;, choices: [&apos;Console&apos;], description: &apos;&apos;)
+        choice(name: &apos;TestTarget&apos;, choices: [&apos;WebUI&apos;], description: &apos;&apos;)
         string(name: &apos;TestTimeout&apos;, defaultValue: &apos;5m&apos;)
     }
 

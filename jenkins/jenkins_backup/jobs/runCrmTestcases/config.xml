@@ -6,6 +6,7 @@
       <jobProperties/>
       <triggers/>
       <parameters>
+        <string>NumberParallelExecutions</string>
         <string>CRMPool</string>
         <string>Controller</string>
         <string>Cycle</string>
@@ -86,6 +87,11 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
+          <name>NumberParallelExecutions</name>
+          <defaultValue>2</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>CommitVersion</name>
           <defaultValue>master</defaultValue>
           <trim>false</trim>
@@ -101,13 +107,11 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>Openstack</string>
-              <string>VCD</string>
-              <string>Vsphere</string>
-              <string>Anthos</string>
-            </a>
+          <choices>
+            <string>Openstack</string>
+            <string>VCD</string>
+            <string>Vsphere</string>
+            <string>Anthos</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>

@@ -7,16 +7,18 @@
       <triggers/>
       <parameters>
         <string>App</string>
-        <string>AutoProvPolicy</string>
         <string>SlaveNode</string>
         <string>RateLimitSettings</string>
         <string>Organization</string>
         <string>User</string>
         <string>BillingOrganization</string>
         <string>AppInst</string>
-        <string>AutoScalePolicy</string>
-        <string>ClusterInst</string>
         <string>Flavor</string>
+        <string>AutoProvPolicy</string>
+        <string>TrustPolicyException</string>
+        <string>AutoScalePolicy</string>
+        <string>TrustPolicy</string>
+        <string>ClusterInst</string>
         <string>Cloudlet</string>
       </parameters>
       <options/>
@@ -86,6 +88,14 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>RateLimitSettings</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>TrustPolicy</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>TrustPolicyException</name>
           <defaultValue>true</defaultValue>
         </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
