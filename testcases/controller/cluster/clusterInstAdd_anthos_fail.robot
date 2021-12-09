@@ -17,7 +17,7 @@ CreateClusterInst - create a clusterinst with numnodes=1 for anthos should fail
 
     ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  operator_org_name=${operator_name_anthos}  cloudlet_name=${cloudlet_name_anthos}  number_masters=1  number_nodes=1 
 
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"NumNodes must be 0 for PLATFORM_TYPE_K8S_BARE_METAL"}')
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"Single kubernetes cluster platform PLATFORM_TYPE_K8S_BARE_METAL only supports AppInst creates"}')
 
 # ECQ-4099
 CreateClusterInst - create a clusterinst with deployment=docker for anthos should fail
@@ -25,9 +25,11 @@ CreateClusterInst - create a clusterinst with deployment=docker for anthos shoul
     ...  - create a cluster instance with deployment=docker for anthos
     ...  - verify correct error occurs
 
+    # EDGECLOUD-5919 clusterinst create for docker on anthos needs better error message
+
     ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  operator_org_name=${operator_name_anthos}  cloudlet_name=${cloudlet_name_anthos}  deployment=docker
 
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"Platform PLATFORM_TYPE_K8S_BARE_METAL only supports kubernetes-based deployments"}')
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"Platform PLATFORM_TYPE_K8S_BARE_METAL only supports kubernetes-based deploymentsxxx"}')
 
 # ECQ-4102
 CreateClusterInst - create a clusterinst with shared volume mounts for anthos should fail
