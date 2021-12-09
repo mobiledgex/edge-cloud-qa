@@ -73,19 +73,6 @@ Flow Shall Be Updated
    Should Be Equal As Numbers   ${show['data']['settings']['reqs_per_second']}  ${parms['requests_per_second']}
    Should Be Equal  ${show['data']['key']['rate_limit_key']['rate_limit_target']}  ${parms['rate_limit_target']}
 
-#   IF  '${parms['rate_limit_target']}' == 'AllRequests'
-#      Should Be Equal As Numbers   ${show['data']['key']['rate_limit_key']['rate_limit_target']}  1
-#      ${rate_limit_target_num}=  Set Variable  ${1}
-#   ELSE IF  '${parms['rate_limit_target']}' == 'PerIp'
-#      Should Be Equal As Numbers   ${show['data']['key']['rate_limit_key']['rate_limit_target']}  2
-#      ${rate_limit_target_num}=  Set Variable  ${2}
-#   ELSE IF  '${parms['rate_limit_target']}' == 'PerUser'
-#      Should Be Equal As Numbers   ${show['data']['key']['rate_limit_key']['rate_limit_target']}  3
-#      ${rate_limit_target_num}=  Set Variable  ${3}
-#   ELSE
-#      Fail  rate_limit_targe unknown
-#   END
-
    Should Be Equal  ${show['data']['key']['rate_limit_key']['api_endpoint_type']}  Dme
 
    IF  'burst_size' in ${parms}
@@ -93,14 +80,6 @@ Flow Shall Be Updated
    END
 
    Should Be Equal  ${show['data']['settings']['flow_algorithm']}  ${parms['flow_algorithm']}
-
-#   IF  '${parms['flow_algorithm']}' == 'TokenBucketAlgorithm'
-#      Should Be Equal As Numbers   ${show['data']['settings']['flow_algorithm']}  1
-#      ${algorithm_num}=  Set Variable  ${1}
-#   ELSE
-#      Should Be Equal As Numbers   ${show['data']['settings']['flow_algorithm']}  2
-#      ${algorithm_num}=  Set Variable  ${2}
-#   END
 
    ${show2}=  Show Rate Limit Settings  region=${region}  api_name=${parms['api_name']}  api_endpoint_type=${parms['api_endpoint_type']}  rate_limit_target=${parms['rate_limit_target']}
 
@@ -130,19 +109,6 @@ Max Requests Shall Be Updated
    Should Be Equal  ${show['data']['key']['max_reqs_settings_name']}  ${parms['max_requests_settings_name']}
    Should Be Equal  ${show['data']['key']['rate_limit_key']['api_endpoint_type']}  Dme
    Should Be Equal  ${show['data']['key']['rate_limit_key']['rate_limit_target']}  ${parms['rate_limit_target']}
-
-#   IF  '${parms['rate_limit_target']}' == 'AllRequests'
-#      Should Be Equal As Numbers   ${show['data']['key']['rate_limit_key']['rate_limit_target']}  1
-#      ${rate_limit_target_num}=  Set Variable  ${1}
-#   ELSE IF  '${parms['rate_limit_target']}' == 'PerIp'
-#      Should Be Equal As Numbers   ${show['data']['key']['rate_limit_key']['rate_limit_target']}  2
-#      ${rate_limit_target_num}=  Set Variable  ${2}
-#   ELSE IF  '${parms['rate_limit_target']}' == 'PerUser'
-#      Should Be Equal As Numbers   ${show['data']['key']['rate_limit_key']['rate_limit_target']}  3
-#      ${rate_limit_target_num}=  Set Variable  ${3}
-#   ELSE
-#      Fail  rate_limit_targe unknown
-#   END
 
    Should Be Equal              ${show['data']['settings']['interval']}  ${parms['interval']}
    Should Be Equal As Numbers   ${show['data']['settings']['max_requests']}  ${parms['max_requests']}
