@@ -280,6 +280,7 @@
         <string>runCsharp3</string>
         <string>runDmeTestcases</string>
         <string>runMcTestcases</string>
+        <string>runMetricsTestcases</string>
         <string>runNmapScan</string>
         <string>runOwaspScan</string>
         <string>runRegression</string>
