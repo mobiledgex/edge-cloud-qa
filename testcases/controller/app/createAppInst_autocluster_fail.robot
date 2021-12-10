@@ -13,26 +13,27 @@ ${cloudlet_name}  tmocloud-2
 ${region}=  US
 
 *** Test Cases ***
+# no longer supported since CreateApp now requires defaultflavor
 # ECQ-3189
-CreateAppInst - User shall not be able to create an autocluster AppInst without default flavor
-    [Documentation]
-    ...  - send CreateApp without default flavor for docker/k8s/helm
-    ...  - send autocluster CreateAppInst
-    ...  - verify proper error is received
-
-    [Tags]  ReservableCluster
-
-    Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer  use_defaults=${False}
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"For auto-provisioning or auto-clusters, App must have default flavor defined"}')
-
-    Create App  region=${region}  token=${token}  app_name=${app_name_default}-2  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer  use_defaults=${False}
-    ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor
-    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"For auto-provisioning or auto-clusters, App must have default flavor defined"}')
-
-    Create App  region=${region}  token=${token}  app_name=${app_name_default}-3  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeHelm  deployment=helm  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer  use_defaults=${False}
-    ${error_msg3}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor
-    Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"For auto-provisioning or auto-clusters, App must have default flavor defined"}')
+#CreateAppInst - User shall not be able to create an autocluster AppInst without default flavor
+#    [Documentation]
+#    ...  - send CreateApp without default flavor for docker/k8s/helm
+#    ...  - send autocluster CreateAppInst
+#    ...  - verify proper error is received
+#
+#    [Tags]  ReservableCluster
+#
+#    Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer  use_defaults=${False}
+#    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor
+#    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"For auto-provisioning or auto-clusters, App must have default flavor defined"}')
+#
+#    Create App  region=${region}  token=${token}  app_name=${app_name_default}-2  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer  use_defaults=${False}
+#    ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor
+#    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"For auto-provisioning or auto-clusters, App must have default flavor defined"}')
+#
+#    Create App  region=${region}  token=${token}  app_name=${app_name_default}-3  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeHelm  deployment=helm  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer  use_defaults=${False}
+#    ${error_msg3}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor
+#    Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"For auto-provisioning or auto-clusters, App must have default flavor defined"}')
 
 # direct not supported
 # ECQ-3190
