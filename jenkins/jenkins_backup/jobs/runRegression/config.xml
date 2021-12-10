@@ -294,6 +294,7 @@ pipeline{
         string(name: &apos;SlaveNodeVsphere&apos;, defaultValue: &apos;jenkinsSlave2&apos;)
         string(name: &apos;SlaveNodeAnthos&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
         string(name: &apos;SlaveNodeConsole&apos;, defaultValue: &apos;jenkinsWindowsSelenium&apos;)
+        string(name: &apos;SlaveNodeMetrics&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
         //choice(name: &apos;Platform&apos;, choices: [&apos;SDK&apos;, &apos;Controller&apos;, &apos;DME&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
         //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
     }
@@ -570,7 +571,7 @@ pipeline{
                     steps {
                         echo &quot;create openstack&quot;
 //                        catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
-                        try {
+//                        try {
                             build job: &apos;runTestcases&apos;, parameters: [
                                 string(name: &apos;Components&apos;, value: &apos;Automated, CRM, CreateCloudlet&apos;), 
                                 string(name: &apos;Project&apos;, value: project), 
@@ -580,19 +581,22 @@ pipeline{
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 string(name: &apos;CRMPoolOpenstack&apos;, value: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;),
                                 string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
-                        } catch (err) {
-                            unstable(&apos;Create Openstack CRM failed&apos;)
-                        }
-                    }
+//                        } catch (err) {
+//                            unstable(&apos;Create Openstack CRM failed&apos;)
+//                        }
+//                    }
                     post {
-                        unstable { slack_warning(&apos;Create Openstack CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                        failure {
+                            unstable(&apos;Create Openstack CRM failed&apos;)
+                            slack_warning(&apos;Create Openstack CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) 
+                        }
                     }
                 }
                 stage(&apos;Create Anthos&apos;) {
                     steps {
                         echo &quot;create anthos&quot;
 //                        catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
-                        try {
+//                        try {
                             build job: &apos;runTestcases&apos;, parameters: [
                                 string(name: &apos;Components&apos;, value: &apos;Automated, CRM, CreateCloudlet&apos;), 
                                 string(name: &apos;Project&apos;, value: project), 
@@ -601,19 +605,22 @@ pipeline{
                                 string(name: &apos;TestTarget&apos;, value: &apos;Anthos&apos;),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
-                        } catch (err) {
-                            unstable(&apos;Create Anthos CRM failed&apos;)
-                        }
-                    }
+//                        } catch (err) {
+//                            unstable(&apos;Create Anthos CRM failed&apos;)
+//                        }
+//                    }
                     post {
-                        unstable { slack_warning(&apos;Create Anthos CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                        failure {
+                            unstable(&apos;Create Anthos CRM failed&apos;)
+                            slack_warning(&apos;Create Anthos CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) 
+                        }
                     }
                 }
                 stage(&apos;Create Fake&apos;) {
                     steps {
                         echo &quot;create fake&quot;
-//                        catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;, message&quot;) {
-                        try {
+//                        catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
+//                        try {
                             build job: &apos;runTestcases&apos;, parameters: [
                                 string(name: &apos;Components&apos;, value: &apos;Automated, CRM, CreateCloudlet&apos;), 
                                 string(name: &apos;Project&apos;, value: project), 
@@ -622,12 +629,16 @@ pipeline{
                                 string(name: &apos;TestTarget&apos;, value: &apos;Controller&apos;),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
-                        } catch (err) {
-                            unstable(&apos;Create Fake CRM failed&apos;)
-                        }
-                    }
+//                        } catch (err) {
+//                            unstable(&apos;Create Fake CRM failed&apos;)
+//                        }
+//                    }
                     post {
-                        unstable { slack_warning(&apos;Create Fake CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+                        failure {
+                            unstable(&apos;Create Fake CRM failed&apos;)
+                            slack_warning(&apos;Create Fake CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) 
+                            
+                        }
                     }
                 }
                 
@@ -635,7 +646,7 @@ pipeline{
                     steps {
                         echo &quot;upgrade cloudlets&quot;
 //                        catchError(buildResult: &apos;UNSTABLE&apos;, stageResult: &apos;FAILURE&apos;) {
-                        try {
+//                        try {
                             build job: &apos;runTestcases&apos;, parameters: [
                                 string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, UpgradeCloudlet&apos;), 
                                 string(name: &apos;Project&apos;, value: project), 
@@ -644,12 +655,15 @@ pipeline{
                                 string(name: &apos;TestTarget&apos;, value: &apos;Openstack&apos;),
                                 string(name: &apos;VariableFile&apos;, value: variablefile), 
                                 string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
-                        } catch (err) {
-                            unstable(&apos;Upgrade of CRMs failed&apos;)
-                        }
-                   }
-                   post {
-                       unstable { slack_warning(&apos;Upgrade Openstack CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) }
+//                        } catch (err) {
+//                            unstable(&apos;Upgrade of CRMs failed&apos;)
+//                        }
+//                    }
+                    post {
+                       failure { 
+                           unstable(&apos;Upgrade of CRMs failed&apos;)
+                           slack_warning(&apos;Upgrade Openstack CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) 
+                       }
                     }
                 }
             }
@@ -918,10 +932,37 @@ pipeline{
                         }
                     }
                 }
-
+                
+                stage(&apos;Metrics&apos;) {
+                    steps {
+                        slack_good(&apos;Starting Metrics tests&apos;)
+                            build job: &apos;runMetricsTestcases&apos;, parameters: [
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Console&apos;, value: params.Console),
+                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+                                string(name: &apos;TestTarget&apos;, value: &apos;Metrics&apos;),
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeMetrics)
+                                ]
+                    }
+                    post {
+                        failure { 
+                            echo &quot;run console tests failed&quot;
+                            slack_fail(&apos;Finished Console tests with failures&apos;)
+                        }
+                        success { 
+                            echo &quot;run console tests passed&quot;
+                            slack_good(&apos;Finished Console tests with pass&apos;)
+                        }
+                    }
+                }
             }
             post {
                 always {
+                    dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
+                        sh(&apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project &apos; + params.Project + &apos; --version &apos; + params.Version + &apos; --cycle &apos; + cycle + &apos; --enddate&apos;)
+                    }
+
                     script {
                         job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis
                         job_duration_string = job_duration.toString()
