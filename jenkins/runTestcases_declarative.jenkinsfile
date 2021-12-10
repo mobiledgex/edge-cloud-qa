@@ -19,6 +19,7 @@ pipeline{
         string(name: 'VariableFile', defaultValue: 'automation_variables.py')
         string(name: 'InfluxDB', defaultValue: 'notset')
         string(name: 'OpenStackEnv', defaultValue: 'notset')
+        string(name: 'CRMUpgradeVersion', defaultValue: 'notset')
         string(name: 'CommitVersion', defaultValue: 'master')
         booleanParam(name: 'RunFailedOnly', defaultValue: false)
         string(name: 'CRMPool', defaultValue: '{"cloudlet_name_crm":[{"cloudlet":"qa-anthos","operator":"packet","region":"US"}]}')
@@ -152,6 +153,7 @@ pipeline{
                                       ';export AUTOMATION_INFLUXDB_ADDRESS=' + params.InfluxDB + 
                                       ';export AUTOMATION_OPENSTACK_VMPOOL_ENV=' + params.OpenStackEnv + 
                                       ';export AUTOMATION_OPENSTACK_VGPU_ENV=' + params.OpenStackEnv + 
+                                      ';export AUTOMATION_VERSION=' + params.CRMUpgradeVersion +
                                       ';./execJira_parallel.py --test_timeout=' + params.TestTimeout + ' ' + runfailedonly_arg)
                         }
                     }
