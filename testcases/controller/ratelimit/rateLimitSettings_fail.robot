@@ -5,7 +5,7 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  String
      
 Test Setup  Setup
-Test Teardown  Cleanup Provisioning
+Test Teardown  Teardown
 
 *** Variables ***
 ${region}=  US
@@ -141,7 +141,7 @@ CreateRateLimitFlow - create with duplicate shall return error
    Create Rate Limit Flow  region=${region}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5
 
    ${error}=  Run Keyword and Expect Error  *  Create Rate Limit Flow  region=${region}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"FlowRateLimitSettings key {\\\\"flow_settings_name\\\\":\\\\"${flow_name}\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":1,\\\\"rate_limit_target\\\\":1}} already exists"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"FlowRateLimitSettings key {\\\\"flow_settings_name\\\\":\\\\"${flow_name}\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":\\\\"Dme\\\\",\\\\"rate_limit_target\\\\":\\\\"AllRequests\\\\"}} already exists"}')
 
 # ECQ-3726
 CreateRateLimitMaxRequests - create with duplicate shall return error
@@ -156,7 +156,7 @@ CreateRateLimitMaxRequests - create with duplicate shall return error
    Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=1  interval=1m
 
    ${error}=  Run Keyword and Expect Error  *  Create Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=1  interval=1m
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"MaxReqsRateLimitSettings key {\\\\"max_reqs_settings_name\\\\":\\\\"xx\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":1,\\\\"rate_limit_target\\\\":1}} already exists"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"MaxReqsRateLimitSettings key {\\\\"max_reqs_settings_name\\\\":\\\\"xx\\\\",\\\\"rate_limit_key\\\\":{\\\\"api_name\\\\":\\\\"yy\\\\",\\\\"api_endpoint_type\\\\":\\\\"Dme\\\\",\\\\"rate_limit_target\\\\":\\\\"AllRequests\\\\"}} already exists"}')
 
 # ECQ-3727
 CreateRateLimitMaxRequests - create with missing parms shall return error
@@ -180,3 +180,11 @@ CreateRateLimitMaxRequests - create with missing parms shall return error
 Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
+
+   Update Settings  region=${region}  disable_rate_limit=${False}
+
+Teardown
+   Cleanup Provisioning
+   Update Settings  region=${region}  disable_rate_limit=${True}
+
+
