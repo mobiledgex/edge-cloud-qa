@@ -138,6 +138,7 @@
               <string>Vsphere</string>
               <string>Anthos</string>
               <string>WebUI</string>
+              <string>Metrics</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
