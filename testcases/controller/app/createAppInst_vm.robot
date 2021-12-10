@@ -27,9 +27,9 @@ AppInst - VM deployment without cluster shall create clustername='DefaultVMClust
 
     ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}  no_auto_delete=${True}
     
-    Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  DefaultCluster  #changed from DefaultVMCluster
+    Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  defaultclust  #changed from DefaultVMCluster
 
-    Delete App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_developer_org_name=${developer_name_default}  cluster_instance_name=DefaultCluster
+    Delete App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_developer_org_name=${developer_name_default}  cluster_instance_name=defaultclust
 
 # ECQ-1461
 AppInst - VM deployment shall be created with clustername
@@ -58,7 +58,7 @@ AppInst - VM deployment without cluster shall be deleted without clustername
 
     ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}  no_auto_delete=${True}
 
-    Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  DefaultCluster  #changed from DefaultVMCluster
+    Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  defaultclust  #changed from DefaultVMCluster
 
     Delete App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}   #cluster_instance_developer_org_name=${developer_name_default}  cluster_instance_name=DefaultCluster
 
@@ -77,7 +77,7 @@ AppInst - Shall be able to create a VM deployment without ports
 
     ${app_inst}=  Create App Instance  app_name=${app_name_default}1  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False} 
 
-    Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  DefaultCluster  #changed from DefaultVMCluster
+    Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  defaultclust  #changed from DefaultVMCluster
 
     Should Be Empty  ${app_inst.mapped_ports}
 
