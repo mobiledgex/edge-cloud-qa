@@ -11,7 +11,6 @@
         <string>VariableFile</string>
         <string>TestTarget</string>
         <string>RunFailedOnly</string>
-        <string>Controller</string>
         <string>TestTimeout</string>
         <string>Cycle</string>
         <string>MasterController</string>
@@ -58,11 +57,6 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>Controller</name>
-          <defaultValue>mexplat-qa-us.ctrl.mobiledgex.net:55001</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
           <name>VariableFile</name>
           <defaultValue>automation_variables.py</defaultValue>
           <trim>false</trim>
@@ -78,10 +72,8 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>Metrics</string>
-            </a>
+          <choices>
+            <string>Metrics</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
