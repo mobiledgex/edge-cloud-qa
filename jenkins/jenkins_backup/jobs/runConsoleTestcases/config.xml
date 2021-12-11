@@ -56,7 +56,7 @@
           <name>TestTarget</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
-              <string>Console</string>
+              <string>WebUI</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>

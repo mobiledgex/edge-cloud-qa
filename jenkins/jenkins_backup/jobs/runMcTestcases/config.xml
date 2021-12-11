@@ -98,13 +98,14 @@
 //slackchannel = &apos;#qa-automation&apos;
 
 automated_component = &quot;Automated&quot;
+automated_components = [automated_component]
 controller_components = [automated_component, &quot;MasterController&quot;]
 testcase_components = [
     controller_components + &quot;Account&quot;,
     controller_components + &quot;UserRole&quot;,
     controller_components + &quot;User&quot;,
     controller_components + &quot;Configs&quot;,
-    automated_component + &quot;Mcctl&quot;,
+    automated_components  + &quot;Mcctl&quot;,
     controller_components + &quot;Billing&quot;,
     controller_components + &quot;ShowNode&quot;,
     controller_components + &quot;Organization&quot;
