@@ -16,6 +16,7 @@
         <string>Components</string>
         <string>DMERest</string>
         <string>Project</string>
+        <string>CRMUpgradeVersion</string>
         <string>VariableFile</string>
         <string>TestTarget</string>
         <string>InfluxDB</string>
@@ -112,6 +113,11 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
+          <name>CRMUpgradeVersion</name>
+          <defaultValue>notset</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>CommitVersion</name>
           <defaultValue>master</defaultValue>
           <trim>false</trim>
@@ -127,19 +133,17 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>MasterController</string>
-              <string>Controller</string>
-              <string>DME</string>
-              <string>SDK</string>
-              <string>Openstack</string>
-              <string>VCD</string>
-              <string>Vsphere</string>
-              <string>Anthos</string>
-              <string>WebUI</string>
-              <string>Metrics</string>
-            </a>
+          <choices>
+            <string>MasterController</string>
+            <string>Controller</string>
+            <string>DME</string>
+            <string>SDK</string>
+            <string>Openstack</string>
+            <string>VCD</string>
+            <string>Vsphere</string>
+            <string>Anthos</string>
+            <string>WebUI</string>
+            <string>Metrics</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
