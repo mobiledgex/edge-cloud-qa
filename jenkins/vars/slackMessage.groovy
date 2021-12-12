@@ -1,6 +1,6 @@
-def slackurl = 'https://mobiledgex.slack.com/services/hooks/jenkins-ci/'
-def slackcred = 'cdda7d70-b701-4983-b287-e3f46dde02e9'
-def slackchannel = '#qa-automation'
+slackurl = 'https://mobiledgex.slack.com/services/hooks/jenkins-ci/'
+slackcred = 'cdda7d70-b701-4983-b287-e3f46dde02e9'
+slackchannel = '#qa-automation'
 
 def good(message) {
     slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: "good", message: message
