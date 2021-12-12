@@ -10,20 +10,13 @@
           <credentialsId>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</credentialsId>
           <traits>
             <jenkins.plugins.git.traits.BranchDiscoveryTrait/>
-            <jenkins.plugins.git.traits.SparseCheckoutPathsTrait>
-              <extension class="hudson.plugins.git.extensions.impl.SparseCheckoutPaths">
-                <sparseCheckoutPaths>
-                  <hudson.plugins.git.extensions.impl.SparseCheckoutPath>
-                    <path>jenkins</path>
-                  </hudson.plugins.git.extensions.impl.SparseCheckoutPath>
-                </sparseCheckoutPaths>
-              </extension>
-            </jenkins.plugins.git.traits.SparseCheckoutPathsTrait>
+            <jenkins.plugins.git.traits.SparseCheckoutPathsTrait/>
           </traits>
         </scm>
+        <libraryPath>jenkins/</libraryPath>
       </retriever>
       <defaultVersion>master</defaultVersion>
-      <implicit>false</implicit>
+      <implicit>true</implicit>
       <allowVersionOverride>true</allowVersionOverride>
       <includeInChangesets>true</includeInChangesets>
     </org.jenkinsci.plugins.workflow.libs.LibraryConfiguration>
