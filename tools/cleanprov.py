@@ -17,7 +17,7 @@ logging.getLogger('mex_rest').setLevel(loglevel)
 logging.getLogger('webservice').setLevel(loglevel)
 logging.getLogger('mex_master_controller.MexOperation').setLevel(loglevel)
 
-table_list = ['appinst', 'app', 'clusterinst', 'flavor', 'autoscalepolicy', 'autoprovpolicy', 'orgcloudletpool', 'cloudletpool', 'cloudlet', 'billingorg', 'org', 'user', 'ratelimitsettings', 'trustpolicy', 'trustpolicyexception']
+table_list = ['appinst', 'app', 'clusterinst', 'flavor', 'autoscalepolicy', 'autoprovpolicy', 'orgcloudletpool', 'cloudletpoolinvitation', 'cloudletpool', 'cloudlet', 'billingorg', 'org', 'user', 'ratelimitsettings', 'trustpolicy', 'trustpolicyexception']
 table_list_str = ','.join(table_list)
 
 region_list = ['US', 'EU']
@@ -67,6 +67,8 @@ flavor_keep = [{'flavor_name':'x1.medium'},{'flavor_name':'automation_api_flavor
 developer_keep = [{'developer_name':'automation_api'},{'developer_name':'mexinfradev_'}]
 operator_keep = [{'operator_name': 'TDG'},{'operator_name': 'gcp'},{'operator_name': 'tmus'},{'operator_name': 'att'},{'operator_name': 'azure'}]
 rate_limit_flow_keep = []
+cloudletpool_keep = []
+cloudletpoolinvitation_keep = []
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -453,6 +455,64 @@ def clean_trustpolicyexception():
                else:
                   print(f'keeping {name} since doesnt match keypattern={key_pattern}')
 
+def clean_cloudletpool():
+    global key_pattern
+
+    print('clean cloudletpool')
+    try:
+        pool_list = mc.show_cloudlet_pool(region=region, token=mc.super_token, use_defaults=False)
+    except Exception as e:
+        print(f'error showing cloudletpool, {e}.continuing to next item')
+        return
+
+    print('cloudletpoollist', pool_list)
+    print('key',key_pattern)
+    if len(pool_list) == 0:
+        print('nothing to delete')
+    else:
+        for a in pool_list:
+            name = a['data']['key']['name']
+            if in_cloudletpool_list(a):
+                print(f'keeping {name}')
+            else:
+               if pattern_re.match(name):
+                  try:
+                     print(f'deleting {name}')
+                     mc.delete_cloudlet_pool(region=region, token=mc.super_token, use_defaults=False, cloudlet_pool_name=name, operator_org_name=a['data']['key']['organization'])
+                  except Exception as e:
+                     print(f'error deleting {name}, {e}.continuing to next item')
+               else:
+                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
+def clean_cloudletpoolinvitation():
+    global key_pattern
+
+    print('clean cloudletpoolinvitation')
+    try:
+        pool_list = mc.show_cloudlet_pool_access_invitation(region=region, token=mc.super_token, use_defaults=False)
+    except Exception as e:
+        print(f'error showing cloudletpool, {e}.continuing to next item')
+        return
+
+    print('cloudletpoollistinvitation', pool_list)
+    print('key',key_pattern)
+    if len(pool_list) == 0:
+        print('nothing to delete')
+    else:
+        for a in pool_list:
+            name = a['CloudletPool']
+            if in_cloudletpoolinvitation_list(a):
+                print(f'keeping {name}')
+            else:
+               if pattern_re.match(name):
+                  try:
+                     print(f'deleting {name} {a["Org"]}')
+                     mc.delete_cloudlet_pool_access_invitation(region=region, token=mc.super_token, use_defaults=False, cloudlet_pool_name=name, cloudlet_pool_org_name=a['CloudletPoolOrg'], developer_org_name=a['Org'])
+                  except Exception as e:
+                     print(f'error deleting {name}, {e}.continuing to next item')
+               else:
+                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 def in_app_list(app):
     for a in app_keep:
         if a['app_name'] == app['data']['key']['name']:
@@ -489,6 +549,18 @@ def in_rate_limit_flow_list(app):
             print('found flow in rate_limit_flow_keep list', app['data']['key']['name'], app['data']['key']['organization'])
             return True
 
+def in_cloudletpool_list(app):
+    for a in cloudletpool_keep:
+        if a['cloudlet_name'] == app['data']['key']['name'] and a['operator_name'] == app['data']['key']['organization']:
+            print('found cloudletpool list', app['data']['key']['name'], app['data']['key']['organization'])
+            return True
+
+def in_cloudletpoolinvitation_list(app):
+    for a in cloudletpoolinvitation_keep:
+        if a['cloudlet_name'] == app['data']['key']['name'] and a['operator_name'] == app['data']['key']['organization']:
+            print('found cloudletpoolinvitation list', app['data']['key']['name'], app['data']['key']['organization'])
+            return True
+
 def in_org_list(app):
     return False 
     #for a in operator_keep:
@@ -518,6 +590,10 @@ for r in region_list:
          if table in tables_arg:
             if table == 'trustpolicyexception':
                clean_trustpolicyexception()
+            if table == 'cloudletpoolinvitation':
+               clean_cloudletpoolinvitation()
+            if table == 'cloudletpool':
+               clean_cloudletpool()
             if table == 'appinst':
                clean_appinst()
             elif table == 'app':
