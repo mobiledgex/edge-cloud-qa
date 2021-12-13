@@ -1,5 +1,5 @@
 def openstack(cycle) {
-    echo "openstack delete start build result ${currentBuild.result}"
+//    echo "openstack delete start build result ${currentBuild.result}"
     echo "delete openstack"
     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete openstack failed') {
         build job: 'runTestcases', parameters: [
@@ -15,7 +15,7 @@ def openstack(cycle) {
 }
 
 def anthos(cycle) {
-    echo "anthos delete start build result ${currentBuild.result}"
+//    echo "anthos delete start build result ${currentBuild.result}"
     echo "delete anthos"
     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete anthos failed') {
         build job: 'runTestcases', parameters: [
@@ -30,7 +30,7 @@ def anthos(cycle) {
 }
 
 def fake(cycle) {
-    echo "fake delete start build result ${currentBuild.result}"
+//    echo "fake delete start build result ${currentBuild.result}"
     echo "delete fake"
     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete fake failed') {
         build job: 'runTestcases', parameters: [
