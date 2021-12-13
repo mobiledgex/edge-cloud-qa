@@ -2,17 +2,17 @@ def openstack(cycle) {
     print('delete andy openstack ')
 //    echo "openstack delete start build result ${currentBuild.result}"
 //    echo "delete openstack"
-//    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete openstack failed') {
-//        build job: 'runTestcases', parameters: [
-//            string(name: 'Components', value: 'Automated, CRM, DeleteCloudlet'), 
-//            string(name: 'Project', value: params.Project), 
-//            string(name: 'Cycle', value: cycle), 
-//            string(name: 'MasterController', value: params.MasterController),
-//            string(name: 'TestTarget', value: 'Openstack'),
-//            string(name: 'VariableFile', value: params.VariableFile), 
-//            string(name: 'CRMPoolOpenstack', value: ''),
-//            string(name: 'NumberParallelExecutions', value: '10')]
-//    }
+    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete openstack failed') {
+        build job: 'runTestcases', parameters: [
+            string(name: 'Components', value: 'Automated, CRM, DeleteCloudlet'), 
+            string(name: 'Project', value: params.Project), 
+            string(name: 'Cycle', value: cycle), 
+            string(name: 'MasterController', value: params.MasterController),
+            string(name: 'TestTarget', value: 'Openstack'),
+            string(name: 'VariableFile', value: params.VariableFile), 
+            string(name: 'CRMPoolOpenstack', value: ''),
+            string(name: 'NumberParallelExecutions', value: '10')]
+    }
 }
 
 def anthos(cycle) {
