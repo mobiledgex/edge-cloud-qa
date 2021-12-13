@@ -308,52 +308,48 @@ pipeline{
     }
 
     stages {
-        stage(&apos;Checkout&apos;) {
-            steps {
-                script {
-                    date = new Date()
-                    sdate = new SimpleDateFormat(&quot;yyy-MM-dd&quot;)
-                    Calendar cal = Calendar.getInstance()
-                    
-                    if(params.BuildDate == &quot;today&quot;) {
-                        dateValue = sdate.format(date)
-                    } else {
-                        dateValue = params.BuildDate
-                    }
-                    echo dateValue
-
-                    cycle = dateValue + &apos;_&apos; + params.Version
-                    currentBuild.displayName = cycle
-
-                    slack_good(&apos;Starting regression for &apos; + cycle)
-                }
-                
-                dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra&apos;) {
-                    sh &apos;rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*&apos;
-                    checkout([$class: &apos;GitSCM&apos;,
-                        branches: [[name: &apos;master&apos;]],
-                        doGenerateSubmoduleConfigurations: false,
-                        extensions: [
-                            [$class: &apos;SparseCheckoutPaths&apos;,  sparseCheckoutPaths:[[$class:&apos;SparseCheckoutPath&apos;, path:&apos;chef/*&apos;],[$class:&apos;SparseCheckoutPath&apos;, path:&apos;ansible/*&apos;]]]
-                        ],
-                        submoduleCfg: [],
-                        userRemoteConfigs: [[credentialsId: gitcred,
-                        url: &apos;https://github.com/mobiledgex/edge-cloud-infra.git&apos;]]])
-                }
-//                dir(&apos;go/src/github.com/mobiledgex/edge-proto&apos;) {
-//                    sh &apos;rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*&apos;
-//                    git branch: &apos;master&apos;, credentialsId: gitcred, url: &apos;https://github.com/mobiledgex/edge-proto.git&apos;
+//        stage(&apos;Checkout&apos;) {
+//            steps {
+//                script {
+//                    date = new Date()
+//                    sdate = new SimpleDateFormat(&quot;yyy-MM-dd&quot;)
+//                    Calendar cal = Calendar.getInstance()
+//                    
+//                    if(params.BuildDate == &quot;today&quot;) {
+//                        dateValue = sdate.format(date)
+//                    } else {
+//                        dateValue = params.BuildDate
+//                    }
+//                    echo dateValue
+//
+//                    cycle = dateValue + &apos;_&apos; + params.Version
+//                    currentBuild.displayName = cycle
+//
+//                    slackMessage.good(&apos;Starting regression for &apos; + cycle)
 //                }
-            }
-            post {
-                failure { 
-                    script {
-                        slackMessage.fail(&apos;Checkout failed for &apos; + dateValue + &apos;. Aborting&apos;)
-                    //input(message: &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;)
-                    }
-                }
-            }
-        }
+//               
+//                dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra&apos;) {
+//                    sh &apos;rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*&apos;
+//                    checkout([$class: &apos;GitSCM&apos;,
+//                        branches: [[name: &apos;master&apos;]],
+//                        doGenerateSubmoduleConfigurations: false,
+//                        extensions: [
+//                            [$class: &apos;SparseCheckoutPaths&apos;,  sparseCheckoutPaths:[[$class:&apos;SparseCheckoutPath&apos;, path:&apos;chef/*&apos;],[$class:&apos;SparseCheckoutPath&apos;, path:&apos;ansible/*&apos;]]]
+//                        ],
+//                        submoduleCfg: [],
+//                        userRemoteConfigs: [[credentialsId: gitcred,
+//                        url: &apos;https://github.com/mobiledgex/edge-cloud-infra.git&apos;]]])
+//                }
+//            }
+//            post {
+//                failure { 
+//                    script {
+//                        slackMessage.fail(&apos;Checkout failed for &apos; + dateValue + &apos;. Aborting&apos;)
+//                    //input(message: &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;)
+//                    }
+//                }
+//            }
+//        }
         
         stage(&apos;Check Load Exists&apos;) {
             steps {
@@ -407,49 +403,52 @@ pipeline{
 
         stage(&apos;Create Cycle&apos;) {
             steps {
-                dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
-                    script {
-                        add_pre = &apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version &apos; + params.Version + &apos; --project &apos; + params.Project + &apos; --cycle &apos; + cycle
-                    }
-                    echo &quot;createcycle build resutl ${currentBuild.result}&quot;
-                    echo &quot;addpre ${add_pre}&quot;
-                    sh add_pre    
-                    
-                    sh add_pre + &apos; --folder controller&apos;
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;controller&apos;, &apos;Automated,Controller&apos;, null)
-                    
-                    sh add_pre + &apos; --folder mastercontroller&apos;
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;mastercontroller&apos;, &apos;Automated,MasterController&apos;, null)
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;mastercontroller&apos;, &apos;Automated,Mcctl&apos;, null)
-
-                    sh add_pre + &apos; --folder dme&apos;
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;dme&apos;, &apos;Automated,DME&apos;, &apos;SDK,Metrics,Performance&apos;)
-
-                    sh add_pre + &apos; --folder sdk&apos;
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;sdk&apos;, &apos;Automated,SDK&apos;, null)
-                    
-                    sh add_pre + &apos; --folder openstack&apos;
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;openstack&apos;, &apos;Automated,CRM,Openstack&apos;, null)
-
-                    sh add_pre + &apos; --folder vsphere&apos;
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;vsphere&apos;, &apos;Automated,CRM,Vsphere&apos;, null)
-                    
-                    sh add_pre + &apos; --folder vcd&apos;
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;vcd&apos;, &apos;Automated,CRM,VCD&apos;, null)
-                    
-                    sh add_pre + &apos; --folder anthos&apos;
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;anthos&apos;, &apos;Automated,CRM,Anthos&apos;, null)
-
-                    sh add_pre + &apos; --folder metrics&apos;
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;metrics&apos;, &apos;Automated,Metrics&apos;, null)
-
-                    sh add_pre + &apos; --folder performance/security&apos;
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;performance/security&apos;, &apos;Automated,Performance&apos;, null)
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;performance/security&apos;, &apos;Automated,Security&apos;, null)
-                    
-                    sh add_pre + &apos; --folder webui&apos;
-                    addTestsToFolder(params.Version, params.Project, cycle, &apos;console&apos;, &apos;Automated,WebUI&apos;, null)
+                script {
+                    addTestsToFolder(params.Version, params.Project, cycle)
                 }
+//                dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
+//                    script {
+//                        add_pre = &apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version &apos; + params.Version + &apos; --project &apos; + params.Project + &apos; --cycle &apos; + cycle
+//                    }
+//                    echo &quot;createcycle build resutl ${currentBuild.result}&quot;
+//                    echo &quot;addpre ${add_pre}&quot;
+//                    sh add_pre    
+//                    
+//                    sh add_pre + &apos; --folder controller&apos;
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;controller&apos;, &apos;Automated,Controller&apos;, null)
+//                    
+//                    sh add_pre + &apos; --folder mastercontroller&apos;
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;mastercontroller&apos;, &apos;Automated,MasterController&apos;, null)
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;mastercontroller&apos;, &apos;Automated,Mcctl&apos;, null)
+//
+//                    sh add_pre + &apos; --folder dme&apos;
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;dme&apos;, &apos;Automated,DME&apos;, &apos;SDK,Metrics,Performance&apos;)
+//
+//                    sh add_pre + &apos; --folder sdk&apos;
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;sdk&apos;, &apos;Automated,SDK&apos;, null)
+//                    
+//                    sh add_pre + &apos; --folder openstack&apos;
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;openstack&apos;, &apos;Automated,CRM,Openstack&apos;, null)
+//
+//                    sh add_pre + &apos; --folder vsphere&apos;
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;vsphere&apos;, &apos;Automated,CRM,Vsphere&apos;, null)
+//                    
+//                    sh add_pre + &apos; --folder vcd&apos;
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;vcd&apos;, &apos;Automated,CRM,VCD&apos;, null)
+//                    
+//                    sh add_pre + &apos; --folder anthos&apos;
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;anthos&apos;, &apos;Automated,CRM,Anthos&apos;, null)
+//
+//                    sh add_pre + &apos; --folder metrics&apos;
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;metrics&apos;, &apos;Automated,Metrics&apos;, null)
+//
+//                    sh add_pre + &apos; --folder performance/security&apos;
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;performance/security&apos;, &apos;Automated,Performance&apos;, null)
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;performance/security&apos;, &apos;Automated,Security&apos;, null)
+//                    
+//                    sh add_pre + &apos; --folder webui&apos;
+//                    addTestsToFolder(params.Version, params.Project, cycle, &apos;console&apos;, &apos;Automated,WebUI&apos;, null)
+//                }
             }
             post {
                 failure {
@@ -547,25 +546,28 @@ pipeline{
         stage(&apos;Deploy backend in K8s&apos;) {
             steps {
                 catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;deploy failed&apos;) {
-                    dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra/ansible&apos;) {
-                        echo &quot;deploy build resutl ${currentBuild.result}&quot;
-                        echo &apos;deploy&apos;
-                        // fix known_hosts file since recreating the server causes a mismatch in the file
-                        sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationbonncloudlet.tdg.mobiledgex.net&quot;&apos;
-                        sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationhamburgcloudlet.tdg.mobiledgex.net&quot;&apos;
-
-                        sh &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;./deploy.sh -V &apos; + dateValue + &apos; qa&apos;
-                        //sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
-
-                        sleep 60  // wait for all pods to come up
-
-                        // defrag etcd
-                        //sh &apos;kubectl config use-context mexplat-qa-us;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
-                        //sh &apos;kubectl config use-context mexplat-qa-eu;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
-                        sh &apos;export VAULT_ADDR=https://vault-qa.mobiledgex.net;vault kv get -field=value secret/ansible/common/kubeconfigs/us | base64 --decode &gt;$HOME/kubeconfig.qa-us;export KUBECONFIG=$HOME/kubeconfig.qa-us;kubectl config use-context mexplat-qa-us;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
-                        sh &apos;export VAULT_ADDR=https://vault-qa.mobiledgex.net;vault kv get -field=value secret/ansible/common/kubeconfigs/eu | base64 --decode &gt;$HOME/kubeconfig.qa-eu;export KUBECONFIG=$HOME/kubeconfig.qa-eu;kubectl config use-context mexplat-qa-eu;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
-
+                    script {
+                        deployEdgeCloud(dateValue)
                     }
+//                    dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra/ansible&apos;) {
+//                        echo &quot;deploy build resutl ${currentBuild.result}&quot;
+//                        echo &apos;deploy&apos;
+//                        // fix known_hosts file since recreating the server causes a mismatch in the file
+//                        sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationbonncloudlet.tdg.mobiledgex.net&quot;&apos;
+//                        sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationhamburgcloudlet.tdg.mobiledgex.net&quot;&apos;
+//
+//                        sh &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;./deploy.sh -V &apos; + dateValue + &apos; qa&apos;
+//                        //sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
+//
+//                        sleep 60  // wait for all pods to come up
+//
+//                        // defrag etcd
+//                        //sh &apos;kubectl config use-context mexplat-qa-us;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+//                        //sh &apos;kubectl config use-context mexplat-qa-eu;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+//                        sh &apos;export VAULT_ADDR=https://vault-qa.mobiledgex.net;vault kv get -field=value secret/ansible/common/kubeconfigs/us | base64 --decode &gt;$HOME/kubeconfig.qa-us;export KUBECONFIG=$HOME/kubeconfig.qa-us;kubectl config use-context mexplat-qa-us;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+//                        sh &apos;export VAULT_ADDR=https://vault-qa.mobiledgex.net;vault kv get -field=value secret/ansible/common/kubeconfigs/eu | base64 --decode &gt;$HOME/kubeconfig.qa-eu;export KUBECONFIG=$HOME/kubeconfig.qa-eu;kubectl config use-context mexplat-qa-eu;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+//
+//                    }
                 }
             }
             post {
@@ -698,7 +700,7 @@ pipeline{
             parallel {
                 stage(&apos;SDK Tests&apos;) {
                     steps {
-                        catchError() {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;SDK tests failed&apos;) {
                             script { slackMessage.good(&apos;Starting SDK tests&apos;) }
                             build job: &apos;runSdkTestcases&apos;, parameters: [
                                 string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeSDK), 
@@ -725,7 +727,7 @@ pipeline{
                 }
                 stage(&apos;DME Tests&apos;) {
                     steps {
-                        catchError() {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;DME tests failed&apos;) {
                             script { slackMessage.good(&apos;Starting DME tests&apos;) }
                             build job: &apos;runDmeTestcases&apos;, parameters: [
                                 string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeDME), 
@@ -758,7 +760,7 @@ pipeline{
                 }
                 stage(&apos;Controller Tests&apos;) {
                     steps {
-                        catchError() {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Controller tests failed&apos;) {
                             script { slackMessage.good(&apos;Starting Controller Tests&apos;) }
                             build job: &apos;runControllerTestcases&apos;, parameters: [
                                 string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeController), 
@@ -792,7 +794,7 @@ pipeline{
               
                 stage(&apos;MasterController Tests&apos;) {
                     steps {
-                        catchError() {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;MC tests failed&apos;) {
                             script { slackMessage.good(&apos;Starting MasterController tests&apos;) }
                             build job: &apos;runMcTestcases&apos;, parameters: [
                                 string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeMasterController), 
@@ -822,7 +824,7 @@ pipeline{
   
                 stage(&apos;Anthos Tests&apos;) {
                     steps {
-                        catchError() {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Anthos tests failed&apos;) {
                             script { slackMessage.good(&apos;Starting Anthos tests&apos;) }
                             build job: &apos;runCrmTestcases&apos;, parameters: [
                                 string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeAnthos), 
@@ -858,7 +860,7 @@ pipeline{
               
                 stage(&apos;Vsphere Tests&apos;) {
                     steps {
-                        catchError() {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Vsphere tests failed&apos;) {
                             script { slackMessage.good(&apos;Starting Vsphere tests&apos;) }
                             build job: &apos;runCrmTestcases&apos;, parameters: [
                                 string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeVsphere), 
@@ -893,8 +895,8 @@ pipeline{
                 }
                 stage(&apos;VCD Tests&apos;) {
                     steps {
-                        catchError() {
-                            script { slack_good(&apos;Starting VCD tests&apos;) }
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;VCD tests failed&apos;) {
+                            script { slackMessage.good(&apos;Starting VCD tests&apos;) }
                             build job: &apos;runCrmTestcases&apos;, parameters: [
                                 string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeVCD), 
                                 string(name: &apos;Project&apos;, value: params.Project), 
@@ -928,8 +930,8 @@ pipeline{
                 }
                 stage(&apos;Openstack Tests&apos;) {
                     steps {
-                        catchError() {
-                            script { slack_good(&apos;Starting Openstack tests&apos;) }
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Openstack tests failed&apos;) {
+                            script { slackMessage.good(&apos;Starting Openstack tests&apos;) }
                             build job: &apos;runCrmTestcases&apos;, parameters: [
                                 string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeOpenstack), 
                                 string(name: &apos;Project&apos;, value: params.Project), 
@@ -963,8 +965,8 @@ pipeline{
                 }
                 stage(&apos;Scans&apos;) {
                     steps {
-                        catchErro() {
-                            script { slack_good(&apos;Starting scan tests&apos;) }
+                        catchErro(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Scans failed&apos;) {
+                            script { slackMessage.good(&apos;Starting scan tests&apos;) }
                             build job: &apos;runScans&apos;, parameters: [
                                 string(name: &apos;Cycle&apos;, value: cycle), 
                                 string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeScans)
@@ -989,7 +991,7 @@ pipeline{
                 
                 stage(&apos;Console&apos;) {
                     steps {
-                        catchError() {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Console tests failed&apos;) {
                         script { slackMessage.good(&apos;Starting Console tests&apos;) }
                             build job: &apos;runConsoleTestcases&apos;, parameters: [
                                 string(name: &apos;Cycle&apos;, value: cycle), 
@@ -1019,7 +1021,7 @@ pipeline{
                 
                 stage(&apos;Metrics&apos;) {
                     steps {
-                        catchError() {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Metrics tests failed&apos;) {
                             script { slackMessage.good(&apos;Starting Metrics tests&apos;) }
                             build job: &apos;runMetricsTestcases&apos;, parameters: [
                                 string(name: &apos;Cycle&apos;, value: cycle), 
@@ -1051,7 +1053,7 @@ pipeline{
         stage(&quot;Password Tests&quot;) {
             steps {
                 script {
-                    catchError() {
+                    catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Password tests failed&apos;) {
                             job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis
                             job_duration_string = job_duration.toString()
                             build job: &apos;runTestscases&apos;, parameters: [
@@ -1067,38 +1069,38 @@ pipeline{
             }
         }
         
-        stage(&quot;Performance Tests&quot;) {
-            steps {
-                script {
-                    catchError() {
-                            build job: &apos;runTestscases&apos;, parameters: [
-                                string(name: &apos;Project&apos;, value: params.Project), 
-                                string(name: &apos;Version&apos;, value: params.Version), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;MasterController&apos;, value: params.MasterController),
-                                string(name: &apos;TestTarget&apos;, value: &apos;MasterController&apos;),
-                                string(name: &apos;Components&apos;, value: &apos;Automated, Performance&apos;),
-                                string(name: &apos;JobDuration&apos;, value: job_duration_string)]
-                        }
-                }
-            }
-            post {
-                always {
-                    dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
-                        sh(&apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project &apos; + params.Project + &apos; --version &apos; + params.Version + &apos; --cycle &apos; + cycle + &apos; --enddate&apos;)
-                    }
-                    script {
-                        job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis
-                        job_duration_string = job_duration.toString()
-                        build job: &apos;createReport&apos;, parameters: [
-                            string(name: &apos;Project&apos;, value: params.Project), 
-                            string(name: &apos;Version&apos;, value: params.Version), 
-                            string(name: &apos;Cycle&apos;, value: cycle), 
-                            string(name: &apos;JobDuration&apos;, value: job_duration_string)]
-                    }  
-                }
-            }
-        }
+//        stage(&quot;Performance Tests&quot;) {
+//            steps {
+//                script {
+//                    catchError() {
+//                            build job: &apos;runTestscases&apos;, parameters: [
+//                                string(name: &apos;Project&apos;, value: params.Project), 
+//                                string(name: &apos;Version&apos;, value: params.Version), 
+//                                string(name: &apos;Cycle&apos;, value: cycle), 
+//                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+//                                string(name: &apos;TestTarget&apos;, value: &apos;MasterController&apos;),
+//                                string(name: &apos;Components&apos;, value: &apos;Automated, Performance&apos;),
+//                                string(name: &apos;JobDuration&apos;, value: job_duration_string)]
+//                        }
+//                }
+//            }
+//            post {
+//                always {
+//                    dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
+//                        sh(&apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project &apos; + params.Project + &apos; --version &apos; + params.Version + &apos; --cycle &apos; + cycle + &apos; --enddate&apos;)
+//                    }
+//                    script {
+//                        job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis
+//                        job_duration_string = job_duration.toString()
+//                        build job: &apos;createReport&apos;, parameters: [
+//                            string(name: &apos;Project&apos;, value: params.Project), 
+//                            string(name: &apos;Version&apos;, value: params.Version), 
+//                            string(name: &apos;Cycle&apos;, value: cycle), 
+//                            string(name: &apos;JobDuration&apos;, value: job_duration_string)]
+//                    }  
+//                }
+//            }
+//        }
     }
 }</script>
     <sandbox>true</sandbox>
