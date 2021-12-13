@@ -2,56 +2,127 @@
 Documentation   Create new cloudlet
 
 Library		MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
+Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
+Library         DateTime
 
 Test Setup      Setup
 Test Teardown   Close Browser
 
-Test Timeout    40 minutes
-	
+Test Timeout    20 minutes
+
 *** Variables ***
 ${browser}           Chrome
 ${console_username}  mexadmin
-${console_password}  mexadmin123
+${console_password}  mexadminfastedgecloudinfra
 
 *** Test Cases ***
-Web UI - user shall be able to create a new EU cloudlet
+WebUI - user shall be able to create a new EU cloudlet
     [Documentation]
-    ...  Create a new flavor
-    ...  Verify flavor shows in list
+    ...  Create a new EU cloudlet
+    ...  Verify cloudlet shows in list
+    [Tags]  passing
 
     Open Cloudlets
 
     #Get Table Data
 
-    Add New Cloudlet  region=EU  
+    Add New Cloudlet  region=EU  physical_name=hamburg  platform_type=Openstack  operator=TDG  cloudlet_name=${cloudlet_name}
 
-    Cloudlet Should Exist
+    FOR  ${x}  IN RANGE  0  60
+        ${cloudlet_state}=    Show Cloudlets  region=EU  cloudlet_name=${cloudlet_name}  operator_org_name=TDG
+        Exit For Loop If  '${cloudlet_state[0]['data']['state']}' == '5'
+        Sleep  10s
+    END
+
+    Change Number Of Rows
+    Cloudlet Should Exist  cloudlet_name=${cloudlet_name}
+
+    ${cloudlet_details}=    Show Cloudlets  region=EU  cloudlet_name=${cloudlet_name}  operator_org_name=TDG
+    ${time}=  Set Variable  ${cloudlet_details[0]['data']['created_at']['seconds']}
+    Log to Console  ${time}
+    ${timestamp}=  Convert Date  ${time}  exclude_millis=yes
+    Log to Console  ${timestamp}
+
+    ${details}=  Open Cloudlet Details
+    Log to Console  ${details}
+    Should Be Equal   ${details['Created']}   ${timestamp}
+    Close Cloudlet Details
+
+    Search Cloudlet
+    MexConsole.Delete Cloudlet  cloudlet_name=${cloudlet_name}
+    Sleep  30s
+    Cloudlet Should Not Exist  cloudlet_name=${cloudlet_name}
+
+WebUI - user shall be able to create a new US cloudlet
+    [Documentation]
+    ...  Create a new US cloudlet
+    ...  Verify cloudlet shows in list
+    [Tags]  passing
+
+    Open Cloudlets
+    Add New Cloudlet  region=US  operator=packet  physical_name=packet2  platform_type=Openstack  cloudlet_name=${cloudlet_name}
+
+    FOR  ${x}  IN RANGE  0  60
+        ${cloudlet_state}=    Show Cloudlets  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=packet
+        Exit For Loop If  '${cloudlet_state[0]['data']['state']}' == '5'
+        Sleep  10s
+    END
+
+    Change Number Of Rows
+    Cloudlet Should Exist  cloudlet_name=${cloudlet_name}
 
     Sleep  5s
 
-    Delete Cloudlet  #region=EU  cloudlet_name=cloudlet1560119652-3246112  operator=operator1560119652-3246112  #latitude=10  longitude=10
+    Search Cloudlet
+    MexConsole.Delete Cloudlet  cloudlet_name=${cloudlet_name}
+    Sleep  30s
+    Cloudlet Should Not Exist  cloudlet_name=${cloudlet_name}
 
-    Cloudlet Should Not Exist
+WebUI - user shall be able to create a cloudlet with trust policy
+    [Documentation]
+    ...  Create a cloudlet with trust policy
+    ...  Verify cloudlet shows in list
+    [Tags]  passing
 
-#Web UI - user shall be able to create a new US flavor
-#    [Documentation]
-#    ...  Click New button
-#    ...  Fill in Region=US and all proper values
-#    ...  Verify Flavor is created and list is updated
-#
-#    Open Flavors
-#
-#    Get Table Data
-#
-#    Add New Flavor  region=US  flavor_name=andyFlavor  ram=1024  vcpus=1  disk=1
-#
-#    Flavor Should Exist
+    Open Cloudlets
 
-    #Sleep  10s
+    Add New Cloudlet  region=EU  physical_name=hamburg  platform_type=Openstack  operator=TDG  cloudlet_name=${cloudlet_name}  trust_policy=automation_trust_policy
+
+    FOR  ${x}  IN RANGE  0  60
+        ${cloudlet_state}=    Show Cloudlets  region=EU  cloudlet_name=${cloudlet_name}  operator_org_name=TDG
+        Exit For Loop If  '${cloudlet_state[0]['data']['state']}' == '5'
+        Sleep  10s
+    END
+
+    Should Be Equal  ${cloudlet_state[0]['data']['trust_policy']}   automation_trust_policy
+    Change Number Of Rows
+    Cloudlet Should Exist  cloudlet_name=${cloudlet_name}
+
+    ${cloudlet_details}=    Show Cloudlets  region=EU  cloudlet_name=${cloudlet_name}  operator_org_name=TDG
+    ${time}=  Set Variable  ${cloudlet_details[0]['data']['created_at']['seconds']}
+    Log to Console  ${time}
+    ${timestamp}=  Convert Date  ${time}  exclude_millis=yes
+    Log to Console  ${timestamp}
+
+    ${details}=  Open Cloudlet Details
+    Log to Console  ${details}
+    Should Be Equal   ${details['Created']}   ${timestamp}
+    Should Be Equal   ${details['Trust Policy']}  automation_trust_policy
+    Close Cloudlet Details
+
+    Search Cloudlet
+    MexConsole.Delete Cloudlet  cloudlet_name=${cloudlet_name}
+    Sleep  30s
+    Cloudlet Should Not Exist  cloudlet_name=${cloudlet_name}
 
 *** Keywords ***
 Setup
-    Log to console  login
-
+    ${token}=  Get Supertoken
+    ${epoch}=  Get Time  epoch
+    ${cloudlet_name}=  Get Default Cloudlet Name
+    Log to Console  Cloudlet name =  ${cloudlet_name}
+    Open Browser
     Login to Mex Console  browser=${browser}  #username=${console_username}  password=${console_password}
     Open Compute
+    Set Suite Variable  ${token}
+    Set Suite Variable  ${cloudlet_name}
