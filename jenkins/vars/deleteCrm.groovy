@@ -1,6 +1,6 @@
 def openstack(cycle) {
 //    echo "openstack delete start build result ${currentBuild.result}"
-    echo "delete openstack"
+//    echo "delete openstack"
     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete openstack failed') {
         build job: 'runTestcases', parameters: [
             string(name: 'Components', value: 'Automated, CRM, DeleteCloudlet'), 
@@ -16,7 +16,7 @@ def openstack(cycle) {
 
 def anthos(cycle) {
 //    echo "anthos delete start build result ${currentBuild.result}"
-    echo "delete anthos"
+//    echo "delete anthos"
     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete anthos failed') {
         build job: 'runTestcases', parameters: [
             string(name: 'Components', value: 'Automated, CRM, DeleteCloudlet'), 
@@ -31,7 +31,7 @@ def anthos(cycle) {
 
 def fake(cycle) {
 //    echo "fake delete start build result ${currentBuild.result}"
-    echo "delete fake"
+//    echo "delete fake"
     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete fake failed') {
         build job: 'runTestcases', parameters: [
             string(name: 'Components', value: 'Automated, CRM, DeleteCloudlet'), 
