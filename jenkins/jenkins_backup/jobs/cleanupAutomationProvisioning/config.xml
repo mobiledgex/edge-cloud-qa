@@ -125,6 +125,8 @@ pipeline{
         booleanParam(name: &apos;RateLimitSettings&apos;, defaultValue: true)
         booleanParam(name: &apos;TrustPolicy&apos;, defaultValue: true)
         booleanParam(name: &apos;TrustPolicyException&apos;, defaultValue: true)
+        booleanParam(name: &apos;CloudletPool&apos;, defaultValue: true)
+        booleanParam(name: &apos;CloudletPoolInvitation&apos;, defaultValue: true)
     }
 
     stages {
@@ -193,6 +195,12 @@ pipeline{
                         }
                         if (String.valueOf(params.TrustPolicyException) == &apos;true&apos;) {
                             table_list = table_list + &apos;trustpolicyexception,&apos;
+                        }
+                        if (String.valueOf(params.CloudletPool) == &apos;true&apos;) {
+                            table_list = table_list + &apos;cloudletpool,&apos;
+                        }
+                        if (String.valueOf(params.CloudletPoolInvitation) == &apos;true&apos;) {
+                            table_list = table_list + &apos;cloudletpoolinvitation,&apos;
                         }
 
                         table_list = table_list.substring(0, table_list.length() - 1)
