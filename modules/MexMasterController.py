@@ -55,6 +55,7 @@ from mex_master_controller.RateLimitSettings import RateLimitSettings
 from mex_master_controller.AlertPolicy import AlertPolicy
 from mex_master_controller.OperatorReporting import OperatorReporting
 from mex_master_controller.Usage import Usage
+from mex_master_controller.Federation import Federation
 
 import shared_variables_mc
 import shared_variables
@@ -226,6 +227,7 @@ class MexMasterController(MexRest):
         self.alert_policy = AlertPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)        
         self.operator_reporting = OperatorReporting(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.usage = Usage(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.federation = Federation(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -1915,6 +1917,21 @@ class MexMasterController(MexRest):
 
         raise Exception(f'NextScheduleDate is NOT correct. Got {reporter[0]["NextScheduleDate"]} but expected {next_schedule_date}')
 
+    def create_federator(self, token=None, region=None, operatorid=None, countrycode=None, mcc=None, mnc=[], federationid=None, use_defaults=True, use_thread=False, auto_delete=True):
+        if token is None:
+            token=self.super_token
+
+        return self.federation.create_federator(token=token, region=region, operatorid=operatorid, countrycode=countrycode, mcc=mcc, mnc=mnc, federationid=federationid, use_defaults=use_defaults, use_thread=use_thread, auto_delete=auto_delete)
+
+    def show_federator(self, token=None, operatorid=None, federationid=None, use_defaults=True, use_thread=False):
+        return self.federation.show_federator(token=token, operatorid=operatorid, federationid=federationid, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_federator(self, token=None, operatorid=None, federationid=None, use_defaults=True, use_thread=False):
+        return self.federation.delete_federator(token=token, operatorid=operatorid, federationid=federationid, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_federator(self, token=None, operatorid=None, federationid=None, mcc=None, mnc=[], use_defaults=True, use_thread=False):
+        return self.federation.update_federator(token=token, operatorid=operatorid, federationid=federationid, mcc=mcc, mnc=mnc, use_defaults=use_defaults, use_thread=use_thread)
+ 
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
             token = self.token
