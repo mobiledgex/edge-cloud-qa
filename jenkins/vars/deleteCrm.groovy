@@ -1,6 +1,5 @@
 def openstack(cycle) {
-    print('delete openstack ')
-    print(cycle)
+    print('delete andy openstack ')
 //    echo "openstack delete start build result ${currentBuild.result}"
 //    echo "delete openstack"
 //    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete openstack failed') {
