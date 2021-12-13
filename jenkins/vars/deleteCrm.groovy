@@ -1,5 +1,6 @@
 def openstack(cycle) {
-    println('delete openstack ' + cycle)
+    print('delete openstack ')
+    print(cycle)
 //    echo "openstack delete start build result ${currentBuild.result}"
 //    echo "delete openstack"
 //    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete openstack failed') {
@@ -16,7 +17,8 @@ def openstack(cycle) {
 }
 
 def anthos(cycle) {
-    println('delete anthos ' + cycle)
+    print('delete anthos ')
+    print(cycle)
 
 //    echo "anthos delete start build result ${currentBuild.result}"
 //    echo "delete anthos"
@@ -33,7 +35,8 @@ def anthos(cycle) {
 }
 
 def fake(cycle) {
-    println('delete fake ' + cycle)
+    print('delete fake ')
+    print(cycle)
 
 //    echo "fake delete start build result ${currentBuild.result}"
 //    echo "delete fake"
