@@ -16,8 +16,10 @@
         <string>Flavor</string>
         <string>AutoProvPolicy</string>
         <string>TrustPolicyException</string>
+        <string>CloudletPool</string>
         <string>AutoScalePolicy</string>
         <string>TrustPolicy</string>
+        <string>CloudletPoolInvitation</string>
         <string>ClusterInst</string>
         <string>Cloudlet</string>
       </parameters>
@@ -96,6 +98,14 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>TrustPolicyException</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>CloudletPool</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>CloudletPoolInvitation</name>
           <defaultValue>true</defaultValue>
         </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
