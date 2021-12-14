@@ -20,7 +20,7 @@ def anthos(cycle) {
 
 //    echo "anthos delete start build result ${currentBuild.result}"
 //    echo "delete anthos"
-//    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete anthos failed') {
+    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete anthos failed') {
         build job: 'runTestcases', parameters: [
             string(name: 'Components', value: 'Automated, CRM, DeleteCloudlet'), 
             string(name: 'Project', value: params.Project), 
@@ -29,14 +29,14 @@ def anthos(cycle) {
             string(name: 'TestTarget', value: 'Anthos'),
             string(name: 'VariableFile', value: params.VariableFile), 
             string(name: 'NumberParallelExecutions', value: '10')]
-//    }
+    }
 }
 
 def fake(cycle) {
     print('delete fake ')
 //    echo "fake delete start build result ${currentBuild.result}"
 //    echo "delete fake"
-//    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete fake failed') {
+    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete fake failed') {
         build job: 'runTestcases', parameters: [
             string(name: 'Components', value: 'Automated, CRM, DeleteCloudlet'), 
             string(name: 'Project', value: params.Project), 
@@ -45,6 +45,6 @@ def fake(cycle) {
             string(name: 'TestTarget', value: 'Controller'),
             string(name: 'VariableFile', value: params.VariableFile), 
             string(name: 'NumberParallelExecutions', value: '10')]
-//    }
+    }
 }
 
