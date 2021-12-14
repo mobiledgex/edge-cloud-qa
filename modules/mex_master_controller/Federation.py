@@ -16,12 +16,16 @@ class Federation(MexOperation):
         self.federatordelete_url = '/auth/federator/self/delete'
         self.federatorshow_url = '/auth/federator/self/show'
         self.federatorupdate_url = '/auth/federator/self/update'
+        self.federatorgenerateapikey_url = '/auth/federator/self/generateapikey'
+        self.federationcreate_url = '/auth/federation/create'
+        self.federationshow_url = '/auth/federation/show'
+        self.federationdelete_url = '/auth/federation/delete'
 
-    def _build(self, operatorid=None, countrycode=None, mcc=None, mnc=[], federationid=None, use_defaults=True):
+    def _build(self, operatorid=None, countrycode=None, mcc=None, mnc=[], federationid=None, selfoperatorid=None, selffederationid=None, federation_name=None, federationaddr=None, apikey=None,  use_defaults=True):
 
         if use_defaults:
-            if operatorid is None:
-                operatorid = shared_variables.operator_name_default
+            if federation_name is None:
+                federation_name = shared_variables.federation_name_default
 
         federator_dict = {}
 
@@ -39,6 +43,21 @@ class Federation(MexOperation):
 
         if federationid is not None:
             federator_dict['federationid'] = federationid
+
+        if selfoperatorid is not None:
+            federator_dict['selfoperatorid'] = selfoperatorid
+
+        if selffederationid is not None:
+            federator_dict['selffederationid'] = selffederationid
+
+        if federation_name is not None:
+            federator_dict['name'] = federation_name
+
+        if federationaddr is not None:
+            federator_dict['federationaddr'] = federationaddr
+        
+        if apikey is not None:
+            federator_dict['apikey'] = apikey
 
         return federator_dict
 
@@ -82,5 +101,39 @@ class Federation(MexOperation):
         msg_dict = msg
 
         return self.show(token=token, url=self.federatorshow_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def generateselfapikey_federator(self, token=None, operatorid=None, federationid=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(operatorid=operatorid, federationid=federationid, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.federatorgenerateapikey_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
+
+    def create_federation(self, token=None, selfoperatorid=None, selffederationid=None, federation_name=None, operatorid=None, countrycode=None, federationid=None, federationaddr=None, apikey=None, use_defaults=True, use_thread=False, auto_delete=True, json_data=None, stream=False, stream_timeout=100):
+        msg = self._build(selfoperatorid=selfoperatorid, selffederationid=selffederationid, federation_name=federation_name, operatorid=operatorid, countrycode=countrycode, federationid=federationid, federationaddr=federationaddr, apikey=apikey, use_defaults=use_defaults)
+        msg_dict=msg
+
+        thread_name = None
+        msg_dict_delete = None
+        if auto_delete and 'selfoperatorid' in msg and 'name' in msg:
+            msg_delete = self._build(selfoperatorid=msg['selfoperatorid'], federation_name=msg['name'], use_defaults=False)
+            msg_dict_delete =  msg_delete
+
+        msg_dict_show = None
+        if 'name' in msg:
+            msg_show = self._build(federation_name=msg['name'], use_defaults=False)
+            msg_dict_show =  msg_show
    
+        return self.create(token=token, url=self.federationcreate_url, delete_url=self.federationdelete_url, show_url=self.federationshow_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)
+
+    def show_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False, json_data=None): 
+        msg = self._build(federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.federationshow_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def delete_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.delete(token=token, url=self.federationdelete_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
