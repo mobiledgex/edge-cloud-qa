@@ -34,19 +34,17 @@ def anthos(cycle) {
 
 def fake(cycle) {
     print('delete fake ')
-    print(cycle)
-
 //    echo "fake delete start build result ${currentBuild.result}"
 //    echo "delete fake"
-//    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete fake failed') {
-//        build job: 'runTestcases', parameters: [
-//            string(name: 'Components', value: 'Automated, CRM, DeleteCloudlet'), 
-//            string(name: 'Project', value: params.Project), 
-//            string(name: 'Cycle', value: cycle), 
-//            string(name: 'MasterController', value: params.MasterController),
-//            string(name: 'TestTarget', value: 'Controller'),
-//            string(name: 'VariableFile', value: params.VariableFile), 
-//            string(name: 'NumberParallelExecutions', value: '10')]
-//    }
+    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete fake failed') {
+        build job: 'runTestcases', parameters: [
+            string(name: 'Components', value: 'Automated, CRM, DeleteCloudlet'), 
+            string(name: 'Project', value: params.Project), 
+            string(name: 'Cycle', value: cycle), 
+            string(name: 'MasterController', value: params.MasterController),
+            string(name: 'TestTarget', value: 'Controller'),
+            string(name: 'VariableFile', value: params.VariableFile), 
+            string(name: 'NumberParallelExecutions', value: '10')]
+    }
 }
 
