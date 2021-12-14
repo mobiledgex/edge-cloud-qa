@@ -319,6 +319,9 @@ class MexMasterController(MexRest):
 
     def get_default_gpudriver_build_name(self):    
         return shared_variables.gpudriver_build_name_default
+
+    def get_default_federation_name(self):
+        return shared_variables.federation_name_default
  
     def number_of_login_requests(self):
         return self._number_login_requests
@@ -1931,6 +1934,21 @@ class MexMasterController(MexRest):
 
     def update_federator(self, token=None, operatorid=None, federationid=None, mcc=None, mnc=[], use_defaults=True, use_thread=False):
         return self.federation.update_federator(token=token, operatorid=operatorid, federationid=federationid, mcc=mcc, mnc=mnc, use_defaults=use_defaults, use_thread=use_thread)
+
+    def generateselfapikey_federator(self, token=None, operatorid=None, federationid=None, use_defaults=True, use_thread=False):
+        return self.federation.generateselfapikey_federator(token=token, operatorid=operatorid, federationid=federationid, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_federation(self, token=None, selfoperatorid=None, selffederationid=None, federation_name=None, operatorid=None, countrycode=None, federationid=None, federationaddr=None, apikey=None, use_defaults=True, use_thread=False, auto_delete=True):
+        if token is None:
+            token=self.super_token
+
+        return self.federation.create_federation(token=token, selfoperatorid=selfoperatorid, selffederationid=selffederationid, federation_name=federation_name, operatorid=operatorid, countrycode=countrycode, federationid=federationid, federationaddr=federationaddr, apikey=apikey, use_defaults=use_defaults, use_thread=use_thread, auto_delete=auto_delete)
+
+    def show_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False):
+        return self.federation.show_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False):
+        return self.federation.delete_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults, use_thread=use_thread)
  
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
