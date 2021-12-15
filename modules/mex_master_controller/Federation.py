@@ -20,6 +20,9 @@ class Federation(MexOperation):
         self.federationcreate_url = '/auth/federation/create'
         self.federationshow_url = '/auth/federation/show'
         self.federationdelete_url = '/auth/federation/delete'
+        self.federationregister_url = '/auth/federation/register'
+        self.federationderegister_url = '/auth/federation/deregister'
+        self.federationsetpartnerkey_url = '/auth/federation/partner/setapikey'
 
     def _build(self, operatorid=None, countrycode=None, mcc=None, mnc=[], federationid=None, selfoperatorid=None, selffederationid=None, federation_name=None, federationaddr=None, apikey=None,  use_defaults=True):
 
@@ -125,8 +128,8 @@ class Federation(MexOperation):
    
         return self.create(token=token, url=self.federationcreate_url, delete_url=self.federationdelete_url, show_url=self.federationshow_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)
 
-    def show_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False, json_data=None): 
-        msg = self._build(federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults)
+    def show_federation(self, token=None, federation_name=None, selfoperatorid=None, federationid=None,  use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(federation_name=federation_name, selfoperatorid=selfoperatorid, federationid=federationid, use_defaults=use_defaults)
         msg_dict = msg
 
         return self.show(token=token, url=self.federationshow_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
@@ -137,3 +140,20 @@ class Federation(MexOperation):
 
         return self.delete(token=token, url=self.federationdelete_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
+    def register_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.federationregister_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
+
+    def deregister_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.federationderegister_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
+
+    def setpartnerapikey_federation(self, token=None, federation_name=None, selfoperatorid=None, apikey=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(federation_name=federation_name, selfoperatorid=selfoperatorid, apikey=apikey, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.federationsetpartnerkey_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]

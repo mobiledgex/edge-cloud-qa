@@ -157,6 +157,9 @@ class MexOperation(MexRest):
                 elif url.endswith('federation/delete'):
                     if 'Deleted partner federation successfully' not in str(self.resp_text):
                         raise Exception('ERROR: Federation not deleted successfully:' + str(self.resp_text))
+                elif url.endswith('partner/setapikey'):
+                    if 'Updated federation attributes' not in str(self.resp_text):
+                        raise Exception('ERROR: Partner API key not set successfully:' + str(self.resp_text))
                 else:
                     logger.info(f'not checking specific url response for {url}')
                 # elif url.endswith('UpdateCloudlet'):
