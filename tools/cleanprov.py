@@ -32,6 +32,7 @@ parser.add_argument('--tables',default=table_list_str, help=f'comma seperated li
 parser.add_argument('--cloudlet', default=None, help='cloudlet to filter the delete by')
 parser.add_argument('--keypattern',default='*',help='pattern to filter the key delete by')
 parser.add_argument('--automation',action='store_true', help=f'delete automation objects that have {automation_regex} regular expression')
+parser.add_argument('--crmoverride',action='store_false', help='delete appinst/clusterinst objects with crmoverride flag. Default is False')
 
 #parser.add_argument('--outfile',required=False, default='tc_import.csv', help='csv outfile to write to. default is tc_import.csv')
 #parser.add_argument('--filepattern',required=False, default='test_*.py', help='file match pattern for testcase parsing. default is test_*.py')
@@ -45,6 +46,7 @@ tables_arg = args.tables.split(',')
 cloudlet = args.cloudlet
 key_pattern = args.keypattern
 automation_set = args.automation
+crmoverride_set = args.crmoverride
 
 if automation_set:
    key_pattern = automation_regex
@@ -226,11 +228,15 @@ def clean_appinst():
                     try:
                         mc.delete_app_instance(region=region, app_name=name, app_version=version, developer_org_name=org, cluster_instance_name=clustername, cluster_instance_developer_org_name=clusterorg, cloudlet_name=cloudletname, operator_org_name=cloudletorg, use_defaults=False, token=mc.super_token, crm_override=crm_override)
                     except Exception as e:
-                        print(f'error deleting {name}, {e}.continuing to next item')
-                        try:
-                            mc.delete_app_instance(region=region, app_name=name, app_version=version, developer_org_name=org, cluster_instance_name=clustername, cluster_instance_developer_org_name=clusterorg, cloudlet_name=cloudletname, operator_org_name=cloudletorg, use_defaults=False, token=mc.super_token, crm_override='IgnoreCrmAndTransientState')
-                        except Exception as e:
-                            print(f'error deleting {name} with override, {e}.continuing to next item')
+                        if crmoverride_set:
+                            print(f'deleting {name} with crmoverride')
+                            try:
+                                mc.delete_app_instance(region=region, app_name=name, app_version=version, developer_org_name=org, cluster_instance_name=clustername, cluster_instance_developer_org_name=clusterorg, cloudlet_name=cloudletname, operator_org_name=cloudletorg, use_defaults=False, token=mc.super_token, crm_override='IgnoreCrmAndTransientState')
+                            except Exception as e:
+                                print(f'error deleting {name} with crmoverride, {e}.continuing to next item')
+                        else:
+                            print(f'error deleting {name}, {e}.continuing to next item')
+ 
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
 
@@ -281,11 +287,14 @@ def clean_clusterinst():
                     try:
                         mc.delete_cluster_instance(region=region, token=mc.super_token, cluster_name=name, developer_org_name=org, cloudlet_name=cloudletname, operator_org_name=cloudletorg, crm_override=crm_override, use_defaults=False)
                     except Exception as e:
-                        print(f'error deleting, {e}.trying with override')
-                        try:
-                           mc.delete_cluster_instance(region=region, token=mc.super_token, cluster_name=name, developer_org_name=org, cloudlet_name=cloudletname, operator_org_name=cloudletorg, crm_override='IgnoreCrmAndTransientState', use_defaults=False)
-                        except Exception as e:
-                           print(f'error deleting, {e}.continuing to next item')
+                        if crmoverride_set:
+                            print(f'deleting {name} with crmoverride')
+                            try:
+                               mc.delete_cluster_instance(region=region, token=mc.super_token, cluster_name=name, developer_org_name=org, cloudlet_name=cloudletname, operator_org_name=cloudletorg, crm_override='IgnoreCrmAndTransientState', use_defaults=False)
+                            except Exception as e:
+                               print(f'error deleting with crmoverride, {e}.continuing to next item')
+                        else:
+                            print(f'error deleting, {e}.continuing to next item')
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
 
