@@ -1,15 +1,11 @@
 #!/usr/local/bin/python3
 
-import os
-import sys
 import argparse
 import logging
 import re
 import MexMasterController as mex_master_controller
 
-#print('loggers', logging.root.manager.loggerDict)
-
-logging.basicConfig(format='%(asctime)s %(levelname)s %(module)s %(funcName)s xline:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(format='%(asctime)s %(levelname)s %(module)s %(funcName)s xline:%(lineno)d - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 loglevel = logging.WARNING
 
 logging.getLogger('MexMasterController').setLevel(loglevel)
@@ -28,20 +24,19 @@ automation_regex = '.*16\d{8}\d*'
 parser = argparse.ArgumentParser(description='clean prov from controller')
 parser.add_argument('--mcaddress', default='console-qa.mobiledgex.net:443', help='master controller address:port. Default is console-qa.mobiledgex.net:443')
 parser.add_argument('--region', default=region_list_str, help=f'master controller region. Default is {region_list_str}')
-parser.add_argument('--tables',default=table_list_str, help=f'comma seperated list of tables in the order to be deleted: Default is {table_list_str}')
+parser.add_argument('--tables', default=table_list_str, help=f'comma seperated list of tables in the order to be deleted: Default is {table_list_str}')
 parser.add_argument('--cloudlet', default=None, help='cloudlet to filter the delete by')
-parser.add_argument('--keypattern',default='*',help='pattern to filter the key delete by')
-parser.add_argument('--automation',action='store_true', help=f'delete automation objects that have {automation_regex} regular expression')
-parser.add_argument('--crmoverride',action='store_false', help='delete appinst/clusterinst objects with crmoverride flag. Default is False')
+parser.add_argument('--keypattern', default='*', help='pattern to filter the key delete by')
+parser.add_argument('--automation', action='store_true', help=f'delete automation objects that have {automation_regex} regular expression')
+parser.add_argument('--crmoverride', action='store_false', help='delete appinst/clusterinst objects with crmoverride flag. Default is False')
 
-#parser.add_argument('--outfile',required=False, default='tc_import.csv', help='csv outfile to write to. default is tc_import.csv')
-#parser.add_argument('--filepattern',required=False, default='test_*.py', help='file match pattern for testcase parsing. default is test_*.py')
+# parser.add_argument('--outfile',required=False, default='tc_import.csv', help='csv outfile to write to. default is tc_import.csv')
+# parser.add_argument('--filepattern',required=False, default='test_*.py', help='file match pattern for testcase parsing. default is test_*.py')
 
 args = parser.parse_args()
 
 mc_address = args.mcaddress
 region_arg = args.region
-#controller_address = args.address
 tables_arg = args.tables.split(',')
 cloudlet = args.cloudlet
 key_pattern = args.keypattern
@@ -49,7 +44,7 @@ automation_set = args.automation
 crmoverride_set = args.crmoverride
 
 if automation_set:
-   key_pattern = automation_regex
+    key_pattern = automation_regex
 
 pattern_re = re.compile(key_pattern)
 
@@ -57,17 +52,16 @@ mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
 mex_key = 'localserver.key'
 
-#appinst_keep = [{'app_name':'automation_api_app'}, {'app_name':'MEXPrometheusAppName'}, {'app_name':'MEXMetricsExporter'}]
-#app_keep = [{'app_name':'automation_api_auth_app'}, {'app_name':'automation_api_app'},{'app_name':'MEXPrometheusAppName'}, {'app_name':'MEXMetricsExporter'}]
-appinst_keep = [{'app_name':'automation_api_app'},{'app_name':'MEXPrometheusAppName'}]
-app_keep = [{'app_name':'automation_api_auth_app'}, {'app_name':'automation_api_app'}]
+# appinst_keep = [{'app_name':'automation_api_app'}, {'app_name':'MEXPrometheusAppName'}, {'app_name':'MEXMetricsExporter'}]
+# app_keep = [{'app_name':'automation_api_auth_app'}, {'app_name':'automation_api_app'},{'app_name':'MEXPrometheusAppName'}, {'app_name':'MEXMetricsExporter'}]
+appinst_keep = [{'app_name': 'automation_api_app'}, {'app_name': 'MEXPrometheusAppName'}]
+app_keep = [{'app_name': 'automation_api_auth_app'}, {'app_name': 'automation_api_app'}]
 clusterinst_keep = []
-cluster_keep = [{'cluster_name':'automationapicluster'}]
-#clusterflavor_keep = [{'cluster_flavor_name':'automation_api_cluster_flavor'},{'cluster_flavor_name':'x1.medium'}]
-cloudlet_keep = [{'cloudlet_name': 'automationMunichCloudlet', 'operator_name': 'TDG'},{'cloudlet_name': 'automationBonnCloudlet', 'operator_name': 'TDG'},{'cloudlet_name': 'automationBerlinCloudlet', 'operator_name': 'TDG'},{'cloudlet_name': 'automationHamburgCloudlet', 'operator_name': 'TDG'},{'cloudlet_name': 'automationFrankfurtCloudlet', 'operator_name': 'TDG'},{'cloudlet_name': 'attcloud-1', 'operator_name': 'att'},{'cloudlet_name': 'tmocloud-1', 'operator_name': 'tmus'},{'cloudlet_name': 'tmocloud-2', 'operator_name': 'tmus'},{'cloudlet_name': 'automationProdHamburgCloudlet', 'operator_name': 'TDG'},{'cloudlet_name': 'automationAzureCentralCloudlet', 'operator_name': 'azure'},{'cloudlet_name': 'automationGcpCentralCloudlet', 'operator_name': 'gcp'}]
-flavor_keep = [{'flavor_name':'x1.medium'},{'flavor_name':'automation_api_flavor'}]
-developer_keep = [{'developer_name':'automation_api'},{'developer_name':'mexinfradev_'}]
-operator_keep = [{'operator_name': 'TDG'},{'operator_name': 'gcp'},{'operator_name': 'tmus'},{'operator_name': 'att'},{'operator_name': 'azure'}]
+cluster_keep = [{'cluster_name': 'automationapicluster'}]
+cloudlet_keep = [{'cloudlet_name': 'automationMunichCloudlet', 'operator_name': 'TDG'}, {'cloudlet_name': 'automationBonnCloudlet', 'operator_name': 'TDG'}, {'cloudlet_name': 'automationBerlinCloudlet', 'operator_name': 'TDG'}, {'cloudlet_name': 'automationHamburgCloudlet', 'operator_name': 'TDG'}, {'cloudlet_name': 'automationFrankfurtCloudlet', 'operator_name': 'TDG'}, {'cloudlet_name': 'attcloud-1', 'operator_name': 'att'}, {'cloudlet_name': 'tmocloud-1', 'operator_name': 'tmus'}, {'cloudlet_name': 'tmocloud-2', 'operator_name': 'tmus'}, {'cloudlet_name': 'automationProdHamburgCloudlet', 'operator_name': 'TDG'}, {'cloudlet_name': 'automationAzureCentralCloudlet', 'operator_name': 'azure'}, {'cloudlet_name': 'automationGcpCentralCloudlet', 'operator_name': 'gcp'}]
+flavor_keep = [{'flavor_name': 'x1.medium'}, {'flavor_name': 'automation_api_flavor'}]
+developer_keep = [{'developer_name': 'automation_api'}, {'developer_name': 'mexinfradev_'}]
+operator_keep = [{'operator_name': 'TDG'}, {'operator_name': 'gcp'}, {'operator_name': 'tmus'}, {'operator_name': 'att'}, {'operator_name': 'azure'}]
 rate_limit_flow_keep = []
 cloudletpool_keep = []
 cloudletpoolinvitation_keep = []
@@ -75,7 +69,8 @@ cloudletpoolinvitation_keep = []
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
-mc = mex_master_controller.MexMasterController(mc_address = mc_address)
+mc = mex_master_controller.MexMasterController(mc_address=mc_address)
+
 
 def clean_autoscalepolicy():
     print('clean autoscalepolicy')
@@ -98,6 +93,7 @@ def clean_autoscalepolicy():
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
 
+
 def clean_autoprovpolicy():
     print('clean orgcloudletpool')
     org_list = mc.show_auto_provisioning_policy(region=region, token=mc.super_token, use_defaults=False)
@@ -118,6 +114,7 @@ def clean_autoprovpolicy():
                         print(f'error deleting {name}, {e}.continuing to next item')
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def clean_orgcloudletpool():
     print('clean orgcloudletpool')
@@ -141,6 +138,7 @@ def clean_orgcloudletpool():
                 else:
                     print(f'keeping {cloudletpool} since doesnt match keypattern={key_pattern}')
 
+
 def clean_org():
     print('clean org')
     org_list = mc.show_organizations(token=mc.super_token, use_defaults=False)
@@ -154,13 +152,13 @@ def clean_org():
             else:
                 if pattern_re.match(name):
                     print(f'deleting {name}')
-                    crm_override = 1
                     try:
                         mc.delete_org(orgname=name, use_defaults=False, token=mc.super_token)
                     except Exception as e:
                         print(f'error deleting {name}. {e}. .continuing to next item')
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def clean_billingorg():
     print('clean billing org')
@@ -182,10 +180,11 @@ def clean_billingorg():
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
 
+
 def clean_user():
     print('clean user')
     org_list = mc.show_user(token=mc.super_token, use_defaults=False)
-    
+
     if len(org_list) == 0:
         print('nothing to delete')
     else:
@@ -196,14 +195,14 @@ def clean_user():
             else:
                 if pattern_re.match(name):
                     print(f'deleting {name}')
-                    crm_override = 1
                     try:
                         mc.delete_user(username=name, use_defaults=False, token=mc.super_token)
                     except Exception as e:
                         print(f'error deleting {name}. {e}. .continuing to next item')
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
- 
+
+
 def clean_appinst():
     print('clean appinst')
     appinst_list = mc.show_app_instances(cloudlet_name=cloudlet, region=region, token=mc.super_token, use_defaults=False)
@@ -236,9 +235,10 @@ def clean_appinst():
                                 print(f'error deleting {name} with crmoverride, {e}.continuing to next item')
                         else:
                             print(f'error deleting {name}, {e}.continuing to next item')
- 
+
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def clean_app():
     print('clean app')
@@ -256,15 +256,13 @@ def clean_app():
             else:
                 if pattern_re.match(name):
                     print(f'deleting {name} {version} {org}')
-                    #mc.delete_app(region=region, app_name=name, app_version=version, developer_org_name=org, use_defaults=False)
-
                     try:
-                       mc.delete_app(region=region, token=mc.super_token, app_name=name, app_version=version, developer_org_name=org, use_defaults=False)
-                       #pass
+                        mc.delete_app(region=region, token=mc.super_token, app_name=name, app_version=version, developer_org_name=org, use_defaults=False)
                     except Exception as e:
                         print(f'error deleting, {e}.continuing to next item')
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def clean_clusterinst():
     print('clean cluster instance')
@@ -290,9 +288,9 @@ def clean_clusterinst():
                         if crmoverride_set:
                             print(f'deleting {name} with crmoverride')
                             try:
-                               mc.delete_cluster_instance(region=region, token=mc.super_token, cluster_name=name, developer_org_name=org, cloudlet_name=cloudletname, operator_org_name=cloudletorg, crm_override='IgnoreCrmAndTransientState', use_defaults=False)
+                                mc.delete_cluster_instance(region=region, token=mc.super_token, cluster_name=name, developer_org_name=org, cloudlet_name=cloudletname, operator_org_name=cloudletorg, crm_override='IgnoreCrmAndTransientState', use_defaults=False)
                             except Exception as e:
-                               print(f'error deleting with crmoverride, {e}.continuing to next item')
+                                print(f'error deleting with crmoverride, {e}.continuing to next item')
                         else:
                             print(f'error deleting, {e}.continuing to next item')
                 else:
@@ -311,27 +309,28 @@ def clean_cloudlet():
             if in_cloudlet_list(a):
                 print(f'keeping {name}')
             else:
-               if pattern_re.match(name):
-                  try:
-                     print(f'deleting {name}')
-                     mc.delete_cloudlet(region=region, token=mc.super_token, cloudlet_name=name, operator_org_name=org, use_defaults=False)
-                     print(f'delete {name} done')
-                  except Exception as e:
-                     print(f'error deleting, {e}.trying with override')
-                     try:
-                        mc.delete_cloudlet(region=region, token=mc.super_token, cloudlet_name=name, operator_org_name=org, use_defaults=False, crm_override='IgnoreCrmAndTransientState')
-                        print(f'delete {name} with override done')
-                     except Exception as e:
-                        print(f'error deleting {name}, {e}.continuing to next item')
-               else:
-                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+                if pattern_re.match(name):
+                    try:
+                        print(f'deleting {name}')
+                        mc.delete_cloudlet(region=region, token=mc.super_token, cloudlet_name=name, operator_org_name=org, use_defaults=False)
+                        print(f'delete {name} done')
+                    except Exception as e:
+                        print(f'error deleting, {e}.trying with override')
+                        try:
+                            mc.delete_cloudlet(region=region, token=mc.super_token, cloudlet_name=name, operator_org_name=org, use_defaults=False, crm_override='IgnoreCrmAndTransientState')
+                            print(f'delete {name} with override done')
+                        except Exception as e:
+                            print(f'error deleting {name}, {e}.continuing to next item')
+                else:
+                    print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def clean_flavor():
     global key_pattern
 
     print('clean flavor')
     app_list = mc.show_flavors(region=region, token=mc.super_token, use_defaults=False)
-    print('key',key_pattern)
+    print('key', key_pattern)
     if len(app_list) == 0:
         print('nothing to delete')
     else:
@@ -340,14 +339,15 @@ def clean_flavor():
             if in_flavor_list(a):
                 print(f'keeping {name}')
             else:
-               if pattern_re.match(name):
-                  try:
-                     print(f'deleting {name}')
-                     mc.delete_flavor(region=region, token=mc.super_token, use_defaults=False, flavor_name=name)
-                  except Exception as e:
-                     print(f'error deleting {name}, {e}.continuing to next item')
-               else:
-                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+                if pattern_re.match(name):
+                    try:
+                        print(f'deleting {name}')
+                        mc.delete_flavor(region=region, token=mc.super_token, use_defaults=False, flavor_name=name)
+                    except Exception as e:
+                        print(f'error deleting {name}, {e}.continuing to next item')
+                else:
+                    print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def clean_ratelimitsettingsflow():
     global key_pattern
@@ -359,7 +359,7 @@ def clean_ratelimitsettingsflow():
         print(f'error showing ratelimit settings, {e}.continuing to next item')
         return
     print('applist', app_list)
-    print('key',key_pattern)
+    print('key', key_pattern)
     if len(app_list) == 0:
         print('nothing to delete')
     else:
@@ -368,14 +368,15 @@ def clean_ratelimitsettingsflow():
             if in_rate_limit_flow_list(a):
                 print(f'keeping {name}')
             else:
-               if pattern_re.match(name):
-                  try:
-                     print(f'deleting {name}')
-                     mc.delete_rate_limit_flow(region=region, token=mc.super_token, use_defaults=False, flow_settings_name=name, api_name=a['data']['key']['rate_limit_key']['api_name'], api_endpoint_type=a['data']['key']['rate_limit_key']['api_endpoint_type'], rate_limit_target=a['data']['key']['rate_limit_key']['rate_limit_target'])
-                  except Exception as e:
-                     print(f'error deleting {name}, {e}.continuing to next item')
-               else:
-                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+                if pattern_re.match(name):
+                    try:
+                        print(f'deleting {name}')
+                        mc.delete_rate_limit_flow(region=region, token=mc.super_token, use_defaults=False, flow_settings_name=name, api_name=a['data']['key']['rate_limit_key']['api_name'], api_endpoint_type=a['data']['key']['rate_limit_key']['api_endpoint_type'], rate_limit_target=a['data']['key']['rate_limit_key']['rate_limit_target'])
+                    except Exception as e:
+                        print(f'error deleting {name}, {e}.continuing to next item')
+                else:
+                    print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def clean_ratelimitsettingsmaxreqs():
     global key_pattern
@@ -388,7 +389,7 @@ def clean_ratelimitsettingsmaxreqs():
         return
 
     print('applist', app_list)
-    print('key',key_pattern)
+    print('key', key_pattern)
     if len(app_list) == 0:
         print('nothing to delete')
     else:
@@ -397,14 +398,15 @@ def clean_ratelimitsettingsmaxreqs():
             if in_rate_limit_flow_list(a):
                 print(f'keeping {name}')
             else:
-               if pattern_re.match(name):
-                  try:
-                     print(f'deleting {name}')
-                     mc.delete_rate_limit_max_requests(region=region, token=mc.super_token, use_defaults=False, max_requests_settings_name=name, api_name=a['data']['key']['rate_limit_key']['api_name'], api_endpoint_type=a['data']['key']['rate_limit_key']['api_endpoint_type'], rate_limit_target=a['data']['key']['rate_limit_key']['rate_limit_target'])
-                  except Exception as e:
-                     print(f'error deleting {name}, {e}.continuing to next item')
-               else:
-                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+                if pattern_re.match(name):
+                    try:
+                        print(f'deleting {name}')
+                        mc.delete_rate_limit_max_requests(region=region, token=mc.super_token, use_defaults=False, max_requests_settings_name=name, api_name=a['data']['key']['rate_limit_key']['api_name'], api_endpoint_type=a['data']['key']['rate_limit_key']['api_endpoint_type'], rate_limit_target=a['data']['key']['rate_limit_key']['rate_limit_target'])
+                    except Exception as e:
+                        print(f'error deleting {name}, {e}.continuing to next item')
+                else:
+                    print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def clean_trustpolicy():
     global key_pattern
@@ -417,7 +419,7 @@ def clean_trustpolicy():
         return
 
     print('applist', app_list)
-    print('key',key_pattern)
+    print('key', key_pattern)
     if len(app_list) == 0:
         print('nothing to delete')
     else:
@@ -426,14 +428,15 @@ def clean_trustpolicy():
             if in_trustpolicy_list(a):
                 print(f'keeping {name}')
             else:
-               if pattern_re.match(name):
-                  try:
-                     print(f'deleting {name}')
-                     mc.delete_trust_policy(region=region, token=mc.super_token, use_defaults=False, policy_name=name, operator_org_name=a['data']['key']['organization'])
-                  except Exception as e:
-                     print(f'error deleting {name}, {e}.continuing to next item')
-               else:
-                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+                if pattern_re.match(name):
+                    try:
+                        print(f'deleting {name}')
+                        mc.delete_trust_policy(region=region, token=mc.super_token, use_defaults=False, policy_name=name, operator_org_name=a['data']['key']['organization'])
+                    except Exception as e:
+                        print(f'error deleting {name}, {e}.continuing to next item')
+                else:
+                    print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def clean_trustpolicyexception():
     global key_pattern
@@ -446,7 +449,7 @@ def clean_trustpolicyexception():
         return
 
     print('applist', app_list)
-    print('key',key_pattern)
+    print('key', key_pattern)
     if len(app_list) == 0:
         print('nothing to delete')
     else:
@@ -455,14 +458,15 @@ def clean_trustpolicyexception():
             if in_trustpolicyexception_list(a):
                 print(f'keeping {name}')
             else:
-               if pattern_re.match(name):
-                  try:
-                     print(f'deleting {name}')
-                     mc.delete_trust_policy_exception(region=region, token=mc.super_token, use_defaults=False, policy_name=name, app_name=a['data']['key']['app_key']['name'], developer_org_name=a['data']['key']['app_key']['organization'], app_version=a['data']['key']['app_key']['version'], cloudlet_pool_name=a['data']['key']['cloudlet_pool_key']['name'], cloudlet_pool_org_name=a['data']['key']['cloudlet_pool_key']['organization'])
-                  except Exception as e:
-                     print(f'error deleting {name}, {e}.continuing to next item')
-               else:
-                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+                if pattern_re.match(name):
+                    try:
+                        print(f'deleting {name}')
+                        mc.delete_trust_policy_exception(region=region, token=mc.super_token, use_defaults=False, policy_name=name, app_name=a['data']['key']['app_key']['name'], developer_org_name=a['data']['key']['app_key']['organization'], app_version=a['data']['key']['app_key']['version'], cloudlet_pool_name=a['data']['key']['cloudlet_pool_key']['name'], cloudlet_pool_org_name=a['data']['key']['cloudlet_pool_key']['organization'])
+                    except Exception as e:
+                        print(f'error deleting {name}, {e}.continuing to next item')
+                else:
+                    print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def clean_cloudletpool():
     global key_pattern
@@ -475,7 +479,7 @@ def clean_cloudletpool():
         return
 
     print('cloudletpoollist', pool_list)
-    print('key',key_pattern)
+    print('key', key_pattern)
     if len(pool_list) == 0:
         print('nothing to delete')
     else:
@@ -484,14 +488,15 @@ def clean_cloudletpool():
             if in_cloudletpool_list(a):
                 print(f'keeping {name}')
             else:
-               if pattern_re.match(name):
-                  try:
-                     print(f'deleting {name}')
-                     mc.delete_cloudlet_pool(region=region, token=mc.super_token, use_defaults=False, cloudlet_pool_name=name, operator_org_name=a['data']['key']['organization'])
-                  except Exception as e:
-                     print(f'error deleting {name}, {e}.continuing to next item')
-               else:
-                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+                if pattern_re.match(name):
+                    try:
+                        print(f'deleting {name}')
+                        mc.delete_cloudlet_pool(region=region, token=mc.super_token, use_defaults=False, cloudlet_pool_name=name, operator_org_name=a['data']['key']['organization'])
+                    except Exception as e:
+                        print(f'error deleting {name}, {e}.continuing to next item')
+                else:
+                    print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def clean_cloudletpoolinvitation():
     global key_pattern
@@ -504,7 +509,7 @@ def clean_cloudletpoolinvitation():
         return
 
     print('cloudletpoollistinvitation', pool_list)
-    print('key',key_pattern)
+    print('key', key_pattern)
     if len(pool_list) == 0:
         print('nothing to delete')
     else:
@@ -513,14 +518,15 @@ def clean_cloudletpoolinvitation():
             if in_cloudletpoolinvitation_list(a):
                 print(f'keeping {name}')
             else:
-               if pattern_re.match(name):
-                  try:
-                     print(f'deleting {name} {a["Org"]}')
-                     mc.delete_cloudlet_pool_access_invitation(region=region, token=mc.super_token, use_defaults=False, cloudlet_pool_name=name, cloudlet_pool_org_name=a['CloudletPoolOrg'], developer_org_name=a['Org'])
-                  except Exception as e:
-                     print(f'error deleting {name}, {e}.continuing to next item')
-               else:
-                  print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+                if pattern_re.match(name):
+                    try:
+                        print(f'deleting {name} {a["Org"]}')
+                        mc.delete_cloudlet_pool_access_invitation(region=region, token=mc.super_token, use_defaults=False, cloudlet_pool_name=name, cloudlet_pool_org_name=a['CloudletPoolOrg'], developer_org_name=a['Org'])
+                    except Exception as e:
+                        print(f'error deleting {name}, {e}.continuing to next item')
+                else:
+                    print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+
 
 def in_app_list(app):
     for a in app_keep:
@@ -528,11 +534,13 @@ def in_app_list(app):
             print('found app in app_keep_list', app['data']['key']['name'])
             return True
 
+
 def in_appinst_list(app):
     for a in appinst_keep:
         if a['app_name'] == app['data']['key']['app_key']['name']:
             print('found app in appinst_keep_list ' + app['data']['key']['app_key']['name'])
             return True
+
 
 def in_clusterinst_list(app):
     for a in clusterinst_keep:
@@ -540,11 +548,13 @@ def in_clusterinst_list(app):
             print('found clusterinst in clusterinst_keep_list', app.key.name)
             return True
 
+
 def in_flavor_list(app):
     for a in flavor_keep:
         if a['flavor_name'] == app['data']['key']['name']:
             print('found flavor in flavor_keep_list', app['data']['key']['name'])
             return True
+
 
 def in_cloudlet_list(app):
     for a in cloudlet_keep:
@@ -552,11 +562,13 @@ def in_cloudlet_list(app):
             print('found cloudlet in cloudlet_keep list', app['data']['key']['name'], app['data']['key']['organization'])
             return True
 
+
 def in_rate_limit_flow_list(app):
     for a in rate_limit_flow_keep:
         if a['cloudlet_name'] == app['data']['key']['name'] and a['operator_name'] == app['data']['key']['organization']:
             print('found flow in rate_limit_flow_keep list', app['data']['key']['name'], app['data']['key']['organization'])
             return True
+
 
 def in_cloudletpool_list(app):
     for a in cloudletpool_keep:
@@ -564,72 +576,74 @@ def in_cloudletpool_list(app):
             print('found cloudletpool list', app['data']['key']['name'], app['data']['key']['organization'])
             return True
 
+
 def in_cloudletpoolinvitation_list(app):
     for a in cloudletpoolinvitation_keep:
         if a['cloudlet_name'] == app['data']['key']['name'] and a['operator_name'] == app['data']['key']['organization']:
             print('found cloudletpoolinvitation list', app['data']['key']['name'], app['data']['key']['organization'])
             return True
 
+
 def in_org_list(app):
-    return False 
-    #for a in operator_keep:
-    #    if a['operator_name'] == app.key.name:
-    #        print('found operator in operator_keep list', app.key.name)
-    #        return True
+    return False
+
 
 def in_orgcloudletpool_list(app):
     return False
 
+
 def in_autoprovpolicy_list(app):
     return False
+
 
 def in_autoscalepolicy_list(app):
     return False
 
+
 def in_trustpolicy_list(app):
     return False
 
+
 def in_trustpolicyexception_list(app):
     return False
- 
+
+
 for r in region_list:
-   if r in region_arg:
-      region = r
-      for table in table_list:
-         if table in tables_arg:
-            if table == 'trustpolicyexception':
-               clean_trustpolicyexception()
-            if table == 'cloudletpoolinvitation':
-               clean_cloudletpoolinvitation()
-            if table == 'cloudletpool':
-               clean_cloudletpool()
-            if table == 'appinst':
-               clean_appinst()
-            elif table == 'app':
-               clean_app()
-            elif table == 'clusterinst':
-               clean_clusterinst()
-            elif table == 'flavor':
-               clean_flavor()
-            elif table == 'cloudlet':
-               clean_cloudlet()
-            if table == 'trustpolicy':
-               clean_trustpolicy()
-            elif table == 'autoprovpolicy':
-               clean_autoprovpolicy()
-            elif table == 'autoscalepolicy':
-               clean_autoscalepolicy()
-            elif table == 'user':
-               clean_user()
-            elif table == 'billingorg':
-               clean_billingorg()
-            #elif table == 'org':
-            #   clean_org()
-            elif table == 'orgcloudletpool':
-               clean_orgcloudletpool()
-            elif table == 'ratelimitsettings':
-               clean_ratelimitsettingsflow()
-               clean_ratelimitsettingsmaxreqs()
+    if r in region_arg:
+        region = r
+        for table in table_list:
+            if table in tables_arg:
+                if table == 'trustpolicyexception':
+                    clean_trustpolicyexception()
+                if table == 'cloudletpoolinvitation':
+                    clean_cloudletpoolinvitation()
+                if table == 'cloudletpool':
+                    clean_cloudletpool()
+                if table == 'appinst':
+                    clean_appinst()
+                elif table == 'app':
+                    clean_app()
+                elif table == 'clusterinst':
+                    clean_clusterinst()
+                elif table == 'flavor':
+                    clean_flavor()
+                elif table == 'cloudlet':
+                    clean_cloudlet()
+                if table == 'trustpolicy':
+                    clean_trustpolicy()
+                elif table == 'autoprovpolicy':
+                    clean_autoprovpolicy()
+                elif table == 'autoscalepolicy':
+                    clean_autoscalepolicy()
+                elif table == 'user':
+                    clean_user()
+                elif table == 'billingorg':
+                    clean_billingorg()
+                elif table == 'orgcloudletpool':
+                    clean_orgcloudletpool()
+                elif table == 'ratelimitsettings':
+                    clean_ratelimitsettingsflow()
+                    clean_ratelimitsettingsmaxreqs()
 
 if 'org' in tables_arg:
-   clean_org()
+    clean_org()
