@@ -71,7 +71,7 @@ class MexMasterController(MexRest):
     """
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
-    def __init__(self, mc_address='127.0.0.1:9900', root_cert=None, auto_login=True):
+    def __init__(self, mc_address='127.0.0.1:9900', root_cert=None, mc_password='mexadminfastedgecloudinfra', auto_login=True):
         """The MC address should be given at import time. The default is the local address
         
         Examples:
@@ -94,8 +94,8 @@ class MexMasterController(MexRest):
 
         self.username = 'mexadmin'
         #self.password = 'mexadmin123'
-        self.password = 'mexadminfastedgecloudinfra'
-
+        #self.password = 'mexadminfastedgecloudinfra'
+        self.password = mc_password
         self.admin_username = self.username
         self.admin_password = self.password
        
@@ -1944,12 +1944,29 @@ class MexMasterController(MexRest):
 
         return self.federation.create_federation(token=token, selfoperatorid=selfoperatorid, selffederationid=selffederationid, federation_name=federation_name, operatorid=operatorid, countrycode=countrycode, federationid=federationid, federationaddr=federationaddr, apikey=apikey, use_defaults=use_defaults, use_thread=use_thread, auto_delete=auto_delete)
 
-    def show_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False):
-        return self.federation.show_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults, use_thread=use_thread)
+    def show_federation(self, token=None, federation_name=None, selfoperatorid=None, federationid=None, use_defaults=True, use_thread=False):
+        return self.federation.show_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, federationid=federationid, use_defaults=use_defaults, use_thread=use_thread)
 
     def delete_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False):
         return self.federation.delete_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults, use_thread=use_thread)
- 
+
+    def register_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False):
+        output = self.federation.register_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults, use_thread=use_thread)
+        if f'Created directed federation "{federation_name}" successfully' not in str((output['message'])):
+            raise Exception('ERROR: Partner Federation not registered successfully:' + str((output['message'])))
+
+        return output
+
+    def deregister_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False):
+        output = self.federation.deregister_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults, use_thread=use_thread)
+        if f'Deregistered federation "{federation_name}" successfully' not in str((output['message'])):
+            raise Exception('ERROR: Partner Federation not deregistered successfully:' + str((output['message'])))
+
+        return output
+
+    def setpartnerapikey_federation(self, token=None, federation_name=None, selfoperatorid=None, apikey=None, use_defaults=True, use_thread=False):
+        return self.federation.setpartnerapikey_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, apikey=apikey, use_defaults=use_defaults, use_thread=use_thread)
+
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
             token = self.token
