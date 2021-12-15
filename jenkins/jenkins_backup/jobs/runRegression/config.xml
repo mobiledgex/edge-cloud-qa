@@ -604,7 +604,7 @@ pipeline{
                 stage(&apos;Create Openstack&apos;) {
                     steps {
                         catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create openstack failed&apos;) {
-                            script { createUpgradeCrm.openstack() }
+                            script { createUpgradeCrm.openstack(cycle) }
                         }
 //                        echo &quot;openstack create build resutl ${currentBuild.result}&quot;
 //                        echo &quot;create openstack&quot;
@@ -636,7 +636,7 @@ pipeline{
                 stage(&apos;Create Anthos&apos;) {
                     steps {
                         catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create anthos failed&apos;) {
-                            script { createUpgradeCrm.anthos() }
+                            script { createUpgradeCrm.anthos(cycle) }
                         }
 //                        echo &quot;create anthos&quot;
 //                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create anthos failed&apos;) {
@@ -665,7 +665,7 @@ pipeline{
                 stage(&apos;Create Fake&apos;) {
                     steps {
                         catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create fake failed&apos;) {
-                            script { createUpgradeCrm.fake() }
+                            script { createUpgradeCrm.fake(cycle) }
                         }
 //                        echo &quot;create fake&quot;
 //                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create fake failed&apos;) {
@@ -695,7 +695,7 @@ pipeline{
                 stage(&apos;Upgrade Cloudlets&apos;) {
                     steps {
                         catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;upgrade cloudlets failed&apos;) {
-                            script { createUpgradeCrm.upgrade() }
+                            script { createUpgradeCrm.upgrade(cycle, dateValue) }
                         }
 //                        echo &quot;upgrade cloudlets&quot;
 //                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;upgrade CRM failed&apos;) {
@@ -1024,7 +1024,7 @@ pipeline{
                 }
                 stage(&apos;Scans&apos;) {
                     steps {
-                        catchErro(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Scans failed&apos;) {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Scans failed&apos;) {
                             script { slackMessage.good(&apos;Starting scan tests&apos;) }
                             build job: &apos;runScans&apos;, parameters: [
                                 string(name: &apos;Cycle&apos;, value: cycle), 
