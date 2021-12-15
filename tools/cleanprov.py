@@ -28,7 +28,7 @@ parser.add_argument('--tables', default=table_list_str, help=f'comma seperated l
 parser.add_argument('--cloudlet', default=None, help='cloudlet to filter the delete by')
 parser.add_argument('--keypattern', default='*', help='pattern to filter the key delete by')
 parser.add_argument('--automation', action='store_true', help=f'delete automation objects that have {automation_regex} regular expression')
-parser.add_argument('--crmoverride', action='store_false', help='delete appinst/clusterinst objects with crmoverride flag. Default is False')
+parser.add_argument('--crmoverride', action='store_true', help='delete appinst/clusterinst objects with crmoverride flag. Default is False')
 
 # parser.add_argument('--outfile',required=False, default='tc_import.csv', help='csv outfile to write to. default is tc_import.csv')
 # parser.add_argument('--filepattern',required=False, default='test_*.py', help='file match pattern for testcase parsing. default is test_*.py')
