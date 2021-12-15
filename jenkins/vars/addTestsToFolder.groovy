@@ -22,7 +22,7 @@ def call(version, project, cycle) {
         echo "createcycle build resutl ${currentBuild.result}"
         echo "addpre ${add_pre}"
 
-#        sh add_pre    
+//        sh add_pre    
                     
         sh add_pre + ' --folder controller'
         addTestsToFolder(params.Version, params.Project, cycle, 'controller', 'Automated,Controller', null)
