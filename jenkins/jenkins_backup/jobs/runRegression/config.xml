@@ -353,32 +353,39 @@ pipeline{
 //            }
 //        }
         
-        stage(&apos;Check Load Exists&apos;) {
-            steps {
-                script {
-                    dateValue = determineDateValue()
-                    cycle = dateValue + &apos;_&apos; + params.Version
-                    currentBuild.displayName = cycle
-                    slackMessage.good(&apos;Starting regression for &apos; + cycle)
-                    checkLoadExists(dateValue)
-//                    def s = &apos;curl -s https://robot\\$qa:RIuSwsdA9naFkunkDtg7TrPOHG3YoqS8@harbor.mobiledgex.net/v2/mobiledgex/edge-cloud/tags/list | jq &quot;.tags | index(\\&quot;&apos; + dateValue + &apos;\\&quot;)&quot;&apos;
-//                    def index  = sh(script: s, returnStdout: true);
-//                    if(index == &apos;null&apos;) {
-//                        println &quot;${s} failed&quot;
-//                        currentBuild.result = &apos;FAILURE&apos;
-//                    }
+        stage(&apos;Regression Prep 1&apos;) {
+            parallel {
+                stage(&apos;Check Load/Create Cycle&apos;) {
+                    steps {
+                        script {
+                            dateValue = determineDateValue()
+                            cycle = dateValue + &apos;_&apos; + params.Version
+                            currentBuild.displayName = cycle
+                            slackMessage.good(&apos;Starting regression for &apos; + cycle)
+                            checkLoadExists(dateValue)
+                            createCycle(cycle)
+                            addTestsToFolder(params.Version, params.Project, cycle)
+                        }
+                    }
+                }
+                stage(&apos;Cleanup Provisioning&apos;) {
+                    steps{
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;cleanup provisioning failed&apos;) {
+                            build job: &apos;cleanupAutomationProvisioning&apos;
+                        }
+                    }
                 }
             }
             post {
                 failure {
                     script {
-                        slackMessage.fail(&quot;Load check failed for &quot; + dateValue + &apos;. Aborting&apos;)
+                        slackMessage.fail(&quot;Load check failed or create cycle failed for &quot; + dateValue + &apos;. Aborting&apos;)
                     }
                 }
             }
         }
 
-        stage(&apos;Regression Prep&apos;) {
+        stage(&apos;Regression Prep 2&apos;) {
             parallel {
                 stage(&apos;Deploy Chef&apos;) {
                     steps {
@@ -406,29 +413,28 @@ pipeline{
 //                    }
                 }
 
-                stage(&apos;Create Cycle&apos;) {
-                    steps {
-                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create cycle failed&apos;) {
-                            script { addTestsToFolder(params.Version, params.Project, cycle) }
-                        }
-                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                slackMessage.fail(&quot;Create cycle and copy tests failed for &quot; + dateValue + &apos;. Aborting&apos;)
-//                            }
+//                stage(&apos;Create Cycle&apos;) {
+//                    steps {
+//                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create cycle failed&apos;) {
+//                            script { addTestsToFolder(params.Version, params.Project, cycle) }
 //                        }
 //                    }
-
-                }
+////                    post {
+////                        failure {
+////                            script {
+////                                slackMessage.fail(&quot;Create cycle and copy tests failed for &quot; + dateValue + &apos;. Aborting&apos;)
+////                            }
+////                        }
+////                    }
+//                }
        
-                stage(&apos;Cleanup Provisioning&apos;) {
-                    steps{
-                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;cleanup provisioning failed&apos;) {
-                            build job: &apos;cleanupAutomationProvisioning&apos;
-                        }
-                    }
-                }
+//                stage(&apos;Cleanup Provisioning&apos;) {
+//                    steps{
+//                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;cleanup provisioning failed&apos;) {
+//                            build job: &apos;cleanupAutomationProvisioning&apos;
+//                        }
+//                    }
+//                }
 
                 stage(&apos;Delete Openstack&apos;) {
                     steps {
@@ -1113,53 +1119,66 @@ pipeline{
             steps {
                 script {
                     catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Password tests failed&apos;) {
-                            job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis
-                            job_duration_string = job_duration.toString()
-                            build job: &apos;runTestscases&apos;, parameters: [
-                                string(name: &apos;Project&apos;, value: params.Project), 
-                                string(name: &apos;Version&apos;, value: params.Version), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;MasterController&apos;, value: params.MasterController),
-                                string(name: &apos;TestTarget&apos;, value: &apos;MasterController&apos;),
-                                string(name: &apos;Components&apos;, value: &apos;Automated, Password&apos;),
-                                string(name: &apos;JobDuration&apos;, value: job_duration_string)]
+                        script { slackMessage.good(&apos;Starting Password tests&apos;) }
+                        build job: &apos;runTestscases&apos;, parameters: [
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Version&apos;, value: params.Version), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;MasterController&apos;, value: params.MasterController),
+                            string(name: &apos;TestTarget&apos;, value: &apos;MasterController&apos;),
+                            string(name: &apos;Components&apos;, value: &apos;Automated, Password&apos;)]
+                    }
+                }
+                post {
+                    failure {
+                        script {
+                            echo &quot;run password tests failed&quot;
+                            slackMessage.fail(&apos;Finished Password tests with failures&apos;)
                         }
+                    }
+                    success {
+                        script {
+                            echo &quot;run password tests passed&quot;
+                            slackMessage.good(&apos;Finished Password tests with pass&apos;)
+                        }
+                    }
                 }
             }
         }
         
-//        stage(&quot;Performance Tests&quot;) {
-//            steps {
-//                script {
-//                    catchError() {
-//                            build job: &apos;runTestscases&apos;, parameters: [
-//                                string(name: &apos;Project&apos;, value: params.Project), 
-//                                string(name: &apos;Version&apos;, value: params.Version), 
-//                                string(name: &apos;Cycle&apos;, value: cycle), 
-//                                string(name: &apos;MasterController&apos;, value: params.MasterController),
-//                                string(name: &apos;TestTarget&apos;, value: &apos;MasterController&apos;),
-//                                string(name: &apos;Components&apos;, value: &apos;Automated, Performance&apos;),
-//                                string(name: &apos;JobDuration&apos;, value: job_duration_string)]
-//                        }
-//                }
-//            }
-//            post {
-//                always {
-//                    dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
-//                        sh(&apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project &apos; + params.Project + &apos; --version &apos; + params.Version + &apos; --cycle &apos; + cycle + &apos; --enddate&apos;)
-//                    }
-//                    script {
-//                        job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis
-//                        job_duration_string = job_duration.toString()
-//                        build job: &apos;createReport&apos;, parameters: [
-//                            string(name: &apos;Project&apos;, value: params.Project), 
-//                            string(name: &apos;Version&apos;, value: params.Version), 
-//                            string(name: &apos;Cycle&apos;, value: cycle), 
-//                            string(name: &apos;JobDuration&apos;, value: job_duration_string)]
-//                    }  
-//                }
-//            }
-//        }
+        stage(&quot;Performance Tests&quot;) {
+            steps {
+                script {
+                    catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Performance tests failed&apos;) {
+                        script { slackMessage.good(&apos;Starting Performance tests&apos;) }
+                        build job: &apos;runTestscases&apos;, parameters: [
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Version&apos;, value: params.Version), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;MasterController&apos;, value: params.MasterController),
+                            string(name: &apos;TestTarget&apos;, value: &apos;Performance/Security&apos;),
+                            string(name: &apos;Components&apos;, value: &apos;Automated, Performance&apos;)]
+                    }
+                }
+            }
+            post {
+                always {
+                    dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
+                        sh(&apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project &apos; + params.Project + &apos; --version &apos; + params.Version + &apos; --cycle &apos; + cycle + &apos; --enddate&apos;)
+                    }
+                    script {
+                        script { slackMessage.good(&apos;Creating Report&apos;) }
+                        job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis
+                        job_duration_string = job_duration.toString()
+                        build job: &apos;createReport&apos;, parameters: [
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Version&apos;, value: params.Version), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;JobDuration&apos;, value: job_duration_string)]
+                    }  
+                }
+            }
+        }
     }
 }</script>
     <sandbox>true</sandbox>
