@@ -249,9 +249,9 @@ class AppsPage(ComputePage):
     def click_close_app_details(self):
         self.driver.find_element(*AppsPageLocators.close_button).click()
 
-    def click_app_row(self, app_name, region='US', app_version=None, app_org=None):
+    def click_app_row(self, app_name, region=None, app_version=None, app_org=None):
         try:
-            r = self.get_table_row_by_value([(region, 2), (app_name, 4), (app_version, 5), (app_org, 3)])
+            r = self.get_table_row_by_value([(region, 2), (app_name + " [" + app_version + "]", 4), (app_org, 3)])
         except:
             logging.info('row is not found')
             return False

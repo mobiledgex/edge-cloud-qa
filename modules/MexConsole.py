@@ -1062,7 +1062,7 @@ class MexConsole() :
         self.new_cloudlet_page.create_cloudlet(region=region, cloudlet_name=cloudlet['key']['name'], operator_name=cloudlet['key']['organization'], latitude=cloudlet['location']['latitude'], longitude=cloudlet['location']['longitude'], ip_support=cloudlet['ip_support'], number_dynamic_ips=cloudlet['num_dynamic_ips'], physical_name=cloudlet['physical_name'], platform_type=cloudlet['platform_type'], infra_api_access=mode, trust_policy=trust_policy)
    
         if mode == 'Direct':
-            if self.compute_page.wait_for_dialog_box(text="Waiting for run lists to be executed on Platform VM", wait=300):
+            if self.compute_page.wait_for_dialog_box(text="Waiting for run lists to be executed on Platform VM", wait=240):
                 self.new_cloudlet_page.close_alert_box()
             else:
                 raise Exception('Dialog box test NOT found')
@@ -1678,16 +1678,23 @@ class MexConsole() :
 
         return details
 
-    def open_app_details(self, app_name=None, region=None, app_version=None, app_org=None):
+    def open_app_details(self, app_name=None, region=None, app_version=None, app_org=None, deployment_type=None):
         if region is None: region = self._region
         if app_name is None: app_name = self._app['key']['name']
         if app_org is None: app_org = self._app['key']['organization']
         if app_version is None: app_version = self._app['key']['version']
+        if deployment_type is None: deployment_type = self._app['deployment']
 
         index = 0
-        self.change_number_of_rows()
 
-        logging.info('Opening app details for appname=' + app_name + ' region=' + region + ' appversion=' + app_version + ' app-org=' + app_org) 
+        self.apps_page.perform_search(app_name)
+        if self.apps_page.wait_for_app(region=region, org_name=app_org, app_name=app_name, app_version=app_version, number_of_pages=2,
+                                       deployment_type=deployment_type):
+            logging.info('*** App Found ***')
+        else:
+            raise Exception('*** App NOT found ***')
+
+        logging.info('Opening app details for appname=' + app_name + ' region=' + region + ' appversion=' + app_version + ' app-org=' + app_org)
 
         if not self.apps_page.click_app_row(app_name=app_name, region=region, app_version=app_version, app_org=app_org):
             index += 1
