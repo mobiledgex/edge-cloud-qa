@@ -47,5 +47,6 @@ gpudriver_name_default = 'gpudriver' + default_time_stamp
 gpudriver_build_name_default = 'build' + default_time_stamp
 reporter_name_default = 'reporter' + default_time_stamp
 federation_name_default = 'federation' + default_time_stamp
+federator_zone_default = 'zone' + default_time_stamp
 
 platform_type = 'notset'

@@ -23,8 +23,14 @@ class Federation(MexOperation):
         self.federationregister_url = '/auth/federation/register'
         self.federationderegister_url = '/auth/federation/deregister'
         self.federationsetpartnerkey_url = '/auth/federation/partner/setapikey'
+        self.showfederatedpartnerzone_url = '/auth/federation/partner/zone/show'
+        self.showfederatedselfzone_url = '/auth/federation/self/zone/show'
+        self.registerfederatorzone_url = '/auth/federator/partner/zone/register'
+        self.federatorzonecreate_url = '/auth/federator/self/zone/create'
+        self.federatorzoneshow_url = '/auth/federator/self/zone/show'
+        self.federatorzonedelete_url = '/auth/federator/self/zone/delete'
 
-    def _build(self, operatorid=None, countrycode=None, mcc=None, mnc=[], federationid=None, selfoperatorid=None, selffederationid=None, federation_name=None, federationaddr=None, apikey=None,  use_defaults=True):
+    def _build(self, operatorid=None, countrycode=None, mcc=None, mnc=[], federationid=None, selfoperatorid=None, selffederationid=None, federation_name=None, federationaddr=None, apikey=None, zoneid=None, zones=[], cloudlets=[], geolocation=None, city=None, state=None, locality=None, use_defaults=True):
 
         if use_defaults:
             if federation_name is None:
@@ -61,6 +67,27 @@ class Federation(MexOperation):
         
         if apikey is not None:
             federator_dict['apikey'] = apikey
+
+        if zoneid is not None:
+            federator_dict['zoneid'] = zoneid
+
+        if zones:
+            federator_dict['zones'] = zones
+
+        if cloudlets:
+            federator_dict['cloudlets'] = cloudlets
+
+        if geolocation is not None:
+            federator_dict['geolocation'] = geolocation
+
+        if city is not None:
+            federator_dict['city'] = city
+ 
+        if state is not None:
+            federator_dict['state'] = state
+ 
+        if locality is not None:
+            federator_dict['locality'] = locality
 
         return federator_dict
 
@@ -157,3 +184,50 @@ class Federation(MexOperation):
         msg_dict = msg
 
         return self.show(token=token, url=self.federationsetpartnerkey_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
+
+    def showpartnerzone_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(federation_name=federation_name, selfoperatorid=selfoperatorid, zoneid=zoneid, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.showfederatedpartnerzone_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def showselfzone_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(federation_name=federation_name, selfoperatorid=selfoperatorid, zoneid=zoneid, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.showfederatedselfzone_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def register_federatorzone(self, token=None, zones=[], selfoperatorid=None, federation_name=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(federation_name=federation_name, selfoperatorid=selfoperatorid, zones=zones, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.registerfederatorzone_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def create_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, cloudlets=[], geolocation=None, region=None, city=None, state=None, locality=None, use_defaults=True, use_thread=False, json_data=None, auto_delete=True, stream=False, stream_timeout=100):
+        msg = self._build(zoneid=zoneid, operatorid=operatorid, countrycode=countrycode, cloudlets=cloudlets, geolocation=geolocation, city=city, state=state, locality=locality, use_defaults=use_defaults)
+        msg_dict = msg
+
+        thread_name = None
+        msg_dict_show = None
+        if 'zoneid' in msg and 'operatorid' in msg:
+            msg_show = self._build(operatorid=msg['operatorid'], zoneid=msg['zoneid'], use_defaults=False)
+            msg_dict_show =  msg_show
+
+        msg_dict_delete = None
+        if auto_delete and 'operatorid' in msg and 'zoneid' in msg:
+            msg_delete = self._build(operatorid=msg['operatorid'], zoneid=msg['zoneid'], countrycode=msg['countrycode'], use_defaults=False)
+            msg_dict_delete =  msg_delete
+
+        return self.create(token=token, url=self.federatorzonecreate_url, delete_url=self.federatorzonedelete_url, show_url=self.federatorzoneshow_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)
+
+    def show_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, region=None, city=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(zoneid=zoneid, operatorid=operatorid, countrycode=countrycode, city=city, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.federatorzoneshow_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def delete_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, use_defaults=True, use_thread=False, json_data=None):
+        msg = self._build(zoneid=zoneid, operatorid=operatorid, countrycode=countrycode, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.delete(token=token, url=self.federatorzonedelete_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
