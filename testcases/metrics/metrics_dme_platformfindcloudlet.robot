@@ -6,7 +6,7 @@ Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Resource  metrics_dme_library.robot
 	      
 Suite Setup       Setup
-Test Teardown   Teardown 
+Suite Teardown   Teardown 
 Test Timeout  ${test_timeout}
 
 *** Variables ***
@@ -332,7 +332,11 @@ DMEMetrics - OperatorManager shall be able to get DME PlatformFindCloudlet metri
    ...  request the DME PlatformFindCloudlet metrics as OperatorManager
    ...  verify metrics are returned
 
-   @{cloudlet_list}=  Create List  tmocloud-2
+   ${epoch}=  Get Current Date  result_format=epoch
+
+   ${cloudlet}=  Create Cloudlet  cloudlet_name=cloudlet${epoch}  region=US
+
+   @{cloudlet_list}=  Create List  ${cloudlet['data']['key']['name']}
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_list=${cloudlet_list}
    Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}
    Create Cloudlet Pool Access Response    region=${region}  cloudlet_pool_name=${pool_return['data']['key']['name']}  cloudlet_pool_org_name=${operator_name_fake}  developer_org_name=${developer_org_name_automation}  decision=accept
@@ -345,6 +349,8 @@ DMEMetrics - OperatorManager shall be able to get DME PlatformFindCloudlet metri
 
 *** Keywords ***
 Setup
+   ${supertoken}=  Get Super Token
+
    ${developer_name}=  Get Default Developer Name 
    ${app_name}=  Get Default App Name
 
@@ -375,9 +381,10 @@ Setup
    Sleep  7 seconds
 
    Set Suite Variable  ${app_name}
+   Set Suite Variable  ${super_token}
 
 Teardown
-   Update Settings  region=${region}  dme_api_metrics_collection_interval=30s
+   Update Settings  region=${region}  dme_api_metrics_collection_interval=30s  token=${super token}
    Cleanup Provisioning
  
 Metrics Headings Should Be Correct
@@ -387,9 +394,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  reqs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  foundOperator
+   #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundOperator
 
    Should Be True  'apporg' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'app' in ${metrics['data'][0]['Series'][0]['tags']}
@@ -431,9 +438,9 @@ Values Should Be In Range
       IF  ${reading[1]} != ${None}    # dont check null readings which be removed later
          Should Be True   ${reading[1]} > 0
          Should Be True   ${reading[2]} >= 0
-         Should Be Equal  ${reading[3]}  0
+         #Should Be Equal  ${reading[3]}  0
+         Should Be True   len('${reading[3]}') > 0
          Should Be True   len('${reading[4]}') > 0
-         Should Be True   len('${reading[5]}') > 0
       END
 
       IF  ${time_diff} != ${None}
