@@ -34,6 +34,7 @@ DMEMetrics - VerifyLocation shall generate metrics
    Verify Location  carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
    Verify Location  carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
    Verify Location  carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
+   Sleep  30s
    Verify Location  carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
    Verify Location  carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
    Verify Location  carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
@@ -41,18 +42,28 @@ DMEMetrics - VerifyLocation shall generate metrics
    Verify Location  carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
    Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
-   ${metrics}=  Get Verify Location API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  
+   ${metrics1}=  Get Verify Location API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  
+   ${metrics2}=  Get Verify Location API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  number_samples=1
 
-   ${count}=  Set Variable  ${0}
-   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
-      ${count}=  Evaluate  ${count}+${s['values'][0][1]}  # reqs field
+   ${count1}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics1['data'][0]['Series']}
+      ${count1}=  Evaluate  ${count1}+${s['values'][0][1]}  # reqs field
    END
 
-   Should Be Equal As Numbers  ${count}  10
+   ${count2}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics2['data'][0]['Series']}
+      Length Should Be  ${s['values']}  1
+      ${count2}=  Evaluate  ${count2}+${s['values'][0][1]}  # reqs field
+   END
 
-   Metrics Headings Should Be Correct  ${metrics}
+   Should Be Equal As Numbers  ${count1}  10
+   Should Be Equal As Numbers  ${count2}  10
 
-   Values Should Be In Range  ${metrics}  ${app}  ${tmus_cloudlet_name}  ${tmus_operator_name}
+   Metrics Headings Should Be Correct  ${metrics1}
+   Metrics Headings Should Be Correct  ${metrics2}
+
+   Values Should Be In Range  ${metrics1}  ${app}  ${tmus_cloudlet_name}  ${tmus_operator_name}
+   Values Should Be In Range  ${metrics2}  ${app}  ${tmus_cloudlet_name}  ${tmus_operator_name}
 
 # ECQ-4096
 DMEMetrics - VerifyLocation with error shall generate metrics
@@ -114,9 +125,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  reqs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  foundOperator
+   #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundOperator
 
    Should Be True  'apporg' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'app' in ${metrics['data'][0]['Series'][0]['tags']}
@@ -143,9 +154,9 @@ Values Should Be In Range
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} == 0
-      Should Be Equal  ${reading[3]}  0
-      Should Be Empty  ${reading[4]} 
-      Should Be Empty  ${reading[5]}
+      #Should Be Equal  ${reading[3]}  0
+      Should Be Empty  ${reading[3]} 
+      Should Be Empty  ${reading[4]}
    END
 
 Values With Error Should Be In Range
@@ -165,8 +176,8 @@ Values With Error Should Be In Range
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
-      Should Be Equal  ${reading[3]}  0
+      #Should Be Equal  ${reading[3]}  0
+      Should Be Empty  ${reading[3]}
       Should Be Empty  ${reading[4]}
-      Should Be Empty  ${reading[5]}
    END
 

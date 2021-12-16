@@ -38,54 +38,65 @@ DMEMetrics - RegisterClient shall generate metrics
    Register Client  app_name=${app}
    Register Client  app_name=${app}
    Sleep  ${metrics_wait_time}
-   ${metrics}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  
+   ${metrics1}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  
+   ${metrics2}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  number_samples=1
 
-   ${count}=  Set Variable  ${0}
-   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
-      ${count}=  Evaluate  ${count}+${s['values'][0][1]}  # reqs field
+   ${count1}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics1['data'][0]['Series']}
+      ${count1}=  Evaluate  ${count1}+${s['values'][0][1]}  # reqs field
+   END
+
+   ${count2}=  Set Variable  ${0}
+   FOR  ${s}  IN  @{metrics2['data'][0]['Series']}
+      Length Should Be  ${s['values']}  1
+      ${count2}=  Evaluate  ${count2}+${s['values'][0][1]}  # reqs field
    END
  
    #Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
-   Should Be Equal As Numbers  ${count}  10
+   Should Be Equal As Numbers  ${count1}  10
+   Should Be Equal As Numbers  ${count2}  10
 
-   Metrics Headings Should Be Correct  ${metrics}
+   Metrics Headings Should Be Correct  ${metrics1}
+   Metrics Headings Should Be Correct  ${metrics2}
 
-   Values Should Be In Range  ${metrics}
+   Values Should Be In Range  ${metrics1}
+   Values Should Be In Range  ${metrics2}
 
+# no longer support cellid
 # ECQ-2051
-DMEMetrics - RegisterClient with cellid shall generate metrics
-   [Documentation]
-   ...  Send multiple RegisterClient messages with cellid
-   ...  Verify all are collected
-
-   # EDGECLOUD-5247 clientapiusage does not report the cellID value
-
-   Register Client  app_name=${app}  cell_id=123
-   Register Client  app_name=${app}  cell_id=123
-   Sleep  30 seconds
-   Register Client  app_name=${app}  cell_id=123
-   Register Client  app_name=${app}  cell_id=123
-   Register Client  app_name=${app}  cell_id=123
-   Register Client  app_name=${app}  cell_id=123
-   Register Client  app_name=${app}  cell_id=123
-   Register Client  app_name=${app}  cell_id=123
-   Register Client  app_name=${app}  cell_id=123
-   Register Client  app_name=${app}  cell_id=123
-   Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
-
-   ${metrics}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
-
-   ${count}=  Set Variable  ${0}
-   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
-      ${count}=  Evaluate  ${count}+${s['values'][0][1]}  # reqs field
-   END
-
-   #Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
-   Should Be Equal As Numbers  ${count}  10
-
-   Metrics Headings Should Be Correct  ${metrics}
-
-   Values With Cellid Should Be In Range  ${metrics}
+#DMEMetrics - RegisterClient with cellid shall generate metrics
+#   [Documentation]
+#   ...  Send multiple RegisterClient messages with cellid
+#   ...  Verify all are collected
+#
+#   # EDGECLOUD-5247 clientapiusage does not report the cellID value
+#
+#   Register Client  app_name=${app}  cell_id=123
+#   Register Client  app_name=${app}  cell_id=123
+#   Sleep  30 seconds
+#   Register Client  app_name=${app}  cell_id=123
+#   Register Client  app_name=${app}  cell_id=123
+#   Register Client  app_name=${app}  cell_id=123
+#   Register Client  app_name=${app}  cell_id=123
+#   Register Client  app_name=${app}  cell_id=123
+#   Register Client  app_name=${app}  cell_id=123
+#   Register Client  app_name=${app}  cell_id=123
+#   Register Client  app_name=${app}  cell_id=123
+#   Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
+#
+#   ${metrics}=  Get Register Client API Metrics  region=${region}  selector=api  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
+#
+#   ${count}=  Set Variable  ${0}
+#   FOR  ${s}  IN  @{metrics['data'][0]['Series']}
+#      ${count}=  Evaluate  ${count}+${s['values'][0][1]}  # reqs field
+#   END
+#
+#   #Should Be Equal As Numbers  ${last_count}  10  # should be 10 register client requests
+#   Should Be Equal As Numbers  ${count}  10
+#
+#   Metrics Headings Should Be Correct  ${metrics}
+#
+#   Values With Cellid Should Be In Range  ${metrics}
 
 # ECQ-2052
 DMEMetrics - RegisterClient with auth shall generate metrics
@@ -206,9 +217,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  reqs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  foundOperator
+   #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundOperator
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  0s
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  5ms
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  10ms
@@ -247,9 +258,9 @@ Values Should Be In Range
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
-      Should Be Equal  ${reading[3]}  0
+      #Should Be Equal  ${reading[3]}  0
+      Should Be Empty  ${reading[3]} 
       Should Be Empty  ${reading[4]} 
-      Should Be Empty  ${reading[5]} 
       #Should Be True   ${reading[3]} >= 0
       #Should Be True   ${reading[4]} >= 0
       #Should Be True   ${reading[5]} >= 0
@@ -313,9 +324,9 @@ Values With Auth Should Be In Range
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
-      Should Be Equal  ${reading[3]}  0
+      #Should Be Equal  ${reading[3]}  0
+      Should Be Empty  ${reading[3]}
       Should Be Empty  ${reading[4]}
-      Should Be Empty  ${reading[5]}
       #Should Be True   ${reading[3]} >= 0
       #Should Be True   ${reading[4]} >= 0
       #Should Be True   ${reading[5]} >= 0
@@ -355,9 +366,9 @@ Values With Error Should Be In Range
       #Should Be True   len('${reading[10]}') == 0
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
-      Should Be Equal  ${reading[3]}  0
+      #Should Be Equal  ${reading[3]}  0
+      Should Be Empty  ${reading[3]}
       Should Be Empty  ${reading[4]}
-      Should Be Empty  ${reading[5]}
       #Should Be True   ${reading[3]} >= 0
       #Should Be True   ${reading[4]} >= 0
       #Should Be True   ${reading[5]} >= 0
