@@ -144,6 +144,7 @@
             <string>Anthos</string>
             <string>WebUI</string>
             <string>Metrics</string>
+            <string>Performance/Security</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
