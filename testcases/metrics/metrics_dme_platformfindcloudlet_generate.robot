@@ -126,9 +126,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  reqs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  foundOperator
+   #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundOperator
 
    Should Be True  'apporg' in ${metrics['data'][0]['Series'][0]['tags']}
    Should Be True  'app' in ${metrics['data'][0]['Series'][0]['tags']}
@@ -155,9 +155,9 @@ Values Should Be In Range
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
-      Should Be Equal  ${reading[3]}  0
-      Should Be Equal  ${reading[4]}  ${cloudlet}
-      Should Be Equal  ${reading[5]}  ${operator}
+      #Should Be Equal  ${reading[3]}  0
+      Should Be Equal  ${reading[3]}  ${cloudlet}
+      Should Be Equal  ${reading[4]}  ${operator}
    END
 
 Values With Error Should Be In Range
@@ -177,8 +177,8 @@ Values With Error Should Be In Range
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} > 0
       Should Be True   ${reading[2]} >= 0
-      Should Be Equal  ${reading[3]}  0
+      #Should Be Equal  ${reading[3]}  0
+      Should Be Empty  ${reading[3]}
       Should Be Empty  ${reading[4]}
-      Should Be Empty  ${reading[5]}
    END
 
