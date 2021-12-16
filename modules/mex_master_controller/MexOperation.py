@@ -160,6 +160,15 @@ class MexOperation(MexRest):
                 elif url.endswith('partner/setapikey'):
                     if 'Updated federation attributes' not in str(self.resp_text):
                         raise Exception('ERROR: Partner API key not set successfully:' + str(self.resp_text))
+                elif url.endswith('partner/zone/register'):
+                    if 'Partner federator zones registered successfully'  not in str(self.resp_text):
+                        raise Exception('ERROR: Partner federator zones not registered successfully:' + str(self.resp_text))
+                elif url.endswith('self/zone/create'):
+                    if 'Created zone successfully'  not in str(self.resp_text):
+                        raise Exception('ERROR: Federator zone not created successfully:' + str(self.resp_text))
+                elif url.endswith('self/zone/delete'):
+                    if 'Deleted federator zone successfully' not in str(self.resp_text):
+                        raise Exception('ERROR: Federator zone not deleted successfully:' + str(self.resp_text))
                 else:
                     logger.info(f'not checking specific url response for {url}')
                 # elif url.endswith('UpdateCloudlet'):
