@@ -41,7 +41,7 @@ Web UI - User shall be able to create a Trusted App which requires Outbound Conn
     ...  Create a new EU Kubernetes App with Android Package
     ...  Verify Kubernetes App shows in list
 
-    &{rule1}=  Create Dictionary  protocol=TCP  port=1001  remote_ip=3.1.1.1
+    &{rule1}=  Create Dictionary  protocol=TCP  portrangemin=1001  portrangemax=1005  remote_ip=3.1.1.1/32
     @{rulelist}=  Create List  ${rule1}
 
     Add New App  region=EU  app_name=${app_name}  developer_name=${developer_name}  deployment_type=kubernetes  access_ports=tcp:2015  trusted=True  outbound_connections=${rulelist}
@@ -54,11 +54,12 @@ Web UI - User shall be able to create a Trusted App which requires Outbound Conn
     END
 
     Should Be Equal  ${var['data']['required_outbound_connections'][0]['protocol']}  tcp
-    Should Be Equal As Numbers   ${var['data']['required_outbound_connections'][0]['port']}  1001
-    Should Be Equal  ${var['data']['required_outbound_connections'][0]['remote_ip']}  3.1.1.1
+    Should Be Equal As Numbers   ${var['data']['required_outbound_connections'][0]['port_range_min']}  1001
+    Should Be Equal As Numbers   ${var['data']['required_outbound_connections'][0]['port_range_max']}  1005
+    Should Be Equal  ${var['data']['required_outbound_connections'][0]['remote_cidr']}  3.1.1.1/32
 
     ${app_details}=  Open App Details
-    Should Be Equal             ${app_details['Deploy On Trusted Cloudlet']}  Yes
+    Should Be Equal             ${app_details['Trusted']}  Yes
     Dictionary Should Contain Key   ${app_details}  Required Outbound Connections
     Close Apps Details
 
