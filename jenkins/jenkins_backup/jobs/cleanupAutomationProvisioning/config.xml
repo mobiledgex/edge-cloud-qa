@@ -14,6 +14,7 @@
         <string>BillingOrganization</string>
         <string>AppInst</string>
         <string>Flavor</string>
+        <string>CRMOverride</string>
         <string>AutoProvPolicy</string>
         <string>TrustPolicyException</string>
         <string>CloudletPool</string>
@@ -107,6 +108,10 @@
         <hudson.model.BooleanParameterDefinition>
           <name>CloudletPoolInvitation</name>
           <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>CRMOverride</name>
+          <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
