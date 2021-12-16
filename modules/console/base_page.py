@@ -252,10 +252,10 @@ class BasePagePulldownMultiElement(object):
 
         pulldown = driver.find_element(*self.locator)
         ActionChains(driver).click(on_element=pulldown).perform()
-        print('*WARN*', 'clicked MultiELement pulldown - ', pulldown)
+        print('*WARN*', 'clicked MultiElement pulldown - ', pulldown)
 
         choice = f'{self.locator2[1]}//span[text()="{value}"]'
-        print('*WARN*', choice)
+        print('*WARN*', 'selecting dropdown value - ', choice)
         driver.find_element_by_xpath(choice).click()
         pulldown = driver.find_element(*self.locator)
         pulldown.click()
