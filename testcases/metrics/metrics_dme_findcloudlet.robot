@@ -361,9 +361,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  reqs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  foundOperator
+   #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cellID
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  foundOperator
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  errs
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  0s
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  5ms
@@ -418,9 +418,9 @@ Values Should Be In Range
       IF  ${reading[1]} != ${None}    # dont check null readings which be removed later
          Should Be True   ${reading[1]} > 0
          Should Be True   ${reading[2]} >= 0
-         Should Be Equal  ${reading[3]}  0
+         #Should Be Equal  ${reading[3]}  0
+         Should Be True   len('${reading[3]}') > 0
          Should Be True   len('${reading[4]}') > 0
-         Should Be True   len('${reading[5]}') > 0
          #Should Be True   ${reading[3]} >= 0
          #Should Be True   ${reading[4]} >= 0
          #Should Be True   ${reading[5]} >= 0
