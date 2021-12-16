@@ -269,6 +269,7 @@ class AppsPageLocators(object):
     apps_region = (By.XPATH, '//*[@class="four wide column detail_item"]//div[text()="Region"]/sup[text()=" *"]')
     apps_region_input = (By.XPATH, '//div[@id="region"]/div[text()="Select Region"]')
     apps_region_pulldown = (By.XPATH, '//div[@id="region"]')
+    apps_region_pulldown_options = (By.XPATH, '//div[@id="region"]//div[@role="option"]')
     apps_region_input2 = (By.XPATH, './/div[@class="visible menu transition"]/div')
     apps_orgname = (By.XPATH, '//div[@class="four wide column detail_item"]//div[text()="Organization"]/sup[text()=" *"]')
     apps_orgname_pulldown = (By.XPATH, '//div[@id="organizationName"]')
@@ -277,7 +278,7 @@ class AppsPageLocators(object):
     apps_appversion = (By.XPATH, '//*[@class="four wide column detail_item"]//div[text()="App Version"]/sup[text()=" *"]')
     apps_appversion_input = (By.XPATH, '//div[@class="ui input"]/input[@placeholder="Enter App Version"]')
     apps_deploymenttype = (By.XPATH, '//*[@class="four wide column detail_item"]//div[text()="Deployment Type"]/sup[text()=" *"]')
-    apps_deploymenttype_pulldown = (By.XPATH, '//div[@id="deployment"]//i[@class="dropdown icon"]')
+    apps_deploymenttype_pulldown = (By.XPATH, '//div[@id="deployment"]')
     apps_deploymenttype_option = (By.XPATH, '//div[@role="listbox"]/div')
     apps_accesstype = (By.XPATH, '//*[@class="four wide column detail_item"]//div[text()="Access Type"]/sup[text()=" *"]')
     apps_accesstype_pulldown = (By.XPATH, '//div[@class="eleven wide column"]/div[@id="accessType"]//i[@class="dropdown icon"]')
@@ -350,12 +351,13 @@ class AppsPageLocators(object):
     close_button = (By.XPATH, '//button[@class="MuiButtonBase-root MuiIconButton-root" and @aria-label="refresh"]')
     apps_details_configs = (By.XPATH, '//td[text()="Configs"]')
     apps_details_deployment_manifest = (By.XPATH, '//td[text()="Deployment Manifest"]')
-    trusted_app_toggle_button = (By.XPATH, '//div[@class="three column row formRow-12"]//span[@class="MuiIconButton-label"]')
+    trusted_app_toggle_button = (By.XPATH, '//div[contains(text(),"Trusted")]/ancestor::div[contains(@class,"formRow-13")]//span[@class="MuiIconButton-label"]/input[contains(@class,"MuiSwitch-input")]')
     create_instance = (By.XPATH, './/li[text()="Create Instance"]')
-    outbound_connections_button = (By.XPATH, '//div[@class="ui grid"]//button[@title="Add Connections"]')
+    outbound_connections_button = (By.XPATH, '//h3[contains(.,"Required Outbound Connections")]/button')
     outbound_connections_protocol_pulldown = (By.XPATH, '//div[@id="ocProtocol"]//div[text()="Select"]')
-    outbound_connections_port_input = (By.XPATH, './/div[2]/div[1]//div[@class="ui input"]/input[@type="number"]')
-    outbound_connections_remoteip_input = (By.XPATH, './/div[3]/div[1]/div[@class="ui input"]/input[@type="text"]')
+    outbound_connections_portrangemin_input = (By.XPATH, '(//div[@id="requiredOutboundConnectionmulti"]//div[@class="ui input"]/input)[1]')
+    outbound_connections_portrangemax_input = (By.XPATH, '(//div[@id="requiredOutboundConnectionmulti"]//div[@class="ui input"]/input)[2]')
+    outbound_connections_remoteip_input = (By.XPATH, '(//div[@id="requiredOutboundConnectionmulti"]//div[@class="ui input"]/input)[3]')
 
 class AppInstancesPageLocators(object):
     app_instances_table_header_region = (By.XPATH, '//table/thead//strong[text()="Region"]')
@@ -514,7 +516,7 @@ class DetailsPageLocators(object):
     details_row_value = (By.XPATH, '//tbody[@class="MuiTableBody-root"]/tr/td/div')
     #details_title = (By.CSS_SELECTOR, 'div.ui.small.modal.transition.visible.active div.header')
     details_title = (By.CSS_SELECTOR, 'label.content_title_label')
-    close_button =  (By.XPATH, '//button[@aria-label="refresh"]')
+    close_button =  (By.XPATH, '//span[text()="close"]/ancestor::button')
     region_label =  (By.XPATH, '//*[@class="ui small modal transition visible active"]//div[text()="Region"]')
 
 class DetailsFullPageLocators(object):

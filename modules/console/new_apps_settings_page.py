@@ -15,8 +15,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class RegionElement(BasePagePulldownMultiElement):
-    locator = AppsPageLocators.apps_region_input
-    locator2 = AppsPageLocators.apps_region_input2
+    locator = AppsPageLocators.apps_region_pulldown
+    locator2 = AppsPageLocators.apps_region_pulldown_options
 
 class AppNameElement(BasePageElement):
     locator = AppsPageLocators.apps_appname_input
@@ -27,9 +27,8 @@ class DeveloperNameElement(BasePagePulldownElement):
 class AppVersionElement(BasePageElement):
     locator = AppsPageLocators.apps_appversion_input
 
-class DeploymentTypeElement(BasePagePulldownMultiElement):
+class DeploymentTypeElement(BasePagePulldownElement):
     locator = AppsPageLocators.apps_deploymenttype_pulldown
-    locator2 = AppsPageLocators.apps_deploymenttype_option
 
 class FlavorNameElement(BasePagePulldownElement):
     locator = AppsPageLocators.apps_flavor_pulldown
@@ -364,7 +363,7 @@ class NewAppsSettingsPage(NewSettingsFullPage):
 
         self.region = region
         time.sleep(2)
-        self.driver.find_element(*AppsPageLocators.apps_region_pulldown).click()
+       # self.driver.find_element(*AppsPageLocators.apps_region_pulldown).click()
         wait = WebDriverWait(self.driver, 5, poll_frequency=1)
         element = wait.until(expected_conditions.visibility_of_element_located((By.XPATH,"//div[@id='organizationName']/input")))
         time.sleep(2)
@@ -472,9 +471,12 @@ class NewAppsSettingsPage(NewSettingsFullPage):
                 protocol = outbound_connections[j]['protocol']
                 proto = f'.//div[@role="listbox"]//span[text()="{protocol}"]'
                 #self.driver.find_element_by_xpath(proto).click()
-                if 'port' in outbound_connections[j]:
-                    port = outbound_connections[j]['port']
-                    self.driver.find_element(*AppsPageLocators.outbound_connections_port_input).send_keys(port)
+                if 'portrangemin' in outbound_connections[j]:
+                    portvalue = outbound_connections[j]['portrangemin']
+                    self.driver.find_element(*AppsPageLocators.outbound_connections_portrangemin_input).send_keys(portvalue)
+                if 'portrangemax' in outbound_connections[j]:
+                    portvalue = outbound_connections[j]['portrangemax']
+                    self.driver.find_element(*AppsPageLocators.outbound_connections_portrangemax_input).send_keys(portvalue)
                 remote_ip = outbound_connections[j]['remote_ip']
                 self.driver.find_element(*AppsPageLocators.outbound_connections_remoteip_input).send_keys(remote_ip)
         time.sleep(2)
