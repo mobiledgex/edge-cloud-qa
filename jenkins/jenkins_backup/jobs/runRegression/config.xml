@@ -1120,7 +1120,7 @@ pipeline{
                 script {
                     catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Password tests failed&apos;) {
                         script { slackMessage.good(&apos;Starting Password tests&apos;) }
-                        build job: &apos;runTestscases&apos;, parameters: [
+                        build job: &apos;runTestcases&apos;, parameters: [
                             string(name: &apos;Project&apos;, value: params.Project), 
                             string(name: &apos;Version&apos;, value: params.Version), 
                             string(name: &apos;Cycle&apos;, value: cycle), 
@@ -1151,7 +1151,7 @@ pipeline{
                 script {
                     catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Performance tests failed&apos;) {
                         script { slackMessage.good(&apos;Starting Performance tests&apos;) }
-                        build job: &apos;runTestscases&apos;, parameters: [
+                        build job: &apos;runTestcases&apos;, parameters: [
                             string(name: &apos;Project&apos;, value: params.Project), 
                             string(name: &apos;Version&apos;, value: params.Version), 
                             string(name: &apos;Cycle&apos;, value: cycle), 
