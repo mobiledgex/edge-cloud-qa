@@ -32,12 +32,14 @@ RunDebug - developer viewer does not have permission to use command to return de
     ...  RunDebug returns cmd=oscmd request for Admin only
     ...  verify RunDebug does not return device information for developer viewer
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+      ${user_token}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd 
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
@@ -52,12 +54,14 @@ RunDebug - developer manager does not have permission to use command to return d
     ...  RunDebug returns cmd=oscmd request for Admin only
     ...  verify RunDebug does not return device information for developer manager
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+      ${user_token}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
@@ -72,12 +76,14 @@ RunDebug - developer contributor does not have permission to use command to retu
     ...  RunDebug returns cmd=oscmd request for Admin only
     ...  verify RunDebug does not return device information for developer contributor
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+      ${user_token}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
@@ -92,12 +98,12 @@ RunDebug - mexadmin has permission to use command to return device information f
     ...  RunDebug returns cmd=oscmd request for Admin only
     ...  verify RunDebug returns cmd=oscmd information for mexadmin on a developer organization
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${supertoken}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${supertoken}
 
       ${node}=  RunDebug  token=${supertoken}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  #node_type=shepherd
 
@@ -117,12 +123,14 @@ RunDebug - operator viewer does not have permission to use command to return dev
     ...  RunDebug returns cmd=oscmd request for Admin only
     ...  verify RunDebug does not return device information for operator viewer
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+      ${user_token}=  Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
@@ -137,12 +145,14 @@ RunDebug - operator manager does not have permission to use command to return de
     ...  RunDebug returns cmd=oscmd request for Admin only
     ...  verify RunDebug does not return device information for operator manager
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+      ${user_token}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
@@ -157,12 +167,14 @@ RunDebug - operator contributor does not have permission to use command to retur
     ...  RunDebug returns cmd=oscmd request for Admin only
     ...  verify RunDebug does not return device information for operator contributor
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+      ${user_token}=  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  node_type=shepherd
       Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
@@ -177,12 +189,12 @@ RunDebug - mexadmin has permission to use command to return device information f
     ...  RunDebug returns cmd=oscmd request for Admin only
     ...  verify RunDebug returns cmd=oscmd information for mexadmin on a operator organization
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${supertoken}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${supertoken}
 
       ${node}=  RunDebug  token=${supertoken}  cloudlet_name=${cloudlet_name_crm}  command=refresh-internal-certs  #node_type=shepherd
 
@@ -206,30 +218,31 @@ CleanUp
 
 Setup
 
-   ${epoch}=  Get Time  epoch
-   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
-   ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
-   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
-   ${epochusername2}=  Catenate  SEPARATOR=  ${username}  ${epoch}  2
+#   ${epoch}=  Get Time  epoch
+#   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+#   ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
+#   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+#   ${epochusername2}=  Catenate  SEPARATOR=  ${username}  ${epoch}  2
 
    ${supertoken}=  Get Super Token
+   Set Suite Variable  ${supertoken}
 
 #  No longer need to verify email to create user accounts EDC-2163 has been added using Skip Verify Config
-   Skip Verify Email  token=${supertoken}
-   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-#   Verify Email  email_address=${emailepoch}
-   Unlock User
-   ${user_token}=  Login  username=${epochusername}  password=${password}
+#   Skip Verify Email  token=${supertoken}
+#   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+##   Verify Email  email_address=${emailepoch}
+#   Unlock User
+#   ${user_token}=  Login  username=${epochusername}  password=${password}
 
-   Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2}
-#   Verify Email  email_address=${emailepoch2}
-   Unlock User
-   ${user_token2}=  Login  username=${epochusername2}  password=${password}
+#   Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2}
+##   Verify Email  email_address=${emailepoch2}
+#   Unlock User
+#   ${user_token2}=  Login  username=${epochusername2}  password=${password}
 
 
-   Set Suite Variable  ${user_token}
-   Set Suite Variable  ${user_token2}
-   Set Suite Variable  ${epochusername2}
+#   Set Suite Variable  ${user_token}
+#   Set Suite Variable  ${user_token2}
+#   Set Suite Variable  ${epochusername2}
 
 Find Device
    [Arguments]  ${device}  ${id}  ${type}
