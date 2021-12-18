@@ -2,12 +2,12 @@
 Documentation  Verify Healthcheck with IpAccessDedicated k8s
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT} 
-Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_DEDICATED_ENV}
+#Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_DEDICATED_ENV}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
 Library  String
 
-Suite Setup      Setup
+Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
@@ -47,10 +47,10 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when replica
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
-    K8s scale replicas  root_loadbalancer=${clusterlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=0
+    K8s scale replicas  root_loadbalancer=${clusterlb}  kubeconfig=${kubeconfig}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=0
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
-    K8s scale replicas  root_loadbalancer=${clusterlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=1
+    K8s scale replicas  root_loadbalancer=${clusterlb}  kubeconfig=${kubeconfig}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=1
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
 # ECQ-2506
@@ -67,10 +67,10 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when replica
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
-    K8s scale replicas  root_loadbalancer=${clusterlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=0
+    K8s scale replicas  root_loadbalancer=${clusterlb}  kubeconfig=${kubeconfig}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=0
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
-    K8s scale replicas  root_loadbalancer=${clusterlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=1
+    K8s scale replicas  root_loadbalancer=${clusterlb}  kubeconfig=${kubeconfig}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=1
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
 # ECQ-2507
@@ -248,7 +248,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckOk when TCP port with skip_
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
@@ -278,7 +278,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail
 
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -289,7 +289,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
     Stop TCP Port  ${tcp_fqdn}  2015
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail2
 
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
@@ -312,7 +312,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
 
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -322,7 +322,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}
 
     Stop TCP Port  ${tcp_fqdn}  2015
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
 
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}
 
@@ -367,7 +367,7 @@ IpAccessDedicated k8s - healthcheck shows proper state after UpdateApp
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
 
     Stop TCP Port  ${tcp_fqdn}  2015
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
@@ -379,24 +379,40 @@ Setup
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
 
+    ${cluster_name_default}=  Get Default Cluster Name
+
     Create Flavor     region=${region}
 
     ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+
+    ${dev_name}=  Get Default Developer Name
+    ${app_name_default}=  Get Default App Name
+    ${app_version_default}=  Get Default App Version
+
+    ${kubeconfig}=  Set Variable  ${None}
+    ${cluster_name_default}=  Get Default Cluster Name
 
     IF  '${platform_type}' != 'K8SBareMetal'
         Log To Console  Creating Cluster Instance
         Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_nodes=1
         Log To Console  Done Creating Cluster Instance
+
+        ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
+    ELSE
+        ${clusterlb}=  Catenate  SEPARATOR=.  defaultclust  ${rootlb}
+        ${dev_name_hyphen}=  Replace String  ${dev_name}  _  -
+        ${app_version_change}=  Replace String  ${app_version_default}  .  ${EMPTY}
+        ${kubeconfig}=  Set Variable  defaultclust.${operator_name_crm}.${dev_name_hyphen}-${app_name_default}-${app_version_change}-${cluster_name_default}
+        ${kubeconfig}=  Get SubString  ${kubeconfig}  0  83
+        ${kubeconfig}=  Set Variable  ${kubeconfig}.kubeconfig
     END
     Set Suite Variable  ${platform_type}
 
-    ${cluster_name_default}=  Get Default Cluster Name
-
-    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
     Set Suite Variable  ${cluster_name_default}
     Set Suite Variable  ${clusterlb}
     Set Suite Variable  ${cloudlet_lowercase}
-    
+    Set Suite Variable  ${kubeconfig}
+ 
 Verify Health Check Ok
     [Arguments]   ${appname}  ${clustername}  ${state}
 
@@ -405,4 +421,4 @@ Verify Health Check Ok
         Exit For Loop If  '${app_inst[0]['data']['health_check']}' == '${state}'
         Sleep  2s
     END
-    Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   3
+    Should Be Equal  ${app_inst[0]['data']['health_check']}  Ok 

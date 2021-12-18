@@ -7,7 +7,7 @@ Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
 Library  String
 
-Suite Setup      Setup
+Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
@@ -35,8 +35,8 @@ ${test_timeout_crm}  15 min
 # ECQ-2524
 IpAccessShared k8s - healthcheck shows HealthCheckFailServerFail when replicas are scaled to zero for app with TCP access port
     [Documentation]
-    ...  deploy IpAccessShared k8s and create app with one TCP access port
-    ...  scale replicas to 0 and verify healthcheck
+    ...  - deploy IpAccessShared k8s and create app with one TCP access port
+    ...  - scale replicas to 0 and verify healthcheck
 
     ${app_name_default}=  Get Default App Name
 
@@ -46,17 +46,17 @@ IpAccessShared k8s - healthcheck shows HealthCheckFailServerFail when replicas a
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
-    K8s scale replicas  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=0
+    K8s scale replicas  root_loadbalancer=${rootlb}  kubeconfig=${kubeconfig}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=0
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
-    K8s scale replicas  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=1
+    K8s scale replicas  root_loadbalancer=${rootlb}  kubeconfig=${kubeconfig}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=1
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
 # ECQ-2525
 IpAccessShared k8s - healthcheck shows HealthCheckFailServerFail when replicas are scaled to zero for app with TCP and UDP access port
     [Documentation]
-    ...  deploy IpAccessShared k8s and create app with one TCP and UDP access ports
-    ...  scale replicas to 0 and verify healthcheck
+    ...  - deploy IpAccessShared k8s and create app with one TCP and UDP access ports
+    ...  - scale replicas to 0 and verify healthcheck
 
     ${app_name_default}=  Get Default App Name
 
@@ -66,10 +66,10 @@ IpAccessShared k8s - healthcheck shows HealthCheckFailServerFail when replicas a
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
-    K8s scale replicas  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=0
+    K8s scale replicas  root_loadbalancer=${rootlb}  kubeconfig=${kubeconfig}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=0
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
-    K8s scale replicas  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=1
+    K8s scale replicas  root_loadbalancer=${rootlb}  kubeconfig=${kubeconfig}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  number_of_replicas=1
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
 # ECQ-2526
@@ -209,7 +209,7 @@ IpAccessShared k8s - healthcheck shows HealthCheckOk when TCP port with skip_hc 
     ${public_port_0}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][0]['public_port']}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_1}
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
@@ -265,15 +265,15 @@ IpAccessShared k8s - healthcheck shows proper state after UpdateApp
     ${public_port_0}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][0]['public_port']}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_1}
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_0}
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
 *** Keywords ***
 Setup
-    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
-    ${rootlb}=  Convert To Lowercase  ${rootlb}
+#    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+#    ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
 
@@ -282,17 +282,33 @@ Setup
     ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
     Set Suite Variable  ${platform_type}
 
+    ${dev_name}=  Get Default Developer Name
+    ${app_name_default}=  Get Default App Name
+    ${app_version_default}=  Get Default App Version
+
+    ${kubeconfig}=  Set Variable  ${None}
     ${cluster_name_default}=  Get Default Cluster Name
     IF  '${platform_type}' != 'K8SBareMetal'
         Log To Console  Creating Cluster Instance
         Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  number_nodes=1
         Log To Console  Done Creating Cluster Instance
+
+        ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ELSE
+        ${rootlb}=  Catenate  SEPARATOR=.  defaultclust  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+        ${dev_name_hyphen}=  Replace String  ${dev_name}  _  -
+        ${app_version_change}=  Replace String  ${app_version_default}  .  ${EMPTY}
+        ${kubeconfig}=  Set Variable  defaultclust.${operator_name_crm}.${dev_name_hyphen}-${app_name_default}-${app_version_change}-${cluster_name_default}
+        ${kubeconfig}=  Get SubString  ${kubeconfig}  0  83
+        ${kubeconfig}=  Set Variable  ${kubeconfig}.kubeconfig  
     END
+
+    ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${cluster_name_default}
     Set Suite Variable  ${rootlb}
     Set Suite Variable  ${cloudlet_lowercase}
-
+    Set Suite Variable  ${kubeconfig}
     
 Verify Health Check Ok
     [Arguments]   ${appname}  ${clustername}  ${state}
@@ -302,4 +318,4 @@ Verify Health Check Ok
         Exit For Loop If  '${app_inst[0]['data']['health_check']}' == '${state}'
         Sleep  2s
     END
-    Should Be Equal As Numbers  ${app_inst[0]['data']['health_check']}   3
+    Should Be Equal  ${app_inst[0]['data']['health_check']}   Ok
