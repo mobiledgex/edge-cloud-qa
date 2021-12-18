@@ -326,7 +326,12 @@ class App():
             if self.deployment.lower() == 'kubernetes':
                 if self.image_path is None:
                     self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
-                    
+            
+            if self.deployment.lower() == 'helm':
+                print('*** INFO - Deployment is helm ***')
+                if self.image_path is None:
+                    self.image_path='https://ealenn.github.io/charts:ealenn/echo-server'
+        
             if self.deployment.lower() == 'vm':
                 if self.image_path is None:
                     self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d'
