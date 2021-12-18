@@ -1,0 +1,15 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<com.thed.zephyr.jenkins.reporter.ZeeDescriptor plugin="zephyr-enterprise-test-management@2.4">
+  <userService class="com.thed.service.impl.UserServiceImpl"/>
+  <projectService class="com.thed.service.impl.ProjectServiceImpl"/>
+  <releaseService class="com.thed.service.impl.ReleaseServiceImpl"/>
+  <cycleService class="com.thed.service.impl.CycleServiceImpl">
+    <executionService class="com.thed.service.impl.ExecutionServiceImpl">
+      <userService class="com.thed.service.impl.UserServiceImpl"/>
+    </executionService>
+    <tcrCatalogTreeService class="com.thed.service.impl.TCRCatalogTreeServiceImpl"/>
+    <testcaseService class="com.thed.service.impl.TestcaseServiceImpl"/>
+  </cycleService>
+  <parserTemplateService class="com.thed.service.impl.ParserTemplateServiceImpl"/>
+  <zephyrInstances/>
+</com.thed.zephyr.jenkins.reporter.ZeeDescriptor>

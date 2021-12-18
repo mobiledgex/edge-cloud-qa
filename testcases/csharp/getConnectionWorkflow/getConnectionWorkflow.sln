@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.808.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "getConnectionWorkflow", "getConnectionWorkflow\getConnectionWorkflow.csproj", "{284C4224-1FB6-4DBB-A01B-95A38C738531}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{284C4224-1FB6-4DBB-A01B-95A38C738531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{284C4224-1FB6-4DBB-A01B-95A38C738531}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{284C4224-1FB6-4DBB-A01B-95A38C738531}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{284C4224-1FB6-4DBB-A01B-95A38C738531}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FEA0EF66-B34B-4F45-9C9D-E0CCCE58768F}
+	EndGlobalSection
+EndGlobal

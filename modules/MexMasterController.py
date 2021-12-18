@@ -55,6 +55,7 @@ from mex_master_controller.RateLimitSettings import RateLimitSettings
 from mex_master_controller.AlertPolicy import AlertPolicy
 from mex_master_controller.OperatorReporting import OperatorReporting
 from mex_master_controller.Usage import Usage
+from mex_master_controller.Federation import Federation
 
 import shared_variables_mc
 import shared_variables
@@ -70,7 +71,7 @@ class MexMasterController(MexRest):
     """
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
-    def __init__(self, mc_address='127.0.0.1:9900', root_cert=None, auto_login=True):
+    def __init__(self, mc_address='127.0.0.1:9900', root_cert=None, mc_password='mexadminfastedgecloudinfra', auto_login=True):
         """The MC address should be given at import time. The default is the local address
         
         Examples:
@@ -93,8 +94,8 @@ class MexMasterController(MexRest):
 
         self.username = 'mexadmin'
         #self.password = 'mexadmin123'
-        self.password = 'mexadminfastedgecloudinfra'
-
+        #self.password = 'mexadminfastedgecloudinfra'
+        self.password = mc_password
         self.admin_username = self.username
         self.admin_password = self.password
        
@@ -226,6 +227,7 @@ class MexMasterController(MexRest):
         self.alert_policy = AlertPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)        
         self.operator_reporting = OperatorReporting(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.usage = Usage(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.federation = Federation(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -317,6 +319,12 @@ class MexMasterController(MexRest):
 
     def get_default_gpudriver_build_name(self):    
         return shared_variables.gpudriver_build_name_default
+
+    def get_default_federation_name(self):
+        return shared_variables.federation_name_default
+
+    def get_default_federator_zone(self):
+        return shared_variables.federator_zone_default
  
     def number_of_login_requests(self):
         return self._number_login_requests
@@ -1238,10 +1246,10 @@ class MexMasterController(MexRest):
         """
         return self.app.delete_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, use_defaults=use_defaults)
 
-    def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], json_data=None, use_defaults=True, use_thread=False):
+    def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, alert_policies=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], json_data=None, use_defaults=True, use_thread=False):
         """ Send region UpdateApp
         """
-        return self.app.update_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, auto_prov_policies=auto_prov_policies,  deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, skip_hc_ports=skip_hc_ports, annotations=annotations, trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, use_defaults=use_defaults)
+        return self.app.update_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, auto_prov_policies=auto_prov_policies,  alert_policies=alert_policies, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, skip_hc_ports=skip_hc_ports, annotations=annotations, trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, use_defaults=use_defaults)
 
     def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, real_cluster_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, dedicated_ip=None, crm_override=None, cleanup_cluster_instance=True, json_data=None, use_defaults=True, auto_delete=True, use_thread=False, timeout=600):
         """ Send region CreateAppInst
@@ -1914,6 +1922,74 @@ class MexMasterController(MexRest):
                 logging.debug(f'reporter is NOT found. sleeping and trying again')
 
         raise Exception(f'NextScheduleDate is NOT correct. Got {reporter[0]["NextScheduleDate"]} but expected {next_schedule_date}')
+
+    def create_federator(self, token=None, region=None, operatorid=None, countrycode=None, mcc=None, mnc=[], federationid=None, use_defaults=True, use_thread=False, auto_delete=True):
+        if token is None:
+            token=self.super_token
+
+        return self.federation.create_federator(token=token, region=region, operatorid=operatorid, countrycode=countrycode, mcc=mcc, mnc=mnc, federationid=federationid, use_defaults=use_defaults, use_thread=use_thread, auto_delete=auto_delete)
+
+    def show_federator(self, token=None, operatorid=None, federationid=None, use_defaults=True, use_thread=False):
+        return self.federation.show_federator(token=token, operatorid=operatorid, federationid=federationid, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_federator(self, token=None, operatorid=None, federationid=None, use_defaults=True, use_thread=False):
+        return self.federation.delete_federator(token=token, operatorid=operatorid, federationid=federationid, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_federator(self, token=None, operatorid=None, federationid=None, mcc=None, mnc=[], use_defaults=True, use_thread=False):
+        return self.federation.update_federator(token=token, operatorid=operatorid, federationid=federationid, mcc=mcc, mnc=mnc, use_defaults=use_defaults, use_thread=use_thread)
+
+    def generateselfapikey_federator(self, token=None, operatorid=None, federationid=None, use_defaults=True, use_thread=False):
+        return self.federation.generateselfapikey_federator(token=token, operatorid=operatorid, federationid=federationid, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_federation(self, token=None, selfoperatorid=None, selffederationid=None, federation_name=None, operatorid=None, countrycode=None, federationid=None, federationaddr=None, apikey=None, use_defaults=True, use_thread=False, auto_delete=True):
+        if token is None:
+            token=self.super_token
+
+        return self.federation.create_federation(token=token, selfoperatorid=selfoperatorid, selffederationid=selffederationid, federation_name=federation_name, operatorid=operatorid, countrycode=countrycode, federationid=federationid, federationaddr=federationaddr, apikey=apikey, use_defaults=use_defaults, use_thread=use_thread, auto_delete=auto_delete)
+
+    def show_federation(self, token=None, federation_name=None, selfoperatorid=None, federationid=None, use_defaults=True, use_thread=False):
+        return self.federation.show_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, federationid=federationid, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False):
+        return self.federation.delete_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults, use_thread=use_thread)
+
+    def register_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False):
+        output = self.federation.register_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults, use_thread=use_thread)
+        if f'Created directed federation "{federation_name}" successfully' not in str((output['message'])):
+            raise Exception('ERROR: Partner Federation not registered successfully:' + str((output['message'])))
+
+        return output
+
+    def deregister_federation(self, token=None, federation_name=None, selfoperatorid=None, use_defaults=True, use_thread=False):
+        output = self.federation.deregister_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, use_defaults=use_defaults, use_thread=use_thread)
+        if f'Deregistered federation "{federation_name}" successfully' not in str((output['message'])):
+            raise Exception('ERROR: Partner Federation not deregistered successfully:' + str((output['message'])))
+
+        return output
+
+    def setpartnerapikey_federation(self, token=None, federation_name=None, selfoperatorid=None, apikey=None, use_defaults=True, use_thread=False):
+        return self.federation.setpartnerapikey_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, apikey=apikey, use_defaults=use_defaults, use_thread=use_thread)
+
+    def showfederatedpartnerzone_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, use_defaults=True, use_thread=False):
+        return self.federation.showpartnerzone_federatorzone(token=token, zoneid=zoneid, selfoperatorid=selfoperatorid, federation_name=federation_name, use_defaults=use_defaults, use_thread=use_thread)
+   
+    def showfederatedselfzone_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, use_defaults=True, use_thread=False):
+        return self.federation.showselfzone_federatorzone(token=token, zoneid=zoneid, selfoperatorid=selfoperatorid, federation_name=federation_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def register_federatorzone(self, token=None, zones=[], selfoperatorid=None, federation_name=None, use_defaults=True, use_thread=False):
+        return self.federation.register_federatorzone(token=token, zones=zones, selfoperatorid=selfoperatorid, federation_name=federation_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, cloudlets=[], geolocation=None, region=None, city=None, state=None, locality=None, use_defaults=True, use_thread=False, auto_delete=True):
+        if token is None:
+            token=self.super_token
+
+        return self.federation.create_federatorzone(token=token, zoneid=zoneid, operatorid=operatorid, countrycode=countrycode, cloudlets=cloudlets, geolocation=geolocation, region=region, city=city, state=state, locality=locality, use_defaults=use_defaults, use_thread=use_thread, auto_delete=auto_delete)
+
+    def show_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, region=None, city=None, use_defaults=True, use_thread=False):
+        return self.federation.show_federatorzone(token=token, zoneid=zoneid, operatorid=operatorid, countrycode=countrycode, region=region, city=city, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, use_defaults=True, use_thread=False):
+        return self.federation.delete_federatorzone(token=token, zoneid=zoneid, operatorid=operatorid, countrycode=countrycode, use_defaults=use_defaults, use_thread=use_thread)
 
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:

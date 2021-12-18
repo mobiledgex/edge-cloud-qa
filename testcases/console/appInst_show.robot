@@ -4,15 +4,15 @@ Documentation   Show appinsts
 Library		MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
 Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
 	
-Suite Setup      Setup
-Suite Teardown   Teardown
+Test Setup      Setup
+Test Teardown   Teardown
 
 Test Timeout    ${timeout}
 	
 *** Variables ***
 ${browser}           Chrome
 ${console_username}  mexadmin
-${console_password}  mexadmin123
+${console_password}  mexadminfastedgecloudinfra
 ${timeout}     15 min
 
 *** Test Cases ***
@@ -21,30 +21,29 @@ Web UI - user shall be able show US app instances
     ...  Show US app instances
     ...  Get US instances from WS
     ...  Verify all instances exist
+    [Tags]  passing
 
     # need to add some flavor on US region so we can be sure some exist when we run it. can do this in setup
 
-    #Create Flavor  region=US  flavor_name=andyflavor2  ram=2  disk=2  vcpus=2
-    Sleep  10s
+    @{ws}=  Show App Instances  region=US  #sort_field=flavor_name  sort_order=ascending
+    ${num_appinstances_ws}=  Get Length  ${ws}
 
-    @{ws}=  Show Flavors  region=EU  #sort_field=flavor_name  sort_order=ascending
-    Log to console  ${ws[0]['data']['key']['name']}	
+    Log to console  ${ws[0]['data']['key']['app_key']['name']}	
 
-#    Open Flavors
+    Open App Instances
 
-#    Change Region  US
+    Change Region  US
 	
-#    @{rows}=  Get Table Data
-
+    @{rows}=  Get Table Data
+    ${num_appinstances_table}=  Get Length  ${rows}
+	
    : FOR  ${row}  IN  @{ws}
-   \	Log to console  ${row}
-#   \  Log To Console  ${row['data']['key']['name']}
-#   \  Flavor Should Exist  region=US  flavor_name=${row['data']['key']['name']}  ram=${row['data']['ram']}  vcpus=${row['data']['vcpus']}  disk=${row['data']['disk']}
+   \  Log To Console  ${row['data']['key']['app_key']['name']}
+   \  ${state}=  Get Variable Value  ${row['data']['state']} 
+   \  ${state_string}=  Set Variable If  ${state} == 5  Ready  Error
+   \  App Instance Should Exist  region=US  app_name=${row['data']['key']['app_key']['name']}  org_name=${row['data']['key']['app_key']['developer_key']['name']}  app_version=${row['data']['key']['app_key']['version']}  operator_name=${row['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${row['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  cluster_instance=${row['data']['key']['cluster_inst_key']['cluster_key']['name']}  latitude=${row['data']['cloudlet_loc']['latitude']}  longitude=${row['data']['cloudlet_loc']['longitude']}  state=${state} 
 	
-#   ${num_flavors_ws}=     Get Length  ${ws}
-#   ${num_flavors_table}=  Get Length  ${rows}
-
-#   Should Be Equal  ${num_flavors_ws}  ${num_flavors_table}
+   Should Be Equal  ${num_appinstances_ws}  ${num_appinstances_table}
    
 Web UI - user shall be able show EU flavors
     [Documentation]
@@ -71,40 +70,44 @@ Web UI - user shall be able show EU flavors
 
    Should Be Equal  ${num_flavors_ws}  ${num_flavors_table}
 
-Web UI - user shall be able show All flavors
+Web UI - user shall be able show All app instances
     [Documentation]
-    ...  Show All flavors
-    ...  Get EU and US flavors from WS
-    ...  Verify all flavors exist
+    ...  Show All app instances 
+    ...  Get EU and US app instances from WS
+    ...  Verify all app instances exist
+    [Tags]  passing
 
     # need to add some flavor on US and EU region so we can be sure some exist when we run it. can do this in setup
 
-    @{wseu}=  Show Flavors  region=EU
-    @{wsus}=  Show Flavors  region=US
+    @{wseu}=  Show App Instances  region=EU
+    @{wsus}=  Show App Instances  region=US
+    ${num_appinstances_wsus}=  Get Length  ${wsus}
+    ${num_appinstances_wseu}=  Get Length  ${wseu}
+    ${total_appinstances_ws}=  Evaluate  ${num_appinstances_wsus}+${num_appinstances_wseu}
 
-    Log to console  ${ws[0]['data']['key']['name']}
-    Open Flavors
+    Open App Instances 
 
     @{rows}=  Get Table Data
+    ${num_appinstances_table}=  Get Length  ${rows}
 
    : FOR  ${row}  IN  @{wseu}
-   \  Log To Console  ${row['data']['key']['name']}
-   \  Flavor Should Exist  region=US  flavor_name=${row['data']['key']['name']}  ram=${row['data']['ram']}  vcpus=${row['data']['vcpus']}  disk=${row['data']['disk']}
+   \  Log To Console  ${row['data']['key']['app_key']['name']}
+   \  ${state}=  Get Variable Value  ${row['data']['state']}
+   \  ${state_string}=  Set Variable If  ${state} == 5  Ready  Error
+   \  App Instance Should Exist  region=US  app_name=${row['data']['key']['app_key']['name']}  org_name=${row['data']['key']['app_key']['developer_key']['name']}  app_version=${row['data']['key']['app_key']['version']}  operator_name=${row['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${row['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  cluster_instance=${row['data']['key']['cluster_inst_key']['cluster_key']['name']}  latitude=${row['data']['cloudlet_loc']['latitude']}  longitude=${row['data']['cloudlet_loc']['longitude']}  state=${state_string}
 
    : FOR  ${row}  IN  @{wsus}
-   \  Log To Console  ${row['data']['key']['name']}
-   \  Flavor Should Exist  region=US  flavor_name=${row['data']['key']['name']}  ram=${row['data']['ram']}  vcpus=${row['data']['vcpus']}  disk=${row['data']['disk']}
+   \  Log To Console  ${row['data']['key']['app_key']['name']}
+   \  ${state}=  Get Variable Value  ${row['data']['state']}
+   \  ${state_string}=  Set Variable If  ${state} == 5  Ready  Error
+   \  App Instance Should Exist  region=US  app_name=${row['data']['key']['app_key']['name']}  org_name=${row['data']['key']['app_key']['developer_key']['name']}  app_version=${row['data']['key']['app_key']['version']}  operator_name=${row['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${row['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  cluster_instance=${row['data']['key']['cluster_inst_key']['cluster_key']['name']}  latitude=${row['data']['cloudlet_loc']['latitude']}  longitude=${row['data']['cloudlet_loc']['longitude']}  state=${state_string}
 
-   ${num_flavors_wsus}=     Get Length  ${wsus}
-   ${num_flavors_wseu}=     Get Length  ${wseu}
-
-   ${num_flavors_table}=  Get Length  ${rows}
-
-   Should Be Equal  ${num_flavors_wsus}+${num_flavors_wseu}  ${num_flavors_table}
+   Should Be Equal  ${total_appinstances_ws}  ${num_appinstances_table}
 
 *** Keywords ***
 Setup
     #create some flavors
+    Open Browser
     Log to console  login
 
     Login to Mex Console  browser=${browser}  #username=${console_username}  password=${console_password}
