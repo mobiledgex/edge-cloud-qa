@@ -424,9 +424,13 @@ class MexApp(object):
 
     def k8s_scale_replicas(self, root_loadbalancer=None, kubeconfig=None, cluster_name=None, operator_name=None, pod_name=None, number_of_replicas=None):
         rb = None
+
+        if kubeconfig is None:
+           kubeconfig = f'{cluster_name}.{operator_name}.kubeconfig'
+
         if root_loadbalancer is not None:
             print('*WARN*', 'rootlb')
-            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=kubeconfig)
             # kubeconfig_file = f'{cluster_name}.{operator_name}.kubeconfig'
         else:
             rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
