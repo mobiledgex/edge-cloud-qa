@@ -21,7 +21,7 @@ CreateCloudlet - create with non-existent vmpool shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet  region=US  operator_org_name=${operator_organization}  vm_pool=nopool  platform_type=PlatformTypeVmPool
 
-   Should Contain   ${error}  {"result":{"message":"VM Pool nopool not found","code":400}}
+   Should Contain   ${error}  {"result":{"message":"VMPool key {\\\\\"organization\\\\\":\\\\\"TDG\\\\\",\\\\\"name\\\\\":\\\\\"nopool\\\\\"} not found","code":400}}
 
 # ECQ-2316
 CreateCloudlet - create with platformtype=VMPool but no vmpool shall return error

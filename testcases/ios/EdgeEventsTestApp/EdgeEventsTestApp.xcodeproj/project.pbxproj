@@ -1,0 +1,766 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4AF25417274D542100D3AC69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF25416274D542100D3AC69 /* AppDelegate.swift */; };
+		4AF25419274D542100D3AC69 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF25418274D542100D3AC69 /* SceneDelegate.swift */; };
+		4AF2541B274D542100D3AC69 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF2541A274D542100D3AC69 /* ViewController.swift */; };
+		4AF2541E274D542100D3AC69 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4AF2541C274D542100D3AC69 /* Main.storyboard */; };
+		4AF25420274D542400D3AC69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4AF2541F274D542400D3AC69 /* Assets.xcassets */; };
+		4AF25423274D542400D3AC69 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4AF25421274D542400D3AC69 /* LaunchScreen.storyboard */; };
+		4AF2542E274D542400D3AC69 /* EdgeEventsTestAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF2542D274D542400D3AC69 /* EdgeEventsTestAppTests.swift */; };
+		4AF25438274D542400D3AC69 /* EdgeEventsTestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF25437274D542400D3AC69 /* EdgeEventsTestAppUITests.swift */; };
+		4AF2543A274D542400D3AC69 /* EdgeEventsTestAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF25439274D542400D3AC69 /* EdgeEventsTestAppUITestsLaunchTests.swift */; };
+		7D207E0F1ACDCC5542F69EB6 /* Pods_EdgeEventsTestAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C06E50D26E17AF1BA147E969 /* Pods_EdgeEventsTestAppUITests.framework */; };
+		98778969F5E19CACB1F07BE6 /* Pods_EdgeEventsTestApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF04819A1FF3A7980BF8F5E5 /* Pods_EdgeEventsTestApp.framework */; };
+		9BDF489A9086C0F09130E146 /* Pods_EdgeEventsTestAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B51CAC7913794B4DE7E47828 /* Pods_EdgeEventsTestAppTests.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4AF2542A274D542400D3AC69 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4AF2540B274D542100D3AC69 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4AF25412274D542100D3AC69;
+			remoteInfo = EdgeEventsTestApp;
+		};
+		4AF25434274D542400D3AC69 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4AF2540B274D542100D3AC69 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4AF25412274D542100D3AC69;
+			remoteInfo = EdgeEventsTestApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0921D32F383D0A9629804FBA /* Pods-EdgeEventsTestAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdgeEventsTestAppUITests.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-EdgeEventsTestAppUITests/Pods-EdgeEventsTestAppUITests.release.xcconfig"; sourceTree = "<group>"; };
+		1FCD8E529C57B2590FD32743 /* Pods-EdgeEventsTestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdgeEventsTestApp.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-EdgeEventsTestApp/Pods-EdgeEventsTestApp.release.xcconfig"; sourceTree = "<group>"; };
+		2047B41673725E78E7A0ADF8 /* Pods-EdgeEventsTestAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdgeEventsTestAppTests.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-EdgeEventsTestAppTests/Pods-EdgeEventsTestAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		35B1B45429D5C9B5488EA5AF /* Pods-EdgeEventsTestAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdgeEventsTestAppTests.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-EdgeEventsTestAppTests/Pods-EdgeEventsTestAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4AF25413274D542100D3AC69 /* EdgeEventsTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EdgeEventsTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AF25416274D542100D3AC69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		4AF25418274D542100D3AC69 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		4AF2541A274D542100D3AC69 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		4AF2541D274D542100D3AC69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4AF2541F274D542400D3AC69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4AF25422274D542400D3AC69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4AF25424274D542400D3AC69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4AF25429274D542400D3AC69 /* EdgeEventsTestAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EdgeEventsTestAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AF2542D274D542400D3AC69 /* EdgeEventsTestAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeEventsTestAppTests.swift; sourceTree = "<group>"; };
+		4AF25433274D542400D3AC69 /* EdgeEventsTestAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EdgeEventsTestAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AF25437274D542400D3AC69 /* EdgeEventsTestAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeEventsTestAppUITests.swift; sourceTree = "<group>"; };
+		4AF25439274D542400D3AC69 /* EdgeEventsTestAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeEventsTestAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		50C9DE162AC51C40C7E5F684 /* Pods-EdgeEventsTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdgeEventsTestApp.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-EdgeEventsTestApp/Pods-EdgeEventsTestApp.debug.xcconfig"; sourceTree = "<group>"; };
+		B51CAC7913794B4DE7E47828 /* Pods_EdgeEventsTestAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EdgeEventsTestAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBBB4C2B18C1FE954A1D78AD /* Pods-EdgeEventsTestAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdgeEventsTestAppUITests.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-EdgeEventsTestAppUITests/Pods-EdgeEventsTestAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		C06E50D26E17AF1BA147E969 /* Pods_EdgeEventsTestAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EdgeEventsTestAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF04819A1FF3A7980BF8F5E5 /* Pods_EdgeEventsTestApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EdgeEventsTestApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4AF25410274D542100D3AC69 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				98778969F5E19CACB1F07BE6 /* Pods_EdgeEventsTestApp.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4AF25426274D542400D3AC69 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BDF489A9086C0F09130E146 /* Pods_EdgeEventsTestAppTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4AF25430274D542400D3AC69 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D207E0F1ACDCC5542F69EB6 /* Pods_EdgeEventsTestAppUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		42807A234466D73583E4124B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CF04819A1FF3A7980BF8F5E5 /* Pods_EdgeEventsTestApp.framework */,
+				B51CAC7913794B4DE7E47828 /* Pods_EdgeEventsTestAppTests.framework */,
+				C06E50D26E17AF1BA147E969 /* Pods_EdgeEventsTestAppUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4AF2540A274D542100D3AC69 = {
+			isa = PBXGroup;
+			children = (
+				4AF25415274D542100D3AC69 /* EdgeEventsTestApp */,
+				4AF2542C274D542400D3AC69 /* EdgeEventsTestAppTests */,
+				4AF25436274D542400D3AC69 /* EdgeEventsTestAppUITests */,
+				4AF25414274D542100D3AC69 /* Products */,
+				7F9291A6D4989F0714C85A7B /* Pods */,
+				42807A234466D73583E4124B /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		4AF25414274D542100D3AC69 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4AF25413274D542100D3AC69 /* EdgeEventsTestApp.app */,
+				4AF25429274D542400D3AC69 /* EdgeEventsTestAppTests.xctest */,
+				4AF25433274D542400D3AC69 /* EdgeEventsTestAppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4AF25415274D542100D3AC69 /* EdgeEventsTestApp */ = {
+			isa = PBXGroup;
+			children = (
+				4AF25416274D542100D3AC69 /* AppDelegate.swift */,
+				4AF25418274D542100D3AC69 /* SceneDelegate.swift */,
+				4AF2541A274D542100D3AC69 /* ViewController.swift */,
+				4AF2541C274D542100D3AC69 /* Main.storyboard */,
+				4AF2541F274D542400D3AC69 /* Assets.xcassets */,
+				4AF25421274D542400D3AC69 /* LaunchScreen.storyboard */,
+				4AF25424274D542400D3AC69 /* Info.plist */,
+			);
+			path = EdgeEventsTestApp;
+			sourceTree = "<group>";
+		};
+		4AF2542C274D542400D3AC69 /* EdgeEventsTestAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				4AF2542D274D542400D3AC69 /* EdgeEventsTestAppTests.swift */,
+			);
+			path = EdgeEventsTestAppTests;
+			sourceTree = "<group>";
+		};
+		4AF25436274D542400D3AC69 /* EdgeEventsTestAppUITests */ = {
+			isa = PBXGroup;
+			children = (
+				4AF25437274D542400D3AC69 /* EdgeEventsTestAppUITests.swift */,
+				4AF25439274D542400D3AC69 /* EdgeEventsTestAppUITestsLaunchTests.swift */,
+			);
+			path = EdgeEventsTestAppUITests;
+			sourceTree = "<group>";
+		};
+		7F9291A6D4989F0714C85A7B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				50C9DE162AC51C40C7E5F684 /* Pods-EdgeEventsTestApp.debug.xcconfig */,
+				1FCD8E529C57B2590FD32743 /* Pods-EdgeEventsTestApp.release.xcconfig */,
+				35B1B45429D5C9B5488EA5AF /* Pods-EdgeEventsTestAppTests.debug.xcconfig */,
+				2047B41673725E78E7A0ADF8 /* Pods-EdgeEventsTestAppTests.release.xcconfig */,
+				BBBB4C2B18C1FE954A1D78AD /* Pods-EdgeEventsTestAppUITests.debug.xcconfig */,
+				0921D32F383D0A9629804FBA /* Pods-EdgeEventsTestAppUITests.release.xcconfig */,
+			);
+			name = Pods;
+			path = EdgeEventsTestApp/Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4AF25412274D542100D3AC69 /* EdgeEventsTestApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4AF2543D274D542400D3AC69 /* Build configuration list for PBXNativeTarget "EdgeEventsTestApp" */;
+			buildPhases = (
+				6C3A23840876C21D1490F79F /* [CP] Check Pods Manifest.lock */,
+				4AF2540F274D542100D3AC69 /* Sources */,
+				4AF25410274D542100D3AC69 /* Frameworks */,
+				4AF25411274D542100D3AC69 /* Resources */,
+				BAA2EF91B1C1A1B074A65079 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EdgeEventsTestApp;
+			productName = EdgeEventsTestApp;
+			productReference = 4AF25413274D542100D3AC69 /* EdgeEventsTestApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4AF25428274D542400D3AC69 /* EdgeEventsTestAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4AF25440274D542400D3AC69 /* Build configuration list for PBXNativeTarget "EdgeEventsTestAppTests" */;
+			buildPhases = (
+				9E365EC60FF7CD5860C38E82 /* [CP] Check Pods Manifest.lock */,
+				4AF25425274D542400D3AC69 /* Sources */,
+				4AF25426274D542400D3AC69 /* Frameworks */,
+				4AF25427274D542400D3AC69 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4AF2542B274D542400D3AC69 /* PBXTargetDependency */,
+			);
+			name = EdgeEventsTestAppTests;
+			productName = EdgeEventsTestAppTests;
+			productReference = 4AF25429274D542400D3AC69 /* EdgeEventsTestAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4AF25432274D542400D3AC69 /* EdgeEventsTestAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4AF25443274D542400D3AC69 /* Build configuration list for PBXNativeTarget "EdgeEventsTestAppUITests" */;
+			buildPhases = (
+				1914188E0AE35A82A55FFBF2 /* [CP] Check Pods Manifest.lock */,
+				4AF2542F274D542400D3AC69 /* Sources */,
+				4AF25430274D542400D3AC69 /* Frameworks */,
+				4AF25431274D542400D3AC69 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4AF25435274D542400D3AC69 /* PBXTargetDependency */,
+			);
+			name = EdgeEventsTestAppUITests;
+			productName = EdgeEventsTestAppUITests;
+			productReference = 4AF25433274D542400D3AC69 /* EdgeEventsTestAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4AF2540B274D542100D3AC69 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1310;
+				LastUpgradeCheck = 1310;
+				TargetAttributes = {
+					4AF25412274D542100D3AC69 = {
+						CreatedOnToolsVersion = 13.1;
+					};
+					4AF25428274D542400D3AC69 = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = 4AF25412274D542100D3AC69;
+					};
+					4AF25432274D542400D3AC69 = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = 4AF25412274D542100D3AC69;
+					};
+				};
+			};
+			buildConfigurationList = 4AF2540E274D542100D3AC69 /* Build configuration list for PBXProject "EdgeEventsTestApp" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4AF2540A274D542100D3AC69;
+			productRefGroup = 4AF25414274D542100D3AC69 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4AF25412274D542100D3AC69 /* EdgeEventsTestApp */,
+				4AF25428274D542400D3AC69 /* EdgeEventsTestAppTests */,
+				4AF25432274D542400D3AC69 /* EdgeEventsTestAppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4AF25411274D542100D3AC69 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4AF25423274D542400D3AC69 /* LaunchScreen.storyboard in Resources */,
+				4AF25420274D542400D3AC69 /* Assets.xcassets in Resources */,
+				4AF2541E274D542100D3AC69 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4AF25427274D542400D3AC69 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4AF25431274D542400D3AC69 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1914188E0AE35A82A55FFBF2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EdgeEventsTestAppUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6C3A23840876C21D1490F79F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EdgeEventsTestApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9E365EC60FF7CD5860C38E82 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EdgeEventsTestAppTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BAA2EF91B1C1A1B074A65079 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-EdgeEventsTestApp/Pods-EdgeEventsTestApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-EdgeEventsTestApp/Pods-EdgeEventsTestApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EdgeEventsTestApp/Pods-EdgeEventsTestApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4AF2540F274D542100D3AC69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4AF2541B274D542100D3AC69 /* ViewController.swift in Sources */,
+				4AF25417274D542100D3AC69 /* AppDelegate.swift in Sources */,
+				4AF25419274D542100D3AC69 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4AF25425274D542400D3AC69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4AF2542E274D542400D3AC69 /* EdgeEventsTestAppTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4AF2542F274D542400D3AC69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4AF2543A274D542400D3AC69 /* EdgeEventsTestAppUITestsLaunchTests.swift in Sources */,
+				4AF25438274D542400D3AC69 /* EdgeEventsTestAppUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4AF2542B274D542400D3AC69 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4AF25412274D542100D3AC69 /* EdgeEventsTestApp */;
+			targetProxy = 4AF2542A274D542400D3AC69 /* PBXContainerItemProxy */;
+		};
+		4AF25435274D542400D3AC69 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4AF25412274D542100D3AC69 /* EdgeEventsTestApp */;
+			targetProxy = 4AF25434274D542400D3AC69 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4AF2541C274D542100D3AC69 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4AF2541D274D542100D3AC69 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		4AF25421274D542400D3AC69 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4AF25422274D542400D3AC69 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4AF2543B274D542400D3AC69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4AF2543C274D542400D3AC69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4AF2543E274D542400D3AC69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 50C9DE162AC51C40C7E5F684 /* Pods-EdgeEventsTestApp.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7P2F6CFU63;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EdgeEventsTestApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LeonMobiledgeX.EdgeEventsTestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4AF2543F274D542400D3AC69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1FCD8E529C57B2590FD32743 /* Pods-EdgeEventsTestApp.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7P2F6CFU63;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EdgeEventsTestApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LeonMobiledgeX.EdgeEventsTestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4AF25441274D542400D3AC69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 35B1B45429D5C9B5488EA5AF /* Pods-EdgeEventsTestAppTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7P2F6CFU63;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LeonMobiledgeX.EdgeEventsTestAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EdgeEventsTestApp.app/EdgeEventsTestApp";
+			};
+			name = Debug;
+		};
+		4AF25442274D542400D3AC69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2047B41673725E78E7A0ADF8 /* Pods-EdgeEventsTestAppTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7P2F6CFU63;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LeonMobiledgeX.EdgeEventsTestAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EdgeEventsTestApp.app/EdgeEventsTestApp";
+			};
+			name = Release;
+		};
+		4AF25444274D542400D3AC69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BBBB4C2B18C1FE954A1D78AD /* Pods-EdgeEventsTestAppUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7P2F6CFU63;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LeonMobiledgeX.EdgeEventsTestAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = EdgeEventsTestApp;
+			};
+			name = Debug;
+		};
+		4AF25445274D542400D3AC69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0921D32F383D0A9629804FBA /* Pods-EdgeEventsTestAppUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7P2F6CFU63;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LeonMobiledgeX.EdgeEventsTestAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = EdgeEventsTestApp;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4AF2540E274D542100D3AC69 /* Build configuration list for PBXProject "EdgeEventsTestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4AF2543B274D542400D3AC69 /* Debug */,
+				4AF2543C274D542400D3AC69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4AF2543D274D542400D3AC69 /* Build configuration list for PBXNativeTarget "EdgeEventsTestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4AF2543E274D542400D3AC69 /* Debug */,
+				4AF2543F274D542400D3AC69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4AF25440274D542400D3AC69 /* Build configuration list for PBXNativeTarget "EdgeEventsTestAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4AF25441274D542400D3AC69 /* Debug */,
+				4AF25442274D542400D3AC69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4AF25443274D542400D3AC69 /* Build configuration list for PBXNativeTarget "EdgeEventsTestAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4AF25444274D542400D3AC69 /* Debug */,
+				4AF25445274D542400D3AC69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4AF2540B274D542100D3AC69 /* Project object */;
+}

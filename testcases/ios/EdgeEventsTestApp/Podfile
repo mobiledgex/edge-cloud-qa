@@ -1,0 +1,28 @@
+use_frameworks!
+platform :ios, '13.0'
+# Default Specs.git:
+source 'https://github.com/CocoaPods/Specs.git'
+plugin 'cocoapods-art', :sources => ['cocoapods-releases']
+target 'EdgeEventsTestApp'  do
+  pod 'MobiledgeXiOSGrpcLibrary', '= 3.0'
+
+  target 'EdgeEventsTestAppTests' do
+    inherit! :search_paths
+  end
+
+  target 'EdgeEventsTestAppUITests' do
+    inherit! :search_paths
+  end
+end
+post_install do |installer|
+   installer.pods_project.targets.each do |target|
+     puts "#{target.name}"
+     target.build_configurations.each do |config|
+       config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+       if target.name == "gRPC-Swift" || target.name == "SwiftNIO" || target.name == "SwiftNIOConcurrencyHelpers" || target.name == "SwiftNIOExtras" || target.name == "SwiftNIOFoundationCompat" || target.name == "SwiftNIOHPACK" || target.name == "SwiftNIOHTTP1" || target.name == "SwiftNIOHTTP2" || target.name == "SwiftNIOSSL" || target.name == "SwiftNIOTLS" || target.name == "SwiftNIOTransportServices"
+         config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'NO'
+       end
+     end
+   end
+ end
+

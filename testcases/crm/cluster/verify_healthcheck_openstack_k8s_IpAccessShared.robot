@@ -19,7 +19,7 @@ ${cloudlet_name_openstack_shared}  automationBonnCloudlet
 
 ${operator_name_openstack}  TDG
 
-${region}  EU
+${region}  US
 
 ${mobiledgex_domain}  mobiledgex.net
 
@@ -318,4 +318,5 @@ Verify Health Check Ok
         Exit For Loop If  '${app_inst[0]['data']['health_check']}' == '${state}'
         Sleep  2s
     END
+
     Should Be Equal  ${app_inst[0]['data']['health_check']}   Ok

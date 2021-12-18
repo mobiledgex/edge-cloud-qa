@@ -268,7 +268,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckOk when TCP port with sk
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
@@ -320,7 +320,7 @@ IpAccessDedicated docker - healthcheck shows proper state after UpdateApp
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail
 
     Stop TCP Port  ${tcp_fqdn}  2015
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
@@ -354,4 +354,4 @@ Verify Health Check Ok
         Exit For Loop If  '${app_inst[0]['data']['health_check']}' == '${state}'
         Sleep  2s
     END
-    Should Be Equal As Numbers  ${app_inst[0]['data']['health_check']}   3
+    Should Be Equal   ${app_inst[0]['data']['health_check']}   Ok

@@ -1,0 +1,1188 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.42">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.9.2"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.9.2">
+      <jobProperties/>
+      <triggers/>
+      <parameters>
+        <string>SlaveNodeMetrics</string>
+        <string>SlaveNodeVsphere</string>
+        <string>SlaveNodeAnthos</string>
+        <string>NumberParallelExecutionsVCD</string>
+        <string>OpenStackEnv</string>
+        <string>DMERest</string>
+        <string>CRMPoolAnthos</string>
+        <string>NumberParallelExecutionsAnthos</string>
+        <string>NumberParallelExecutionsVsphere</string>
+        <string>SlaveNodeController</string>
+        <string>Version</string>
+        <string>SlaveNodeConsole</string>
+        <string>Console</string>
+        <string>SlaveNodeScans</string>
+        <string>CRMPoolOpenstack</string>
+        <string>SlaveNodeMasterController</string>
+        <string>DME</string>
+        <string>DMERestCert</string>
+        <string>SlaveNodeDME</string>
+        <string>NumberParallelExecutionsOpenstack</string>
+        <string>SlaveNodeSDK</string>
+        <string>Controller</string>
+        <string>Project</string>
+        <string>SlaveNodeOpenstack</string>
+        <string>VariableFile</string>
+        <string>CRMPoolVCD</string>
+        <string>CRMPoolVsphere</string>
+        <string>SlaveNodeVCD</string>
+        <string>BuildDate</string>
+        <string>InfluxDB</string>
+        <string>RunFailedOnly</string>
+        <string>MasterController</string>
+        <string>CommitVersion</string>
+      </parameters>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>NEW JOB DESCRIPTION</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.6"/>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>20</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty plugin="build-failure-analyzer@1.27.1">
+      <doNotScan>false</doNotScan>
+    </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>BuildDate</name>
+          <description>YYYY-MM-DD or &quot;today&quot;</description>
+          <defaultValue>today</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Project</name>
+          <defaultValue>ECQ</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Version</name>
+          <defaultValue>CirrusR3.1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MasterController</name>
+          <defaultValue>console-qa.mobiledgex.net:443</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Controller</name>
+          <defaultValue>mexplat-qa-us.ctrl.mobiledgex.net:55001</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DME</name>
+          <defaultValue>us-qa.dme.mobiledgex.net:50051</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DMERest</name>
+          <defaultValue>us-qa.dme.mobiledgex.net:38001</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DMERestCert</name>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Console</name>
+          <defaultValue>https://console-qa.mobiledgex.net</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPoolOpenstack</name>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;},{&quot;cloudlet&quot;:&quot;packet-qaregression&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPoolAnthos</name>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPoolVCD</name>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationDallasCloudlet&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CRMPoolVsphere</name>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;DFWVMW2&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NumberParallelExecutionsOpenstack</name>
+          <defaultValue>2</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NumberParallelExecutionsAnthos</name>
+          <defaultValue>2</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NumberParallelExecutionsVCD</name>
+          <defaultValue>2</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NumberParallelExecutionsVsphere</name>
+          <defaultValue>2</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>VariableFile</name>
+          <defaultValue>automation_variables.py</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>InfluxDB</name>
+          <defaultValue>notset</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>OpenStackEnv</name>
+          <defaultValue>notset</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CommitVersion</name>
+          <defaultValue>master</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RunFailedOnly</name>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeSDK</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeDME</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeController</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeMasterController</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeScans</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeOpenstack</name>
+          <defaultValue>jenkinsGcpSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeVCD</name>
+          <defaultValue>jenkinsGcpSlave2</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeVsphere</name>
+          <defaultValue>jenkinsSlave2</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeAnthos</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeConsole</name>
+          <defaultValue>jenkinsWindowsSelenium</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeMetrics</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
+    <script>//import java.text.SimpleDateFormat
+
+//library &apos;slackMessage&apos;
+
+//slackurl = &apos;https://mobiledgex.slack.com/services/hooks/jenkins-ci/&apos;
+//slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
+//slackchannel = &apos;#qa-automation&apos;
+gitcred = &apos;79b116ea-d7ac-4d6c-928d-49b79e5f9bef&apos;
+dateValue = &apos;notset&apos;
+cycle = &apos;notset&apos;
+regression_prep_status = true
+create_cloudlet_status = true
+
+//def slack_good(message) {
+//    slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: message
+//}
+//def slack_fail(message) {
+//    slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;danger&quot;, message: message
+//}
+//def slack_warning(message) {
+//    slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;warning&quot;, message: message
+//}
+
+//def add_tests_to_folder(version, project, cycle, folder, components=null, components_omit=null) {
+//    def status = -1
+//    def s = &apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version &apos; + version + &apos; --project &apos; + project + &apos; --cycle &apos; + cycle +  &apos; --folder &apos; + folder
+//    if (components != null) {
+//        s = s + &apos; --component &apos; + components
+//    }
+//    if (components_omit != null) {
+//        s = s + &apos; --componentOmit &apos; + components_omit
+//    }
+//    status = sh(script: s, returnStatus: true);
+//    println status
+//    if(status != 0) {
+//        println &quot;copyTestsToRelease.py failed&quot;
+//        currentBuild.result = &apos;FAILURE&apos;
+//        throw new Exception(&quot;Copy tests to release failed&quot;)
+//    }
+//}
+
+pipeline{
+    agent { label &apos;jenkinsSlave1&apos; }
+    parameters {
+        string(name: &apos;BuildDate&apos;, defaultValue: &apos;today&apos;, description: &apos;YYYY-MM-DD or &quot;today&quot;&apos;)
+        string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
+        string(name: &apos;Version&apos;, defaultValue: &apos;CirrusR3.1&apos;)
+        string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
+        string(name: &apos;Controller&apos;, defaultValue: &apos;mexplat-qa-us.ctrl.mobiledgex.net:55001&apos;)
+        string(name: &apos;DME&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:50051&apos;)
+        string(name: &apos;DMERest&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:38001&apos;)
+        string(name: &apos;DMERestCert&apos;, defaultValue: &apos;&apos;)
+        string(name: &apos;Console&apos;, defaultValue: &apos;https://console-qa.mobiledgex.net&apos;)
+        string(name: &apos;CRMPoolOpenstack&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;},{&quot;cloudlet&quot;:&quot;packet-qaregression&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
+        string(name: &apos;CRMPoolAnthos&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
+        string(name: &apos;CRMPoolVCD&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationDallasCloudlet&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
+        string(name: &apos;CRMPoolVsphere&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;DFWVMW2&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
+        string(name: &apos;NumberParallelExecutionsOpenstack&apos;, defaultValue: &apos;2&apos;)
+        string(name: &apos;NumberParallelExecutionsAnthos&apos;, defaultValue: &apos;2&apos;)
+        string(name: &apos;NumberParallelExecutionsVCD&apos;, defaultValue: &apos;2&apos;)
+        string(name: &apos;NumberParallelExecutionsVsphere&apos;, defaultValue: &apos;2&apos;)
+        string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
+        string(name: &apos;InfluxDB&apos;, defaultValue: &apos;notset&apos;)
+        string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
+        string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
+        booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
+        string(name: &apos;SlaveNodeSDK&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNodeDME&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNodeController&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNodeMasterController&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNodeScans&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNodeOpenstack&apos;, defaultValue: &apos;jenkinsGcpSlave1&apos;)
+        string(name: &apos;SlaveNodeVCD&apos;, defaultValue: &apos;jenkinsGcpSlave2&apos;)
+        string(name: &apos;SlaveNodeVsphere&apos;, defaultValue: &apos;jenkinsSlave2&apos;)
+        string(name: &apos;SlaveNodeAnthos&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        string(name: &apos;SlaveNodeConsole&apos;, defaultValue: &apos;jenkinsWindowsSelenium&apos;)
+        string(name: &apos;SlaveNodeMetrics&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        //choice(name: &apos;Platform&apos;, choices: [&apos;SDK&apos;, &apos;Controller&apos;, &apos;DME&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
+    }
+
+    stages {
+//        stage(&apos;Checkout&apos;) {
+//            steps {
+//                script {
+//                    date = new Date()
+//                    sdate = new SimpleDateFormat(&quot;yyy-MM-dd&quot;)
+//                    Calendar cal = Calendar.getInstance()
+//                    
+//                    if(params.BuildDate == &quot;today&quot;) {
+//                        dateValue = sdate.format(date)
+//                    } else {
+//                        dateValue = params.BuildDate
+//                    }
+//                    echo dateValue
+//
+//                    cycle = dateValue + &apos;_&apos; + params.Version
+//                    currentBuild.displayName = cycle
+//
+//                    slackMessage.good(&apos;Starting regression for &apos; + cycle)
+//                }
+//               
+//                dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra&apos;) {
+//                    sh &apos;rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*&apos;
+//                    checkout([$class: &apos;GitSCM&apos;,
+//                        branches: [[name: &apos;master&apos;]],
+//                        doGenerateSubmoduleConfigurations: false,
+//                        extensions: [
+//                            [$class: &apos;SparseCheckoutPaths&apos;,  sparseCheckoutPaths:[[$class:&apos;SparseCheckoutPath&apos;, path:&apos;chef/*&apos;],[$class:&apos;SparseCheckoutPath&apos;, path:&apos;ansible/*&apos;]]]
+//                        ],
+//                        submoduleCfg: [],
+//                        userRemoteConfigs: [[credentialsId: gitcred,
+//                        url: &apos;https://github.com/mobiledgex/edge-cloud-infra.git&apos;]]])
+//                }
+//            }
+//            post {
+//                failure { 
+//                    script {
+//                        slackMessage.fail(&apos;Checkout failed for &apos; + dateValue + &apos;. Aborting&apos;)
+//                    //input(message: &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;)
+//                    }
+//                }
+//            }
+//        }
+        
+        stage(&apos;Regression Prep 1&apos;) {
+            parallel {
+                stage(&apos;Check Load/Create Cycle&apos;) {
+                    steps {
+                        script {
+                            dateValue = determineDateValue()
+                            cycle = dateValue + &apos;_&apos; + params.Version
+                            currentBuild.displayName = cycle
+                            slackMessage.good(&apos;Starting regression for &apos; + cycle)
+                            checkLoadExists(dateValue)
+                            createCycle(cycle)
+                            addTestsToFolder(params.Version, params.Project, cycle)
+                        }
+                    }
+                }
+                stage(&apos;Cleanup Provisioning&apos;) {
+                    steps{
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;cleanup provisioning failed&apos;) {
+                            build job: &apos;cleanupAutomationProvisioning&apos;
+                        }
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackMessage.fail(&quot;Load check failed or create cycle failed for &quot; + dateValue + &apos;. Aborting&apos;)
+                    }
+                }
+            }
+        }
+
+        stage(&apos;Regression Prep 2&apos;) {
+            parallel {
+                stage(&apos;Deploy Chef&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;deploy chef failed&apos;) {
+                            script { deployChef(dateValue) }
+                        }
+                    }
+//                    post {
+//                        failure {
+//                            script { slackMessage.fail(&quot;Chef deploy failed for &quot; + dateValue + &apos;. Aborting&apos;) }
+//                        }
+//                    }
+                }
+
+                stage(&apos;Pull Image&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;pull image failed&apos;) {
+                            script { pullImage(dateValue) }
+                        }
+                    }
+//                    post {
+//                        failure {
+//                            script { slackMessage.fail(&quot;Pulling image failed for &quot; + dateValue + &apos;. Aborting&apos;) }
+//                        }
+//                    }
+                }
+
+//                stage(&apos;Create Cycle&apos;) {
+//                    steps {
+//                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create cycle failed&apos;) {
+//                            script { addTestsToFolder(params.Version, params.Project, cycle) }
+//                        }
+//                    }
+////                    post {
+////                        failure {
+////                            script {
+////                                slackMessage.fail(&quot;Create cycle and copy tests failed for &quot; + dateValue + &apos;. Aborting&apos;)
+////                            }
+////                        }
+////                    }
+//                }
+       
+//                stage(&apos;Cleanup Provisioning&apos;) {
+//                    steps{
+//                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;cleanup provisioning failed&apos;) {
+//                            build job: &apos;cleanupAutomationProvisioning&apos;
+//                        }
+//                    }
+//                }
+
+                stage(&apos;Delete Openstack&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;delete openstack failed&apos;) {
+                            script { deleteCrm.openstack(cycle) }
+                        }
+////                        echo &quot;openstack delete start build result ${currentBuild.result}&quot;
+////                        echo &quot;delete openstack&quot;
+////                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;delete openstack failed&apos;) {
+////                            build job: &apos;runTestcases&apos;, parameters: [
+////                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, DeleteCloudlet&apos;), 
+////                                string(name: &apos;Project&apos;, value: params.Project), 
+////                                string(name: &apos;Cycle&apos;, value: cycle), 
+////                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+////                                string(name: &apos;TestTarget&apos;, value: &apos;Openstack&apos;),
+////                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+////                                string(name: &apos;CRMPoolOpenstack&apos;, value: &apos;&apos;),
+////                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+////                        }
+                    }
+//                    post {
+//                        failure {
+//                            script {
+//                                echo &quot;openstack build resutl ${currentBuild.result}&quot;
+//                                slackMessage.warning(&apos;Delete Openstack CRM failed for &apos; + dateValue) 
+//                                input message: &apos;Delete Openstack failed for &apos; + dateValue + &apos; Continue?&apos;
+//                                slackMessage.good(&apos;Delete Openstack CRM proceeding&apos;) 
+//                            }
+//                        }
+//                    }
+                }
+                stage(&apos;Delete Anthos&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;delete anthos failed&apos;) {
+                            script { deleteCrm.anthos(cycle) }
+                        }
+////                        echo &quot;anthos delete start build result ${currentBuild.result}&quot;
+////                        echo &quot;delete anthos&quot;
+////                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;delete anthos failed&apos;) {
+////                            build job: &apos;runTestcases&apos;, parameters: [
+////                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, DeleteCloudlet&apos;), 
+////                                string(name: &apos;Project&apos;, value: params.Project), 
+////                                string(name: &apos;Cycle&apos;, value: cycle), 
+////                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+////                                string(name: &apos;TestTarget&apos;, value: &apos;Anthos&apos;),
+////                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+////                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+////                        }
+                    }
+//                    post {
+//                        failure { 
+//                            script {
+//                                echo &quot;anthos build resutl ${currentBuild.result}&quot;
+//                                slackMessage.warning(&apos;Delete Anthos CRM failed for &apos; + dateValue + &apos;. Waiting for input.&apos;) 
+//                                input message: &apos;Delete Anthos failed for &apos; + dateValue + &apos; Continue?&apos;
+//                                slackMessage.good(&apos;Delete Anthos CRM proceeding&apos;)
+//                            }
+//                        }
+//                    }
+                }
+                stage(&apos;Delete Fake&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;delete fake failed&apos;) {
+                            script { deleteCrm.fake(cycle) }
+                        }
+////                        echo &quot;fake delete start build result ${currentBuild.result}&quot;
+////                        echo &quot;delete fake&quot;
+////                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;delete fake failed&apos;) {
+////                            build job: &apos;runTestcases&apos;, parameters: [
+////                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, DeleteCloudlet&apos;), 
+////                                string(name: &apos;Project&apos;, value: params.Project), 
+////                                string(name: &apos;Cycle&apos;, value: cycle), 
+////                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+////                                string(name: &apos;TestTarget&apos;, value: &apos;Controller&apos;),
+////                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+////                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+////                        }
+                    }
+//                    post {
+//                        failure { 
+//                            script {
+//                                echo &quot;fake build resutl ${currentBuild.result}&quot;
+//                                slackMessage.warning(&apos;Delete Fake CRM failed for &apos; + dateValue)
+//                                input message: &apos;Delete Fake failed for &apos; + dateValue + &apos; Continue?&apos;
+//                                slackMessage.good(&apos;Delete Fake CRM proceeding&apos;) 
+//
+//                            }
+ //                       }
+//                    }
+                }
+            }
+            post {
+                failure {
+//                    stage(&apos;Pause Regression&apos;) {
+//                        steps {
+//                            input message: &apos;Regression Prep failed. Continue?&apos;
+//                        }
+//                    }
+                    script { 
+//                        slackMessage.fail(&apos;Regression Prep Failed. Waiting for input&apos;)
+//                        input message: &apos;Regression Prep failed. Continue?&apos;
+//                        build job: &apos;pauseRegression&apos;
+//                        slackMessage.good(&apos;Regression proceeding&apos;)
+                        currentBuild.result = &apos;SUCCESS&apos;
+                        echo &quot;SSSUUUUCCCCEEEESSS&quot;
+                        regression_prep_status = false
+                    }
+                }
+                success {
+                    script { slackMessage.good(&apos;Regression Prep successfull&apos;) }
+                }
+            }
+        }
+
+        stage(&apos;Regression Prep Check&apos;) {
+            steps {
+                script {
+                    if(regression_prep_status == false) {
+                        slackMessage.fail(&apos;Regression Prep Failed. Waiting for input&apos;)
+                        input message: &apos;Regression Prep failed. Continue?&apos;
+                        slackMessage.good(&apos;Regression proceeding&apos;)
+                        currentBuild.result = &apos;SUCCESS&apos;
+                        echo &quot;SSSUUUUCCCCEEEESSS22222&quot;
+                    }
+                }
+            }
+        }   
+        
+        stage(&apos;Deploy backend in K8s&apos;) {
+            steps {
+                catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;deploy failed&apos;) {
+                    script {
+                        slackMessage.good(&apos;Deploying backend&apos;)
+                        deployEdgeCloud(dateValue)
+                    }
+//                    dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra/ansible&apos;) {
+//                        echo &quot;deploy build resutl ${currentBuild.result}&quot;
+//                        echo &apos;deploy&apos;
+//                        // fix known_hosts file since recreating the server causes a mismatch in the file
+//                        sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationbonncloudlet.tdg.mobiledgex.net&quot;&apos;
+//                        sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationhamburgcloudlet.tdg.mobiledgex.net&quot;&apos;
+//
+//                        sh &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;./deploy.sh -V &apos; + dateValue + &apos; qa&apos;
+//                        //sh &apos;docker system prune -af&apos;  //remove all docker stuff without prompting
+//
+//                        sleep 60  // wait for all pods to come up
+//
+//                        // defrag etcd
+//                        //sh &apos;kubectl config use-context mexplat-qa-us;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+//                        //sh &apos;kubectl config use-context mexplat-qa-eu;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+//                        sh &apos;export VAULT_ADDR=https://vault-qa.mobiledgex.net;vault kv get -field=value secret/ansible/common/kubeconfigs/us | base64 --decode &gt;$HOME/kubeconfig.qa-us;export KUBECONFIG=$HOME/kubeconfig.qa-us;kubectl config use-context mexplat-qa-us;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+//                        sh &apos;export VAULT_ADDR=https://vault-qa.mobiledgex.net;vault kv get -field=value secret/ansible/common/kubeconfigs/eu | base64 --decode &gt;$HOME/kubeconfig.qa-eu;export KUBECONFIG=$HOME/kubeconfig.qa-eu;kubectl config use-context mexplat-qa-eu;kubectl exec -it mex-etcd-0 -- sh -c &quot;ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag&quot;&apos;
+//
+//                    }
+                }
+            }
+            post {
+                failure { 
+                    script {
+                        slackMessage.warning(&apos;Deploy failed for &apos; + dateValue + &apos;. Requesting input to continue&apos;) 
+                        input message: &apos;Deploy failed for &apos; + dateValue + &apos; Continue regression anyway?&apos;
+                        slackMessage.good(&apos;Regression proceeding for &apos; + dateValue)
+                    }
+                }
+                success {
+                    script { slackMessage.good(&apos;Deploy successfull for &apos; + dateValue) }
+                }
+            }
+        }
+        
+        stage(&apos;Create/Upgrade CRMs&apos;) {
+            parallel {
+                stage(&apos;Create Openstack&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create openstack failed&apos;) {
+                            script { createUpgradeCrm.openstack(cycle) }
+                        }
+//                        echo &quot;openstack create build resutl ${currentBuild.result}&quot;
+//                        echo &quot;create openstack&quot;
+//                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create openstack failed&apos;) {
+////                        try {
+//                            build job: &apos;runTestcases&apos;, parameters: [
+//                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, CreateCloudlet&apos;), 
+//                                string(name: &apos;Project&apos;, value: params.Project), 
+//                                string(name: &apos;Cycle&apos;, value: cycle), 
+//                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+//                                string(name: &apos;TestTarget&apos;, value: &apos;Openstack&apos;),
+//                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+//                                string(name: &apos;CRMPoolOpenstack&apos;, value: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;),
+//                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+////                        } catch (err) {
+////                            unstable(&apos;Create Openstack CRM failed&apos;)
+////                        }
+                    }
+//                    }
+//                    post {
+//                        failure {
+//                            script {
+//                                //unstable(&apos;Create Openstack CRM failed&apos;)
+//                                slackMessage.warning(&apos;Create Openstack CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) 
+//                            }
+//                        }
+//                    }
+                }
+                stage(&apos;Create Anthos&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create anthos failed&apos;) {
+                            script { createUpgradeCrm.anthos(cycle) }
+                        }
+//                        echo &quot;create anthos&quot;
+//                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create anthos failed&apos;) {
+////                        try {
+//                            build job: &apos;runTestcases&apos;, parameters: [
+//                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, CreateCloudlet&apos;), 
+//                                string(name: &apos;Project&apos;, value: params.Project), 
+//                                string(name: &apos;Cycle&apos;, value: cycle), 
+//                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+//                                string(name: &apos;TestTarget&apos;, value: &apos;Anthos&apos;),
+//                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+//                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+////                        } catch (err) {
+////                            unstable(&apos;Create Anthos CRM failed&apos;)
+//                        }
+                    }
+//                    post {
+//                        failure {
+//                            script {
+//                                //unstable(&apos;Create Anthos CRM failed&apos;)
+//                                slackMessage.warning(&apos;Create Anthos CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) 
+//                            }
+//                        }
+//                    }
+                }
+                stage(&apos;Create Fake&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create fake failed&apos;) {
+                            script { createUpgradeCrm.fake(cycle) }
+                        }
+//                        echo &quot;create fake&quot;
+//                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;create fake failed&apos;) {
+////                        try {
+//                            build job: &apos;runTestcases&apos;, parameters: [
+//                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, CreateCloudlet&apos;), 
+//                                string(name: &apos;Project&apos;, value: params.Project), 
+//                                string(name: &apos;Cycle&apos;, value: cycle), 
+//                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+//                                string(name: &apos;TestTarget&apos;, value: &apos;Controller&apos;),
+//                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+//                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+////                        } catch (err) {
+////                            unstable(&apos;Create Fake CRM failed&apos;)
+//                        }
+                    }
+//                    post {
+//                        failure {
+//                            script {
+//                                //unstable(&apos;Create Fake CRM failed&apos;)
+//                                slackMessage.warning(&apos;Create Fake CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) 
+//                            }
+//                        }
+//                    }
+                }
+                
+                stage(&apos;Upgrade Cloudlets&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;upgrade cloudlets failed&apos;) {
+                            script { createUpgradeCrm.upgrade(cycle, dateValue) }
+                        }
+//                        echo &quot;upgrade cloudlets&quot;
+//                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;upgrade CRM failed&apos;) {
+////                        try {
+//                            build job: &apos;runTestcases&apos;, parameters: [
+//                                string(name: &apos;Components&apos;, value: &apos;Automated, CRM, Cloudlet, UpgradeCloudlet&apos;), 
+//                                string(name: &apos;Project&apos;, value: params.Project), 
+//                                string(name: &apos;Cycle&apos;, value: cycle), 
+//                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+//                                string(name: &apos;TestTarget&apos;, value: &apos;Openstack&apos;),
+//                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+//                                string(name: &apos;CRMUpgradeVersion&apos;, value: dateValue), 
+//                                string(name: &apos;NumberParallelExecutions&apos;, value: &apos;10&apos;)]
+////                        } catch (err) {
+////                            unstable(&apos;Upgrade of CRMs failed&apos;)
+//                        }
+                    }
+//                    post {
+//                       failure {
+//                           script {
+//                            //unstable(&apos;Upgrade of CRMs failed&apos;)
+//                            slackMessage.warning(&apos;Upgrade Openstack CRM failed for &apos; + dateValue + &apos;. Continue anyway&apos;) 
+//                           }
+//                       }
+//                    }
+                }
+            }
+            post {
+                failure {
+                    script { 
+//                        slackMessage.fail(&apos;Create/Upgrade CRM Failed. Waiting for input&apos;)
+//                        input message: &apos;Create/Upgrade CRM failed. Continue?&apos;
+//                        slackMessage.good(&apos;Regression proceeding&apos;)
+                        currentBuild.result = &apos;SUCCESS&apos;
+                        echo &quot;SSSUUUUCCCCEEEESSS&quot;
+                        create_cloudlet_status = false
+                    }
+                }
+                success {
+                    script { slackMessage.good(&apos;Create/Upgrade CRM successfull&apos;) }
+                }
+            }
+
+        }
+
+        stage(&apos;Create/Upgrade CRM Check&apos;) {
+            steps {
+                script {
+                    if(create_cloudlet_status == false) {
+                        slackMessage.fail(&apos;Create/Upgrade CRM Failed. Waiting for input&apos;)
+                        input message: &apos;Create/Upgrade CRM failed. Continue?&apos;
+                        slackMessage.good(&apos;Regression proceeding&apos;)
+                        currentBuild.result = &apos;SUCCESS&apos;
+                        echo &quot;SSSUUUUCCCCEEEESSS33333&quot;
+                    }
+                }
+            }
+        }        
+
+        stage(&quot;execute parallel tests&quot;) {
+            parallel {
+                stage(&apos;SDK Tests&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;SDK tests failed&apos;) {
+                            script { slackMessage.good(&apos;Starting SDK tests&apos;) }
+                            build job: &apos;runSdkTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeSDK), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;TestTarget&apos;, value: &apos;SDK&apos;),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
+                        }
+                    }
+                    post {
+                        failure {
+                            script {
+                                echo &quot;run SDK tests failed&quot;
+                                slackMessage.fail(&apos;Finished SDK tests with failures&apos;)
+                            }
+                        }
+                        success {
+                            script {
+                                echo &quot;run SDK tests passed&quot;
+                                slackMessage.good(&apos;Finished SDK tests with pass&apos;)
+                            }
+                        }
+                    }
+                }
+                stage(&apos;DME Tests&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;DME tests failed&apos;) {
+                            script { slackMessage.good(&apos;Starting DME tests&apos;) }
+                            build job: &apos;runDmeTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeDME), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: params.Controller), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+                                string(name: &apos;DME&apos;, value: params.DME),
+                                string(name: &apos;DMERest&apos;, value: params.DMERest),
+                                string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                                string(name: &apos;TestTarget&apos;, value: &apos;DME&apos;),
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
+                        }
+                    }
+                    post {
+                        failure {
+                            script {
+                                echo &quot;run DNE tests failed&quot;
+                                slackMessage.fail(&apos;Finished DME tests with failures&apos;)
+                            }
+                        }
+                        success {
+                            script {
+                                echo &quot;run DME tests passed&quot;
+                                slackMessage.good(&apos;Finished DME tests with pass&apos;)
+                            }
+                        }
+                    }
+                }
+                stage(&apos;Controller Tests&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Controller tests failed&apos;) {
+                            script { slackMessage.good(&apos;Starting Controller Tests&apos;) }
+                            build job: &apos;runControllerTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeController), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: params.Controller), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+                                string(name: &apos;DME&apos;, value: params.DME),
+                                string(name: &apos;DMERest&apos;, value: params.DMERest),
+                                string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                                string(name: &apos;TestTarget&apos;, value: &apos;Controller&apos;),
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
+                        }
+                    }
+                    post {
+                        failure {
+                            script {
+                                echo &quot;run Controller tests failed&quot;
+                                slackMessage.fail(&apos;Finished Controller tests with failures&apos;)
+                            }
+                        }
+                        success {
+                            script {
+                                echo &quot;run Controller tests passed&quot;
+                                slackMessage.good(&apos;Finished Controller tests with pass&apos;)
+                            }
+                        }
+                    }
+                }
+              
+                stage(&apos;MasterController Tests&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;MC tests failed&apos;) {
+                            script { slackMessage.good(&apos;Starting MasterController tests&apos;) }
+                            build job: &apos;runMcTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeMasterController), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+                                string(name: &apos;TestTarget&apos;, value: &apos;MasterController&apos;),
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
+                        }
+                    }
+                    post {
+                        failure {
+                            script {
+                                echo &quot;run MasterController tests failed&quot;
+                                slackMessage.fail(&apos;Finished MasterController tests with failures&apos;)
+                            }
+                        }
+                        success {
+                            script {
+                                echo &quot;run MasterController tests passed&quot;
+                                slackMessage.good(&apos;Finished MasterController tests with pass&apos;)
+                            }
+                        }
+                    }
+                }
+  
+                stage(&apos;Anthos Tests&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Anthos tests failed&apos;) {
+                            script { slackMessage.good(&apos;Starting Anthos tests&apos;) }
+                            build job: &apos;runCrmTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeAnthos), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: params.Controller), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+                                string(name: &apos;DME&apos;, value: params.DME),
+                                string(name: &apos;DMERest&apos;, value: params.DMERest),
+                                string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                                string(name: &apos;TestTarget&apos;, value: &apos;Anthos&apos;),
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolAnthos),
+                                string(name: &apos;NumberParallelExecutions&apos;, value: params.NumberParallelExecutionsAnthos),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
+                        }
+                    }
+                    post {
+                        failure {
+                            script {
+                                echo &quot;run Anthos tests failed&quot;
+                                slackMessage.fail(&apos;Finished Anthos tests with failures&apos;)
+                            }
+                        }
+                        success {
+                            script {
+                                echo &quot;run Anthos tests passed&quot;
+                                slackMessage.good(&apos;Finished Anthos tests with pass&apos;)
+                            }
+                        }
+                    }
+                }
+              
+                stage(&apos;Vsphere Tests&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Vsphere tests failed&apos;) {
+                            script { slackMessage.good(&apos;Starting Vsphere tests&apos;) }
+                            build job: &apos;runCrmTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeVsphere), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: params.Controller), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+                                string(name: &apos;DME&apos;, value: params.DME),
+                                string(name: &apos;DMERest&apos;, value: params.DMERest),
+                                string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                                string(name: &apos;TestTarget&apos;, value: &apos;Vsphere&apos;),
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolVsphere),
+                                string(name: &apos;NumberParallelExecutions&apos;, value: params.NumberParallelExecutionsVsphere),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
+                        }
+                    }
+                    post {
+                        failure {
+                            script {
+                                echo &quot;run Vsphere tests failed&quot;
+                                slackMessage.fail(&apos;Finished Vsphere tests with failures&apos;)
+                            }
+                        }
+                        success {
+                            script {
+                                echo &quot;run Vsphere tests passed&quot;
+                                slackMessage.good(&apos;Finished Vsphere tests with pass&apos;)
+                            }
+                        }
+                    }
+                }
+                stage(&apos;VCD Tests&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;VCD tests failed&apos;) {
+                            script { slackMessage.good(&apos;Starting VCD tests&apos;) }
+                            build job: &apos;runCrmTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeVCD), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: params.Controller), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+                                string(name: &apos;DME&apos;, value: params.DME),
+                                string(name: &apos;DMERest&apos;, value: params.DMERest),
+                                string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                                string(name: &apos;TestTarget&apos;, value: &apos;VCD&apos;),
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolVCD),
+                                string(name: &apos;NumberParallelExecutions&apos;, value: params.NumberParallelExecutionsVCD),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
+                        }
+                    }
+                    post {
+                        failure {
+                            script {
+                                echo &quot;run VCD tests failed&quot;
+                                slackMessage.fail(&apos;Finished VCD tests with failures&apos;)
+                            }
+                        }
+                        success {
+                            script {
+                                echo &quot;run VCD tests passed&quot;
+                                slackMessage.good(&apos;Finished VCD tests with pass&apos;)
+                            }
+                        }
+                    }
+                }
+                stage(&apos;Openstack Tests&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Openstack tests failed&apos;) {
+                            script { slackMessage.good(&apos;Starting Openstack tests&apos;) }
+                            build job: &apos;runCrmTestcases&apos;, parameters: [
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeOpenstack), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: params.Controller), 
+                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+                                string(name: &apos;DME&apos;, value: params.DME),
+                                string(name: &apos;DMERest&apos;, value: params.DMERest),
+                                string(name: &apos;DMERestCert&apos;, value: params.DMERestCert),
+                                string(name: &apos;TestTarget&apos;, value: &apos;Openstack&apos;),
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
+                                string(name: &apos;CRMPool&apos;, value: params.CRMPoolOpenstack),
+                                string(name: &apos;NumberParallelExecutions&apos;, value: params.NumberParallelExecutionsOpenstack),
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
+                        }
+                    }
+                    post {
+                        failure {
+                            script {
+                                echo &quot;run Openstack tests failed&quot;
+                                slackMessage.fail(&apos;Finished Openstack tests with failures&apos;)
+                            }
+                        }
+                        success {
+                            script {
+                                echo &quot;run Openstack tests passed&quot;
+                                slackMessage.good(&apos;Finished Openstack tests with pass&apos;)
+                            }
+                        }
+                    }
+                }
+                stage(&apos;Scans&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Scans failed&apos;) {
+                            script { slackMessage.good(&apos;Starting scan tests&apos;) }
+                            build job: &apos;runScans&apos;, parameters: [
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeScans)
+                                ]
+                        }
+                    }
+                    post {
+                        failure {
+                            script {
+                                echo &quot;run scan tests failed&quot;
+                                slackMessage.fail(&apos;Finished scan tests with failures&apos;)
+                            }
+                        }
+                        success {
+                            script {
+                                echo &quot;run scan tests passed&quot;
+                                slackMessage.good(&apos;Finished scan tests with pass&apos;)
+                            }
+                        }
+                    }
+                }
+                
+                stage(&apos;Console&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Console tests failed&apos;) {
+                        script { slackMessage.good(&apos;Starting Console tests&apos;) }
+                            build job: &apos;runConsoleTestcases&apos;, parameters: [
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Console&apos;, value: params.Console),
+                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+                                string(name: &apos;TestTarget&apos;, value: &apos;WebUI&apos;),
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeConsole)
+                                ]
+                        }
+                    }
+                    post {
+                        failure {
+                            script {
+                                echo &quot;run console tests failed&quot;
+                                slackMessage.fail(&apos;Finished Console tests with failures&apos;)
+                            }
+                        }
+                        success {
+                            script {
+                                echo &quot;run console tests passed&quot;
+                                slackMessage.good(&apos;Finished Console tests with pass&apos;)
+                            }
+                        }
+                    }
+                }
+                
+                stage(&apos;Metrics&apos;) {
+                    steps {
+                        catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Metrics tests failed&apos;) {
+                            script { slackMessage.good(&apos;Starting Metrics tests&apos;) }
+                            build job: &apos;runMetricsTestcases&apos;, parameters: [
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Project&apos;, value: params.Project), 
+                                string(name: &apos;Console&apos;, value: params.Console),
+                                string(name: &apos;MasterController&apos;, value: params.MasterController),
+                                string(name: &apos;TestTarget&apos;, value: &apos;Metrics&apos;),
+                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNodeMetrics)
+                                ]
+                        }
+                    }
+                    post {
+                        failure {
+                            script {
+                                echo &quot;run console tests failed&quot;
+                                slackMessage.fail(&apos;Finished Console tests with failures&apos;)
+                            }
+                        }
+                        success {
+                            script {
+                                echo &quot;run console tests passed&quot;
+                                slackMessage.good(&apos;Finished Console tests with pass&apos;)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stage(&quot;Password Tests&quot;) {
+            steps {
+                script {
+                    catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Password tests failed&apos;) {
+                        script { slackMessage.good(&apos;Starting Password tests&apos;) }
+                        build job: &apos;runTestcases&apos;, parameters: [
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Version&apos;, value: params.Version), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;MasterController&apos;, value: params.MasterController),
+                            string(name: &apos;TestTarget&apos;, value: &apos;MasterController&apos;),
+                            string(name: &apos;Components&apos;, value: &apos;Automated, Password&apos;)]
+                    }
+                }
+                post {
+                    failure {
+                        script {
+                            echo &quot;run password tests failed&quot;
+                            slackMessage.fail(&apos;Finished Password tests with failures&apos;)
+                        }
+                    }
+                    success {
+                        script {
+                            echo &quot;run password tests passed&quot;
+                            slackMessage.good(&apos;Finished Password tests with pass&apos;)
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage(&quot;Performance Tests&quot;) {
+            steps {
+                script {
+                    catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;Performance tests failed&apos;) {
+                        script { slackMessage.good(&apos;Starting Performance tests&apos;) }
+                        build job: &apos;runTestcases&apos;, parameters: [
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Version&apos;, value: params.Version), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;MasterController&apos;, value: params.MasterController),
+                            string(name: &apos;TestTarget&apos;, value: &apos;Performance/Security&apos;),
+                            string(name: &apos;Components&apos;, value: &apos;Automated, Performance&apos;)]
+                    }
+                }
+            }
+            post {
+                always {
+                    dir(&apos;go/src/github.com/mobiledgex/jenkins&apos;) {
+                        sh(&apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project &apos; + params.Project + &apos; --version &apos; + params.Version + &apos; --cycle &apos; + cycle + &apos; --enddate&apos;)
+                    }
+                    script {
+                        script { slackMessage.good(&apos;Creating Report&apos;) }
+                        job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis
+                        job_duration_string = job_duration.toString()
+                        build job: &apos;createReport&apos;, parameters: [
+                            string(name: &apos;Project&apos;, value: params.Project), 
+                            string(name: &apos;Version&apos;, value: params.Version), 
+                            string(name: &apos;Cycle&apos;, value: cycle), 
+                            string(name: &apos;JobDuration&apos;, value: job_duration_string)]
+                    }  
+                }
+            }
+        }
+    }
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

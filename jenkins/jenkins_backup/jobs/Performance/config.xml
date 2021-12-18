@@ -1,0 +1,111 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Metrics Performance </description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty plugin="build-failure-analyzer@1.27.1">
+      <doNotScan>false</doNotScan>
+    </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.1">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>http://github.com/mobiledgex/edge-cloud-qa.git</url>
+        <credentialsId>79b116ea-d7ac-4d6c-928d-49b79e5f9bef</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <assignedNode>jenkinsGcpSlave1</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>export PATH=/usr/bin:/usr/local/bin
+/usr/local/bin/bzt /home/andy_anderson/siege/siege-us.yaml</command>
+      <configuredLocalRules/>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>export AUTOMATION_CONTROLLER_ADDRESS=mexplat-qa-eu.ctrl.mobiledgex.net:55001
+export AUTOMATION_DME_ADDRESS=eu-qa.dme.mobiledgex.net:50051
+export AUTOMATION_DME_REST_ADDRESS=eu-qa.dme.mobiledgex.net:38001
+export AUTOMATION_DME_CERT=mex-ca.crt
+export AUTOMATION_MC_ADDRESS=console-qa.mobiledgex.net:443
+export AUTOMATION_INFLUXDB_ADDRESS=https://eu-qa.influxdb.mobiledgex.net:8086
+export AUTOMATION_MC_CERT=
+export AUTOMATION_CONTROLLER_ADDRESS=mexplat-qa-us.ctrl.mobiledgex.net:55001
+export AUTOMATION_DME_ADDRESS=us-qa.dme.mobiledgex.net:50051
+export AUTOMATION_DME_REST_ADDRESS=us-qa.dme.mobiledgex.net:38001
+export AUTOMATION_DME_CERT=mex-ca.crt
+export AUTOMATION_MC_ADDRESS=console-qa.mobiledgex.net:443
+export AUTOMATION_INFLUXDB_ADDRESS=https://us-qa.influxdb.mobiledgex.net:8086
+export AUTOMATION_MC_CERT=
+export PYTHONPATH=/home/jenkins/workspace/Performance/protos:/home/jenkins/workspace/Performance/modules:/home/jenkins/workspace/Performance/certs:/home/jenkins/workspace/Performance/testcases:/home/jenkins/workspace/Performance/testcases/config
+/usr/local/bin/robot /home/jenkins/workspace/Performance/testcases/metrics/AppInst_and_ClusterInst_Metrics</command>
+      <configuredLocalRules/>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.robot.RobotPublisher plugin="robot@2.1.1">
+      <outputPath>/home/jenkins/workspace/Performance/</outputPath>
+      <reportFileName>report.html</reportFileName>
+      <logFileName>log.html</logFileName>
+      <outputFileName>output.xml</outputFileName>
+      <disableArchiveOutput>false</disableArchiveOutput>
+      <passThreshold>0.0</passThreshold>
+      <unstableThreshold>0.0</unstableThreshold>
+      <otherFiles>
+        <string></string>
+      </otherFiles>
+      <enableCache>true</enableCache>
+      <onlyCritical>true</onlyCritical>
+    </hudson.plugins.robot.RobotPublisher>
+    <jenkins.plugins.slack.SlackNotifier plugin="slack@2.42">
+      <baseUrl></baseUrl>
+      <teamDomain>mobiledgex</teamDomain>
+      <authToken></authToken>
+      <tokenCredentialId>cdda7d70-b701-4983-b287-e3f46dde02e9</tokenCredentialId>
+      <botUser>false</botUser>
+      <room>qa-automation</room>
+      <sendAsText>false</sendAsText>
+      <iconEmoji></iconEmoji>
+      <username></username>
+      <startNotification>true</startNotification>
+      <notifySuccess>true</notifySuccess>
+      <notifyAborted>false</notifyAborted>
+      <notifyNotBuilt>false</notifyNotBuilt>
+      <notifyUnstable>false</notifyUnstable>
+      <notifyRegression>false</notifyRegression>
+      <notifyFailure>false</notifyFailure>
+      <notifyEveryFailure>true</notifyEveryFailure>
+      <notifyBackToNormal>false</notifyBackToNormal>
+      <notifyRepeatedFailure>false</notifyRepeatedFailure>
+      <includeTestSummary>true</includeTestSummary>
+      <includeFailedTests>true</includeFailedTests>
+      <uploadFiles>false</uploadFiles>
+      <artifactIncludes></artifactIncludes>
+      <commitInfoChoice>NONE</commitInfoChoice>
+      <includeCustomMessage>false</includeCustomMessage>
+      <customMessage></customMessage>
+      <customMessageSuccess></customMessageSuccess>
+      <customMessageAborted></customMessageAborted>
+      <customMessageNotBuilt></customMessageNotBuilt>
+      <customMessageUnstable></customMessageUnstable>
+      <customMessageFailure></customMessageFailure>
+    </jenkins.plugins.slack.SlackNotifier>
+  </publishers>
+  <buildWrappers/>
+</project>

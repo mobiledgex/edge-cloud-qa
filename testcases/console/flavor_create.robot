@@ -1,55 +1,70 @@
 *** Settings ***
 Documentation   Create new flavor
 
-Library		MexConsole  url=url=%{AUTOMATION_CONSOLE_ADDRESS}
+Library		MexConsole           url=%{AUTOMATION_CONSOLE_ADDRESS}
+Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
 
 Test Setup      Setup
-Test Teardown   Close Browser
+Test Teardown   Teardown
 
-Test Timeout    40 minutes
-	
+Test Timeout    ${timeout}
+
 *** Variables ***
 ${browser}           Chrome
 ${console_username}  mexadmin
-${console_password}  mexadmin123
+${console_password}  mexadminfastedgecloudinfra
+${timeout}           10 min
+${region}  US
 
 *** Test Cases ***
-Web UI - user shall be able to create a new EU flavor
+WebUI - user shall be able to create a new EU flavor
     [Documentation]
     ...  Create a new flavor
+    ...  Fill in Region=US and all proper values
     ...  Verify flavor shows in list
-
-    Open Flavors
+    [Tags]  passing
 
     Get Table Data
+    Add New Flavor  region=EU  flavor_name=${flavor_name_default}
 
-    Add New Flavor  region=EU  flavor_name=andyFlavor  ram=1024  vcpus=1  disk=1
-
-    Flavor Should Exist
-
+    Flavor Should Exist  flavor_name=${flavor_name_default}  change_rows_per_page=True  number_of_pages=${num_pages}
     # should also call the WS to check the flavor
+    MexConsole.Delete Flavor  number_of_pages=${num_pages}  click_previous_page=off
 
-Web UI - user shall be able to create a new US flavor
+WebUI - user shall be able to create a new US flavor
     [Documentation]
     ...  Click New button
     ...  Fill in Region=US and all proper values
     ...  Verify Flavor is created and list is updated
-
-    Open Flavors
+    [Tags]  passing
 
     Get Table Data
+    Add New Flavor  region=US  flavor_name=${flavor_name_default}
 
-    Add New Flavor  region=US  flavor_name=andyFlavor  ram=1024  vcpus=1  disk=1
-
-    Flavor Should Exist
-
+    Flavor Should Exist  flavor_name=${flavor_name_default}  change_rows_per_page=True  number_of_pages=${num_pages}
     # should also call the WS to check the flavor
-
-    #Sleep  10s
+    MexConsole.Delete Flavor  number_of_pages=${num_pages}  click_previous_page=off
 
 *** Keywords ***
 Setup
-    Log to console  login
-
+    ${flavor_name_default}=  Get Default Flavor Name
+    Open Browser
     Login to Mex Console  browser=${browser}  #username=${console_username}  password=${console_password}
     Open Compute
+    Sleep  3s
+    Open Flavors
+    ${token}=  Get Supertoken
+    @{ws1}=  Show Flavors  region=EU  token=${token}  use_defaults=${False} 
+    @{ws2}=  Show Flavors  region=US  token=${token}  use_defaults=${False} 
+    ${num_orgs_ws1}=     Get Length  ${ws1}
+    ${num_orgs_ws2}=     Get Length  ${ws2}
+    ${total}=  Evaluate  ${num_orgs_ws1}+${num_orgs_ws2}
+    ${result}=  Evaluate  ${total}/75
+    ${num_pages}=  Evaluate  math.ceil(${result})  modules=math
+    Set Suite Variable  ${token}
+    Set Suite Variable  ${num_pages}
+    Set Suite Variable  ${flavor_name_default}
+
+Teardown
+    Close Browser
+    Run Keyword and Ignore Error  MexMasterController.Delete Flavor  region=${region}

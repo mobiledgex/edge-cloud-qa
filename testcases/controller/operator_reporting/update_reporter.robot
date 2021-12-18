@@ -88,7 +88,7 @@ Shall be able to update schedule of a reporter
     Should Be Equal  ${reporter[0]['Email']}  ${email}
     Should Be Equal  ${reporter[0]['Username']}  op_manager_automation
     Should Be Equal  ${reporter[0]['Status']}  success
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
+    Should Be Equal  ${reporter[0]['Schedule']}  Every15Days
 
     Find Report Period  UTC  Every15Days
     Email With Operator Report Should Be Received  email_password=${mextester06_gmail_password}  email_address=${email}  reporter_name=${reporter_name}  report_period=${report_period}  timezone=UTC  username=${op_manager_user_automation}  organization=${operator}
@@ -194,7 +194,7 @@ Shall be able to update email address and schedule of a reporter
     Should Be Equal  ${reporter[0]['Email']}  ${email1}
     Should Be Equal  ${reporter[0]['Username']}  op_manager_automation
     Should Be Equal  ${reporter[0]['Status']}  success
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
+    Should Be Equal  ${reporter[0]['Schedule']}  Every15Days
 
     Find Report Period  UTC  Every15Days
     Email With Operator Report Should Be Received  email_password=${password1}  email_address=${email1}  reporter_name=${reporter_name}  report_period=${report_period}  timezone=UTC  username=${op_manager_user_automation}  organization=${operator}
@@ -301,7 +301,7 @@ Shall be able to update schedule and StartScheduleDate of a reporter
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
     Should Be Equal  ${reporter[0]['Timezone']}  UTC
     Should Be Equal  ${reporter[0]['Status']}  success
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
+    Should Be Equal  ${reporter[0]['Schedule']}  Every15Days
 
     Find Report Period  UTC  Every15Days
     Email With Operator Report Should Be Received  email_password=${mextester06_gmail_password}  email_address=${email}  reporter_name=${reporter_name}  report_period=${report_period}  timezone=UTC  username=${op_manager_user_automation}  organization=${operator}
@@ -336,7 +336,7 @@ Shall be able to update schedule and timezone of a reporter
     Should Be Equal  ${reporter[0]['StartScheduleDate']}  ${current_date}
     Should Be Equal  ${reporter[0]['Timezone']}  Asia/Kolkata
     Should Be Equal  ${reporter[0]['Status']}  success
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
+    Should Be Equal  ${reporter[0]['Schedule']}  Every15Days
 
     Find Report Period  Asia/Kolkata  Every15Days
     Email With Operator Report Should Be Received  email_password=${mextester06_gmail_password}  email_address=${email}  reporter_name=${reporter_name}  report_period=${report_period}  timezone=Asia/Kolkata  username=${op_manager_user_automation}  organization=${operator}
@@ -373,7 +373,7 @@ Shall be able to update all optional args of a reporter
     Should Be Equal  ${reporter[0]['Timezone']}  Asia/Kolkata
     Should Be Equal  ${reporter[0]['Status']}  success
     Should Be Equal  ${reporter[0]['Email']}  ${email1}
-    Should Be Equal As Numbers  ${reporter[0]['Schedule']}  1
+    Should Be Equal  ${reporter[0]['Schedule']}  Every15Days
 
     Find Report Period  Asia/Kolkata  Every15Days
     Email With Operator Report Should Be Received  email_password=${password1}  email_address=${email1}  reporter_name=${reporter_name}  report_period=${report_period}  timezone=Asia/Kolkata  username=${op_manager_user_automation}  organization=${operator}
