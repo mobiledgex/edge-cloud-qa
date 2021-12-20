@@ -197,11 +197,11 @@ Success Create/Show/Delete Flow Via mcctl
    Should Be Equal  ${show[0]['ApiName']}  ${parms['apiname']}
    Should Be Equal  ${show[0]['FlowSettingsName']}  ${parms['flowsettingsname']}
    IF  '${parms['ratelimittarget']}' == 'AllRequests'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  1
+      Should Be Equal    ${show[0]['RateLimitTarget']}  AllRequests
    ELSE IF  '${parms['ratelimittarget']}' == 'PerIp'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  2
+      Should Be Equal    ${show[0]['RateLimitTarget']}  PerIp
    ELSE IF  '${parms['ratelimittarget']}' == 'PerUser'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  3
+      Should Be Equal    ${show[0]['RateLimitTarget']}  PerUser
    END
 
    IF  'burstsize' in ${parms}
@@ -218,9 +218,9 @@ Success Create/Show/Delete Flow Via mcctl
 
    IF  'flowalgorithm' in ${parms}
       IF  '${parms['flowalgorithm']}' == 'TokenBucketAlgorithm'
-         Should Be Equal As Numbers   ${show[0]['FlowAlgorithm']}  1
+         Should Be Equal   ${show[0]['FlowAlgorithm']}  TokenBucketAlgorithm
       ELSE
-         Should Be Equal As Numbers   ${show[0]['FlowAlgorithm']}  2 
+         Should Be Equal   ${show[0]['FlowAlgorithm']}  LeakyBucketAlgorithm
       END
    ELSE
       Should Be Equal As Numbers   ${show[0]['FlowAlgorithm']}  0
@@ -238,11 +238,11 @@ Success Create/Show/Delete MaxReqs Via mcctl
    Should Be Equal  ${show[0]['ApiName']}  ${parms['apiname']}
    Should Be Equal  ${show[0]['MaxReqsSettingsName']}  ${parms['maxreqssettingsname']}
    IF  '${parms['ratelimittarget']}' == 'AllRequests'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  1
+      Should Be Equal    ${show[0]['RateLimitTarget']}  AllRequests
    ELSE IF  '${parms['ratelimittarget']}' == 'PerIp'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  2
+      Should Be Equal    ${show[0]['RateLimitTarget']}  PerIp
    ELSE IF  '${parms['ratelimittarget']}' == 'PerUser'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  3
+      Should Be Equal    ${show[0]['RateLimitTarget']}  PerUser
    END
 
    IF  'interval' in ${parms}
@@ -259,7 +259,7 @@ Success Create/Show/Delete MaxReqs Via mcctl
 
    IF  'maxreqsalgorithm' in ${parms}
       IF  '${parms['maxreqsalgorithm']}' == 'FixedWindowAlgorithm'
-         Should Be Equal As Numbers   ${show[0]['MaxReqsAlgorithm']}  1
+         Should Be Equal    ${show[0]['MaxReqsAlgorithm']}  FixedWindowAlgorithm
       END
    ELSE
       Should Be Equal As Numbers   ${show[0]['MaxReqsAlgorithm']}  0
@@ -314,11 +314,11 @@ Success Update/Show Maxreqs Via mcctl
    Should Be Equal  ${show[0]['ApiName']}  ${parms['apiname']}
    Should Be Equal  ${show[0]['MaxReqsSettingsName']}  ${parms['maxreqssettingsname']}
    IF  '${parms['ratelimittarget']}' == 'AllRequests'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  1
+      Should Be Equal    ${show[0]['RateLimitTarget']}  AllRequests
    ELSE IF  '${parms['ratelimittarget']}' == 'PerIp'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  2
+      Should Be Equal    ${show[0]['RateLimitTarget']}  PerIp
    ELSE IF  '${parms['ratelimittarget']}' == 'PerUser'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  3
+      Should Be Equal    ${show[0]['RateLimitTarget']}  PerUser
    END
 
    IF  'interval' in ${parms}
@@ -330,7 +330,7 @@ Success Update/Show Maxreqs Via mcctl
    END
 
    IF  'maxreqsalgorithm' in ${parms}
-      Should Be Equal As Numbers   ${show[0]['MaxReqsAlgorithm']}  1
+      Should Be Equal    ${show[0]['MaxReqsAlgorithm']}  FixedWindowAlgorithm
    END
  
 Fail Update Flow Via mcctl
@@ -355,11 +355,11 @@ Verify Flow Update
    Should Be Equal  ${show[0]['ApiName']}  ${parms['apiname']}
    Should Be Equal  ${show[0]['FlowSettingsName']}  ${parms['flowsettingsname']}
    IF  '${parms['ratelimittarget']}' == 'AllRequests'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  1
+      Should Be Equal    ${show[0]['RateLimitTarget']}  AllRequests
    ELSE IF  '${parms['ratelimittarget']}' == 'PerIp'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  2
+      Should Be Equal    ${show[0]['RateLimitTarget']}  PerIp
    ELSE IF  '${parms['ratelimittarget']}' == 'PerUser'
-      Should Be Equal As Numbers   ${show[0]['RateLimitTarget']}  3
+      Should Be Equal    ${show[0]['RateLimitTarget']}  PerUser
    END
 
    IF  'burstsize' in ${parms}
@@ -372,9 +372,9 @@ Verify Flow Update
 
    IF  'flowalgorithm' in ${parms}
       IF  '${parms['flowalgorithm']}' == 'TokenBucketAlgorithm'
-         Should Be Equal As Numbers   ${show[0]['FlowAlgorithm']}  1
+         Should Be Equal   ${show[0]['FlowAlgorithm']}  TokenBucketAlgorithm
       ELSE
-         Should Be Equal As Numbers   ${show[0]['FlowAlgorithm']}  2
+         Should Be Equal   ${show[0]['FlowAlgorithm']}  LeakyBucketAlgorithm
       END
    END
 

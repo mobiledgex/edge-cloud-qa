@@ -52,7 +52,7 @@ CreateCloudlet - mcctl shall handle create failures
       #Error: Bad Request (400), Unknown image type IMAGE_TYPE_UNKNOWN  appname=${app_name}  app-org=${developer}  appvers=1.0
 
       # trusted
-      Error: OK (200), TrustPolicy x for organization tmus not found  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  trustpolicy=x
+      Error: OK (200), TrustPolicy key {"organization":"tmus","name":"x"} not found  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  trustpolicy=x
 
       # kafka
       Error: OK (200), Must specify both kafka username and password, or neither  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkacluster=cluster  kafkauser=user
@@ -254,16 +254,16 @@ Success Create/Show/Delete Cloudlet Via mcctl
    Should Be Equal As Numbers  ${show[0]['location']['latitude']}   ${parms['location.latitude']}
    Should Be Equal As Numbers  ${show[0]['location']['longitude']}  ${parms['location.longitude']}
    Should Be Equal As Numbers  ${show[0]['num_dynamic_ips']}        ${parms['numdynamicips']}
-   Should Be Equal As Numbers  ${show[0]['state']}                  5
+   Should Be Equal             ${show[0]['state']}                  Ready
 
    IF  'trustpolicy' in ${parms}
       IF  '${parms['trustpolicy']}' != '${Empty}'
          Should Be Equal  ${show[0]['trust_policy']}  ${parms['trustpolicy']}
-         Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  5
+         Should Be Equal  ${show[0]['trust_policy_state']}  Ready
       END
    ELSE
       Should Not Contain  ${show[0]}  trust_policy
-      Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  1
+      Should Be Equal     ${show[0]['trust_policy_state']}  NotPresent
    END
 
    IF  'kafkacluster' in ${parms}
@@ -306,16 +306,16 @@ Success Update/Show Cloudlet Via mcctl
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['cloudlet']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['cloudlet-org']}
-   Should Be Equal As Numbers  ${show[0]['state']}     5
+   Should Be Equal  ${show[0]['state']}     Ready
 
    IF  'trustpolicy' in ${parms}
       IF  '${parms['trustpolicy']}' != '${Empty}'
          Should Be Equal  ${show[0]['trust_policy']}  ${parms['trustpolicy']}
-         Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  5
+         Should Be Equal  ${show[0]['trust_policy_state']}  Ready
       END
    ELSE
       Should Not Contain  ${show[0]}  trust_policy
-      Should Be Equal As Numbers  ${show[0]['trust_policy_state']}  1
+      Should Be Equal     ${show[0]['trust_policy_state']}  NotPresent
    END
 
    IF  'kafkacluster' in ${parms}
