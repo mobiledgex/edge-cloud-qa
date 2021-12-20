@@ -199,16 +199,31 @@ class App(MexOperation):
                 rule_dict['protocol'] = rule['protocol']
                 # _fields_list.append(_protocol_field_number)
 
-            if 'port' in rule and rule['port'] is not None:
+            if 'port_range_minimum' in rule and rule['port_range_minimum'] is not None:
                 try:
-                    rule_dict['port'] = int(rule['port'])
+                    rule_dict['port_range_min'] = int(rule['port_range_minimum'])
                 except Exception:
-                    rule_dict['port'] = rule['port']
-                # _fields_list.append(_port_range_min_field_number)
+                    rule_dict['port_range_min'] = rule['port_range_minimum']
 
-            if 'remote_ip' in rule and rule['remote_ip'] is not None:
-                rule_dict['remote_ip'] = rule['remote_ip']
-                # _fields_list.append(_remote_cidr_field_number)
+            if 'port_range_maximum' in rule and rule['port_range_maximum'] is not None:
+                try:
+                    rule_dict['port_range_max'] = int(rule['port_range_maximum'])
+                except Exception:
+                    rule_dict['port_range_max'] = rule['port_range_maximum']
+
+            if 'remote_cidr' in rule and rule['remote_cidr'] is not None:
+                rule_dict['remote_cidr'] = rule['remote_cidr']
+
+#            if 'port' in rule and rule['port'] is not None:
+#                try:
+#                    rule_dict['port'] = int(rule['port'])
+#                except Exception:
+#                    rule_dict['port'] = rule['port']
+#                # _fields_list.append(_port_range_min_field_number)
+#
+#            if 'remote_ip' in rule and rule['remote_ip'] is not None:
+#                rule_dict['remote_ip'] = rule['remote_ip']
+#                # _fields_list.append(_remote_cidr_field_number)
 
             if rule_dict:
                 rule_dict_list.append(rule_dict)
