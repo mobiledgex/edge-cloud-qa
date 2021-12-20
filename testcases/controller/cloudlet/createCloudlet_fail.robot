@@ -173,7 +173,7 @@ CreateCloudlet - cloudlet should fail with unknown trust policy
     ${epoch}=  Get Time  epoch
     ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
 
-    Run Keyword And Expect Error  ('code=200', 'error={"result":{"message":"TrustPolicy x for organization ${oper} not found","code":400}}')  Create Cloudlet  region=${region}  operator_org_name=${oper}  cloudlet_name=${cldlet}  number_dynamic_ips=5  latitude=35  longitude=-96  trust_policy=x
+    Run Keyword And Expect Error  ('code=200', 'error={"result":{"message":"Policy key {\\\\\"organization\\\\\":\\\\\"azure\\\\\",\\\\\"name\\\\\":\\\\\"x\\\\\"} not found","code":400}}')  Create Cloudlet  region=${region}  operator_org_name=${oper}  cloudlet_name=${cldlet}  number_dynamic_ips=5  latitude=35  longitude=-96  trust_policy=x
 
 # ECQ-3031
 CreateCloudlet - create with trust policy on non-openstack shall return error

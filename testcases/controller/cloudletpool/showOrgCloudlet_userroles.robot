@@ -33,6 +33,7 @@ ShowOrgCloudlet - developer org owner shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Continue For Loop If  "${pool_cloudlet['state']}" == "Creating"
       Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
    END
 
@@ -63,6 +64,7 @@ ShowOrgCloudlet - operator org owner shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Continue For Loop If  "${pool_cloudlet['state']}" == "Creating"
       Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
    END
 
@@ -94,6 +96,7 @@ ShowOrgCloudlet - DeveloperManager shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Continue For Loop If  "${pool_cloudlet['state']}" == "Creating"
       Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
    END
 
@@ -126,6 +129,7 @@ ShowOrgCloudlet - DeveloperContributor shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Continue For Loop If  "${pool_cloudlet['state']}" == "Creating"
       Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
    END
 
@@ -157,6 +161,7 @@ ShowOrgCloudlet - DeveloperViewer shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Continue For Loop If  "${pool_cloudlet['state']}" == "Creating"
       Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
    END
 
@@ -188,6 +193,7 @@ ShowOrgCloudlet - OperatorManager shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Continue For Loop If  "${pool_cloudlet['state']}" == "Creating"
       Run Keyword If  "${pool_cloudlet['key']['organization']}" == "${orgname}"  Operator Cloudlet Info Should Be Correct  ${pool_cloudlet}
       ...  ELSE  Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
    END
@@ -220,6 +226,7 @@ ShowOrgCloudlet - OperatorContributor shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Continue For Loop If  "${pool_cloudlet['state']}" == "Creating"
       Run Keyword If  "${pool_cloudlet['key']['organization']}" == "${orgname}"  Operator Cloudlet Info Should Be Correct  ${pool_cloudlet}
       ...  ELSE  Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
    END
@@ -252,6 +259,7 @@ ShowOrgCloudlet - OperatorViewer shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Continue For Loop If  "${pool_cloudlet['state']}" == "Creating"
       Run Keyword If  "${pool_cloudlet['key']['organization']}" == "${orgname}"  Operator Cloudlet Info Should Be Correct  ${pool_cloudlet}
       ...  ELSE  Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
    END
@@ -315,15 +323,18 @@ Developer Cloudlet Info Should Be Correct
    Dictionary Should Not Contain Key  ${show}  notify_srv_addr
    Dictionary Should Not Contain Key  ${show}  physical_name
 
-   Should Be True  ${show['ip_support']} > 0
+   #Should Be True  ${show['ip_support']} > 0
+   Should Be Equal  ${show['ip_support']}  Dynamic
    Should Not Be Empty  ${show['key']['name']}
    Should Not Be Empty  ${show['key']['organization']}
    Should Be True  ${show['location']['latitude']} >= -90 and ${show['location']['latitude']} <= 90
    Should Not Be Empty  ${show['location']['longitude']} >= -180 and ${show['location']['longitude']} <= 180
-   Should Be True  ${show['state']} > 0
+   #Should Be True  ${show['state']} > 0
+   Should Be Equal  ${show['state']}  Ready
    Should Be True  ${show['num_dynamic_ips']} > 0
    #Should Be True  'trust_policy_state' in ${show} or 'trust_policy' in ${show}
-   Run Keyword If  'trust_policy_state' in ${show}  Should Be True  ${show['trust_policy_state']} > 0
+   #Run Keyword If  'trust_policy_state' in ${show}  Should Be True  ${show['trust_policy_state']} > 0
+   Run Keyword If  'trust_policy_state' in ${show}  Should Contain Any  ${show['trust_policy_state']}  NotPresent  Ready  Updating
    Run Keyword If  'trust_policy' in ${show}  Should Not Be Empty  ${show['trust_policy']}
 
 Operator Cloudlet Info Should Be Correct
@@ -345,6 +356,6 @@ Operator Cloudlet Info Should Be Correct
    Should Be True  ${show['num_dynamic_ips']} > 0
    Should Be True  len("${show['notify_srv_addr']}") > 0
    Should Be Equal  ${show['physical_name']}  ${cloudlet}
-   Should Be Equal As Numbers  ${show['state']}  5
-   Should Be Equal As Numbers  ${show['trust_policy_state']}  1
+   Should Be Equal  ${show['state']}  Ready
+   Should Be Equal  ${show['trust_policy_state']}  NotPresent
 

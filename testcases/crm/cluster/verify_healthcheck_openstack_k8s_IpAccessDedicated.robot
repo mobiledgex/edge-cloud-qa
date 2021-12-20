@@ -19,7 +19,7 @@ ${cloudlet_name_openstack_dedicated}  automationBuckhornCloudlet
 
 ${operator_name_openstack}  GDDT
 
-${region}  EU
+${region}  US
 
 ${mobiledgex_domain}  mobiledgex.net
 
@@ -248,6 +248,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckOk when TCP port with skip_
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
+    
     Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
@@ -289,7 +290,8 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
     Stop TCP Port  ${tcp_fqdn}  2015
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail2
+
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail
 
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
@@ -312,6 +314,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
+
     Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
 
     Register Client
@@ -322,6 +325,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}
 
     Stop TCP Port  ${tcp_fqdn}  2015
+
     Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
 
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}
@@ -367,6 +371,7 @@ IpAccessDedicated k8s - healthcheck shows proper state after UpdateApp
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
+
     Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
 
     Stop TCP Port  ${tcp_fqdn}  2015
@@ -421,4 +426,5 @@ Verify Health Check Ok
         Exit For Loop If  '${app_inst[0]['data']['health_check']}' == '${state}'
         Sleep  2s
     END
+
     Should Be Equal  ${app_inst[0]['data']['health_check']}  Ok 
