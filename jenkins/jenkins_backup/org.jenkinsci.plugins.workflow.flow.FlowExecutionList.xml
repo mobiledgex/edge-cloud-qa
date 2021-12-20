@@ -1,2 +1,35 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<list/>
+<list>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runEdgecloud</job>
+    <id>1152</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runDMETests</job>
+    <id>995</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runCrmTests</job>
+    <id>801</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runCrmOpenstackDedicatedTests</job>
+    <id>645</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runCrmOpenstackDedicatedTests</job>
+    <id>643</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runCrmOpenstackGPUTests</job>
+    <id>497</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runCrmOpenstackSharedTests</job>
+    <id>638</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runDMERateLimitTests</job>
+    <id>139</id>
+  </flow-owner>
+</list>
