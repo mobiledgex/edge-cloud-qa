@@ -1,0 +1,207 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.42">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.9.2"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.9.2">
+      <jobProperties/>
+      <triggers/>
+      <parameters>
+        <string>Platform</string>
+        <string>DMERestCert</string>
+        <string>Controller</string>
+        <string>Cycle</string>
+        <string>OpenStackEnv</string>
+        <string>Components</string>
+        <string>DMERest</string>
+        <string>Project</string>
+        <string>VariableFile</string>
+        <string>InfluxDB</string>
+        <string>RunFailedOnly</string>
+        <string>DME</string>
+        <string>MasterController</string>
+        <string>CommitVersion</string>
+      </parameters>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>NEW JOB DESCRIPTION</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.6"/>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>20</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty plugin="build-failure-analyzer@1.27.1">
+      <doNotScan>false</doNotScan>
+    </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>Components</name>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Cycle</name>
+          <defaultValue>2021-11-05_CirrusR3.1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Project</name>
+          <defaultValue>ECQ</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MasterController</name>
+          <defaultValue>console-qa.mobiledgex.net:443</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Controller</name>
+          <defaultValue>mexplat-qa-us.ctrl.mobiledgex.net:55001</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DME</name>
+          <defaultValue>us-qa.dme.mobiledgex.net:50051</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DMERest</name>
+          <defaultValue>us-qa.dme.mobiledgex.net:38001</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DMERestCert</name>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>VariableFile</name>
+          <defaultValue>automation_variables.py</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>InfluxDB</name>
+          <defaultValue>notset</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>OpenStackEnv</name>
+          <defaultValue>notset</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CommitVersion</name>
+          <defaultValue>master</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RunFailedOnly</name>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>Platform</name>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>SDK</string>
+              <string>Controller</string>
+              <string>DME</string>
+              <string>Openstack</string>
+              <string>VCD</string>
+              <string>Vshpere</string>
+              <string>Anthos</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Folder</name>
+          <defaultValue>controller</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
+    <script>currentBuild.displayName = cycle
+slackurl = &apos;https://mobiledgex.slack.com/services/hooks/jenkins-ci/&apos;
+slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
+slackchannel = &apos;#qa-automation&apos;
+
+automated_component = &quot;Automated&quot;
+sdk_components = [automated_component, &quot;SDK&quot;]
+testcase_components = [
+    sdk_components + &quot;CPP&quot;,
+    sdk_components + &quot;CSharp&quot;,
+    ]
+
+
+pipeline{
+    agent { label &apos;jenkinsSlave1&apos; }
+    parameters {
+        string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
+        string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
+        string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
+        string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
+        string(name: &apos;Controller&apos;, defaultValue: &apos;mexplat-qa-us.ctrl.mobiledgex.net:55001&apos;)
+        string(name: &apos;DME&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:50051&apos;)
+        string(name: &apos;DMERest&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:38001&apos;)
+        string(name: &apos;DMERestCert&apos;, defaultValue: &apos;&apos;)
+        string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
+        string(name: &apos;InfluxDB&apos;, defaultValue: &apos;notset&apos;)
+        string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
+        string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
+        booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
+        choice(name: &apos;Platform&apos;, choices: [&apos;SDK&apos;, &apos;Controller&apos;, &apos;DME&apos;, &apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vshpere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
+        //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
+    }
+
+    stages {
+        stage(&quot;execute tests&quot;) {
+            steps {
+                slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting SDK tests&quot;
+                
+                script {
+                    builds = [:]
+                    testcase_components.eachWithIndex { value, index-&gt;
+                        echo &quot;${value}&quot;
+                        builds[&quot;${value[-1]}&quot;] = {
+                            build job: &apos;runTestcases&apos;, parameters: [
+                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
+                                string(name: &apos;Project&apos;, value: project), 
+                                string(name: &apos;Cycle&apos;, value: cycle), 
+                                string(name: &apos;Controller&apos;, value: controller), 
+                                string(name: &apos;MasterController&apos;, value: mastercontroller),
+                                string(name: &apos;DME&apos;, value: dme),
+                                string(name: &apos;DMERest&apos;, value: dmerest),
+                                string(name: &apos;DMERestCert&apos;, value: dmerestcert),
+                                string(name: &apos;Platform&apos;, value: platform),
+                                string(name: &apos;VariableFile&apos;, value: variablefile), 
+                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
+                        }
+                    }
+                    parallel build
+                }
+            }
+            post {
+                failure { 
+                    echo &quot;run SDK tests failed&quot;
+                    slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Finished SDK tests with failure&quot;
+                }
+                success {
+                    slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Finished SDK tests with success&quot;
+                }
+            }
+        }
+    }
+
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

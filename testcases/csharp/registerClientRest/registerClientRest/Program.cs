@@ -4,38 +4,45 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using DistributedMatchEngine;
+using DistributedMatchEngine.Mel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace RestSample
 {
+
     // This interface is optional but is used in the sample.
     class DummyUniqueID : UniqueID
     {
         string UniqueID.GetUniqueIDType()
         {
-            return "";
+            return "dummyModel";
         }
 
         string UniqueID.GetUniqueID()
         {
-            return "";
+            return "abcdef0123456789";
         }
     }
-
     class DummyDeviceInfo : DeviceInfo
     {
-        public bool IsPingSupported()
-        {
-            return true;
-        }
+        DummyCarrierInfo carrierInfo = new DummyCarrierInfo();
 
         Dictionary<string, string> DeviceInfo.GetDeviceInfo()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            dict["one"] = "ONE";
-            dict["two"] = "TWO";
+            dict["DataNetworkPath"] = carrierInfo.GetDataNetworkPath();
+            dict["CarrierName"] = carrierInfo.GetCurrentCarrierName();
+            dict["SignalStrength"] = carrierInfo.GetSignalStrength().ToString();
+            dict["DeviceModel"] = "C#SDK";
+            dict["DeviceOS"] = "TestOS";
             return dict;
+        }
+
+        public bool IsPingSupported()
+        {
+            return true;
         }
 
     }
@@ -52,40 +59,47 @@ namespace RestSample
             return "26201";
         }
 
-        public string GetDataNetworkPath()
-        {
-            return "GSM";
-        }
-
         public string GetMccMnc()
         {
             return "26201";
         }
 
+        public string GetDataNetworkPath()
+        {
+            return "GSM";
+        }
+
         public ulong GetSignalStrength()
         {
-            return 0;
+            return 2;
         }
     }
+
+    public class TestMelMessaging : MelMessagingInterface
+    {
+        public bool IsMelEnabled() { return false; }
+        public string GetMelVersion() { return ""; }
+        public string GetUid() { return ""; }
+        public string SetToken(string token, string app_name) { return ""; }
+        public string GetManufacturer() { return "DummyManufacturer"; }
+    }
+
 
     class Program
     {
         static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
         static string carrierName = "dmuus";
-        //static string appName = "EmptyMatchEngineApp";
-        //static string orgName = "EmptyMatchEngineApp";
         static string orgName = "automation_dev_org";
         static string appName = "automation_api_app";
         static string appVers = "1.0";
         static string developerAuthToken = "";
 
-        //static string host = "gddt.dme.mobiledgex.net";
         static string host = "us-qa.dme.mobiledgex.net";
         static UInt32 port = 38001;
         static string sessionCookie;
 
         // Get the ephemerial carriername from device specific properties.
-        async static Task<string> getCurrentCarrierName()
+        async static Task<string> getCurrentCarrierName() 
         {
             var dummy = await Task.FromResult(0);
             return carrierName;
@@ -266,6 +280,10 @@ namespace RestSample
                 }
                 Console.WriteLine("Test Case Passed!!!");
             }
+            catch (CryptographicException ce)
+            {
+                Console.WriteLine(ce.StackTrace);
+            }
             catch (InvalidTokenServerTokenException itste)
             {
                 Console.WriteLine(itste.StackTrace);
@@ -273,6 +291,10 @@ namespace RestSample
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                if (e.InnerException != null)
+                {
+                    Console.WriteLine("\n\nInner Execption: " + e.InnerException.Message);
+                }
             }
 
         }
