@@ -202,13 +202,13 @@ class App(MexOperation):
             if 'port_range_minimum' in rule and rule['port_range_minimum'] is not None:
                 try:
                     rule_dict['port_range_min'] = int(rule['port_range_minimum'])
-                except:
+                except Exception:
                     rule_dict['port_range_min'] = rule['port_range_minimum']
 
             if 'port_range_maximum' in rule and rule['port_range_maximum'] is not None:
                 try:
                     rule_dict['port_range_max'] = int(rule['port_range_maximum'])
-                except:
+                except Exception:
                     rule_dict['port_range_max'] = rule['port_range_maximum']
 
             if 'remote_cidr' in rule and rule['remote_cidr'] is not None:
