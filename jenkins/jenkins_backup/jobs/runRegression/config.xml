@@ -1129,18 +1129,18 @@ pipeline{
                             string(name: &apos;Components&apos;, value: &apos;Automated, Password&apos;)]
                     }
                 }
-                post {
-                    failure {
-                        script {
-                            echo &quot;run password tests failed&quot;
-                            slackMessage.fail(&apos;Finished Password tests with failures&apos;)
-                        }
+            }
+            post {
+                failure {
+                    script {
+                        echo &quot;run password tests failed&quot;
+                        slackMessage.fail(&apos;Finished Password tests with failures&apos;)
                     }
-                    success {
-                        script {
-                            echo &quot;run password tests passed&quot;
-                            slackMessage.good(&apos;Finished Password tests with pass&apos;)
-                        }
+                }
+                success {
+                    script {
+                        echo &quot;run password tests passed&quot;
+                        slackMessage.good(&apos;Finished Password tests with pass&apos;)
                     }
                 }
             }
@@ -1184,5 +1184,5 @@ pipeline{
     <sandbox>true</sandbox>
   </definition>
   <triggers/>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
 </flow-definition>
