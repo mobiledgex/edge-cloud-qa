@@ -1184,5 +1184,5 @@ pipeline{
     <sandbox>true</sandbox>
   </definition>
   <triggers/>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
 </flow-definition>
