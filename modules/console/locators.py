@@ -154,6 +154,8 @@ class CloudletsPageLocators(object):
     select_no = (By.XPATH, './/button[1]/span[text()="NO"]')
     select_yes = (By.XPATH, './/button[2]/span[text()="YES"]')
     trustpolicy_dropdown_clear = (By.XPATH, '//div[@id="trustPolicyName"]//i[@class="dropdown icon clear"]')
+    cloudlets_searchbutton = (By.XPATH, '//div[contains(@class,"MuiInputBase-root MuiInput-root makeStyles-inputRoot")]')
+    cloudlets_searchInput = (By.XPATH, '//div[contains(@class,"MuiInputBase-root MuiInput-root makeStyles-inputRoot")]//input')
 
 class ClusterInstancesPageLocators(object):
     cluster_instances_table_header_region = (By.XPATH, '//table/thead/tr/th[text()="Region"]')
@@ -534,13 +536,13 @@ class DetailsFullPageLocators(object):
     region_label =  (By.XPATH, '//td//div[text()="Region"]')
 
 class CloudletDetailsPageLocators(object):
-    cloudletname_label = (By.XPATH, '//table/tbody/tr[2]/td[1][text()="Cloudlet Name"]')
-    operator_label = (By.XPATH, '//table/tbody/tr[3]/td[1][text()="Operator"]')
+    cloudletname_label = (By.XPATH, '//table/tbody/tr/td[1][text()="Cloudlet"]')
+    operator_label = (By.XPATH, '//table/tbody/tr[2]/td[1][text()="Operator"]')
     cloudletlocation_label = (By.XPATH, '//table/tbody/tr[4]/td[1][text()="Cloudlet Location"]')
     ipsupport_label = (By.XPATH, '//table/tbody/tr[5]/td[1][text()="IP Support"]')
     numdynamicips_label = (By.XPATH, '//table/tbody/tr[6]/td[1][text()="Number of Dynamic IPs"]')
-    cloudlet_header = (By.XPATH, '//div[@class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"]/label[text()="Cloudlets"]')
-    cloudletname_field = (By.XPATH, '//table/tbody/tr[2]/td[2]')
+    cloudlet_header = (By.XPATH, '//div[@class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"]//h4[text()="Cloudlets"]')
+    cloudletname_field = (By.XPATH, '//table/tbody/tr[3]/td[2]/div')
 
 class DeleteConfirmationPageLocators(object):
     no_button = (By.XPATH, '//button/span[text()="NO"]')
