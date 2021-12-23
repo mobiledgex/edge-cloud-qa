@@ -80,11 +80,12 @@ class CloudletsPage(ComputePage):
         #print('*WARN*', "GOT HERE", rows)
         for r in rows:
             #location = f'Latitude : {latitude}\nLongitude : {longitude}'
-            logging.info(f'row={r}',r[1],r[2],r[3],r[4])
+            logging.info("Table values - r1 = " + r[1] + ", r2 = " + r[2] + " ,r3 = " + r[3] + ", r4 = " + r[4]+ ", r5 = " + r[5])
+
             #print('*WARN*', 'r[3]', r[3], 'location', location)
-            if r[1] == region and r[2] == cloudlet_name and r[3] == operator:
+            if r[2] == region and r[3] == operator and r[4] == cloudlet_name:
                 if state:
-                    if r[4] == state:
+                    if r[5] == state:
                         cloudlet_found = True
                 else:
                     cloudlet_found = False
@@ -101,8 +102,20 @@ class CloudletsPage(ComputePage):
 
         return False
 
+    def perform_search(self, searchstring):
+        time.sleep(1)
+        logging.info("Clicking Search button and performing search for value - " + searchstring)
+        we = self.driver.find_element(*CloudletsPageLocators.cloudlets_searchbutton)
+        ActionChains(self.driver).click(on_element=we).perform()
+        time.sleep(1)
+        we_Input = self.driver.find_element(*CloudletsPageLocators.cloudlets_searchInput)
+        self.driver.execute_script("arguments[0].value = '';", we_Input)
+        we_Input.send_keys(searchstring)
+        time.sleep(1)
+
     def wait_for_cloudlet(self, region=None, cloudlet_name=None, operator=None, latitude=None, longitude=None, state=None, wait=None):
         logging.info(f'wait_for_cloudlet region={region} cloudlet_name={cloudlet_name} operator={operator} latitude={latitude} longitude={longitude} state={state}')
+        self.perform_search(cloudlet_name)
         for attempt in range(wait):
             if self.is_cloudlet_present(region=region, cloudlet_name=cloudlet_name, operator=operator, latitude=latitude, longitude=longitude, state=state ):
                 return True
@@ -114,8 +127,8 @@ class CloudletsPage(ComputePage):
 
     def delete_cloudlet(self, region=None, cloudlet_name=None, operator=None):
         logging.info(f'deleting cloudlet region={region} cloudlet_name={cloudlet_name} operator={operator}')
-        row = self.get_table_row_by_value([(region, 2), (cloudlet_name, 3), (operator, 4)])
-        #row = self.get_table_row_by_value([(region, 1)])
+        self.perform_search(cloudlet_name)
+        row = self.get_table_row_by_value([(region, 3), (cloudlet_name, 5)])
         row.find_element(*ComputePageLocators.table_action).click()
         self.driver.find_element(*ComputePageLocators.table_delete).click()
     
@@ -161,9 +174,9 @@ class CloudletsPage(ComputePage):
     def click_operator_heading(self):
         self.driver.find_element(*CloudletsPageLocators.cloudlets_table_header_operator).click()
 
-    def click_cloudlet_row(self, cloudlet_name, region='US'):
-        logging.info('clicking cloudlet' + cloudlet_name + region)
-        r = self.get_table_row_by_value([(region, 2), (cloudlet_name, 3)])
+    def click_cloudlet_row(self, cloudlet_name, region):
+        logging.info('clicking cloudlet' + cloudlet_name + '  ' + region)
+        r = self.get_table_row_by_value([(region, 3), (cloudlet_name, 5)])
         #text_value = r.find_element_by_xpath(f'./td[2]/div').text
         #print('*WARN*','xxxxx',text_value)
         time.sleep(1)

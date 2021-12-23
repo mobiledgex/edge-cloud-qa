@@ -24,8 +24,6 @@ WebUI - user shall be able to create a new EU cloudlet
 
     Open Cloudlets
 
-    #Get Table Data
-
     Add New Cloudlet  region=EU  physical_name=hawkins  platform_type=Openstack  operator=GDDT  cloudlet_name=${cloudlet_name}
 
     FOR  ${x}  IN RANGE  0  60
@@ -34,7 +32,6 @@ WebUI - user shall be able to create a new EU cloudlet
         Sleep  10s
     END
 
-    Change Number Of Rows
     Cloudlet Should Exist  cloudlet_name=${cloudlet_name}
 
     ${cloudlet_details}=    Show Cloudlets  region=EU  cloudlet_name=${cloudlet_name}  operator_org_name=GDDT
@@ -43,12 +40,12 @@ WebUI - user shall be able to create a new EU cloudlet
     ${timestamp}=  Convert Date  ${time}  exclude_millis=yes
     Log to Console  ${timestamp}
 
-    ${details}=  Open Cloudlet Details
+    ${details}=  Open Cloudlet Details  cloudlet_name=${cloudlet_name}  region=EU
     Log to Console  ${details}
     Should Be Equal   ${details['Created']}   ${timestamp}
     Close Cloudlet Details
 
-    Search Cloudlet
+    Search Cloudlet  cloudlet_name=${cloudlet_name}
     MexConsole.Delete Cloudlet  cloudlet_name=${cloudlet_name}
     Sleep  30s
     Cloudlet Should Not Exist  cloudlet_name=${cloudlet_name}
