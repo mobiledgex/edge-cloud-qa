@@ -177,11 +177,17 @@ class ComputePage(BasePage):
                 row.location_once_scrolled_into_view   # cause row to scroll into view
                 cell_data = []
                 for cell in row.find_elements_by_css_selector('td'):
-                    if cell.text == '':
-                        cell_data.append(cell)
+                    cellinnerText = cell.get_attribute("innerText")
+                    if cellinnerText == '':
+                        cell_data.append(cellinnerText)
                     else:
-                        cell_data.append(cell.text.strip())
-                    logging.info('CELL Text - ' +  cell.text)
+                        cell_data.append(cellinnerText.strip())
+                    logging.info('CELL Text - ' + cellinnerText)
+                    # if cell.text == '':
+                    #     cell_data.append(cell)
+                    # else:
+                    #     cell_data.append(cell.text.strip())
+                    # logging.info('CELL Text - ' +  cell.text)
                 cell_data.append(row)
                 row_list.append(list(cell_data))
             ele = self.driver.find_element_by_xpath(ComputePageLocators.next_page_button)
@@ -221,9 +227,8 @@ class ComputePage(BasePage):
                 print('*WARN*', 'not displayed')
                 
             for value in row_values:
-                #text_value = row.find_element_by_xpath(f'./td[{value[1]}]/div').text
                 text_value = row.find_element_by_xpath(f'./td[{value[1]}]').text
-                print('*WARN*', 'text_value', text_value, 'value[0]',value[0])
+                print('*WARN*', 'text_value=', text_value, 'value[0]=',value[0])
                 if text_value == value[0]:
                     row_found += 1
                 else:
