@@ -372,6 +372,9 @@ pipeline{
                     steps{
                         catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;cleanup provisioning failed&apos;) {
                             build job: &apos;cleanupAutomationProvisioning&apos;
+                            script {
+                                defragEtcd()
+                            }
                         }
                     }
                 }
