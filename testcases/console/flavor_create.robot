@@ -30,6 +30,7 @@ WebUI - user shall be able to create a new EU flavor
     Flavor Should Exist  flavor_name=${flavor_name_default}  change_rows_per_page=True  number_of_pages=${num_pages}
     # should also call the WS to check the flavor
     MexConsole.Delete Flavor  number_of_pages=${num_pages}  click_previous_page=off
+    Flavor Should Not Exist  flavor_name=${flavor_name_default}
 
 WebUI - user shall be able to create a new US flavor
     [Documentation]

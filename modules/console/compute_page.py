@@ -104,6 +104,7 @@ class ComputePage(BasePage):
 
     def are_elements_present(self, username, role=None):
         elements_present = True
+        logging.info(f"role =  {role}")
 
         if self.is_branding_present():
             logging.info('branding present')
@@ -111,53 +112,12 @@ class ComputePage(BasePage):
             logging.error('branding NOT present')
             elements_present = False
 
-        #if self.is_refresh_icon_present():
-        #    logging.info('refresh icon present')
-        #else:
-        #    logging.error('refresh icon NOT present')
-        #    elements_present = False
 
-        #if self.is_public_icon_present():
-        #    logging.info('public icon present')
-        #else:
-        #    logging.error('public icon NOT present')
-        #    elements_present = False
-
-        if role is None:
-            if self.is_help_icon_present():
-                logging.info('help icon present')
-            else:
-                logging.error('help icon NOT present')
-                elements_present = False
+        if self.is_help_icon_present():
+            logging.info('help icon present')
         else:
-            if self.is_help_icon_present_developer_view():
-                logging.info('help icon present')
-            else:
-                logging.error('help icon NOT present')
-                elements_present = False
-
-        #if self.is_notifications_icon_present():
-        #    logging.info('notifications icon present')
-        #else:
-        #    raise Exception('notifications icon not present')
-
-        #if compute_page.is_add_icon_present():
-        #    logging.info('add icon present')
-        #else:
-        #    raise Exception('add icon not present')
-
-
-        #if self.is_username_present(username):
-        #    logging.info('username present')
-        #else:
-        #    logging.error('username NOT present')
-        #    elements_present = False
-
-        #if self.is_support_present():
-        #    logging.info('support present')
-        #else:
-        #    logging.error('support NOT present')
-        #    elements_present = False
+            logging.error('help icon NOT present')
+            elements_present = False
 
         return elements_present
 
@@ -177,12 +137,14 @@ class ComputePage(BasePage):
                 row.location_once_scrolled_into_view   # cause row to scroll into view
                 cell_data = []
                 for cell in row.find_elements_by_css_selector('td'):
-                    cellinnerText = cell.get_attribute("innerText")
-                    if cellinnerText == '':
-                        cell_data.append(cellinnerText)
-                    else:
-                        cell_data.append(cellinnerText.strip())
-                    logging.info('CELL Text - ' + cellinnerText)
+                    ishidden = cell.get_attribute("hidden")
+                    if not (ishidden):
+                        cellinnerText = cell.get_attribute("innerText")
+                        if cellinnerText == '':
+                            cell_data.append(cellinnerText)
+                        else:
+                            cell_data.append(cellinnerText.strip())
+                        logging.info('CELL Text - ' + cellinnerText)
                     # if cell.text == '':
                     #     cell_data.append(cell)
                     # else:
