@@ -58,21 +58,25 @@ class NewFlavorSettingsPage(NewSettingsPage):
         if self.is_flavorname_label_present() and self.is_flavorname_input_present():
             logging.info('FlavorName present')
         else:
+            logging.error('FlavorName not present')
             settings_present = False
 
         if self.is_ram_label_present() and self.is_ram_input_present():
             logging.info('RAM present')
         else:
+            logging.error('RAM not present')
             settings_present = False
 
         if self.is_vcpus_label_present() and self.is_vcpus_input_present():
             logging.info('VCPUS present')
         else:
+            logging.error('VCPUS present')
             settings_present = False
 
         if self.is_disk_label_present() and self.is_disk_input_present():
             logging.info('Disk present')
         else:
+            logging.error('Disk present')
             settings_present = False
 
         return settings_present
