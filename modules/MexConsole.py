@@ -801,7 +801,7 @@ class MexConsole() :
         self.take_screenshot('add_new_flavor_pre')
         if decision != None:
             decision = decision.lower()
-        self.compute_page.click_new_button()
+        self.compute_page.click_add_button()
         if self.new_flavor_page.are_elements_present():
             logging.info('click New Flavor button verification succeeded')
         else:
@@ -854,20 +854,12 @@ class MexConsole() :
         if vcpus is None: vcpus = self._flavor['vcpus']
         if disk is None: disk = self._flavor['disk']
 
+        self.flavors_page.perform_search(flavor_name)
         if self.flavors_page.wait_for_flavor(region, flavor_name, ram, vcpus, disk, number_of_pages):
-            logging.info('flavor found')
+            logging.info('Flavor found')
         else:
             raise Exception('Flavor NOT found')
 
-        #rows = self.get_table_data()
-        #print('*WARN*', 'sf', self._flavor)
-        #for r in rows:
-        #    print('*WARN*', 'flavorr', r)
-        #    if r[0] == region and r[1] == 'flavor_name':
-        #        print('*WARN*', 'found flavor')
-        #        return True
-
-        #return False
 
     def flavor_should_not_exist(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5):
         self.take_screenshot('flavor_should_not_exist_pre')
@@ -879,10 +871,11 @@ class MexConsole() :
         if vcpus is None: vcpus = self._flavor['vcpus']
         if disk is None: disk = self._flavor['disk']
 
-        if self.flavors_page.wait_for_flavor(region, flavor_name, ram, vcpus, disk):
-            raise Exception('Flavor found')
+        self.flavors_page.perform_search(flavor_name)
+        if self.flavors_page.wait_for_flavor(region, flavor_name, ram, vcpus, disk, 1):
+            raise Exception('Flavor found. Expected to be not found')
         else:
-            logging.info('flavor not found')
+            logging.info('Flavor not found as expected')
 
 
     def open_flavor_details(self, flavor_name, region='US'):

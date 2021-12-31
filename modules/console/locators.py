@@ -115,13 +115,13 @@ class ComputePageLocators(object):
     searchInput = (By.XPATH, '//div[contains(@class,"MuiInputBase-root MuiInput-root makeStyles-inputRoot")]//input')
 
 class FlavorsPageLocators(object):
-    flavors_table_header_region = (By.XPATH, '//table/thead/tr/th/span[text()="Region"]')
-    flavors_table_header_flavorname = (By.XPATH, '//table/thead/tr/th/span[text()="Flavor Name"]')
-    flavors_table_header_ram = (By.XPATH, '//table/thead/tr/th/span[text()="RAM Size(MB)"]')
-    flavors_table_header_vcpus = (By.XPATH, '//table/thead/tr/th/span[text()="Number of vCPUs"]')
-    flavors_table_header_disk = (By.XPATH, '//table/thead/tr/th/span[text()="Disk Space(GB)"]')
-    flavors_table_header_gpu = (By.XPATH, '//table/thead/tr/th/span[text()="Number of GPUs"]')
-    flavors_table_header_edit = (By.XPATH, '//table/thead/tr/th[text()="Actions"]')
+    flavors_table_header_region = (By.XPATH, '//table/thead//strong[text()="Region"]')
+    flavors_table_header_flavorname = (By.XPATH, '//table/thead//strong[text()="Flavor Name"]')
+    flavors_table_header_ram = (By.XPATH, '//table/thead//strong[text()="RAM Size(MB)"]')
+    flavors_table_header_vcpus = (By.XPATH, '//table/thead//strong[text()="Number of vCPUs"]')
+    flavors_table_header_disk = (By.XPATH, '//table/thead//strong[text()="Disk Space(GB)"]')
+    flavors_table_header_gpu = (By.XPATH, '//table/thead//strong[text()="Number of GPUs"]')
+    flavors_table_header_edit = (By.XPATH, '//table/thead//strong[text()="Actions"]')
     flavors_table_button_edit = (By.XPATH, '//table/tbody/tr/td/button[text()="Actions"]')
     table_delete = (By.XPATH, './/i[@class="trash alternate icon"]')
     #close_button =  (By.XPATH, '//button[text()="Close"]')
@@ -131,6 +131,8 @@ class FlavorsPageLocators(object):
     next_page_button = (By.XPATH, '//div[@class="MuiTablePagination-actions"]/button[@type="button" and @title="Next page"]')
     previous_page_button = (By.XPATH, '//div[@class="MuiTablePagination-actions"]/button[@type="button" and @title="Previous page"]')
     details_row = (By.XPATH, '//table[@class="MuiTable-root MuiTable-stickyHeader"]/tbody/tr')
+    flavors_searchbutton = (By.XPATH, '//div[contains(@class,"MuiInputBase-root MuiInput-root makeStyles-inputRoot")]')
+    flavors_searchInput = (By.XPATH, '//div[contains(@class,"MuiInputBase-root MuiInput-root makeStyles-inputRoot")]//input')
 
 class CloudletsPageLocators(object):
     cloudlets_table_header_region = (By.XPATH, '//table/thead//strong[text()="Region"]')
@@ -416,9 +418,9 @@ class NewPageLocators(object):
     region_pulldown_option_us = (By.XPATH, '//span[text()="US"]')
     region_pulldown_option_eu = (By.XPATH, '//span[text()="EU"]')
     #cancel_button = (By.XPATH, '//*[@class="ui modal transition visible active"]//button[text()="Cancel"]')
-    cancel_button = (By.XPATH, '//button/span[text()="Cancel"]')
+    cancel_button = (By.XPATH, '//form[@class="ui form"]//span[text()="Cancel"]/ancestor::button')
     #save_button = (By.XPATH, '//*[@class="ui modal transition visible active"]//button[text()="Save"]')
-    save_button = (By.XPATH, '//button/span[text()="Create"]')
+    save_button = (By.XPATH, '//form[@class="ui form"]//span[text()="Create"]/ancestor::button')
 
     flavor_heading = (By.XPATH, '//h2[text()="Flavors"]')
     flavor_flavorname = (By.XPATH, '//div[text() ="Flavor Name"]/sup[text() = " *"]')
