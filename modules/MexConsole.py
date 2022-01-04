@@ -797,7 +797,7 @@ class MexConsole() :
             count -= 1
             time.sleep(1)
 
-    def add_new_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, decision=None):
+    def add_new_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, decision=None, gpu=None):
         self.take_screenshot('add_new_flavor_pre')
         if decision != None:
             decision = decision.lower()
@@ -806,7 +806,6 @@ class MexConsole() :
             logging.info('click New Flavor button verification succeeded')
         else:
             raise Exception('click New Flavor button verification failed')
-        # this function are_elements_present doesnt work for flavor page yet. Will create!!!
 
         flavor = Flavor(flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk).flavor
         logging.info(f'flavor created:{flavor}')
@@ -826,7 +825,7 @@ class MexConsole() :
             self.take_screenshot('flavor_failed_expected')
         else:
             logging.info(f'Adding new flavor region={region} flavor_name={flavor["key"]["name"]}  ram={flavor["ram"]}  vcpus={flavor["vcpus"]}  disk={flavor["disk"]}')
-            self.new_flavor_page.create_flavor(region=region, flavor_name=flavor['key']['name'], ram=flavor['ram'], vcpus=flavor['vcpus'], disk=flavor['disk'])
+            self.new_flavor_page.create_flavor(region=region, flavor_name=flavor['key']['name'], ram=flavor['ram'], vcpus=flavor['vcpus'], disk=flavor['disk'], gpu=gpu)
             time.sleep(3)
             self.take_screenshot('add_new_flavor_post')
 
@@ -839,14 +838,14 @@ class MexConsole() :
     def change_number_of_rows(self):
         self.flavors_page.flavor_rows_per_page()
 
-    def flavor_should_exist(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5, change_rows_per_page=False, number_of_pages=None):
+    def flavor_should_exist(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5, change_rows_per_page=False, number_of_pages=None, gpu=None):
         if change_rows_per_page:
             self.flavors_page.flavor_rows_per_page()
         if number_of_pages is None:
             number_of_pages = 1
         logging.info('number of pages is ' + str(number_of_pages))
         self.take_screenshot('flavor_should_exist_pre')
-        logging.info(f'flavor_should_exist region={region} flavor={flavor_name} ram={ram} vcpus={vcpus} disk={disk} wait={wait}')
+        logging.info(f'flavor_should_exist region={region} flavor={flavor_name} ram={ram} vcpus={vcpus} disk={disk} wait={wait} gpu={gpu}')
 
         if region is None: region = self._region
         if flavor_name is None: flavor_name = self._flavor['key']['name']
@@ -855,7 +854,7 @@ class MexConsole() :
         if disk is None: disk = self._flavor['disk']
 
         self.flavors_page.perform_search(flavor_name)
-        if self.flavors_page.wait_for_flavor(region, flavor_name, ram, vcpus, disk, number_of_pages):
+        if self.flavors_page.wait_for_flavor(region, flavor_name, ram, vcpus, disk, number_of_pages, gpu=gpu):
             logging.info('Flavor found')
         else:
             raise Exception('Flavor NOT found')
