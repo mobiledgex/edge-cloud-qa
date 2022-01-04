@@ -32,19 +32,20 @@ WebUI - user shall be able to create a new EU flavor
     MexConsole.Delete Flavor  number_of_pages=${num_pages}  click_previous_page=off
     Flavor Should Not Exist  flavor_name=${flavor_name_default}
 
-WebUI - user shall be able to create a new US flavor
+WebUI - user shall be able to create a new US flavor with GPU
     [Documentation]
     ...  Click New button
-    ...  Fill in Region=US and all proper values
+    ...  Fill in Region=US and all proper values with GPU
     ...  Verify Flavor is created and list is updated
     [Tags]  passing
 
     Get Table Data
-    Add New Flavor  region=US  flavor_name=${flavor_name_default}
+    Add New Flavor  region=US  flavor_name=${flavor_name_default}  gpu=true
 
-    Flavor Should Exist  flavor_name=${flavor_name_default}  change_rows_per_page=True  number_of_pages=${num_pages}
+    Flavor Should Exist  flavor_name=${flavor_name_default}  change_rows_per_page=True  number_of_pages=${num_pages}  gpu=true
     # should also call the WS to check the flavor
     MexConsole.Delete Flavor  number_of_pages=${num_pages}  click_previous_page=off
+    Flavor Should Not Exist  flavor_name=${flavor_name_default}
 
 *** Keywords ***
 Setup
