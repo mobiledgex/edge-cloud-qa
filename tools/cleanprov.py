@@ -454,7 +454,7 @@ def clean_trustpolicyexception():
         print('nothing to delete')
     else:
         for a in app_list:
-            name = a['data']['key']['Name']
+            name = a['data']['key']['name']
             if in_trustpolicyexception_list(a):
                 print(f'keeping {name}')
             else:
