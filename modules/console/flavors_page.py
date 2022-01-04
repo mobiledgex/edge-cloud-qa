@@ -80,16 +80,19 @@ class FlavorsPage(ComputePage):
 
         return settings_present
 
-    def is_flavor_present(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5):
+    def is_flavor_present(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5, gpu=None):
         self.take_screenshot('is_flavor_present_pre.png')
 
-        logging.info(f'Looking for region={region} flavor={flavor_name} ram={ram} vcpus={vcpus} disk={disk}')
+        logging.info(f'Looking for region={region} flavor={flavor_name} ram={ram} vcpus={vcpus} disk={disk} gpu={gpu}')
 
         rows = self.get_table_rows()
         for r in rows:
             logging.info("Table values - r1 = " + r[1] + ", r2 = " + r[2] + " ,r3 = " + r[3] + ", r4 = " + r[4] + ", r5 = " + r[5] + ", r6 = " + r[6])
             if r[2] == region and r[3] == flavor_name and r[4] == str(ram) and r[5] == str(vcpus) and r[6] == str(disk):
                 logging.info('found flavor')
+                if gpu == 'true':
+                    if not self.is_gpu_icon_visible():
+                        raise Exception ('GPU icon not visible')
                 return True
 
         logging.warning('flavor not found')
@@ -115,11 +118,12 @@ class FlavorsPage(ComputePage):
         #self.driver.find_element(*AppsPageLocators.apps_page_searchInput).send_keys(searchstring)
         time.sleep(1)
 
-    def wait_for_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, number_of_pages=None, click_previous_page=None):
+    def wait_for_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, number_of_pages=None, click_previous_page=None, gpu=None):
         index = 0
+        logging.info(f'Wait for flavor  region={region} flavor={flavor_name} ram={ram} vcpus={vcpus} disk={disk} number_of_pages={number_of_pages} click_previous_page={click_previous_page} gpu={gpu}')
         for x in range(0, number_of_pages):
             for attempt in range(2):
-                if self.is_flavor_present(region, flavor_name, ram, vcpus, disk):
+                if self.is_flavor_present(region, flavor_name, ram, vcpus, disk, gpu=gpu):
                     if ((index>0) and (click_previous_page is None)):
                         self.click_previous_page()
                     return True
@@ -240,5 +244,11 @@ class FlavorsPage(ComputePage):
         else:
             raise Exception('flavors trash icon IS present')
     
+    def is_gpu_icon_visible(self):
+        if self.is_element_present(FlavorsPageLocators.flavors_table_gpu_icon):
+            logging.info('GPU icon visible for flavor row')
+            return True
+        else:
+            logging.info('GPU icon NOT visible for flavor row')
+            return False
 
-    
