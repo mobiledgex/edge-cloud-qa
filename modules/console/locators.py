@@ -133,6 +133,7 @@ class FlavorsPageLocators(object):
     details_row = (By.XPATH, '//table[@class="MuiTable-root MuiTable-stickyHeader"]/tbody/tr')
     flavors_searchbutton = (By.XPATH, '//div[contains(@class,"MuiInputBase-root MuiInput-root makeStyles-inputRoot")]')
     flavors_searchInput = (By.XPATH, '//div[contains(@class,"MuiInputBase-root MuiInput-root makeStyles-inputRoot")]//input')
+    flavors_table_gpu_icon = (By.XPATH, '//td/img[@src="/assets/icons/gpu_green.svg"]')
 
 class CloudletsPageLocators(object):
     cloudlets_table_header_region = (By.XPATH, '//table/thead//strong[text()="Region"]')
@@ -440,6 +441,7 @@ class NewPageLocators(object):
     flavor_vcpus_detail = (By.XPATH, '//td[text()="Number of vCPUs"]')
     flavor_disk_detail = (By.XPATH, '//td[text()="Disk Space(GB)"]')
     flavor_gpu_detail = (By.XPATH, '//td[text()="Number of GPUs"]')
+    flavor_gpu_slider = (By.XPATH, '//div[contains(text(),"GPU")]/../../div/following-sibling::div//input')
 
     cloudlet_heading =  (By.XPATH, '//h2[text()="Create Cloudlet"]')
     #cloudlet_cloudletname = (By.XPATH, '//*[@class="ui form fieldForm"]//div[text()[1]="Cloudlet Name" and text()[2]=" *"]')
