@@ -877,35 +877,20 @@ class MexConsole() :
             logging.info('Flavor not found as expected')
 
 
-    def open_flavor_details(self, flavor_name, region='US'):
-        index = 0
-        k = 0
+    def open_flavor_details(self, flavor_name, region=None):
+        if region is None: region = self._region
         self.change_number_of_rows()
         logging.info('Opening flavor details for flavorname=' + flavor_name)
-
-        for i in range(2):
-            if self.flavors_page.click_flavor_row(flavor_name=flavor_name, region=region):
-                k += 1
-                break
-
-        if k == 0:
-           index += 1
-           self.flavors_page.click_next_page()
-           for j in range(2):
-               if self.flavors_page.click_flavor_row(flavor_name=flavor_name, region=region):
-                   break
+        self.flavors_page.click_flavor_row(flavor_name=flavor_name, region=region)
+        time.sleep(1)
+        self.take_screenshot('open_flavor_details')
 
         if self.flavors_page.are_flavor_details_present():
             logging.info('Flavor details page verification succeeded')
         else:
             raise Exception('Flavor details page verification failed')
 
-        #details = self.organization_details_page.get_details()
         details = self.details_page.get_details()
-     
-        if (index>0):
-            self.flavors_page.click_close_flavor_details()
-            self.flavors_page.click_previous_page()
 
         return details
 

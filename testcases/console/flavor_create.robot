@@ -40,9 +40,19 @@ WebUI - user shall be able to create a new US flavor with GPU
     [Tags]  passing
 
     Get Table Data
-    Add New Flavor  region=US  flavor_name=${flavor_name_default}  gpu=true
+    Add New Flavor  region=US  flavor_name=${flavor_name_default}  ram=2048  vcpus=2  disk=80  gpu=true
 
     Flavor Should Exist  flavor_name=${flavor_name_default}  change_rows_per_page=True  number_of_pages=${num_pages}  gpu=true
+    ${details}=  Open Flavor Details  flavor_name=${flavor_name_default}  region=US
+    Log to Console  ${details}
+    Should Be Equal                     ${details}[Region]           US
+    Should Be Equal                     ${details}[Flavor Name]      ${flavor_name_default}
+    Should Be Equal As Numbers          ${details}[RAM Size(MB)]         2048
+    Should Be Equal As Numbers          ${details}[Number of vCPUs]  2
+    Should Be Equal As Numbers          ${details}[Disk Space(GB)]       80
+    Should Contain                      ${details}[GPU]              1
+    Close Flavor Details
+
     # should also call the WS to check the flavor
     MexConsole.Delete Flavor  number_of_pages=${num_pages}  click_previous_page=off
     Flavor Should Not Exist  flavor_name=${flavor_name_default}
