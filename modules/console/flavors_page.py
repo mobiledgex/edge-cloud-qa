@@ -189,9 +189,9 @@ class FlavorsPage(ComputePage):
     def click_close_flavor_details(self):
         self.driver.find_element(*FlavorsPageLocators.close_button).click()
 
-    def click_flavor_row(self, flavor_name, region='US'):
+    def click_flavor_row(self, flavor_name, region):
         try:
-            row = self.get_table_row_by_value([(region, 2), (flavor_name, 3)])
+            row = self.get_table_row_by_value([(region, 3), (flavor_name, 4)])
         except:
             logging.info('row is not found')
             return False

@@ -440,7 +440,7 @@ class NewPageLocators(object):
     flavor_ram_detail = (By.XPATH, '//td[text()="RAM Size(MB)"]')
     flavor_vcpus_detail = (By.XPATH, '//td[text()="Number of vCPUs"]')
     flavor_disk_detail = (By.XPATH, '//td[text()="Disk Space(GB)"]')
-    flavor_gpu_detail = (By.XPATH, '//td[text()="Number of GPUs"]')
+    flavor_gpu_detail = (By.XPATH, '//td[text()="GPU"]')
     flavor_gpu_slider = (By.XPATH, '//div[contains(text(),"GPU")]/../../div/following-sibling::div//input')
 
     cloudlet_heading =  (By.XPATH, '//h2[text()="Create Cloudlet"]')
