@@ -3,6 +3,7 @@
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  String
 Library  Collections
+Library  DateTime
 
 Test Teardown  Cleanup provisioning	
 Test Setup     Setup
@@ -234,7 +235,7 @@ UpdateCloudlet - shall be able to update cloudlet with trust policy
    Should Be Equal  ${policy_return2['data']['key']['organization']}  ${operator_name_fake}
 
    # create cloudlet trust policy
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy_state']}  Ready
 
@@ -271,7 +272,7 @@ UpdateCloudlet - shall be able to add trust policy to cloudlet
    Should Be Equal As Numbers  ${numrules}  1
 
    # create cloudlet without trust policy
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  
    Should Not Contain             ${cloudlet['data']}  trust_policy
 
    # update cloudlet with new trust policy
@@ -307,7 +308,7 @@ UpdateCloudlet - shall be able to remove trust policy from cloudlet
    Should Be Equal As Numbers  ${numrules}  1
 
    # create cloudlet with trust policy
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_name}
    Should Be Equal             ${cloudlet['data']['trust_policy_state']}  Ready
 
@@ -360,3 +361,7 @@ UpdateCloudlet - shall be able to remove allianceorgs from cloudlet
 *** Keywords  ***
 Setup
    Login  username=${admin_manager_username}  password=${admin_manager_password}
+   ${time}=  Get Current Date  result_format=epoch
+
+   Set Suite Variable  ${cloudlet_name}  cloudlet${time}
+
