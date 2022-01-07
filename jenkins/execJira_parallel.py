@@ -648,7 +648,8 @@ def exec_testcase(z, t):
 
     exec_start = time.time()
     try:
-        exec_cmd = f'timeout {testcase_timeout} bash "{exec_file}" && rm {file_output}.exec'
+        if linux_os:
+            exec_cmd = f'timeout {testcase_timeout} bash "{exec_file}" && rm {file_output}.exec'
         logger.info("subprocess " + exec_cmd)
         r = subprocess.run(exec_cmd, shell=True, check=True, env=my_env)
         logger.info(f'subprocess returncode={r.returncode}')
