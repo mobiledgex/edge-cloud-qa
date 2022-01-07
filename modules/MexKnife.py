@@ -62,7 +62,7 @@ class MexKnife:
  
     def _start_upgrade(self):
         policy_group = self.policy_group
-        workdir = "/home/jenkins/workspace/upgradeEdgecloud"
+        workdir = "/home/jenkins/workspace/runRegression"
         if not os.path.exists(workdir):
             workdir = os.environ.get("HOME")
         chef_dir = os.path.join(workdir, 'go/src/github.com/mobiledgex/edge-cloud-infra/chef/policyfiles')
