@@ -479,6 +479,20 @@ def exec_testcase(z, t):
     print('tc', t['tc'])
     last_status = 'unset'
 
+    linux_os = windows_os = False
+
+    if os.name == 'posix':
+        linux_os = True
+    elif os.name == 'nt':
+        windows_os = True
+
+    if linux_os:
+        tmpdir = '/tmp/'
+        python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/certs:$WORKSPACE/go/src/github.com/mobiledgex/testcases::$WORKSPACE/go/src/github.com/mobiledgex/testcases/config'
+    elif windows_os:
+        tmpdir = os.environ['TMP'] + '\\'
+        python_path = '%WORKSPACE%/go/src/github.com/mobiledgex/protos;%WORKSPACE%/go/src/github.com/mobiledgex/modules;%WORKSPACE%/go/src/github.com/mobiledgex/certs;%WORKSPACE%/go/src/github.com/mobiledgex/testcases;$WORKSPACE/go/src/github.com/mobiledgex/testcases/config'
+
     if t['tc'] == 'noTestcaseInStep':
         logger.info('skipping execution of {}. does not contain a testcase'.format(t['issue_key']))
         found_failure = 1  # consider it a failure if the teststep is missing
@@ -529,7 +543,7 @@ def exec_testcase(z, t):
         tc = os.path.basename(t['tc'])
 
     # tmpdir = os.environ['TMPDIR']
-    tmpdir = '/tmp/'
+    # tmpdir = '/tmp/'
     tc_replace = tc.replace('/', '')  # remove slash from filename
     # file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
     file_delete = f'{tmpdir}*{t["folder_name"]}_{t["issue_key"]}*'
@@ -600,7 +614,10 @@ def exec_testcase(z, t):
             logger.debug(f'my_env={my_env}')
 
         if robot_tcname:
-            exec_cmd = f'export PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} {var_override_cmd} --outputdir /tmp --report {report_output} --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
+            if linux_os:
+                exec_cmd = f'export PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} {var_override_cmd} --outputdir /tmp --report {report_output} --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
+            elif windows_os:
+                exec_cmd = f'set PYTHONPATH={python_path} & robot --loglevel INFO {var_cmd} --outputdir {tmpdir} --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
         else:
             exec_cmd = f'export PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} {var_override_cmd} --outputdir /tmp --report {report_output} --output {xml_output} --log {file_output} {robot_file}'
         # file_output = '/tmp/log.html'
