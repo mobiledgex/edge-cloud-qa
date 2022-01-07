@@ -3,6 +3,7 @@ Documentation  DeleteTrustPolicy fail
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  String
+Library  DateTime
      
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
@@ -97,20 +98,22 @@ DeleteTrustPolicy - delete policy in use by cloudlet shall retun error
    ...  - verify proper error is returned 
 
    [Tags]  TrustPolicy
-   
-   Create Flavor  region=${region}
+  
+   Create Flavor  region=${region}  token=${token}
 
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}  token=${token}
 
-   Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
+   Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}  token=${token}
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy in use by Cloudlet"}')  Delete Trust Policy  region=${region}  token=${token}  operator_org_name=${operator_name_fake}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy in use by Cloudlet {\\\\"organization\\\\":\\\\"${operator_name_fake}\\\\",\\\\"name\\\\":\\\\"${cloudlet_name}\\\\"}"}')  Delete Trust Policy  region=${region}  token=${token}  operator_org_name=${operator_name_fake}
 
 *** Keywords ***
 Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
 
+   ${time}=  Get Current Date  result_format=epoch
+   Set Suite Variable  ${cloudlet_name}  cloudlet${time}

@@ -445,13 +445,21 @@ Teardown Forbidden
 Get Number Of Cloudlets with Trust Policy
    [Arguments]  ${cloudlets}
 
+   ${founddict}=  Create Dictionary
+
    ${counter}=  Set Variable  ${0}
    FOR  ${C}  IN  @{cloudlets}
       log to console  ${c}
       ${c2}=  Run Keyword If  'data' in ${c}  Set Variable  ${c['data']}
       ...  ELSE  Set Variable  ${c}
-      ${counter}=  Run Keyword If  'trust_policy' in ${c2}  Set Variable  ${counter+1}
-      ...  ELSE  Set Variable  ${counter}
+      IF  'trust_policy' in ${c2}
+         ${policy}=  Set Variable  ${c2['trust_policy']}
+         ${counter}=  Run Keyword If  '${policy}' not in ${founddict}  Set Variable  ${counter+1}
+         ...  ELSE  Set Variable  ${counter}
+         Set To Dictionary  ${founddict}  ${policy}  ${True}
+      END
+#      ${counter}=  Run Keyword If  'trust_policy' in ${c2}  Set Variable  ${counter+1}
+#      ...  ELSE  Set Variable  ${counter}
 
    END
    [Return]  ${counter}

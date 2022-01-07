@@ -4,6 +4,7 @@ Documentation   Create AppInst with Trusted Parm
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
 Library  String
+Library  DateTime
 
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
@@ -218,8 +219,8 @@ CreateAppInst - autoprov appinst shall start for trusted k8s/lb/shared on truste
 
    ${policy}=  Create Auto Provisioning Policy  region=${region}  developer_org_name=automation_dev_org  min_active_instances=1  max_instances=0  cloudlet_list=${cloudlets}
 
-   Create Cluster Instance  region=${region}  cluster_name=${cluster_name}  reservable=${True}   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
-   Create Cluster Instance  region=${region}  cluster_name=${cluster_name}2  reservable=${True}   cloudlet_name=${cloudlet_name}2  operator_org_name=${operator_name_fake}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
+   Create Cluster Instance  region=${region}  cluster_name=${cluster_name}  reservable=${True}   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes  flavor_name=${flavor_name}
+   Create Cluster Instance  region=${region}  cluster_name=${cluster_name}2  reservable=${True}   cloudlet_name=${cloudlet_name}2  operator_org_name=${operator_name_fake}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes  flavor_name=${flavor_name}
 
    @{policy_list}=  Create List  ${policy['data']['key']['name']}
    Create App  region=${region}  app_name=${appname}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer  trusted=${True}
@@ -230,14 +231,18 @@ CreateAppInst - autoprov appinst shall start for trusted k8s/lb/shared on truste
  
 *** Keywords ***
 Setup
-   ${epoch}=  Get Time  epoch
+   #${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
+
    Create Flavor  region=${region}
    #${appname}=  Get Default App Name
    ${appname}=  Set Variable  app${epoch}
    #${appname}  ${appname_micro}=  Split String  ${appname}  -
  
-   ${cloudlet_name}=  Get Default Cloudlet Name
+   ${cloudlet_name}=  Set Variable  cloudlet${epoch}
    ${cluster_name}=  Get Default Cluster Name
+   ${flavor_name}=  Get Default Flavor Name
+
    ${token}=  Get Super Token
 
    ${policy_name}=  Get Default Trust Policy Name
@@ -257,13 +262,13 @@ Setup
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
    Should Be Equal As Numbers  ${numrules}  1
 
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
 
    Set Suite Variable  ${app_name}  
    Set Suite Variable  ${cloudlet_name}
    Set Suite Variable  ${cluster_name}
    Set Suite Variable  ${policy_name}
-
+   Set Suite Variable  ${flavor_name}
    Set Suite Variable  ${token}
 
 Setup In Range RequiredOutboundConnections
@@ -276,28 +281,28 @@ Setup In Range RequiredOutboundConnections
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
    ${policy_return}=  Update Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
 
-   &{rule1}=  Create Dictionary  protocol=tcp  port=3001  remote_ip=3.9.1.2
-   &{rule2}=  Create Dictionary  protocol=udp  port=3001  remote_ip=3.9.1.2
-   &{rule3}=  Create Dictionary  protocol=icmp  remote_ip=3.9.1.2
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=3001  port_range_maximum=3001  remote_cidr=3.9.1.3/17
+   &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=3001  port_range_maximum=3001  remote_cidr=3.9.1.3/17
+   &{rule3}=  Create Dictionary  protocol=icmp  remote_cidr=3.9.2.3/17
    @{rules}=  Create List  ${rule1}  ${rule2}  ${rule3}
    ${app}=  Create App  region=${region}  app_name=${appname}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${rules}
 
-   &{rule1}=  Create Dictionary  protocol=tcp  port=3001  remote_ip=3.9.5.10
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=3001  port_range_maximum=3001  remote_cidr=3.9.2.3/17
    @{tcpstartport_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=tcp  port=3002  remote_ip=3.9.5.10
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=3002  port_range_maximum=3002  remote_cidr=3.9.2.3/17
    @{tcpendport_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=tcp  port=3002  remote_ip=3.9.0.0
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=3002  port_range_maximum=3002  remote_cidr=3.9.2.3/17
    @{tcpstartip_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=tcp  port=3002  remote_ip=3.9.127.255
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=3002  port_range_maximum=3002  remote_cidr=3.9.2.3/17
    @{tcpendip_rulelist}=  Create List  ${rule1}
 
-   &{rule1}=  Create Dictionary  protocol=udp  port=1001  remote_ip=3.9.5.10
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=1001  remote_cidr=3.9.2.3/17
    @{udpstartport_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=udp  port=2001  remote_ip=3.9.5.10
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=2001  port_range_maximum=2001  remote_cidr=3.9.2.3/17
    @{udpendport_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=udp  port=1111  remote_ip=3.9.0.0
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1111  port_range_maximum=1111  remote_cidr=3.9.2.3/17
    @{udpstartip_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=udp  port=1999  remote_ip=3.9.127.255
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1999  port_range_maximum=1999  remote_cidr=3.9.2.3/17
    @{udpendip_rulelist}=  Create List  ${rule1}
 
    Set Suite Variable  ${tcpstartport_rulelist}
@@ -315,22 +320,22 @@ Setup Out Of Range RequiredOutboundConnections
 
    # startip=3.9.0.0  endip=3.9.127.255
 
-   &{rule1}=  Create Dictionary  protocol=tcp  port=3000  remote_ip=3.9.5.10
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=3000  port_range_maximum=3000  remote_cidr=3.9.2.3/17
    @{tcpbeforestartport_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=tcp  port=3003  remote_ip=3.9.5.10
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=3003  port_range_maximum=3003  remote_cidr=3.9.2.3/17
    @{tcpafterendport_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=tcp  port=3002  remote_ip=3.8.255.255
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=3002  port_range_maximum=3002  remote_cidr=3.8.2.3/17
    @{tcpbeforeip_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=tcp  port=3002  remote_ip=3.9.128.0
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=3002  port_range_maximum=3002  remote_cidr=3.10.2.3/17
    @{tcpafterip_rulelist}=  Create List  ${rule1}
 
-   &{rule1}=  Create Dictionary  protocol=udp  port=1000  remote_ip=3.9.5.10
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1000  port_range_maximum=1000  remote_cidr=3.9.2.3/17
    @{udpbeforestartport_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=udp  port=2002  remote_ip=3.9.5.10
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=2002  port_range_maximum=2002  remote_cidr=3.9.2.3/17
    @{udpafterendport_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=udp  port=1111  remote_ip=3.8.255.255
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1111  port_range_maximum=1111  remote_cidr=3.8.2.3/17
    @{udpbeforeip_rulelist}=  Create List  ${rule1}
-   &{rule1}=  Create Dictionary  protocol=udp  port=1999  remote_ip=3.9.128.0
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1999  port_range_maximum=1999  remote_cidr=3.10.2.3/17
    @{udpafterip_rulelist}=  Create List  ${rule1}
 
    Set Suite Variable  ${tcpbeforestartport_rulelist}
@@ -346,21 +351,21 @@ Setup Out Of Range RequiredOutboundConnections
 Setup RequiredOutboundConnections
    Setup
 
-   &{rule1}=  Create Dictionary  protocol=icmp  remote_ip=1.1.1.1
+   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/1
    @{icmp1_rulelist}=  Create List  ${rule1}
 
-   &{rule1}=  Create Dictionary  protocol=icmp  port=0  remote_ip=1.1.1.1
+   &{rule1}=  Create Dictionary  protocol=icmp  port_range_minimum=0  remote_cidr=1.1.1.1/1
    @{icmp1port_rulelist}=  Create List  ${rule1}
 
-   &{rule1}=  Create Dictionary  protocol=tcp  port=1  remote_ip=1.1.1.1
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=1  remote_cidr=1.1.1.1/1
    @{tcp1_rulelist}=  Create List  ${rule1}
 
-   &{rule1}=  Create Dictionary  protocol=udp  port=65535  remote_ip=1.1.1.1
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=65535  port_range_maximum=65535  remote_cidr=1.1.1.1/1
    @{udp1_rulelist}=  Create List  ${rule1}
 
-   &{rule1}=  Create Dictionary  protocol=icmp  remote_ip=1.1.1.1
-   &{rule2}=  Create Dictionary  protocol=tcp  port=11  remote_ip=2.1.1.1
-   &{rule3}=  Create Dictionary  protocol=udp  port=6535  remote_ip=3.1.1.1
+   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/1
+   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=11  port_range_maximum=12  remote_cidr=2.1.1.1/1
+   &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=6535  port_range_maximum=6537  remote_cidr=3.1.1.1/1
    @{udptcpicmp_rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
    Set Suite Variable  ${icmp1_rulelist}
@@ -394,7 +399,7 @@ Create Trusted AppInst
 
    ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}
 
-   ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}
+   ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}  flavor_name=${flavor_name}
 
    ${appinst}=  Run Keyword If  '${parms['deployment']}' == 'vm'  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
    ...  ELSE  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=${clusterinst['data']['key']['cluster_key']['name']}
@@ -415,10 +420,17 @@ Create Trusted AppInst with RequiredOutboundConnections
    ${rule_list}=  Create List
    FOR  ${rule}  IN  @{parms['required_outbound_connections_list']}
       log to console  ${rule}
-      ${port}=  Run Keyword If  '${rule['protocol']}' == 'icmp' and 'port' not in ${rule}  Set Variable  0
-      ...   ELSE  Set Variable  ${rule['port']}
-
-      &{rule1}=  Create Dictionary  protocol=${rule['protocol']}  port_range_minimum=${port}  port_range_maximum=${port}  remote_cidr=${rule['remote_ip']}/1
+      #${port}=  Run Keyword If  '${rule['protocol']}' == 'icmp' and 'port_range_minimum' not in ${rule}  Set Variable  0
+      #...   ELSE  Set Variable  ${rule['port_range_minimum']}
+      IF  '${rule['protocol']}' == 'icmp' and 'port_range_minimum' not in ${rule}
+         ${port_min}=  Set Variable  0
+         ${port_max}=  Set Variable  0
+      ELSE
+         
+         ${port_min}=  Run Keyword If  'port_range_minimum' in ${rule}  Set Variable  ${rule['port_range_minimum']} 
+         ${port_max}=  Run Keyword If  'port_range_maximum' in ${rule}  Set Variable  ${rule['port_range_maximum']} 
+      END 
+      &{rule1}=  Create Dictionary  protocol=${rule['protocol']}  port_range_minimum=${port_min}  port_range_maximum=${port_max}  remote_cidr=${rule['remote_cidr']}
       Append To List  ${rule_list}  ${rule1}
    END
 
@@ -426,7 +438,7 @@ Create Trusted AppInst with RequiredOutboundConnections
 
    ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${parms['required_outbound_connections_list']}  auto_delete=${False}
 
-   ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}  auto_delete=${False}
+   ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}  auto_delete=${False}  flavor_name=${flavor_name}
 
    ${appinst}=  Run Keyword If  '${parms['deployment']}' == 'vm'  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  auto_delete=${False}
    ...  ELSE  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=${clusterinst['data']['key']['cluster_key']['name']}  auto_delete=${False}
@@ -447,10 +459,18 @@ Create Trusted AppInst with In Range RequiredOutboundConnections
    ${rule_list}=  Create List
    FOR  ${rule}  IN  @{parms['required_outbound_connections_list']}
       log to console  ${rule}
-      ${port}=  Run Keyword If  '${rule['protocol']}' == 'icmp' and 'port' not in ${rule}  Set Variable  0
-      ...   ELSE  Set Variable  ${rule['port']}
+      #${port}=  Run Keyword If  '${rule['protocol']}' == 'icmp' and 'port' not in ${rule}  Set Variable  0
+      #...   ELSE  Set Variable  ${rule['port']}
+      IF  '${rule['protocol']}' == 'icmp' and 'port_range_minimum' not in ${rule}
+         ${port_min}=  Set Variable  0
+         ${port_max}=  Set Variable  0
+      ELSE
 
-      &{rule1}=  Create Dictionary  protocol=${rule['protocol']}  port_range_minimum=${port}  port_range_maximum=${port}  remote_cidr=${rule['remote_ip']}/1
+         ${port_min}=  Run Keyword If  'port_range_minimum' in ${rule}  Set Variable  ${rule['port_range_minimum']}
+         ${port_max}=  Run Keyword If  'port_range_maximum' in ${rule}  Set Variable  ${rule['port_range_maximum']}
+      END
+
+      &{rule1}=  Create Dictionary  protocol=${rule['protocol']}  port_range_minimum=${port_min}  port_range_maximum=${port_max}  remote_cidr=${rule['remote_cidr']}
       Append To List  ${rule_list}  ${rule1}
    END
 
@@ -466,10 +486,18 @@ Fail Create Trusted AppInst with Out Of Range RequiredOutboundConnections
    ${rule_list}=  Create List
    FOR  ${rule}  IN  @{parms['required_outbound_connections_list']}
       log to console  ${rule}
-      ${port}=  Run Keyword If  '${rule['protocol']}' == 'icmp' and 'port' not in ${rule}  Set Variable  0
-      ...   ELSE  Set Variable  ${rule['port']}
+      #${port}=  Run Keyword If  '${rule['protocol']}' == 'icmp' and 'port' not in ${rule}  Set Variable  0
+      #...   ELSE  Set Variable  ${rule['port']}
+      IF  '${rule['protocol']}' == 'icmp' and 'port_range_minimum' not in ${rule}
+         ${port_min}=  Set Variable  0
+         ${port_max}=  Set Variable  0
+      ELSE
 
-      &{rule1}=  Create Dictionary  protocol=${rule['protocol']}  port_range_minimum=${port}  port_range_maximum=${port}  remote_cidr=${rule['remote_ip']}/1
+         ${port_min}=  Run Keyword If  'port_range_minimum' in ${rule}  Set Variable  ${rule['port_range_minimum']}
+         ${port_max}=  Run Keyword If  'port_range_maximum' in ${rule}  Set Variable  ${rule['port_range_maximum']}
+      END
+
+      &{rule1}=  Create Dictionary  protocol=${rule['protocol']}  port_range_minimum=${port_min}  port_range_maximum=${port_max}  remote_cidr=${rule['remote_cidr']}
       Append To List  ${rule_list}  ${rule1}
    END
 
@@ -477,7 +505,7 @@ Fail Create Trusted AppInst with Out Of Range RequiredOutboundConnections
 
    ${appinst}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${appname}  auto_delete=${False}
 
-   Should Be Equal  ${appinst}  ('code=200', 'error={"result":{"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_ip']}:${parms['required_outbound_connections_list'][0]['port']} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}","code":400}}\')
+   Should Be Equal  ${appinst}  ('code=200', 'error={"result":{"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy or exception to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_cidr']}:${parms['required_outbound_connections_list'][0]['port_range_minimum']}-${parms['required_outbound_connections_list'][0]['port_range_maximum']} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}","code":400}}\')
 
 Fail Create Trusted AppInst with RequiredOutboundConnections
    [Arguments]  &{parms}
@@ -487,14 +515,22 @@ Fail Create Trusted AppInst with RequiredOutboundConnections
 
    ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${parms['required_outbound_connections_list']}
 
-   ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}
+   ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}  flavor_name=${flavor_name}
 
    ${appinst}=  Run Keyword If  '${parms['deployment']}' == 'vm'  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
    ...  ELSE  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=${clusterinst['data']['key']['cluster_key']['name']}
 
-   ${port}=  Run Keyword If  '${parms['required_outbound_connections_list'][0]['protocol']}' == 'icmp' and 'port' not in ${parms['required_outbound_connections_list'][0]}  Set Variable  0
-   ...   ELSE  Set Variable  ${parms['required_outbound_connections_list'][0]['port']}
-   Should Be Equal  ${appinst}  ('code=400', 'error={"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_ip']}:${port} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}-${app_counter}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}\')
+   #${port}=  Run Keyword If  '${parms['required_outbound_connections_list'][0]['protocol']}' == 'icmp' and 'port' not in ${parms['required_outbound_connections_list'][0]}  Set Variable  0
+   #...   ELSE  Set Variable  ${parms['required_outbound_connections_list'][0]['port']}
+      IF  '${parms['required_outbound_connections_list'][0]['protocol']}' == 'icmp'
+         ${port_min}=  Run Keyword If  'port_range_minimum' in ${parms['required_outbound_connections_list'][0]}  Set Variable  ${parms['required_outbound_connections_list'][0]['port_range_minimum']}  ELSE  Set Variable  0
+         ${port_max}=  Run Keyword If  'port_range_maximum' in ${parms['required_outbound_connections_list'][0]}  Set Variable  ${parms['required_outbound_connections_list'][0]['port_range_maximum']}  ELSE  Set Variable  0
+      ELSE
+         ${port_min}=  Run Keyword If  'port_range_minimum' in ${parms['required_outbound_connections_list'][0]}  Set Variable  ${parms['required_outbound_connections_list'][0]['port_range_minimum']}
+         ${port_max}=  Run Keyword If  'port_range_maximum' in ${parms['required_outbound_connections_list'][0]}  Set Variable  ${parms['required_outbound_connections_list'][0]['port_range_maximum']}
+      END
+
+   Should Be Equal  ${appinst}  ('code=400', 'error={"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy or exception to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_cidr']}:${port_min}-${port_max} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}-${app_counter}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}\')
 
 Fail Create Untrusted AppInst
    [Arguments]  ${error_msg}  &{parms}  
@@ -504,7 +540,7 @@ Fail Create Untrusted AppInst
 
    ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016
 
-   ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}
+   ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}  flavor_name=${flavor_name}
 
    ${std_create}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
    Should Contain Any  ${std_create}  ${error_msg}  #${error_msg2}
