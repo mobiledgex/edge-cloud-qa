@@ -108,7 +108,8 @@ testcase_components = [
     automated_components  + &quot;Mcctl&quot;,
     controller_components + &quot;Billing&quot;,
     controller_components + &quot;ShowNode&quot;,
-    controller_components + &quot;Organization&quot;
+    controller_components + &quot;Organization&quot;,
+    controller_components = &quot;Controller&quot;
     ]
 
 
