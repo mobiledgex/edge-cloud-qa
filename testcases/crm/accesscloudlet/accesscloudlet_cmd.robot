@@ -9,6 +9,7 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{A
 #Library  Collections
 Library  String
 
+Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
 
@@ -168,6 +169,8 @@ AccessCloudlet - Access cloudlet platform type specific check for error 400 when
     ...  verify platformvm is not accessible
     ...  verify unable to find specified cloudlet mgmt node error 400 with description is returned
 
+    [Tags]  Anthos
+
 #         ${region}=    Set Variable If
 #    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
 #    ...  '${cloudlet_platform_type}' == 'PlatformTypevSphere'      ${region_US}
@@ -193,6 +196,8 @@ AccessCloudlet - Access cloudlet check for error if region is not specified
     ...  send accessCloudlet specifying node_type typonodetype
     ...  verify platformvm is not accessible
     ...  verify no region specified error 400 with description is returned
+
+    [Tags]  Anthos
 
 #         ${region}=    Set Variable If
 #    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
@@ -223,6 +228,8 @@ AccessCloudlet - Access cloudlet check for error if bash commnad is not found
     ...  verify platformvm is accessible
     ...  verify bash command is not found to execute and connection closed
 
+    [Tags]  Anthos
+
 #Return: 'bash: =: command not found\r\n
 
 
@@ -246,10 +253,12 @@ AccessCloudlet - Access cloudlet check for error if bash commnad is not found
       Log to Console  \n\n:${nobash}
 
 #ECQ-2818   
-AccessCloudlet - Access cloudlet by node_type platformvm and send command docker ps
+AccessCloudlet - Access cloudlet by node_type platformvm/platformhost and send command docker ps
     [Documentation]
     ...  send accessCloudlet by node_type platformvm and send docker ps
     ...  verify return information shows container info for crmserver  shepherd  cloudletPrometheus
+
+    [Tags]  Anthos
 
 #         ${region}=    Set Variable If
 #    ...  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    ${region_US}
@@ -270,13 +279,43 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command docker
       Should Contain Any  ${prompt}  crmserver  shepherd  cloudletPrometheus
       Log to Console  \n\n${prompt}
 
+# ECQ-4186
+AccessCloudlet - Access cloudlet by node_type platformhost and node_name and send command docker ps
+    [Documentation]
+    ...  - send accessCloudlet by node_type platformhost and send docker ps
+    ...  - verify return information shows container info for crmserver  shepherd  cloudletPrometheus
+
+    [Tags]  Anthos
+
+      ${prompt}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command}  node_type=platformhost  node_name=
+      Should Contain Any  ${prompt}  crmserver  shepherd  cloudletPrometheus
+      Log to Console  \n\n${prompt}
+
+      ${prompt2}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command}  node_type=platformhost 
+      Should Contain Any  ${prompt2}  crmserver  shepherd  cloudletPrometheus
+      Log to Console  \n\n${prompt2}
+
+      ${prompt3}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command}  node_type=platformhost  node_name=${cloudlet_name_crm}
+      Should Contain Any  ${prompt3}  crmserver  shepherd  cloudletPrometheus
+      Log to Console  \n\n${prompt3}
+
+      ${prompt4}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command}  node_name=${cloudlet_name_crm}
+      Should Contain Any  ${prompt4}  crmserver  shepherd  cloudletPrometheus
+      Log to Console  \n\n${prompt4}
+
+      ${prompt5}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command}  node_name=${cloudlet_name_crm}  node_type=
+      Should Contain Any  ${prompt5}  crmserver  shepherd  cloudletPrometheus
+      Log to Console  \n\n${prompt5}
+
 #ECQ-2819
-AccessCloudlet - Access cloudlet by node_type platformvm and send command docker logs search crmserver     
+AccessCloudlet - Access cloudlet by node_type platformvm/platformhost and send command docker logs search crmserver     
     [Documentation]
     ...  send accessCloudlet command to search crmserver logs on platformvm
     ...  verify platformvm is accessible
     ...  verify commnad docker logs on crmserver returns log info
     ...  verify commnad docker logs on crmserver using grep with 2>&1 works properly 
+
+    [Tags]  Anthos
 
 #${access_command2}=  stty cols 210;docker logs --tail 10 crmserver
 #${access_command2c}=  stty cols 210;docker logs --tail 100 crmserver >2&1 | grep ${testtime} 
@@ -302,18 +341,20 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command docker
 
        ${testtime}=   Get Time  epoch
        ${testtime}=   Convert To String    ${testtime}
-       ${prompt2c}=  Access Cloudlet  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  region=${region}  command=${access_command2c} ${testtime}  node_type=${platformvm}  node_name=
+       ${prompt2c}=  Access Cloudlet  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_command2c} ${testtime}  node_type=${platformvm}  node_name=
        ${cnt}=  Get Line Count  ${prompt2c}
        Should Be True  ${cnt} < 5       #search is 100 lines so grep for epoch time is searching for nothing which will yeild 3 lines and should return less than 5 lines out of 100 
        Log to Console  \n\n${prompt2c}
        Log to Console  \n\n${prompt2c}
 
 #ECQ-2820
-AccessCloudlet - Access cloudlet by node_type platformvm and send command docker logs search shepherd
+AccessCloudlet - Access cloudlet by node_type platformvm/platformhost and send command docker logs search shepherd
     [Documentation]
     ...  send accessCloudlet command to search shepherd logs on platformvm
     ...  verify platformvm is accessible
     ...  verify commnad docker logs on shepherd returns log info
+
+    [Tags]  Anthos
 
 #${access_command2b}=  stty cols 210;docker logs --tail 10 shepherd
 
@@ -338,12 +379,14 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command docker
        Log to Console  \n\n${prompt2}
 
 #ECQ-2821
-AccessCloudlet - Access cloudlet by node_type platformvm and send command to create and delete a file
+AccessCloudlet - Access cloudlet by node_type platformvm/platformhost and send command to create and delete a file
     [Documentation]
     ...  send accessCloudlet node_type platformvm and create a file
     ...  verify command created a file on platformvm
     ...  send accessCloudlet node_type platformvm and delete a file
     ...  verify command deleted the file on platformvm
+
+    [Tags]  Anthos
 
 #${access_command3}=  touch logme;ls -l
 #${access_command3a}= rm logme;ls -l
@@ -373,11 +416,13 @@ AccessCloudlet - Access cloudlet by node_type platformvm and send command to cre
       Log to Console  \n\n${prompt3a}
 
 #ECQ-2822
-AccessCloudlet - accessCloudlet with node type platformvm and verify command exit will return user from cli
+AccessCloudlet - accessCloudlet with node type platformvm/platformhost and verify command exit will return user from cli
    [Documentation]
     ...  Use automation cloudlet node type platformvm
     ...  Verify accesscloudlet can access the platformvm and exit
     ...  Verify exit is performed and user is returned from platformvm
+
+    [Tags]  Anthos
 
 
 #         ${region}=    Set Variable If
@@ -406,6 +451,8 @@ AccessCloudlet - accessCloudlet with node type platformvm issue a ls command wit
     ...  Use automation cloudlet node type  platformvm
     ...  Verify accesscloudlet can access the platformvm and issue a ls command with exit
     ...  Verify ls -l and exit are performed and user is returned from platformvm
+
+    [Tags]  Anthos
 
 
 #         ${region}=    Set Variable If
@@ -543,3 +590,9 @@ AccessCloudlet - Create and access a dedicatedrootlb cluster using command args 
 
 
 *** Keywords ***
+Setup
+    ${platform_type}=  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+
+    IF  '${platform_type}' == 'K8SBareMetal'
+        Set Suite Variable  ${platformvm}  platformhost
+    END
