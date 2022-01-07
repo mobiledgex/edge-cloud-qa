@@ -3,6 +3,7 @@ Documentation  UpdateTrustPolicy fail
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  String
+Library  DateTime
      
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
@@ -286,12 +287,12 @@ UpdateTrustPolicy - update with trust policy and maintenance mode shall return e
 
    [Tags]  TrustPolicy
 
-   Create Flavor  region=${region}
+   Create Flavor  region=${region}  token=${token}
 
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}  token=${token}
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
 
@@ -303,13 +304,13 @@ UpdateTrustPolicy - update with trust policy and maintenance mode shall return e
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
    Should Be Equal As Numbers  ${numrules}  1
 
-   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
-   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}  token=${token}
+   Should Be Equal  ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  Ready
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot change both maintenance state and trust policy at the same time"}')  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  trust_policy=${cloudlet['data']['trust_policy']}  maintenance_state=MaintenanceStart  use_defaults=False
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot change both maintenance state and trust policy at the same time"}')  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  trust_policy=${cloudlet['data']['trust_policy']}  maintenance_state=MaintenanceStart  use_defaults=False  token=${token}
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot change both maintenance state and trust policy at the same time"}')  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  trust_policy=${cloudlet['data']['trust_policy']}  maintenance_state=MaintenanceStartNoFailover  use_defaults=False
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot change both maintenance state and trust policy at the same time"}')  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  trust_policy=${cloudlet['data']['trust_policy']}  maintenance_state=MaintenanceStartNoFailover  use_defaults=False  token=${token}
 
 # ECQ-3124
 UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mismatched appinst rules
@@ -322,14 +323,12 @@ UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mi
 
    [Tags]  TrustPolicy
 
-   Create Flavor  region=${region}
+   Create Flavor  region=${region}  token=${token}
 
-   Create Org  orgtype=operator
+   Create Org  orgtype=operator  token=${token}
 
    ${policy_name}=  Get Default Trust Policy Name
-   ${app_name}=  Get Default App Name
    ${org_name}=  Get Default Organization Name
-   ${cloudlet_name}=  Get Default Cloudlet Name
 
    # create a trust policy
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/24
@@ -341,7 +340,7 @@ UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mi
    &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.2.1.1/24
    @{rulelist2}=  Create List  ${rule2}
 
-   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist1}  operator_org_name=${operator_name_fake}
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist1}  operator_org_name=${operator_name_fake}  token=${token}
 
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
@@ -353,23 +352,23 @@ UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mi
    Should Be Equal As Numbers  ${numrules}  1
 
    # create cloudlet with trust policy
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
-   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_name}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}  token=${token}
+   Should Be Equal  ${cloudlet['data']['trust_policy']}  ${policy_name}
+   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  Ready
 
    # add appinst on the cloudlet
-   &{rule1}=  Create Dictionary  protocol=udp  port=1001  remote_ip=3.1.1.1
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=1003  remote_cidr=3.1.1.1/24
    @{tcp1_rulelist}=  Create List  ${rule1}
    Login  username=dev_manager_automation  password=${password}
-   ${app}=  Create App  region=${region}  developer_org_name=${developer_org}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${tcp1_rulelist}
-   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name}  developer_org_name=${developer_org}
+   ${app}=  Create App  region=${region}  app_name=${app_name}  developer_org_name=${developer_org}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${tcp1_rulelist}  token=${token}
+   ${appinst}=  Create App Instance  region=${region}  app_name=${app_name}  developer_org_name=${developer_org}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name}  developer_org_name=${developer_org}  token=${token}
 
    # update cloudlet with new trust policy with mismatch port list
    ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist11}  operator_org_name=${operator_name_fake}  token=${token}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy to match required connection udp:3.1.1.1:1001 for App {\\\\"organization\\\\":\\\\"${developer_org}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}') 
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy or exception to match required connection udp:3.1.1.1/24:1001-1003 for App {\\\\"organization\\\\":\\\\"${developer_org}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}') 
 
    ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist2}  operator_org_name=${operator_name_fake}  token=${token}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy to match required connection udp:3.1.1.1:1001 for App {\\\\"organization\\\\":\\\\"${developer_org}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy or exception to match required connection udp:3.1.1.1/24:1001-1003 for App {\\\\"organization\\\\":\\\\"${developer_org}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
 
 *** Keywords ***
 Setup
@@ -379,6 +378,7 @@ Setup
    ${policy_name}=  Get Default Trust Policy Name
    Set Suite Variable  ${policy_name}
 
-   ${cloudlet_name}=  Get Default Cloudlet Name
-   Set Suite Variable  ${cloudlet_name}
+   ${time}=  Get Current Date  result_format=epoch
 
+   Set Suite Variable  ${cloudlet_name}  cloudlet${time}
+   Set Suite Variable  ${app_name}  app${time}

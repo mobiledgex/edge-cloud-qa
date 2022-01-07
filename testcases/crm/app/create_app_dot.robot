@@ -79,7 +79,7 @@ Setup
         Log To Console  Done Creating Cluster Instance
         ${fqdn}=  Set Variable  shared.${rootlb}
     ELSE
-        ${fqdn}=  Set Variable  defaultclust.${rootlb}
+        ${fqdn}=  Convert To Lowercase  shared.${cloudlet_name_crm}-${operator_name_crm}.${region}.${mobiledgex_domain}
     END
 
     Set Suite Variable  ${rootlb}
