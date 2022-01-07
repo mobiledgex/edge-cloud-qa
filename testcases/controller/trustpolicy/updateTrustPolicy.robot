@@ -3,6 +3,7 @@ Documentation  UpdateTrustPolicy
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  String
+Library  DateTime
      
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
@@ -777,12 +778,12 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlet
 
    [Tags]  TrustPolicy
 
-   Create Flavor  region=${region}
+   Create Flavor  region=${region}  token=${token}
 
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}  token=${token}
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
 
@@ -794,16 +795,16 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlet
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
    Should Be Equal As Numbers  ${numrules}  1
 
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
-   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}  token=${token}
+   Should Be Equal  ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  Ready
 
    &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=3001  port_range_maximum=4001  remote_cidr=3.1.1.1/1
    &{rule3}=  Create Dictionary  protocol=tcp  port_range_minimum=3002  port_range_maximum=4002  remote_cidr=3.1.1.1/1
    &{rule4}=  Create Dictionary  protocol=icmp  remote_cidr=4.1.1.1/1
    @{rulelist2}=  Create List  ${rule2}  ${rule3}  ${rule4}
 
-   ${policy_post}=  Update Trust Policy  region=${region}  token=${token}  operator_org_name=${operator_name_fake}  rule_list=${rulelist2}
+   ${policy_post}=  Update Trust Policy  region=${region}  token=${token}  operator_org_name=${operator_name_fake}  rule_list=${rulelist2}  token=${token}
    Should Be Equal  ${policy_post['data']['key']['name']}           ${policy_name}
    Should Be Equal  ${policy_post['data']['key']['organization']}   ${operator_name_fake}
 
@@ -825,9 +826,9 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlet
    ${numrules_post}=  Get Length  ${policy_post['data']['outbound_security_rules']}
    Should Be Equal As Numbers  ${numrules_post}  3
 
-   ${cloudlet_post}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}
-   Should Be Equal             ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet_post[0]['data']['trust_policy_state']}  5
+   ${cloudlet_post}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  token=${token}
+   Should Be Equal  ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal  ${cloudlet_post[0]['data']['trust_policy_state']}  Ready
 
 # ECQ-3116
 UpdateTrustPolicy - shall be able to update policy in use by multiple cloudlets
@@ -840,12 +841,12 @@ UpdateTrustPolicy - shall be able to update policy in use by multiple cloudlets
 
    [Tags]  TrustPolicy
 
-   Create Flavor  region=${region}
+   Create Flavor  region=${region}  token=${token}
 
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}  token=${token}
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
 
@@ -857,17 +858,17 @@ UpdateTrustPolicy - shall be able to update policy in use by multiple cloudlets
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
    Should Be Equal As Numbers  ${numrules}  1
 
-   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}-1  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
-   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}-1  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}  token=${token}
+   Should Be Equal  ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  Ready
 
-   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}-2  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
-   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}-2  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}  token=${token}
+   Should Be Equal  ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  Ready
 
-   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}-3  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
-   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}-3  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}  token=${token}
+   Should Be Equal  ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  Ready
 
    &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=3001  port_range_maximum=4001  remote_cidr=3.1.1.1/1
    &{rule3}=  Create Dictionary  protocol=tcp  port_range_minimum=3002  port_range_maximum=4002  remote_cidr=3.1.1.1/1
@@ -897,14 +898,14 @@ UpdateTrustPolicy - shall be able to update policy in use by multiple cloudlets
    Should Be Equal As Numbers  ${numrules_post}  3
 
    ${cloudlet_post}=  Show Cloudlets  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}-1  operator_org_name=${operator_name_fake}  use_defaults=${False}
-   Should Be Equal             ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet_post[0]['data']['trust_policy_state']}  5
+   Should Be Equal  ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal  ${cloudlet_post[0]['data']['trust_policy_state']}  Ready
    ${cloudlet_post}=  Show Cloudlets  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}-2  operator_org_name=${operator_name_fake}  use_defaults=${False}
-   Should Be Equal             ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet_post[0]['data']['trust_policy_state']}  5
+   Should Be Equal  ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal  ${cloudlet_post[0]['data']['trust_policy_state']}  Ready 
    ${cloudlet_post}=  Show Cloudlets  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}-3  operator_org_name=${operator_name_fake}  use_defaults=${False}
-   Should Be Equal             ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet_post[0]['data']['trust_policy_state']}  5
+   Should Be Equal  ${cloudlet_post[0]['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal  ${cloudlet_post[0]['data']['trust_policy_state']}  Ready 
 
 # ECQ-3117
 UpdateTrustPolicy - shall be able to update policy in use by cloudlets in maintenance mode
@@ -918,12 +919,12 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlets in mainte
 
    [Tags]  TrustPolicy
 
-   Create Flavor  region=${region}
+   Create Flavor  region=${region}  token=${token}
 
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}  token=${token}
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
 
@@ -935,11 +936,11 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlets in mainte
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
    Should Be Equal As Numbers  ${numrules}  1
 
-   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
-   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
-   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}  token=${token}
+   Should Be Equal  ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal  ${cloudlet['data']['trust_policy_state']}  Ready
 
-   ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  maintenance_state=MaintenanceStart  use_defaults=False
+   ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  maintenance_state=MaintenanceStart  use_defaults=False  token=${token}
 
    &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=3001  port_range_maximum=4001  remote_cidr=3.1.1.1/1
    &{rule3}=  Create Dictionary  protocol=tcp  port_range_minimum=3002  port_range_maximum=4002  remote_cidr=3.1.1.1/1
@@ -955,13 +956,14 @@ Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
 
+   ${time}=  Get Current Date  result_format=epoch
+
    ${policy_name}=  Get Default Trust Policy Name
    ${operator_name}=  Get Default Organization Name
-   ${cloudlet_name}=  Get Default Cloudlet Name
 
    Create Org  orgtype=operator
 
    Set Suite Variable  ${token}
    Set Suite Variable  ${policy_name}
    Set Suite Variable  ${operator_name}
-   Set Suite Variable  ${cloudlet_name}
+   Set Suite Variable  ${cloudlet_name}  cloudlet${time}
