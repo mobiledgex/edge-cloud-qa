@@ -19,13 +19,13 @@
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>Build</name>
+          <name>VersionToDeploy</name>
           <description>YYYY-MM-DD or &apos;today&apos;</description>
           <defaultValue>today</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
-          <name>component</name>
+          <name>Component</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>Console</string>
