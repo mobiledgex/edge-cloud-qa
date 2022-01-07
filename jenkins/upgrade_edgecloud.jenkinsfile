@@ -1,6 +1,6 @@
 import java.text.SimpleDateFormat
 
-dateParm = "${BuildDate}"
+dateParm = "${VersionToDeploy}"
 
 node('jenkinsSlave1'){
     date = new Date()
@@ -8,104 +8,78 @@ node('jenkinsSlave1'){
     Calendar cal = Calendar.getInstance()
 
     dateValue = "notset"
+    deployOptions = 'notset'
+
     if(dateParm == "today") {
        dateValue = sdate.format(date)
     } else {
        dateValue = dateParm
     }
-    cycle = Version + '_automation_' + dateValue
+    //cycle = Version + '_automation_' + dateValue
     tag = dateValue
-    
-    currentBuild.displayName = cycle
+
+    if(Component == 'Everything') {
+       deployOptions = '-s vault-setup -V ' + tag + ' qa'
+    } else if(Component == 'Console') {
+       deployOptions = '-C ' + 'v' + tag + ' -s mc qa console'
+   }
+    currentBuild.displayName = tag
 
     try {
        stage('Check Load Exists') {
-          def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + tag + '\\")"'
-          def index  = sh(script: s, returnStdout: true);
-	  int indexnum = index as Integer
-          if(indexnum < 1) {
-             println "${s} failed"
-             currentBuild.result = 'FAILURE'
-          }
-
+           if(Component == 'Everything') {
+               def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + tag + '\\")"'
+               def index  = sh(script: s, returnStdout: true);
+	           int indexnum = index as Integer
+               if(indexnum < 1) {
+                  println "${s} failed"
+                  currentBuild.result = 'FAILURE'
+               }
+           } else {
+               echo 'skipping load check since component is not Everything'
+           }
        }
     }  catch (e) {
-       dir('go/src/github.com/mobiledgex/jenkins') {
-          def status = -1
-	  def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + tag + ' doesnt exist in registry. Aborting"'
-          status = sh(script: s, returnStatus: true);
-       }
+       slackMessage.fail('load=' + tag + ' doesnt exist in registry. Aborting')
        error('Aborting the build')
     }
 
     try {
        stage('Checkout') {
-          dir('go/src/github.com/mobiledgex') {
-             checkout([$class: 'GitSCM',
-                branches: [[name: 'master']],
-                doGenerateSubmoduleConfigurations: false,
-                extensions: [
-                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'jenkins/*'],[$class:'SparseCheckoutPath', path:'modules/*'],[$class:'SparseCheckoutPath', path:'tools/*'],[$class:'SparseCheckoutPath', path:'testcases/config/*']]]
-                ],
-                submoduleCfg: [],
-                userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
-                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
-          }
-          dir('go/src/github.com/mobiledgex/edge-cloud') {
-             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*'
-          }
           dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
              sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*'
+             checkout([$class: 'GitSCM',
+             branches: [[name: 'master']],
+             doGenerateSubmoduleConfigurations: false,
+             extensions: [
+                 [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'ansible/*']]]
+             ],
+             submoduleCfg: [],
+             userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-cloud-infra.git']]])
           }
-          dir('go/src/github.com/mobiledgex/edge-proto') {
-             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*'
-          }
-
-          dir('go/src/github.com/mobiledgex/edge-cloud') {
-             git branch: 'master',
-             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
-             url: 'https://github.com/mobiledgex/edge-cloud.git'
-          }
-          dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
-             git branch: 'master',
-             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
-             url: 'https://github.com/mobiledgex/edge-cloud-infra.git'
-          }
-          dir('go/src/github.com/mobiledgex/edge-proto') {
-             git branch: 'master',
-             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
-             url: 'https://github.com/mobiledgex/edge-proto.git'
-          }
-
        }
     }  catch (e) {
-       dir('go/src/github.com/mobiledgex/jenkins') {
-          def status = -1
-          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "checkout of edge-cloud-qa failed. Aborting"'
-          status = sh(script: s, returnStatus: true);
-       }
+       slackMessage.fail("git checkout failed. Aborting")
+       echo "git failed"
        error('Aborting the build')
     }
 
     try {
-       stage('deploy processes in k8s') {
+       stage('deploy processes') {
           dir('go/src/github.com/mobiledgex/edge-cloud-infra/ansible') {
              // fix known_hosts file since recreating the server causes a mismatch in the file
              sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationbonncloudlet.tdg.mobiledgex.net"'
              sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationhamburgcloudlet.tdg.mobiledgex.net"'
-	     
-             sh 'export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID="22c16b60-1ac5-4a32-cc07-05037475a717";export VAULT_SECRET_ID="67c96872-878e-9442-4440-ff76ce65cea5";./deploy.sh -s vault-setup -V ' + tag + ' qa' 
-             //sh 'docker system prune -af'  //remove all docker stuff without prompting
+             echo './deploy.sh ' + deployOptions
+             sh 'export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID="22c16b60-1ac5-4a32-cc07-05037475a717";export VAULT_SECRET_ID="67c96872-878e-9442-4440-ff76ce65cea5";./deploy.sh -y ' + deployOptions
 
              sleep 60  // wait for all pods to come up
 	  }
        }
     } catch(e) {
-       dir('go/src/github.com/mobiledgex/jenkins') {
-          def status = -1
-          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "deploy to k8s for Build ' + tag + ' failed. Aborting"'
-          status = sh(script: s, returnStatus: true);
-       }
-       error('Aborting the build')
+        slackMessage.fail('deploy for Build ' + tag + ' failed. Aborting')
+        error('Aborting the build')
     }
 }
+
