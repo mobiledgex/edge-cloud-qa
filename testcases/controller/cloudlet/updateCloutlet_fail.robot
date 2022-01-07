@@ -2,8 +2,9 @@
 #Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         String
+Library  DateTime
 
-#Test Teardown  Cleanup Provisioning
+Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001
@@ -304,7 +305,8 @@ UpdateCloudlet with unknown trust policy
    [Tags]  TrustPolicy
 
    ${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}     cloudlet_name=${cldlet}     trust_policy=999      use_defaults=False
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"TrustPolicy 999 for organization ${oper} not found"}') 
+   #Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"TrustPolicy 999 for organization ${oper} not found"}') 
+   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"${oper}\\\\",\\\\"name\\\\":\\\\"999\\\\"} not found"}')
 
 # ECQ-3095
 UpdateCloudlet - error shall be received for update to trusted with nontrusted app
@@ -316,6 +318,9 @@ UpdateCloudlet - error shall be received for update to trusted with nontrusted a
    ...  - verify error is received
 
    [Tags]  TrustPolicy
+
+   ${epoch}=  Get Current Date  result_format=epoch
+   ${cloudlet_name}=  Set Variable  cloudlet${epoch}
 
    Create Flavor  region=${region}
 
@@ -336,13 +341,13 @@ UpdateCloudlet - error shall be received for update to trusted with nontrusted a
    Should Be Equal As Numbers  ${numrules}  1
 
    # create cloudlet without trust policy
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${oper}
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${oper}
    Should Not Contain  ${cloudlet['data']}  trust_policy
    Should Be Equal     ${cloudlet['data']['trust_policy_state']}  NotPresent
 
    # create a trusted app/appinst on the cloudlet
    ${app}=  Create App  region=${region}  trusted=${True}
-   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
+   ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
 
    # update cloudlet with trust policy and remove the policy
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${oper}  trust_policy=${policy_name}
@@ -367,6 +372,9 @@ UpdateCloudlet - error shall be received for update to trusted with trusted app 
 
    [Tags]  TrustPolicy
 
+   ${epoch}=  Get Current Date  result_format=epoch
+   ${cloudlet_name}=  Set Variable  cloudlet${epoch}
+
    Create Flavor  region=${region}
 
    ${policy_name}=  Get Default Trust Policy Name
@@ -386,20 +394,20 @@ UpdateCloudlet - error shall be received for update to trusted with trusted app 
    Should Be Equal As Numbers  ${numrules}  1
 
    # create cloudlet without trust policy
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${oper}
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${oper}
    Should Not Contain  ${cloudlet['data']}  trust_policy
    Should Be Equal     ${cloudlet['data']['trust_policy_state']}  NotPresent
 
    # create a trusted app/appinst on the cloudlet
-   &{rule1}=  Create Dictionary  protocol=udp  port=1000  remote_ip=3.1.1.1
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1000  port_range_maximum=1000  remote_cidr=3.1.1.1/1
    @{tcp1_rulelist}=  Create List  ${rule1}
    ${app}=  Create App  region=${region}
-   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
+   ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
    ${appt}=  Update App  region=${region}  trusted=${True}  required_outbound_connections_list=${tcp1_rulelist}
 
    # update cloudlet with trust policy
    ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  cloudlet_name=${cloudlet['data']['key']['name']}  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection udp:3.1.1.1:1000 for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${app['data']['key']['name']}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy or exception to match required connection udp:3.1.1.1/1:1000-1000 for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${app['data']['key']['name']}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
 
 # ECQ-3098
 UpdateCloudlet - update with trust policy on non-openstack shall return error
@@ -521,7 +529,7 @@ UpdateCloudlet - update with same alliance org as own org shall return error
 Setup
 	${dips}    Convert To Integer     254
 
-        ${epoch}=  Get Time  epoch
+        ${epoch}=  Get Current Date  result_format=epoch
         ${epochstring}=  Convert To String  ${epoch}
 
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}

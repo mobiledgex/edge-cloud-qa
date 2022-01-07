@@ -2,6 +2,7 @@
 #Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         String
+Library  DateTime
 
 Test Setup     Setup
 Test Teardown  Cleanup provisioning
@@ -162,7 +163,7 @@ CreateCloudlet - shall be able to create cloudlet with trust policy
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
    Should Be Equal As Numbers  ${numrules}  1
 
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
    Should Be Equal             ${cloudlet['data']['trust_policy_state']}  Ready
 
@@ -174,7 +175,7 @@ CreateCloudlet - shall be able to create cloudlet with empty trust policy
 
    [Tags]  TrustPolicy
 
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${Empty}
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${Empty}
    Should Not Contain  ${cloudlet['data']}  trust_policy
    Should Be Equal     ${cloudlet['data']['trust_policy_state']}  NotPresent
 
@@ -222,6 +223,9 @@ CreateCloudlet - shall be able to create cloudlet with allianceorgs
 
 ** Keywords **
 Setup
+   ${time}=  Get Current Date  result_format=epoch
+
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
 
+   Set Suite Variable  ${cloudlet_name}  cloudlet${time} 
