@@ -135,7 +135,7 @@ UpdateCloudlet with a ipsupport of -1
 	${ipsup}    Convert To Integer 	-1
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	 region=${region}  operator_org_name=${oper}   cloudlet_name=${cldlet}    ip_support=${ipsup}      use_defaults=False             
-        Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid IpSupport"}')
+        Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected IpSupport, but got value -1 for field \\\\"Cloudlet.ip_support\\\\", valid values are one of Unknown, Static, Dynamic, or 0, 1, 2"}')
 
 	#Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	#Should Contain  ${error_msg}   details = "Invalid IpSupport"
@@ -151,7 +151,7 @@ UpdateCloudlet with a ipsupport of -8
 	${ipsup}    Convert To Integer 	-8
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	 region=${region}  operator_org_name=${oper}   cloudlet_name=${cldlet}    ip_support=${ipsup}        use_defaults=False
-        Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid IpSupport"}')
+        Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected IpSupport, but got value -8 for field \\\\"Cloudlet.ip_support\\\\", valid values are one of Unknown, Static, Dynamic, or 0, 1, 2"}')
 
 	#Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	#Should Contain  ${error_msg}   details = "Invalid IpSupport"
@@ -294,7 +294,7 @@ UpdateCloudlet with invalid maintenance mode
         ...  - verify correct error is received 
 
         ${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}     cloudlet_name=${cldlet}     maintenance_state=999      use_defaults=False
-        Should Be Equal  ${error_msg}   ('code=400', 'error={"message":"Invalid maintenance state, only normal operation and maintenance start states are allowed"}')
+        Should Be Equal  ${error_msg}   ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected MaintenanceState, but got value 999 for field \\\\"Cloudlet.maintenance_state\\\\", valid values are one of NormalOperation, MaintenanceStart, FailoverRequested, FailoverDone, FailoverError, MaintenanceStartNoFailover, CrmRequested, CrmUnderMaintenance, CrmError, NormalOperationInit, UnderMaintenance, or 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 31"}')
 
 # ECQ-3069
 UpdateCloudlet with unknown trust policy
