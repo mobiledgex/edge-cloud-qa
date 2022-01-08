@@ -74,10 +74,10 @@ DeleteRateLimitFlow - delete with invalid parms shall return error
 
    # fixed - EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
    # invalid rate limit target
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid RateLimitTarget value \\\\"AllRequest\\\\""}')  Delete Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected RateLimitTarget, but got string AllRequest for field \\\\"FlowRateLimitSettings.key.rate_limit_key.rate_limit_target\\\\", valid values are one of UnknownTarget, AllRequests, PerIp, PerUser, or 0, 1, 2, 3"}')  Delete Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
    # invalid api_endpoint_type
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid ApiEndpointType value \\\\"Dm\\\\""}')  Delete Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected ApiEndpointType, but got string Dm for field \\\\"FlowRateLimitSettings.key.rate_limit_key.api_endpoint_type\\\\", valid values are one of UnknownApiEndpointType, Dme, or 0, 1"}')  Delete Rate Limit Flow  region=${region}  token=${token}  flow_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
 # ECQ-4051
 DeleteRateLimitMaxRequests - delete with invalid parms shall return error
@@ -89,10 +89,10 @@ DeleteRateLimitMaxRequests - delete with invalid parms shall return error
 
    # fixed - EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
    # invalid rate limit target
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid RateLimitTarget value \\\\"AllRequest\\\\""}')  Delete Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected RateLimitTarget, but got string AllRequest for field \\\\"MaxReqsRateLimitSettings.key.rate_limit_key.rate_limit_target\\\\", valid values are one of UnknownTarget, AllRequests, PerIp, PerUser, or 0, 1, 2, 3"}')  Delete Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
 
    # invalid api_endpoint_type
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Invalid ApiEndpointType value \\\\"Dm\\\\""}')  Delete Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected ApiEndpointType, but got string Dm for field \\\\"MaxReqsRateLimitSettings.key.rate_limit_key.api_endpoint_type\\\\", valid values are one of UnknownApiEndpointType, Dme, or 0, 1"}')  Delete Rate Limit Max Requests  region=${region}  token=${token}  max_requests_settings_name=xx  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
 
 # ECQ-4052
 DeleteRateLimitFlow - delete with non-existent flow shall return error
