@@ -130,7 +130,9 @@ CreateCloudlet with an invalid ipsupport enumeration -1
 	
 	${supp}    Convert To Integer 	-1
 	
-	Run Keyword And Expect Error  ('code=400', 'error={"message":"Only dynamic IPs are supported currently"}')   Create Cloudlet	 region=${region}  token=${token}   operator_org_name=${oper}    cloudlet_name=${cldlet}     number_dynamic_ips=2    latitude=35     longitude=-96   ip_support=${supp}   use_defaults=False
+	#Run Keyword And Expect Error  ('code=400', 'error={"message":"Only dynamic IPs are supported currently"}')   Create Cloudlet	 region=${region}  token=${token}   operator_org_name=${oper}    cloudlet_name=${cldlet}     number_dynamic_ips=2    latitude=35     longitude=-96   ip_support=${supp}   use_defaults=False
+        Run Keyword And Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected IpSupport, but got value -1 for field \\\\"Cloudlet.ip_support\\\\", valid values are one of Unknown, Static, Dynamic, or 0, 1, 2"}')   Create Cloudlet    region=${region}  token=${token}   operator_org_name=${oper}    cloudlet_name=${cldlet}     number_dynamic_ips=2    latitude=35     longitude=-96   ip_support=${supp}   use_defaults=False
+
 	#Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	#Should Contain  ${error_msg}   details = "Only dynamic IPs are supported currently"
 
@@ -157,7 +159,8 @@ CreateCloudlet with an invalid ipsupport enumeration 3
 	...                 IpSupportDynamic = 2
 	...             Expect the test to fail as enumeration 3 is not used and will give an error.
 	${supp}    Convert To Integer 	3
-	Run Keyword And Expect Error  ('code=400', 'error={"message":"Only dynamic IPs are supported currently"}')  Create Cloudlet	 region=${region}  token=${token}  operator_org_name=${oper}    cloudlet_name=${cldlet}     number_dynamic_ips=2    latitude=35     longitude=-96   ip_support=${supp}     use_defaults=False
+	#Run Keyword And Expect Error  ('code=400', 'error={"message":"Only dynamic IPs are supported currently"}')  Create Cloudlet	 region=${region}  token=${token}  operator_org_name=${oper}    cloudlet_name=${cldlet}     number_dynamic_ips=2    latitude=35     longitude=-96   ip_support=${supp}     use_defaults=False
+        Run Keyword And Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected IpSupport, but got value 3 for field \\\\"Cloudlet.ip_support\\\\", valid values are one of Unknown, Static, Dynamic, or 0, 1, 2"}')  Create Cloudlet     region=${region}  token=${token}  operator_org_name=${oper}    cloudlet_name=${cldlet}     number_dynamic_ips=2    latitude=35     longitude=-96   ip_support=${supp}     use_defaults=False
 
 	#Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	#Should Contain  ${error_msg}   details = "Only dynamic IPs are supported currently"

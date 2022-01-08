@@ -91,14 +91,14 @@ UpdateRateLimitFlow - update with invalid parms shall return error
 
    # fixed - EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
    # invalid rate limit target
-   Invalid JSON data: Invalid RateLimitTarget value \\\\"AllRequest\\\\"  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Invalid JSON data: Unmarshal error: expected RateLimitTarget, but got string AllRequest for field \\\\"FlowRateLimitSettings.key.rate_limit_key.rate_limit_target\\\\", valid values are one of UnknownTarget, AllRequests, PerIp, PerUser, or 0, 1, 2, 3  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
    # invalid api_endpoint_type
-   Invalid JSON data: Invalid ApiEndpointType value \\\\"Dm\\\\"  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Invalid JSON data: Unmarshal error: expected ApiEndpointType, but got string Dm for field \\\\"FlowRateLimitSettings.key.rate_limit_key.api_endpoint_type\\\\", valid values are one of UnknownApiEndpointType, Dme, or 0, 1  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  flow_algorithm=TokenBucketAlgorithm  requests_per_second=5  burst_size=5  use_defaults=${False}
 
    # invalid flow algor
-   Invalid JSON data: Invalid FlowRateLimitAlgorithm value \\\\"xxx\\\\""  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=xxx  requests_per_second=5  burst_size=5  use_defaults=${False}
-   Invalid JSON data: Invalid FlowRateLimitAlgorithm value 99  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=${99}  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Invalid JSON data: Unmarshal error: expected FlowRateLimitAlgorithm, but got string xxx for field \\\\"FlowRateLimitSettings.settings.flow_algorithm\\\\", valid values are one of UnknownFlowAlgorithm, TokenBucketAlgorithm, LeakyBucketAlgorithm, or 0, 1, 2  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=xxx  requests_per_second=5  burst_size=5  use_defaults=${False}
+   Invalid JSON data: Unmarshal error: expected FlowRateLimitAlgorithm, but got value 99 for field \\\\"FlowRateLimitSettings.settings.flow_algorithm\\\\", valid values are one of UnknownFlowAlgorithm, TokenBucketAlgorithm, LeakyBucketAlgorithm, or 0, 1, 2  flow_settings_name=${flow_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  flow_algorithm=${99}  requests_per_second=5  burst_size=5  use_defaults=${False}
 
 # ECQ-4061
 UpdateRateLimitMaxRequests - update with invalid parms shall return error
@@ -118,14 +118,14 @@ UpdateRateLimitMaxRequests - update with invalid parms shall return error
 
    # fixed - EDGECLOUD-5481 ratelimitsettings with invalid flowalgorithm,apiendpointtype and ratelimittarget need better error message
    # invalid rate limit target
-   Invalid JSON data: Invalid RateLimitTarget value \\\\"AllRequest\\\\"  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
+   Invalid JSON data: Unmarshal error: expected RateLimitTarget, but got string AllRequest for field \\\\"MaxReqsRateLimitSettings.key.rate_limit_key.rate_limit_target\\\\", valid values are one of UnknownTarget, AllRequests, PerIp, PerUser, or 0, 1, 2, 3  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequest  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
 
    # invalid api_endpoint_type
-   Invalid JSON data: Invalid ApiEndpointType value \\\\"Dm\\\\"  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
+   Invalid JSON data: Unmarshal error: expected ApiEndpointType, but got string Dm for field \\\\"MaxReqsRateLimitSettings.key.rate_limit_key.api_endpoint_type\\\\", valid values are one of UnknownApiEndpointType, Dme, or 0, 1  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dm  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1m
 
    # invalid interval
-   Invalid JSON data: Unmarshal duration \\\\"1\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1
-   Invalid JSON data: Unmarshal duration \\\\"m\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=m
+   Invalid JSON data: Unmarshal error: expected duration, but got string 1 for field \\\\"MaxReqsRateLimitSettings.settings.interval\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=1
+   Invalid JSON data: Unmarshal error: expected duration, but got string m for field \\\\"MaxReqsRateLimitSettings.settings.interval\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc  max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=m
    Invalid Interval -1000000000, must be greater than 0                                                    max_requests_settings_name=${max_requests_name}  api_name=yy  rate_limit_target=AllRequests  api_endpoint_type=Dme  max_requests_algorithm=FixedWindowAlgorithm  max_requests=11  interval=-1s
 
 # ECQ-4062
