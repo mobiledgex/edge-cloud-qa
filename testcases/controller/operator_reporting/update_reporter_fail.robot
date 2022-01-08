@@ -52,7 +52,8 @@ Update Reporter - Controller throws error when invalid schedule is provided
     Create Reporter  reporter_name=${reporter_name}  organization=${operator}
 
     ${error_msg}=  Run Keyword and Expect Error  *  Update Reporter  reporter_name=${reporter_name}  organization=${operator}  schedule=EveryDay
-    Should Contain  ${error_msg}  Invalid JSON data: Invalid ReportSchedule value 4
+    #Should Contain  ${error_msg}  Invalid JSON data: Invalid ReportSchedule value 4
+    Should Contain  ${error_msg}  Invalid JSON data: Unmarshal error: expected ReportSchedule, but got value 4 for field \\\\"Schedule\\\\", valid values are one of EveryWeek, Every15Days, Every30Days, EveryMonth, or 0, 1, 2, 3
 
 # ECQ-3788
 Update Reporter - Controller throws error when startscheduledate is a historical date
