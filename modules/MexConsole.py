@@ -839,8 +839,6 @@ class MexConsole() :
         self.flavors_page.flavor_rows_per_page()
 
     def flavor_should_exist(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5, change_rows_per_page=False, number_of_pages=None, gpu=None):
-        if change_rows_per_page:
-            self.flavors_page.flavor_rows_per_page()
         if number_of_pages is None:
             number_of_pages = 1
         logging.info('number of pages is ' + str(number_of_pages))
