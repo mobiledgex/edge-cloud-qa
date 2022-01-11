@@ -132,11 +132,10 @@ class ComputePage(BasePage):
 
         cell_data = []
         button_enabled = True
-        while(button_enabled):
-            for row in table.find_elements_by_css_selector('tr'):
+        for row in table.find_elements_by_xpath('//div[@role="row"]'):
                 row.location_once_scrolled_into_view   # cause row to scroll into view
                 cell_data = []
-                for cell in row.find_elements_by_css_selector('td'):
+                for cell in row.find_elements_by_xpath('//div[@role="gridcell"]'):
                     ishidden = cell.get_attribute("hidden")
                     if not (ishidden):
                         cellinnerText = cell.get_attribute("innerText")
@@ -152,44 +151,32 @@ class ComputePage(BasePage):
                     # logging.info('CELL Text - ' +  cell.text)
                 cell_data.append(row)
                 row_list.append(list(cell_data))
-            ele = self.driver.find_element_by_xpath(ComputePageLocators.next_page_button)
-
-            if ele.is_enabled():
-                logging.info("Clicking NEXT button")
-                ele.click()
-                time.sleep(1)
-            else:
-                button_enabled = False
-                break
-
         logging.info('ROW LIST - ', *row_list)
 
-        if len(table.find_elements_by_css_selector('tr')) > 0:
-            table.find_elements_by_css_selector('tr')[0].location_once_scrolled_into_view
+        if len(table.find_elements_by_xpath('//div[@role="row"]')) > 0:
+            table.find_elements_by_xpath('//div[@role="row"]')[0].location_once_scrolled_into_view
             
         return row_list
 
-    #def get_table_row_by_value(self, value, value_index):
     def get_table_row_by_value(self, row_values):
         print('*WARN*', 'rowvalues', row_values)
         table = self.driver.find_element(*ComputePageLocators.table_data)
     
-        #print('*WARN*','row_values', len(row_values))
         row_found = 0
         row_list = []
         cell_data = []
 
-        for row in table.find_elements_by_css_selector('tr'):
+        for row in table.find_elements_by_xpath('//div[@role="row"]'):
             print('*WARN*', 'checking row', row)
             if not row.is_displayed:
                 row.location_once_scrolled_into_view   # cause row to scroll into view
-                print('*WARN*', 'displayed')
+                print('*WARN*', 'row not displayed')
             else:
                 row.location_once_scrolled_into_view   # cause row to scroll into view
-                print('*WARN*', 'not displayed')
+                print('*WARN*', 'row displayed')
                 
             for value in row_values:
-                text_value = row.find_element_by_xpath(f'./td[{value[1]}]').text
+                text_value = row.find_element_by_xpath(f'//div[@role="gridcell"][{value[1]}]//span').text
                 print('*WARN*', 'text_value=', text_value, 'value[0]=',value[0])
                 if text_value == value[0]:
                     row_found += 1
@@ -215,7 +202,6 @@ class ComputePage(BasePage):
         self.driver.find_element(*ComputePageLocators.table_new_button).click()
 
     def click_add_button(self):
-        #self.driver.find_element(*ComputePageLocators.table_add_button).click()
         logging.info("Clicking ADD button")
         e = self.driver.find_element(*ComputePageLocators.table_add_button)
         ActionChains(self.driver).click(on_element=e).perform()
