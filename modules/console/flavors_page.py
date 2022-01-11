@@ -15,37 +15,37 @@ class FlavorsPage(ComputePage):
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_region):
             logging.info('region header present')
         else:
-            logging.info('region header not present')
+            logging.warning('region header not present')
             header_present = False
 
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_flavorname):
             logging.info('flavorname header present')
         else:
-            logging.info('flavorname header not present')
+            logging.warning('flavorname header not present')
             header_present = False
 
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_ram):
             logging.info('ram header present')
         else:
-            logging.info('ram header not present')
+            logging.warning('ram header not present')
             header_present = False
 
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_vcpus):
             logging.info('vcpus header present')
         else:
-            logging.info('vcpus header not present')
+            logging.warning('vcpus header not present')
             header_present = False
 
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_disk):
             logging.info('disk header present')
         else:
-            logging.info('disk header not present')
+            logging.warning('disk header not present')
             header_present = False
 
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_edit):
             logging.info('edit header present')
         else:
-            logging.info('edit header not present')
+            logging.warning('edit header not present')
             header_present = False
 
         return header_present
@@ -129,7 +129,6 @@ class FlavorsPage(ComputePage):
                     return True
                 else:
                     time.sleep(1)
-            self.click_next_page()
             index += 1
             
         return False
@@ -139,7 +138,10 @@ class FlavorsPage(ComputePage):
         logging.info(f'deleting flavor region={region} flavor_name={flavor_name} ')
         self.perform_search(flavor_name)
         row = self.get_table_row_by_value([(flavor_name, 4)])
-        row.find_element(*ComputePageLocators.table_action).click()
+        print('*WARN*', 'row = ', row)
+        #row.find_element(*ComputePageLocators.table_action).click()
+        e = row.find_element(*ComputePageLocators.table_action)
+        ActionChains(self.driver).click(on_element=e).perform()
         self.driver.find_element(*ComputePageLocators.table_delete).click()
 
         time.sleep(1)

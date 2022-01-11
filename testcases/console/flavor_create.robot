@@ -20,7 +20,7 @@ ${region}  US
 WebUI - user shall be able to create a new EU flavor
     [Documentation]
     ...  Create a new flavor
-    ...  Fill in Region=US and all proper values
+    ...  Fill in Region=EU and all proper values
     ...  Verify flavor shows in list
     [Tags]  passing
 
