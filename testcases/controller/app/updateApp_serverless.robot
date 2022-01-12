@@ -160,30 +160,30 @@ UpdateApp - serverless apps with non k8s shall fail
     Should Be Equal  ${error3}  ('code=400', 'error={"message":"Allow serverless only supported for deployment type Kubernetes"}')
 
 # ECQ-4248
-#UpdateApp - serverless apps with config and no serverless option shall fail
-#   [Documentation]
-#   ...  - create app with serverless=false
-#   ...  - update app with config only
-#   ...  - verify proper error
-#
-#   [Tags]  Serverless
-#
-#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  allow_serverless=${False}
-#
-#   ${error1}=  Run Keyword and Expect Error  *  Update App  region=${region}  serverless_config_vcpus=1
-#   Should Be Equal  ${error1}  ('code=400', 'error={"message":"Serverless config cannot be specified without allow serverless true"}')
-#
-#   ${error1}=  Run Keyword and Expect Error  *  Update App  region=${region}  serverless_config_ram=1
-#   Should Be Equal  ${error1}  ('code=400', 'error={"message":"Serverless config cannot be specified without allow serverless true"}')
-#
-#   ${error1}=  Run Keyword and Expect Error  *  Update App  region=${region}  serverless_config_min_replicas=1
-#   Should Be Equal  ${error1}  ('code=400', 'error={"message":"Serverless config cannot be specified without allow serverless true"}')
-#
-#   ${error2}=  Run Keyword and Expect Error  *  Update App  region=${region}  allow_serverless=${False}  serverless_config_vcpus=1  serverless_config_ram=1  serverless_config_min_replicas=1
-#   Should Be Equal  ${error2}  ('code=400', 'error={"message":"Serverless config cannot be specified without allow serverless true"}')
-#
-#   ${error3}=  Run Keyword and Expect Error  *  Update App  region=${region}  serverless_config_vcpus=1  serverless_config_ram=1  serverless_config_min_replicas=1
-#   Should Be Equal  ${error3}  ('code=400', 'error={"message":"Serverless config cannot be specified without allow serverless true"}')
+UpdateApp - serverless apps with config and no serverless option shall fail
+   [Documentation]
+   ...  - create app with serverless=false
+   ...  - update app with config only
+   ...  - verify proper error
+
+   [Tags]  Serverless
+
+   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  allow_serverless=${False}
+
+   ${error1}=  Run Keyword and Expect Error  *  Update App  region=${region}  serverless_config_vcpus=1
+   Should Be Equal  ${error1}  ('code=400', 'error={"message":"Serverless config cannot be specified without allow serverless true"}')
+
+   ${error1}=  Run Keyword and Expect Error  *  Update App  region=${region}  serverless_config_ram=1
+   Should Be Equal  ${error1}  ('code=400', 'error={"message":"Serverless config cannot be specified without allow serverless true"}')
+
+   ${error1}=  Run Keyword and Expect Error  *  Update App  region=${region}  serverless_config_min_replicas=1
+   Should Be Equal  ${error1}  ('code=400', 'error={"message":"Serverless config cannot be specified without allow serverless true"}')
+
+   ${error2}=  Run Keyword and Expect Error  *  Update App  region=${region}  allow_serverless=${False}  serverless_config_vcpus=1  serverless_config_ram=1  serverless_config_min_replicas=1
+   Should Be Equal  ${error2}  ('code=400', 'error={"message":"Serverless config cannot be specified without allow serverless true"}')
+
+   ${error3}=  Run Keyword and Expect Error  *  Update App  region=${region}  serverless_config_vcpus=1  serverless_config_ram=1  serverless_config_min_replicas=1
+   Should Be Equal  ${error3}  ('code=400', 'error={"message":"Serverless config cannot be specified without allow serverless true"}')
 
 # ECQ-4249
 UpdateApp - serverless apps with serverless vcpus less than 0.001 shall fail
