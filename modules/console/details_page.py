@@ -59,7 +59,7 @@ class DetailsPage(BasePage):
                 #key = row.find_element(*DetailsPageLocators.details_row_key).text
                 #value = row.find_element(*DetailsPageLocators.details_row_value).text
                 table_row =  f'//tbody/tr[{row}]/td'
-                table_column =  f'//tbody/tr[{row}]/td/div'
+                table_column =  f'//tbody/tr[{row}]/td/strong/div'
                 table_column1 = f'//tbody/tr[{row}]/td[2]'
                 key = self.driver.find_element_by_xpath(table_row).text
                 if key == 'Auto Provisioning Policies' or key == 'Created' or key == 'Updated':
