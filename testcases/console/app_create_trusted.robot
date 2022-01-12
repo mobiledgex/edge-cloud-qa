@@ -63,7 +63,7 @@ Web UI - User shall be able to create a Trusted App which requires Outbound Conn
     Dictionary Should Contain Key   ${app_details}  Required Outbound Connections
     Close Apps Details
 
-    MexConsole.Delete App  click_previous_page=off  change_rows_per_page=True
+    MexConsole.Delete App  click_previous_page=off
 
 *** Keywords ***
 Setup
