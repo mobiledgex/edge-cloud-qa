@@ -21,6 +21,7 @@ class Cloudlet(MexOperation):
         self.metrics_url = '/auth/metrics/cloudlet'
         self.metrics_client_cloudlet_url = '/auth/metrics/clientcloudletusage'
         self.addmapping_url = '/auth/ctrl/AddCloudletResMapping'
+        self.createrestagtable_url = '/auth/ctrl/CreateResTagTable'
         self.addrestag_url = '/auth/ctrl/AddResTag'
         self.manifest_url = '/auth/ctrl/GetCloudletManifest'
         self.revoke_url = '/auth/ctrl/RevokeAccessKey'
@@ -500,6 +501,14 @@ class Cloudlet(MexOperation):
         #    msg_dict_show = {'app': msg_show}
 
         return self.create(token=token, url=self.addmapping_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict)
+
+    def create_resource_table(self, token=None, region=None, resource_table_name=None, operator_org_name=None, tags=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+        msg = self._build(cloudlet_name=resource_table_name, operator_org_name=operator_org_name, use_defaults=False)
+
+        map_dict = {'restagtable': msg}
+        msg_dict = self._build_restag(cloudlet_dict=map_dict, tags=tags)
+
+        return self.create(token=token, url=self.createrestagtable_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict)
 
     def add_resource_tag(self, token=None, region=None, resource_name=None, operator_org_name=None, tags=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         msg = self._build(cloudlet_name=resource_name, operator_org_name=operator_org_name, use_defaults=False)
