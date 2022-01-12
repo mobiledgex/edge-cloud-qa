@@ -1475,6 +1475,11 @@ class MexMasterController(MexRest):
         """
         return self.cloudlet.add_cloudlet_resource_mapping(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, mapping=mapping, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+    def create_resource_tag_table(self, token=None, region=None, resource_table_name=None, operator_org_name=None, tags=None, json_data=None, use_defaults=True, use_thread=False):
+        """ Sends region CreateResTagTable
+        """
+        return self.cloudlet.create_resource_table(token=token, region=region, resource_table_name=resource_table_name, operator_org_name=operator_org_name, tags=tags, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
     def add_resource_tag(self, token=None, region=None, resource_name=None, operator_org_name=None, tags=None, json_data=None, use_defaults=True, use_thread=False):
         """ Sends region AddResTag
         """
