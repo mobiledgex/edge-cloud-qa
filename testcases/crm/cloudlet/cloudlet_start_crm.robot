@@ -58,12 +58,17 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Buckhorn
         [Documentation]
         ...  do CreateCloudlet to start a CRM on buckhorn openstack
 
+        Run Keyword and Ignore Error  Create GPU Driver  region=US  gpudriver_name=nvidia-450  gpudriver_org=GDDT
+        Run Keyword and Ignore Error  Add Build GPU Driver  region=US  gpudriver_name=nvidia-450  gpudriver_org=GDDT  build_name=Linux-4.15.0-159-generic  build_driverpath=https://artifactory.mobiledgex.net/artifactory/binaries/nvidia-gpu-passthrough/nvidia-450_450.119.03-4.15.0-159-generic-1_amd64.deb  build_md5sum=a32661ce39bdc9d503a1a277ffb8f616  build_os=Linux  build_kernelversion=4.15.0-159-generic  build_driverpathcreds=angshuman:jaWbu2)8Hb{xB
+ 
         Create Cloudlet  region=US  operator_org_name=${operator_name_openstack_buckhorn}  cloudlet_name=${cloudlet_name_openstack_buckhorn}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_buckhorn}  number_dynamic_ips=254  latitude=50.73438    longitude=7.09549  env_vars=FLAVOR_MATCH_PATTERN=m4,MEX_EXT_NETWORK=external-network-02  gpudriver_name=nvidia-450  gpudriver_org=GDDT
 
-        Add Cloudlet Resource Mapping  region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}  operator_org_name=${operator_name_openstack_buckhorn}  mapping=gpu=${gpu_resource_name}
+        Create Resource Tag Table  region=US  resource_table_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_buckhorn}  tags=pci=t4gpu:1
         Add Resource Tag  region=US  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_buckhorn}  tags=pci=t4gpu:1
+        Add Cloudlet Resource Mapping  region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}  operator_org_name=${operator_name_openstack_buckhorn}  mapping=gpu=${gpu_resource_name}
 
         Create Cluster Instance  region=US  cluster_name=porttestcluster  cloudlet_name=${cloudlet_name_openstack_buckhorn}  operator_org_name=${operator_name_openstack_buckhorn}  deployment=kubernetes  flavor_name=${flavor_name_automation}  ip_access=IpAccessDedicated
+        Run Keyword and Ignore Error  Create App  region=US  app_name=automation-sdk-porttest  app_version=1.0  developer_org_name=${developer_org_name_automation}  default_flavor_name=${flavor_name_automation}  access_ports=tcp:2015:tls,tcp:2016,udp:2015,tcp:3765,tcp:8085,tcp:4015  skip_hc_ports=tcp:2015,tcp:3765,tcp:8085,tcp:4015
         Create App Instance  region=US  app_name=automation-sdk-porttest  app_version=1.0  developer_org_name=${developer_org_name_automation}  cluster_instance_name=porttestcluster  cloudlet_name=${cloudlet_name_openstack_buckhorn}  operator_org_name=${operator_name_openstack_buckhorn}  flavor_name=${flavor_name_automation}
 
 # ECQ-1613
