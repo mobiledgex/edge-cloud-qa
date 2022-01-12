@@ -1451,10 +1451,10 @@ class MexConsole() :
 
         if self.compute_page.is_alert_box_present():
             if self.compute_page.get_alert_box_text() != 'App ' + app['key']['name'] + ' added successfully':
-                print('*WARN*', 'SUCCESSFUL')
-                raise Exception('success alert box NOT found. got ' + self.compute_page.get_alert_box_text())
+                print('*WARN*', 'Found alert box SUCCESSFUL')
+                raise Exception('Success alert box found But text did not match. Got ' + self.compute_page.get_alert_box_text())
         else:
-            raise Exception('Success alert box not found')
+            raise Exception('Success alert box NOT found')
 
         self.take_screenshot('add_new_app_post')
 
@@ -1592,8 +1592,8 @@ class MexConsole() :
             raise Exception('Policy NOT found')
  
     def app_should_exist(self, region=None, org_name=None, app_name=None, app_version=None, deployment_type=None, default_flavor_name=None, ports=None, change_rows_per_page=False, number_of_pages=2, wait=5):
-        if change_rows_per_page:
-            self.change_number_of_rows()
+       # if change_rows_per_page:
+        #    self.change_number_of_rows()
         self.take_screenshot('app_should_exist_pre')
         #logging.info(f'Verifying new app exists region={region} app_name={app_name} app_version={app_version} org_name={org_name}  default_flavor_name={default_flavor_name} deployment_type={deployment_type} ports={ports}')
         
@@ -1671,10 +1671,7 @@ class MexConsole() :
 
         logging.info('Opening app details for appname=' + app_name + ' region=' + region + ' appversion=' + app_version + ' app-org=' + app_org)
 
-        if not self.apps_page.click_app_row(app_name=app_name, region=region, app_version=app_version, app_org=app_org):
-            index += 1
-            self.apps_page.click_next_page()
-            self.apps_page.click_app_row(app_name=app_name, region=region, app_version=app_version, app_org=app_org)
+        self.apps_page.click_app_row(app_name=app_name, region=region, app_version=app_version, app_org=app_org)
 
         if self.new_apps_page.are_app_details_present():
             logging.info('app details page verification succeeded')

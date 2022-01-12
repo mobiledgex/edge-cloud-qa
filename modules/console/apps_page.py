@@ -128,27 +128,16 @@ class AppsPage(ComputePage):
 
     def delete_app(self, region=None, developer_name=None, app_name=None, app_version=None, deployment_type=None):
         logging.info(f'deleting app app_name={app_name} app_version={app_version} developer_name={developer_name}')
-        #row = self.get_table_row_by_value([(region, 1), (developer_name, 2), (app_name, 3)])
-        #print('*WARN*','row==', row)
-        totals_rows = self.driver.find_elements(*ComputePageLocators.details_row)
-        total_rows_length = len(totals_rows)
-        total_rows_length += 1
-        for row in range(1, total_rows_length):
-            table_column_app_name =  f'//tbody/tr[{row}]/td[4]'
-            value = self.driver.find_element_by_xpath(table_column_app_name).text
-            if app_name in value:
-                i = row
-                break
 
-        table_action = f'//tbody/tr[{i}]/td[6]//button[@aria-label="Action"]'
-        e = self.driver.find_element_by_xpath(table_action)
+        self.perform_search(app_name)
+        row = self.get_table_row_by_value([(app_name + " [" + app_version + "]", 4)])
+        print('*WARN*', 'row = ', row)
+        e = row.find_element(*ComputePageLocators.table_action)
         ActionChains(self.driver).click(on_element=e).perform()
         self.driver.find_element(*ComputePageLocators.table_delete).click()
-        self.driver.find_element(*DeleteConfirmationPageLocators.yes_button).click()
-        #row.find_element(*ComputePageLocators.trash_button).click()
 
         time.sleep(1)
-        #row.find_element(*DeleteConfirmationPageLocators.yes_button).click()
+        row.find_element(*DeleteConfirmationPageLocators.yes_button).click()
 
     def update_app(self,  app_name=None, access_ports=None, scale_with_cluster=False, auth_public_key=None, envvar=None, official_fqdn=None, android_package=None, configs_kind=None, trusted=False, skip_hc=None, outbound_connections=[]):
         logging.info(f'Updating app app_name={app_name}')
@@ -234,7 +223,6 @@ class AppsPage(ComputePage):
                     return True
                 else:
                     time.sleep(1)
-            self.click_next_page()
             index += 1
 
         logging.info(f'wait_for_app timedout region={region} org_name={org_name} app_name={app_name} app_version={app_version} wait={wait}')
@@ -251,12 +239,14 @@ class AppsPage(ComputePage):
 
     def click_app_row(self, app_name, region=None, app_version=None, app_org=None):
         try:
-            r = self.get_table_row_by_value([(region, 2), (app_name + " [" + app_version + "]", 4), (app_org, 3)])
+            row = self.get_table_row_by_value([(app_name + " [" + app_version + "]", 4)])
+            print('*WARN*', 'row = ', row)
+            e = row.find_element_by_xpath(f'//span[contains(.,"{app_name}")]')
+            e.click()
         except:
-            logging.info('row is not found')
-            return False
+            raise Exception('row is not found while trying to click app row or could not click row')
+
         time.sleep(1)
-        ActionChains(self.driver).click(on_element=r).perform()
         return True
 
     def apps_menu_should_exist(self):
