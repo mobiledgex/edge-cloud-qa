@@ -279,31 +279,37 @@ class NewAppsSettingsPage(NewSettingsFullPage):
         if self.is_element_present(AppsPageLocators.apps_details_region):
             logging.info('Apps region detail present')
         else:
+            logging.warning('Apps region detail NOT present')
             settings_present = False
 
         if self.is_element_present(AppsPageLocators.apps_details_developername):
             logging.info('Developer detail present')
         else:
+            logging.warning('Developer detail NOT present')
             settings_present = False
 
         if self.is_element_present(AppsPageLocators.apps_details_appname):
             logging.info('App name detail present')
         else:
+            logging.info('App name detail NOT present')
             settings_present = False
 
         if self.is_element_present(AppsPageLocators.apps_details_version):
             logging.info('Version detail present')
         else:
+            logging.warning('Version detail NOT present')
             settings_present = False
 
         if self.is_element_present(AppsPageLocators.apps_details_deploymenttype):
             logging.info('Deployment Type detail present')
         else:
+            logging.warning('Deployment Type detail NOT present')
             settings_present = False
 
         if self.is_element_present(AppsPageLocators.apps_details_imagetype):
             logging.info('Image Type detail present')
         else:
+            logging.warning('Image Type detail NOT present')
             settings_present = False
  
         if self.is_element_present(AppsPageLocators.apps_details_imagepath):
@@ -311,14 +317,14 @@ class NewAppsSettingsPage(NewSettingsFullPage):
         elif self.is_element_present(AppsPageLocators.apps_details_deployment_manifest):
             logging.info('Deployment Manifest detail present')
         else:
+            logging.warning('Image Path detail NOT present')
             settings_present = False
 
         if self.is_element_present(AppsPageLocators.apps_details_flavors):
             logging.info('Flavors detail present')
         else:
-            logging.info('Flavors detail NOT present')
+            logging.warning('Flavors detail NOT present')
             #settings_present = False
-
 
         return settings_present
 
