@@ -92,24 +92,26 @@ CreateCloudlet - shall be able to create/update cloudlet with icmp/tcp/udp trust
    ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_crm}  token=${tokenop}
 
    # create cloudlet with trust policy
-   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_crm}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_crm}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  trust_policy=${policy_return['data']['key']['name']}  env_vars=${env_vars}  token=${tokenop}  use_thread=${True}
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_crm}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_crm}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  trust_policy=${policy_return['data']['key']['name']}  env_vars=${env_vars}  token=${tokenop}  use_thread=${True} 
    ${cloudlet2}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}2  operator_org_name=${operator_name_crm}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_crm}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  trust_policy=${policy_return['data']['key']['name']}  env_vars=${env_vars}  token=${tokenop}  use_thread=${True}
 
    Wait For Replies  ${cloudlet}  ${cloudlet2}
 
    # create app/appinst for testing the policy
-   &{apprule1}=  Create Dictionary  protocol=udp  port=1001  remote_ip=3.9.5.10
+   &{apprule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=1001  remote_cidr=3.1.1.1/1  #remote_ip=3.9.5.10
    @{app_rulelist}=  Create List  ${apprule1}
    ${app}=  Create App  region=${region}  developer_org_name=${org_name_dev}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image_porttest}  access_ports=tcp:3015  trusted=${True}  required_outbound_connections_list=${app_rulelist}  token=${tokendev}
    ${appInst}=  Create App Instance  region=${region}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app['data']['key']['name']}  token=${tokendev}
-   ${real_cluster_name}=  Set Variable  ${appInst['data']['real_cluster_name']}  
-   ${fqdn}=  Set Variable  ${real_cluster_name}.${cloudlet_name}.${operator_name_crm}.mobiledgex.net
+   #${real_cluster_name}=  Set Variable  ${appInst['data']['real_cluster_name']}  
+   #${fqdn}=  Set Variable  ${real_cluster_name}.${cloudlet_name}.${operator_name_crm}.mobiledgex.net
+   ${fqdn}=  Set Variable  ${appInst['data']['uri']}
 
    # openstack security group show cloudlet1609891618-9118872.packet.mobiledgex.net-sg
-   ${cloudname}=  Convert To Lowercase  ${cloudlet_name}
-   ${operator}=   Convert To Lowercase  ${operator_name_crm}
-   ${openstack_group_name}=  Catenate  SEPARATOR=-  ${cloudname}  ${operator}  cloudlet-sg
-   
+   #${cloudname}=  Convert To Lowercase  ${cloudlet_name}
+   #${operator}=   Convert To Lowercase  ${operator_name_crm}
+   #${openstack_group_name}=  Catenate  SEPARATOR=-  ${cloudname}  ${operator}  cloudlet-sg
+   ${openstack_group_name}=  Catenate  SEPARATOR=-  ${cloudlet_name}  ${operator_name_crm}  cloudlet-sg
+ 
    # verify cloudlet has trust policy rules
    ${openstacksecgroup}=  Get Security Groups  name=${openstack_group_name}
    #Should Match Regexp  ${openstacksecgroup['rules']}  .+direction='egress'.+remote_ip_prefix='0\.0\.0\.0\/32'
