@@ -122,14 +122,14 @@ ShowFlavorsFor - mcctl shall handle showflavorsfor
    ${show}=  Run mcctl  cloudlet showflavorsfor region=${region} cloudlet=tmocloud-1 cloudlet-org=tmus  version=${version}
    Should Contain  ${show}  automation_api_flavor
 
-   ${error1}=  Run Keyword And Expect Error  *  Run mcctl  cloudlet showflavorsfor region=${region}  version=${version}
-   Should Contain  ${error1}  missing required args
+   ${show1}=  Run mcctl  cloudlet showflavorsfor region=${region}  version=${version}
+   Should Contain  ${show1}  automation_api_flavor
 
-   ${error2}=  Run Keyword And Expect Error  *  Run mcctl  cloudlet showflavorsfor region=${region} cloudlet=tmocloud-1   version=${version}
-   Should Contain  ${error2}  missing required args
+   ${show2}=  Run mcctl  cloudlet showflavorsfor region=${region} cloudlet=tmocloud-1   version=${version}
+   Should Contain  ${show2}  automation_api_flavor
 
-   ${error3}=  Run Keyword And Expect Error  *  Run mcctl  cloudlet showflavorsfor region=${region} cloudlet-org=tmus   version=${version}
-   Should Contain  ${error3}  missing required args
+   ${show3}=  Run mcctl  cloudlet showflavorsfor region=${region} cloudlet-org=tmus   version=${version}
+   Should Contain  ${show3}  automation_api_flavor
 
 # ECQ-3957
 AddAllianceOrg - mcctl shall handle cloudlet addallianceorg
