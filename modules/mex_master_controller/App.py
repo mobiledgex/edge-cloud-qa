@@ -69,10 +69,10 @@ class App(MexOperation):
             else:
                 if deployment.lower() == 'docker':
                     if image_path is None:
-                        image_path = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+                        image_path = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0'
                 if deployment.lower() == 'kubernetes':
                     if image_path is None:
-                        image_path = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+                        image_path = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0'
                 elif deployment.lower() == 'vm':
                     if image_path is None:
                         image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
@@ -105,7 +105,7 @@ class App(MexOperation):
         if default_flavor_name == 'default':
             default_flavor_name = shared_variables.flavor_name_default
         if image_path == 'default':
-            image_path = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+            image_path = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0'
 
         app_dict = {}
         app_key_dict = {}
