@@ -40,19 +40,19 @@ def fake(cycle) {
 
 def upgrade(cycle, dateValue) {
     print('upgrade cloudlets')
-    dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
-        sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*'
-        checkout([$class: 'GitSCM',
-            branches: [[name: 'master']],
-            doGenerateSubmoduleConfigurations: false,
-            extensions: [
-                [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'chef/*']
-                ]]
-            ],
-            submoduleCfg: [],
-            userRemoteConfigs: [[credentialsId: gitcred,
-            url: 'https://github.com/mobiledgex/edge-cloud-infra.git']]])
-    }
+//    dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
+//        sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*'
+//        checkout([$class: 'GitSCM',
+//            branches: [[name: 'master']],
+//            doGenerateSubmoduleConfigurations: false,
+//            extensions: [
+//                [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'chef/*']
+//                ]]
+//            ],
+//            submoduleCfg: [],
+//            userRemoteConfigs: [[credentialsId: gitcred,
+//            url: 'https://github.com/mobiledgex/edge-cloud-infra.git']]])
+//    }
 
     build job: 'runTestcases', parameters: [
         string(name: 'Components', value: 'Automated, CRM, UpgradeCloudlet'),
