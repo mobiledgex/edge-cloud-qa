@@ -90,6 +90,9 @@ UpdateTrustPolicyException - update with unknown parm values shall return error
    # unknown cloudlet pool org name
    ('code\=400', 'error\={"message":"TrustPolicyException key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\",\\\\"name\\\\":\\\\"${app_name_automation}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cloudlet_pool_key\\\\":{\\\\"organization\\\\":\\\\"x\\\\",\\\\"name\\\\":\\\\"${pool['data']['key']['name']}\\\\"},\\\\"name\\\\":\\\\"${policy_name}\\\\"} not found"}')   policy_name=${policy_name}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=x
 
+   # unknown cloudlet pool org name with rules
+   ('code\=400', 'error\={"message":"TrustPolicyException key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\",\\\\"name\\\\":\\\\"${app_name_automation}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cloudlet_pool_key\\\\":{\\\\"organization\\\\":\\\\"x\\\\",\\\\"name\\\\":\\\\"${pool['data']['key']['name']}\\\\"},\\\\"name\\\\":\\\\"${policy_name}\\\\"} not found"}')   policy_name=${policy_name}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=x  rule_list=${rulelist}
+
 # ECQ-4169
 UpdateTrustPolicyException - update without protocol shall return error
    [Documentation]
@@ -286,12 +289,12 @@ UpdateTrustPolicyException - operator update of state=unknown shall return error
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=10  port_range_maximum=1  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"User not allowed to update TrustPolicyException state to TRUST_POLICY_EXCEPTION_STATE_UNKNOWN"}')  Update Trust Policy Exception  region=${region}  token=${optoken}  policy_name=${policy_name}  app_name=${app_name_automation}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   state=Unknown
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"New state must be either Active or Rejected"}')  Update Trust Policy Exception  region=${region}  token=${optoken}  policy_name=${policy_name}  app_name=${app_name_automation}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   state=Unknown
 
 # ECQ-4177
 UpdateTrustPolicyException - developer update of state shall return error
    [Documentation]
-   ...  - send UpdateTrustPolicyException as operator with rules
+   ...  - send UpdateTrustPolicyException as developer with state
    ...  - verify error is returned
 
    [Tags]  TrustPolicyException
@@ -301,9 +304,25 @@ UpdateTrustPolicyException - developer update of state shall return error
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
 
-   &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=10  port_range_maximum=1  remote_cidr=1.1.1.1/1
-   @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Developer not allowed to update state field"}')  Update Trust Policy Exception  region=${region}  token=${devtoken}  policy_name=${policy_name}  app_name=${app_name_automation}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   rule_list=${rulelist}  state=Active
+
+# ECQ-4252
+UpdateTrustPolicyException - developer update of rules after Active shall return error
+   [Documentation]
+   ...  - send UpdateTrustPolicyException as developer with connections after it is Active
+   ...  - verify error is returned
+
+   [Tags]  TrustPolicyException
+
+   ${devtoken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
+   ${optoken}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
+
+   &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
+   @{rulelist}=  Create List  ${rule}
+
+   Update Trust Policy Exception  region=${region}  token=${optoken}  policy_name=${policy_name}  app_name=${app_name_automation}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   state=Active
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Can update security rules only when trust policy exception is still in approval requested state"}')  Update Trust Policy Exception  region=${region}  token=${devtoken}  policy_name=${policy_name}  app_name=${app_name_automation}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   rule_list=${rulelist}
 
 *** Keywords ***
 Setup
@@ -320,6 +339,11 @@ Setup
 
    ${cloudlet_name}=  Get Default Cloudlet Name
    Set Suite Variable  ${cloudlet_name}
+
+   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/1
+   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
+   @{rulelist}=  Create List  ${rule1}  ${rule2}
+   Set Suite Variable  @{rulelist}
 
 Exception Should Error
    [Arguments]  ${error_msg}  &{parms}
