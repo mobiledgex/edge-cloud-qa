@@ -486,9 +486,9 @@ UpdateTrustPolicyException - shall be able to update with tcp/udp/icmp
    Length Should Be  ${policy_return2['data']['outbound_security_rules']}   3
 
 # ECQ-4160
-UpdateTrustPolicy - shall be able to update with duplicate policy items
+UpdateTrustPolicyException - shall be able to update with duplicate policy items
    [Documentation]
-   ...  - send CreateTrustPolicy with duplicate policy items
+   ...  - send CreateTrustPolicyException with duplicate policy items
    ...  - update the policy
    ...  - verify policy is updated
 
