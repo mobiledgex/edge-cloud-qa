@@ -1792,6 +1792,42 @@ class MexMasterController(MexRest):
             token=self.super_token
         return self.config.update_config(token=token, max_metrics_data_points=max_metrics_data_points, use_defaults=use_defaults, use_thread=use_thread)
 
+    def set_apikey_limit_config(self, apikey_limit=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, apikey_limit=apikey_limit, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_rate_limit_ips_config(self, rate_limit_ips=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, rate_limit_ips = rate_limit_ips, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_rate_limit_users_config(self, rate_limit_users=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, rate_limit_users = rate_limit_users, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_fail_threshold1_config(self, fail_threshold1=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, fail_threshold1 = fail_threshold1, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_threshold1_delay_config(self, threshold1_delay=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, threshold1_delay = threshold1_delay, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_fail_threshold2_config(self, fail_threshold2=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, fail_threshold2 = fail_threshold2, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_threshold2_delay_config(self, threshold2_delay=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, threshold2_delay = threshold2_delay, use_defaults=use_defaults, use_thread=use_thread)
+
+    
     def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, timeout=None, json_data=None, use_defaults=True, use_thread=False): 
         if developer_org_name is None:
             if self.organization_name:
