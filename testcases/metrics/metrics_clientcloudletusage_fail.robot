@@ -164,7 +164,7 @@ ClientCloudletUsageMetrics - get with invalid start age shall return error
    ...  - verify error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  start_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"2019-09-26T04:01:01\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string 2019-09-26T04:01:01 for field \\\\"startage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
 # ECQ-3577
 ClientCloudletUsageMetrics - get with invalid end age shall return error
@@ -173,7 +173,7 @@ ClientCloudletUsageMetrics - get with invalid end age shall return error
    ...  - verify error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  end_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"2019-09-26T04:01:01\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string 2019-09-26T04:01:01 for field \\\\"endage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
 # ECQ-3578
 ClientCloudletUsageMetrics - get with invalid start/end age shall return error
@@ -182,7 +182,7 @@ ClientCloudletUsageMetrics - get with invalid start/end age shall return error
    ...  - verify error
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Cloudlet Usage Metrics  region=US  selector=latency  limit=1  cloudlet_name=cloudlet  operator_org_name=operator  start_age=x  end_age=2019-09  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"x\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string x for field \\\\"startage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
 # ECQ-3600
 ClientCloudletUsageMetrics - get with start age newer than end age shall return error
