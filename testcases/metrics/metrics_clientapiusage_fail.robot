@@ -164,7 +164,7 @@ ClientApiUsageMetrics - get with invalid start age shall return error
    # EDGECLOUD-5255 invalid limit/numsamples/startage/endage for clientapiusage/clientappusage/clientcloudletusage needs better error handling
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"2019-09-26T04:01:01\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string 2019-09-26T04:01:01 for field \\\\"startage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
 # ECQ-3591
 ClientApiUsageMetrics - get with invalid end age shall return error
@@ -175,7 +175,7 @@ ClientApiUsageMetrics - get with invalid end age shall return error
    # EDGECLOUD-5255 invalid limit/numsamples/startage/endage for clientapiusage/clientappusage/clientcloudletusage needs better error handling
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  end_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"2019-09-26T04:01:01\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string 2019-09-26T04:01:01 for field \\\\"endage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
 # ECQ-3592
 ClientApiUsageMetrics - get with invalid start/end age shall return error
@@ -186,7 +186,7 @@ ClientApiUsageMetrics - get with invalid start/end age shall return error
    # EDGECLOUD-5255 invalid limit/numsamples/startage/endage for clientapiusage/clientappusage/clientcloudletusage needs better error handling
 
    ${error}=  Run Keyword and Expect Error  *  Get Client Api Usage Metrics  region=US  selector=latency  limit=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_age=x  end_age=2019-09  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal duration \\\\"x\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string x for field \\\\"startage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
 # ECQ-3602
 ClientApiUsageMetrics - get with start age newer than end age shall return error
