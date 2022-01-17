@@ -1832,6 +1832,11 @@ class MexConsole() :
         #if default_flavor is None: disk = self._flavor['disk']
         #if ports is None: disk = self._flavor['disk']
 
+        if cluster_instance is not None:
+            self.app_instances_page.perform_search(cluster_instance)
+        else:
+            self.app_instances_page.perform_search(app_name)
+
         if self.app_instances_page.wait_for_app_instance(region=region, org_name=org_name, app_name=app_name, version=app_version, operator=operator_name, cloudlet=cloudlet_name, cluster_instance=cluster_instance, wait=5):
             logging.info('app instance found')
         else:
@@ -1860,8 +1865,6 @@ class MexConsole() :
             return True
 
     def delete_app_instance(self, region=None, developer_name=None, app_name=None, app_version=None, operator_name=None, cloudlet_name=None, cluster_instance=None, change_rows_per_page=True):
-        if change_rows_per_page:
-            self.change_number_of_rows()
         self.refresh_page()
         time.sleep(2)
         self.take_screenshot('delete_appinst_pre')
