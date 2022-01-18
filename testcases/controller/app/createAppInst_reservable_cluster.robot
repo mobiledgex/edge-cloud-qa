@@ -115,11 +115,13 @@ CreateAppInst - shall be able to create app inst with real_cluster_name
 Setup
     #Create Flavor  region=${region}
 
+    ${region_lc}=  Convert To Lower Case  ${region}
     ${app_name_default}=  Get Default App Name
     ${app_version_default}=  Get Default App Version
     ${developer_name_default}=  Get Default Developer Name
     ${flavor_name_default}=  Get Default Flavor Name
   
+    Set Suite Variable  ${region_lc}
     Set Suite Variable  ${app_name_default}
     Set Suite Variable  ${app_version_default}
     Set Suite Variable  ${developer_name_default}
@@ -228,8 +230,8 @@ DeleteAppInst Should Not Delete Reservable Cluster
    ${cluster_inst}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst['data']['real_cluster_name']}  developer_org_name=MobiledgeX
    Length Should Be  ${cluster_inst}  1
 
-   ${uri}=  Run Keyword If  '${deployment}' == 'docker'  Set Variable  ${app_inst['data']['real_cluster_name']}.${cloudlet_name}.${operator_name}.mobiledgex.net
-   ...  ELSE  Set Variable  shared.${cloudlet_name}.${operator_name}.mobiledgex.net
+   ${uri}=  Run Keyword If  '${deployment}' == 'docker'  Set Variable  ${app_inst['data']['real_cluster_name']}-mobiledgex.${cloudlet_name}-${operator_name}.${region_lc}.mobiledgex.net
+   ...  ELSE  Set Variable  shared.${cloudlet_name}-${operator_name}.${region_lc}.mobiledgex.net
 
    Should Be Equal  ${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  autocluster${app_name_default}
    Should Match Regexp  ${app_inst['data']['real_cluster_name']}  ^reservable\\d$
@@ -257,8 +259,8 @@ Reservable Cluster Should Be Created
    ${cluster_inst}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst['data']['real_cluster_name']}  developer_org_name=MobiledgeX
    Length Should Be  ${cluster_inst}  1
 
-   ${uri}=  Run Keyword If  '${deployment}' == 'docker'  Set Variable  ${app_inst['data']['real_cluster_name']}.${cloudlet_name}.${operator_name}.mobiledgex.net
-   ...  ELSE  Set Variable  shared.${cloudlet_name}.${operator_name}.mobiledgex.net
+   ${uri}=  Run Keyword If  '${deployment}' == 'docker'  Set Variable  ${app_inst['data']['real_cluster_name']}-mobiledgex.${cloudlet_name}-${operator_name}.${region_lc}.mobiledgex.net
+   ...  ELSE  Set Variable  shared.${cloudlet_name}-${operator_name}.${region_lc}.mobiledgex.net
 
    Should Be Equal  ${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  autocluster${app_name_default}
    Should Match Regexp  ${app_inst['data']['real_cluster_name']}  ^reservable\\d$
