@@ -140,8 +140,9 @@ Setup
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}-${developer_org_name_automation}  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
+    ${rootlb}=  Replace String  ${rootlb}  _  -
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
 

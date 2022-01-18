@@ -50,7 +50,7 @@ ShowFlavorsForCloudlet - shall be able to get all supported flavors for a cloudl
    List Should Contain Value  ${supported}  ${flavor_name_good}
    List Should Contain Value  ${supported}  ${gpu_flavor_name_good}
 
-   IF  ${platform} == 11    # VCD
+   IF  '${platform}' == 'Vcd'    # VCD
       Length Should Be  ${faillist}  0  # VCD supports all flavors
       List Should Contain Value   ${supported}  ${gpu_flavor_name_bad}
       List Should Contain Value   ${supported}  ${large_flavor_name_bad}
@@ -105,7 +105,7 @@ ShowFlavorsForCloudlet - shall be able to get all supported flavors for a cloudl
    List Should Contain Value  ${supported}  ${flavor_name_good}
    List Should Contain Value  ${supported}  ${gpu_flavor_name_good}
 
-   IF  ${platform} == 11    # VCD
+   IF  '${platform}' == 'Vcd'    # VCD
       Length Should Be  ${faillist}  0  # VCD supports all flavors
       List Should Contain Value   ${supported}  ${gpu_flavor_name_bad}
       List Should Contain Value   ${supported}  ${large_flavor_name_bad}
@@ -153,7 +153,7 @@ ShowFlavorsForCloudlet - shall be able to get all supported flavors for a cloudl
    List Should Contain Value  ${supported}  ${flavor_name_good}
    List Should Contain Value  ${supported}  ${gpu_flavor_name_good}
 
-   IF  ${platform} == 11    # VCD
+   IF  '${platform}' == 'Vcd'    # VCD
       Length Should Be  ${faillist}  0  # VCD supports all flavors
       List Should Contain Value   ${supported}  ${gpu_flavor_name_bad}
       List Should Contain Value   ${supported}  ${large_flavor_name_bad}

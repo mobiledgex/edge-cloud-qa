@@ -10,6 +10,7 @@ Test Setup	Setup
 Test Teardown	Cleanup Provisioning
 
 *** Variables ***
+${region}         us
 ${operator_name}  dmuus
 ${cloudlet_name}  tmocloud-1
 
@@ -25,7 +26,8 @@ AppInst - user shall be able to add with TCP port range for docker
 
     ${app_default}=  Get Default App Name
 
-    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    #Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}-mobiledgex.${cloudlet_name}-${operator_name}.${region}.mobiledgex.net
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1 
@@ -45,7 +47,8 @@ AppInst - user shall be able to add with UDP port range for docker
 
     ${app_default}=  Get Default App Name
 
-    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    #Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}-mobiledgex.${cloudlet_name}-${operator_name}.${region}.mobiledgex.net
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
@@ -65,7 +68,8 @@ AppInst - user shall be able to add with TCP/UDP port range for docker
 
     ${app_default}=  Get Default App Name
 
-    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    #Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}-mobiledgex.${cloudlet_name}-${operator_name}.${region}.mobiledgex.net
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  100
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    100

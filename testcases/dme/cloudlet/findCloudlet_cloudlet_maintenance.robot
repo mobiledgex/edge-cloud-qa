@@ -26,7 +26,7 @@ FindCloudlet - request shall not return appinst for k8s/lb/shared app inst when 
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # ECQ-2534
 FindCloudlet - request shall not return appinst for k8s/lb/dedicated app inst when cloudlet is maintenance mode
@@ -42,7 +42,7 @@ FindCloudlet - request shall not return appinst for k8s/lb/dedicated app inst wh
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}   cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${cluster1}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # ECQ-2535
 FindCloudlet - request shall not return appinst for docker/lb/dedicated app inst when cloudlet is maintenance mode
@@ -58,7 +58,7 @@ FindCloudlet - request shall not return appinst for docker/lb/dedicated app inst
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${cluster1}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # ECQ-2536
 FindCloudlet - request shall not return appinst for docker/lb/shared app inst when cloudlet is maintenance mode
@@ -74,7 +74,7 @@ FindCloudlet - request shall not return appinst for docker/lb/shared app inst wh
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # direct no longer supported
 # ECQ-2537
@@ -119,7 +119,7 @@ FindCloudlet - request shall not return appinst for vm/lb app inst when cloudlet
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}    cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=${developer_org_name_automation}${app_name_default}10.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${app_name_default}${version_default}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # ECQ-2540
 FindCloudlet - request shall not return appinst for helm/shared/lb app inst when cloudlet is maintenance mode
@@ -135,7 +135,7 @@ FindCloudlet - request shall not return appinst for helm/shared/lb app inst when
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # ECQ-2541
 FindCloudlet - request shall not return appinst for helm/dedicated/lb app inst when cloudlet is maintenance mode
@@ -151,7 +151,7 @@ FindCloudlet - request shall not return appinst for helm/dedicated/lb app inst w
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
     App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${cluster1}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 *** Keywords ***
 Setup
@@ -170,12 +170,25 @@ Setup
    ${operator_name}=  Get Default Organization Name
    ${flavor_name_default}=  Get Default Flavor Name
    ${app_name_default}=  Get Default App Name
+   ${region_lc}=  Convert to Lower Case  ${region}
+   ${org_length}=  Get Length  ${operator_name}
+   IF  ${org_length} > 20
+       ${operator_name_trunc}=  Get Substring  ${operator_name}  0  20
+   ELSE
+       ${operator_name_trunc}=  Set Variable  ${operator_name}
+   END
+
+   ${version_default}=  Get Default App Version
+   ${version_default}=  Remove String  ${version_default}  .
 
    Set Suite Variable  ${flavor_name_default}
    Set Suite Variable  ${operator_name}
    Set Suite Variable  ${cloudlet_name1}
    Set Suite Variable  ${cluster1}
    Set Suite Variable  ${app_name_default}
+   Set Suite Variable  ${region_lc}
+   Set Suite Variable  ${operator_name_trunc}
+   Set Suite Variable  ${version_default}
 
 Teardown
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
@@ -197,7 +210,7 @@ Register Client and Find Cloudlet
 
    # verify not found
    ${cloudlet_2}=  Run Keyword and Expect Error  *  Find Cloudlet      latitude=31  longitude=-91
-   Should Contain  ${cloudlet_2}  NotFound
+   Should Contain  ${cloudlet_2}  Notfound
 
    # put cloudlet back online
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
@@ -213,4 +226,4 @@ Register Client and Find Cloudlet
 
    # verify not found
    ${cloudlet_4}=  Run Keyword and Expect Error  *  Find Cloudlet      latitude=31  longitude=-91
-   Should Contain  ${cloudlet_4}  NotFound
+   Should Contain  ${cloudlet_4}  Notfound
