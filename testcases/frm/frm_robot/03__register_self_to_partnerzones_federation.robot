@@ -17,7 +17,7 @@ ${partneroperator}  packet
 
 
 *** Test Cases ***
-# ECQ-3755
+# ECQ-4253
 Shall be able to register/deregister to multiple partner zones and view zones as cloudlets
     [Documentation]
     ...  Login as OperatorContributor

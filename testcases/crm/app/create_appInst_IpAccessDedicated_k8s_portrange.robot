@@ -93,11 +93,12 @@ Setup
     Set Suite Variable  ${platform_type}
     Set Suite Variable  ${allow_serverless}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cluster_name}=  Get Default Cluster Name
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name}-${developer_org_name_automation}  ${rootlb}
+    ${rootlb}=  Replace String  ${rootlb}  _  -
     
     Set Suite Variable  ${rootlb}
 

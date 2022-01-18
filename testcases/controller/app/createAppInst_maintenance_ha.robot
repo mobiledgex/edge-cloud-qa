@@ -3,6 +3,7 @@ Documentation   Cloudlet maintenance controller HA tests
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexDmeRest         dme_address=%{AUTOMATION_DME_REST_ADDRESS}
+Library  String
 
 Test Setup  Setup
 Test Teardown  Teardown
@@ -36,7 +37,7 @@ AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is mainte
 
    Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=shared.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=shared.${cloudlet_name2}.${operator_name}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net  cloudlet2_fqdn=shared.${cloudlet_name2}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # ECQ-2459
 AppInst - appinst shall start for k8s/lb/dedicated app inst when cloudlet is maintenance mode
@@ -61,7 +62,7 @@ AppInst - appinst shall start for k8s/lb/dedicated app inst when cloudlet is mai
 
    Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}-mobiledgex.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net  cloudlet2_fqdn=${cluster2}-mobiledgex.${cloudlet_name2}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # ECQ-2460
 AppInst - appinst shall start for docker/lb/dedicated app inst when cloudlet is maintenance mode
@@ -86,7 +87,7 @@ AppInst - appinst shall start for docker/lb/dedicated app inst when cloudlet is 
 
    Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}-mobiledgex.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net  cloudlet2_fqdn=${cluster2}-mobiledgex.${cloudlet_name2}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # ECQ-2461
 AppInst - appinst shall start for docker/lb/shared app inst when cloudlet is maintenance mode
@@ -111,7 +112,7 @@ AppInst - appinst shall start for docker/lb/shared app inst when cloudlet is mai
 
    Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=shared.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=shared.${cloudlet_name2}.${operator_name}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net  cloudlet2_fqdn=shared.${cloudlet_name2}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # direct not supported
 # ECQ-2462
@@ -164,7 +165,7 @@ AppInst - appinst shall start for helm/shared/lb app inst when cloudlet is maint
 
    Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=shared.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=shared.${cloudlet_name2}.${operator_name}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net  cloudlet2_fqdn=shared.${cloudlet_name2}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # ECQ-2464
 AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is maintenance mode
@@ -191,7 +192,7 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
 
    Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}-mobiledgex.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net  cloudlet2_fqdn=${cluster2}-mobiledgex.${cloudlet_name2}-${operator_name_trunc}.${region_lc}.mobiledgex.net
 
 # direct not supported
 # ECQ-2465
@@ -275,7 +276,7 @@ AppInst - appinst shall not start for docker/lb/shared app inst when cloudlet is
    ${cloudlet_1}=  Find Cloudlet      latitude=31  longitude=-91
    #Should Be Equal              ${cloudlet_1['fqdn']}  ${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
    # it now returns a random order so it could be either cloudlet
-   Should Be True              '${cloudlet_1['fqdn']}'=='${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net' or '${cloudlet_1['fqdn']}'=='${cluster1}.${cloudlet_name2}.${operator_name}.mobiledgex.net'
+   Should Be True              '${cloudlet_1['fqdn']}'=='${cluster1}-mobiledgex.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net' or '${cloudlet_1['fqdn']}'=='${cluster1}-mobiledgex.${cloudlet_name2}-${operator_name_trunc}.${region_lc}.mobiledgex.net'
 
 # ECQ-3395
 AppInst - appinst shall be deleted when cloudlet is put in maintenance mode
@@ -359,7 +360,14 @@ Setup
    #Add Auto Provisioning Policy Cloudlet  region=${region}  developer_org_name=${operator_name}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
 
    @{policy_list}=  Create List  ${policy['data']['key']['name']}
-
+   ${region_lc}=  Convert to Lower Case  ${region}
+   ${org_length}=  Get Length  ${operator_name}
+   IF  ${org_length} > 20
+       ${operator_name_trunc}=  Get Substring  ${operator_name}  0  20
+   ELSE
+       ${operator_name_trunc}=  Set Variable  ${operator_name}
+   END
+ 
    Set Suite Variable  ${flavor_name_default}
    Set Suite Variable  ${operator_name}
    Set Suite Variable  ${cloudlet_name1}
@@ -371,6 +379,8 @@ Setup
    Set Suite Variable  @{policy_list}
    Set Suite Variable  ${org_name_dev}
    Set Suite Variable  ${tokendev}
+   Set Suite Variable  ${region_lc}
+   Set Suite Variable  ${operator_name_trunc}
 
 Teardown
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${token}

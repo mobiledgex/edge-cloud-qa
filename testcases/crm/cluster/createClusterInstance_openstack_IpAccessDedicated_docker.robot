@@ -14,6 +14,7 @@ Test Timeout     ${test_timeout_crm}
 ${cloudlet_name_openstack_dedicated}  automationBonnCloudlet
 ${operator_name_openstack}  TDG 
 ${mobiledgex_domain}  mobiledgex.net
+${region}             US
 
 ${test_timeout_crm}  15 min
 	
@@ -29,7 +30,7 @@ ClusterInst shall create with IpAccessDedicated/docker on CRM
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
 
-   ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+   ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}-mobiledgex  ${rootlb}
 	 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=0  number_masters=0  ip_access=IpAccessDedicated  deployment=docker
@@ -88,7 +89,7 @@ Setup
 
     Set Suite Variable  ${cloudlet_lowercase}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}-${operator_name_openstack}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
