@@ -20,7 +20,7 @@ ${partner_fed_id}
 
 
 *** Test Cases ***
-# ECQ-3755
+# ECQ-4253
 Shall be able to unshare and delete federatorzones
     [Documentation]
     ...  Login as MexAdmin
