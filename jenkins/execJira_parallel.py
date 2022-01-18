@@ -601,7 +601,8 @@ def exec_testcase(z, t):
             my_env['AUTOMATION_OPENSTACK_VM_ENV'] = openstack_file
             my_env['AUTOMATION_OPENSTACK_GPU_ENV'] = openstack_file
             my_env['AUTOMATION_OPENSTACK_OFFLINE_ENV'] = openstack_file
-            my_env['AUTOMATION_OPENSTACK_VGPU_ENV'] = openstack_file
+            my_env['AUTOMATION_OPENSTACK_VGPU_ENV'] = os.environ['WORKSPACE'] + '/go/src/github.com/mobiledgex/testcases/config/openrc_automationDusseldorfCloudlet.mex'
+            my_env['AUTOMATION_OPENSTACK_VMPOOL_ENV'] = os.environ['WORKSPACE'] + '/go/src/github.com/mobiledgex/testcases/config/openrc_automationDusseldorfCloudlet.mex'
 
             with open(env_file) as f:
                 lines = f.readlines()
