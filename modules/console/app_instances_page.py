@@ -177,14 +177,15 @@ class AppInstancesPage(ComputePage):
         else:
             raise Exception('app instances trash icon IS present')
     
-    def click_appinst_row(self, app_name, region=None, app_version=None, cluster_name=None, cloudlet_name=None):
+    def click_appinst_row(self, app_name, region=None, app_version=None, cluster_name=None, cloudlet_name=None, operator_org_name=None):
         try:
-            r = self.get_table_row_by_value([(region, 2), (app_name, 4), (app_version, 5), (cluster_name, 8), (cloudlet_name, 7)])
+            r = self.get_table_row_by_value([(app_name + " [" + app_version + "]", 4), (cluster_name, 6), (cloudlet_name+ " [" + operator_org_name + "]", 5)])
         except:
             logging.info('row is not found')
             return False
         time.sleep(1)
-        ActionChains(self.driver).click(on_element=r).perform()
+        e = r.find_element_by_xpath(f'//span[contains(.,"{app_name}")]')
+        e.click()
         return True
 
 
