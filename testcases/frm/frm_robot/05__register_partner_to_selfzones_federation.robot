@@ -14,6 +14,7 @@ ${operator}=           packet
 ${countrycode}=        SG
 
 *** Test Cases ***
+# ECQ-4253
 Partner shall be able to register to shared zones
     [Documentation]
     ...  Login as MexAdmin

@@ -23,7 +23,7 @@ ${partner_fed_id}
 
 
 *** Test Cases ***
-# ECQ-3755
+# ECQ-4253
 Shall be able to register/deregister with partner federation 
     [Documentation]
     ...  Login as MexAdmin

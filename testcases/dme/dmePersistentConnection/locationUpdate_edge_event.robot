@@ -4,6 +4,7 @@ Documentation   Latency Edge Event Tests
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  Collections
+Library  String
 
 Test Setup	Setup
 Test Teardown	Teardown
@@ -36,7 +37,7 @@ DMEPersistentConnection - Location Update edge event shall return new cloudlet
 
     Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2-tmus.${region_lc}.mobiledgex.net
 
     Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
@@ -44,7 +45,7 @@ DMEPersistentConnection - Location Update edge event shall return new cloudlet
 
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet2.new_cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet2.new_cloudlet.fqdn}  shared.tmocloud-1.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet2.new_cloudlet.fqdn}  shared.tmocloud-1-tmus.${region_lc}.mobiledgex.net
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].proto}  1
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].internal_port}  1234
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].public_port}  1234
@@ -65,7 +66,7 @@ DMEPersistentConnection - Location Update edge event with device info shall retu
 
     Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2-tmus.${region_lc}.mobiledgex.net
 
     Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96  carrier_name=tmus  data_network_type=5G  device_os=Android  device_model=Google Pixel  signal_strength=65
 
@@ -74,7 +75,7 @@ DMEPersistentConnection - Location Update edge event with device info shall retu
 
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet2.new_cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet2.new_cloudlet.fqdn}  shared.tmocloud-1.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet2.new_cloudlet.fqdn}  shared.tmocloud-1-tmus.${region_lc}.mobiledgex.net
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].proto}  1
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].internal_port}  1234
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].public_port}  1234
@@ -95,7 +96,7 @@ DMEPersistentConnection - Location Update edge event without lat/long shall retu
 
     Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2-tmus.${region_lc}.mobiledgex.net
 
     Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
@@ -118,7 +119,7 @@ DMEPersistentConnection - Location Update edge event with invalid lat/long shall
 
     Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2-tmus.${region_lc}.mobiledgex.net
 
     Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
@@ -147,7 +148,7 @@ DMEPersistentConnection - Shall be able to make another Persistent Connection af
 
     Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2-tmus.${region_lc}.mobiledgex.net
 
     Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
@@ -155,7 +156,7 @@ DMEPersistentConnection - Shall be able to make another Persistent Connection af
 
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet2.new_cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet2.new_cloudlet.fqdn}  shared.tmocloud-1.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet2.new_cloudlet.fqdn}  shared.tmocloud-1-tmus.${region_lc}.mobiledgex.net
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].proto}  1
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].internal_port}  1234
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].public_port}  1234
@@ -168,7 +169,7 @@ DMEPersistentConnection - Shall be able to make another Persistent Connection af
 
     Should Be Equal As Numbers  ${cloudlet3.new_cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet3.new_cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet3.new_cloudlet.fqdn}  shared.tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet3.new_cloudlet.fqdn}  shared.tmocloud-2-tmus.${region_lc}.mobiledgex.net
     Should Be Equal As Numbers  ${cloudlet3.new_cloudlet.ports[0].proto}  1
     Should Be Equal As Numbers  ${cloudlet3.new_cloudlet.ports[0].internal_port}  1234
     Should Be Equal As Numbers  ${cloudlet3.new_cloudlet.ports[0].public_port}  1234
@@ -196,7 +197,7 @@ DMEPersistentConnection - Location Update edge event shall return public cloudle
 
     Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2-tmus.${region_lc}.mobiledgex.net
 
     Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
@@ -234,7 +235,7 @@ DMEPersistentConnection - Location Update edge event shall return alliance org c
 
     Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2-tmus.${region_lc}.mobiledgex.net
 
     Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96  carrier_name=tmus  data_network_type=5G  device_os=Android  device_model=Google Pixel  signal_strength=65
 
@@ -273,14 +274,14 @@ DMEPersistentConnection - Location Update edge event shall return alliance org c
 
     Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2.tmus.mobiledgex.net
+    Should Be Equal  ${cloudlet.fqdn}  shared.tmocloud-2-tmus.${region_lc}.mobiledgex.net
 
     Create DME Persistent Connection  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96  carrier_name=tmus  data_network_type=5G  device_os=Android  device_model=Google Pixel  signal_strength=65
 
     ${cloudlet2}=  Send Location Update Edge Event  latitude=31  longitude=-91.999
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet2.new_cloudlet.edge_events_cookie}') > 100
-    Should Contain  ${cloudlet2.new_cloudlet.fqdn}  shared.tmocloud-1.tmus.mobiledgex.net
+    Should Contain  ${cloudlet2.new_cloudlet.fqdn}  shared.tmocloud-1-tmus.${region_lc}.mobiledgex.net
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].proto}  1
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].internal_port}  1234
     Should Be Equal As Numbers  ${cloudlet2.new_cloudlet.ports[0].public_port}  1234
@@ -315,9 +316,11 @@ Setup
     ${tmus_appinst}=  Create App Instance  region=${region}  app_name=${app_name_automation}  cluster_instance_developer_org_name=MobiledgeX  cloudlet_name=tmocloud-2  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
 #    Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  cluster_instance_name=autocluster
 
-   
+    ${region_lc}=  Convert To Lower Case  ${region}
+     
     Set Suite Variable  ${tmus_appinst} 
     Set Suite Variable  ${app_name}
+    Set Suite Variable  ${region_lc}
 
 Teardown
    Terminate DME Persistent Connection

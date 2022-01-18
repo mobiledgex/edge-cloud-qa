@@ -16,7 +16,7 @@ ${selfcountrycode}  DE
 
 
 *** Test Cases ***
-# ECQ-3755
+# ECQ-4253
 Shall be able to create new federatorzones and share them 
     [Documentation]
     ...  Login as OperatorContributor
