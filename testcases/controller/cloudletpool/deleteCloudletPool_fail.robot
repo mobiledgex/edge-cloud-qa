@@ -103,6 +103,27 @@ DeleteCloudletPool - delete when assigned to an invitation/response shall return
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region ${region} name ${pool_name} because it is referenced by automation_dev_org invitation, automation_dev_org response"}
 
+# ECQ-4185
+DeleteCloudletPool - delete when assigned to a trustpolicy exception shall return error
+   [Documentation]
+   ...  - send CreateCloudletPool
+   ...  - create TrustPolicyException with the cloudletpool
+   ...  - send DeleteCloudletPool
+   ...  - verify proper error is received
+
+   [Tags]  TrustPolicyException 
+
+   ${pool_name}=  Get Default Cloudlet Pool Name
+   ${policy_name}=   Get Default Trust Policy Name
+
+   ${pool}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  token=${token}
+
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  policy_name=${policy_name}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  use_defaults=${False}
+
+   ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  token=${token}
+   Should Contain   ${error}  code=400
+   Should Contain   ${error}  error={"message":"CloudletPool in use by Trust Policy Exception {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\",\\\\"name\\\\":\\\\"${app_name_automation}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cloudlet_pool_key\\\\":{\\\\"organization\\\\":\\\\"${pool['data']['key']['organization']}\\\\",\\\\"name\\\\":\\\\"${pool['data']['key']['name']}\\\\"},\\\\"name\\\\":\\\\"${policy_name}\\\\"}"}
+
 *** Keywords ***
 Setup
    ${token}=  Get Super Token
