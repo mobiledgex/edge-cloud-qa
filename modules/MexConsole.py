@@ -1635,18 +1635,19 @@ class MexConsole() :
     def sort_apps_by_region(self):
         self.apps_page.click_region_heading()
 
-    def open_appinst_details(self, app_name=None, region=None, app_version=None, cluster_name=None, cloudlet_name=None):
+    def open_appinst_details(self, app_name=None, region=None, app_version=None, cluster_name=None, cloudlet_name=None, operator_org_name=None):
         if region is None: region = self._region
         if app_name is None: app_name = self._appInst['key']['app_key']['name']
         if app_version is None: app_version = self._appInst['key']['app_key']['version']
         if cluster_name is None: cluster_name = self._appInst['key']['cluster_inst_key']['cluster_key']['name']
         if cloudlet_name is None: cloudlet_name = self._appInst['key']['cluster_inst_key']['cloudlet_key']['name']
+        if operator_org_name is None: operator_org_name = self.appInst['key']['cluster_inst_key']['cloudlet_key']['organization']
 
-        self.change_number_of_rows()
         self.refresh_page()
+        self.app_instances_page.perform_search(app_name)
         time.sleep(2)
 
-        if self.app_instances_page.click_appinst_row(app_name=app_name, region=region, app_version=app_version, cluster_name=cluster_name, cloudlet_name=cloudlet_name):
+        if self.app_instances_page.click_appinst_row(app_name=app_name, region=region, app_version=app_version, cluster_name=cluster_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name):
             details = self.details_page.get_details()
         else:
             raise Exception('appinst NOT found')
@@ -1802,7 +1803,6 @@ class MexConsole() :
         self.take_screenshot('add_new_app_post')
 
     def add_app_instance_from_apps_page(self, region=None, app_name=None, app_version=None, developer_name=None, operator_name=None, cloudlet_name=None, cluster_instance=None, deployment_type=None, type=None, ip_access=None, envvar=None):       
-        self.change_number_of_rows()
 
         if self.apps_page.wait_for_app(region=region, org_name=developer_name, app_name=app_name, app_version=app_version, deployment_type=deployment_type, number_of_pages=2, click_previous_page='off'):
             if self.apps_page.create_instance(region=region, developer_name=developer_name, app_name=app_name, app_version=app_version, deployment_type=deployment_type):
