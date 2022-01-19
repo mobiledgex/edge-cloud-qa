@@ -14,7 +14,7 @@ ${cloudlet_name_openstack_metrics}=   packetcloudlet
 ${operator}=                       packet
 ${clustername_k8sdedicated}=   k8smonitoring
 ${developer_name}=  testmonitor
-${app_name}=  app-us-k8s
+${app_name}=  jme-k8s
 
 ${username_admin}=  mexadmin
 ${password_admin}=  mexadmin123

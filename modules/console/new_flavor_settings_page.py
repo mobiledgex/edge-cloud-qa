@@ -58,26 +58,30 @@ class NewFlavorSettingsPage(NewSettingsPage):
         if self.is_flavorname_label_present() and self.is_flavorname_input_present():
             logging.info('FlavorName present')
         else:
+            logging.error('FlavorName not present')
             settings_present = False
 
         if self.is_ram_label_present() and self.is_ram_input_present():
             logging.info('RAM present')
         else:
+            logging.error('RAM not present')
             settings_present = False
 
         if self.is_vcpus_label_present() and self.is_vcpus_input_present():
             logging.info('VCPUS present')
         else:
+            logging.error('VCPUS present')
             settings_present = False
 
         if self.is_disk_label_present() and self.is_disk_input_present():
             logging.info('Disk present')
         else:
+            logging.error('Disk present')
             settings_present = False
 
         return settings_present
 
-    def create_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None):
+    def create_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, gpu=None):
         logging.info('creating flavor')
 
         self.region = region
@@ -85,6 +89,15 @@ class NewFlavorSettingsPage(NewSettingsPage):
         self.ram = ram
         self.vcpus = vcpus
         self.disk = disk
+
+        if gpu == 'true':
+            logging.info('Clicking GPU slider')
+            self.driver.find_element(*NewPageLocators.flavor_gpu_slider).click()
+            ischecked = self.driver.find_element(*NewPageLocators.flavor_gpu_slider).get_attribute("value")
+            if not (ischecked):
+                logging.warning("GPU Slider not checked. Expected to be checked")
+            else:
+                logging.info("GPU Slider checked as expected.")
         time.sleep(5)
         self.take_screenshot('add_new_flavor_settings.png')
         self.click_save_button()

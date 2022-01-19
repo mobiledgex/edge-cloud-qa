@@ -104,6 +104,7 @@ class ComputePage(BasePage):
 
     def are_elements_present(self, username, role=None):
         elements_present = True
+        logging.info(f"role =  {role}")
 
         if self.is_branding_present():
             logging.info('branding present')
@@ -111,53 +112,12 @@ class ComputePage(BasePage):
             logging.error('branding NOT present')
             elements_present = False
 
-        #if self.is_refresh_icon_present():
-        #    logging.info('refresh icon present')
-        #else:
-        #    logging.error('refresh icon NOT present')
-        #    elements_present = False
 
-        #if self.is_public_icon_present():
-        #    logging.info('public icon present')
-        #else:
-        #    logging.error('public icon NOT present')
-        #    elements_present = False
-
-        if role is None:
-            if self.is_help_icon_present():
-                logging.info('help icon present')
-            else:
-                logging.error('help icon NOT present')
-                elements_present = False
+        if self.is_help_icon_present():
+            logging.info('help icon present')
         else:
-            if self.is_help_icon_present_developer_view():
-                logging.info('help icon present')
-            else:
-                logging.error('help icon NOT present')
-                elements_present = False
-
-        #if self.is_notifications_icon_present():
-        #    logging.info('notifications icon present')
-        #else:
-        #    raise Exception('notifications icon not present')
-
-        #if compute_page.is_add_icon_present():
-        #    logging.info('add icon present')
-        #else:
-        #    raise Exception('add icon not present')
-
-
-        #if self.is_username_present(username):
-        #    logging.info('username present')
-        #else:
-        #    logging.error('username NOT present')
-        #    elements_present = False
-
-        #if self.is_support_present():
-        #    logging.info('support present')
-        #else:
-        #    logging.error('support NOT present')
-        #    elements_present = False
+            logging.error('help icon NOT present')
+            elements_present = False
 
         return elements_present
 
@@ -172,58 +132,52 @@ class ComputePage(BasePage):
 
         cell_data = []
         button_enabled = True
-        while(button_enabled):
-            for row in table.find_elements_by_css_selector('tr'):
+        for row in table.find_elements_by_xpath('//div[@role="row"]'):
                 row.location_once_scrolled_into_view   # cause row to scroll into view
                 cell_data = []
-                for cell in row.find_elements_by_css_selector('td'):
-                    if cell.text == '':
-                        cell_data.append(cell)
-                    else:
-                        cell_data.append(cell.text.strip())
-                    logging.info('CELL Text - ' +  cell.text)
+                for cell in row.find_elements_by_xpath('//div[@role="gridcell"]'):
+                    ishidden = cell.get_attribute("hidden")
+                    if not (ishidden):
+                        cellinnerText = cell.get_attribute("innerText")
+                        if cellinnerText == '':
+                            cell_data.append(cellinnerText)
+                        else:
+                            cell_data.append(cellinnerText.strip())
+                        logging.info('CELL Text - ' + cellinnerText)
+                    # if cell.text == '':
+                    #     cell_data.append(cell)
+                    # else:
+                    #     cell_data.append(cell.text.strip())
+                    # logging.info('CELL Text - ' +  cell.text)
                 cell_data.append(row)
                 row_list.append(list(cell_data))
-            ele = self.driver.find_element_by_xpath(ComputePageLocators.next_page_button)
-
-            if ele.is_enabled():
-                logging.info("Clicking NEXT button")
-                ele.click()
-                time.sleep(1)
-            else:
-                button_enabled = False
-                break
-
         logging.info('ROW LIST - ', *row_list)
 
-        if len(table.find_elements_by_css_selector('tr')) > 0:
-            table.find_elements_by_css_selector('tr')[0].location_once_scrolled_into_view
+        if len(table.find_elements_by_xpath('//div[@role="row"]')) > 0:
+            table.find_elements_by_xpath('//div[@role="row"]')[0].location_once_scrolled_into_view
             
         return row_list
 
-    #def get_table_row_by_value(self, value, value_index):
     def get_table_row_by_value(self, row_values):
         print('*WARN*', 'rowvalues', row_values)
         table = self.driver.find_element(*ComputePageLocators.table_data)
     
-        #print('*WARN*','row_values', len(row_values))
         row_found = 0
         row_list = []
         cell_data = []
 
-        for row in table.find_elements_by_css_selector('tr'):
+        for row in table.find_elements_by_xpath('//div[@role="row"]'):
             print('*WARN*', 'checking row', row)
             if not row.is_displayed:
                 row.location_once_scrolled_into_view   # cause row to scroll into view
-                print('*WARN*', 'displayed')
+                print('*WARN*', 'row not displayed')
             else:
                 row.location_once_scrolled_into_view   # cause row to scroll into view
-                print('*WARN*', 'not displayed')
+                print('*WARN*', 'row displayed')
                 
             for value in row_values:
-                #text_value = row.find_element_by_xpath(f'./td[{value[1]}]/div').text
-                text_value = row.find_element_by_xpath(f'./td[{value[1]}]').text
-                print('*WARN*', 'text_value', text_value, 'value[0]',value[0])
+                text_value = row.find_element_by_xpath(f'//div[@role="gridcell"][{value[1]}]//span').text
+                print('*WARN*', 'text_value=', text_value, 'value[0]=',value[0])
                 if text_value == value[0]:
                     row_found += 1
                 else:
@@ -248,7 +202,6 @@ class ComputePage(BasePage):
         self.driver.find_element(*ComputePageLocators.table_new_button).click()
 
     def click_add_button(self):
-        #self.driver.find_element(*ComputePageLocators.table_add_button).click()
         logging.info("Clicking ADD button")
         e = self.driver.find_element(*ComputePageLocators.table_add_button)
         ActionChains(self.driver).click(on_element=e).perform()

@@ -20,7 +20,7 @@ ${region}  US
 WebUI - user shall be able to create a new EU flavor
     [Documentation]
     ...  Create a new flavor
-    ...  Fill in Region=US and all proper values
+    ...  Fill in Region=EU and all proper values
     ...  Verify flavor shows in list
     [Tags]  passing
 
@@ -30,20 +30,32 @@ WebUI - user shall be able to create a new EU flavor
     Flavor Should Exist  flavor_name=${flavor_name_default}  change_rows_per_page=True  number_of_pages=${num_pages}
     # should also call the WS to check the flavor
     MexConsole.Delete Flavor  number_of_pages=${num_pages}  click_previous_page=off
+    Flavor Should Not Exist  flavor_name=${flavor_name_default}
 
-WebUI - user shall be able to create a new US flavor
+WebUI - user shall be able to create a new US flavor with GPU
     [Documentation]
     ...  Click New button
-    ...  Fill in Region=US and all proper values
+    ...  Fill in Region=US and all proper values with GPU
     ...  Verify Flavor is created and list is updated
     [Tags]  passing
 
     Get Table Data
-    Add New Flavor  region=US  flavor_name=${flavor_name_default}
+    Add New Flavor  region=US  flavor_name=${flavor_name_default}  ram=2048  vcpus=2  disk=80  gpu=true
 
-    Flavor Should Exist  flavor_name=${flavor_name_default}  change_rows_per_page=True  number_of_pages=${num_pages}
+    Flavor Should Exist  flavor_name=${flavor_name_default}  change_rows_per_page=True  number_of_pages=${num_pages}  gpu=true
+    ${details}=  Open Flavor Details  flavor_name=${flavor_name_default}  region=US
+    Log to Console  ${details}
+    Should Be Equal                     ${details}[Region]           US
+    Should Be Equal                     ${details}[Flavor Name]      ${flavor_name_default}
+    Should Be Equal As Numbers          ${details}[RAM Size(MB)]         2048
+    Should Be Equal As Numbers          ${details}[Number of vCPUs]  2
+    Should Be Equal As Numbers          ${details}[Disk Space(GB)]       80
+    Should Contain                      ${details}[GPU]              1
+    Close Flavor Details
+
     # should also call the WS to check the flavor
     MexConsole.Delete Flavor  number_of_pages=${num_pages}  click_previous_page=off
+    Flavor Should Not Exist  flavor_name=${flavor_name_default}
 
 *** Keywords ***
 Setup
