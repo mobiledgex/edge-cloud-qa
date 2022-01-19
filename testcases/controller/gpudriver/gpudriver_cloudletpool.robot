@@ -19,7 +19,7 @@ ${kernelversion1}  4.15.0-135-generic
 ${md5sum1}  aa89cc385928a781d77472b88a54d9d4
 
 ${cloudlet_name}  automationParadiseCloudlet
-${region}=  EU
+${region_eu}=  EU
 
 ${username}=   mextester06
 ${password}=   ${mextester06_gmail_password}
@@ -34,44 +34,44 @@ DeveloperOrg part of cloudletpool can only access gpudrivers mapped to private c
     ...  Update Cloudlet to map the gpudriver to the cloudlets
     ...  Developer can only view gpudriver mapped to cloudlet belonging to the same cloudletpool
 
-   Create Cloudlet Pool  region=${region}  token=${super_token}  cloudlet_pool_name=${pool1}  operator_org_name=GDDT
-   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${pool1}  operator_org_name=GDDT  cloudlet_name=automationParadiseCloudlet
+   Create Cloudlet Pool  region=${region_eu}  token=${super_token}  cloudlet_pool_name=${pool1}  operator_org_name=GDDT
+   Add Cloudlet Pool Member  region=${region_eu}  token=${super_token}  cloudlet_pool_name=${pool1}  operator_org_name=GDDT  cloudlet_name=automationParadiseCloudlet
 
-   Create Cloudlet Pool  region=${region}  token=${super_token}  cloudlet_pool_name=${pool2}  operator_org_name=reportorg1
-   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${pool2}  operator_org_name=reportorg1  cloudlet_name=testreportgpu
+   Create Cloudlet Pool  region=${region_eu}  token=${super_token}  cloudlet_pool_name=${pool2}  operator_org_name=reportorg1
+   Add Cloudlet Pool Member  region=${region_eu}  token=${super_token}  cloudlet_pool_name=${pool2}  operator_org_name=reportorg1  cloudlet_name=testreportgpu
 
-   Create Cloudlet Pool Access Invitation  region=${region}  token=${op1_token}  cloudlet_pool_name=${pool1}  cloudlet_pool_org_name=GDDT  developer_org_name=${org_name1}  use_defaults=False
-   Create Cloudlet Pool Access Response  region=${region}  token=${tokendev1}  cloudlet_pool_name=${pool1}  cloudlet_pool_org_name=GDDT  developer_org_name=${org_name1}  decision=accept  use_defaults=False
+   Create Cloudlet Pool Access Invitation  region=${region_eu}  token=${op1_token}  cloudlet_pool_name=${pool1}  cloudlet_pool_org_name=GDDT  developer_org_name=${org_name1}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region_eu}  token=${tokendev1}  cloudlet_pool_name=${pool1}  cloudlet_pool_org_name=GDDT  developer_org_name=${org_name1}  decision=accept  use_defaults=False
 
-   Create Cloudlet Pool Access Invitation  region=${region}  token=${op2_token}  cloudlet_pool_name=${pool2}  cloudlet_pool_org_name=reportorg1  developer_org_name=${org_name2}  use_defaults=False
-   Create Cloudlet Pool Access Response  region=${region}  token=${tokendev2}  cloudlet_pool_name=${pool2}  cloudlet_pool_org_name=reportorg1  developer_org_name=${org_name2}  decision=accept  use_defaults=False
+   Create Cloudlet Pool Access Invitation  region=${region_eu}  token=${op2_token}  cloudlet_pool_name=${pool2}  cloudlet_pool_org_name=reportorg1  developer_org_name=${org_name2}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region_eu}  token=${tokendev2}  cloudlet_pool_name=${pool2}  cloudlet_pool_org_name=reportorg1  developer_org_name=${org_name2}  decision=accept  use_defaults=False
 
-   Create Gpudriver  region=${region}  gpudriver_org=GDDT  builds_dict=${driver_details}  token=${op1_token}
-   Create Gpudriver  region=${region}  gpudriver_org=reportorg1  builds_dict=${driver_details}  token=${op2_token}
+   Create Gpudriver  region=${region_eu}  gpudriver_org=GDDT  builds_dict=${driver_details}  token=${op1_token}
+   Create Gpudriver  region=${region_eu}  gpudriver_org=reportorg1  builds_dict=${driver_details}  token=${op2_token}
 
-   ${gpudriver1}=  Show Gpudriver  region=${region}  gpudriver_org=GDDT  token=${tokendev1}
-   ${gpudriver2}=  Show Gpudriver  region=${region}  gpudriver_org=reportorg1  token=${tokendev2}
+   ${gpudriver1}=  Show Gpudriver  region=${region_eu}  gpudriver_org=GDDT  token=${tokendev1}
+   ${gpudriver2}=  Show Gpudriver  region=${region_eu}  gpudriver_org=reportorg1  token=${tokendev2}
 
    Should Be Empty  ${gpudriver1}
    Should Be Empty  ${gpudriver2}
 
-   Update Cloudlet  region=${region}  operator_org_name=GDDT  cloudlet_name=automationParadiseCloudlet  gpudriver_name=${gpudriver_name}  gpudriver_org=GDDT  token=${op1_token}
-   Update Cloudlet  region=${region}  operator_org_name=reportorg1  cloudlet_name=testreportgpu  gpudriver_name=${gpudriver_name}  gpudriver_org=reportorg1  token=${op2_token}
+   Update Cloudlet  region=${region_eu}  operator_org_name=GDDT  cloudlet_name=automationParadiseCloudlet  gpudriver_name=${gpudriver_name}  gpudriver_org=GDDT  token=${op1_token}
+   Update Cloudlet  region=${region_eu}  operator_org_name=reportorg1  cloudlet_name=testreportgpu  gpudriver_name=${gpudriver_name}  gpudriver_org=reportorg1  token=${op2_token}
 
-   ${gpudriver1}=  Show Gpudriver  region=${region}  gpudriver_org=GDDT  token=${tokendev1}
-   ${gpudriver2}=  Show Gpudriver  region=${region}  gpudriver_org=reportorg1  token=${tokendev2}
+   ${gpudriver1}=  Show Gpudriver  region=${region_eu}  gpudriver_org=GDDT  token=${tokendev1}
+   ${gpudriver2}=  Show Gpudriver  region=${region_eu}  gpudriver_org=reportorg1  token=${tokendev2}
 
    Length Should Be   ${gpudriver1}  1
    Length Should Be   ${gpudriver2}  1
 
-   ${gpudriver1}=  Show Gpudriver  region=${region}  gpudriver_org=reportorg1  token=${tokendev1}
-   ${gpudriver2}=  Show Gpudriver  region=${region}  gpudriver_org=GDDT  token=${tokendev2}
+   ${gpudriver1}=  Show Gpudriver  region=${region_eu}  gpudriver_org=reportorg1  token=${tokendev1}
+   ${gpudriver2}=  Show Gpudriver  region=${region_eu}  gpudriver_org=GDDT  token=${tokendev2}
 
    Should Be Empty  ${gpudriver1}
    Should Be Empty  ${gpudriver2}
 
-   Update Cloudlet  region=${region}  operator_org_name=GDDT  cloudlet_name=automationParadiseCloudlet  gpudriver_name=${Empty}  token=${op1_token}
-   Update Cloudlet  region=${region}  operator_org_name=reportorg1  cloudlet_name=testreportgpu  gpudriver_name=${Empty}  token=${op2_token}
+   Update Cloudlet  region=${region_eu}  operator_org_name=GDDT  cloudlet_name=automationParadiseCloudlet  gpudriver_name=${Empty}  token=${op1_token}
+   Update Cloudlet  region=${region_eu}  operator_org_name=reportorg1  cloudlet_name=testreportgpu  gpudriver_name=${Empty}  token=${op2_token}
 
 *** Keywords ***
 Setup

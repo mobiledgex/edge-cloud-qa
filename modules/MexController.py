@@ -729,7 +729,7 @@ class App():
                       
             if self.image_type == 'imagetypedocker':
                 if self.image_path is None:
-                    self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+                    self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0'
                     #try:
                     #    new_app_name = self._docker_sanitize(self.app_name)
                     #    if self.developer_name is not None:
@@ -785,7 +785,7 @@ class App():
         if self.default_flavor_name == 'default':
             self.default_flavor_name = shared_variables.flavor_name_default
         if self.image_path == 'default':
-            self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+            self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0'
             
         app_dict = {}
         app_key_dict = {}

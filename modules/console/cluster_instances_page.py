@@ -54,29 +54,11 @@ class ClusterInstancesPage(ComputePage):
             logging.error('flavor header NOT present')
             header_present = False
 
-        if self.is_element_present(ClusterInstancesPageLocators.cluster_instances_table_header_cloudlet):
-            logging.info('cloudlet header present')
+        if self.is_element_present(ClusterInstancesPageLocators.cluster_instances_table_header_deployment):
+            logging.info('deployment header present')
         else:
-            logging.error('cloudlet header NOT present')
+            logging.error('deployment header NOT present')
             header_present = False
-
-        if self.is_element_present(ClusterInstancesPageLocators.cluster_instances_table_header_ipaccess):
-            logging.info('ipaccess header present')
-        else:
-            logging.error('ipaccess header NOT present')
-            header_present = False
-
-        #if self.is_element_present(ClusterInstancesPageLocators.cluster_instances_table_header_location):
-        #    logging.info('cloudlet location header present')
-        #else:
-        #    logging.error('cloudlet location header NOT present')
-        #    header_present = False
-
-        #if self.is_element_present(ClusterInstancesPageLocators.cluster_instances_table_header_state):
-        #    logging.info('state header present')
-        #else:
-        #    logging.error('state header NOT present')
-        #    header_present = False
 
         if self.is_element_present(ClusterInstancesPageLocators.cluster_instances_table_header_progress):
             logging.info('progress header present')
@@ -84,10 +66,10 @@ class ClusterInstancesPage(ComputePage):
             logging.error('progress header NOT present')
             header_present = False
 
-        if self.is_element_present(ClusterInstancesPageLocators.cluster_instances_table_header_edit):
-            logging.info('edit header present')
+        if self.is_element_present(ClusterInstancesPageLocators.cluster_instances_table_header_actions):
+            logging.info('actions header present')
         else:
-            logging.error('edit header NOT present')
+            logging.error('actions header NOT present')
             header_present = False
 
         return header_present

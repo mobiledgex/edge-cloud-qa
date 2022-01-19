@@ -78,12 +78,12 @@ Setup
     Log To Console  Creating Cluster Instance
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cluster_name}=  Get Default Cluster Name
     ${app_name}=  Get Default App Name 
-    ${rootlb}=  Catenate  SEPARATOR=.  automation-dev-org${app_name}10  ${rootlb}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${app_name}10-automation-dev-org  ${rootlb}
     
     Set Suite Variable  ${rootlb}
 
