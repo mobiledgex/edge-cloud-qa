@@ -130,10 +130,13 @@ User shall be able to create VM deployment with md5 argument on CRM
 
     ${image_split}=  Split String  ${qcow_centos_image}  \#
     ${md5_split}=  Split String  ${image_split[1]}  :
-   
-    Create App  image_type=ImageTypeQCOW  deployment=vm  app_name=server_ping_threaded_centos7  developer_org_name=MobiledgeX  image_path=no_default  md5_sum=${md5_split[1]}  access_ports=tcp:1023-2016,udp:2015-4050  access_type=loadbalancer  region=${region} 
+  
+    ${developer}=  Set Variable  MobiledgeX
+    ${app_name}=  Set Variable  server_ping_threaded_centos7
+ 
+    Create App  image_type=ImageTypeQCOW  deployment=vm  app_name=${app_name}  developer_org_name=${developer}  image_path=no_default  md5_sum=${md5_split[1]}  access_ports=tcp:1023-2016,udp:2015-4050  access_type=loadbalancer  region=${region} 
     #Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${image_split[0]}  md5_sum=${md5_split[1]}  access_ports=tcp:1023-2016,udp:2015-4050  access_type=loadbalancer  region=${region}   #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  app_name=server_ping_threaded_centos7  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
+    ${app_inst}=  Create App Instance  app_name=${app_name}  developer_org_name=${developer}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
 
    # verify md5 in createappinst stream
    ${app_inst_stream_output}=  Get Create App Instance Stream
@@ -145,18 +148,21 @@ User shall be able to create VM deployment with md5 argument on CRM
    Length Should Be  ${image_list}  1
 
    # verify dedicated cluster as it own security group
-   ${vm}=  Replace String  ${vm}  ${developer_name_default}  mobiledgex
-   ${vm}=  Replace String  ${vm}  ${app_name_default}  server-ping-threaded-centos7
-   
-   ${server_show}=  Get Server Show  name=${vm}
-   Security Groups Should Contain  ${server_show['security_groups']}  ${vm}-sg
-   ${openstacksecgroup}=  Get Security Groups  name=${vm}-sg
-   Should Be Equal  ${openstacksecgroup['name']}   ${vm}-sg
+   ${server}=  Set Variable  ${app_name}${version_default}-${developer}
+   ${server}=  Remove String  ${server}  .
+   ${server}=  Replace String  ${server}  _  -
+   ${server}=  Set Variable  ${server}.${cloudlet_name_crm}-${operator_name_crm}.${region}.mobiledgex.net
+   ${server}=  Convert To Lowercase  ${server}
+   ${server_show}=  Get Server Show  name=${server}
+   Security Groups Should Contain  ${server_show['security_groups']}  ${server}-sg
+   ${openstacksecgroup}=  Get Security Groups  name=${server}-sg
+   Should Be Equal  ${openstacksecgroup['name']}   ${server}-sg
    Should Match Regexp  ${openstacksecgroup['rules']}  direction='egress', ethertype='IPv4', id='.*', updated_at
-   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='2016', port_range_min='23', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at
-   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='40000', port_range_min='2015', protocol='udp', remote_ip_prefix='0.0.0.0/0', updated_at=
+   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='2016', port_range_min='1023', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at
+   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='4050', port_range_min='2015', protocol='udp', remote_ip_prefix='0.0.0.0/0', updated_at=
+   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='22', port_range_min='22', protocol='tcp'
    @{sec_groups}=  Split To Lines  ${openstacksecgroup['rules']}
-   Length Should Be  ${sec_groups}  3
+   Length Should Be  ${sec_groups}  4
 
    @{sec_groups}=  Split To Lines  ${server_show['security_groups']}
    Length Should Be  ${sec_groups}  2
@@ -199,8 +205,7 @@ Setup
    Set Suite Variable  ${vm}
    Set Suite Variable  ${vm_lb}
    Set Suite Variable  ${openstack_image}
-   Set Suite Variable  ${developer_name_default}
-   Set Suite Variable  ${app_name_default}
+   Set Suite Variable  ${version_default}
 
 Security Groups Should Contain
    [Arguments]  ${grouplist}  ${group}
