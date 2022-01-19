@@ -168,7 +168,7 @@ ShowLogs - shall return error for VM apps
     Create App  region=US  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  developer_org_name=${developer_artifactory} 
     ${app_inst}=  Create App Instance  region=US  cloudlet_name=tmocloud-1  operator_org_name=dmuus  developer_org_name=${developer_artifactory}  cluster_instance_developer_org_name=${developer_artifactory}
 
-    ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  cloudlet_name=tmocloud-1  operator_org_name=dmuus  developer_org_name=${developer_artifactory}
+    ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  cloudlet_name=tmocloud-1  operator_org_name=dmuus  developer_org_name=${developer_artifactory}  cluster_instance_developer_org_name=${developer_artifactory}
 
     #Should Contain  ${error1}  ('code=400', 'error={"message":"ShowLogs not available for vm deployments"}')
     Should Contain  ${error1}  ('code=400', 'error={"message":"Command not supported for vm deployments"}')

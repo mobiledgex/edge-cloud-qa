@@ -145,6 +145,9 @@ User shall be able to create VM deployment with md5 argument on CRM
    Length Should Be  ${image_list}  1
 
    # verify dedicated cluster as it own security group
+   ${vm}=  Replace String  ${vm}  ${developer_name_default}  mobiledgex
+   ${vm}=  Replace String  ${vm}  ${app_name_default}  server-ping-threaded-centos7
+   
    ${server_show}=  Get Server Show  name=${vm}
    Security Groups Should Contain  ${server_show['security_groups']}  ${vm}-sg
    ${openstacksecgroup}=  Get Security Groups  name=${vm}-sg
@@ -180,13 +183,13 @@ Setup
    ${app_name_default}=  Get Default App Name
    ${developer_name_default}=  Get Default Developer Name
    ${version_default}=  Get Default App Version
+   ${version_default}=           Remove String  ${version_default}  .
 
    ${developer_name_default}=  Replace String  ${developer_name_default}  _  -
-   ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+   ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
    ${rootlb}=  Convert To Lowercase  ${rootlb}
-   ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
-   ${vm}=  Remove String  ${vm}  .
-   ${vm_lb}=  Catenate  SEPARATOR=.  ${vm}  ${rootlb}
+   ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}-${cloudlet_name_crm}-${operator_name_crm}
+   ${vm_lb}=  Catenate  SEPARATOR=.  ${app_name_default}${version_default}-${developer_name_default}  ${rootlb}
 
    @{image_split}=  Split String  ${qcow_centos_image}  /
    @{image_md5_split}=  Split String  ${image_split[-1]}  \#md5:
@@ -196,6 +199,8 @@ Setup
    Set Suite Variable  ${vm}
    Set Suite Variable  ${vm_lb}
    Set Suite Variable  ${openstack_image}
+   Set Suite Variable  ${developer_name_default}
+   Set Suite Variable  ${app_name_default}
 
 Security Groups Should Contain
    [Arguments]  ${grouplist}  ${group}
