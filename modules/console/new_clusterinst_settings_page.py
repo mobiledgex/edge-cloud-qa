@@ -28,11 +28,11 @@ class IpAccessElement(BasePagePulldownElement):
 class FlavorNameElement(BasePagePulldownElement):
     locator = ClusterInstancesPageLocators.clusterinst_flavor_pulldown
 
-class NumMastersElement(BasePageElement):
-    locator = ClusterInstancesPageLocators.clusterinst_nummasters_input
+class AutoScalePolicyElement(BasePagePulldownElement):
+    locator = ClusterInstancesPageLocators.clusterinst_autoscalepolicy_pulldown
 
-class NumNodesElement(BasePageElement):
-    locator = ClusterInstancesPageLocators.clusterinst_numnodes_input
+class NetworkElement(BasePagePulldownElement):
+    locator = ClusterInstancesPageLocators.clusterinst_network_pulldown
 
 class NewClusterInstSettingsPage(NewSettingsFullPage):
     cluster_name = ClusterNameElement()
@@ -42,8 +42,8 @@ class NewClusterInstSettingsPage(NewSettingsFullPage):
     deployment = DeploymentTypeElement()
     ip_access = IpAccessElement()
     flavor_name = FlavorNameElement()
-    number_masters = NumMastersElement()
-    number_nodes = NumNodesElement()
+    autoscalepolicy = AutoScalePolicyElement()
+    network = NetworkElement()
 
     def is_region_label_present(self):
         return self.is_element_present(ClusterInstancesPageLocators.clusterinst_region)
@@ -72,8 +72,8 @@ class NewClusterInstSettingsPage(NewSettingsFullPage):
     def is_cloudlet_label_present(self):
         return self.is_element_present(ClusterInstancesPageLocators.clusterinst_cloudletname)
 
-    #def is_cloudlet_input_present(self):
-        #return self.is_element_present(ClusterInstancesPageLocators.clusterinst_cloudletname_input)
+    def is_cloudlet_input_present(self):
+        return self.is_element_present(ClusterInstancesPageLocators.clusterinst_cloudletname_input)
 
     def is_deployment_label_present(self):
         return self.is_element_present(ClusterInstancesPageLocators.clusterinst_deploymenttype)
@@ -93,17 +93,17 @@ class NewClusterInstSettingsPage(NewSettingsFullPage):
     def is_flavor_input_present(self):
         return self.is_element_present(ClusterInstancesPageLocators.clusterinst_flavor_pulldown)
 
-    def is_nummasters_label_present(self):
-        return self.is_element_present(ClusterInstancesPageLocators.clusterinst_nummasters)
+    def is_autoscalepolicy_label_present(self):
+        return self.is_element_present(ClusterInstancesPageLocators.clusterinst_autoscalepolicy)
 
-    def is_nummasters_input_present(self):
-        return self.is_element_present(ClusterInstancesPageLocators.clusterinst_nummasters_input)
+    def is_autoscalepolicy_input_present(self):
+        return self.is_element_present(ClusterInstancesPageLocators.clusterinst_autoscalepolicy_pulldown)
 
-    def is_numnodes_label_present(self):
-        return self.is_element_present(ClusterInstancesPageLocators.clusterinst_numnodes)
+    def is_network_label_present(self):
+        return self.is_element_present(ClusterInstancesPageLocators.clusterinst_network)
 
-    def is_numnodes_input_present(self):
-        return self.is_element_present(ClusterInstancesPageLocators.clusterinst_numnodes_input)
+    def is_network_input_present(self):
+        return self.is_element_present(ClusterInstancesPageLocators.clusterinst_network_pulldown)
 
     def are_elements_present(self):
         settings_present = True
@@ -134,7 +134,7 @@ class NewClusterInstSettingsPage(NewSettingsFullPage):
             logging.error('OperatorName not present')
             settings_present = False
 
-        if self.is_cloudlet_label_present(): #and self.is_cloudlet_input_present():
+        if self.is_cloudlet_label_present() and self.is_cloudlet_input_present():
             logging.info('cloudlet present')
         else:
             logging.error('cloudlet not present')
@@ -158,18 +158,18 @@ class NewClusterInstSettingsPage(NewSettingsFullPage):
             logging.error('Flavor not present')
             settings_present = False
 
- #       if self.is_nummasters_label_present() and self.is_nummasters_input_present():
- #           logging.info('NumMasters present')
- #       else:
- #           logging.error('NumMasters not present')
- #           settings_present = False
+        if self.is_autoscalepolicy_label_present() and self.is_autoscalepolicy_input_present():
+            logging.info('Autoscalepolicy present')
+        else:
+            logging.error('Autoscalepolicy not present')
+            settings_present = False
 
-#        if self.is_numnodes_label_present() and self.is_numnodes_input_present():
-#            logging.info('NumNodes present')
-#        else:
-#            logging.error('NumNodes not present')
-#            settings_present = False
-    
+        if self.is_network_label_present() and self.is_network_input_present():
+            logging.info('Network present')
+        else:
+            logging.error('Network not present')
+            settings_present = False
+
         return settings_present
 
     def are_cluster_details_present(self):
@@ -227,8 +227,6 @@ class NewClusterInstSettingsPage(NewSettingsFullPage):
         else: 
             pass
 
-
-        #print('*WARN*', 'HERE')
         self.take_screenshot('add_new_cloudlet_settings.png')
-        #print('*WARN*', 'HERE')
+
         self.click_create_button()

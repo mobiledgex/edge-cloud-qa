@@ -14,8 +14,9 @@ Test Timeout    10 minutes
 ${browser}           Chrome
 ${console_username}  mexadmin
 ${console_password}  mexadminfastedgecloudinfra
-${developer_name}  MobiledgeX
-${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
+${developer_name}  automation_dev_org
+${operator_org_name}  packet
+${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0
 
 *** Test Cases ***
 Web UI - User shall be create app instance from apps page
@@ -32,15 +33,14 @@ Web UI - User shall be create app instance from apps page
     ${timestamp}=  Convert Date  ${time}  exclude_millis=yes
     Log to Console  ${timestamp}
 
-    ${details}=  Open Appinst Details  region=US  app_name=${app_name}  app_version=1.0  cluster_name=autocluster${app_name}  cloudlet_name=${cloudlet_name}
+    ${details}=  Open Appinst Details  region=US  app_name=${app_name}  app_version=1.0  cluster_name=autocluster${app_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_org_name}
     Log to Console  ${details}
     Should Be Equal   ${details['Created']}   ${timestamp}
-    Should Be Equal   ${details['IP Access']}   Shared
     Should Be Equal   ${details['Progress']}   Ready
 
     Close Details
 
-    MexConsole.Delete App Instance   region=US  app_name=${app_name}  app_version=1.0  cluster_instance=autocluster${app_name}  cloudlet_name=${cloudlet_name}  operator_name=packet  developer_name=${developer_name}
+    MexConsole.Delete App Instance   region=US  app_name=${app_name}  app_version=1.0  cluster_instance=autocluster${app_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_org_name}  developer_name=${developer_name}
 
     FOR  ${i}  IN RANGE  0  5
         ${appinst_details}=   Show App Instances  region=US  app_name=${app_name}  cloudlet_name=${cloudlet_name}
@@ -56,8 +56,8 @@ Setup
     ${app_name}=  Get Default App Name
     Open Browser
     Login to Mex Console  browser=${browser}
-    MexMasterController.Create Cloudlet  region=US  operator_org_name=packet  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=31  longitude=-91
-    MexMasterController.Create App   region=US  image_path=${docker_image}  access_ports=tcp:2015  deployment=kubernetes  image_type=ImageTypeDocker  access_type=loadbalancer  app_name=${app_name}  default_flavor_name=automation_api_flavor
+    MexMasterController.Create Cloudlet  region=US  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=31  longitude=-91
+    MexMasterController.Create App   region=US  developer_org_name=${developer_name}  image_path=${docker_image}  access_ports=tcp:2015  deployment=kubernetes  image_type=ImageTypeDocker  access_type=loadbalancer  app_name=${app_name}  default_flavor_name=automation_api_flavor
     Open Compute
     Open Apps
     Set Suite Variable  ${token}
@@ -65,8 +65,8 @@ Setup
     Set Suite Variable  ${app_name}
 
 Teardown
-    MexMasterController.Delete App  region=US  app_name=${app_name}
-    MexMasterController.Delete Cloudlet  region=US  operator_org_name=packet  cloudlet_name=${cloudlet_name}
+    MexMasterController.Delete App  region=US  app_name=${app_name}  developer_org_name=${developer_name}
+    MexMasterController.Delete Cloudlet  region=US  operator_org_name=${operator_org_name}  cloudlet_name=${cloudlet_name}
     Close Browser
 
 
