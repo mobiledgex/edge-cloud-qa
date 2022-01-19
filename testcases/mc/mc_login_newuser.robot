@@ -44,13 +44,7 @@ MC - New User with wrong password shall not be able to login
    ...  - login to the mc as new user with invalid password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${username}  password=xx
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Invalid username or password"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid username or password"}')  Login  username=${username}  password=xx
 
 # ECQ-3275
 MC - New User with wrong username shall not be able to login
@@ -58,13 +52,7 @@ MC - New User with wrong username shall not be able to login
    ...  - login to the mc as new user with invalid username
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=xx  password=${password}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Invalid username or password"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid username or password"}')  Login  username=xx  password=${password}
 
 # ECQ-3276
 MC - New User with no username shall not be able to login
@@ -72,13 +60,7 @@ MC - New User with no username shall not be able to login
    ...  - login to the mc as new user with no username
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${None}  password=${password}  use_defaults=${False}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Username not specified"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Username not specified"}')  Login  username=${None}  password=${password}  use_defaults=${False}
 
 # ECQ-3277
 MC - New User with no password shall not be able to login
@@ -86,13 +68,7 @@ MC - New User with no password shall not be able to login
    ...  - login to the mc with as new user and no password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${username}  password=${None}  use_defaults=${False}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Please specify password"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Please specify password"}')  Login  username=${username}  password=${None}  use_defaults=${False}
 
 # ECQ-3278
 MC - New User with empty username shall not be able to login
@@ -100,13 +76,7 @@ MC - New User with empty username shall not be able to login
    ...  - login to the mc with empty username and new user password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${EMPTY}  password=${password}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Username not specified"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Username not specified"}')  Login  username=${EMPTY}  password=${password}
 
 # ECQ-3279
 MC - New User with empty password shall not be able to login
@@ -114,13 +84,7 @@ MC - New User with empty password shall not be able to login
    ...  - login to the mc with as new user and empty password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${username}  password=${EMPTY}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Please specify password"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Please specify password"}')  Login  username=${username}  password=${EMPTY}
 
 *** Keywords ***
 Setup
