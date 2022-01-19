@@ -17,7 +17,7 @@ ${driverpath1}  https://artifactory.mobiledgex.net:443/artifactory/packages/pool
 ${kernelversion1}  4.15.0-135-generic
 ${md5sum1}  aa89cc385928a781d77472b88a54d9d4
 
-${region}=  EU
+${region_eu}=  EU
 ${cloudlet_name}  automationParadiseCloudlet
 ${username}=   mextester06
 ${password}=   ${mextester06_gmail_password}
@@ -43,14 +43,14 @@ Operator shall be able to UpdateCloudlet using a gpudriver with no org
     ${tokenop}=  Login  username=${usernameop_epoch}  password=${password}
 
     &{properties}=  Create Dictionary  FPS=10
-    ${gpudriver}=  Create Gpudriver  region=${region}  gpudriver_org=${Empty}  builds_dict=${driver_details}  properties=${properties}  token=${super_token}
+    ${gpudriver}=  Create Gpudriver  region=${region_eu}  gpudriver_org=${Empty}  builds_dict=${driver_details}  properties=${properties}  token=${super_token}
 
-    ${gpudriver}=  Show Gpudriver  region=${region}  gpudriver_org=${Empty}  token=${tokenop}
+    ${gpudriver}=  Show Gpudriver  region=${region_eu}  gpudriver_org=${Empty}  token=${tokenop}
     Should Be Equal  ${gpudriver[0]['data']['key']['name']}  ${gpudriver_name}
 
-    ${gpudriver}=  Update Cloudlet  region=${region}  operator_org_name=GDDT  cloudlet_name=${cloudlet_name}  gpudriver_name=${gpudriver_name}  gpudriver_org=${Empty}
+    ${gpudriver}=  Update Cloudlet  region=${region_eu}  operator_org_name=GDDT  cloudlet_name=${cloudlet_name}  gpudriver_name=${gpudriver_name}  gpudriver_org=${Empty}
     Should Be Equal  ${gpudriver['data']['gpu_config']['driver']['name']}  ${gpudriver_name}
-    ${gpudriver}=  Update Cloudlet  region=${region}  operator_org_name=GDDT  cloudlet_name=${cloudlet_name}  gpudriver_name=${Empty}
+    ${gpudriver}=  Update Cloudlet  region=${region_eu}  operator_org_name=GDDT  cloudlet_name=${cloudlet_name}  gpudriver_name=${Empty}
 
 # ECQ-3650
 OperatorManager of Org A shall not be able to UpdateCloudlet using gpudriver of Org B
@@ -217,13 +217,13 @@ OperatorManager of Org A cannot create/update/delete gpudriver of Operator Org B
     ...  Controller throws error while creating/updating/deleting gpudriver of Org B
 
     &{properties}=  Create Dictionary  FPS=10
-    Create Gpudriver  region=${region}  gpudriver_org=GDDT2
+    Create Gpudriver  region=${region_eu}  gpudriver_org=GDDT2
 
     ${tokenop}=  Login  username=op_manager_automation  password=${op_manager_password_automation}
 
-    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Gpudriver  region=${region}  gpudriver_org=GDDT2  token=${tokenop}
-    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Gpudriver  region=${region}  gpudriver_org=GDDT2  properties=${properties}  token=${tokenop}
-    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Gpudriver  region=${region}  gpudriver_org=GDDT2  gpudriver_name=${gpudriver_name}1  token=${tokenop}
+    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Gpudriver  region=${region_eu}  gpudriver_org=GDDT2  token=${tokenop}
+    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Gpudriver  region=${region_eu}  gpudriver_org=GDDT2  properties=${properties}  token=${tokenop}
+    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Gpudriver  region=${region_eu}  gpudriver_org=GDDT2  gpudriver_name=${gpudriver_name}1  token=${tokenop}
 
 # ECQ-3659
 Developer can view/download gpudriver mapped to public cloudlet
@@ -233,20 +233,20 @@ Developer can view/download gpudriver mapped to public cloudlet
     ...  Gpudriver is visible to developer and getbuildurl works fine
 
     &{properties}=  Create Dictionary  FPS=10
-    ${gpudriver}=  Create Gpudriver  region=${region}  gpudriver_org=GDDT  builds_dict=${driver_details}  properties=${properties}
+    ${gpudriver}=  Create Gpudriver  region=${region_eu}  gpudriver_org=GDDT  builds_dict=${driver_details}  properties=${properties}
 
-    Update Cloudlet  region=${region}  operator_org_name=GDDT  cloudlet_name=${cloudlet_name}  gpudriver_name=${gpudriver_name}  gpudriver_org=GDDT
+    Update Cloudlet  region=${region_eu}  operator_org_name=GDDT  cloudlet_name=${cloudlet_name}  gpudriver_name=${gpudriver_name}  gpudriver_org=GDDT
     ${tokendev}=  Login  username=dev_contributor_automation  password=${dev_contributor_password_automation}
 
-    ${gpudriver}=  Show Gpudriver  region=${region}  gpudriver_org=GDDT  token=${tokendev}
+    ${gpudriver}=  Show Gpudriver  region=${region_eu}  gpudriver_org=GDDT  token=${tokendev}
     Length Should Be   ${gpudriver[0]['data']['builds']}  1
     Should Be Equal  ${gpudriver[0]['data']['properties']['FPS']}  10
 
-    ${buildurl}=  GetBuildUrl Gpudriver  region=${region}  gpudriver_org=GDDT  build_name=${gpudriver_build}  token=${tokendev}
+    ${buildurl}=  GetBuildUrl Gpudriver  region=${region_eu}  gpudriver_org=GDDT  build_name=${gpudriver_build}  token=${tokendev}
     Should Contain  ${buildurl['build_url_path']}  storage.googleapis.com
     Should Be Equal  ${buildurl['validity']}  20m0s
 
-    Update Cloudlet  region=${region}  operator_org_name=GDDT  cloudlet_name=${cloudlet_name}  gpudriver_name=${Empty}  token=${super_token}
+    Update Cloudlet  region=${region_eu}  operator_org_name=GDDT  cloudlet_name=${cloudlet_name}  gpudriver_name=${Empty}  token=${super_token}
 
 *** Keywords ***
 Setup

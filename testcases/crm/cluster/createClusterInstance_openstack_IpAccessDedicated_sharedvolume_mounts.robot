@@ -29,6 +29,9 @@ ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:
 #${manifest_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_volumemount.yml
 ${manifest_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_shared_volumemount.yml
 ${manifest_pod_name}=  server-ping-threaded-udptcphttp
+
+${latitude}       32.7767
+${longitude}      -96.7970
 	
 ${test_timeout_crm}  15 min
 	
