@@ -69,10 +69,9 @@ class MexOperation(MexRest):
             payload = json_data
         else:
             msg_dict = message
+            if region is not None:
+                msg_dict['region'] = region
             payload = json.dumps(msg_dict)
-
-        if region is not None:
-            msg_dict['region'] = region
 
         logger.info(f'{message_type} at {url}. \n\t{payload}')
 
