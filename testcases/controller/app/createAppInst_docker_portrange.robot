@@ -10,6 +10,7 @@ Test Setup	Setup
 Test Teardown	Cleanup Provisioning
 
 *** Variables ***
+${region}         US
 ${operator_name}  tmus
 ${cloudlet_name}  tmocloud-1
 
@@ -25,7 +26,8 @@ AppInst - user shall be able to add with TCP port range for docker
 
     ${app_default}=  Get Default App Name
 
-    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    #Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}-mobiledgex.${cloudlet_name}-${operator_name}.${region_lc}.mobiledgex.net
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1 
@@ -45,7 +47,8 @@ AppInst - user shall be able to add with UDP port range for docker
 
     ${app_default}=  Get Default App Name
 
-    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    #Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}-mobiledgex.${cloudlet_name}-${operator_name}.${region_lc}.mobiledgex.net
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
@@ -65,7 +68,8 @@ AppInst - user shall be able to add with TCP/UDP port range for docker
 
     ${app_default}=  Get Default App Name
 
-    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    #Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
+    Should Be Equal              ${appInst.uri}    ${cluster_instance_default}-mobiledgex.${cloudlet_name}-${operator_name}.${region_lc}.mobiledgex.net
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  100
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    100
@@ -119,7 +123,9 @@ Setup
     ${developer_name_default}=    Get Default Developer Name
     ${version_default}=           Get Default App Version
     ${version_default}=           Remove String  ${version_default}  .
+    ${region_lc}=                 Convert To Lowercase  ${region}
 
     Set Suite Variable  ${cluster_instance_default}
     Set Suite Variable  ${developer_name_default}
     Set Suite Variable  ${version_default}
+    Set Suite Variable  ${region_lc}

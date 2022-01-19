@@ -19,7 +19,7 @@ ${md5sum1}  aa89cc385928a781d77472b88a54d9d4
 
 ${cloudlet_name}  automationDusseldorfCloudlet
 ${gpu_cloudlet}   automationMunichCloudlet
-${region}=  EU
+${region_eu}=  EU
 
 *** Test Cases ***
 # ECQ-3660
@@ -32,14 +32,14 @@ Controller throws error if adding build for Linux OS without providing kernel ve
     &{properties}=  Create Dictionary  FPS=10
     Remove From Dictionary  ${driver_details}  kernel_version
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create Gpudriver  region=${region}  gpudriver_org=TDG  builds_dict=${driver_details}  properties=${properties}
+    ${error_msg}=  Run Keyword and Expect Error  *  Create Gpudriver  region=${region_eu}  gpudriver_org=TDG  builds_dict=${driver_details}  properties=${properties}
     Should Contain  ${error_msg}  Kernel version is required for Linux build
 
-    Create Gpudriver  region=${region}  gpudriver_org=TDG
-    ${error_msg}=  Run Keyword and Expect Error  *  Addbuild Gpudriver  region=${region}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${driverpath}  build_os=Linux  build_md5sum=${md5sum}  build_driverpathcreds=apt:mobiledgex    
+    Create Gpudriver  region=${region_eu}  gpudriver_org=TDG
+    ${error_msg}=  Run Keyword and Expect Error  *  Addbuild Gpudriver  region=${region_eu}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${driverpath}  build_os=Linux  build_md5sum=${md5sum}  build_driverpathcreds=apt:mobiledgex    
     Should Contain  ${error_msg}  Kernel version is required for Linux build
 
-    ${gpudriver}=  Show Gpudriver  region=${region}  gpudriver_org=TDG
+    ${gpudriver}=  Show Gpudriver  region=${region_eu}  gpudriver_org=TDG
     Should Be Equal  ${gpudriver[0]['data']['builds']}  ${None}
 
 # ECQ-3661
@@ -51,14 +51,14 @@ Controller throws error if invalid md5 checksum is provided while adding build
 
     Set To Dictionary  ${driver_details}  md5sum=${md5sum}1
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create Gpudriver  region=${region}  gpudriver_org=TDG  builds_dict=${driver_details}
+    ${error_msg}=  Run Keyword and Expect Error  *  Create Gpudriver  region=${region_eu}  gpudriver_org=TDG  builds_dict=${driver_details}
     Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Invalid md5sum specified, expected md5sum 4acc71e8d54bfa92d7f12debf7e0a3a9","code":400}}'
 
-    Create Gpudriver  region=${region}  gpudriver_org=TDG
-    ${error_msg}=  Run Keyword and Expect Error  *  Addbuild Gpudriver  region=${region}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${driverpath}  build_os=Linux  build_md5sum=${md5sum}1  build_driverpathcreds=apt:mobiledgex  build_kernelversion=4.15.0-143-generic
+    Create Gpudriver  region=${region_eu}  gpudriver_org=TDG
+    ${error_msg}=  Run Keyword and Expect Error  *  Addbuild Gpudriver  region=${region_eu}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${driverpath}  build_os=Linux  build_md5sum=${md5sum}1  build_driverpathcreds=apt:mobiledgex  build_kernelversion=4.15.0-143-generic
     Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Invalid md5sum specified, expected md5sum 4acc71e8d54bfa92d7f12debf7e0a3a9","code":400}}'
 
-    ${gpudriver}=  Show Gpudriver  region=${region}  gpudriver_org=TDG
+    ${gpudriver}=  Show Gpudriver  region=${region_eu}  gpudriver_org=TDG
     Should Be Equal  ${gpudriver[0]['data']['builds']}  ${None}
 
 # ECQ-3662
@@ -74,14 +74,14 @@ Controller throws error when driverpath contains package other than debian
     Set To Dictionary  ${driver_details}  driver_path=${package}
     Set To Dictionary  ${driver_details}  md5sum=${md5sum}
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create Gpudriver  region=${region}  gpudriver_org=TDG  builds_dict=${driver_details}
+    ${error_msg}=  Run Keyword and Expect Error  *  Create Gpudriver  region=${region_eu}  gpudriver_org=TDG  builds_dict=${driver_details}
     Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Only supported file extension for Linux GPU driver is \\'.deb\\', given .run","code":400}}'
 
-    Create Gpudriver  region=${region}  gpudriver_org=TDG
-    ${error_msg}=  Run Keyword and Expect Error  *  Addbuild Gpudriver  region=${region}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${package}  build_os=Linux  build_md5sum=${md5sum}  build_driverpathcreds=apt:mobiledgex  build_kernelversion=4.15.0-143-generic
+    Create Gpudriver  region=${region_eu}  gpudriver_org=TDG
+    ${error_msg}=  Run Keyword and Expect Error  *  Addbuild Gpudriver  region=${region_eu}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${package}  build_os=Linux  build_md5sum=${md5sum}  build_driverpathcreds=apt:mobiledgex  build_kernelversion=4.15.0-143-generic
     Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Only supported file extension for Linux GPU driver is \\'.deb\\', given .run","code":400}}'
 
-    ${gpudriver}=  Show Gpudriver  region=${region}  gpudriver_org=TDG
+    ${gpudriver}=  Show Gpudriver  region=${region_eu}  gpudriver_org=TDG
     Should Be Equal  ${gpudriver[0]['data']['builds']}  ${None}
 
 # ECQ-3663
@@ -98,14 +98,14 @@ Controller throws error while adding build if debian package was built for older
     Set To Dictionary  ${driver_details}  md5sum=${md5sum}
     Set To Dictionary  ${driver_details}  driver_path_creds=qa-regression:L2ihKxGzo3
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create Gpudriver  region=${region}  gpudriver_org=TDG  builds_dict=${driver_details}
+    ${error_msg}=  Run Keyword and Expect Error  *  Create Gpudriver  region=${region_eu}  gpudriver_org=TDG  builds_dict=${driver_details}
     Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Driver package(\\\\"TDG/${gpudriver_name}/${gpudriver_build}.deb\\\\") should have Linux Kernel dependency(\\\\"4.15.0-143-generic\\\\") specified as part of debian control file
 
-    Create Gpudriver  region=${region}  gpudriver_org=TDG
-    ${error_msg}=  Run Keyword and Expect Error  *  Addbuild Gpudriver  region=${region}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${driverpath}  build_os=Linux  build_md5sum=${md5sum}  build_driverpathcreds=qa-regression:L2ihKxGzo3  build_kernelversion=4.15.0-143-generic
+    Create Gpudriver  region=${region_eu}  gpudriver_org=TDG
+    ${error_msg}=  Run Keyword and Expect Error  *  Addbuild Gpudriver  region=${region_eu}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${driverpath}  build_os=Linux  build_md5sum=${md5sum}  build_driverpathcreds=qa-regression:L2ihKxGzo3  build_kernelversion=4.15.0-143-generic
     Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Driver package(\\\\"TDG/${gpudriver_name}/${gpudriver_build}.deb\\\\") should have Linux Kernel dependency(\\\\"4.15.0-143-generic\\\\") specified as part of debian control file
 
-    ${gpudriver}=  Show Gpudriver  region=${region}  gpudriver_org=TDG
+    ${gpudriver}=  Show Gpudriver  region=${region_eu}  gpudriver_org=TDG
     Should Be Equal  ${gpudriver[0]['data']['builds']}  ${None}
 
 # ECQ-3664
@@ -121,14 +121,14 @@ Controller throws error while adding build if invalid credentials are provided
     Set To Dictionary  ${driver_details}  driver_path=${driverpath}
     Set To Dictionary  ${driver_details}  md5sum=${md5sum}
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create Gpudriver  region=${region}  gpudriver_org=TDG  builds_dict=${driver_details}
+    ${error_msg}=  Run Keyword and Expect Error  *  Create Gpudriver  region=${region_eu}  gpudriver_org=TDG  builds_dict=${driver_details}
     Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Failed to download GPU driver build ${driverpath}, Invalid credentials to access URL: ${driverpath}","code":400}}
 
-    Create Gpudriver  region=${region}  gpudriver_org=TDG
-    ${error_msg}=  Run Keyword and Expect Error  *  Addbuild Gpudriver  region=${region}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${driverpath}  build_os=Linux  build_md5sum=${md5sum}  build_driverpathcreds=apt:mobiledgex  build_kernelversion=4.15.0-143-generic
+    Create Gpudriver  region=${region_eu}  gpudriver_org=TDG
+    ${error_msg}=  Run Keyword and Expect Error  *  Addbuild Gpudriver  region=${region_eu}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${driverpath}  build_os=Linux  build_md5sum=${md5sum}  build_driverpathcreds=apt:mobiledgex  build_kernelversion=4.15.0-143-generic
     Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Failed to download GPU driver build ${driverpath}, Invalid credentials to access URL: ${driverpath}","code":400}}
 
-    ${gpudriver}=  Show Gpudriver  region=${region}  gpudriver_org=TDG
+    ${gpudriver}=  Show Gpudriver  region=${region_eu}  gpudriver_org=TDG
     Should Be Equal  ${gpudriver[0]['data']['builds']}  ${None}
 
 # ECQ-3665
@@ -138,13 +138,13 @@ ClusterInst/AppInst creation of gpu flavor on a cloudlet not mapped to GPU drive
     ...  Create an appinst of gpu flavor on a reservable cluster
     ...  Controller throws error in both cases since cloudlet is not mapped to gpudriver
 
-    Update Cloudlet  region=${region}  operator_org_name=TDG  cloudlet_name=${cloudlet_name}  gpudriver_name=${Empty}
+    Update Cloudlet  region=${region_eu}  operator_org_name=TDG  cloudlet_name=${cloudlet_name}  gpudriver_name=${Empty}
 
-    ${error_msg}=  Run Keyword and Expect Error  *   Create Cluster Instance  region=${region}  operator_org_name=TDG  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor
+    ${error_msg}=  Run Keyword and Expect Error  *   Create Cluster Instance  region=${region_eu}  operator_org_name=TDG  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor
     Should Contain  ${error_msg}  'code=400', 'error={"message":"No GPU driver associated with cloudlet {TDG ${cloudlet_name} }"}
 
-    Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015  default_flavor_name=automation_gpu_flavor
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  operator_org_name=TDG  cloudlet_name=${cloudlet_name}  cluster_instance_name=autocluster1
+    Create App  region=${region_eu}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015  default_flavor_name=automation_gpu_flavor
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  region=${region_eu}  operator_org_name=TDG  cloudlet_name=${cloudlet_name}  cluster_instance_name=autocluster1
     Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"No GPU driver associated with cloudlet {TDG ${cloudlet_name} }","code":400}}'
 
 # ECQ-3666
@@ -154,13 +154,13 @@ Deletion of GpuDriver is use by Cloudlet fails
     ...  UpdateCloudlet to map the gpudriver with the cloudlet
     ...  Controller throws error while trying to delete the gpudriver
 
-    Create Gpudriver  region=${region}  gpudriver_org=TDG  builds_dict=${driver_details}
-    Update Cloudlet  region=${region}  operator_org_name=TDG  cloudlet_name=${cloudlet_name}  gpudriver_name=${gpudriver_name}  gpudriver_org=TDG
+    Create Gpudriver  region=${region_eu}  gpudriver_org=TDG  builds_dict=${driver_details}
+    Update Cloudlet  region=${region_eu}  operator_org_name=TDG  cloudlet_name=${cloudlet_name}  gpudriver_name=${gpudriver_name}  gpudriver_org=TDG
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Delete Gpudriver  region=${region}  gpudriver_org=TDG
+    ${error_msg}=  Run Keyword and Expect Error  *  Delete Gpudriver  region=${region_eu}  gpudriver_org=TDG
     Should Contain  ${error_msg}  'code=400', 'error={"message":"GPU driver in use by Cloudlet(s): ${cloudlet_name}"}
 
-    Update Cloudlet  region=${region}  operator_org_name=TDG  cloudlet_name=${cloudlet_name}  gpudriver_name=${Empty} 
+    Update Cloudlet  region=${region_eu}  operator_org_name=TDG  cloudlet_name=${cloudlet_name}  gpudriver_name=${Empty} 
 
 # ECQ-3667
 ClusterInst create on cloudlet mapped to incompatible GPU driver fails
@@ -169,14 +169,14 @@ ClusterInst create on cloudlet mapped to incompatible GPU driver fails
     ...  UpdateCloudlet to map the gpudriver to the cloudlet
     ...  Controller throws error while creating clusterinst since the correct debian package cannot be found
 
-    Create Gpudriver  region=${region}  gpudriver_org=TDG
-    Addbuild Gpudriver  region=${region}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${driverpath1}  build_os=Linux  build_md5sum=${md5sum1}  build_driverpathcreds=apt:mobiledgex  build_kernelversion=4.15.0-135-generic
+    Create Gpudriver  region=${region_eu}  gpudriver_org=TDG
+    Addbuild Gpudriver  region=${region_eu}  gpudriver_org=TDG  build_name=${gpudriver_build}  build_driverpath=${driverpath1}  build_os=Linux  build_md5sum=${md5sum1}  build_driverpathcreds=apt:mobiledgex  build_kernelversion=4.15.0-135-generic
 
-    Update Cloudlet  region=${region}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  gpudriver_name=${gpudriver_name}  gpudriver_org=TDG
-    ${error_msg}=  Run Keyword and Expect Error  *   Create Cluster Instance  region=${region}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor
+    Update Cloudlet  region=${region_eu}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  gpudriver_name=${gpudriver_name}  gpudriver_org=TDG
+    ${error_msg}=  Run Keyword and Expect Error  *   Create Cluster Instance  region=${region_eu}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor
     Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Encountered failures: Create failed: failed to install GPU drivers on cluster VM: Unable to find Linux GPU driver build for kernel version 4.15.0-159-generic
 
-    Update Cloudlet  region=${region}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  gpudriver_name=nvidia-450  gpudriver_org=TDG
+    Update Cloudlet  region=${region_eu}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  gpudriver_name=nvidia-450  gpudriver_org=TDG
 
 # ECQ-3668
 ClusterInst creation of gpu flavor fails if gpudriver does not contain any build
@@ -185,13 +185,13 @@ ClusterInst creation of gpu flavor fails if gpudriver does not contain any build
     ...  UpdateCloudlet to map the gpudriver to the cloudlet
     ...  Controller throws error while creating clusterinst since no debian package is found
 
-    Create Gpudriver  region=${region}  gpudriver_org=TDG
+    Create Gpudriver  region=${region_eu}  gpudriver_org=TDG
 
-    Update Cloudlet  region=${region}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  gpudriver_name=${gpudriver_name}  gpudriver_org=TDG
-    ${error_msg}=  Run Keyword and Expect Error  *   Create Cluster Instance  region=${region}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor
+    Update Cloudlet  region=${region_eu}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  gpudriver_name=${gpudriver_name}  gpudriver_org=TDG
+    ${error_msg}=  Run Keyword and Expect Error  *   Create Cluster Instance  region=${region_eu}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor
     Should Contain  ${error_msg}  'code=200', 'error={"result":{"message":"Encountered failures: Create failed: failed to install GPU drivers on cluster VM: Unable to find Linux GPU driver build for kernel version 4.15.0-159-generic
 
-    Update Cloudlet  region=${region}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  gpudriver_name=nvidia-450  gpudriver_org=TDG
+    Update Cloudlet  region=${region_eu}  operator_org_name=TDG  cloudlet_name=${gpu_cloudlet}  gpudriver_name=nvidia-450  gpudriver_org=TDG
 
 # ECQ-3669
 ClusterInst/AppInst creation fail if GPU type of cloudlet and cluster do not match
@@ -201,13 +201,13 @@ ClusterInst/AppInst creation fail if GPU type of cloudlet and cluster do not mat
     ...  Create a clusterinst of flavor which has VGPU in optresmap
     ...  Controller throws error cloudlet GPU type of clusterinst and cloudlet do not match
 
-    Create Gpudriver  region=${region}  gpudriver_org=reportorg1  builds_dict=${driver_details}
-    Update Cloudlet  region=${region}  operator_org_name=reportorg1  cloudlet_name=testreportgpu  gpudriver_name=${gpudriver_name}  gpudriver_org=reportorg1
+    Create Gpudriver  region=${region_eu}  gpudriver_org=reportorg1  builds_dict=${driver_details}
+    Update Cloudlet  region=${region_eu}  operator_org_name=reportorg1  cloudlet_name=testreportgpu  gpudriver_name=${gpudriver_name}  gpudriver_org=reportorg1
 
-    ${error_msg}=  Run Keyword and Expect Error  *   Create Cluster Instance  region=${region}  developer_org_name=reportdevorg1  operator_org_name=reportorg1  cloudlet_name=testreportgpu  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_vgpu_flavor
+    ${error_msg}=  Run Keyword and Expect Error  *   Create Cluster Instance  region=${region_eu}  developer_org_name=reportdevorg1  operator_org_name=reportorg1  cloudlet_name=testreportgpu  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_vgpu_flavor
     Should Contain  ${error_msg}  'code=400', 'error={"message":"Invalid node flavor automation_vgpu_flavor, cloudlet \\\\"testreportgpu\\\\" doesn\\\'t support GPU resource \\\\"resources\\\\""}
  
-    Update Cloudlet  region=${region}  operator_org_name=reportorg1  cloudlet_name=testreportgpu  gpudriver_name=${Empty}
+    Update Cloudlet  region=${region_eu}  operator_org_name=reportorg1  cloudlet_name=testreportgpu  gpudriver_name=${Empty}
 
 *** Keywords ***
 Setup

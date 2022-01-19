@@ -13,7 +13,7 @@ ${cloudlet_name_openstack_metrics}=   packetcloudlet
 ${operator}=                       packet
 ${clustername_docker}=   dockershared
 ${developer_name}=  testmonitor
-${app_name}=  app-us
+${app_name}=  jme-app
 
 ${username_admin}=  mexadmin
 ${password_admin}=  mexadmin123

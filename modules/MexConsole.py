@@ -797,16 +797,15 @@ class MexConsole() :
             count -= 1
             time.sleep(1)
 
-    def add_new_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, decision=None):
+    def add_new_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, decision=None, gpu=None):
         self.take_screenshot('add_new_flavor_pre')
         if decision != None:
             decision = decision.lower()
-        self.compute_page.click_new_button()
+        self.compute_page.click_add_button()
         if self.new_flavor_page.are_elements_present():
             logging.info('click New Flavor button verification succeeded')
         else:
             raise Exception('click New Flavor button verification failed')
-        # this function are_elements_present doesnt work for flavor page yet. Will create!!!
 
         flavor = Flavor(flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk).flavor
         logging.info(f'flavor created:{flavor}')
@@ -826,7 +825,7 @@ class MexConsole() :
             self.take_screenshot('flavor_failed_expected')
         else:
             logging.info(f'Adding new flavor region={region} flavor_name={flavor["key"]["name"]}  ram={flavor["ram"]}  vcpus={flavor["vcpus"]}  disk={flavor["disk"]}')
-            self.new_flavor_page.create_flavor(region=region, flavor_name=flavor['key']['name'], ram=flavor['ram'], vcpus=flavor['vcpus'], disk=flavor['disk'])
+            self.new_flavor_page.create_flavor(region=region, flavor_name=flavor['key']['name'], ram=flavor['ram'], vcpus=flavor['vcpus'], disk=flavor['disk'], gpu=gpu)
             time.sleep(3)
             self.take_screenshot('add_new_flavor_post')
 
@@ -839,14 +838,12 @@ class MexConsole() :
     def change_number_of_rows(self):
         self.flavors_page.flavor_rows_per_page()
 
-    def flavor_should_exist(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5, change_rows_per_page=False, number_of_pages=None):
-        if change_rows_per_page:
-            self.flavors_page.flavor_rows_per_page()
+    def flavor_should_exist(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5, change_rows_per_page=False, number_of_pages=None, gpu=None):
         if number_of_pages is None:
             number_of_pages = 1
         logging.info('number of pages is ' + str(number_of_pages))
         self.take_screenshot('flavor_should_exist_pre')
-        logging.info(f'flavor_should_exist region={region} flavor={flavor_name} ram={ram} vcpus={vcpus} disk={disk} wait={wait}')
+        logging.info(f'flavor_should_exist region={region} flavor={flavor_name} ram={ram} vcpus={vcpus} disk={disk} wait={wait} gpu={gpu}')
 
         if region is None: region = self._region
         if flavor_name is None: flavor_name = self._flavor['key']['name']
@@ -854,20 +851,12 @@ class MexConsole() :
         if vcpus is None: vcpus = self._flavor['vcpus']
         if disk is None: disk = self._flavor['disk']
 
-        if self.flavors_page.wait_for_flavor(region, flavor_name, ram, vcpus, disk, number_of_pages):
-            logging.info('flavor found')
+        self.flavors_page.perform_search(flavor_name)
+        if self.flavors_page.wait_for_flavor(region, flavor_name, ram, vcpus, disk, number_of_pages, gpu=gpu):
+            logging.info('Flavor found')
         else:
             raise Exception('Flavor NOT found')
 
-        #rows = self.get_table_data()
-        #print('*WARN*', 'sf', self._flavor)
-        #for r in rows:
-        #    print('*WARN*', 'flavorr', r)
-        #    if r[0] == region and r[1] == 'flavor_name':
-        #        print('*WARN*', 'found flavor')
-        #        return True
-
-        #return False
 
     def flavor_should_not_exist(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5):
         self.take_screenshot('flavor_should_not_exist_pre')
@@ -879,41 +868,27 @@ class MexConsole() :
         if vcpus is None: vcpus = self._flavor['vcpus']
         if disk is None: disk = self._flavor['disk']
 
-        if self.flavors_page.wait_for_flavor(region, flavor_name, ram, vcpus, disk):
-            raise Exception('Flavor found')
+        self.flavors_page.perform_search(flavor_name)
+        if self.flavors_page.wait_for_flavor(region, flavor_name, ram, vcpus, disk, 1):
+            raise Exception('Flavor found. Expected to be not found')
         else:
-            logging.info('flavor not found')
+            logging.info('Flavor not found as expected')
 
 
-    def open_flavor_details(self, flavor_name, region='US'):
-        index = 0
-        k = 0
+    def open_flavor_details(self, flavor_name, region=None):
+        if region is None: region = self._region
         self.change_number_of_rows()
         logging.info('Opening flavor details for flavorname=' + flavor_name)
-
-        for i in range(2):
-            if self.flavors_page.click_flavor_row(flavor_name=flavor_name, region=region):
-                k += 1
-                break
-
-        if k == 0:
-           index += 1
-           self.flavors_page.click_next_page()
-           for j in range(2):
-               if self.flavors_page.click_flavor_row(flavor_name=flavor_name, region=region):
-                   break
+        self.flavors_page.click_flavor_row(flavor_name=flavor_name, region=region)
+        time.sleep(1)
+        self.take_screenshot('open_flavor_details')
 
         if self.flavors_page.are_flavor_details_present():
             logging.info('Flavor details page verification succeeded')
         else:
             raise Exception('Flavor details page verification failed')
 
-        #details = self.organization_details_page.get_details()
         details = self.details_page.get_details()
-     
-        if (index>0):
-            self.flavors_page.click_close_flavor_details()
-            self.flavors_page.click_previous_page()
 
         return details
 
@@ -1062,7 +1037,7 @@ class MexConsole() :
         self.new_cloudlet_page.create_cloudlet(region=region, cloudlet_name=cloudlet['key']['name'], operator_name=cloudlet['key']['organization'], latitude=cloudlet['location']['latitude'], longitude=cloudlet['location']['longitude'], ip_support=cloudlet['ip_support'], number_dynamic_ips=cloudlet['num_dynamic_ips'], physical_name=cloudlet['physical_name'], platform_type=cloudlet['platform_type'], infra_api_access=mode, trust_policy=trust_policy)
    
         if mode == 'Direct':
-            if self.compute_page.wait_for_dialog_box(text="Waiting for run lists to be executed on Platform VM", wait=240):
+            if self.compute_page.wait_for_dialog_box(text="Waiting for run lists to be executed on Platform Server", wait=300):
                 self.new_cloudlet_page.close_alert_box()
             else:
                 raise Exception('Dialog box test NOT found')
@@ -1476,10 +1451,10 @@ class MexConsole() :
 
         if self.compute_page.is_alert_box_present():
             if self.compute_page.get_alert_box_text() != 'App ' + app['key']['name'] + ' added successfully':
-                print('*WARN*', 'SUCCESSFUL')
-                raise Exception('success alert box NOT found. got ' + self.compute_page.get_alert_box_text())
+                print('*WARN*', 'Found alert box SUCCESSFUL')
+                raise Exception('Success alert box found But text did not match. Got ' + self.compute_page.get_alert_box_text())
         else:
-            raise Exception('Success alert box not found')
+            raise Exception('Success alert box NOT found')
 
         self.take_screenshot('add_new_app_post')
 
@@ -1617,8 +1592,8 @@ class MexConsole() :
             raise Exception('Policy NOT found')
  
     def app_should_exist(self, region=None, org_name=None, app_name=None, app_version=None, deployment_type=None, default_flavor_name=None, ports=None, change_rows_per_page=False, number_of_pages=2, wait=5):
-        if change_rows_per_page:
-            self.change_number_of_rows()
+       # if change_rows_per_page:
+        #    self.change_number_of_rows()
         self.take_screenshot('app_should_exist_pre')
         #logging.info(f'Verifying new app exists region={region} app_name={app_name} app_version={app_version} org_name={org_name}  default_flavor_name={default_flavor_name} deployment_type={deployment_type} ports={ports}')
         
@@ -1660,18 +1635,19 @@ class MexConsole() :
     def sort_apps_by_region(self):
         self.apps_page.click_region_heading()
 
-    def open_appinst_details(self, app_name=None, region=None, app_version=None, cluster_name=None, cloudlet_name=None):
+    def open_appinst_details(self, app_name=None, region=None, app_version=None, cluster_name=None, cloudlet_name=None, operator_org_name=None):
         if region is None: region = self._region
         if app_name is None: app_name = self._appInst['key']['app_key']['name']
         if app_version is None: app_version = self._appInst['key']['app_key']['version']
         if cluster_name is None: cluster_name = self._appInst['key']['cluster_inst_key']['cluster_key']['name']
         if cloudlet_name is None: cloudlet_name = self._appInst['key']['cluster_inst_key']['cloudlet_key']['name']
+        if operator_org_name is None: operator_org_name = self.appInst['key']['cluster_inst_key']['cloudlet_key']['organization']
 
-        self.change_number_of_rows()
         self.refresh_page()
+        self.app_instances_page.perform_search(app_name)
         time.sleep(2)
 
-        if self.app_instances_page.click_appinst_row(app_name=app_name, region=region, app_version=app_version, cluster_name=cluster_name, cloudlet_name=cloudlet_name):
+        if self.app_instances_page.click_appinst_row(app_name=app_name, region=region, app_version=app_version, cluster_name=cluster_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name):
             details = self.details_page.get_details()
         else:
             raise Exception('appinst NOT found')
@@ -1696,10 +1672,7 @@ class MexConsole() :
 
         logging.info('Opening app details for appname=' + app_name + ' region=' + region + ' appversion=' + app_version + ' app-org=' + app_org)
 
-        if not self.apps_page.click_app_row(app_name=app_name, region=region, app_version=app_version, app_org=app_org):
-            index += 1
-            self.apps_page.click_next_page()
-            self.apps_page.click_app_row(app_name=app_name, region=region, app_version=app_version, app_org=app_org)
+        self.apps_page.click_app_row(app_name=app_name, region=region, app_version=app_version, app_org=app_org)
 
         if self.new_apps_page.are_app_details_present():
             logging.info('app details page verification succeeded')
@@ -1830,7 +1803,6 @@ class MexConsole() :
         self.take_screenshot('add_new_app_post')
 
     def add_app_instance_from_apps_page(self, region=None, app_name=None, app_version=None, developer_name=None, operator_name=None, cloudlet_name=None, cluster_instance=None, deployment_type=None, type=None, ip_access=None, envvar=None):       
-        self.change_number_of_rows()
 
         if self.apps_page.wait_for_app(region=region, org_name=developer_name, app_name=app_name, app_version=app_version, deployment_type=deployment_type, number_of_pages=2, click_previous_page='off'):
             if self.apps_page.create_instance(region=region, developer_name=developer_name, app_name=app_name, app_version=app_version, deployment_type=deployment_type):
@@ -1860,6 +1832,11 @@ class MexConsole() :
         #if default_flavor is None: disk = self._flavor['disk']
         #if ports is None: disk = self._flavor['disk']
 
+        if cluster_instance is not None:
+            self.app_instances_page.perform_search(cluster_instance)
+        else:
+            self.app_instances_page.perform_search(app_name)
+
         if self.app_instances_page.wait_for_app_instance(region=region, org_name=org_name, app_name=app_name, version=app_version, operator=operator_name, cloudlet=cloudlet_name, cluster_instance=cluster_instance, wait=5):
             logging.info('app instance found')
         else:
@@ -1888,8 +1865,6 @@ class MexConsole() :
             return True
 
     def delete_app_instance(self, region=None, developer_name=None, app_name=None, app_version=None, operator_name=None, cloudlet_name=None, cluster_instance=None, change_rows_per_page=True):
-        if change_rows_per_page:
-            self.change_number_of_rows()
         self.refresh_page()
         time.sleep(2)
         self.take_screenshot('delete_appinst_pre')

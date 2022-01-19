@@ -14,8 +14,8 @@ ${browser}           Chrome
 ${console_username}  mexadmin
 ${console_password}  mexadminfastedgecloudinfra
 ${developer_name}  MobiledgeX
-${operator_name}  TDG
-${cloudlet_name}  mexplat-stage-hamburg-cloudlet
+${operator_name}  tmus
+${cloudlet_name}  tmocloud-1
 ${flavor}  x1.medium
 ${wait}  200
 

@@ -189,13 +189,13 @@ Setup
    ${app_name_default}=  Get Default App Name
    ${developer_name_default}=  Get Default Developer Name
    ${version_default}=  Get Default App Version
+   ${version_default}=           Remove String  ${version_default}  .
 
    ${developer_name_default}=  Replace String  ${developer_name_default}  _  -
-   ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+   ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
    ${rootlb}=  Convert To Lowercase  ${rootlb}
-   ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
-   ${vm}=  Remove String  ${vm}  .
-   ${vm_lb}=  Catenate  SEPARATOR=.  ${vm}  ${rootlb}
+   ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}-${cloudlet_name_crm}-${operator_name_crm}
+   ${vm_lb}=  Catenate  SEPARATOR=.  ${app_name_default}${version_default}-${developer_name_default}  ${rootlb}
 
    @{image_split}=  Split String  ${qcow_centos_image}  /
    @{image_md5_split}=  Split String  ${image_split[-1]}  \#md5:
