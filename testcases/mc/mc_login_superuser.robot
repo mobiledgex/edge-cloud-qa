@@ -29,13 +29,7 @@ MC - Superuser with wrong password shall not be able to login
    ...  - login to the mc with superuser username and invalid password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  password=xx
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Invalid username or password"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid username or password"}')  Login  password=xx
 
 # ECQ-3282
 MC - Superuser with wrong username shall not be able to login
@@ -43,13 +37,7 @@ MC - Superuser with wrong username shall not be able to login
    ...  - login to the mc with invalid username and superuser password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=xx
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Invalid username or password"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid username or password"}')  Login  username=xx
 
 # ECQ-3283
 MC - Superuser with no username shall not be able to login
@@ -57,13 +45,7 @@ MC - Superuser with no username shall not be able to login
    ...  - login to the mc with no username and superuser password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${None}  password=${mex_password}  use_defaults=${False}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Username not specified"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Username not specified"}')  Login  username=${None}  password=${mex_password}  use_defaults=${False}
 
 # ECQ-3284
 MC - Superuser with no password shall not be able to login
@@ -71,13 +53,7 @@ MC - Superuser with no password shall not be able to login
    ...  - login to the mc with superuser username and no password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=mexadmin  password=${None}  use_defaults=${False}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Please specify password"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Please specify password"}')  Login  username=mexadmin  password=${None}  use_defaults=${False}
 
 # ECQ-3285
 MC - Superuser with empty username shall not be able to login
@@ -85,13 +61,7 @@ MC - Superuser with empty username shall not be able to login
    ...  - login to the mc with empty username and superuser password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${EMPTY}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Username not specified"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Username not specified"}')  Login  username=${EMPTY}
 
 # ECQ-3286
 MC - Superuser with empty password shall not be able to login
@@ -99,13 +69,7 @@ MC - Superuser with empty password shall not be able to login
    ...  - login to the mc with superuser username and empty password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  password=${EMPTY}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Please specify password"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Please specify password"}')  Login  username=mexadmin  password=${EMPTY}
 
 # ECQ-3287
 MC - User with empty username/password shall not be able to login
@@ -113,13 +77,7 @@ MC - User with empty username/password shall not be able to login
    ...  - login to the mc with empty username/password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${EMPTY}  password=${EMPTY}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Username not specified"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Username not specified"}')  Login  username=${EMPTY}  password=${EMPTY}
 
 # ECQ-3288
 MC - User with no username/password shall not be able to login
@@ -127,13 +85,7 @@ MC - User with no username/password shall not be able to login
    ...  - login to the mc with empty username/password
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${None}  password=${None}   use_defaults=${False}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Username not specified"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Username not specified"}')  Login  username=${None}  password=${None}   use_defaults=${False}
 
 # ECQ-3289
 MC - User with invalid json shall not be able to login
@@ -141,13 +93,7 @@ MC - User with invalid json shall not be able to login
    ...  - login to the mc with invalid username/password json
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  json_data={"username":"mexadmin","password":"${mex_password}"
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Invalid JSON data: Syntax error at offset 62, unexpected end of JSON input"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Syntax error at offset 62, unexpected end of JSON input"}')  Login  json_data={"username":"mexadmin","password":"${mex_password}"
 
 # ECQ-3290
 MC - User with wrong parm name shall not be able to login
@@ -155,10 +101,4 @@ MC - User with wrong parm name shall not be able to login
    ...  - login to the mc with wrong username/password json
    ...  - verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  json_data={"username":"mexadmin","passwor":"${mex_password}"}
-
-   ${status_code}=  Response Status Code
-   ${body}=         Response Body
-
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Please specify password"}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Please specify password"}')  Login  json_data={"username":"mexadmin","passwor":"${mex_password}"}

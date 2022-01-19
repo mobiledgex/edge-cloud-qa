@@ -56,6 +56,7 @@ from mex_master_controller.AlertPolicy import AlertPolicy
 from mex_master_controller.OperatorReporting import OperatorReporting
 from mex_master_controller.Usage import Usage
 from mex_master_controller.Federation import Federation
+from mex_master_controller.Login import Login
 
 import shared_variables_mc
 import shared_variables
@@ -173,9 +174,11 @@ class MexMasterController(MexRest):
         self.trustpolicy =  None
         self.autoprov_policy =  None
         self.run_cmd = None
-        
+       
+        self.login_class = Login(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+ 
         if auto_login:
-            self.super_token = self.login(self.username, self.password, None, False)
+            self.super_token = self.login(username=self.username, password=self.password, use_defaults=False)
 
         #self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
@@ -416,61 +419,21 @@ class MexMasterController(MexRest):
         orginfo = 'Name:' + self.org + '  Type:' + self.orgtype + '  Address:' + self.address + '  Phone:' + self.phone
         return orginfo
 
-    def login(self, username=None, password=None, json_data=None, use_defaults=True, use_thread=False):
-        url = self.root_url + '/login'
-        payload = None
+    def login(self, username=None, password=None, totp=None, json_data=None, use_defaults=True, use_thread=False):
+        login_return = self.login_class.login(username=username, password=password, totp=totp, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+        self.token = login_return['token']
+        if username == self.admin_username:
+            self.super_token = self.token
+        self._decoded_token = jwt.decode(self.token, verify=False)
+
+        self._create_classes()
+
+        return self.token
+       
+    def get_totp(self, totp_shared_key):
+        return self.login_class.get_totp(totp_shared_key)
  
-        if json_data is not None:
-            payload = json_data
-        else:
-            if use_defaults == True:
-                if username == None: username = self.username
-                if password == None: password = self.password
-
-            login_dict = {}
-            if username != None:
-                login_dict['username'] = username
-            if password != None:
-                login_dict['password'] = password
-            payload = json.dumps(login_dict)
-
-        logger.info('login to mc at {}. \n\t{}'.format(url, payload))
-
-        def send_message():
-            self._number_login_requests += 1
-
-            try:
-                self.post(url=url, data=payload)
-                logger.info('response:\n' + str(self.resp.text))
-
-                self.token = self.decoded_data['token']
-                if username == self.admin_username:  self.super_token = self.token
-                
-                self._decoded_token = jwt.decode(self.token, verify=False)
-
-                if str(self.resp.status_code) != '200':
-                    self._number_login_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            except Exception as e:
-                self._number_login_requests_fail += 1
-                print('*WARN*', 'queu_obj', self._queue_obj, e)
-                if self._queue_obj:
-                    print('*WARN*', 'fail login')
-                    self._queue_obj.put({'login_thread':sys.exc_info()})
-
-                raise Exception("post failed:", e)
-
-        self._number_login_requests_success += 1
-
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            self._create_classes()
-            return self.token
-
     def login_mexadmin(self):
         return self.login(username=self.admin_username, password=self.admin_password)
 
