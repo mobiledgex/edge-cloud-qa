@@ -477,12 +477,12 @@ class MexMasterController(MexRest):
     def create_controller(self, region=None, controller_address=None, influxdb_address=None, token=None):
         return self.controller.create_controller(region=region, controller_address=controller_address, influxdb_address=influxdb_address, token=token)
 
-    def create_user(self, username=None, password=None, email_address=None, email_password=None, family_name=None, given_name=None, nickname=None, enable_totp=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+    def create_user(self, username=None, password=None, email_address=None, email_password=None, family_name=None, given_name=None, nickname=None, enable_totp=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, auto_show=True):
         self.username = username
         self.password = password
         self.email_address = email_address
 
-        return self.user.create_user(username=username, password=password, email_address=email_address, email_password=email_password, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, server=server, email_check=email_check, auto_delete=auto_delete, use_defaults=use_defaults, use_thread=use_thread)
+        return self.user.create_user(username=username, password=password, email_address=email_address, email_password=email_password, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, server=server, email_check=email_check, auto_delete=auto_delete, auto_show=auto_show, use_defaults=use_defaults, use_thread=use_thread)
 
     def show_user(self,  username=None, email_address=None, family_name=None, given_name=None, nickname=None, role=None, organization=None, locked=None, enable_totp=None, email_verified=None, token=None, json_data=None, use_defaults=True):
         return self.user.show_user(token=token, username=username, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, role=role, organization=organization, locked=locked, enable_totp=enable_totp, email_verified=email_verified, json_data=json_data, use_defaults=use_defaults)

@@ -95,7 +95,7 @@ class User(MexOperation):
 
         return user_dict
 
-    def create_user(self, username=None, password=None, email_address=None, family_name=None, given_name=None, nickname=None, email_password=None, enable_totp=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+    def create_user(self, username=None, password=None, email_address=None, family_name=None, given_name=None, nickname=None, email_password=None, enable_totp=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, auto_show=True):
         if not email_password:
             email_password = password
 
@@ -103,7 +103,7 @@ class User(MexOperation):
         msg_dict = msg
 
         msg_dict_show = None
-        if username:
+        if auto_show and username:
             msg_show = self._build(username=username, use_defaults=False)
             msg_dict_show = msg_show
 
