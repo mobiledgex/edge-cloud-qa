@@ -48,8 +48,8 @@ MC - Admin user shall not be able to login with the old password
 	New Password    password=${newadminpass}     token=${adminuserToken}     use_defaults=${False}
 	${error}=  Run Keyword and Expect Error  *  Login   username=${adminuser}   password=${adminpass}
       	
-	Should Contain    ${error}   Code = 400	
-	Should Contain    ${error}   Body={"message":"Invalid username or password"}
+	Should Contain    ${error}   code=400	
+	Should Contain    ${error}   Invalid username or password
 
 	${adminuserToken}=  Login   username=${adminuser}   password=${newadminpass}
 	New Password    password=${adminpass}     token=${adminuserToken}     use_defaults=${False}
@@ -94,8 +94,8 @@ MC - User shall not be able to login with the old password
 
 	${error}=  Run Keyword and Expect Error  *  Login   username=${epochuser1}   password=${password}
 
-	Should Contain    ${error}   Code = 400	
-	Should Contain    ${error}   Body={"message":"Invalid username or password"}
+	Should Contain    ${error}   code=400	
+	Should Contain    ${error}   "message":"Invalid username or password"
 
 	${epochuserToken1}=  Login   username=${epochuser1}  password=${newpass}
 	New Password  password=${password}   token=${epochuserToken1}
