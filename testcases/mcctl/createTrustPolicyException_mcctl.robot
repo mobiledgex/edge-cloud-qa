@@ -27,8 +27,8 @@ CreateTrustPolicyException - mcctl shall be able to create/show/delete policy ex
    [Tags]  TrustPolicyException
 
    [Template]  Success Create/Show/Delete Trust Policy Via mcctl
-      # no protocol 
-      name=${recv_name}
+      # no protocol - no longer supported 
+      #name=${recv_name}
 
       # icmp
       name=${recv_name}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
@@ -63,40 +63,40 @@ CreateTrustPolicyException - mcctl shall handle create exception failures
       Error: missing required args:  appname=x  appvers=x  app-org=${operator}  outboundsecurityrules:0.protocol=icmp
       Error: missing required args:       appname=x  appvers=x  app-org=${operator}  cloudletpool-org=${operator}  outboundsecurityrules:0.protocol=icmp
       Error: missing required args: name  appname=x  appvers=x  app-org=${operator}  cloudletpool-name=y  cloudletpool-org=${operator}  outboundsecurityrules:0.protocol=icmp
-      Error: Bad Request (400), Port range must be empty for icmp  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      Error: Bad Request (400), Port range must be empty for icmp  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
 
-      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp
-      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:1.portrangemin=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1
-      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemax=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:1.portrangemin=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemax=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2
 
-      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp
-      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:1.portrangemin=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1
-      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemax=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:1.portrangemin=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemax=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2
 
       # invalid values
-      Error: Bad Request (400), Invalid CIDR address: 1.11.1/1  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.11.1/1
+      Error: Bad Request (400), Invalid CIDR address: 1.11.1/1  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.11.1/1
 
-      Error: parsing arg "outboundsecurityrules:0.portrangemin\=x" failed: unable to parse "x" as uint  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
-      Error: parsing arg "outboundsecurityrules:0.portrangemax\=x" failed: unable to parse "x" as uint  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
-      Error: Bad Request (400), Invalid min port: 999999  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
-      Error: Bad Request (400), Invalid max port: 99999  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
-      Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
-      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.11.1/1
+      Error: parsing arg "outboundsecurityrules:0.portrangemin\=x" failed: unable to parse "x" as uint  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
+      Error: parsing arg "outboundsecurityrules:0.portrangemax\=x" failed: unable to parse "x" as uint  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
+      Error: Bad Request (400), Invalid min port: 999999  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
+      Error: Bad Request (400), Invalid max port: 99999  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
+      Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.11.1/1
 
-      Error: parsing arg "outboundsecurityrules:0.portrangemin\=x" failed: unable to parse "x" as uint  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
-      Error: parsing arg "outboundsecurityrules:0.portrangemax\=x" failed: unable to parse "x" as uint  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
-      Error: Bad Request (400), Invalid min port: 999999  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
-      Error: Bad Request (400), Invalid max port: 99999  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
-      Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
-      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.11.1/1
+      Error: parsing arg "outboundsecurityrules:0.portrangemin\=x" failed: unable to parse "x" as uint  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
+      Error: parsing arg "outboundsecurityrules:0.portrangemax\=x" failed: unable to parse "x" as uint  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
+      Error: Bad Request (400), Invalid min port: 999999  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
+      Error: Bad Request (400), Invalid max port: 99999  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
+      Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.11.1/1
 
 # ECQ-4112
 UpdateTrustPolicyException - mcctl shall handle update exception
@@ -124,6 +124,19 @@ UpdateTrustPolicyException - mcctl shall handle update exception
       name=${recv_name}  state=Active             outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
       name=${recv_name}  state=Rejected
 
+# ECQ-4271
+CreatePolicyException - mcctl help shall show
+   [Documentation]
+   ...  - send TrustPolicyException via mcctl with help for each command
+   ...  - verify help is returned
+
+   [Template]  Show Help
+   ${Empty}
+   create
+   update
+   delete
+   show
+
 *** Keywords ***
 Setup
    ${recv_name}=  Get Default Trust Policy Name
@@ -145,15 +158,15 @@ Success Create/Show/Delete Trust Policy Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  trustpolicyexception create region=${region} ${parmss} appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  version=${version}
+   Run mcctl  trustpolicyexception create region=${region} ${parmss} appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  version=${version}
    ${show}=  Run mcctl  trustpolicyexception show region=${region} ${parmss}  version=${version}
-   Run mcctl  trustpolicyexception delete region=${region} ${parmss} appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  version=${version}
+   Run mcctl  trustpolicyexception delete region=${region} ${parmss} appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}  version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['name']} 
    Should Be Equal  ${show[0]['key']['cloudlet_pool_key']['organization']}  ${operator_name_fake}
    Should Be Equal  ${show[0]['key']['cloudlet_pool_key']['name']}  ${pool_name}
    Should Be Equal  ${show[0]['key']['app_key']['organization']}  ${developer_org_name_automation}
-   Should Be Equal  ${show[0]['key']['app_key']['name']}  ${app_name_automation}
+   Should Be Equal  ${show[0]['key']['app_key']['name']}  ${app_name_automation_trusted}
    Should Be Equal  ${show[0]['key']['app_key']['version']}  ${appvers}
 
    Should Be Equal  ${show[0]['state']}  ApprovalRequested
@@ -175,10 +188,10 @@ Success Create/Show/Delete Trust Policy Via mcctl
 
 Update Setup
    Setup
-   Run mcctl  trustpolicyexception create region=${region} name=${recv_name} appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}    version=${version}
+   Run mcctl  trustpolicyexception create region=${region} name=${recv_name} appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake} outboundsecurityrules:0.protocol=tcp outboundsecurityrules:0.portrangemin=1 outboundsecurityrules:0.remotecidr=1.1.1.1/1  version=${version}
 
 Update Teardown
-   Run mcctl  trustpolicyexception delete region=${region} name=${recv_name} appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}   version=${version}
+   Run mcctl  trustpolicyexception delete region=${region} name=${recv_name} appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}   version=${version}
    Teardown
 
 Success Update/Show Trust Policy Via mcctl
@@ -186,14 +199,14 @@ Success Update/Show Trust Policy Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  trustpolicyexception update region=${region} ${parmss} appname=${app_name_automation} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}   version=${version}
+   Run mcctl  trustpolicyexception update region=${region} ${parmss} appname=${app_name_automation_trusted} appvers=${appvers} app-org=${developer_org_name_automation} cloudletpool-name=${pool_name} cloudletpool-org=${operator_name_fake}   version=${version}
    ${show}=  Run mcctl  trustpolicyexception show region=${region} ${parmss}    version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['name']}
    Should Be Equal  ${show[0]['key']['cloudlet_pool_key']['organization']}  ${operator_name_fake}
    Should Be Equal  ${show[0]['key']['cloudlet_pool_key']['name']}  ${pool_name}
    Should Be Equal  ${show[0]['key']['app_key']['organization']}  ${developer_org_name_automation}
-   Should Be Equal  ${show[0]['key']['app_key']['name']}  ${app_name_automation}
+   Should Be Equal  ${show[0]['key']['app_key']['name']}  ${app_name_automation_trusted}
    Should Be Equal  ${show[0]['key']['app_key']['version']}  ${appvers}
 
    IF  'state' in ${parms}
@@ -228,3 +241,11 @@ Fail Create Trust Policy Via mcctl
 
    ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  trustpolicyexception create region=${region} ${parmss}    version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
+
+Show Help
+   [Arguments]  ${parms}
+
+   ${error}=  Run Keyword and Expect Error  *  Run mcctl  trustpolicyexception ${parms} -h  version=${version}
+
+   ${cmd}=  Run Keyword If  '${parms}' == '${Empty}'  Set Variable  ${Empty}  ELSE  Set Variable  ${parms}
+   Should Contain  ${error}  Usage: mcctl trustpolicyexception ${cmd}

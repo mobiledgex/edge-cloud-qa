@@ -32,6 +32,7 @@ vmpool_name = 'automationVMPool'
 
 app_name_automation = 'automation_api_app'
 app_name_auth_automation = 'automation_api_auth_app'
+app_name_automation_trusted = 'automation_api_app_trusted'
 developer_org_name_automation = 'automation_dev_org'
 flavor_name_automation = 'automation_api_flavor'
 alert_policy_name_automation = 'automation_api_alert_policy_name'
