@@ -43,7 +43,7 @@ AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is mainte
 
    #AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2_fqdn=${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=shared.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}  cloudlet2_fqdn=shared.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=shared.${cloudlet_name_openstack_ha1}-${operator_name_openstack}.${region_lc}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}  cloudlet2_fqdn=shared.${cloudlet_name_openstack_ha2}-${operator_name_openstack}.${region_lc}.mobiledgex.net
 
 # ECQ-2551
 AppInst - appinst shall start for docker/lb/dedicated app inst when cloudlet is maintenance mode
@@ -73,7 +73,7 @@ AppInst - appinst shall start for docker/lb/dedicated app inst when cloudlet is 
 
    #AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cluster2}.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cluster1}-mobiledgex.${cloudlet_name_openstack_ha1}-${operator_name_openstack}.${region_lc}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cluster2}-mobiledgex.${cloudlet_name_openstack_ha2}-${operator_name_openstack}.${region_lc}.mobiledgex.net
 
 # ECQ-2552
 AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is maintenance mode
@@ -103,7 +103,7 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
 
    Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}-mobiledgex.${cloudlet_name_openstack_ha1}-${operator_name_openstack}.${region_lc}.mobiledgex.net  cloudlet2_fqdn=${cluster2}-mobiledgex.${cloudlet_name_openstack_ha2}-${operator_name_openstack}.${region_lc}.mobiledgex.net  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}
 
 # ECQ-2553
 AppInst - openstack-to-vmpool appinst shall start for docker/direct/dedicated app inst when cloudlet is maintenance mode
@@ -131,7 +131,7 @@ AppInst - openstack-to-vmpool appinst shall start for docker/direct/dedicated ap
 
    Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_vmpool}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cluster2}.${cloudlet_name_vmpool}.${operator_name_openstack}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cluster1}-mobiledgex.${cloudlet_name_openstack_ha1}-${operator_name_openstack}.${region_lc}.mobiledgex.net  cloudlet2=${cloudlet_name_vmpool}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cluster2}-mobiledgex.${cloudlet_name_vmpool}-${operator_name_openstack}.${region_lc}.mobiledgex.net
 
 # ECQ-2554
 AppInst - vmpool-to-openstack appinst shall start for k8s/lb/shared app inst when cloudlet is maintenance mode
@@ -159,7 +159,7 @@ AppInst - vmpool-to-openstack appinst shall start for k8s/lb/shared app inst whe
 
    Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_vmpool}  operator1=${operator_name_openstack}  cloudlet1_fqdn=shared.${cloudlet_name_vmpool}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha1}  operator2=${operator_name_openstack}  cloudlet2_fqdn=shared.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_vmpool}  operator1=${operator_name_openstack}  cloudlet1_fqdn=shared.${cloudlet_name_vmpool}-${operator_name_openstack}.${region_lc}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha1}  operator2=${operator_name_openstack}  cloudlet2_fqdn=shared.${cloudlet_name_openstack_ha1}-${operator_name_openstack}.${region_lc}.mobiledgex.net
 
 *** Keywords ***
 Setup
@@ -182,6 +182,7 @@ Setup
    @{cloudlets}=  Create List  ${cloudlet1}  ${cloudlet2}
    ${policy}=  Create Auto Provisioning Policy  region=${region}  developer_org_name=${operator_name}  min_active_instances=1  max_instances=0  cloudlet_list=${cloudlets}
    @{policy_list}=  Create List  ${policy['data']['key']['name']}
+   ${region_lc}=  Convert To Lowercase  ${region}
 
    Set Suite Variable  ${flavor_name_default}
    Set Suite Variable  ${operator_name}
@@ -190,6 +191,7 @@ Setup
    Set Suite Variable  ${cluster2}
    Set Suite Variable  ${policy}
    Set Suite Variable  @{policy_list}
+   Set Suite Variable  ${region_lc}
 
 Teardown
    [Arguments]  ${cloudlet1}  ${operator1}  ${cloudlet2}  ${operator2}
