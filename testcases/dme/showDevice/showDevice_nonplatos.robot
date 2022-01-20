@@ -21,9 +21,9 @@ ${platos_s6_id}=  01dddc962bbf0ddedcd32c70caf39b50dfb045ace735bafde9c6fb1540ebe6
 #ECQ-2295
 showDevice - request for non-platos app with uuidtype=platos shall return device information
     [Documentation]
-    ...  registerClient with non-platos app with unique_id and type=platos
-    ...  verify showDevice returns all information supported
-    ...  key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
+    ...  - registerClient with non-platos app with unique_id and type=platos
+    ...  - verify showDevice returns all information supported
+    ...  - key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
 
       ${epoch}=  Get Time  epoch
 
@@ -35,15 +35,16 @@ showDevice - request for non-platos app with uuidtype=platos shall return device
       Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch} 
       Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
       Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
+      Should Be True   ${device[0]['data']['notify_id']} > 0
 
       Length Should Be   ${device}  1
 
 #ECQ-2296
 showDevice - request for non-platos app with uuidtype=xxxSamSungxxx shall return device information
     [Documentation]
-    ...  registerClient with non-platos app with unique_id and type=xxxSamSungxxx
-    ...  verify showDevice returns all information supported
-    ...  key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
+    ...  - registerClient with non-platos app with unique_id and type=xxxSamSungxxx
+    ...  - verify showDevice returns all information supported
+    ...  - key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
 
       ${epoch}=  Get Time  epoch
 
@@ -55,15 +56,16 @@ showDevice - request for non-platos app with uuidtype=xxxSamSungxxx shall return
       Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch}
       Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
       Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
+      Should Be True   ${device[0]['data']['notify_id']} > 0
 
       Length Should Be   ${device}  1
 
 #ECQ-2297
 showDevice - request for non-platos app with S20 shall return device information
     [Documentation]
-    ...  registerClient with non-platos app with S20 unique_id and type
-    ...  verify showDevice returns all information supported
-    ...  key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
+    ...  - registerClient with non-platos app with S20 unique_id and type
+    ...  - verify showDevice returns all information supported
+    ...  - key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
 
       ${epoch}=  Get Time  epoch
 
@@ -75,6 +77,7 @@ showDevice - request for non-platos app with S20 shall return device information
       Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch}
       Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
       Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
+      Should Be True   ${device[0]['data']['notify_id']} > 0
 
       Length Should Be   ${device}  1
 
@@ -93,6 +96,7 @@ showDevice - request for non-platos app with S6 shall return device information
     Should Be Equal  ${device[0]['data']['key']['unique_id']}  ${platos_s6_id}
     Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
     Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
+    Should Be True   ${device[0]['data']['notify_id']} > 0
 
     Length Should Be   ${device}  1
 
@@ -127,6 +131,7 @@ showDevice - request for appname=nonplatos and orgname=platos and unique_id_type
     Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch}
     Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
     Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
+    Should Be True   ${device[0]['data']['notify_id']} > 0
 
     Length Should Be   ${device}  1
 
@@ -149,6 +154,7 @@ showDevice - request for appname=nonplatos and orgname=platos and unique_id_type
     Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch}
     Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
     Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
+    Should Be True   ${device[0]['data']['notify_id']} > 0
 
     Length Should Be   ${device}  1
 
@@ -171,6 +177,7 @@ showDevice - request for appname=nonplatos and orgname=platos and unique_id_type
     Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch}
     Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
     Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
+    Should Be True   ${device[0]['data']['notify_id']} > 0
 
     Length Should Be   ${device}  1
 
@@ -193,6 +200,7 @@ showDevice - request for appname=platosEnablingLayer and orgname=MobiledgeX and 
     Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch}
     Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
     Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
+    Should Be True   ${device[0]['data']['notify_id']} > 0
 
     Length Should Be   ${device}  1
 
