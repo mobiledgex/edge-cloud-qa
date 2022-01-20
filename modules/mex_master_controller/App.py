@@ -69,7 +69,7 @@ class App(MexOperation):
             else:
                 if deployment.lower() == 'docker':
                     if image_path is None:
-                        image_path = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+                        image_path = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0'
                 if deployment.lower() == 'kubernetes':
                     if image_path is None:
                         image_path = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0'
@@ -105,7 +105,7 @@ class App(MexOperation):
         if default_flavor_name == 'default':
             default_flavor_name = shared_variables.flavor_name_default
         if image_path == 'default':
-            image_path = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+            image_path = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0'
 
         app_dict = {}
         app_key_dict = {}

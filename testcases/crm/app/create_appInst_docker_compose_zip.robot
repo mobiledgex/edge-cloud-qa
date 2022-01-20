@@ -134,11 +134,12 @@ Setup
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=IpAccessDedicated  number_masters=0  number_nodes=0  deployment=docker  developer_org_name=${developer_org_name}
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
+    ${developer_org_name_lc}=  Convert To Lowercase  ${developer_org_name}
 
     ${cluster_name}=  Get Default Cluster Name
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name}-${developer_org_name_lc}  ${rootlb}
    
     ${cloudlet_lowercase}=  Convert To Lowercase  ${cloudlet_name_crm}
     ${openstack_node_name}=    Catenate  SEPARATOR=-  docker  vm  ${cloudlet_lowercase}  ${cluster_name}

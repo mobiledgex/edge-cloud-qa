@@ -1755,6 +1755,42 @@ class MexMasterController(MexRest):
             token=self.super_token
         return self.config.update_config(token=token, max_metrics_data_points=max_metrics_data_points, use_defaults=use_defaults, use_thread=use_thread)
 
+    def set_apikey_limit_config(self, apikey_limit=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, apikey_limit=apikey_limit, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_rate_limit_ips_config(self, rate_limit_ips=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, rate_limit_ips = rate_limit_ips, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_rate_limit_users_config(self, rate_limit_users=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, rate_limit_users = rate_limit_users, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_fail_threshold1_config(self, fail_threshold1=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, fail_threshold1 = fail_threshold1, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_threshold1_delay_config(self, threshold1_delay=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, threshold1_delay = threshold1_delay, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_fail_threshold2_config(self, fail_threshold2=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, fail_threshold2 = fail_threshold2, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_threshold2_delay_config(self, threshold2_delay=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, threshold2_delay = threshold2_delay, use_defaults=use_defaults, use_thread=use_thread)
+
+    
     def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, timeout=None, json_data=None, use_defaults=True, use_thread=False): 
         if developer_org_name is None:
             if self.organization_name:
@@ -1950,26 +1986,35 @@ class MexMasterController(MexRest):
     def setpartnerapikey_federation(self, token=None, federation_name=None, selfoperatorid=None, apikey=None, use_defaults=True, use_thread=False):
         return self.federation.setpartnerapikey_federation(token=token, federation_name=federation_name, selfoperatorid=selfoperatorid, apikey=apikey, use_defaults=use_defaults, use_thread=use_thread)
 
-    def showfederatedpartnerzone_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, use_defaults=True, use_thread=False):
-        return self.federation.showpartnerzone_federatorzone(token=token, zoneid=zoneid, selfoperatorid=selfoperatorid, federation_name=federation_name, use_defaults=use_defaults, use_thread=use_thread)
+    def showfederatedpartnerzone_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, registered=False, use_defaults=False, use_thread=False):
+        return self.federation.showpartnerzone_federatorzone(token=token, zoneid=zoneid, selfoperatorid=selfoperatorid, federation_name=federation_name, registered=registered, use_defaults=use_defaults, use_thread=use_thread)
    
-    def showfederatedselfzone_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, use_defaults=True, use_thread=False):
+    def showfederatedselfzone_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, use_defaults=False, use_thread=False):
         return self.federation.showselfzone_federatorzone(token=token, zoneid=zoneid, selfoperatorid=selfoperatorid, federation_name=federation_name, use_defaults=use_defaults, use_thread=use_thread)
 
-    def register_federatorzone(self, token=None, zones=[], selfoperatorid=None, federation_name=None, use_defaults=True, use_thread=False):
+    def register_federatorzone(self, token=None, zones=[], selfoperatorid=None, federation_name=None, use_defaults=False, use_thread=False):
         return self.federation.register_federatorzone(token=token, zones=zones, selfoperatorid=selfoperatorid, federation_name=federation_name, use_defaults=use_defaults, use_thread=use_thread)
 
-    def create_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, cloudlets=[], geolocation=None, region=None, city=None, state=None, locality=None, use_defaults=True, use_thread=False, auto_delete=True):
+    def deregister_federatorzone(self, token=None, zones=[], selfoperatorid=None, federation_name=None, use_defaults=False, use_thread=False):
+        return self.federation.deregister_federatorzone(token=token, zones=zones, selfoperatorid=selfoperatorid, federation_name=federation_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, cloudlets=[], geolocation=None, region=None, city=None, state=None, locality=None, use_defaults=False, use_thread=False, auto_delete=True):
         if token is None:
             token=self.super_token
 
         return self.federation.create_federatorzone(token=token, zoneid=zoneid, operatorid=operatorid, countrycode=countrycode, cloudlets=cloudlets, geolocation=geolocation, region=region, city=city, state=state, locality=locality, use_defaults=use_defaults, use_thread=use_thread, auto_delete=auto_delete)
 
-    def show_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, region=None, city=None, use_defaults=True, use_thread=False):
+    def show_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, region=None, city=None, use_defaults=False, use_thread=False):
         return self.federation.show_federatorzone(token=token, zoneid=zoneid, operatorid=operatorid, countrycode=countrycode, region=region, city=city, use_defaults=use_defaults, use_thread=use_thread)
 
-    def delete_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, use_defaults=True, use_thread=False):
+    def delete_federatorzone(self, token=None, zoneid=None, operatorid=None, countrycode=None, use_defaults=False, use_thread=False):
         return self.federation.delete_federatorzone(token=token, zoneid=zoneid, operatorid=operatorid, countrycode=countrycode, use_defaults=use_defaults, use_thread=use_thread)
+
+    def share_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, use_defaults=False, use_thread=False):
+        return self.federation.share_federatorzone(token=token, zoneid=zoneid, selfoperatorid=selfoperatorid, federation_name=federation_name, use_defaults=use_defaults)
+
+    def unshare_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, use_defaults=False, use_thread=False):
+        return self.federation.unshare_federatorzone(token=token, zoneid=zoneid, selfoperatorid=selfoperatorid, federation_name=federation_name, use_defaults=use_defaults)
 
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:

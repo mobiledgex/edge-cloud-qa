@@ -31,7 +31,8 @@ CreateCloudletPool - create without parameters shall return error
    ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool  region=US  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid organization name"}
+   #Should Contain   ${error}  error={"message":"Invalid organization name"}
+   Should Contain   ${error}  error={"message":"Invalid cloudlet pool organization"}
 
 # ECQ-2271
 CreateCloudletPool - create without pool name shall return error
@@ -42,7 +43,8 @@ CreateCloudletPool - create without pool name shall return error
    ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool  region=US  operator_org_name=TDG  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"\\\\\""}
+   #Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"\\\\\""}
+   Should Contain   ${error}  error={"message":"Invalid cloudlet pool name"}
 
 # ECQ-1671
 CreateCloudletPool - create with invalid pool name shall fails 
@@ -54,25 +56,29 @@ CreateCloudletPool - create with invalid pool name shall fails
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=-pool  operator_org_name=TDG
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"-pool\\\\\""}
+   #Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"-pool\\\\\""}
+   Should Contain   ${error}  error={"message":"Invalid cloudlet pool name"}
 
    # $ in name 
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=p$ool  operator_org_name=TDG
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"p$ool\\\\\""}
+   #Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"p$ool\\\\\""}
+   Should Contain   ${error}  error={"message":"Invalid cloudlet pool name"}
 
    # () in name
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=p(o)ol  operator_org_name=TDG
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"p(o)ol\\\\\""}
+   #Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"p(o)ol\\\\\""}
+   Should Contain   ${error}  error={"message":"Invalid cloudlet pool name"}
 
    # +={}<> in name
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=+={}<>  operator_org_name=TDG
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"+={}\\\\u003c\\\\u003e\\\\\""}
+   #Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"+={}\\\\u003c\\\\u003e\\\\\""}
+   Should Contain   ${error}  error={"message":"Invalid cloudlet pool name"}
 
 # ECQ-1672
 CreateCloudletPool - create with same name shall return error

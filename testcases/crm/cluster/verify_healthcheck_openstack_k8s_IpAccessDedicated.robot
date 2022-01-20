@@ -379,7 +379,7 @@ IpAccessDedicated k8s - healthcheck shows proper state after UpdateApp
 
 *** Keywords ***
 Setup
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
@@ -402,7 +402,8 @@ Setup
         Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_nodes=1
         Log To Console  Done Creating Cluster Instance
 
-        ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
+        ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}-${developer_org_name_automation}  ${rootlb}
+        ${clusterlb}=  Replace String  ${clusterlb}  _  -
     ELSE
         ${clusterlb}=  Catenate  SEPARATOR=.  defaultclust  ${rootlb}
         ${dev_name_hyphen}=  Replace String  ${dev_name}  _  -
