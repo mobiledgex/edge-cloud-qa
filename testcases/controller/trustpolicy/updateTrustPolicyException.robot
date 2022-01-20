@@ -21,23 +21,31 @@ UpdateTrustPolicyException - shall be able to add rules
 
    [Tags]  TrustPolicyException
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']} 
-
-   Verify Key  ${policy_return} 
-
-   Should Be Equal   ${policy_return['data']['outbound_security_rules']}  ${None}
-
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+
+   Verify Key  ${policy_return} 
+
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
+
+   Length Should Be   ${policy_return['data']['outbound_security_rules']}  1
+
+   &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=2.1.1.1/1
+   @{rulelist2}=  Create List  ${rule1}  ${rule2}
+
+   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
 
    Verify Key  ${policy_updated}
 
    Should Be Equal  ${policy_updated['data']['outbound_security_rules'][0]['protocol']}        icmp 
    Should Be Equal  ${policy_updated['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
+   Should Be Equal  ${policy_updated['data']['outbound_security_rules'][1]['protocol']}        icmp
+   Should Be Equal  ${policy_updated['data']['outbound_security_rules'][1]['remote_cidr']}     2.1.1.1/1
 
-   Length Should Be   ${policy_updated['data']['outbound_security_rules']}  1
+   Length Should Be   ${policy_updated['data']['outbound_security_rules']}  2
 
 # ECQ-4148
 UpdateTrustPolicyException - shall be able to delete rules
@@ -52,7 +60,7 @@ UpdateTrustPolicyException - shall be able to delete rules
    &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=2.1.1.1/1
    @{rulelist}=  Create List  ${rule1}   ${rule2}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return} 
 
@@ -61,7 +69,7 @@ UpdateTrustPolicyException - shall be able to delete rules
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=6  remote_cidr=1.1.1.1/1
    @{rulelist2}=  Create List  ${rule1}
 
-   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   rule_list=${rulelist2}
+   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   rule_list=${rulelist2}
 
    Verify Key  ${policy_updated}
 
@@ -85,7 +93,7 @@ UpdateTrustPolicyException - shall be able to delete all rules
    &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=2.1.1.1/1
    @{rulelist}=  Create List  ${rule1}   ${rule2}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -93,7 +101,7 @@ UpdateTrustPolicyException - shall be able to delete all rules
 
    @{rulelist2}=  Create List  empty
 
-   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   rule_list=${rulelist2}
+   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   rule_list=${rulelist2}
 
    Verify Key  ${policy_updated}
 
@@ -112,7 +120,7 @@ UpdateTrustPolicyException - update with no rules shall not change the rules
    &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=2.1.1.1/1
    @{rulelist}=  Create List  ${rule1}   ${rule2}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -125,7 +133,7 @@ UpdateTrustPolicyException - update with no rules shall not change the rules
 
    Length Should Be   ${policy_return['data']['outbound_security_rules']}  2
 
-   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']} 
+   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']} 
 
    Verify Key  ${policy_updated}
 
@@ -150,7 +158,7 @@ UpdateTrustPolicyException - shall be able to update icmp cidr
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -162,7 +170,7 @@ UpdateTrustPolicyException - shall be able to update icmp cidr
    &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=2.1.1.1/1
    @{rulelist2}=  Create List  ${rule2}
 
-   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
+   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
 
    Verify Key  ${policy_updated}
 
@@ -184,7 +192,7 @@ UpdateTrustPolicyException - shall be able to update with tcp and no maxport
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=15  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}  ${rule2}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -201,7 +209,7 @@ UpdateTrustPolicyException - shall be able to update with tcp and no maxport
 
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=6  remote_cidr=2.1.1.1/1
    @{rulelist2}=  Create List  ${rule2}
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
 
    Verify Key  ${policy_return2}
 
@@ -224,7 +232,7 @@ UpdateTrustPolicyException - shall be able to update with tcp and maxport=0
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=0  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1} 
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -237,7 +245,7 @@ UpdateTrustPolicyException - shall be able to update with tcp and maxport=0
 
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=6  remote_cidr=2.1.1.1/1
    @{rulelist2}=  Create List  ${rule2}
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
 
    Verify Key  ${policy_return2}
 
@@ -260,7 +268,7 @@ UpdateTrustPolicyException - shall be able to update with tcp and minport/maxpor
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=55  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
    
@@ -273,7 +281,7 @@ UpdateTrustPolicyException - shall be able to update with tcp and minport/maxpor
 
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=6  port_range_maximum=66  remote_cidr=6.1.1.1/1
    @{rulelist2}=  Create List  ${rule2}
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
 
    Verify Key  ${policy_return2}
 
@@ -296,7 +304,7 @@ UpdateTrustPolicyException - shall be able to update with tcp and min/max port n
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=16  port_range_maximum=65  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -309,7 +317,7 @@ UpdateTrustPolicyException - shall be able to update with tcp and min/max port n
 
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65535  remote_cidr=6.1.1.1/1
    @{rulelist2}=  Create List  ${rule2}
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
 
    Verify Key  ${policy_return2}
 
@@ -332,7 +340,7 @@ UpdateTrustPolicyException - shall be able to update with udp and no maxport
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -345,7 +353,7 @@ UpdateTrustPolicyException - shall be able to update with udp and no maxport
 
    &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=100  remote_cidr=6.1.1.1/1
    @{rulelist2}=  Create List  ${rule2}
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
 
    Verify Key  ${policy_return2}
 
@@ -368,7 +376,7 @@ UpdateTrustPolicyException - shall be able to update with udp and maxport=0
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=100  port_range_maximum=0  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -381,7 +389,7 @@ UpdateTrustPolicyException - shall be able to update with udp and maxport=0
 
    &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=100  port_range_maximum=0  remote_cidr=6.1.1.1/1
    @{rulelist2}=  Create List  ${rule2}
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
 
    Verify Key  ${policy_return2}
 
@@ -404,7 +412,7 @@ UpdateTrustPolicyException - shall be able to update with udp and min/max port n
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=12  port_range_maximum=65  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -417,7 +425,7 @@ UpdateTrustPolicyException - shall be able to update with udp and min/max port n
 
    &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=65535  remote_cidr=6.1.1.1/1
    @{rulelist2}=  Create List  ${rule2}
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
 
    Verify Key  ${policy_return2}
 
@@ -442,7 +450,7 @@ UpdateTrustPolicyException - shall be able to update with tcp/udp/icmp
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -466,7 +474,7 @@ UpdateTrustPolicyException - shall be able to update with tcp/udp/icmp
    &{rule31}=  Create Dictionary  protocol=udp  port_range_minimum=31  port_range_maximum=61   remote_cidr=4.1.1.1/2
    @{rulelist2}=  Create List  ${rule11}  ${rule21}  ${rule31}
 
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
 
    Verify Key  ${policy_return2}
 
@@ -502,7 +510,7 @@ UpdateTrustPolicyException - shall be able to update with duplicate policy items
    &{rule6}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}  ${rule4}  ${rule5}  ${rule6}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -546,7 +554,7 @@ UpdateTrustPolicyException - shall be able to update with duplicate policy items
    &{rule6}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=2.1.1.1/2
    @{rulelist2}=  Create List  ${rule1}  ${rule2}  ${rule3}  ${rule4}  ${rule5}  ${rule6}
 
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist2}
 
    Verify Key  ${policy_return2}
 
@@ -596,7 +604,7 @@ UpdateTrustPolicyException - shall be able to update with same rules
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -617,7 +625,7 @@ UpdateTrustPolicyException - shall be able to update with same rules
 
    Length Should Be  ${policy_return['data']['outbound_security_rules']}   3
 
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return2}
 
@@ -652,7 +660,7 @@ UpdateTrustPolicyException - operator shall be able to update to Active
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -661,7 +669,7 @@ UpdateTrustPolicyException - operator shall be able to update to Active
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  65
 
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Active
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Active
 
    Verify Key  ${policy_return2}  state=Active
 
@@ -670,7 +678,7 @@ UpdateTrustPolicyException - operator shall be able to update to Active
    Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  65
 
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Active
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Active
 
    Verify Key  ${policy_return2}  state=Active
 
@@ -693,7 +701,7 @@ UpdateTrustPolicyException - operator shall be able to update to Rejected
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -702,7 +710,7 @@ UpdateTrustPolicyException - operator shall be able to update to Rejected
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  65
 
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Rejected
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Rejected
 
    Verify Key  ${policy_return2}  state=Rejected
 
@@ -711,7 +719,7 @@ UpdateTrustPolicyException - operator shall be able to update to Rejected
    Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  65
 
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Rejected
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Rejected
 
    Verify Key  ${policy_return2}  state=Rejected
 
@@ -736,7 +744,7 @@ UpdateTrustPolicyException - operator shall be able to update to Active/Rejected
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    Verify Key  ${policy_return}
 
@@ -745,7 +753,7 @@ UpdateTrustPolicyException - operator shall be able to update to Active/Rejected
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  65
 
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Active
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Active
 
    Verify Key  ${policy_return2}  state=Active
 
@@ -754,7 +762,7 @@ UpdateTrustPolicyException - operator shall be able to update to Active/Rejected
    Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  65
 
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Rejected
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Rejected
 
    Verify Key  ${policy_return2}  state=Rejected
 
@@ -763,7 +771,7 @@ UpdateTrustPolicyException - operator shall be able to update to Active/Rejected
    Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  65
 
-   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Active
+   ${policy_return2}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  state=Active
 
    Verify Key  ${policy_return2}  state=Active
 
@@ -792,7 +800,7 @@ Verify Key
 
    Should Be Equal  ${policy_return['data']['key']['name']}       ${name}
 
-   Should Be Equal  ${policy_return['data']['key']['app_key']['name']}          ${app_name_automation}
+   Should Be Equal  ${policy_return['data']['key']['app_key']['name']}          ${app_name_automation_trusted}
    Should Be Equal  ${policy_return['data']['key']['app_key']['organization']}  ${developer_org_name_automation}
    Should Be Equal  ${policy_return['data']['key']['app_key']['version']}       1.0
 

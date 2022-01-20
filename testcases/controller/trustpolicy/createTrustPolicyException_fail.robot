@@ -45,13 +45,13 @@ CreateTrustPolicyException - create exception without key parms shall return err
 
    [Template]  Exception Should Error
 
-   ('code\=400', 'error\={"message":"Invalid AppKey in TrustPolicyExceptionKey, Invalid app name"}')  app_name=${None}
-   ('code\=400', 'error\={"message":"TrustPolicyException name cannot be empty"}')   app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}
-   ('code\=400', 'error\={"message":"Invalid AppKey in TrustPolicyExceptionKey, Invalid app name"}')   policy_name=x  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}
-   ('code\=400', 'error\={"message":"Invalid AppKey in TrustPolicyExceptionKey, Invalid app version"}')   policy_name=x  app_name=${app_name_automation}  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}
-   ('code\=400', 'error\={"message":"Invalid AppKey in TrustPolicyExceptionKey, Invalid app organization"}')   policy_name=x  app_name=${app_name_automation}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}
-   ('code\=400', 'error\={"message":"Invalid CloudletPoolKey in TrustPolicyExceptionKey, Invalid cloudlet pool name"}')   policy_name=x  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_org_name=${pool['data']['key']['organization']}
-   ('code\=400', 'error\={"message":"Invalid CloudletPoolKey in TrustPolicyExceptionKey, Invalid cloudlet pool organization"}')   policy_name=x  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}c
+   ('code\=400', 'error\={"message":"Invalid AppKey in TrustPolicyExceptionKey, Invalid app name"}')  app_name=${None}  rule_list=${rulelist}
+   ('code\=400', 'error\={"message":"TrustPolicyException name cannot be empty"}')   app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ('code\=400', 'error\={"message":"Invalid AppKey in TrustPolicyExceptionKey, Invalid app name"}')   policy_name=x  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ('code\=400', 'error\={"message":"Invalid AppKey in TrustPolicyExceptionKey, Invalid app version"}')   policy_name=x  app_name=${app_name_automation_trusted}  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ('code\=400', 'error\={"message":"Invalid AppKey in TrustPolicyExceptionKey, Invalid app organization"}')   policy_name=x  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ('code\=400', 'error\={"message":"Invalid CloudletPoolKey in TrustPolicyExceptionKey, Invalid cloudlet pool name"}')   policy_name=x  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ('code\=400', 'error\={"message":"Invalid CloudletPoolKey in TrustPolicyExceptionKey, Invalid cloudlet pool organization"}')   policy_name=x  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  rule_list=${rulelist}
 
 # ECQ-4116
 CreateTrustPolicyException - create exception with unknown parm values shall return error
@@ -62,12 +62,12 @@ CreateTrustPolicyException - create exception with unknown parm values shall ret
    [Tags]  TrustPolicyException
 
    [Template]  Exception Should Error
-   ('code\=400', 'error\={"message":"App key {\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\",\\\\"name\\\\":\\\\"yyy\\\\",\\\\"version\\\\":\\\\"1.0\\\\"} not found"}')  policy_name=x  app_name=yyy  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}
-   ('code\=400', 'error\={"message":"Org xxxx not found"}')  policy_name=x  app_name=${app_name_automation}  app_version=1.0  developer_org_name=xxxx  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}
-   ('code\=400', 'error\={"message":"App key {\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\",\\\\"name\\\\":\\\\"${app_name_automation}\\\\",\\\\"version\\\\":\\\\"x.0\\\\"} not found"}')  policy_name=x  app_name=${app_name_automation}  app_version=x.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}
+   ('code\=400', 'error\={"message":"App key {\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\",\\\\"name\\\\":\\\\"yyy\\\\",\\\\"version\\\\":\\\\"1.0\\\\"} not found"}')  policy_name=x  app_name=yyy  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ('code\=400', 'error\={"message":"Org xxxx not found"}')  policy_name=x  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=xxxx  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ('code\=400', 'error\={"message":"App key {\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\",\\\\"name\\\\":\\\\"${app_name_automation_trusted}\\\\",\\\\"version\\\\":\\\\"x.0\\\\"} not found"}')  policy_name=x  app_name=${app_name_automation_trusted}  app_version=x.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
-   ('code\=400', 'error\={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"dmuus\\\\",\\\\"name\\\\":\\\\"x\\\\"} not found"}')  policy_name=x  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=x  cloudlet_pool_org_name=${pool['data']['key']['organization']}
-   ('code\=400', 'error\={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"x\\\\",\\\\"name\\\\":\\\\"${pool['data']['key']['name']}\\\\"} not found"}')  policy_name=x  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=x
+   ('code\=400', 'error\={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"dmuus\\\\",\\\\"name\\\\":\\\\"x\\\\"} not found"}')  policy_name=x  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=x  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ('code\=400', 'error\={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"x\\\\",\\\\"name\\\\":\\\\"${pool['data']['key']['name']}\\\\"} not found"}')  policy_name=x  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=x  rule_list=${rulelist}
 
 CreateTrustPolicyException - create exception with state shall return error
    [Documentation]
@@ -198,6 +198,7 @@ CreateTrustPolicyException - create exception with icmp and port range shall ret
    &{rule}=  Create Dictionary  protocol=icmp  port_range_minimum=0  port_range_maximum=10  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Create Trust Policy Exception  region=${region}  token=${token}  rule_list=${rulelist} 
+
 # ECQ-4122
 CreateTrustPolicyException - create exception with minport>maxport shall return error
    [Documentation]
@@ -225,14 +226,40 @@ CreateTrustPolicyException - create with duplicate exception shall return error
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=10  port_range_maximum=11  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
 
-   Create Trust Policy Exception  region=${region}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   Create Trust Policy Exception  region=${region}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
    ${policyname}=  Get Default Trust Policy Name
    ${org}=  Get Default Operator Name
 
-   ${error}=  Run Keyword and Expect Error  *  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   ${error}=  Run Keyword and Expect Error  *  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
 
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"TrustPolicyException key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\",\\\\"name\\\\":\\\\"${app_name_automation}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cloudlet_pool_key\\\\":{\\\\"organization\\\\":\\\\"${pool['data']['key']['organization']}\\\\",\\\\"name\\\\":\\\\"${pool['data']['key']['name']}\\\\"},\\\\"name\\\\":\\\\"${policy_name}\\\\"} already exists"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"TrustPolicyException key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\",\\\\"name\\\\":\\\\"${app_name_automation_trusted}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cloudlet_pool_key\\\\":{\\\\"organization\\\\":\\\\"${pool['data']['key']['organization']}\\\\",\\\\"name\\\\":\\\\"${pool['data']['key']['name']}\\\\"},\\\\"name\\\\":\\\\"${policy_name}\\\\"} already exists"}')
+
+# ECQ-4269
+CreateTrustPolicyException - create on non-trusted app shall return error
+   [Documentation]
+   ...  - send CreateTrustPolicyException on app that is not trusted
+   ...  - verify error is returned
+
+   [Tags]  TrustPolicyException
+
+   ${policyname}=  Get Default Trust Policy Name
+
+   &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=10  port_range_maximum=11  remote_cidr=1.1.1.1/1
+   @{rulelist}=  Create List  ${rule}
+
+   ${error}=  Run Keyword and Expect Error  *  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Non trusted app: organization:\\\\"${developer_org_name_automation}\\\\" name:\\\\"${app_name_automation}\\\\" version:\\\\"1.0\\\\" not compatible with trust policy: app_key:\\\\u003corganization:\\\\"${developer_org_name_automation}\\\\" name:\\\\"${app_name_automation}\\\\" version:\\\\"1.0\\\\" \\\\u003e cloudlet_pool_key:\\\\u003corganization:\\\\"${pool['data']['key']['organization']}\\\\" name:\\\\"${pool['data']['key']['name']}\\\\" \\\\u003e name:\\\\"${policyname}\\\\" "}') 
+
+# ECQ-4270
+CreateTrustPolicyException - create without security rules shall return error
+   [Documentation]
+   ...  - send CreateTrustPolicyException without security rules
+   ...  - verify error is returned
+
+   [Tags]  TrustPolicyException
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Security rules must be specified"}')  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']} 
 
 *** Keywords ***
 Setup
@@ -241,6 +268,10 @@ Setup
 
    ${pool}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  token=${token}
    Set Suite Variable  ${pool}
+
+   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
+   @{rulelist}=  Create List  ${rule1}
+   Set Suite Variable  @{rulelist}
 
 Exception Should Error
    [Arguments]  ${error_msg}  &{parms}
