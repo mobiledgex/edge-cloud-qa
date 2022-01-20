@@ -3,6 +3,7 @@ Documentation   DME persistent connection with cloudlet maintenance and state ch
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+Library  String
 
 Suite Setup    Setup Suite
 Test Setup     Setup
@@ -99,7 +100,7 @@ DmePersistentConnetion - cloudlet in maintenance mode shall return new cloudlet
    ${cloud1}=  Receive Cloudlet Maintenance Event  state=UNDER_MAINTENANCE
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.status}  1  #FIND_FOUND
    Should Be True  len('${cloud1.new_cloudlet.edge_events_cookie}') > 100
-   Should contain  ${cloud1.new_cloudlet.fqdn}  ${cloudlet2}.dmuus.mobiledgex.net
+   Should contain  ${cloud1.new_cloudlet.fqdn}  ${cloudlet2}-dmuus.${region_lc}.mobiledgex.net
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.ports[0].proto}  1
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.ports[0].internal_port}  1
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.ports[0].public_port}  1
@@ -125,7 +126,7 @@ DmePersistentConnetion - cloudlet in maintenance mode shall return new cloudlet
    ${cloud2}=  Receive Cloudlet Maintenance Event  state=UNDER_MAINTENANCE
    Should Be Equal As Numbers  ${cloud2.new_cloudlet.status}  1  #FIND_FOUND
    Should Be True  len('${cloud2.new_cloudlet.edge_events_cookie}') > 100
-   Should contain  ${cloud2.new_cloudlet.fqdn}  ${cloudlet2}.dmuus.mobiledgex.net
+   Should contain  ${cloud2.new_cloudlet.fqdn}  ${cloudlet2}-dmuus.${region_lc}.mobiledgex.net
    Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].proto}  1
    Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].internal_port}  1
    Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].public_port}  1
@@ -197,7 +198,7 @@ DmePersistentConnetion - cloudlet state change shall return a new cloudlet
       ${cloud2}=  Receive Cloudlet State Event  state=${state}
       Should Be Equal As Numbers  ${cloud2.new_cloudlet.status}  1  #FIND_FOUND
       Should Be True  len('${cloud2.new_cloudlet.edge_events_cookie}') > 100
-      Should contain  ${cloud2.new_cloudlet.fqdn}  ${cloudlet2}.dmuus.mobiledgex.net
+      Should contain  ${cloud2.new_cloudlet.fqdn}  ${cloudlet2}-dmuus.${region_lc}.mobiledgex.net
       Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].proto}  1
       Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].internal_port}  1
       Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].public_port}  1
@@ -316,7 +317,10 @@ DmePersistentConnection - cloudlet in maintenance mode shall return new alliance
 *** Keywords ***
 Setup Suite
    ${cloudlet}=  Get Default Cloudlet Name
+   ${region_lc}=  Convert to Lower Case  ${region}
+
    Set Suite Variable  ${cloudlet}
+   Set Suite Variable  ${region_lc}
 
 Setup
    Create Flavor  region=${region}

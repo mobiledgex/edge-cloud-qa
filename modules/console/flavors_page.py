@@ -15,36 +15,37 @@ class FlavorsPage(ComputePage):
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_region):
             logging.info('region header present')
         else:
+            logging.warning('region header not present')
             header_present = False
 
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_flavorname):
             logging.info('flavorname header present')
         else:
+            logging.warning('flavorname header not present')
             header_present = False
 
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_ram):
             logging.info('ram header present')
         else:
+            logging.warning('ram header not present')
             header_present = False
 
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_vcpus):
             logging.info('vcpus header present')
         else:
+            logging.warning('vcpus header not present')
             header_present = False
 
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_disk):
             logging.info('disk header present')
         else:
-            header_present = False
-
-        if self.is_element_present(FlavorsPageLocators.flavors_table_header_gpu):
-            logging.info('GPU header present')
-        else:
+            logging.warning('disk header not present')
             header_present = False
 
         if self.is_element_present(FlavorsPageLocators.flavors_table_header_edit):
             logging.info('edit header present')
         else:
+            logging.warning('edit header not present')
             header_present = False
 
         return header_present
@@ -79,19 +80,22 @@ class FlavorsPage(ComputePage):
 
         return settings_present
 
-    def is_flavor_present(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5):
+    def is_flavor_present(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5, gpu=None):
         self.take_screenshot('is_flavor_present_pre.png')
 
-        logging.info(f'Looking for region={region} flavor={flavor_name} ram={ram} vcpus={vcpus} disk={disk}')
+        logging.info(f'Looking for region={region} flavor={flavor_name} ram={ram} vcpus={vcpus} disk={disk} gpu={gpu}')
 
         rows = self.get_table_rows()
         for r in rows:
-            #print('*WARN*', 'flavorr', r, r[2], region, flavor_name, ram, vcpus, disk)
-            if r[1] == region and r[2] == flavor_name and r[3] == str(ram) and r[4] == str(vcpus) and r[5] == str(disk):
+            logging.info("Table values - r1 = " + r[1] + ", r2 = " + r[2] + " ,r3 = " + r[3] + ", r4 = " + r[4] + ", r5 = " + r[5] + ", r6 = " + r[6])
+            if r[2] == region and r[3] == flavor_name and r[4] == str(ram) and r[5] == str(vcpus) and r[6] == str(disk):
                 logging.info('found flavor')
+                if gpu == 'true':
+                    if not self.is_gpu_icon_visible():
+                        raise Exception ('GPU icon not visible')
                 return True
 
-        logging.error('flavor not found')
+        logging.warning('flavor not found')
         return False
 
     def click_next_page(self):
@@ -102,56 +106,47 @@ class FlavorsPage(ComputePage):
          e = self.driver.find_element(*FlavorsPageLocators.previous_page_button)
          ActionChains(self.driver).click(on_element=e).perform()
 
-    def wait_for_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, number_of_pages=None, click_previous_page=None):
+    def perform_search(self, searchstring):
+        time.sleep(1)
+        logging.info("Clicking Search button and performing search for value - " + searchstring)
+        we = self.driver.find_element(*FlavorsPageLocators.flavors_searchbutton)
+        ActionChains(self.driver).click(on_element=we).perform()
+        time.sleep(1)
+        we_Input = self.driver.find_element(*FlavorsPageLocators.flavors_searchInput)
+        self.driver.execute_script("arguments[0].value = '';", we_Input)
+        we_Input.send_keys(searchstring)
+        #self.driver.find_element(*AppsPageLocators.apps_page_searchInput).send_keys(searchstring)
+        time.sleep(1)
+
+    def wait_for_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, number_of_pages=None, click_previous_page=None, gpu=None):
         index = 0
-        #e = self.driver.find_element(*FlavorsPageLocators.next_page_button)
+        logging.info(f'Wait for flavor  region={region} flavor={flavor_name} ram={ram} vcpus={vcpus} disk={disk} number_of_pages={number_of_pages} click_previous_page={click_previous_page} gpu={gpu}')
         for x in range(0, number_of_pages):
             for attempt in range(2):
-                #print('*WARN*', 'Searching across flavors')
-                if self.is_flavor_present(region, flavor_name, ram, vcpus, disk):
+                if self.is_flavor_present(region, flavor_name, ram, vcpus, disk, gpu=gpu):
                     if ((index>0) and (click_previous_page is None)):
                         self.click_previous_page()
                     return True
                 else:
                     time.sleep(1)
-            #self.driver.find_element(*FlavorsPageLocators.next_page_button).click()
-            self.click_next_page()
             index += 1
             
         return False
 
     def delete_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, decision=None):
-        #row = self.get_table_row_by_value([(region, 1), (flavor_name, 2)])  # don't use INTs bc it reads text_value as string
-        #print('*WARN*', 'found row')
+
+        logging.info(f'deleting flavor region={region} flavor_name={flavor_name} ')
+        self.perform_search(flavor_name)
+        row = self.get_table_row_by_value([(flavor_name, 4)])
+        print('*WARN*', 'row = ', row)
         #row.find_element(*ComputePageLocators.table_action).click()
-        #print('*WARN*', 'clicked action')
-
-        totals_rows = self.driver.find_elements(*FlavorsPageLocators.details_row)
-        total_rows_length = len(totals_rows)
-        total_rows_length = total_rows_length + 1
-        for row in range(1, total_rows_length):
-            table_column =  f'//tbody/tr[{row}]/td[3]/div'
-            value = self.driver.find_element_by_xpath(table_column).text
-            if value == flavor_name:
-                i = row
-                break
-
-        table_action = f'//tbody/tr[{i}]/td[8]//button[@aria-label="Action"]' 
-        e = self.driver.find_element_by_xpath(table_action)
+        e = row.find_element(*ComputePageLocators.table_action)
         ActionChains(self.driver).click(on_element=e).perform()
         self.driver.find_element(*ComputePageLocators.table_delete).click()
-        print('*WARN*', 'clicked delete')
-        #time.sleep(10)
-        if (decision != None):
-            decision = decision.lower()
-        if (decision == 'no' or decision == 'cant'):
-            print('*WARN*', 'Not deleting row ', row)
-            time.sleep(3)
-            self.driver.find_element(*DeleteConfirmationPageLocators.no_button).click()
-        else:
-            #print('*WARN*', 'delete row ', row)
-            time.sleep(3)
-            self.driver.find_element(*DeleteConfirmationPageLocators.yes_button).click()
+
+        time.sleep(1)
+        row.find_element(*DeleteConfirmationPageLocators.yes_button).click()
+
 
     def click_rows_per_page_pulldown(self):
         self.driver.find_element(*FlavorsPageLocators.rows_per_page).click()
@@ -196,9 +191,9 @@ class FlavorsPage(ComputePage):
     def click_close_flavor_details(self):
         self.driver.find_element(*FlavorsPageLocators.close_button).click()
 
-    def click_flavor_row(self, flavor_name, region='US'):
+    def click_flavor_row(self, flavor_name, region):
         try:
-            row = self.get_table_row_by_value([(region, 2), (flavor_name, 3)])
+            row = self.get_table_row_by_value([(region, 3), (flavor_name, 4)])
         except:
             logging.info('row is not found')
             return False
@@ -251,5 +246,11 @@ class FlavorsPage(ComputePage):
         else:
             raise Exception('flavors trash icon IS present')
     
+    def is_gpu_icon_visible(self):
+        if self.is_element_present(FlavorsPageLocators.flavors_table_gpu_icon):
+            logging.info('GPU icon visible for flavor row')
+            return True
+        else:
+            logging.info('GPU icon NOT visible for flavor row')
+            return False
 
-    

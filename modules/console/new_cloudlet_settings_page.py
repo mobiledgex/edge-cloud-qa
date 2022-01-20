@@ -197,9 +197,11 @@ class NewCloudletSettingsPage(NewSettingsFullPage):
         self.physical_name = physical_name
         time.sleep(2)
         self.platform_type = platform_type
-        
+        time.sleep(2)
+
         if ip_support == 2:
             self.ip_support = 'Dynamic'
+            time.sleep(2)
 
         self.infra_api_access = infra_api_access
 

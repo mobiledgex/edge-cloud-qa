@@ -118,24 +118,21 @@ class AppInstancesPage(ComputePage):
         time.sleep(1)
 
     def delete_appinst(self, region=None, developer_name=None, app_name=None, app_version=None, operator_name=None, cloudlet_name=None, cluster_instance=None):
-        self.perform_search(cluster_instance)
         logging.info('deleting app instance')
 
-        totals_rows = self.driver.find_elements(*ComputePageLocators.details_row)
-        total_rows_length = len(totals_rows)
-        total_rows_length += 1
-        for row in range(1, total_rows_length):
-            table_column =  f'//tbody/tr[{row}]/td[4]'
-            value = self.driver.find_element_by_xpath(table_column).text
-            if app_name in value:
-                i = row
-                break
-
-        table_action = f'//tbody/tr[{i}]/td[10]//button[@aria-label="Action"]'
-        e = self.driver.find_element_by_xpath(table_action)
+        if cluster_instance is not None:
+            self.perform_search(cluster_instance)
+        else:
+            self.perform_search(app_name)
+        row = self.get_table_row_by_value([(app_name + " [" + app_version + "]", 4), (cloudlet_name + " [" + operator_name + "]", 5)])
+        print('*WARN*', 'row = ', row)
+        e = row.find_element(*ComputePageLocators.table_action)
         ActionChains(self.driver).click(on_element=e).perform()
-        self.driver.find_element(*ComputePageLocators.table_delete).click() 
-        self.driver.find_element(*DeleteConfirmationPageLocators.yes_button).click()
+        self.driver.find_element(*ComputePageLocators.table_delete).click()
+
+        time.sleep(1)
+        row.find_element(*DeleteConfirmationPageLocators.yes_button).click()
+
         return True
 
     def appsInst_menu_should_exist(self):
@@ -180,14 +177,15 @@ class AppInstancesPage(ComputePage):
         else:
             raise Exception('app instances trash icon IS present')
     
-    def click_appinst_row(self, app_name, region=None, app_version=None, cluster_name=None, cloudlet_name=None):
+    def click_appinst_row(self, app_name, region=None, app_version=None, cluster_name=None, cloudlet_name=None, operator_org_name=None):
         try:
-            r = self.get_table_row_by_value([(region, 2), (app_name, 4), (app_version, 5), (cluster_name, 8), (cloudlet_name, 7)])
+            r = self.get_table_row_by_value([(app_name + " [" + app_version + "]", 4), (cluster_name, 6), (cloudlet_name+ " [" + operator_org_name + "]", 5)])
         except:
             logging.info('row is not found')
             return False
         time.sleep(1)
-        ActionChains(self.driver).click(on_element=r).perform()
+        e = r.find_element_by_xpath(f'//span[contains(.,"{app_name}")]')
+        e.click()
         return True
 
 

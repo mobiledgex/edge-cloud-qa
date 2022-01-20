@@ -10,7 +10,7 @@ Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
 *** Variables ***
-${cloudlet_name_openstack_dedicated}  automationFairviewCloudlet
+${cloudlet_name_openstack}  automationFairviewCloudlet
 ${operator_name_openstack}  GDDT
 ${region}  US
 ${flavor_name}    x1.medium
@@ -27,7 +27,7 @@ Controller shall return error while creating docker based cluster and IpAccessDe
     ${cluster_name_openstack_length}=  Get Length   ${cluster_name_long}
     log to console   Length of cluster name=${cluster_name_openstack_length}
 
-    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_name=${cluster_name_long}  deployment=docker  ip_access=IpAccessDedicated
+    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_name=${cluster_name_long}  deployment=docker  ip_access=IpAccessDedicated
     Should be equal  ${error}  ('code=400', 'error={"message":"Cluster name limited to 40 characters"}')
 
 
