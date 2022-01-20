@@ -197,16 +197,17 @@ showDevice - request with Samsung platform app and lower samsung unique_id_type 
     ${device}=  Show Device  region=${region}  unique_id=${timestamp}  #begin_seconds=${secs}  begin_nanos=${nsecs}
     Length Should Be   ${device}  0
 
-#ECQ-2122
-showDevice - without notify_id shall return device information
-    [Documentation]
-    ...  showDevice check display of notify_id
-    ...  verify notify_id is displayed without being requested
-
-      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd
-      Should Be True  ${device[0]['data']['notify_id']} > 0
-
-      Length Should Be  ${device}  1
+# covered in non samsung tests
+##ECQ-2122
+#showDevice - without notify_id shall return device information
+#    [Documentation]
+#    ...  showDevice check display of notify_id
+#    ...  verify notify_id is displayed without being requested
+#
+#      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd
+#      Should Be True  ${device[0]['data']['notify_id']} > 0
+#
+#      Length Should Be  ${device}  1
   
 #ECQ-2123
 showDevice - request with bad token

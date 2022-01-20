@@ -34,15 +34,17 @@ class User(MexOperation):
             if email_address is None:
                 email_address = username + '@email.com'
 
-        shared_variables_mc.username_default = username
-        shared_variables_mc.password_default = password
+        # shared_variables_mc.username_default = username
+        # shared_variables_mc.password_default = password
 
         user_dict = {}
 
         if username is not None:
             user_dict['name'] = username
+            shared_variables_mc.username_default = username
         if password is not None:
             user_dict['passhash'] = password
+            shared_variables_mc.password_default = password
         if email_address is not None:
             user_dict['email'] = email_address
         if metadata is not None:
