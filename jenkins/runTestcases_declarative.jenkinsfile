@@ -149,6 +149,7 @@ pipeline{
                                       ';export AUTOMATION_OPENSTACK_GPU_ENV=' + params.OpenStackEnv + 
                                       ';export AUTOMATION_OPENSTACK_OFFLINE_ENV=' + params.OpenStackEnv + 
                                       ';export AUTOMATION_MC_ADDRESS=' + params.MasterController + 
+                                      ';export AUTOMATION_MC_ADDRESS_FEDERATION=' + params.MasterControllerFederation +
                                       ';export AUTOMATION_MC_CERT=' + 
                                       ';export AUTOMATION_INFLUXDB_ADDRESS=' + params.InfluxDB + 
                                       ';export AUTOMATION_OPENSTACK_VMPOOL_ENV=' + params.OpenStackEnv + 
