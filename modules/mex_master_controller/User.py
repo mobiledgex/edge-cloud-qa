@@ -66,7 +66,7 @@ class User(MexOperation):
 
         return user_dict
 
-    def _build_update_restricted(self, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, use_defaults=True):
+    def _build_update_restricted(self, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, enable_totp=None, failed_logins=None, use_defaults=True):
         if username == 'default':
             username = shared_variables_mc.username_default
 
@@ -92,6 +92,10 @@ class User(MexOperation):
             user_dict['nickname'] = nickname
         if email_verified is not None:
             user_dict['emailverified'] = email_verified
+        if enable_totp is not None:
+            user_dict['enabletotp'] = enable_totp
+        if failed_logins is not None:
+            user_dict['failedlogins'] = failed_logins
 
         return user_dict
 
@@ -147,8 +151,8 @@ class User(MexOperation):
 
         return self.update(token=token, url=self.update_url, show_url=self.show_url, region=None, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=None)
 
-    def update_user_restricted(self, token=None, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, json_data=None, use_defaults=False, use_thread=False):
-        msg = self._build_update_restricted(username=username, email_address=email_address, email_verified=email_verified, family_name=family_name, given_name=given_name, nickname=nickname, locked=locked, use_defaults=use_defaults)
+    def update_user_restricted(self, token=None, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, enable_totp=None, failed_logins=None, json_data=None, use_defaults=False, use_thread=False):
+        msg = self._build_update_restricted(username=username, email_address=email_address, email_verified=email_verified, family_name=family_name, given_name=given_name, nickname=nickname, locked=locked, enable_totp=enable_totp, failed_logins=failed_logins, use_defaults=use_defaults)
         msg_dict = msg
 
         thread_name = 'update_user_restricted'
