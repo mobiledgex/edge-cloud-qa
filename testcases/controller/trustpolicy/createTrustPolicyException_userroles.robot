@@ -32,14 +32,14 @@ CreateTrustPolicyException - OperatorManager shall be able to show/update but no
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
    ${pool}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  token=${super_token}  
-   ${exception_create}=  Create Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${super_token}  region=${region}  rule_list=${rulelist}
+   ${exception_create}=  Create Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${super_token}  region=${region}  rule_list=${rulelist}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist} 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
 
-   ${show}=  Show Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   ${show}=  Show Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
 
-   ${exception_update}=  Update Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  state=Active
+   ${exception_update}=  Update Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  state=Active
 
    Length Should Be  ${show}  1
 
@@ -63,14 +63,14 @@ CreateTrustPolicyException - OperatorContributor shall be able to show/update bu
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
    ${pool}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  token=${super_token}
-   ${exception_create}=  Create Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${super_token}  region=${region}  rule_list=${rulelist}
+   ${exception_create}=  Create Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${super_token}  region=${region}  rule_list=${rulelist}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist}
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
 
-   ${show}=  Show Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   ${show}=  Show Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
 
-   ${exception_update}=  Update Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  state=Active
+   ${exception_update}=  Update Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  state=Active
 
    Length Should Be  ${show}  1
 
@@ -94,13 +94,13 @@ CreateTrustPolicyException - OperatorViewer shall be able to show but not create
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
    ${pool}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  token=${super_token}
-   ${exception_create}=  Create Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${super_token}  region=${region}  rule_list=${rulelist}
+   ${exception_create}=  Create Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${super_token}  region=${region}  rule_list=${rulelist}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist}
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  state=Active
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  state=Active
 
-   ${show}=  Show Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   ${show}=  Show Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
 
    Length Should Be  ${show}  1
 
@@ -124,9 +124,9 @@ CreateTrustPolicyException - DeveloperManager shall be able to create/delete/sho
 
    ${pool}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  token=${super_token}
 
-   ${policy}=  Create Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist}
-   ${policy_show}=  Show Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  
-   ${policy_update}=  Update Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   ${policy}=  Create Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   ${policy_show}=  Show Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  
+   ${policy_update}=  Update Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
 
    Should Be Equal  ${policy['data']['key']['name']}  ${policy_name}
    Should Be Equal  ${policy['data']['state']}   ApprovalRequested
@@ -154,9 +154,9 @@ CreateTrustPolicyException - DeveloperContributor shall be able to create/delete
 
    ${pool}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  token=${super_token}
 
-   ${policy}=  Create Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist}
-   ${policy_show}=  Show Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
-   ${policy_update}=  Update Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   ${policy}=  Create Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   ${policy_show}=  Show Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   ${policy_update}=  Update Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
 
    Should Be Equal  ${policy['data']['key']['name']}  ${policy_name}
    Should Be Equal  ${policy['data']['state']}   ApprovalRequested
@@ -183,13 +183,13 @@ CreateTrustPolicyException - DeveloperViewer shall be able to show but not creat
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
    ${pool}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  token=${super_token}
-   ${policy}=  Create Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${super_token}  region=${region}  rule_list=${rulelist}
+   ${policy}=  Create Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${super_token}  region=${region}  rule_list=${rulelist}
 
-   ${show}=  Show Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   ${show}=  Show Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist}
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy Exception  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy Exception  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  token=${user_token2}  region=${region}
 
    Should Be Equal  ${show[0]['data']['key']['name']}  ${policy['data']['key']['name']}
 
