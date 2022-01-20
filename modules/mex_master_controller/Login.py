@@ -24,15 +24,17 @@ class Login(MexOperation):
             if password is None:
                 password = shared_variables_mc.password_default
 
-        shared_variables_mc.username_default = username
-        shared_variables_mc.password_default = password
+        # shared_variables_mc.username_default = username
+        # shared_variables_mc.password_default = password
 
         login_dict = {}
 
         if username is not None:
             login_dict['username'] = username
+            shared_variables_mc.username_default = username
         if password is not None:
             login_dict['password'] = password
+            shared_variables_mc.password_default = password
         if totp is not None:
             login_dict['totp'] = str(totp)
 
