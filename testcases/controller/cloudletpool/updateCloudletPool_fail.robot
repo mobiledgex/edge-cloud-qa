@@ -34,7 +34,8 @@ UpdateCloudletPool - update without parameters shall return error
 
    Should Contain   ${error}  code=400
 #   Should Contain   ${error}  error={"message":"CloudletPool key {} not found"}
-   Should Contain   ${error}  error={"message":"Invalid organization name"}
+   #Should Contain   ${error}  error={"message":"Invalid organization name"}
+   Should Contain   ${error}  error={"message":"Invalid cloudlet pool organization"}
 
 # ECQ-2416
 UpdateCloudletPool - update without pool name shall return error
@@ -46,7 +47,8 @@ UpdateCloudletPool - update without pool name shall return error
 
    Should Contain   ${error}  code=400
    #Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"GDDT\\\\"} not found"}
-   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"\\\\\""}
+   #Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name \\\\\"\\\\\""}
+   Should Contain   ${error}  error={"message":"Invalid cloudlet pool name"}
 
 
 # ECQ-2417

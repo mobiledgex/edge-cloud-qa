@@ -31,7 +31,8 @@ DeleteVMPool - delete without parameters shall return error
    ${error}=  Run Keyword And Expect Error  *   Delete VM Pool  region=${region}  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid organization name"}
+   #Should Contain   ${error}  error={"message":"Invalid organization name"}
+   Should Contain   ${error}  error={"message":"VMPool key {} not found"}
 
 # ECQ-2335
 DeleteVMPool - delete without pool name shall return error
@@ -42,8 +43,8 @@ DeleteVMPool - delete without pool name shall return error
    ${error}=  Run Keyword And Expect Error  *   Delete VM Pool  region=${region}  org_name=${organization}  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   #Should Contain   ${error}  error={"message":"VMPool key {\\\\"organization\\\\":\\\\"${organization}\\\\"} not found"}
-    Should Contain   ${error}  error={"message":"Invalid VM pool name"}
+   Should Contain   ${error}  error={"message":"VMPool key {\\\\"organization\\\\":\\\\"${organization}\\\\"} not found"}
+   # Should Contain   ${error}  error={"message":"Invalid VM pool name"}
 
 # ECQ-2336
 DeleteVMPool - delete without org name shall return error
@@ -54,8 +55,8 @@ DeleteVMPool - delete without org name shall return error
    ${error}=  Run Keyword And Expect Error  *   Delete VM Pool  region=${region}  vm_pool_name=xxx  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   #Should Contain   ${error}  error={"message":"VMPool key {\\\\"name\\\\":\\\\"xxx\\\\"} not found"}
-   Should Contain   ${error}  error={"message":"Invalid organization name"}
+   Should Contain   ${error}  error={"message":"VMPool key {\\\\"name\\\\":\\\\"xxx\\\\"} not found"}
+   #Should Contain   ${error}  error={"message":"Invalid organization name"}
 
 # ECQ-2337
 DeleteVMPool - delete with name not found shall return error

@@ -86,7 +86,7 @@
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>TestTimeout</name>
-          <defaultValue>2m</defaultValue>
+          <defaultValue>4m</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -109,6 +109,7 @@ testcase_components = [
     controller_components + &quot;Cloudlet&quot;,
     controller_components + &quot;AppInst&quot;,
     controller_components + &quot;TrustPolicy&quot;,
+    controller_components + &quot;TrustPolicyException&quot;,
     controller_components + &quot;AlertReceiver&quot;,
 //    [automated_component] + &quot;Mcctl&quot;,
     controller_components + &quot;Settings&quot;,
@@ -143,7 +144,7 @@ pipeline{
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
         choice(name: &apos;TestTarget&apos;, choices: [&apos;Controller&apos;], description: &apos;&apos;)
-        string(name: &apos;TestTimeout&apos;, defaultValue: &apos;2m&apos;)
+        string(name: &apos;TestTimeout&apos;, defaultValue: &apos;4m&apos;)
     }
 
     stages {

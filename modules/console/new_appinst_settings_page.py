@@ -199,9 +199,9 @@ class NewAppInstSettingsPage(NewSettingsFullPage):
             self.cluster_instance = cluster_instance
         else:
             self.driver.find_element(*AppInstancesPageLocators.appinst_autoclusterinst_checkbox).click()
-            self.driver.find_element(*AppInstancesPageLocators.appinst_ipaccess_pulldown).click()
-            access_type = f'.//div[@role="listbox"]//span[text()="{ip_access}"]'
-            self.driver.find_element_by_xpath(access_type).click()
+            #self.driver.find_element(*AppInstancesPageLocators.appinst_ipaccess_pulldown).click()
+            #access_type = f'.//div[@role="listbox"]//span[text()="{ip_access}"]'
+            #self.driver.find_element_by_xpath(access_type).click()
         if envvar is not None:
             self.driver.find_element(*AppInstancesPageLocators.configs_button).click()
             self.driver.find_element(*AppsPageLocators.configs_input).send_keys(envvar)

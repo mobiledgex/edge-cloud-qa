@@ -26,7 +26,7 @@ ${email}             mextester06@gmail.com
 
 ${app_name}          server_ping_threaded
 ${app_version_old}       5.0
-${app_version_new}       9.0
+${app_version_new}       11.0
 
 *** Test Cases ***
 # ECQ-3139
