@@ -459,8 +459,8 @@ class MexMasterController(MexRest):
     def delete_user(self, username=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.user.delete_user(token=token, username=username, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def update_restricted_user(self, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, token=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.user.update_user_restricted(token=token, username=username, email_address=email_address, email_verified=email_verified, family_name=family_name, given_name=given_name, nickname=nickname, locked=locked, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def update_restricted_user(self, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, enable_totp=None, failed_logins=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.update_user_restricted(token=token, username=username, email_address=email_address, email_verified=email_verified, family_name=family_name, given_name=given_name, nickname=nickname, locked=locked, enable_totp=enable_totp, failed_logins=failed_logins, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def unlock_user(self, token=None, username=None, use_thread=False):
         if username is None: username = shared_variables_mc.username_default
