@@ -121,4 +121,4 @@ pagerduty_key = 'd1bdad0245364905c0e25090ce357f30'  # paid account
 
 trust_policy_server = '35.199.188.102'
 self_federation_id = '13c8f174-eca4-4d01-966e-7f79482d4856'
-partner_federation_name= 'controllerfed'
+partner_federation_name = 'controllerfed'
