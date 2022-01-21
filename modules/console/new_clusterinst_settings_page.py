@@ -6,27 +6,33 @@ import time
 
 import logging
 
+from selenium.webdriver import Keys, ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
+
+
 class ClusterNameElement(BasePageElement):
     locator = ClusterInstancesPageLocators.clusterinst_clustername_input
 
 class DeveloperNameElement(BasePagePulldownElement):
-    locator = ClusterInstancesPageLocators.clusterinst_developername_pulldown
+    locator = ClusterInstancesPageLocators.clusterinst_developername_pulldownbox
 
 class OperatorNameElement(BasePagePulldownElement):
-    locator = ClusterInstancesPageLocators.clusterinst_operatorname_pulldown
+    locator = ClusterInstancesPageLocators.clusterinst_operatorname_pulldownbox
 
 class CloudletNameElement(BasePagePulldownMultiElement):
     locator = ClusterInstancesPageLocators.clusterinst_cloudletname_pulldown
     locator2 = ClusterInstancesPageLocators.clusterinst_cloudletname_pulldown2
 
 class DeploymentTypeElement(BasePagePulldownElement):
-    locator = ClusterInstancesPageLocators.clusterinst_deploymenttype_pulldown
+    locator = ClusterInstancesPageLocators.clusterinst_deploymenttype_pulldownbox
 
 class IpAccessElement(BasePagePulldownElement):
-    locator = ClusterInstancesPageLocators.clusterinst_ipaccess_pulldown
+    locator = ClusterInstancesPageLocators.clusterinst_ipaccess_pulldownbox
 
 class FlavorNameElement(BasePagePulldownElement):
-    locator = ClusterInstancesPageLocators.clusterinst_flavor_pulldown
+    locator = ClusterInstancesPageLocators.clusterinst_flavor_pulldownbox
 
 class AutoScalePolicyElement(BasePagePulldownElement):
     locator = ClusterInstancesPageLocators.clusterinst_autoscalepolicy_pulldown
@@ -73,7 +79,7 @@ class NewClusterInstSettingsPage(NewSettingsFullPage):
         return self.is_element_present(ClusterInstancesPageLocators.clusterinst_cloudletname)
 
     def is_cloudlet_input_present(self):
-        return self.is_element_present(ClusterInstancesPageLocators.clusterinst_cloudletname_input)
+        return self.is_element_present(ClusterInstancesPageLocators.clusterinst_cloudletname_pulldown)
 
     def is_deployment_label_present(self):
         return self.is_element_present(ClusterInstancesPageLocators.clusterinst_deploymenttype)
@@ -220,7 +226,9 @@ class NewClusterInstSettingsPage(NewSettingsFullPage):
         self.cloudlet_name = cloudlet_name
         self.deployment = deployment
         self.ip_access = ip_access
-        self.flavor_name = flavor_name
+        self.selectFlavor (flavor_name)
+        #self.flavor_name = flavor_name
+
         if deployment == 'Kubernetes':
             self.number_nodes = number_nodes
             #self.number_masters = number_masters
@@ -228,5 +236,17 @@ class NewClusterInstSettingsPage(NewSettingsFullPage):
             pass
 
         self.take_screenshot('add_new_cloudlet_settings.png')
-
         self.click_create_button()
+
+    def selectFlavor(self, flavorname):
+        self.driver.find_element(*ClusterInstancesPageLocators.clusterinst_flavor_pulldown).click()
+        self.driver.find_element(*ClusterInstancesPageLocators.clusterinst_flavor_input).send_keys(flavorname)
+        self.driver.find_element(*ClusterInstancesPageLocators.clusterinst_flavor_input).send_keys(Keys.ENTER)
+
+        wait = WebDriverWait(self.driver, 10, poll_frequency=1)
+        flavor_value = f".//button[@class='mex_select_tree_detail' and text()='{flavorname}']"
+        wait.until(expected_conditions.visibility_of_element_located((By.XPATH, flavor_value))).click()
+
+    def click_create_button(self):
+        e = self.driver.find_element(*NewPageFullLocators.create_button)
+        ActionChains(self.driver).click(on_element=e).perform()
