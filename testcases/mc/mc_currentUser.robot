@@ -392,3 +392,14 @@ MC - User shall be able to update current enable totp
    Should Be Equal             ${info2['TOTPSharedKey']}  ${EMPTY}
    Convert Date  ${info2['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
+# ECQ-4273
+MC - User shall not be able to update with duplicate email address
+    [Documentation]
+    ...  - Login as a user
+    ...  - attempt to update with an email already used
+    ...  - verify error is returned
+
+    Login  username=${op_manager_user_automation}   password=${op_manager_password_automation}
+
+    Run Keyword and Expect Error  ('code=400', 'error={"message":"Email ${admin_manager_email} already in use"}')  Update Current User  email_address=${admin_manager_email}  use_defaults=${False}
+
