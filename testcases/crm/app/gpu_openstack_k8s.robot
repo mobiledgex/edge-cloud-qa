@@ -21,7 +21,7 @@ ${gpu_resource_name}  mygpuresrouce
 ${cluster_flavor_name}  x1.medium
 
 ${cloudlet_name_openstack_gpu}  automationDusseldorfCloudlet
-${operator_name_openstack}  TDG
+${operator_name}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
@@ -42,7 +42,7 @@ GPU - shall be able to deploy k8s shared NVidia T4 Passthru GPU app on KVM Opens
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=kubernetes  developer_org_name=MobiledgeX-Samples
+    ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=kubernetes  developer_org_name=MobiledgeX-Samples
     ${rootlb}=  Catenate  SEPARATOR=.  shared  ${rootlb}
     ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
     ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name_default}
@@ -65,7 +65,7 @@ GPU - shall be able to deploy k8s shared NVidia T4 Passthru GPU app on KVM Opens
     Node Should Not Have GPU  root_loadbalancer=${rootlb}  node=${server_info_master[0]['Networks']}
 
     Create App  region=${region}  image_path=${k8s_gpu}  access_ports=tcp:8008:tls,tcp:8011  image_type=ImageTypeDocker  deployment=kubernetes  skip_hc_ports=tcp:8011  developer_org_name=MobiledgeX-Samples
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
 
     Register Client  developer_org_name=MobiledgeX-Samples
     ${cloudlet}=  Find Cloudlet	 latitude=${latitude}  longitude=${longitude}
@@ -92,10 +92,10 @@ GPU - shall be able to deploy k8s dedicated NVidia T4 Passthru GPU app on KVM Op
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=kubernetes  developer_org_name=MobiledgeX-Samples
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=kubernetes  developer_org_name=MobiledgeX-Samples
     Sleep  30  seconds
     Create App  region=${region}  image_path=${k8s_gpu}  access_ports=tcp:8008:tls,tcp:8011  image_type=ImageTypeDocker  deployment=kubernetes  skip_hc_ports=tcp:8011  developer_org_name=MobiledgeX-Samples
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
 
     Register Client  developer_org_name=MobiledgeX-Samples
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -124,7 +124,7 @@ GPU - shall be able to deploy k8s reservable autocluster NVidia T4 Passthru GPU 
     ${app_name_default}=  Get Default App Name
 
     Create App  region=${region}  image_path=${k8s_gpu}  access_ports=tcp:8008:tls,tcp:8011  image_type=ImageTypeDocker  deployment=kubernetes  skip_hc_ports=tcp:8011  developer_org_name=MobiledgeX-Samples
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
 
     Register Client  developer_org_name=MobiledgeX-Samples
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -152,10 +152,10 @@ GPU - shall be able to deploy k8s NVidia T4 Passthru GPU app on KVM Openstack wi
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=kubernetes  developer_org_name=MobiledgeX-Samples
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=kubernetes  developer_org_name=MobiledgeX-Samples
     Sleep  30  seconds
     Create App  region=${region}  deployment_manifest=${k8s_manifest_url}  access_ports=tcp:8008:tls,tcp:8011  image_type=ImageTypeDocker  deployment=kubernetes  skip_hc_ports=tcp:8011  developer_org_name=MobiledgeX-Samples
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
 
     Register Client  developer_org_name=MobiledgeX-Samples
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -177,10 +177,10 @@ GPU - shall be able to deploy k8s NVidia T4 Passthru GPU app on KVM Openstack wi
 Setup
     Create Flavor  region=${region}  disk=40  optional_resources=gpu=pci:1
 
-    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  mapping=gpu=${gpu_resource_name}
-    Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack}  tags=pci=t4gpu:1
+    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  mapping=gpu=${gpu_resource_name}
+    Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_org_name=${operator_name}  tags=pci=t4gpu:1
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_gpu}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_gpu}  ${operator_name}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_gpu}
