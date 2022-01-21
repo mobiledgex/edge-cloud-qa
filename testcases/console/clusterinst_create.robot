@@ -3,6 +3,7 @@ Documentation   Create new clusterinst
 ## Passes
 ## Has trouble with success boxes
 Library         MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
+Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
 
 Test Setup      Setup
 Test Teardown   Close Browser
@@ -44,15 +45,19 @@ Web UI - user shall be able to create a new US clusterinst with Docker Dedicated
 
     Sleep  5s
 
-    Add New Cluster Instance  region=US  developer_name=${developer_name}  operator_name=${operator_name}  cloudlet_name=${cloudlet_name}  ip_access=Dedicated  deployment=Docker  flavor_name=${flavor}  wait=300
+    Add New Cluster Instance  region=US  cluster_name=${cluster_instance_name_default}  developer_name=${developer_name}  operator_name=${operator_name}  cloudlet_name=${cloudlet_name}  ip_access=Dedicated  deployment=docker  flavor_name=${flavor}  wait=300
+    Sleep  30s
+    Cluster Should Exist  region=US  cluster_name=${cluster_instance_name_default}  ip_access=Dedicated  wait=${wait}
+    ${clusterInst}=  Show Cluster Instances  region=US  cluster_name=${cluster_instance_name_default}  cloudlet_name=${cloudlet_name}   developer_org_name=${developer_name}
+    Log To Console  Printing Cluster Instance Object
+    Log To Console  ${clusterInst}
+    Should Be Equal              ${clusterInst[0]['data']['ip_access']}                           Dedicated
+    Should Be Equal              ${clusterInst[0]['data']['flavor']['name']}                         ${flavor}
 
-    Cluster Should Exist  region=US  ip_access=Dedicated  wait=${wait}
 
-    Sleep  200s
+    Delete Cluster  cluster_name=${cluster_instance_name_default}  wait=${wait}
 
-    Delete Cluster  wait=${wait}
-
-    Cluster Should Not Exist
+    Cluster Should Not Exist  cluster_name=${cluster_instance_name_default}
 
 Web UI - user shall be able to create a new EU clusterinst with Kubernetes Shared Ip Access
     [Documentation]
@@ -124,9 +129,12 @@ Web UI - user shall be able to create a new US clusterinst with Kubernetes Dedic
 
 *** Keywords ***
 Setup
+    ${cluster_instance_name_default}=  Get Default Cluster Name
     Open Browser
     Login to Mex Console  browser=${browser}  #username=${console_username}  password=${console_password}
     Open Compute
     Open Cluster Instances
+    Set Suite Variable  ${cluster_instance_name_default}
+
 Teardown
     Close Browser

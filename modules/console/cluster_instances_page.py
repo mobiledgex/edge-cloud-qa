@@ -6,6 +6,9 @@ from console.locators import DeleteConfirmationPageLocators
 import logging
 import time
 
+from selenium.webdriver import ActionChains
+
+
 class ClusterInstancesPage(ComputePage):
     def is_delete_button_present(self, row):
         row.find_element(*ClusterInstancesPageLocators.table_delete)
@@ -74,18 +77,31 @@ class ClusterInstancesPage(ComputePage):
 
         return header_present
 
+    def perform_search(self, searchstring):
+        time.sleep(1)
+        logging.info("Clicking Search button and performing search for value on App Instances page - " + searchstring)
+        we = self.driver.find_element(*ComputePageLocators.searchbutton)
+        ActionChains(self.driver).click(on_element=we).perform()
+        time.sleep(1)
+        we_Input = self.driver.find_element(*ComputePageLocators.searchInput)
+        self.driver.execute_script("arguments[0].value = '';", we_Input)
+        we_Input.send_keys(searchstring)
+        time.sleep(1)
+
     def is_cluster_instance_present(self,region=None, cluster_name=None, developer_name=None, operator_name=None, cloudlet_name=None, flavor_name=None, ip_access=None, wait=None):
         logging.info(f'is_cluster_instance_present region={region}  cluster_name={cluster_name}  developer_name={developer_name}  operator_name={operator_name}  cloudlet_name={cloudlet_name}  ip_access={ip_access}  flavor_name={flavor_name}')
         #self.take_screenshot('is_app_present_pre.png')
 
         rows = self.get_table_rows()
         for r in rows:
-            #location = f'Latitude : {latitude}\nLongitude : {longitude}'
-            if r[0] == region and r[1] == cluster_name and r[2] == developer_name and r[3] == operator_name and r[4] == cloudlet_name and r[5] == flavor_name and self.is_action_button_present(r[-1]):
+            logging.info("Table values  - r[1] = " + r[1] + " r[2] = " + r[2] +
+                         " r[3] = " + r[3] + " r[4] = " + r[4] + " r[5] = " + r[5])
+
+            if r[1] == region and r[2] == developer_name  and r[3] == cluster_name and r[4] == cloudlet_name + " [" + operator_name + "]"and r[5] == flavor_name :
                 logging.info('found cluster instance')
                 return True
             else: 
-                logging.info('cluster instance NOT found')
+                logging.warning('cluster instance NOT found')
 
         return False
         
@@ -115,15 +131,17 @@ class ClusterInstancesPage(ComputePage):
         logging.error(f'wait_for_app_instance timedout region={region} org_name={org_name} app_name={app_name} version={version} operator={operator} cloudlet={cloudlet} cluster_instance={cluster_instance} wait={wait}')
         return False
 
-    def delete_cluster(self, cluster_name=None, operator_name=None, developer_name=None):
-        logging.info(f'deleting cluster cluster_name={cluster_name} operator_name={operator_name} developer_name={developer_name}')
-        row = self.get_table_row_by_value([(cluster_name, 2), (developer_name, 3), (operator_name, 4)])
-        #row = self.get_table_row_by_value([(region, 1)])
+    def delete_cluster(self, cluster_name=None, operator_name=None, developer_name=None, cloudlet_name=None):
+        logging.info(f'deleting cluster cluster_name={cluster_name} operator_name={operator_name} developer_name={developer_name} cloudlet_name={cloudlet_name}')
+        row = self.get_table_row_by_value([(cluster_name, 4), (developer_name, 3), (cloudlet_name + " [" + operator_name + "]", 5)])
         print('*WARN*', row)
-        row.find_element(*ComputePageLocators.trash_button).click()
-        
+        e = row.find_element(*ComputePageLocators.table_action)
+        ActionChains(self.driver).click(on_element=e).perform()
+        self.driver.find_element(*ComputePageLocators.table_delete).click()
+
         time.sleep(1)
         row.find_element(*DeleteConfirmationPageLocators.yes_button).click()
+
 
     def click_cluster_name_heading(self):
         self.driver.find_element(*ClusterInstancesPageLocators.cluster_instances_table_header_clustername).click()
