@@ -225,7 +225,7 @@ Setup
     Set Suite Variable  ${cloudlet_lowercase}
     Set Suite Variable  ${super_token}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_openstack_shared}-${operator_name_openstack}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
     Set Suite Variable  ${rootlb}
 

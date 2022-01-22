@@ -45,10 +45,11 @@ Shall be able to configure IpAccessDedicated k8s cluster/app with shared volume 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}-${operator_name_openstack}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
-    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
+    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}-${developer_org_name_automation}  ${rootlb}
+    ${clusterlb}=  Replace String  ${clusterlb}  _  -    
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
 
@@ -70,7 +71,7 @@ Shall be able to configure IpAccessDedicated k8s cluster/app with shared volume 
 
     #Mount Should Persist  root_loadbalancer=${clusterlb}  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}      operator_name=${operator_name_openstack}
 
-    Delete Pod  root_loadbalancer=${rootlb}  pod_name=${manifest_pod_name}  cluster_name=${cluster_name_default}     operator_name=${operator_name_openstack}
+    Delete Pod  root_loadbalancer=${clusterlb}  pod_name=${manifest_pod_name}  cluster_name=${cluster_name_default}     operator_name=${operator_name_openstack}
 
     ${write_return}=  Write To App Volume Mount  host=${cloudlet.fqdn}  port=${cloudlet.ports[0].public_port}  data=${cluster_name_default}
     Should Be Equal  ${write_return[1]}  ${cluster_name_default}
