@@ -293,7 +293,7 @@ Setup
         Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessShared  number_nodes=1
         Log To Console  Done Creating Cluster Instance
 
-        ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+        ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ELSE
         ${rootlb}=  Catenate  SEPARATOR=.  defaultclust  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
         ${dev_name_hyphen}=  Replace String  ${dev_name}  _  -
