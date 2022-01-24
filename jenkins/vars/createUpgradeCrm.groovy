@@ -11,6 +11,7 @@ def openstack(cycle) {
         string(name: 'MasterController', value: params.MasterController),
         string(name: 'TestTarget', value: 'Openstack'),
         string(name: 'VariableFile', value: params.VariableFile), 
+        string(name: 'CRMPool', value: params.CRMPoolOpenstack),
         string(name: 'NumberParallelExecutions', value: '10')]
 }
 
