@@ -49,6 +49,7 @@ ${dmuus_cloudlet_latitude}	  35
 ${dmuus_cloudlet longitude}	  -95
 
 *** Test Cases ***
+# ECQ-991
 FindCloudlet - request shall return dmuus with gcp cloudlet provisioned and dmuus farther but < 100km than gcp
     [Documentation]
     ...  findCloudlet with with dmuus and gcp. dmuus farther but < 100km from request. return dmuus
