@@ -1,5 +1,4 @@
 *** Settings ***
-Documentation     Login to console with nonmexadmin
 
 Library         MexConsole  %{AUTOMATION_CONSOLE_ADDRESS}
 Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
@@ -15,6 +14,8 @@ ${console_username}  mextester99
 ${console_password}  mextester99123
 ${console_email}     mextester99@gmail.com
 ${password}=   H31m8@W8maSfg
+${username}=    mextester06
+
 
 *** Test Cases ***
 WebUI - User shall be able to login with non-mexadmin username
@@ -23,8 +24,14 @@ WebUI - User shall be able to login with non-mexadmin username
    ...  verify login is successful
 
    [Tags]  passing
+   ${epoch}=  Get Time  epoch
+   ${new_username}=  Catenate  SEPARATOR=   ${username}   ${epoch}
+   ${email}=  Catenate  SEPARATOR=   ${username}  +  ${epoch}  @gmail.com
+   Skip Verify Email
+   Create User  username=${new_username}   password=${password}   email_address=${email}  email_check=False
+   Unlock User  username=${new_username}
 
-   Login to Mex Console  browser=${browser}  username=${console_username}  password=${console_password}
+   Login to Mex Console  browser=${browser}  username=${new_username}  password=${password}
 
 WebUI - User shall be able to login with non-mexadmin email
    [Documentation]
@@ -96,7 +103,7 @@ WebUI - User shall not be able to login without username and password
 
    [Tags]  passing
 
-   Run Keyword and Expect Error  Insert Username and Password  Login to Mex Console  browser=${browser}  username=${EMPTY}  password=${EMPTY}
+   Run Keyword and Expect Error  Username not specified  Login to Mex Console  browser=${browser}  username=${EMPTY}  password=${EMPTY}
 
 WebUI - User shall not be able to login without username
    [Documentation]
@@ -105,7 +112,7 @@ WebUI - User shall not be able to login without username
 
    [Tags]  passing
 
-   Run Keyword and Expect Error  Insert Username  Login to Mex Console  browser=${browser}  username=${EMPTY}  password=${console_password}
+   Run Keyword and Expect Error  Username not specified  Login to Mex Console  browser=${browser}  username=${EMPTY}  password=${console_password}
 
 WebUI - User shall not be able to login with username and no password
    [Documentation]
