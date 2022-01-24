@@ -52,6 +52,7 @@ gitlab_username = 'root'
 gitlab_password = 'sandhill'
 
 docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0'
+docker_image_alerts = 'docker-qa.mobiledgex.net/automation_dev_org/images/jmeterplus8086:13.8.6'
 docker_image_developer = 'MobiledgeX'
 docker_image_facedetection = 'docker-qa.mobiledgex.net/mobiledgex/images/facedetection:latest'
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/computervision-gpu:2020-09-22'
