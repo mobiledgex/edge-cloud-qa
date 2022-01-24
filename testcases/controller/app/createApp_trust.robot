@@ -212,6 +212,26 @@ UpdateApp - Error shall be received for updated to non-trusted on trusted cloudl
    #('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
    #('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
 
+# ECQ-4274
+UpdateApp - Error shall be received for updated to non-trusted with trustpolicyexception
+   [Documentation]
+   ...  - update k8s/docker/helm/vm lb/direct app to non-trusted with a trustpolicyexception attached
+   ...  - verify error is created
+
+   [Tags]  TrustPolicy
+
+   [Setup]  Setup Cloudletpool
+
+   [Template]  Fail Update Non-Trusted App With TrustPolicyException
+
+   ('code\=400', 'error\={"message":"Application in use by Trust Policy Exception  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}
+   ('code\=400', 'error\={"message":"Application in use by Trust Policy Exception  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}
+   ('code\=400', 'error\={"message":"Application in use by Trust Policy Exception  image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
+   ('code\=400', 'error\={"message":"Application in use by Trust Policy Exception  image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
+   ('code\=400', 'error\={"message":"Application in use by Trust Policy Exception  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
+   ('code\=400', 'error\={"message":"Application in use by Trust Policy Exception  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
+   ('code\=400', 'error\={"message":"Application in use by Trust Policy Exception  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
+
 # ECQ-3392
 UpdateApp - shall be able to update to trusted with appinst
    [Documentation]
@@ -357,6 +377,12 @@ Setup Trusted Cloudlet
 
    Set Suite Variable  ${app_name}
 
+Setup Cloudletpool
+   Setup
+
+   ${pool}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}
+   Set Suite Variable  ${pool}
+
 Setup RequiredOutboundConnections
    Setup
 
@@ -501,6 +527,24 @@ Fail Update Non-Trusted App on Trusted Cloudlet
    Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}
    ${appinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create App Instance  region=${region}  cloudlet_name=${cloudletname}  operator_org_name=${operator}  cluster_instance_name=autocluster${app_counter}
    ...  ELSE  Create App Instance  region=${region}  operator_org_name=${operator}
+
+   ${std_create}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${appname}_${app_counter}  trusted=${False}
+   Should Contain Any  ${std_create}  ${error_msg}  #${error_msg2}
+
+Fail Update Non-Trusted App With TrustPolicyException
+   [Arguments]  ${error_msg}  &{parms}
+
+   ${app_counter}=  Evaluate  ${app_counter} + 1
+   Set Suite Variable  ${app_counter}
+
+   Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}
+
+   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
+   @{rulelist}=  Create List  ${rule1}
+   Create Trust Policy Exception  region=${region}  app_name=${appname}_${app_counter}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+
+   #${appinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create App Instance  region=${region}  cloudlet_name=${cloudletname}  operator_org_name=${operator}  cluster_instance_name=autocluster${app_counter}
+   #...  ELSE  Create App Instance  region=${region}  operator_org_name=${operator}
 
    ${std_create}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${appname}_${app_counter}  trusted=${False}
    Should Contain Any  ${std_create}  ${error_msg}  #${error_msg2}

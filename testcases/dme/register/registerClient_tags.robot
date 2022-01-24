@@ -26,7 +26,7 @@ RegisterClient - shall be able to send request with tags
 
    ${cloudlet}=  Find Cloudlet       carrier_name=tmus  latitude=31  longitude=-91
    Should Be Equal  ${cloudlet['status']}  Found
-   Should Be Equal  ${cloudlet['fqdn']}    shared.tmocloud-1.tmus.mobiledgex.net
+   Should Be Equal  ${cloudlet['fqdn']}    shared.tmocloud-1-tmus.us.mobiledgex.net
    Should Be True   len('${cloudlet['edge_events_cookie']}') > 100
 
    ${decoded_cookie}=  decoded session cookie
