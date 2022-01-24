@@ -58,5 +58,9 @@ def call(version, project, cycle) {
                     
         sh add_pre + ' --folder webui'
         addTestsToFolder(params.Version, params.Project, cycle, 'webui', 'Automated,WebUI', null)
+
+        sh add_pre + ' --folder frm'
+        addTestsToFolder(params.Version, params.Project, cycle, 'frm', 'Automated,FRM', null)
+
     }
 }

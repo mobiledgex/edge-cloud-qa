@@ -62,6 +62,7 @@ ${tmus_cloudlet_latitude}         35
 ${tmus_cloudlet longitude}        -95
 
 *** Test Cases ***
+# ECQ-963
 FindCloudlet - request shall return gcp with tmus and gcp/azure cloudlet provisioned and requesting gcp
     [Documentation]
     ...  findCloudlet with tmus/gcp/azure provisioned. request gcp. return gcp

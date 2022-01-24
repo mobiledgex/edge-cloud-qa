@@ -23,7 +23,7 @@ pipeline{
         string(name: 'CommitVersion', defaultValue: 'master')
         booleanParam(name: 'RunFailedOnly', defaultValue: false)
         string(name: 'CRMPool')
-        choice(name: 'TestTarget', choices: ['MasterController', 'Controller', 'DME', 'SDK', 'Openstack', 'VCD', 'Vsphere', 'Anthos', 'WebUI', 'Metrics', 'Performance/Security'], description: '')
+        choice(name: 'TestTarget', choices: ['MasterController', 'Controller', 'DME', 'SDK', 'Openstack', 'VCD', 'Vsphere', 'Anthos', 'WebUI', 'Metrics', 'Performance/Security', 'FRM'], description: '')
         string(name: 'NumberParallelExecutions', defaultValue: '1')
         string(name: 'TestTimeout', defaultValue: '60m')
     }
