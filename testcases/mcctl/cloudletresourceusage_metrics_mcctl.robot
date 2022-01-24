@@ -35,6 +35,14 @@ Cloudletusage - mcctl shall be able to request resourceusage metrics
         cloudlet-org=${operator_name_fake}  endage=1s
         cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
 
+        cloudlets:0.cloudlet-org=${operator_name_fake}
+        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudlet-org=${operator_name_fake}
+        cloudlets:0.cloudlet-org=${operator_name_fake}  cloudlets:1.cloudlet-org=${operator_name_openstack}
+        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudlet-org=${operator_name_fake}  cloudlets:1.cloudlet=${cloudlet_name_openstack}  cloudlets:1.cloudlet-org=${operator_name_openstack}
+        cloudlets:0.cloudlet-org=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
+        cloudlets:0.cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
+        cloudlets:0.cloudlet-org=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
+
 # ECQ-4066
 Cloudletusage - mcctl shall be able to request flavorusage metrics
    [Documentation]
@@ -51,6 +59,23 @@ Cloudletusage - mcctl shall be able to request flavorusage metrics
         cloudlet-org=${operator_name_fake}  startage=12h
         cloudlet-org=${operator_name_fake}  endage=1s
         cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
+
+        cloudlets:0.cloudlet-org=${operator_name_fake}
+        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudlet-org=${operator_name_fake}
+        cloudlets:0.cloudlet-org=${operator_name_fake}  cloudlets:1.cloudlet-org=${operator_name_openstack}
+        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudlet-org=${operator_name_fake}  cloudlets:1.cloudlet=${cloudlet_name_openstack}  cloudlets:1.cloudlet-org=${operator_name_openstack}
+        cloudlets:0.cloudlet-org=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
+        cloudlets:0.cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
+        cloudlets:0.cloudlet-org=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
+
+# ECQ-4275
+Cloudletusage - mcctl help shall show
+   [Documentation]
+   ...  - send cloudletusage metrics via mcctl with help for each command
+   ...  - verify help is returned
+
+   [Template]  Show Help
+   ${Empty}
 
 *** Keywords ***
 Setup
@@ -72,7 +97,8 @@ Setup
 
    ${result}=  Run mcctl  metrics cloudletusage region=${region} selector=resourceusage ${parmss}  version=${version}
 
-   Should Be Equal  ${result['data'][0]['Series'][0]['name']}  fake-resource-usage
+   #Should Be Equal  ${result['data'][0]['Series'][0]['name']}  fake-resource-usage
+   Should Contain  ${result['data'][0]['Series'][0]['name']}  -resource-usage
 
  Success Cloudletflavorusage Metrics Via mcctl
    [Arguments]  &{parms}
@@ -85,4 +111,12 @@ Setup
    ${result}=  Run mcctl  metrics cloudletusage region=${region} selector=flavorusage ${parmss}  version=${version}
 
    Should Be Equal  ${result['data'][0]['Series'][0]['name']}  cloudlet-flavor-usage
+
+Show Help
+   [Arguments]  ${parms}
+
+   ${error}=  Run Keyword and Expect Error  *  Run mcctl  metrics cloudletusage ${parms} -h  version=${version}
+
+   ${cmd}=  Run Keyword If  '${parms}' == '${Empty}'  Set Variable  ${Empty}  ELSE  Set Variable  ${parms}
+   Should Contain  ${error}  Usage: mcctl metrics cloudletusage ${cmd}
 
