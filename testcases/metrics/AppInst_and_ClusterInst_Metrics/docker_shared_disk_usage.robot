@@ -68,7 +68,7 @@ Setup
    #${clustername_docker}=  Catenate  SEPARATOR=-  cluster  ${t}  docker
    #${app_name}=     Catenate  SEPARATOR=  ${app_name}  k8s
 
-   ${app_name}=  Set Variable  app-us
+   ${app_name}=  Set Variable  jme-app
    ${clustername_docker}=   Set Variable  dockershared
    ${developer_name}=  Set Variable  testmonitor
 
