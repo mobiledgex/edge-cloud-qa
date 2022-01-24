@@ -122,6 +122,7 @@ testcase_components = [
 //    controller_components + &quot;Billing&quot;,
     controller_components + &quot;VMPool&quot;,
     controller_components + &quot;GPUDriver&quot;,
+    controller_components + &quot;Federation&quot;,
     controller_components + &quot;OperatorReporting&quot;,
 
     ]
