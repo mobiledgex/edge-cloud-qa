@@ -10,14 +10,17 @@
         <string>SlaveNodeVsphere</string>
         <string>SlaveNodeAnthos</string>
         <string>NumberParallelExecutionsVCD</string>
+        <string>MasterControllerFederation</string>
         <string>OpenStackEnv</string>
         <string>DMERest</string>
         <string>CRMPoolAnthos</string>
         <string>NumberParallelExecutionsAnthos</string>
         <string>NumberParallelExecutionsVsphere</string>
+        <string>TestTimeoutMasterController</string>
         <string>SlaveNodeController</string>
         <string>Version</string>
         <string>SlaveNodeConsole</string>
+        <string>TestTimeoutController</string>
         <string>Console</string>
         <string>SlaveNodeScans</string>
         <string>CRMPoolOpenstack</string>
@@ -37,6 +40,8 @@
         <string>BuildDate</string>
         <string>InfluxDB</string>
         <string>RunFailedOnly</string>
+        <string>TestTimeoutDME</string>
+        <string>TestTimeoutSDK</string>
         <string>MasterController</string>
         <string>CommitVersion</string>
       </parameters>
@@ -79,6 +84,11 @@
         <hudson.model.StringParameterDefinition>
           <name>MasterController</name>
           <defaultValue>console-qa.mobiledgex.net:443</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MasterControllerFederation</name>
+          <defaultValue>console-dev.mobiledgex.net:443</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -222,6 +232,26 @@
         <hudson.model.StringParameterDefinition>
           <name>SlaveNodeMetrics</name>
           <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeoutSDK</name>
+          <defaultValue>5m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeoutController</name>
+          <defaultValue>4m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeoutMasterController</name>
+          <defaultValue>4m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeoutDME</name>
+          <defaultValue>2m</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>

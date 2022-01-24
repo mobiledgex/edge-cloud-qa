@@ -20,7 +20,7 @@ ${vgpu_resource_name}  myvgpuresource
 ${gpu_resource_name}  mygpuresrouce
 
 ${cloudlet_name_openstack_vgpu}  automationDusseldorfCloudlet
-${operator_name_openstack}  TDG
+${operator_name}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
@@ -42,7 +42,7 @@ VGPU - shall be able to deploy k8s shared NVidia VGPU app on KVM Openstack
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_vgpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=kubernetes  developer_org_name=MobiledgeX-Samples
+    ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_vgpu}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=kubernetes  developer_org_name=MobiledgeX-Samples
     ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
     ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name_default}
 
@@ -64,7 +64,7 @@ VGPU - shall be able to deploy k8s shared NVidia VGPU app on KVM Openstack
     Node Should Not Have GPU  root_loadbalancer=${rootlb}  node=${server_info_master[0]['Networks']}  type=VGPU
 
     Create App  region=${region}  image_path=${k8s_gpu}  access_ports=tcp:8008:tls,tcp:8011  image_type=ImageTypeDocker  deployment=kubernetes  skip_hc_ports=tcp:8011  developer_org_name=MobiledgeX-Samples
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_vgpu}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_vgpu}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_default}  developer_org_name=MobiledgeX-Samples
 
     Register Client  developer_org_name=MobiledgeX-Samples
     ${cloudlet}=  Find Cloudlet	 latitude=${latitude}  longitude=${longitude}
@@ -94,14 +94,14 @@ VGPU - shall be able to deploy k8s shared NVidia VGPU app on KVM Openstack
 Setup
     Create Flavor  region=${region}  disk=80  optional_resources=gpu=resources:VGPU:1
 
-    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_vgpu}  operator_org_name=${operator_name_openstack}  mapping=gpu=${vgpu_resource_name}
-    #Add Resource Tag  region=${region}  resource_name=${vgpu_resource_name}  operator_org_name=${operator_name_openstack}  tags=resources=VGPU=1
+    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_vgpu}  operator_org_name=${operator_name}  mapping=gpu=${vgpu_resource_name}
+    #Add Resource Tag  region=${region}  resource_name=${vgpu_resource_name}  operator_org_name=${operator_name}  tags=resources=VGPU=1
 
-    ${cloudlet_show}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet_name_openstack_vgpu}  operator_org_name=${operator_name_openstack}
+    ${cloudlet_show}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet_name_openstack_vgpu}  operator_org_name=${operator_name}
 
-    Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_vgpu}  gpudriver_name=nvidia-450v  gpudriver_org=${operator_name_openstack}
+    Update Cloudlet  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name_openstack_vgpu}  gpudriver_name=nvidia-450v  gpudriver_org=${operator_name}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_vgpu}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_vgpu}  ${operator_name}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_vgpu}
@@ -111,5 +111,5 @@ Setup
 
 Teardown
     Cleanup Provisioning
-    Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_vgpu}  gpudriver_name=nvidia-450  gpudriver_org=${operator_name_openstack}
-    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_vgpu}  operator_org_name=${operator_name_openstack}  mapping=gpu=${gpu_resource_name}
+    Update Cloudlet  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name_openstack_vgpu}  gpudriver_name=nvidia-450  gpudriver_org=${operator_name}
+    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_vgpu}  operator_org_name=${operator_name}  mapping=gpu=${gpu_resource_name}

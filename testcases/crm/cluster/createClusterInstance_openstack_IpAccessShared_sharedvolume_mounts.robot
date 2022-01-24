@@ -42,7 +42,7 @@ Shall be able to configure IpAccessShared k8s cluster/app with shared volume mou
     ...  - deploy IpAccessShared k8s cluster and app with manifest with shared volume mounts
     ...  - verify mounts are persisted over pod restart
 
-    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
