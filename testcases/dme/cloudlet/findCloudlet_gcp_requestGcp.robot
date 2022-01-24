@@ -62,6 +62,7 @@ ${dmuus_cloudlet_latitude}         35
 ${dmuus_cloudlet longitude}        -95
 
 *** Test Cases ***
+# ECQ-963
 FindCloudlet - request shall return gcp with dmuus and gcp/azure cloudlet provisioned and requesting gcp
     [Documentation]
     ...  findCloudlet with dmuus/gcp/azure provisioned. request gcp. return gcp
