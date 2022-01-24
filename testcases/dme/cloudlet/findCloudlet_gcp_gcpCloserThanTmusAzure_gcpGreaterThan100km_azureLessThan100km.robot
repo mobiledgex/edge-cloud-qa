@@ -63,6 +63,7 @@ ${tmus_cloudlet_latitude}	  35
 ${tmus_cloudlet longitude}	  -95
 
 *** Test Cases ***
+# ECQ-962
 FindCloudlet - request shall return gcp with tmus and gcp/azure cloudlet provisioned and tmus farther and > 100km than gcp and < 100km than azure and gcp closer than azure
     [Documentation]
     ...  findCloudlet with tmus/gcp/azure provisioned. tmus farther than gcp and azure. tmus > 100km than gcp. tmus < 100km than azure. gcp closer than azure. return gcp
