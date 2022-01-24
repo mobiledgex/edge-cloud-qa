@@ -1,0 +1,134 @@
+currentBuild.displayName = cycle + '_' + testtarget
+
+automated_component = "Automated"
+crm_components = [automated_component, "CRM"]
+
+testcase_components1 = [
+    crm_components + "Cloudlet",
+    crm_components + "ClusterInst",
+    crm_components + "AppInst",
+    crm_components + "RunCommand",
+    crm_components + "ShowLogs",
+    crm_components + "RunDebug",
+    crm_components + "AccessCloudlet",
+    crm_components + "AlertReceiver",
+    crm_components + "GPU",
+    crm_components + "VMPool",
+    crm_components + "AutoProvisioning",
+]
+
+testcase_components2 = [
+    crm_components + "CloudletMaintenance",
+]
+
+node_name = 'notset'
+if(testtarget == 'Anthos') {
+    echo "testtarget is Anthos"
+    testcase_components1 = testcase_components1.minus([crm_components + "ClusterInst"])
+    testcase_components1 = testcase_components1.minus([crm_components + "GPU"])
+    testcase_components1 = testcase_components1.minus([crm_components + "VMPool"])
+    testcase_components1 = testcase_components1.minus([crm_components + "AutoProvisioning"])
+    
+    node_name = 'jenkinsSlave1'
+} else if(testtarget == 'Vsphere') {
+    echo "testtarget is Vsphere"
+    testcase_components1 = testcase_components1.minus([crm_components + "GPU"])
+    testcase_components1 = testcase_components1.minus([crm_components + "VMPool"])
+    testcase_components1 = testcase_components1.minus([crm_components + "AutoProvisioning"])
+
+    node_name = 'jenkinsSlave2'
+} else if(testtarget == 'VCD') {
+    echo "testtarget is VCD"
+    testcase_components1 = testcase_components1.minus([crm_components + "GPU"])
+    testcase_components1 = testcase_components1.minus([crm_components + "VMPool"])
+    testcase_components1 = testcase_components1.minus([crm_components + "AutoProvisioning"])
+
+    node_name = 'jenkinsGcpSlave2'
+} else if(testtarget == 'Openstack') {
+    echo "testtarget is Openstack"
+    node_name = 'jenkinsGcpSlave1'
+} else {
+    echo "testtarget is something else:${testtarget}"
+    node_name = 'jenkinsGcpSlave1'
+}
+
+pipeline{
+    agent { label node_name }
+    parameters {
+        string(name: 'Cycle', defaultValue: '2021-11-05_CirrusR3.1')
+        string(name: 'Project', defaultValue: 'ECQ')
+        string(name: 'MasterController', defaultValue: 'console-qa.mobiledgex.net:443')
+        string(name: 'Controller', defaultValue: 'mexplat-qa-us.ctrl.mobiledgex.net:55001')
+        string(name: 'DME', defaultValue: 'us-qa.dme.mobiledgex.net:50051')
+        string(name: 'DMERest', defaultValue: 'us-qa.dme.mobiledgex.net:38001')
+        string(name: 'VariableFile', defaultValue: 'automation_variables.py')
+        string(name: 'InfluxDB', defaultValue: 'notset')
+        string(name: 'OpenStackEnv', defaultValue: 'notset')
+        string(name: 'NumberParallelExecutions', defaultValue: '2')
+        string(name: 'CommitVersion', defaultValue: 'master')
+        booleanParam(name: 'RunFailedOnly', defaultValue: false)
+        string(name: 'CRMPool', defaultValue: '{"cloudlet_name_crm":[{"cloudlet":"qa-anthos","operator":"packet","region":"US"}]}')
+        choice(name: 'TestTarget', choices: ['Openstack', 'VCD', 'Vsphere', 'Anthos'], description: '')
+    }
+
+    stages {
+        stage("execute tests 1") {
+            steps {
+                script {
+                    builds = [:]
+                    testcase_components1.eachWithIndex { value, index->
+                        echo "${value}"
+                        builds["${value[-1]}"] = {
+                            build job: 'runTestcases', parameters: [
+                                string(name: 'SlaveNode', value: node_name),
+                                string(name: 'TestTarget', value: params.TestTarget),
+                                string(name: 'Components', value: value.join(',')), 
+                                string(name: 'Project', value: params.Project), 
+                                string(name: 'Cycle', value: params.Cycle), 
+                                string(name: 'Controller', value: params.Controller), 
+                                string(name: 'MasterController', value: params.MasterController), 
+                                string(name: 'VariableFile', value: params.VariableFile), 
+                                string(name: 'CRMPool', value: params.CRMPool), 
+                                string(name: 'NumberParallelExecutions', value: params.NumberParallelExecutions),
+                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
+                        }
+                    }
+                    catchError {
+                        parallel builds
+                    }
+                }
+            }
+            post {
+                failure { echo "run tests1 failed"}
+            }
+        }
+   
+        stage("execute tests 2") {
+            steps {
+                script{
+                    builds = [:]
+                    testcase_components2.eachWithIndex { value, index->
+                        echo "${value}"
+                        builds["${value[-1]}"] = {
+                            build job: 'runTestcases', parameters: [
+                                string(name: 'SlaveNode', value: node_name),
+                                string(name: 'TestTarget', value: testtarget),
+                                string(name: 'Components', value: value.join(',')), 
+                                string(name: 'Project', value: project), 
+                                string(name: 'Cycle', value: cycle), 
+                                string(name: 'Controller', value: controller), 
+                                string(name: 'MasterController', value: mastercontroller), 
+                                string(name: 'VariableFile', value: variablefile), 
+                                string(name: 'CRMPool', value: params.CRMPool),
+                                booleanParam(name: 'RunFailedOnly', value: runfailedonly)]
+                        }
+                    }
+                    parallel builds
+                }
+            }
+            post {
+                failure { echo "run tests2 failed"}
+            }
+        }
+    }
+}
