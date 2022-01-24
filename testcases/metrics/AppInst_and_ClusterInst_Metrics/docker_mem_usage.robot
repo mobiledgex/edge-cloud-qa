@@ -72,7 +72,7 @@ Setup
    #${clustername_docker}=   Set Variable  cluster-1582226010-873146-docker
    #${developer_name}=  Set Variable  mobiledgex
 
-   ${app_name}=  Set Variable  app-us
+   ${app_name}=  Set Variable  jme-app
    ${clustername_docker}=   Set Variable  dockermonitoring
    ${developer_name}=  Set Variable  testmonitor
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
