@@ -210,7 +210,7 @@ class MexConsole() :
 
         if self.login_page.is_alert_box_present():
             alert_text = self.login_page.get_alert_box_text()
-            logging.error(f'alert present box present with text={alert_text}')
+            logging.warning(f'alert present box present with text={alert_text}')
             self.take_screenshot('loginpage_alert')
             raise Exception(alert_text)
         else:
