@@ -91,7 +91,7 @@ Setup
    #${clustername_k8sdedicated}=   Set Variable  cluster-1582226010-873146-k8sdedicated
    #${developer_name}=  Set Variable  mobiledgex
 
-   ${app_name}=  Set Variable  app-us-k8s
+   ${app_name}=  Set Variable  jme-k8s
    ${clustername_k8sdedicated}=   Set Variable  k8smonitoring
    ${developer_name}=  Set Variable  testmonitor
 

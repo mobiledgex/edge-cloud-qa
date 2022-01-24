@@ -78,7 +78,7 @@ k8s Dedicated AppInstMetrics - last 5 MEMORY usage metrics on openstack
 *** Keywords ***
 Setup
 
-   ${app_name}=  Set Variable  app-us-k8s
+   ${app_name}=  Set Variable  jme-k8s
    ${clustername_k8sdedicated}=   Set Variable  k8smonitoring
    ${developer_name}=  Set Variable  testmonitor
 
