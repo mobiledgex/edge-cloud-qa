@@ -100,7 +100,8 @@ FindFlavorMatch - mcctl shall handle findflavormatch
    ${show}=  Run mcctl  cloudlet findflavormatch region=${region} cloudlet=tmocloud-1 cloudlet-org=tmus flavor=automation_api_flavor  version=${version}
    Should Be Equal  ${show['key']['name']}  tmocloud-1
    Should Be Equal  ${show['key']['organization']}  tmus
-   Should Be Equal  ${show['flavor_name']}  x1.small
+   #Should Be Equal  ${show['flavor_name']}  x1.small
+   Should Be Equal  ${show['flavor_name']}  x1.tiny
 
    ${error1}=  Run Keyword And Expect Error  *  Run mcctl  cloudlet findflavormatch region=${region} cloudlet-org=tmus  version=${version}
    Should Contain  ${error1}  missing required args

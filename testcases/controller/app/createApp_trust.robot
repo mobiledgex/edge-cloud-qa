@@ -4,6 +4,7 @@ Documentation   Create App with Trusted Parm
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
 Library  DateTime
+Library  String
 
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
@@ -36,6 +37,30 @@ CreateApp - User shall be able to create a k8s/docker/helm/vm loadbalancer/direc
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${False}
    #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}
    #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}
+
+# ECQ-4109
+CreateApp - Error shall be received for invalid requiredoutboundconnections parms
+   [Documentation]
+   ...  - create app with invalid connections parms
+   ...  - verify error is created
+
+   [Tags]  TrustPolicy
+
+   [Template]  Fail Create Outbound App
+
+   ('code\=400', 'error\={"message":"Invalid CIDR address: 1.1.1/24"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,1001,20013,1.1.1/24
+   ('code\=400', 'error\={"message":"Invalid CIDR address: 1.1.1.24"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,1001,20013,1.1.1.24
+   ('code\=400', 'error\={"message":"Invalid CIDR address: x"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,1001,20013,x
+   ('code\=400', 'error\={"message":"Min port range: 1001 cannot be higher than max: 1000"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,1001,1000,1.1.1.1/24
+   ('code\=400', 'error\={"message":"Invalid min port: 0"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,0,1000,1.1.1.1/24
+   Unmarshal error: expected uint32, but got string for field \\\\"App.required_outbound_connections.port_range_min\\\\"   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,x,1000,1.1.1.1/24
+   Unmarshal error: expected uint32, but got string for field \\\\"App.required_outbound_connections.port_range_max\\\\"   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,1,x1000,1.1.1.1/24
+   ('code\=400', 'error\={"message":"Protocol must be one of: (tcp,udp,icmp)"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=dp,1001,20013,1.1.1.1/24
+
+   Unmarshal error: expected uint32, but got string for field \\\\"App.required_outbound_connections.port_range_min\\\\"   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,,20013,1.1.1.1/24
+   Unmarshal error: expected uint32, but got string for field \\\\"App.required_outbound_connections.port_range_max\\\\"   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,1,,1.1.1.1/24
+   ('code\=400', 'error\={"message":"Invalid CIDR address: "}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,1001,20013,
+   ('code\=400', 'error\={"message":"Protocol must be one of: (tcp,udp,icmp)"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=,1001,20013,1.1.1.1/24
 
 # ECQ-3084
 CreateApp - Error shall be received for invalid trusted parm
@@ -408,6 +433,16 @@ Setup RequiredOutboundConnections
    Set Suite Variable  ${tcp1_rulelist}
    Set Suite Variable  ${udp1_rulelist}
    Set Suite Variable  ${udptcpicmp_rulelist}
+
+Fail Create Outbound App
+   [Arguments]  ${error_msg}  &{parms}
+
+   ${c}=  Split String  ${parms['required_outbound_connections']}  ,
+   &{rule1}=  Create Dictionary  protocol=${c[0]}  port_range_minimum=${c[1]}   port_range_maximum=${c[2]}  remote_cidr=${c[3]}
+   ${clist}=  Create List  ${rule1}
+
+   ${std_create}=  Run Keyword and Expect Error  *  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${clist}
+   Should Contain Any  ${std_create}  ${error_msg}  #${error_msg2}
 
 Update Trusted App
    [Arguments]  &{parms}
