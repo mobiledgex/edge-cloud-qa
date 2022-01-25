@@ -29,7 +29,7 @@ ${region}=  US
 
 #${cloudlet_name_openstack_metrics}=   automationDusseldorfCloudlet
 #${operator}=                       TDG
-#${clustername_k8sdedicated}=   k8smonitoring
+#${clustername_k8sdedicated}=   k8sdedicated
 #${developer_name}=  testmonitor
 #${app_name}=  k8sapp
 #
@@ -80,7 +80,7 @@ k8s Dedicated AppInstMetrics - last 5 DISK usage metrics on openstack
 Setup
 
    ${app_name}=  Set Variable  jme-k8s
-   ${clustername_k8sdedicated}=   Set Variable  k8smonitoring
+   ${clustername_k8sdedicated}=   Set Variable  k8sdedicated
    ${developer_name}=  Set Variable  testmonitor
 #   ${t}=  Get Default Time Stamp
 #   ${developer_name}=  Get Default Developer Name
