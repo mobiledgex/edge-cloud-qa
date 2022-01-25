@@ -17,7 +17,7 @@ Test Setup       Setup
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   packetcloudlet
 ${operator}=                       packet
-${clustername_k8s}=   k8smonitoring
+${clustername_k8s}=   k8sdedicated
 ${developer_name}=  testmonitor
 
 #${username_admin}=  testuser
@@ -69,7 +69,7 @@ Setup
    ${timestamp}=  Get Default Time Stamp
    ${developer_name}=  Get Default Developer Name
    #${clustername}=  Get Default Cluster Name
-   ${clustername_k8dedicated}=  set variable  k8smonitoring
+   ${clustername_k8dedicated}=  set variable  k8sdedicated
    ${developer_name}=  Set Variable  testmonitor
    #${clustername_k8dedicated}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -k8sdedicated
 
