@@ -25,6 +25,12 @@ Web UI - User shall be able to update a Kubernetes App for EU Region with Androi
 
     MexConsole.Update App  android_package=${package}
 
+    ${details}=  Open App Details
+    Log to Console  ${details}
+    Should Be Equal   ${details['Android Package Name']}   ${package}
+
+    Close Details
+
     MexConsole.Delete App  click_previous_page=off  change_rows_per_page=True
 
     App Should Not Exist
