@@ -73,7 +73,7 @@ Setup
    #${developer_name}=  Set Variable  mobiledgex
 
    ${app_name}=  Set Variable  jme-app
-   ${clustername_docker}=   Set Variable  dockermonitoring
+   ${clustername_docker}=   Set Variable  dockerdedicated
    ${developer_name}=  Set Variable  testmonitor
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
    ${app_name_influx}=  Convert To Lowercase  ${app_name}

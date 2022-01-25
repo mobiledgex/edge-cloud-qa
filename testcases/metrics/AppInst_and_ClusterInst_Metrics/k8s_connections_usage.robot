@@ -17,7 +17,7 @@ Suite Setup       Setup
 
 ${cloudlet_name_openstack_metrics}=   packetcloudlet
 ${operator}=                       packet
-${clustername_k8sdedicated}=   k8smonitoring
+${clustername_k8sdedicated}=   k8sdedicated
 ${developer_name}=  testmonitor
 ${app_name}=  jme-k8s
 
