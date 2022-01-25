@@ -44,7 +44,7 @@ ${username}=  testuser
 ${password}=  testuser
 ${orgname}=   testmonitor
 
-${port}=  8080
+${port}=  8086
 
 ${region}=  US
 
