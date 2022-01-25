@@ -107,167 +107,46 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices>
-            <string>Openstack</string>
-            <string>VCD</string>
-            <string>Vsphere</string>
-            <string>Anthos</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>Openstack</string>
+              <string>VCD</string>
+              <string>Vsphere</string>
+              <string>Anthos</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
-    <script>currentBuild.displayName = cycle + &apos;_&apos; + testtarget
-//slackurl = &apos;https://mobiledgex.slack.com/services/hooks/jenkins-ci/&apos;
-//slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
-//slackchannel = &apos;#qa-automation&apos;
-
-automated_component = &quot;Automated&quot;
-crm_components = [automated_component, &quot;CRM&quot;]
-
-testcase_components1 = [
-    crm_components + &quot;Cloudlet&quot;,
-    crm_components + &quot;ClusterInst&quot;,
-    crm_components + &quot;AppInst&quot;,
-    crm_components + &quot;RunCommand&quot;,
-    crm_components + &quot;ShowLogs&quot;,
-    crm_components + &quot;RunDebug&quot;,
-    crm_components + &quot;AccessCloudlet&quot;,
-    crm_components + &quot;AlertReceiver&quot;,
-    crm_components + &quot;GPU&quot;,
-    crm_components + &quot;VMPool&quot;,
-    crm_components + &quot;AutoProvisioning&quot;,
-   
-]
-
-testcase_components2 = [
-    crm_components + &quot;CloudletMaintenance&quot;,
-]
-
-node_name = &apos;notset&apos;
-if(testtarget == &apos;Anthos&apos;) {
-    echo &quot;testtarget is Anthos&quot;
-    testcase_components1 = testcase_components1.minus([crm_components + &quot;ClusterInst&quot;])
-    testcase_components1 = testcase_components1.minus([crm_components + &quot;GPU&quot;])
-    testcase_components1 = testcase_components1.minus([crm_components + &quot;VMPool&quot;])
-    testcase_components1 = testcase_components1.minus([crm_components + &quot;AutoProvisioning&quot;])
-    
-    node_name = &apos;jenkinsSlave1&apos;
-} else if(testtarget == &apos;Vsphere&apos;) {
-    echo &quot;testtarget is Vsphere&quot;
-    testcase_components1 = testcase_components1.minus([crm_components + &quot;GPU&quot;])
-    testcase_components1 = testcase_components1.minus([crm_components + &quot;VMPool&quot;])
-    testcase_components1 = testcase_components1.minus([crm_components + &quot;AutoProvisioning&quot;])
-
-    node_name = &apos;jenkinsSlave2&apos;
-} else if(testtarget == &apos;VCD&apos;) {
-    echo &quot;testtarget is VCD&quot;
-    testcase_components1 = testcase_components1.minus([crm_components + &quot;GPU&quot;])
-    testcase_components1 = testcase_components1.minus([crm_components + &quot;VMPool&quot;])
-    testcase_components1 = testcase_components1.minus([crm_components + &quot;AutoProvisioning&quot;])
-
-    node_name = &apos;jenkinsGcpSlave2&apos;
-} else if(testtarget == &apos;Openstack&apos;) {
-    echo &quot;testtarget is Openstack&quot;
-    node_name = &apos;jenkinsGcpSlave1&apos;
-} else {
-    echo &quot;testtarget is something else:${testtarget}&quot;
-    node_name = &apos;jenkinsGcpSlave1&apos;
-}
-
-pipeline{
-    agent { label node_name }
-    parameters {
-//        string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
-        string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
-        string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
-        string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
-        string(name: &apos;Controller&apos;, defaultValue: &apos;mexplat-qa-us.ctrl.mobiledgex.net:55001&apos;)
-        string(name: &apos;DME&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:50051&apos;)
-        string(name: &apos;DMERest&apos;, defaultValue: &apos;us-qa.dme.mobiledgex.net:38001&apos;)
-        string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
-        string(name: &apos;InfluxDB&apos;, defaultValue: &apos;notset&apos;)
-        string(name: &apos;OpenStackEnv&apos;, defaultValue: &apos;notset&apos;)
-        string(name: &apos;NumberParallelExecutions&apos;, defaultValue: &apos;2&apos;)
-        string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
-        booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        //string(name: &apos;CRMPoolAnthos&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
-        string(name: &apos;CRMPool&apos;, defaultValue: &apos;{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}&apos;)
-        choice(name: &apos;TestTarget&apos;, choices: [&apos;Openstack&apos;, &apos;VCD&apos;, &apos;Vsphere&apos;, &apos;Anthos&apos;], description: &apos;&apos;)
-        //string(name: &apos;Area&apos;, defaultValue: &apos;flavor&apos;)
-    }
-
-    stages {
-        stage(&quot;execute tests 1&quot;) {
-            steps {
-                //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting ${testtarget} tests&quot;
-
-                script {
-                    builds = [:]
-                    testcase_components1.eachWithIndex { value, index-&gt;
-                        echo &quot;${value}&quot;
-                        builds[&quot;${value[-1]}&quot;] = {
-                            build job: &apos;runTestcases&apos;, parameters: [
-                                string(name: &apos;SlaveNode&apos;, value: node_name),
-                                string(name: &apos;TestTarget&apos;, value: params.TestTarget),
-                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
-                                string(name: &apos;Project&apos;, value: params.Project), 
-                                string(name: &apos;Cycle&apos;, value: params.Cycle), 
-                                string(name: &apos;Controller&apos;, value: params.Controller), 
-                                string(name: &apos;MasterController&apos;, value: params.MasterController), 
-                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
-                                //string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
-                                string(name: &apos;CRMPool&apos;, value: params.CRMPool), 
-                                string(name: &apos;NumberParallelExecutions&apos;, value: params.NumberParallelExecutions),
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
-                        }
-                    }
-                    catchError {
-                        parallel builds
-                    }
-                }
-            }
-            post {
-                failure { echo &quot;run tests1 failed&quot;}
-            }
-        }
-   
-        stage(&quot;execute tests 2&quot;) {
-            steps {
-                script{
-                    builds = [:]
-                    testcase_components2.eachWithIndex { value, index-&gt;
-                        echo &quot;${value}&quot;
-                        builds[&quot;${value[-1]}&quot;] = {
-                            build job: &apos;runTestcases&apos;, parameters: [
-                                string(name: &apos;SlaveNode&apos;, value: node_name),
-                                string(name: &apos;TestTarget&apos;, value: testtarget),
-                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
-                                string(name: &apos;Project&apos;, value: project), 
-                                string(name: &apos;Cycle&apos;, value: cycle), 
-                                string(name: &apos;Controller&apos;, value: controller), 
-                                string(name: &apos;MasterController&apos;, value: mastercontroller), 
-                                string(name: &apos;VariableFile&apos;, value: variablefile), 
-                                //string(name: &apos;CRMPoolAnthos&apos;, value: params.CRMPoolAnthos), 
-                                string(name: &apos;CRMPool&apos;, value: params.CRMPool),
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: runfailedonly)]
-                        }
-                    }
-                    parallel builds
-                }
-            }
-            post {
-                failure { echo &quot;run tests2 failed&quot;}
-            }
-        }
-       
-        
-    }
-
-}
-</script>
-    <sandbox>true</sandbox>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@4.10.0">
+      <configVersion>2</configVersion>
+      <userRemoteConfigs>
+        <hudson.plugins.git.UserRemoteConfig>
+          <url>https://github.com/mobiledgex/edge-cloud-qa.git</url>
+          <credentialsId>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</credentialsId>
+        </hudson.plugins.git.UserRemoteConfig>
+      </userRemoteConfigs>
+      <branches>
+        <hudson.plugins.git.BranchSpec>
+          <name>*/master</name>
+        </hudson.plugins.git.BranchSpec>
+      </branches>
+      <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+      <submoduleCfg class="empty-list"/>
+      <extensions>
+        <hudson.plugins.git.extensions.impl.SparseCheckoutPaths>
+          <sparseCheckoutPaths>
+            <hudson.plugins.git.extensions.impl.SparseCheckoutPath>
+              <path>jenkins</path>
+            </hudson.plugins.git.extensions.impl.SparseCheckoutPath>
+          </sparseCheckoutPaths>
+        </hudson.plugins.git.extensions.impl.SparseCheckoutPaths>
+      </extensions>
+    </scm>
+    <scriptPath>jenkins/runCrmTestcases_declarative.jenkinsfile</scriptPath>
+    <lightweight>true</lightweight>
   </definition>
   <triggers/>
   <disabled>false</disabled>
