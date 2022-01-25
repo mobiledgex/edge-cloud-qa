@@ -12,7 +12,7 @@ Suite Setup       Setup
 
 ${cloudlet_name_openstack_metrics}=   packetcloudlet
 ${operator}=                       packet
-${clustername_k8sdedicated}=   k8smonitoring
+${clustername_k8sdedicated}=   k8sdedicated
 ${developer_name}=  testmonitor
 ${app_name}=  jme-k8s
 
@@ -29,7 +29,7 @@ ${region}=  US
 
 #${cloudlet_name_openstack_metrics}=   automationParadiseCloudlet
 #${operator}=                       GDDT
-#${clustername_k8sdedicated}=   k8smonitoring
+#${clustername_k8sdedicated}=   k8sdedicated
 #${developer_name}=  testmonitor
 #${app_name}=  k8sapp
 #
@@ -92,11 +92,11 @@ Setup
    #${developer_name}=  Set Variable  mobiledgex
 
    ${app_name}=  Set Variable  jme-k8s
-   ${clustername_k8sdedicated}=   Set Variable  k8smonitoring
+   ${clustername_k8sdedicated}=   Set Variable  k8sdedicated
    ${developer_name}=  Set Variable  testmonitor
 
    ${appinst}=  Show App Instances  region=${region}  app_name=app-us-k8s
-   ${clustername_k8sdedicated}=   Set Variable  k8smonitoring
+   ${clustername_k8sdedicated}=   Set Variable  k8sdedicated
    ${developer_name}=  Set Variable  testmonitor
    ${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
    ${app_name_influx}=  Convert To Lowercase  ${app_name}
