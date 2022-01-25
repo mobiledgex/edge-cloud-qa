@@ -1517,10 +1517,10 @@ class MexConsole() :
 
         logging.info(f'Updating app app_name={app_name} developer_name={developer_name} app_version={app_version}')
 
-        self.change_number_of_rows()
+        #self.change_number_of_rows()
         self.apps_page.wait_for_app(region=region, org_name=developer_name, app_name=app_name, app_version=app_version, deployment_type=deployment_type, number_of_pages=number_of_pages)
 
-        if self.apps_page.update_app(app_name=app_name, access_ports=access_ports, scale_with_cluster=scale_with_cluster, auth_public_key=auth_public_key, envvar=envvar, official_fqdn=official_fqdn, android_package=android_package, trusted=trusted, skip_hc=skip_hc, outbound_connections=outbound_connections):
+        if self.apps_page.update_app(app_name=app_name, access_ports=access_ports, scale_with_cluster=scale_with_cluster, auth_public_key=auth_public_key, envvar=envvar, official_fqdn=official_fqdn, android_package=android_package, trusted=trusted, skip_hc=skip_hc, outbound_connections=outbound_connections, app_version=app_version):
             logging.info('Updated app')
         else:
             raise Exception('did NOT update')
@@ -1726,8 +1726,6 @@ class MexConsole() :
             raise Exception('Success alert box not found')
 
     def delete_app(self, region=None, app_name=None, app_version=None, developer_name=None, deployment_type=None, number_of_pages=2, click_previous_page=None, change_rows_per_page=False):
-        if change_rows_per_page:
-            self.change_number_of_rows()
         self.take_screenshot('delete_app_pre')
         
         if region is None: region = self._region
