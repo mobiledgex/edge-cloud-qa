@@ -53,7 +53,7 @@ ${acx_util_val}=  21
 
 *** Test Cases ***
    
-#ECQ-XXX1
+#ECQ-4287
 Set mc settings alertpolicymintriggertime to 30s
    [Documentation]
    ...  - Setting for mc alertpolicytrigger can be updated
@@ -62,7 +62,7 @@ Set mc settings alertpolicymintriggertime to 30s
    Log To Console  ${\n}Resetting mc trigger time policy to 30s
    Run Keyword  Reset Trigger Time Policy 30s
 
-#ECQ-XXX2
+#ECQ-4286
 Create new alert policies for cpu mem disk and active-connections
    [Documentation]
    ...  - User shall be able to create new alert policies 
@@ -73,7 +73,7 @@ Create new alert policies for cpu mem disk and active-connections
    Log To Console  ${\n} Creating app and alert  policies
    Run Keyword  Create Policies
 
-#ECQ-XXX3
+#ECQ-4289
 Update existing alert policies with new values
    [Documentation]
    ...  - User shall be able to update existing alertpolicy values
@@ -83,7 +83,7 @@ Update existing alert policies with new values
    Log To Console  ${\n}Updating policies severity to warning and trigger time to 32s
    Run Keyword  Update Policies Severity Warning Trigger32
 
-#ECQ-XXX4
+#ECQ-4290
 Add alert policies to k8s app
    [Documentation]
    ...  - User shall be able to add alert policies to an app
@@ -92,7 +92,7 @@ Add alert policies to k8s app
    Log To Console  ${\n}Adding policies To app
    Run Keyword  Add Policies To App
 
-#ECQ-XXX5
+#ECQ-4291
 Show alert policies added to k8s app
    [Documentation]
    ...  - User shall be able to view existing alert policies added to an app
@@ -100,7 +100,7 @@ Show alert policies added to k8s app
 
    Log To Console  ${\n} Showing alert policies from app
    Run Keyword  Show Alert Policies From App
-#ECQ-XXX6
+#ECQ-4292
 Remove alert policies from app
    [Documentation]
    ...  - User shall be able to Remove alert policies from an app
@@ -108,7 +108,7 @@ Remove alert policies from app
 
    Log To Console  ${\n}Removing policies from app
    Run Keyword  Remove Alert Policies From App
-#ECQ-XXX7
+#ECQ-4293
 Add back alert policies to app that have been previously removed
    [Documentation]
    ...  - User shall be able to re-add previously removed alert policies back to app
@@ -116,8 +116,8 @@ Add back alert policies to app that have been previously removed
 
    Log To Console  ${\n}Adding exising policies to once removed policies on app
    Run Keyword  Add Policies To App
-#ECQ-XXX8
-Remove alert policers from app delete alert polices k8s app and flavor
+#ECQ-4294
+Remove alert polices from app delete alert polices plus delete k8s app and flavor
    [Documentation]
    ...  - User shall be able to Remove alert policies and delete app
    ...  - Verify the removal of alert policies from an app
