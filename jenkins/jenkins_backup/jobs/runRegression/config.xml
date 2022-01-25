@@ -7,8 +7,10 @@
       <triggers/>
       <parameters>
         <string>SlaveNodeMetrics</string>
+        <string>SlaveNodeFRM</string>
         <string>SlaveNodeVsphere</string>
         <string>SlaveNodeAnthos</string>
+        <string>TestTimeoutFRM</string>
         <string>NumberParallelExecutionsVCD</string>
         <string>MasterControllerFederation</string>
         <string>OpenStackEnv</string>
@@ -235,6 +237,11 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeFRM</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>TestTimeoutSDK</name>
           <defaultValue>5m</defaultValue>
           <trim>false</trim>
@@ -251,6 +258,11 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>TestTimeoutDME</name>
+          <defaultValue>2m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeoutFRM</name>
           <defaultValue>2m</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
