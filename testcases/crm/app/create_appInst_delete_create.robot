@@ -23,6 +23,7 @@ ${mobiledgex_domain}  mobiledgex.net
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
 
+${region}    US
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
