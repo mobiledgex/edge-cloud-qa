@@ -98,7 +98,7 @@ ${firing_totals}=     0
 
 *** Test Cases ***
 
-#test01
+#ECQ-4276
 Create Alert Receiver for alertpolicy tests
    [Documentation]
    ...  - Create an alert receiver so alerts can be seen
@@ -106,7 +106,7 @@ Create Alert Receiver for alertpolicy tests
    Log To Console  ${\n}Create Custom Alert Receiver
    Run Keyword  Create Custom Alert Receiver
 
-#test02
+#ECQ-4277
 Create new alert policies for cpu mem disk and active-connections
    [Documentation]
    ...  - Create new alert policies 
@@ -114,7 +114,7 @@ Create new alert policies for cpu mem disk and active-connections
    Log To Console  ${\n} Create Policies
    Run Keyword  Create Policies
 
-#test03
+#ECQ-4278
 Update mc settings alertpolicymintriggertime to 3s
    [Documentation]
    ...  - Set alertpolicymintriggertime to 3s
@@ -122,41 +122,43 @@ Update mc settings alertpolicymintriggertime to 3s
    Log To Console  ${\n}Set Trigger Time Policy 3s
    Run Keyword  Set Trigger Time Policy 3s
 
-#test04
+#ECQ-4279
 Update existing policies with new values
    [Documentation]
-   ...  - Update alertpolicy values
+   ...  - Update alertpolicy values for trigger severity and utilization
 
    Log To Console  ${\n}Update Policies Severity Warning Trigger3s
    Run Keyword  Update Policies Severity Warning Trigger3s
 
-#test05
+#ECQ-4280
 Add alert policies to k8s app so appinst will trigger alerts
    [Documentation]
-   ...  - Add cpu mem dsk and acx policy to app
+   ...  - Add cpu mem disk and active-connections policies to app
 
    Log To Console  ${\n}Add Policies To App
    Run Keyword  Add Policies To App
 
-#test051
+#ECQ-4281
 Show alert policies added to k8s app
    [Documentation]
-   ...  - Show  cpu mem dsk and acx policies added to app
+   ...  - Show cpu mem disk and active-connections alert policies were added to app
+
    Log To Console  ${\n} Show Alert Policies From App
    Run Keyword  Show Alert Policies From App
 
-#test06
+#ECQ-4282
 Use runcommand on appinst to test script is creating utilization for alerts
    [Documentation]
-   ...  - Create utilization to trigger k8s appinst alerts 
+   ...  - Create utilization to trigger k8s appinst alerts
+   ...  - Use the appinst created and issue a Runcommand to start utilization script 
 
    Log To Console  ${\n}Setup Runcommand To Run Measurments
    Run Keyword  Setup Runcommand To Run Measurments
 
-#test07
+#ECQ-4283
 Check the metrics from the utilization script and check for alerts
    [Documentation]
-   ...  - Test the appinst utilization script and influxdb metrics 
+   ...  - Test that the appinst utilization script and influxdb metrics are working
 
    Log To Console  ${\n}Get Metrics Primer
    Log To Console  Waiting ${script_primer} seconds for influxdb 
@@ -166,21 +168,21 @@ Check the metrics from the utilization script and check for alerts
    Log To Console  Show Alerts Firing Primer
    Run Keyword  Show Alerts Firing Primer
 
-#test08
+#ECQ-4284
 Verify all alerts are cleared for mem disk cpu and active-connections
    [Documentation]
-   ...  - Test that any alerts have cleared when utilization script stops
+   ...  - Test that any alerts have cleared after the utilization script stops
 
    Log To Console  ${\n}Verify no alerts are triggering from utilization primer
    Log To Console  Show Alerts Cleared
    Run Keyword  Show Alerts Cleared
    Log To Console  Getting trigger values and metrics values
 
-#test09
+#ECQ-4285
 Run utilization script and verify all alert types are firing for k8s appinst
    [Documentation]
    ...  - Run appinst script to generate utilization for triggering alerts
-   ...  - Poll for alerts firing and verify all clear
+   ...  - Poll for alerts firing and verify all clear after trigger duration is no longer met
 
    Log To Console  ${\n}Setup Runcommand To Run Measurments
    Run Keyword  Setup Runcommand To Run Measurments
@@ -189,10 +191,11 @@ Run utilization script and verify all alert types are firing for k8s appinst
    Log To Console  Show Alerts Cleared
    Run Keyword  Show Alerts Cleared
 
-#test10
+#ECQ-4286
 Set mc settings alertpolicymintriggertime back to 30s
    [Documentation]
-   ...  - mc alertpolicytrigger to 30s
+   ...  - Set the mc alertpolicytrigger to 30s
+   ...  - Verify that the value is set back for 30s US and EU
 
    Log To Console  ${\n}Reset Trigger Time Policy 30s
    Run Keyword  Reset Trigger Time Policy 30s
