@@ -61,22 +61,22 @@ CreateTrustPolicy - mcctl shall handle create failures
       Error: missing required args: name  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp
       Error: missing required args: cloudlet-org  name=${recv_name}  outboundsecurityrules:0.protocol=tcp
       Error: missing required args: cloudlet-org name  Error: missing required args: name cloudlet-org  outboundsecurityrules:0.protocol=tcp
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:1.portrangemin=1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:1.portrangemin=1
       Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemax=1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemax=1
       Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=1
       Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2
 
       Error: missing required args: name  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp
       Error: missing required args: cloudlet-org  name=${recv_name}  outboundsecurityrules:0.protocol=udp
       Error: missing required args: cloudlet-org name  Error: missing required args: name cloudlet-org  outboundsecurityrules:0.protocol=udp
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:1.portrangemin=1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:1.portrangemin=1
       Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemax=1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemax=1
       Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=1
       Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2
 
@@ -85,17 +85,17 @@ CreateTrustPolicy - mcctl shall handle create failures
 
       Error: parsing arg "outboundsecurityrules:0.portrangemin\=x" failed: unable to parse "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
       Error: parsing arg "outboundsecurityrules:0.portrangemax\=x" failed: unable to parse "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
-      Error: Bad Request (400), Invalid min port range: 999999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
-      Error: Bad Request (400), Invalid max port range: 99999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
+      Error: Bad Request (400), Invalid min port: 999999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
+      Error: Bad Request (400), Invalid max port: 99999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
       Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.11.1/1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.11.1/1
 
       Error: parsing arg "outboundsecurityrules:0.portrangemin\=x" failed: unable to parse "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
       Error: parsing arg "outboundsecurityrules:0.portrangemax\=x" failed: unable to parse "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
-      Error: Bad Request (400), Invalid min port range: 999999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
-      Error: Bad Request (400), Invalid max port range: 99999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
+      Error: Bad Request (400), Invalid min port: 999999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
+      Error: Bad Request (400), Invalid max port: 99999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
       Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.11.1/1
+      Bad Request (400), Invalid min port: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.11.1/1
 
 # ECQ-3082
 UpdateTrustPolicy - mcctl shall handle update policy
