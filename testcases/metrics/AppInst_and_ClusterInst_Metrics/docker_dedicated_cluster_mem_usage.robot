@@ -15,7 +15,7 @@ Test Setup       Setup
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   packetcloudlet
 ${operator}=                       packet
-${clustername_docker}=   dockermonitoring
+${clustername_docker}=   dockerdedicated
 ${developer_name}=  testmonitor
 
 #${username_admin}=  testuser
@@ -69,7 +69,7 @@ Setup
    ${timestamp}=  Get Default Time Stamp
    ${developer_name}=  Get Default Developer Name
    #${clustername}=  Get Default Cluster Name
-   ${clustername_docker}=  set variable  dockermonitoring
+   ${clustername_docker}=  set variable  dockerdedicated
    ${developer_name}=  Set Variable  testmonitor
 
    #${clustername_docker}=   Set Variable  cluster1575415520-263537-docker
