@@ -15,10 +15,15 @@ testcase_components1 = [
     crm_components + "GPU",
     crm_components + "VMPool",
     crm_components + "AutoProvisioning",
+    crm_components + "DMEPersistentConnection"
 ]
 
 testcase_components2 = [
     crm_components + "CloudletMaintenance",
+]
+
+testcase_components3 = [
+    crm_components + "ResourceManagment",
 ]
 
 node_name = 'notset'
@@ -67,7 +72,7 @@ pipeline{
         string(name: 'NumberParallelExecutions', defaultValue: '2')
         string(name: 'CommitVersion', defaultValue: 'master')
         booleanParam(name: 'RunFailedOnly', defaultValue: false)
-        string(name: 'CRMPool', defaultValue: '{"cloudlet_name_crm":[{"cloudlet":"qa-anthos","operator":"packet","region":"US"}]}')
+        string(name: 'CRMPool', defaultValue: '{"cloudlet_name_crm":[{"cloudlet":"qa-anthos","operator":"packet","region":"US","physical_name":"qa-anthos"}]}')
         choice(name: 'TestTarget', choices: ['Openstack', 'VCD', 'Vsphere', 'Anthos'], description: '')
     }
 
@@ -130,5 +135,34 @@ pipeline{
                 failure { echo "run tests2 failed"}
             }
         }
+
+        stage("execute tests 3") {
+            steps {
+                script{
+                    builds = [:]
+                    testcase_components3.eachWithIndex { value, index->
+                        echo "${value}"
+                        builds["${value[-1]}"] = {
+                            build job: 'runTestcases', parameters: [
+                                string(name: 'SlaveNode', value: node_name),
+                                string(name: 'TestTarget', value: testtarget),
+                                string(name: 'Components', value: value.join(',')),
+                                string(name: 'Project', value: project),
+                                string(name: 'Cycle', value: cycle),
+                                string(name: 'Controller', value: controller),
+                                string(name: 'MasterController', value: mastercontroller),
+                                string(name: 'VariableFile', value: variablefile),
+                                string(name: 'CRMPool', value: params.CRMPool),
+                                booleanParam(name: 'RunFailedOnly', value: runfailedonly)]
+                        }
+                    }
+                    parallel builds
+                }
+            }
+            post {
+                failure { echo "run tests3 failed"}
+            }
+        }
+
     }
 }
