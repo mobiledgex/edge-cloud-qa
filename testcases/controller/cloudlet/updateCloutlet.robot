@@ -315,7 +315,7 @@ UpdateCloudlet - shall be able to remove trust policy from cloudlet
    # update cloudlet with empty trust policy
    ${cloudlet_update}=  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${operator_name_fake}  trust_policy=${Empty}
    Should Not Contain             ${cloudlet_update['data']}  trust_policy
-   Should Be Equal                ${cloudlet_update['data']['trust_policy_state']}  Updating
+   Should Be Equal                ${cloudlet_update['data']['trust_policy_state']}  NotPresent
 
 # ECQ-3961
 UpdateCloudlet - shall be able to add allianceorgs to cloudlet
