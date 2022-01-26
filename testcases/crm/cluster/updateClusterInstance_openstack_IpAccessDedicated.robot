@@ -44,7 +44,8 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
 
     #EDGECLOUD-3133 - After UpdateClusterInst to increase the number of worker nodes , App Inst is no longer running 
 
-    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
+    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}-${developer_org_name_automation}  ${rootlb}
+    ${clusterlb}=  Replace String  ${clusterlb}  _  -
 
     Log To Console  Creating Cluster Instance
     ${clusterinst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=0
@@ -169,7 +170,8 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
+    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}-${developer_org_name_automation}  ${rootlb}
+    ${clusterlb}=  Replace String  ${clusterlb}  _  -
 
     #Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
     Create Autoscale Policy  region=${region}  policy_name=${policy_name_default}  developer_org_name=automation_dev_org  min_nodes=1  max_nodes=2  target_cpu=70  stabilization_window_sec=60  use_defaults=${False}  token=${super_token}
@@ -266,7 +268,7 @@ Setup
     Set Suite Variable  ${cloudlet_lowercase}
     Set Suite Variable  ${super_token}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
     Set Suite Variable  ${rootlb}
 

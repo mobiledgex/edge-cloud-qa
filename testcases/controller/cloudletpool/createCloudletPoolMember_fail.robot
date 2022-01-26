@@ -44,7 +44,8 @@ CreateCloudletPoolMember - create without org shall return error
 
    Should Contain   ${error}  code=400
    #Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"name\\\\":\\\\"xxx\\\\"} not found"}
-   Should Contain   ${error}  error={"message":"Invalid organization name"}
+   #Should Contain   ${error}  error={"message":"Invalid organization name"}
+   Should Contain   ${error}  error={"message":"Invalid cloudlet pool organization"}
 
 # ECQ-3838
 CreateCloudletPoolMember - create without cloudlet name shall return error
