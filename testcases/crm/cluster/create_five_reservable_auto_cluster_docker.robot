@@ -51,82 +51,82 @@ Create App, Add Autoprovisioning Policy and Deploy an App Instance
    @{policy}=  Create List  ${policy_name}
 
    log to console  Creating App and App Instance
-   create app  region=${region}  app_name=${app_name_1}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policies=${policy}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
-   create app  region=${region}  app_name=${app_name_2}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policies=${policy}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
-   create app  region=${region}  app_name=${app_name_3}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policies=${policy}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
-   create app  region=${region}  app_name=${app_name_4}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policies=${policy}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
-   create app  region=${region}  app_name=${app_name_5}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policies=${policy}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
+   create app  region=${region}  app_name=${app_name_1}  deployment=docker  developer_org_name=${orgname}  image_path=${docker_image}  auto_prov_policies=${policy}  access_ports=tcp:2015  app_version=1.0  default_flavor_name=${default_flavor_name}  token=${user_token}
+   create app  region=${region}  app_name=${app_name_2}  deployment=docker  developer_org_name=${orgname}  image_path=${docker_image}  auto_prov_policies=${policy}  access_ports=tcp:2015  app_version=1.0  default_flavor_name=${default_flavor_name}  token=${user_token}
+   create app  region=${region}  app_name=${app_name_3}  deployment=docker  developer_org_name=${orgname}  image_path=${docker_image}  auto_prov_policies=${policy}  access_ports=tcp:2015  app_version=1.0  default_flavor_name=${default_flavor_name}  token=${user_token}
+   create app  region=${region}  app_name=${app_name_4}  deployment=docker  developer_org_name=${orgname}  image_path=${docker_image}  auto_prov_policies=${policy}  access_ports=tcp:2015  app_version=1.0  default_flavor_name=${default_flavor_name}  token=${user_token}
+   create app  region=${region}  app_name=${app_name_5}  deployment=docker  developer_org_name=${orgname}  image_path=${docker_image}  auto_prov_policies=${policy}  access_ports=tcp:2015  app_version=1.0  default_flavor_name=${default_flavor_name}  token=${user_token}
 
 
    log to console  Registering Client and Finding Cloudlet to App1
-   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name_1}
+   Register Client  developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_1}
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
    log to console  Registering Client and Finding Cloudlet to App2
-   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name_2}
+   Register Client  developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_2}
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
    log to console  Registering Client and Finding Cloudlet to App3
-   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name_3}
+   Register Client  developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_3}
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
    log to console  Registering Client and Finding Cloudlet to App4
-   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name_4}
+   Register Client  developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_4}
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
    log to console  Registering Client and Finding Cloudlet to App5
-   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name_5}
+   Register Client  developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_5}
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
    sleep  3 minutes
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name_1}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_1}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name_2}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_2}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name_3}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_3}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name_4}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_4}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name_5}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_5}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${user_token}
 
 #   wait for cluster instance to be ready  region=${region}  cluster_name=reservable0  cloudlet_name=${cloudlet_name_crm}  token=${user_token}
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
-   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name_1}
+   Register Client  developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_1}
    ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    log to console  Deployed Autoprovision App Successfully!
 
    Should Be Equal As Numbers  ${cloudlet.status}  1
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
-   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name_2}
+   Register Client  developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_2}
    ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    log to console  Deployed Autoprovision App Successfully!
 
    Should Be Equal As Numbers  ${cloudlet.status}  1
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
-   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name_3}
+   Register Client  developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_3}
    ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    log to console  Deployed Autoprovision App Successfully!
 
    Should Be Equal As Numbers  ${cloudlet.status}  1
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
-   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name_4}
+   Register Client  developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_4}
    ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    log to console  Deployed Autoprovision App Successfully!
 
    Should Be Equal As Numbers  ${cloudlet.status}  1
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
-   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name_5}
+   Register Client  developer_org_name=${orgname}  app_version=1.0  app_name=${app_name_5}
    ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_crm}
    log to console  Deployed Autoprovision App Successfully!
 
@@ -167,22 +167,22 @@ Setup
 Cleanup
 
     sleep  1 minute
-    ${appInst1}=  Show App Instances  region=${region}  app_name=${app_name_1}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
-    ${appInst2}=  Show App Instances  region=${region}  app_name=${app_name_2}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
-    ${appInst3}=  Show App Instances  region=${region}  app_name=${app_name_3}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
-    ${appInst4}=  Show App Instances  region=${region}  app_name=${app_name_4}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
-    ${appInst5}=  Show App Instances  region=${region}  app_name=${app_name_5}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+    ${appInst1}=  Show App Instances  region=${region}  app_name=${app_name_1}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
+    ${appInst2}=  Show App Instances  region=${region}  app_name=${app_name_2}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
+    ${appInst3}=  Show App Instances  region=${region}  app_name=${app_name_3}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
+    ${appInst4}=  Show App Instances  region=${region}  app_name=${app_name_4}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
+    ${appInst5}=  Show App Instances  region=${region}  app_name=${app_name_5}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
     ${reservable1_cluster_name}=  Set Variable  ${appInst1[0]['data']['real_cluster_name']}
     ${reservable2_cluster_name}=  Set Variable  ${appInst2[0]['data']['real_cluster_name']}
     ${reservable3_cluster_name}=  Set Variable  ${appInst3[0]['data']['real_cluster_name']}
     ${reservable4_cluster_name}=  Set Variable  ${appInst4[0]['data']['real_cluster_name']}
     ${reservable5_cluster_name}=  Set Variable  ${appInst5[0]['data']['real_cluster_name']}
 
-    delete app instance  region=${region}  app_name=${app_name_1}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
-    delete app instance  region=${region}  app_name=${app_name_2}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
-    delete app instance  region=${region}  app_name=${app_name_3}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
-    delete app instance  region=${region}  app_name=${app_name_4}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
-    delete app instance  region=${region}  app_name=${app_name_5}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+    delete app instance  region=${region}  app_name=${app_name_1}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
+    delete app instance  region=${region}  app_name=${app_name_2}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
+    delete app instance  region=${region}  app_name=${app_name_3}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
+    delete app instance  region=${region}  app_name=${app_name_4}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
+    delete app instance  region=${region}  app_name=${app_name_5}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
 
     delete cluster instance  region=${region}  cluster_name=${reservable1_cluster_name}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${super_token}
     delete cluster instance  region=${region}  cluster_name=${reservable2_cluster_name}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  token=${super_token}
