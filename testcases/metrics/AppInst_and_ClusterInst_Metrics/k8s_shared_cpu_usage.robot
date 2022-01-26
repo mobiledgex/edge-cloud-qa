@@ -77,7 +77,7 @@ Setup
    ${clustername_k8sdedicated}=   Set Variable  k8sshared
    ${developer_name}=  Set Variable  testmonitor
 
-   ${appinst}=  Show App Instances  region=${region}  app_name=app-us-k8s
+   ${appinst}=  Show App Instances  region=${region}  app_name=jme-k8s
    ${clustername_k8sdedicated}=   Set Variable  k8sshared
    ${developer_name}=  Set Variable  testmonitor
    ${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
