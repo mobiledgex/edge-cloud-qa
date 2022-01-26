@@ -93,7 +93,7 @@ Setup
    #${app_name}=     Catenate  SEPARATOR=  ${app_name}  k8s
 
    ${app_name}=  Set Variable  jme-k8s
-   ${clustername_k8sdedicated}=   Set Variable  k8smonitoring
+   ${clustername_k8sdedicated}=   Set Variable  k8sdedicated
    ${developer_name}=  Set Variable  testmonitor
 
 #   ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
