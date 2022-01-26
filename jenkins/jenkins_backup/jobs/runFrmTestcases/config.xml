@@ -75,7 +75,7 @@
           <name>TestTarget</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
-              <string>Controller</string>
+              <string>FRM</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
