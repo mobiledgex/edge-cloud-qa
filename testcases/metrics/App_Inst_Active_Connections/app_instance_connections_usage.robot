@@ -12,9 +12,7 @@ Suite Setup       Setup
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   packetcloudlet
 ${operator}=                       packet
-${clustername_docker}=   dockermonitoring
 ${developer_name}=  testmonitor
-${app_name}=  app-us
 
 ${username_admin}=  mexadmin
 ${password_admin}=  mexadmin123
@@ -23,7 +21,7 @@ ${username}=  testuser
 ${password}=  testuser
 ${orgname}=   testmonitor
 
-${port}=  8080
+${port}=  8086
 
 ${region}=  US
 
@@ -81,12 +79,12 @@ K8s Shared AppInstMetrics - CONNECTIONS usage metrics on openstack
 *** Keywords ***
 Setup
 
-   ${app_name_1}=  Set Variable  app-us
-   ${clustername_docker_dedicated}=   Set Variable  dockermonitoring
+   ${app_name_1}=  Set Variable  jme-app
+   ${clustername_docker_dedicated}=   Set Variable  dockerdedicated
    ${clustername_docker_shared}=   Set Variable  dockershared
 
-   ${app_name_2}=  Set Variable  app-us-k8s
-   ${clustername_k8s_dedicated}=   Set Variable  k8smonitoring
+   ${app_name_2}=  Set Variable  jme-k8s
+   ${clustername_k8s_dedicated}=   Set Variable  k8sdedicated
    ${clustername_k8s_shared}=   Set Variable  k8sshared
 
    ${developer_name}=  Set Variable  testmonitor
