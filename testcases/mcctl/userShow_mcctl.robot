@@ -30,6 +30,27 @@ ShowUser - mcctl shall be able to show users
        name_to_check=mexadmin                   nickname=mexadmin
        name_to_check=op_contributor_automation  name=op_contributor_automation
 
+# ECQ-4298
+User - mcctl help shall show
+   [Documentation]
+   ...  - send User via mcctl with help for each command
+   ...  - verify help is returned
+
+   [Template]  Show Help
+   ${Empty}
+   create
+   delete
+   update
+   show
+   current
+   newpass
+   resendverify
+   verifyemail
+   passwordresetrequest
+   passwordreset
+   createuserapikey
+   deleteuserapikey
+   showuserapikey
 
 *** Keywords ***
 #Setup
@@ -57,3 +78,11 @@ Success ShowUser Via mcctl
    END
 
    Should Be True  ${found}
+
+Show Help
+   [Arguments]  ${parms}
+
+   ${error}=  Run Keyword and Expect Error  *  Run mcctl  user ${parms} -h  version=${version}
+
+   ${cmd}=  Run Keyword If  '${parms}' == '${Empty}'  Set Variable  ${Empty}  ELSE  Set Variable  ${parms}
+   Should Contain  ${error}  Usage: mcctl user ${cmd}
