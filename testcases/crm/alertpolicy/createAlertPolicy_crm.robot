@@ -14,8 +14,8 @@ Test Timeout  30m
 
 *** Variables ***
 ${nogo}=  ${True}
-#${cloudlet_name_crm}  automationDallasCloudlet
-${cloudlet_name_crm}  dfw-vsphere
+${cloudlet_name_crm}  automationDallasCloudlet
+#${cloudlet_name_crm}  dfw-vsphere
 #${cloudlet_name_crm}  DFWVMW2
 #${cloudlet_name_crm}  automationBonnCloudlet
 ${operator_name_crm}  packet
@@ -48,6 +48,9 @@ ${MEM_policy}   MEMpolicyErr
 ${DSK_policy}   DSKpolicyErr
 ${ACX_policy}   ACXpolicyErr
 ${RCV_policy}   RCVemailRxErr
+${RCV_policy_cloudlet}  RCVemailRxErr
+${RCV_policy_cluster}   RCVemailRxInfo
+${RCV_policy_appinst}   RCVemailRxWarn
 ${username}=              qaadmin
 ${password}=              zudfgojfrdhqntzm
 ${mexadmin_password}=     mexadminfastedgecloudinfra
@@ -71,9 +74,9 @@ ${mem_util_val}=  1
 ${dsk_util_val}=  1
 ${acx_util_val}=  5
 ${cpu_trig_val}=  15s
-${mem_trig_val}=  15s
+${mem_trig_val}=  12s
 ${dsk_trig_val}=  3s
-${acx_trig_val}=  10s
+${acx_trig_val}=  14s
 ${script_runtime}=   125
 ${script2_runtime}=  125
 ${influx_wait_seconds}=  30seconds
@@ -98,15 +101,26 @@ ${firing_totals}=     0
 
 *** Test Cases ***
 
-#ECQ-4276
-Create Alert Receiver for alertpolicy tests
+
+Create Custom Alert Receiver Selector Testall
    [Documentation]
-   ...  - Create an alert receiver so alerts can be seen
+   ...  - Create new alert policies
 
-   Log To Console  ${\n}Create Custom Alert Receiver
-   Run Keyword  Create Custom Alert Receiver
+   Log To Console  ${\n} Create Policies
+   Run Keyword  Create Custom Alert Receiver Selector Testall
 
-#ECQ-4277
+#AlertPolicy - Create alert policies for k8s app utilization triggering all supported alert types
+#ECQ-4276
+Create alert receivers by selector type cloudlet,cluster,appinst so alerts can be seen
+   [Documentation]
+   ...  - Create an alert receiver for each selector type so alerts can be seen
+   ...  - Use selector type cloudlet to create an slert receiver
+   ...  - Use selector type cluster create an slert receiver
+   ...  - Use selector type Appinst to create an slert receiver
+
+   Log To Console  ${\n}Create alert receivers based on selector of cloudlet,cluster and appinst
+   Run Keyword  Create Custom Alert Receiver Selector All
+
 Create new alert policies for cpu mem disk and active-connections
    [Documentation]
    ...  - Create new alert policies 
@@ -114,7 +128,6 @@ Create new alert policies for cpu mem disk and active-connections
    Log To Console  ${\n} Create Policies
    Run Keyword  Create Policies
 
-#ECQ-4278
 Update mc settings alertpolicymintriggertime to 3s
    [Documentation]
    ...  - Set alertpolicymintriggertime to 3s
@@ -122,7 +135,6 @@ Update mc settings alertpolicymintriggertime to 3s
    Log To Console  ${\n}Set Trigger Time Policy 3s
    Run Keyword  Set Trigger Time Policy 3s
 
-#ECQ-4279
 Update existing policies with new values
    [Documentation]
    ...  - Update alertpolicy values for trigger severity and utilization
@@ -130,7 +142,6 @@ Update existing policies with new values
    Log To Console  ${\n}Update Policies Severity Warning Trigger3s
    Run Keyword  Update Policies Severity Warning Trigger3s
 
-#ECQ-4280
 Add alert policies to k8s app so appinst will trigger alerts
    [Documentation]
    ...  - Add cpu mem disk and active-connections policies to app
@@ -138,7 +149,6 @@ Add alert policies to k8s app so appinst will trigger alerts
    Log To Console  ${\n}Add Policies To App
    Run Keyword  Add Policies To App
 
-#ECQ-4281
 Show alert policies added to k8s app
    [Documentation]
    ...  - Show cpu mem disk and active-connections alert policies were added to app
@@ -146,7 +156,6 @@ Show alert policies added to k8s app
    Log To Console  ${\n} Show Alert Policies From App
    Run Keyword  Show Alert Policies From App
 
-#ECQ-4282
 Use runcommand on appinst to test script is creating utilization for alerts
    [Documentation]
    ...  - Create utilization to trigger k8s appinst alerts
@@ -155,7 +164,6 @@ Use runcommand on appinst to test script is creating utilization for alerts
    Log To Console  ${\n}Setup Runcommand To Run Measurments
    Run Keyword  Setup Runcommand To Run Measurments
 
-#ECQ-4283
 Check the metrics from the utilization script and check for alerts
    [Documentation]
    ...  - Test that the appinst utilization script and influxdb metrics are working
@@ -168,7 +176,6 @@ Check the metrics from the utilization script and check for alerts
    Log To Console  Show Alerts Firing Primer
    Run Keyword  Show Alerts Firing Primer
 
-#ECQ-4284
 Verify all alerts are cleared for mem disk cpu and active-connections
    [Documentation]
    ...  - Test that any alerts have cleared after the utilization script stops
@@ -178,7 +185,6 @@ Verify all alerts are cleared for mem disk cpu and active-connections
    Run Keyword  Show Alerts Cleared
    Log To Console  Getting trigger values and metrics values
 
-#ECQ-4285
 Run utilization script and verify all alert types are firing for k8s appinst
    [Documentation]
    ...  - Run appinst script to generate utilization for triggering alerts
@@ -191,7 +197,6 @@ Run utilization script and verify all alert types are firing for k8s appinst
    Log To Console  Show Alerts Cleared
    Run Keyword  Show Alerts Cleared
 
-#ECQ-4286
 Set mc settings alertpolicymintriggertime back to 30s
    [Documentation]
    ...  - Set the mc alertpolicytrigger to 30s
@@ -255,11 +260,17 @@ Setup
     ${DSK_policy}=  Catenate  ${DSK_policy}-${epoch}
     ${ACX_policy}=  Catenate  ${ACX_policy}-${epoch}
     ${RCV_policy}=  Catenate  ${RCV_policy}-${epoch}
+    ${RCV_policy_cloudlet}=   Catenate  ${RCV_policy_cloudlet}-${epoch}-selector-cloudlet
+    ${RCV_policy_cluster}=    Catenate  ${RCV_policy_cluster}-${epoch}-selector-cluster
+    ${RCV_policy_appinst}=    Catenate  ${RCV_policy_appinst}-${epoch}-selector-appinst
     Set Suite Variable  ${CPU_policy}
     Set Suite Variable  ${MEM_policy}
     Set Suite Variable  ${DSK_policy}
     Set Suite Variable  ${ACX_policy}
     Set Suite Variable  ${RCV_policy}
+    Set Suite Variable  ${RCV_policy_cloudlet}
+    Set Suite Variable  ${RCV_policy_cluster}
+    Set Suite Variable  ${RCV_policy_appinst}
     Set Suite Variable  ${err}          error
     Set Suite Variable  ${wrn}          warning
     Set Suite Variable  ${inf}          info
@@ -274,6 +285,9 @@ Setup
     Log To Console  ${\n}${DSK_policy}
     Log To Console  ${\n}${ACX_policy}
     Log To Console  ${\n}${RCV_policy}
+    Log To Console  ${\n}${RCV_policy_cloudlet}
+    Log To Console  ${\n}${RCV_policy_cluster}
+    Log To Console  ${\n}${RCV_policy_appinst}
     Log To Console  ${\n}${app_name}
     Log To Console  ${\n}${cluster_name}
 
@@ -313,11 +327,57 @@ Setup
     Set Suite Variable  ${internal_port_val}
     Set Suite Variable  ${public_port_val}
 
-Create Custom Alert Receiver
+Create Custom Alert Receiver Cloudlet Err
     # Only a generic type email is needed to setup alert manager to trigger k8s alert policy. Creating each type with alert policy is covered in mcctl robot tests
     ${RCV_policy1}=  Run Keyword  Create Alert Receiver  token=${super_token}  region=${region}  receiver_name=${RCV_policy}-${cloudlet_name_crm}  type=email  email_address=${user_email}  severity=${err}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
     Set Suite Variable  ${RCV_policy1}
     Log To Console  ${\n}Done Creating Alert Receiver name=${RCV_policy1}
+
+Create Custom Alert Receiver Selector All
+    # Createing Alert Receiver by selector types
+    #Selector Cloudlet
+    ${RCV_policy_cld}=  Run Keyword  Create Alert Receiver  token=${super_token}  region=${region}  receiver_name=${RCV_policy_cloudlet}  type=email  email_address=${user_email}  severity=${err}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    Set Suite Variable  ${RCV_policy_cld}
+    Log To Console  ${\n}Done Creating Alert Receiver name=${RCV_policy_cld}
+    Run Keyword  Should Be Equal  ${RCV_policy_cld['Name']}  ${RCV_policy_cloudlet}
+    #Selector Cluster
+    ${RCV_policy_clust}=  Run Keyword  Create Alert Receiver  token=${super_token}  region=${region}  receiver_name=${RCV_policy_cluster}  type=email  email_address=${user_email}  severity=${inf}  cluster_instance_name=${cluster_name}  app_cloudlet_name=${cloudlet_name_crm}  app_cloudlet_org=${operator_name_crm}
+    Set Suite Variable  ${RCV_policy_clust}
+    Log To Console  ${\n}Done Creating Alert Receiver by clusterinst selector  name=${RCV_policy_clust}
+    Run Keyword  Should Be Equal  ${RCV_policy_clust['Name']}  ${RCV_policy_cluster}
+    #Selector Appinst
+    ${RCV_policy_app}=  Run Keyword  Create Alert Receiver  token=${super_token}  region=${region}  receiver_name=${RCV_policy_appinst}  type=email  email_address=${user_email}  severity=${wrn}  cluster_instance_name=${cluster_name}  app_name=${app_name}  app_version=${app_version}  app_cloudlet_name=${cloudlet_name_crm}  app_cloudlet_org=${operator_name_crm}
+    Set Suite Variable  ${RCV_policy_app}
+    Log To Console  ${\n}Done Creating Alert Receiver by appinst selector  name=${RCV_policy_app}
+    Run Keyword  Should Be Equal  ${RCV_policy_app['Name']}  ${RCV_policy_appinst}
+
+Create Custom Alert Receiver Selector Testall
+    # manual testing for just alert receivers when no cluster instance or appinstance is created - for error testing
+    ${super_token}  Get Super Token
+    Set Suite Variable  ${super_token}
+    ${date}=         Get Current Date  result_format=epoch  exclude_millis=no
+    Set Suite Variable  ${date}
+    ${epoch}=        Convert Date    ${date}    epoch  exclude_millis=yes
+    ${epoch}=        Convert To String  ${epoch}
+    ${epoch}=        Remove String   ${epoch}  .0
+    ${RCV_policy_cloudlet}=        Catenate  ${RCV_policy_cloudlet}-${epoch}-selector-cloudlet-deleteme
+    ${RCV_policy_cluster}=  Catenate  ${RCV_policy_cluster}-${epoch}-selector-cluster-deleteme
+    ${RCV_policy_appinst}=    Catenate  ${RCV_policy_appinst}-${epoch}-selector-appinst-deleteme
+
+    ${RCV_policy_cld}=  Run Keyword  Create Alert Receiver  token=${super_token}  region=${region}  receiver_name=${RCV_policy_cloudlet}  type=email  email_address=${user_email}  severity=${err}  cloudlet_name=automationDallasCloudlet  operator_org_name=packet
+    Set Suite Variable  ${RCV_policy_cld}
+    Log To Console  ${\n}Done Creating Alert Receiver name=${RCV_policy_cld}
+    Run Keyword  Should Be Equal  ${RCV_policy_cld['Name']}  ${RCV_policy_cloudlet}
+
+    ${RCV_policy_clust}=  Run Keyword  Create Alert Receiver  token=${super_token}  region=US  receiver_name=${RCV_policy_cluster}  type=email  email_address=${user_email}  severity=${inf}  cluster_instance_name=porttestcluster  app_cloudlet_name=automationDallasCloudlet  app_cloudlet_org=packet
+    Set Suite Variable  ${RCV_policy_clust}
+    Log To Console  ${\n}Done Creating Alert Receiver by clusterinst selector  name=${RCV_policy_clust}
+    Run Keyword  Should Be Equal  ${RCV_policy_clust['Name']}  ${RCV_policy_cluster}
+
+    ${RCV_policy_app}=  Run Keyword  Create Alert Receiver  token=${super_token}  region=US  receiver_name=${RCV_policy_appinst}  type=email  email_address=${user_email}  severity=${wrn}  cluster_instance_name=porttestcluster  app_name=automation-sdk-porttest  app_version=1.0  app_cloudlet_name=automationDallasCloudlet  app_cloudlet_org=packet
+    Set Suite Variable  ${RCV_policy_app}
+    Log To Console  ${\n}Done Creating Alert Receiver by appinst selector  name=${RCV_policy_app}
+    Run Keyword  Should Be Equal  ${RCV_policy_app['Name']}  ${RCV_policy_appinst}
 
 Reset Trigger Time Policy 30s
    # Show current settings for trriger time and set back to 30s which is the default when test is complete
@@ -460,7 +520,7 @@ Update Policies Severity Warning Trigger30
    Run Keyword If  '${nogo}'=='${False}'  Log To Console  ${\n}${MEM_policy} does not exists not updated
    ${nogo}=  Run Keyword If  ${mem_err}!=${mem_policy_name}  Set Variable  ${True}
    Run Keyword If  '${nogo}'=='${True}'  Log To Console  ${\n}${MEM_policy} was updated
-   ${mem_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${CPU_policy}
+   ${mem_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${MEM_policy}
    ${mem_plcy_sev}=   Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${mem_plcy_show[0]['data']['severity']}
    ${mem_plcy_trig}=  Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${mem_plcy_show[0]['data']['trigger_time']}
    Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${mem_plcy_sev}   ${wrn}
@@ -471,7 +531,7 @@ Update Policies Severity Warning Trigger30
    Run Keyword If  '${nogo}'=='${False}'  Log To Console  ${\n}${DSK_policy} does not exists not updated
    ${nogo}=  Run Keyword If  ${dsk_err}!=${dsk_policy_name}  Set Variable  ${True}
    Run Keyword If  '${nogo}'=='${True}'  Log To Console  ${\n}${DSK_policy} was updated
-   ${dsk_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${CPU_policy}
+   ${dsk_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${DSK_policy}
    ${dsk_plcy_sev}=   Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${dsk_plcy_show[0]['data']['severity']}
    ${dsk_plcy_trig}=  Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${dsk_plcy_show[0]['data']['trigger_time']}
    Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${dsk_plcy_sev}   ${wrn}
@@ -482,7 +542,7 @@ Update Policies Severity Warning Trigger30
    Run Keyword If  '${nogo}'=='${False}'  Log To Console  ${\n}${ACX_policy} does not exists not updated
    ${nogo}=  Run Keyword If  ${acx_err}!=${acx_policy_name}  Set Variable  ${True}
    Run Keyword If  '${nogo}'=='${True}'  Log To Console  ${\n}${ACX_policy} was updated
-   ${acx_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${CPU_policy}
+   ${acx_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${ACX_policy}
    ${acx_plcy_sev}=   Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${acx_plcy_show[0]['data']['severity']}
    ${acx_plcy_trig}=  Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${acx_plcy_show[0]['data']['trigger_time']}
    Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${acx_plcy_sev}   ${wrn}
@@ -502,9 +562,9 @@ Update Policies Severity Warning Trigger3s
    ${dsk_util_val}  Set Variable  ${dsk_util_val}
    ${acx_util_val}  Set Variable  ${acx_util_val}
    ${cpu_trig_val}  Set Variable  ${cpu_trig_val}
-   ${mem_trig_val}  Set Variable  ${cpu_trig_val}
-   ${dsk_trig_val}  Set Variable  ${cpu_trig_val}
-   ${acx_trig_val}  Set Variable  ${cpu_trig_val}
+   ${mem_trig_val}  Set Variable  ${mem_trig_val}
+   ${dsk_trig_val}  Set Variable  ${dsk_trig_val}
+   ${acx_trig_val}  Set Variable  ${acx_trig_val}
 #Updating alert policies if exists
    ${cpu_err}  Set Variable  (\'FAIL\', \'(\\\'code=400\\\', \\\'error={"message":"AlertPolicy key {\\\\\\\\"organization\\\\\\\\":\\\\\\\\"automation_dev_org\\\\\\\\",\\\\\\\\"name\\\\\\\\":\\\\\\\\"${CPUpolicy}\\\\\\\\"} not found"}\\\')\')
    ${mem_err}  Set Variable  (\'FAIL\', \'(\\\'code=400\\\', \\\'error={"message":"AlertPolicy key {\\\\\\\\"organization\\\\\\\\":\\\\\\\\"automation_dev_org\\\\\\\\",\\\\\\\\"name\\\\\\\\":\\\\\\\\"${MEMpolicy}\\\\\\\\"} not found"}\\\')\')
@@ -527,7 +587,7 @@ Update Policies Severity Warning Trigger3s
    Run Keyword If  '${nogo}'=='${False}'  Log To Console  ${\n}${MEM_policy} does not exists not updated
    ${nogo}=  Run Keyword If  ${mem_err}!=${mem_policy_name}  Set Variable  ${True}
    Run Keyword If  '${nogo}'=='${True}'  Log To Console  ${\n}${MEM_policy} was updated
-   ${mem_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${CPU_policy}
+   ${mem_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${MEM_policy}
    ${mem_plcy_sev}=   Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${mem_plcy_show[0]['data']['severity']}
    ${mem_plcy_trig}=  Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${mem_plcy_show[0]['data']['trigger_time']}
    Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${mem_plcy_sev}   ${wrn}
@@ -538,7 +598,7 @@ Update Policies Severity Warning Trigger3s
    Run Keyword If  '${nogo}'=='${False}'  Log To Console  ${\n}${DSK_policy} does not exists not updated
    ${nogo}=  Run Keyword If  ${dsk_err}!=${dsk_policy_name}  Set Variable  ${True}
    Run Keyword If  '${nogo}'=='${True}'  Log To Console  ${\n}${DSK_policy} was updated
-   ${dsk_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${CPU_policy}
+   ${dsk_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${DSK_policy}
    ${dsk_plcy_sev}=   Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${dsk_plcy_show[0]['data']['severity']}
    ${dsk_plcy_trig}=  Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${dsk_plcy_show[0]['data']['trigger_time']}
    Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${dsk_plcy_sev}   ${wrn}
@@ -549,11 +609,11 @@ Update Policies Severity Warning Trigger3s
    Run Keyword If  '${nogo}'=='${False}'  Log To Console  ${\n}${ACX_policy} does not exists not updated
    ${nogo}=  Run Keyword If  ${acx_err}!=${acx_policy_name}  Set Variable  ${True}
    Run Keyword If  '${nogo}'=='${True}'  Log To Console  ${\n}${ACX_policy} was updated
-   ${acx_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${CPU_policy}
+   ${acx_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${ACX_policy}
    ${acx_plcy_sev}=   Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${acx_plcy_show[0]['data']['severity']}
    ${acx_plcy_trig}=  Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${acx_plcy_show[0]['data']['trigger_time']}
    Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${acx_plcy_sev}   ${wrn}
-   Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${acx_plcy_trig}  ${cpu_trig_val}
+   Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${acx_plcy_trig}  ${acx_trig_val}
    Sleep  2seconds
 
 Add Policies To App
@@ -566,18 +626,22 @@ Add Policies To App
    ${cpu_policy_add}=  Run Keyword And Ignore Error    Add Alert Policy App  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  alert_policy=${CPU_policy}  app_org=${app_org}
    Run Keyword If      ${cpu_err}==${cpu_policy_add}    Log To Console  ${\n}${CPU_policy} already added not adding to app ${app_name}
    Run Keyword If      ${cpu_err}!=${cpu_policy_add}    Log To Console  ${\n}${CPU_policy} added to ${app_name}
+   Sleep  2seconds
 #MEM AlertPolicy
    ${mem_policy_add}=  Run Keyword And Ignore Error    Add Alert Policy App  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  alert_policy=${MEM_policy}  app_org=${app_org}
    Run Keyword If      ${mem_err}==${mem_policy_add}    Log To Console  ${\n}${MEM_policy} already added not adding to app ${app_name}
    Run Keyword If      ${mem_err}!=${mem_policy_add}    Log To Console  ${\n}${MEM_policy} added to ${app_name}
+   Sleep  2seconds   
 #DSK AlertPolicy
    ${dsk_policy_add}=  Run Keyword And Ignore Error    Add Alert Policy App  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  alert_policy=${DSK_policy}  app_org=${app_org}
    Run Keyword If      ${dsk_err}==${dsk_policy_add}    Log To Console  ${\n}${DSK_policy} already added not adding to app ${app_name}
    Run Keyword If      ${dsk_err}!=${dsk_policy_add}    Log To Console  ${\n}${DSK_policy} added to ${app_name}
+   Sleep  2seconds
 #ACX AlertPolicy
    ${acx_policy_add}=  Run Keyword And Ignore Error    Add Alert Policy App  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  alert_policy=${ACX_policy}  app_org=${app_org}
    Run Keyword If      ${acx_err}==${acx_policy_add}    Log To Console  ${\n}${ACX_policy} already added not adding to app ${app_name}
    Run Keyword If      ${acx_err}!=${acx_policy_add}    Log To Console  ${\n}${ACX_policy} added to ${app_name}
+   Sleep  2seconds
 
 Show Alert Policies From App
     ${super_token}  Get Super Token
@@ -696,7 +760,7 @@ Show Alerts Firing
     Set Suite Variable  ${poll_time}  5seconds
 
    FOR  ${i}  IN RANGE  ${loop_c}
-   Log To Console  ${\n}Waiting for all triggers to >=1 ${CPU_policy}=${cpu_firing_total} ${MEM_policy}=${mem_firing_total} ${DSK_policy}=${dsk_firing_total} ${ACX_policy}=${acx_firing_total}
+   Log To Console  ${\n}Waiting for triggers >=1 ${CPU_policy}=${cpu_firing_total} ${MEM_policy}=${mem_firing_total} ${DSK_policy}=${dsk_firing_total} ${ACX_policy}=${acx_firing_total}
 
          ${cpu_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${CPU_policy}
          ${len_cpu}=  Get Length  ${cpu_firing}
@@ -709,6 +773,8 @@ Show Alerts Firing
             ${cpu_firing_total}=     Evaluate  ${cpu_firing_cnt} + ${cpu_firing_total} + 0
             ${cpu_alertname_total}=  Evaluate  ${cpu_alertname_cnt} + ${cpu_alertname_total} + 0
             Run Keywords   Should Contain  ${cpu_alertname_val}  ${CPU_policy}    AND  Log To Console  CPU alert name firing was ${cpu_alertname_val}
+            Log To Console  CPU alert utilization value=${cpu_util_val}% firing value=${cpu_firing_val}%
+            END
          ${mem_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${MEM_policy}
          ${len_mem}=  Get Length  ${mem_firing}
          Sleep  1seconds
@@ -720,6 +786,8 @@ Show Alerts Firing
             ${mem_firing_total}=     Evaluate  ${mem_firing_cnt} + ${mem_firing_total} + 0
             ${mem_alertname_total}=  Evaluate  ${mem_alertname_cnt} + ${mem_alertname_total} + 0
             Run Keywords   Should Contain  ${mem_alertname_val}  ${MEM_policy}    AND  Log To Console  MEM alert name firing was ${mem_alertname_val}
+            Log To Console  MEM alert utilization value=${mem_util_val}% firing value=${mem_firing_val} GB
+            END
          ${dsk_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${DSK_policy}
          ${len_dsk}=  Get Length  ${dsk_firing}
          Sleep  1seconds
@@ -732,6 +800,7 @@ Show Alerts Firing
             ${dsk_alertname_total}=  Evaluate  ${dsk_alertname_cnt} + ${dsk_alertname_total} + 0
             Run Keywords   Should Contain  ${dsk_alertname_val}  ${DSK_policy}    AND  Log To Console  DSK alert name firing was ${dsk_alertname_val}
             Log To Console  DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} GB
+            END
          ${acx_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${ACX_policy}
          ${len_acx}=  Get Length  ${acx_firing}
          Sleep  1seconds
@@ -743,10 +812,8 @@ Show Alerts Firing
             ${acx_firing_total}=     Evaluate  ${acx_firing_cnt} + ${acx_firing_total} + 0
             ${acx_alertname_total}=  Evaluate  ${acx_alertname_cnt} + ${acx_alertname_total} + 0
             Run Keywords   Should Contain  ${acx_alertname_val}  ${ACX_policy}    AND  Log To Console  ACX alert name firing was ${acx_alertname_val}
-         END
-         END
-         END
-         END
+            Log To Console  ACX alert utilization value=${acx_util_val}% firing value=${acx_firing_val} connections
+            END
    Sleep  ${poll_time} 
    ${alertname_totals}=     Evaluate  ${cpu_alertname_total} + ${mem_alertname_total} + ${dsk_alertname_total} + ${acx_alertname_total} + 0 
    ${firing_totals}=        Evaluate  ${cpu_firing_total} + ${mem_firing_total} + ${dsk_firing_total} + ${acx_firing_total} + 0
@@ -791,10 +858,10 @@ Show Alerts Firing
    Run Keywords   Should Be True  ${mem_firing_total} > 0   AND   Log To Console  ${MEM_policy} alert triggered MEM alert utilization value=${mem_util_val}% firing value=${mem_firing_val} Bytes
    Run Keywords   Should Be True  ${dsk_firing_total} > 0   AND   Log To Console  ${DSK_policy} alert triggered DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} Bytes
    Run Keywords   Should Be True  ${acx_firing_total} > 0   AND   Log To Console  ${ACX_policy} tirigger value active-connections=${acx_util_val} firing value=${acx_firing_val} active connections
-   Log To Console  ${\n}${CPU_policy} alert triggered CPU alert utilization value=${cpu_util_val}% firing value=${cpu_firing_val}%
-   Log To Console  ${MEM_policy} alert triggered MEM alert utilization value=${mem_util_val}% firing value=${mem_firing_val} Bytes
-   Log To Console  ${DSK_policy} alert triggered DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} Bytes
-   Log To Console  ${ACX_policy} tirigger value active-connections=${acx_util_val} firing value=${acx_firing_val} active connections
+#   Log To Console  ${\n}${CPU_policy} alert triggered CPU alert utilization value=${cpu_util_val}% firing value=${cpu_firing_val}%
+#   Log To Console  ${MEM_policy} alert triggered MEM alert utilization value=${mem_util_val}% firing value=${mem_firing_val} Bytes
+#   Log To Console  ${DSK_policy} alert triggered DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} Bytes
+#   Log To Console  ${ACX_policy} tirigger value active-connections=${acx_util_val} firing value=${acx_firing_val} active connections
 
 Show Alerts Firing Primer
     Set Suite Variable  ${alertname_totals}   0
@@ -823,12 +890,12 @@ Show Alerts Firing Primer
     Set Suite Variable  ${mem_alertname_val}     0
     Set Suite Variable  ${dsk_alertname_val}     0
     Set Suite Variable  ${acx_alertname_val}     0
-    Set Suite Variable  ${loop_c}   1
+    Set Suite Variable  ${loop_c}   5
     Set Suite Variable  ${loop_20}  20
     Set Suite Variable  ${primer_poll_time}  35seconds
    Log To Console  This is a primer to wait for stats in influxdb
    FOR  ${i}  IN RANGE  ${loop_c}
-   Log To Console  ${\n}Monitoring if ready triggers to >=1 ${CPU_policy}=${cpu_firing_total} ${MEM_policy}=${mem_firing_total} ${DSK_policy}=${dsk_firing_total} ${ACX_policy}=${acx_firing_total}
+   Log To Console  ${\n}Monitoring triggers >=1 ${CPU_policy}=${cpu_firing_total} ${MEM_policy}=${mem_firing_total} ${DSK_policy}=${dsk_firing_total} ${ACX_policy}=${acx_firing_total}
 
          ${cpu_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${CPU_policy}
          ${len_cpu}=  Get Length  ${cpu_firing}
@@ -841,6 +908,8 @@ Show Alerts Firing Primer
             ${cpu_firing_total}=     Evaluate  ${cpu_firing_cnt} + ${cpu_firing_total} + 0
             ${cpu_alertname_total}=  Evaluate  ${cpu_alertname_cnt} + ${cpu_alertname_total} + 0
             Run Keywords   Should Contain  ${cpu_alertname_val}  ${CPU_policy}    AND  Log To Console  CPU alert name firing was ${cpu_alertname_val}
+            Log To Console  CPU alert utilization value=${cpu_util_val}% firing value=${cpu_firing_val}%
+            END
          ${mem_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${MEM_policy}
          ${len_mem}=  Get Length  ${mem_firing}
          Sleep  1seconds
@@ -852,6 +921,8 @@ Show Alerts Firing Primer
             ${mem_firing_total}=     Evaluate  ${mem_firing_cnt} + ${mem_firing_total} + 0
             ${mem_alertname_total}=  Evaluate  ${mem_alertname_cnt} + ${mem_alertname_total} + 0
             Run Keywords   Should Contain  ${mem_alertname_val}  ${MEM_policy}    AND  Log To Console  MEM alert name firing was ${mem_alertname_val}
+            Log To Console  MEM alert utilization value=${mem_util_val}% firing value=${mem_firing_val} GB
+            END
          ${dsk_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${DSK_policy}
          ${len_dsk}=  Get Length  ${dsk_firing}
          Sleep  1seconds
@@ -864,6 +935,7 @@ Show Alerts Firing Primer
             ${dsk_alertname_total}=  Evaluate  ${dsk_alertname_cnt} + ${dsk_alertname_total} + 0
             Run Keywords   Should Contain  ${dsk_alertname_val}  ${DSK_policy}    AND  Log To Console  DSK alert name firing was ${dsk_alertname_val}
             Log To Console  DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} GB
+            END
          ${acx_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${ACX_policy}
          ${len_acx}=  Get Length  ${acx_firing}
          Sleep  1seconds
@@ -875,10 +947,8 @@ Show Alerts Firing Primer
             ${acx_firing_total}=     Evaluate  ${acx_firing_cnt} + ${acx_firing_total} + 0
             ${acx_alertname_total}=  Evaluate  ${acx_alertname_cnt} + ${acx_alertname_total} + 0
             Run Keywords   Should Contain  ${acx_alertname_val}  ${ACX_policy}    AND  Log To Console  ACX alert name firing was ${acx_alertname_val}
-         END
-         END
-         END
-         END
+            Log To Console  ACX alert utilization value=${acx_util_val}% firing value=${acx_firing_val} connections
+            END
    Sleep  ${primer_poll_time}
    ${alertname_totals}=     Evaluate  ${cpu_alertname_total} + ${mem_alertname_total} + ${dsk_alertname_total} + ${acx_alertname_total} + 0
    ${firing_totals}=        Evaluate  ${cpu_firing_total} + ${mem_firing_total} + ${dsk_firing_total} + ${acx_firing_total} + 0
