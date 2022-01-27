@@ -33,10 +33,10 @@ ${tt_30s}=           30s
 ${tt_32s}=           32s
 ${test_timeout_crm}  15 min
 #ALERT POLICY RECEIVER INFO
-${CPU_policy}   CPUpolicyErr
-${MEM_policy}   MEMpolicyErr
-${DSK_policy}   DSKpolicyErr
-${ACX_policy}   ACXpolicyErr
+${CPU_policy}   CPUpolicyDel
+${MEM_policy}   MEMpolicyDel
+${DSK_policy}   DSKpolicyDel
+${ACX_policy}   ACXpolicyDel
 ${err}=     error
 ${wrn}=     warning
 ${inf}=     info
@@ -52,17 +52,7 @@ ${dsk_util_val}=  20
 ${acx_util_val}=  21
 
 *** Test Cases ***
-   
-#ECQ-4287
-Set mc settings alertpolicymintriggertime to 30s
-   [Documentation]
-   ...  - Setting for mc alertpolicytrigger can be updated
-   ...  - Verify new trigger time is updated
-
-   Log To Console  ${\n}Resetting mc trigger time policy to 30s
-   Run Keyword  Reset Trigger Time Policy 30s
-
-#ECQ-4286
+#ECQ-4288  Remove and add alert policies from app
 Create new alert policies for cpu mem disk and active-connections
    [Documentation]
    ...  - User shall be able to create new alert policies 
@@ -73,7 +63,6 @@ Create new alert policies for cpu mem disk and active-connections
    Log To Console  ${\n} Creating app and alert  policies
    Run Keyword  Create Policies
 
-#ECQ-4289
 Update existing alert policies with new values
    [Documentation]
    ...  - User shall be able to update existing alertpolicy values
@@ -83,7 +72,6 @@ Update existing alert policies with new values
    Log To Console  ${\n}Updating policies severity to warning and trigger time to 32s
    Run Keyword  Update Policies Severity Warning Trigger32
 
-#ECQ-4290
 Add alert policies to k8s app
    [Documentation]
    ...  - User shall be able to add alert policies to an app
@@ -92,7 +80,6 @@ Add alert policies to k8s app
    Log To Console  ${\n}Adding policies To app
    Run Keyword  Add Policies To App
 
-#ECQ-4291
 Show alert policies added to k8s app
    [Documentation]
    ...  - User shall be able to view existing alert policies added to an app
@@ -100,7 +87,7 @@ Show alert policies added to k8s app
 
    Log To Console  ${\n} Showing alert policies from app
    Run Keyword  Show Alert Policies From App
-#ECQ-4292
+
 Remove alert policies from app
    [Documentation]
    ...  - User shall be able to Remove alert policies from an app
@@ -108,7 +95,7 @@ Remove alert policies from app
 
    Log To Console  ${\n}Removing policies from app
    Run Keyword  Remove Alert Policies From App
-#ECQ-4293
+
 Add back alert policies to app that have been previously removed
    [Documentation]
    ...  - User shall be able to re-add previously removed alert policies back to app
@@ -116,7 +103,7 @@ Add back alert policies to app that have been previously removed
 
    Log To Console  ${\n}Adding exising policies to once removed policies on app
    Run Keyword  Add Policies To App
-#ECQ-4294
+
 Remove alert polices from app delete alert polices plus delete k8s app and flavor
    [Documentation]
    ...  - User shall be able to Remove alert policies and delete app
@@ -305,7 +292,7 @@ Update Policies Severity Warning Trigger32
    Run Keyword If  '${nogo}'=='${False}'  Log To Console  ${\n}${MEM_policy} does not exists not updated
    ${nogo}=  Run Keyword If  ${mem_err}!=${mem_policy_name}  Set Variable  ${True}
    Run Keyword If  '${nogo}'=='${True}'  Log To Console  ${\n}${MEM_policy} was updated
-   ${mem_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${CPU_policy}
+   ${mem_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${MEM_policy}
    ${mem_plcy_sev}=   Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${mem_plcy_show[0]['data']['severity']}
    ${mem_plcy_trig}=  Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${mem_plcy_show[0]['data']['trigger_time']}
    Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${mem_plcy_sev}   ${wrn}
@@ -316,7 +303,7 @@ Update Policies Severity Warning Trigger32
    Run Keyword If  '${nogo}'=='${False}'  Log To Console  ${\n}${DSK_policy} does not exists not updated
    ${nogo}=  Run Keyword If  ${dsk_err}!=${dsk_policy_name}  Set Variable  ${True}
    Run Keyword If  '${nogo}'=='${True}'  Log To Console  ${\n}${DSK_policy} was updated
-   ${dsk_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${CPU_policy}
+   ${dsk_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${DSK_policy}
    ${dsk_plcy_sev}=   Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${dsk_plcy_show[0]['data']['severity']}
    ${dsk_plcy_trig}=  Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${dsk_plcy_show[0]['data']['trigger_time']}
    Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${dsk_plcy_sev}   ${wrn}
@@ -327,7 +314,7 @@ Update Policies Severity Warning Trigger32
    Run Keyword If  '${nogo}'=='${False}'  Log To Console  ${\n}${ACX_policy} does not exists not updated
    ${nogo}=  Run Keyword If  ${acx_err}!=${acx_policy_name}  Set Variable  ${True}
    Run Keyword If  '${nogo}'=='${True}'  Log To Console  ${\n}${ACX_policy} was updated
-   ${acx_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${CPU_policy}
+   ${acx_plcy_show}=  Run Keyword If  '${nogo}'=='${True}'  Show Alert Policy  token=${super_token}  region=${region}  alertpolicy_name=${ACX_policy}
    ${acx_plcy_sev}=   Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${acx_plcy_show[0]['data']['severity']}
    ${acx_plcy_trig}=  Run Keyword If  '${nogo}'=='${True}'  Convert To String  ${acx_plcy_show[0]['data']['trigger_time']}
    Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${acx_plcy_sev}   ${wrn}
