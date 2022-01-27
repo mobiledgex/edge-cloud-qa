@@ -1012,3 +1012,8 @@ class MexApp(object):
         tz = pytz.timezone(timezone)
         current_date = datetime.now(tz)
         return current_date.strftime('%Y-%m-%d %H:%M:%S')
+
+    def fetch_current_date(self, timezone='UTC'):
+        tz = pytz.timezone(timezone)
+        current_date = datetime.now(tz)
+        return current_date.strftime('%Y-%m-%d')
