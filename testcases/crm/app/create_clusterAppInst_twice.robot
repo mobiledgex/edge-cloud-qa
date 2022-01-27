@@ -57,7 +57,7 @@ CreateAppInst - User shall be able to create same cluster/appinst twice
     TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
     Delete App Instance  region=${region}
-    Delete Cluster Instance  region=${region}
+    Run Keyword If  '${platform_type}' != 'K8SBareMetal'  Delete Cluster Instance  region=${region}
 
     IF  '${platform_type}' != 'K8SBareMetal'
         Log To Console  Creating Cluster Instance again

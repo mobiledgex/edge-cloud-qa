@@ -69,7 +69,7 @@ RunCommand - k8s dedicated shall return command result on CRM
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
-    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}  dedicated_ip=${True}
+    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}  dedicated_ip=${dedicated_ip}
 
     log to console  ${app_inst}
     ${token}=  Login
@@ -238,16 +238,19 @@ Setup
         ${allow_serverless}=  Set Variable  ${True}
         ${cluster_developer_name}=  Set Variable  MobiledgeX
         ${cleanup_cluster}=  Set Variable  ${False}
+        ${dedicated_ip}=  Set Variable  ${True}
     ELSE
         ${allow_serverless}=  Set Variable  ${None}
         ${cleanup_cluster}=  Set Variable  ${True}
         ${cluster_developer_name}=  Get Default Developer Name
+        ${dedicated_ip}=  Set Variable  ${False}
     END
     Set Suite Variable  ${platform_type}
     Set Suite Variable  ${allow_serverless}
     Set Suite Variable  ${cluster_developer_name}
     Set Suite Variable  ${cluster_name}
     Set Suite Variable  ${cleanup_cluster}
+    Set Suite Variable  ${dedicated_ip}
 
     #${cloudlet}=  Show Cloudlets  region=${region}  cloudlet_name=${cloudlet_name_crm}
     #${platform_type}=  Set Variable  ${cloudlet[0]['data']['platform_type']}
