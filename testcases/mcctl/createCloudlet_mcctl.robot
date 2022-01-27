@@ -225,6 +225,44 @@ UpdateCloudlet - mcctl shall handle allianceorg clear
 
    Should Not Contain  ${show2[0]}  alliance_orgs
 
+# ECQ-4296
+CreateCloudlet - mcctl help shall show
+   [Documentation]
+   ...  - send Cloudlet via mcctl with help for each command
+   ...  - verify help is returned
+
+   [Template]  Show Help
+   cloudlet ${Empty}
+   cloudlet create                 
+   cloudlet delete                
+   cloudlet update               
+   cloudlet show                
+   cloudlet getmanifest        
+   cloudlet getprops          
+   cloudlet getresourcequotaprops
+   cloudlet getresourceusage    
+   cloudlet addresmapping      
+   cloudlet removeresmapping  
+   cloudlet addallianceorg   
+   cloudlet removeallianceorg      
+   cloudlet findflavormatch       
+   cloudlet showflavorsfor       
+   cloudlet getorganizationson  
+   cloudlet revokeaccesskey    
+   cloudlet generateaccesskey 
+
+#ECQ-4297
+CloudletInfo - mcctl help shall show
+   [Documentation]
+   ...  - send CloudletInfo via mcctl with help for each command
+   ...  - verify help is returned
+
+   [Template]  Show Help
+   cloudletinfo ${Empty}
+   cloudletinfo show
+   cloudletinfo inject
+   cloudletinfo evict
+
 *** Keywords ***
 Setup
    ${cloudlet_name}=  Get Default Cloudlet Name
@@ -351,3 +389,12 @@ Fail Remove Alliance Org Via mcctl
 
    ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudlet removeallianceorg region=${region} ${parmss}  version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
+
+Show Help
+   [Arguments]  ${parms}
+
+   ${error}=  Run Keyword and Expect Error  *  Run mcctl  ${parms} -h  version=${version}
+
+   #${cmd}=  Run Keyword If  '${parms}' == '${Empty}'  Set Variable  ${Empty}  ELSE  Set Variable  ${parms}
+   Should Contain  ${error}  Usage: mcctl ${parms}
+
