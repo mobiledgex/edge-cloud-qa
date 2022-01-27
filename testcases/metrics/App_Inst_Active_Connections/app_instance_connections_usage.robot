@@ -94,7 +94,6 @@ Setup
    ${appinst_3}=  Show App Instances  region=${region}  app_name=${app_name_2}  cluster_instance_name=${clustername_k8s_dedicated}
    ${appinst_4}=  Show App Instances  region=${region}  app_name=${app_name_2}  cluster_instance_name=${clustername_k8s_shared}
 #   ${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
-   ${app_name_influx}=  Convert To Lowercase  ${app_name}
 
    Set Suite Variable  ${app_name_1}
    Set Suite Variable  ${app_name_2}
@@ -103,7 +102,6 @@ Setup
    Set Suite Variable  ${clustername_k8s_dedicated}
    Set Suite Variable  ${clustername_k8s_shared}
    Set Suite Variable  ${developer_name}
-   Set Suite Variable  ${app_name_influx}
    #Set Suite Variable  ${pod}
 
 Metrics Headings Should Be Correct
