@@ -43,7 +43,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when replica
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command} 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -63,7 +63,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when replica
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  command=${docker_command} 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -84,7 +84,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,tcp:4015  command=${docker_command} 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
@@ -128,7 +128,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016,tcp:4015  command=${docker_command} 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
@@ -170,7 +170,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016:tls  command=${docker_command} 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
@@ -201,7 +201,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016  command=${docker_command} 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
@@ -233,7 +233,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckOk when TCP port with skip_
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  command=${docker_command}  skip_hc_ports=tcp:2016 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
@@ -271,7 +271,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,tcp:8085  command=${docker_command}  skip_hc_ports=tcp:2015,tcp:2016 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -306,7 +306,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016,tcp:8085  command=${docker_command}  skip_hc_ports=tcp:2015-2016 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -342,14 +342,14 @@ IpAccessDedicated k8s - healthcheck shows proper state after UpdateApp
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command} 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  auto_delete=False
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}  auto_delete=False
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
     Update App  region=${region}  access_ports=tcp:2015,tcp:2016,tcp:4015
 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  auto_delete=False
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}  auto_delete=False
 
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
@@ -363,7 +363,7 @@ IpAccessDedicated k8s - healthcheck shows proper state after UpdateApp
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
     Update App  region=${region}   skip_hc_ports=tcp:2016
 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  dedicated_ip=${dedicated_ip}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -404,13 +404,15 @@ Setup
 
         ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}-${developer_org_name_automation}  ${rootlb}
         ${clusterlb}=  Replace String  ${clusterlb}  _  -
+        ${dedicated_ip}=  Set Variable  ${None}
     ELSE
-        ${clusterlb}=  Catenate  SEPARATOR=.  defaultclust  ${rootlb}
+        ${clusterlb}=  Catenate  SEPARATOR=.  shared  ${rootlb}
         ${dev_name_hyphen}=  Replace String  ${dev_name}  _  -
         ${app_version_change}=  Replace String  ${app_version_default}  .  ${EMPTY}
         ${kubeconfig}=  Set Variable  defaultclust.${operator_name_crm}.${dev_name_hyphen}-${app_name_default}-${app_version_change}-${cluster_name_default}
         ${kubeconfig}=  Get SubString  ${kubeconfig}  0  83
         ${kubeconfig}=  Set Variable  ${kubeconfig}.kubeconfig
+        ${dedicated_ip}=  Set Variable  ${True}
     END
     Set Suite Variable  ${platform_type}
 
@@ -418,6 +420,7 @@ Setup
     Set Suite Variable  ${clusterlb}
     Set Suite Variable  ${cloudlet_lowercase}
     Set Suite Variable  ${kubeconfig}
+    Set Suite Variable  ${dedicated_ip}
  
 Verify Health Check Ok
     [Arguments]   ${appname}  ${clustername}  ${state}
