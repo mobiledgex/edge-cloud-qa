@@ -13,6 +13,16 @@ ${udp_fqdn}       reservable0.automationbonncloudlet.tdg.mobiledgex.net
 ${tcp_fqdn}       shared.automationbonncloudlet.tdg.mobiledgex.net
 ${http_fqdn}      reservable0.automationbonncloudlet.tdg.mobiledgex.net
 
+#${udp_fqdn}       porttestcluster-automation-dev-org.automationbonncloudlet-tdg.us.mobiledgex.net
+#${tcp_fqdn}       porttestcluster-automation-dev-org.automationbonncloudlet-tdg.us.mobiledgex.net
+#${http_fqdn}      porttestcluster-automation-dev-org.automationbonncloudlet-tdg.us.mobiledgex.net
+
+#${udp_fqdn}       porttestcluster-automation-dev-org.automationdallascloudlet-packet.us.mobiledgex.net
+#${tcp_fqdn}       porttestcluster-automation-dev-org.automationdallascloudlet-packet.us.mobiledgex.net
+#${http_fqdn}      porttestcluster-automation-dev-org.automationdallascloudlet-packet.us.mobiledgex.net
+
+porttestcluster-automation-dev-org.automationbonncloudlet-tdg.us.mobiledgex.net
+
 ${udp_port}   2016
 ${tls_port}   2015
 ${tcp_port}   10006
