@@ -663,13 +663,14 @@ pipeline{
                 script {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Performance tests failed') {
                         script { slackMessage.good('Starting Performance tests') }
-                        build job: 'runTestcases', parameters: [
-                            string(name: 'Project', value: params.Project), 
-                            string(name: 'Version', value: params.Version), 
-                            string(name: 'Cycle', value: cycle), 
-                            string(name: 'MasterController', value: params.MasterController),
-                            string(name: 'TestTarget', value: 'Performance/Security'),
-                            string(name: 'Components', value: 'Automated, Performance')]
+                        build job: 'Performance'
+//                        build job: 'runTestcases', parameters: [
+//                            string(name: 'Project', value: params.Project), 
+//                            string(name: 'Version', value: params.Version), 
+//                            string(name: 'Cycle', value: cycle), 
+//                            string(name: 'MasterController', value: params.MasterController),
+//                            string(name: 'TestTarget', value: 'Performance/Security'),
+//                            string(name: 'Components', value: 'Automated, Performance')]
                     }
                 }
             }
