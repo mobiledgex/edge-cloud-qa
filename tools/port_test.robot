@@ -21,7 +21,7 @@ ${http_fqdn}      reservable0.automationbonncloudlet.tdg.mobiledgex.net
 #${tcp_fqdn}       porttestcluster-automation-dev-org.automationdallascloudlet-packet.us.mobiledgex.net
 #${http_fqdn}      porttestcluster-automation-dev-org.automationdallascloudlet-packet.us.mobiledgex.net
 
-porttestcluster-automation-dev-org.automationbonncloudlet-tdg.us.mobiledgex.net
+
 
 ${udp_port}   2016
 ${tls_port}   2015
