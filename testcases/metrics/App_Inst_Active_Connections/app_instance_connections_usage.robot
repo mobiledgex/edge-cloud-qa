@@ -37,7 +37,7 @@ Docker Dedicated AppInstMetrics - CONNECTIONS usage metrics on openstack
    ...  request app Connections metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_1}  ${app_name_influx}  ${clustername_docker_dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_1}  ${clustername_docker_dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
    log  ${metrics}
    Metrics Headings Should Be Correct  ${metrics}
    Connections Should Be In Range  ${metrics}
@@ -48,7 +48,7 @@ Docker Shared AppInstMetrics - CONNECTIONS usage metrics on openstack
    ...  request app Connections metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_1}  ${app_name_influx}  ${clustername_docker_shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_1}   ${clustername_docker_shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
    log  ${metrics}
    Metrics Headings Should Be Correct  ${metrics}
    Connections Should Be In Range  ${metrics}
@@ -59,7 +59,7 @@ K8s Dedicated AppInstMetrics - CONNECTIONS usage metrics on openstack
    ...  request app Connections metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_2}  ${app_name_influx}  ${clustername_k8s_dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_2}   ${clustername_k8s_dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
    log  ${metrics}
    Metrics Headings Should Be Correct  ${metrics}
    Connections Should Be In Range  ${metrics}
@@ -70,7 +70,7 @@ K8s Shared AppInstMetrics - CONNECTIONS usage metrics on openstack
    ...  request app Connections metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_2}  ${app_name_influx}  ${clustername_k8s_shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_2}   ${clustername_k8s_shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
    log  ${metrics}
    Metrics Headings Should Be Correct  ${metrics}
    Connections Should Be In Range  ${metrics}
