@@ -585,7 +585,8 @@ def exec_testcase(z, t):
             cloudlet = next_crm['cloudlet']
             cloudlet_openrc = cloudlet
             operator = next_crm['operator']
-            var_override_cmd = f'--variable {crm_pool_var}:{cloudlet} --variable operator_name_openstack:{operator} --variable operator_name_crm:{operator} --variable region:{region}'
+            physical_name = next_crm['physical_name']
+            var_override_cmd = f'--variable {crm_pool_var}:{cloudlet} --variable physical_name_crm:{physical_name} --variable operator_name_openstack:{operator} --variable operator_name_crm:{operator} --variable region:{region}'
 
             env_file = find(f'automation_env_{region}.sh', os.environ['WORKSPACE'])
 
