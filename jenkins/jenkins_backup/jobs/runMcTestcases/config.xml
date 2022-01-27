@@ -109,7 +109,8 @@ testcase_components = [
     controller_components + &quot;Billing&quot;,
     controller_components + &quot;ShowNode&quot;,
     controller_components + &quot;Organization&quot;,
-    controller_components + &quot;Controller&quot;
+    controller_components + &quot;Controller&quot;,
+    controller_components + &quot;RateLimit&quot;
     ]
 
 

@@ -119,22 +119,22 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>CRMPoolOpenstack</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;},{&quot;cloudlet&quot;:&quot;packet-qaregression&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;bonn&quot;},{&quot;cloudlet&quot;:&quot;packet-qaregression&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;packet2&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>CRMPoolAnthos</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;qa-anthos&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>CRMPoolVCD</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationDallasCloudlet&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationDallasCloudlet&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;qa2-lab&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>CRMPoolVsphere</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;DFWVMW2&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;DFWVMW2&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;dfw2&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>

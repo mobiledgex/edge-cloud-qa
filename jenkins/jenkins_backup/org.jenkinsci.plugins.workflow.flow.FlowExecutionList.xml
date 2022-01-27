@@ -1,15 +1,2 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<list>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runRegression</job>
-    <id>202</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runCrmTestcases</job>
-    <id>174</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runTestcases</job>
-    <id>3755</id>
-  </flow-owner>
-</list>
+<list/>

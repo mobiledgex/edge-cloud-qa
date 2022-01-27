@@ -102,18 +102,16 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>CRMPool</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;qa-anthos&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>Openstack</string>
-              <string>VCD</string>
-              <string>Vsphere</string>
-              <string>Anthos</string>
-            </a>
+          <choices>
+            <string>Openstack</string>
+            <string>VCD</string>
+            <string>Vsphere</string>
+            <string>Anthos</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
