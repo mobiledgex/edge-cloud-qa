@@ -4,11 +4,12 @@
   <description>Active Connections Test for App Instance </description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.6"/>
     <com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty plugin="build-failure-analyzer@1.27.1">
       <doNotScan>false</doNotScan>
     </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.1">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.10.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -22,7 +23,7 @@
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <submoduleCfg class="list"/>
+    <submoduleCfg class="empty-list"/>
     <extensions/>
   </scm>
   <assignedNode>jenkinsGcpSlave1</assignedNode>
@@ -47,7 +48,8 @@ export PYTHONPATH=/home/jenkins/workspace/ActiveConnectionsTest/protos:/home/jen
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.plugins.robot.RobotPublisher plugin="robot@2.1.1">
+    <hudson.plugins.robot.RobotPublisher plugin="robot@3.0.1">
+      <archiveDirName>robot-plugin</archiveDirName>
       <outputPath>/home/jenkins/workspace/ActiveConnectionsTest/</outputPath>
       <reportFileName>report.html</reportFileName>
       <logFileName>log.html</logFileName>
@@ -58,10 +60,11 @@ export PYTHONPATH=/home/jenkins/workspace/ActiveConnectionsTest/protos:/home/jen
       <otherFiles>
         <string></string>
       </otherFiles>
+      <overwriteXAxisLabel></overwriteXAxisLabel>
       <enableCache>true</enableCache>
       <onlyCritical>true</onlyCritical>
     </hudson.plugins.robot.RobotPublisher>
-    <jenkins.plugins.slack.SlackNotifier plugin="slack@2.42">
+    <jenkins.plugins.slack.SlackNotifier plugin="slack@2.48">
       <baseUrl></baseUrl>
       <teamDomain>mobiledgex</teamDomain>
       <authToken></authToken>
