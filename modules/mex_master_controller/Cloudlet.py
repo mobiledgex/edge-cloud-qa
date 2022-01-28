@@ -476,8 +476,7 @@ class Cloudlet(MexOperation):
         metric_dict = msg
         if 'key' in msg:
             metric_dict['cloudlet'] = msg['key']
-        else:
-            metric_dict = msg
+            del metric_dict['key']
 
         msg_dict = self._build_metrics(type_dict=metric_dict, selector=selector, limit=limit, start_time=start_time, end_time=end_time, start_age=start_age, end_age=end_age, number_samples=number_samples)
 
