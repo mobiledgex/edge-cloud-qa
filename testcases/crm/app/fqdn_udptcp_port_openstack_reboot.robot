@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation  use FQDN to access app on CRM after reboot
 
-Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
 Library  String
@@ -29,6 +29,8 @@ ${manifest_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml
 ${manifest_pod_name}=  server-ping-threaded-udptcphttp
 	
 ${test_timeout_crm}  15 min
+
+${region}  US
 	
 *** Test Cases ***
 # ECQ-1379
@@ -42,8 +44,8 @@ User shall be able to access UDP,TCP and HTTP ports on CRM after reboot
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -58,20 +60,22 @@ User shall be able to access UDP,TCP and HTTP ports on CRM after reboot
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
 
     Reboot Rootlb  root_loadbalancer=${rootlb}
-    Sleep  60s
- 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+
+    Wait For Cloudlet Status Offline  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    Wait For Cloudlet Status Online  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  timeout=600
+
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  num_tries=90
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
  
 *** Keywords ***
 Setup
-    Create Flavor
+    Create Flavor  region=${region}
 
-    ${platform_type}  Get Cloudlet Platform Type  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+    ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
     IF  '${platform_type}' != 'K8SBareMetal'
         Log To Console  Creating Cluster Instance
-        Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  #flavor_name=${cluster_flavor_name}
+        Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  #flavor_name=${cluster_flavor_name}
         Log To Console  Done Creating Cluster Instance
     END
 
