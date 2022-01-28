@@ -53,8 +53,8 @@ CreateAppInst - User shall be able to create same cluster/appinst twice
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tag=${app_name_default}
 
     Delete App Instance  region=${region}
     Run Keyword If  '${platform_type}' != 'K8SBareMetal'  Delete Cluster Instance  region=${region}
@@ -74,8 +74,8 @@ CreateAppInst - User shall be able to create same cluster/appinst twice
     ${fqdn_02}=  Catenate  SEPARATOR=   ${cloudlet2.ports[0].fqdn_prefix}  ${cloudlet2.fqdn}
     ${fqdn_12}=  Catenate  SEPARATOR=   ${cloudlet2.ports[1].fqdn_prefix}  ${cloudlet2.fqdn}
 
-    TCP Port Should Be Alive  ${fqdn_02}  ${cloudlet2.ports[0].public_port}
-    TCP Port Should Be Alive  ${fqdn_12}  ${cloudlet2.ports[1].public_port}
+    TCP Port Should Be Alive  ${fqdn_02}  ${cloudlet2.ports[0].public_port}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_12}  ${cloudlet2.ports[1].public_port}  tag=${app_name_default}
 
 *** Keywords ***
 Setup

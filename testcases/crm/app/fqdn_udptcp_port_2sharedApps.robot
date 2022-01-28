@@ -105,8 +105,8 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with same name but dif
    ${fqdn_udp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[1].fqdn_prefix}  ${cloudlet1.fqdn}
 
    Log To Console  Checking if port is alive
-   TCP Port Should Be Alive  ${fqdn_tcp1}  ${cloudlet1.ports[0].public_port}
-   UDP Port Should Be Alive  ${fqdn_udp1}  ${cloudlet1.ports[1].public_port}
+   TCP Port Should Be Alive  ${fqdn_tcp1}  ${cloudlet1.ports[0].public_port}  tag=${app_name_k8s}
+   UDP Port Should Be Alive  ${fqdn_udp1}  ${cloudlet1.ports[1].public_port}  tag=${app_name_k8s}
 
    Log To Console  Registering Client and Finding Cloudlet for k8s
    Register Client  app_name=${app_name_k8s}  app_version=2.0
@@ -115,8 +115,8 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with same name but dif
    ${fqdn_udp2}=  Catenate  SEPARATOR=  ${cloudlet2.ports[1].fqdn_prefix}  ${cloudlet2.fqdn}
 
    Log To Console  Checking if port is alive
-   TCP Port Should Be Alive  ${fqdn_tcp2}  ${cloudlet2.ports[0].public_port}
-   UDP Port Should Be Alive  ${fqdn_udp2}  ${cloudlet2.ports[1].public_port}
+   TCP Port Should Be Alive  ${fqdn_tcp2}  ${cloudlet2.ports[0].public_port}  tag=${app_name_k8s}
+   UDP Port Should Be Alive  ${fqdn_udp2}  ${cloudlet2.ports[1].public_port}  tag=${app_name_k8s}
 
 # ECQ-4124
 User shall be able to access TCP/UDP ports for 2 k8s apps with with same ports on the same rootlb with dedicatedip=true
@@ -151,8 +151,8 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with with same ports o
    ${fqdn_udp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[1].fqdn_prefix}  ${cloudlet1.fqdn}
 
    Log To Console  Checking if port is alive
-   TCP Port Should Be Alive  ${fqdn_tcp1}  ${cloudlet1.ports[0].public_port}
-   UDP Port Should Be Alive  ${fqdn_udp1}  ${cloudlet1.ports[1].public_port}
+   TCP Port Should Be Alive  ${fqdn_tcp1}  ${cloudlet1.ports[0].public_port}  tag=${app_name_1}
+   UDP Port Should Be Alive  ${fqdn_udp1}  ${cloudlet1.ports[1].public_port}  tag=${app_name_1}
 
    Log To Console  Registering Client and Finding Cloudlet for k8s
    Register Client  app_name=${app_name_2}  app_version=1.0
@@ -161,8 +161,8 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with with same ports o
    ${fqdn_udp2}=  Catenate  SEPARATOR=  ${cloudlet2.ports[1].fqdn_prefix}  ${cloudlet2.fqdn}
 
    Log To Console  Checking if port is alive
-   TCP Port Should Be Alive  ${fqdn_tcp2}  ${cloudlet2.ports[0].public_port}
-   UDP Port Should Be Alive  ${fqdn_udp2}  ${cloudlet2.ports[1].public_port}
+   TCP Port Should Be Alive  ${fqdn_tcp2}  ${cloudlet2.ports[0].public_port}  tag=${app_name_2}
+   UDP Port Should Be Alive  ${fqdn_udp2}  ${cloudlet2.ports[1].public_port}  tag=${app_name_2}
 
 # ECQ-4125
 User shall be able to access TCP/UDP ports for 2 k8s apps with with same ports on the same rootlb with dedicatedip=false
@@ -197,8 +197,8 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with with same ports o
    ${fqdn_udp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[1].fqdn_prefix}  ${cloudlet1.fqdn}
 
    Log To Console  Checking if port is alive
-   TCP Port Should Be Alive  ${fqdn_tcp1}  ${cloudlet1.ports[0].public_port}
-   UDP Port Should Be Alive  ${fqdn_udp1}  ${cloudlet1.ports[1].public_port}
+   TCP Port Should Be Alive  ${fqdn_tcp1}  ${cloudlet1.ports[0].public_port}  tag=${app_name_1}
+   UDP Port Should Be Alive  ${fqdn_udp1}  ${cloudlet1.ports[1].public_port}  tag=${app_name_1}
 
    Log To Console  Registering Client and Finding Cloudlet for k8s
    Register Client  app_name=${app_name_2}  app_version=1.0
@@ -207,8 +207,8 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with with same ports o
    ${fqdn_udp2}=  Catenate  SEPARATOR=  ${cloudlet2.ports[1].fqdn_prefix}  ${cloudlet2.fqdn}
 
    Log To Console  Checking if port is alive
-   TCP Port Should Be Alive  ${fqdn_tcp2}  ${cloudlet2.ports[0].public_port}
-   UDP Port Should Be Alive  ${fqdn_udp2}  ${cloudlet2.ports[1].public_port}
+   TCP Port Should Be Alive  ${fqdn_tcp2}  ${cloudlet2.ports[0].public_port}  tag=${app_name_2}
+   UDP Port Should Be Alive  ${fqdn_udp2}  ${cloudlet2.ports[1].public_port}  tag=${app_name_2}
 
 *** Keywords ***
 Setup
