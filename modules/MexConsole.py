@@ -877,7 +877,7 @@ class MexConsole() :
 
     def open_flavor_details(self, flavor_name, region=None):
         if region is None: region = self._region
-        self.change_number_of_rows()
+
         logging.info('Opening flavor details for flavorname=' + flavor_name)
         self.flavors_page.click_flavor_row(flavor_name=flavor_name, region=region)
         time.sleep(1)
@@ -1037,10 +1037,10 @@ class MexConsole() :
         self.new_cloudlet_page.create_cloudlet(region=region, cloudlet_name=cloudlet['key']['name'], operator_name=cloudlet['key']['organization'], latitude=cloudlet['location']['latitude'], longitude=cloudlet['location']['longitude'], ip_support=cloudlet['ip_support'], number_dynamic_ips=cloudlet['num_dynamic_ips'], physical_name=cloudlet['physical_name'], platform_type=cloudlet['platform_type'], infra_api_access=mode, trust_policy=trust_policy)
    
         if mode == 'Direct':
-            if self.compute_page.wait_for_dialog_box(text="Waiting for run lists to be executed on Platform Server", wait=300):
+            if self.compute_page.wait_for_dialog_box(text="Waiting for run lists to be executed on Platform Server", wait=400):
                 self.new_cloudlet_page.close_alert_box()
             else:
-                raise Exception('Dialog box test NOT found')
+                raise Exception('Dialog box text NOT found')
         else:
             self.compute_page.wait_for_dialog_box(text="Cloudlet configured successfully, please wait requesting cloudlet manifest to bring up Platform VM(s) for cloudlet service", wait=60)
             if self.new_cloudlet_page.get_cloudlet_manifest(cloudlet_name=cloudlet['key']['name']):
@@ -1131,7 +1131,7 @@ class MexConsole() :
     def open_cloudlet_details(self, cloudlet_name=None, region=None):
         if region is None: region = self._region
         if cloudlet_name is None: cloudlet_name =  self._cloudlet['key']['name']
-        self.change_number_of_rows()
+
         logging.info('Opening cloudlet details for cloudletname=' + cloudlet_name)
 
         self.cloudlets_page.click_cloudlet_row(cloudlet_name=cloudlet_name, region=region)
