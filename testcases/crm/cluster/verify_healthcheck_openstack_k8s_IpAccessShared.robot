@@ -91,8 +91,8 @@ IpAccessShared k8s - healthcheck shows HealthCheckFailServerFail when one port g
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tag=${app_name_default}
 
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
@@ -114,8 +114,8 @@ IpAccessShared k8s - healthcheck shows HealthCheckFailServerFail when one port g
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tag=${app_name_default}
 
 # ECQ-2527
 IpAccessShared k8s - healthcheck shows HealthCheckFailServerFail when one port goes down for app with 2 TCP access ports and TLS enabled on both ports
@@ -135,8 +135,8 @@ IpAccessShared k8s - healthcheck shows HealthCheckFailServerFail when one port g
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
-    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tls=${True}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tls=${True}  tag=${app_name_default}
 
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
@@ -167,8 +167,8 @@ IpAccessShared k8s - healthcheck shows HealthCheckFailServerFail when one port g
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
-    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tag=${app_name_default}
 
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
@@ -200,8 +200,8 @@ IpAccessShared k8s - healthcheck shows HealthCheckOk when TCP port with skip_hc 
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tag=${app_name_default}
 
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
@@ -211,7 +211,7 @@ IpAccessShared k8s - healthcheck shows HealthCheckOk when TCP port with skip_hc 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_1}
     Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tag=${app_name_default}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_0}
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
@@ -295,7 +295,7 @@ Setup
 
         ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     ELSE
-        ${rootlb}=  Catenate  SEPARATOR=.  defaultclust  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+        ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
         ${dev_name_hyphen}=  Replace String  ${dev_name}  _  -
         ${app_version_change}=  Replace String  ${app_version_default}  .  ${EMPTY}
         ${kubeconfig}=  Set Variable  defaultclust.${operator_name_crm}.${dev_name_hyphen}-${app_name_default}-${app_version_change}-${cluster_name_default}

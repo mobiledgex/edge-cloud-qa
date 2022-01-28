@@ -51,11 +51,11 @@ User shall be able to access 2 UDP and 2 TCP ports with k8s and autocluster
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tag=${app_name_default}
 
-    UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
-    UDP Port Should Be Alive  ${fqdn_3}  ${cloudlet.ports[3].public_port}
+    UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}  tag=${app_name_default}
+    UDP Port Should Be Alive  ${fqdn_3}  ${cloudlet.ports[3].public_port}  tag=${app_name_default}
 
 *** Keywords ***
 Setup
