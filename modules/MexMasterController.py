@@ -923,6 +923,27 @@ class MexMasterController(MexRest):
     def show_cloudlets(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=False, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
         return self.cloudlet.show_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
 
+    def wait_for_cloudlet_status(self, status, token=None, region=None, operator_org_name=None, cloudlet_name=None, timeout=180):
+        for x in range(1, timeout):
+            cloudlet = self.show_cloudlet_info(token=token, region=region, operator_org_name=None, cloudlet_name=cloudlet_name, use_defaults=False)
+            if cloudlet:
+                if cloudlet[0]['data']['state'] == status:
+                    logging.info(f'Cloudlet Instance is {status}')
+                    return cloudlet
+                else:
+                    logging.debug(f'cloudlet state not matching {status}. got {cloudlet[0]["data"]["state"]}. sleeping and trying again')
+                    time.sleep(1)
+            else:
+                logging.debug(f'cloudlet is NOT found. sleeping and trying again')
+
+        raise Exception(f'cloudlet is NOT {state}. Got {cloudlet[0]["data"]["state"]} but expected {status}')
+
+    def wait_for_cloudlet_status_online(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, timeout=180):
+        return self.wait_for_cloudlet_status(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, timeout=timeout, status='Ready')
+
+    def wait_for_cloudlet_status_offline(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, timeout=180):
+        return self.wait_for_cloudlet_status(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, timeout=timeout, status='Offline')
+
     def get_cloudlet_platform_type(self, token=None, region=None, operator_org_name=None, cloudlet_name=None):
         cloudlet = self.show_cloudlets(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name)
         
