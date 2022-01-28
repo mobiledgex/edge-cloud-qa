@@ -210,7 +210,7 @@ class MexConsole() :
 
         if self.login_page.is_alert_box_present():
             alert_text = self.login_page.get_alert_box_text()
-            logging.error(f'alert present box present with text={alert_text}')
+            logging.warning(f'alert present box present with text={alert_text}')
             self.take_screenshot('loginpage_alert')
             raise Exception(alert_text)
         else:
@@ -877,7 +877,7 @@ class MexConsole() :
 
     def open_flavor_details(self, flavor_name, region=None):
         if region is None: region = self._region
-        self.change_number_of_rows()
+
         logging.info('Opening flavor details for flavorname=' + flavor_name)
         self.flavors_page.click_flavor_row(flavor_name=flavor_name, region=region)
         time.sleep(1)
@@ -1037,10 +1037,10 @@ class MexConsole() :
         self.new_cloudlet_page.create_cloudlet(region=region, cloudlet_name=cloudlet['key']['name'], operator_name=cloudlet['key']['organization'], latitude=cloudlet['location']['latitude'], longitude=cloudlet['location']['longitude'], ip_support=cloudlet['ip_support'], number_dynamic_ips=cloudlet['num_dynamic_ips'], physical_name=cloudlet['physical_name'], platform_type=cloudlet['platform_type'], infra_api_access=mode, trust_policy=trust_policy)
    
         if mode == 'Direct':
-            if self.compute_page.wait_for_dialog_box(text="Waiting for run lists to be executed on Platform Server", wait=300):
+            if self.compute_page.wait_for_dialog_box(text="Waiting for run lists to be executed on Platform Server", wait=400):
                 self.new_cloudlet_page.close_alert_box()
             else:
-                raise Exception('Dialog box test NOT found')
+                raise Exception('Dialog box text NOT found')
         else:
             self.compute_page.wait_for_dialog_box(text="Cloudlet configured successfully, please wait requesting cloudlet manifest to bring up Platform VM(s) for cloudlet service", wait=60)
             if self.new_cloudlet_page.get_cloudlet_manifest(cloudlet_name=cloudlet['key']['name']):
@@ -1131,7 +1131,7 @@ class MexConsole() :
     def open_cloudlet_details(self, cloudlet_name=None, region=None):
         if region is None: region = self._region
         if cloudlet_name is None: cloudlet_name =  self._cloudlet['key']['name']
-        self.change_number_of_rows()
+
         logging.info('Opening cloudlet details for cloudletname=' + cloudlet_name)
 
         self.cloudlets_page.click_cloudlet_row(cloudlet_name=cloudlet_name, region=region)
@@ -1190,26 +1190,32 @@ class MexConsole() :
         self.details_page.click_close_button()
 
     def add_new_cluster_instance(self, region=None, cluster_name=None, developer_name=None, operator_name=None, cloudlet_name=None, deployment=None, ip_access=None, flavor_name=None, number_masters=None, number_nodes=None, wait=None):
-        #driver = webdriver.Chrome()
-        #self.driver = driver
         self.take_screenshot('add_new_clusterinst_pre')
 
         wait = int(wait)
 
-        self.compute_page.click_new_button()
+        self.compute_page.click_add_button()
 
         if self.new_clusterinst_page.are_elements_present():
-            logging.info('click New Cluster Instance button verification succeeded')
+            logging.info('click New Cluster Instance verification succeeded')
         else:
-            raise Exception('click New Cluster Instance button verification failed')
+            raise Exception('click New Cluster Instance verification failed')
 
-        clusterInst = ClusterInstance.create_cluster_instance(cluster_name=cluster_name, operator_org_name=operator_name, cloudlet_name=cloudlet_name, developer_org_name=developer_name, flavor_name=flavor_name, ip_access=ip_access, number_nodes = number_nodes, deployment = deployment)        
+        #clusterInst = ClusterInstance.create_cluster_instance(cluster_name=cluster_name, operator_org_name=operator_name, cloudlet_name=cloudlet_name, developer_org_name=developer_name, flavor_name=flavor_name, ip_access=ip_access, number_nodes = number_nodes, deployment = deployment)
+        #clusterInst = ClusterInstance(cluster_name=cluster_name, operator_org_name=operator_name, cloudlet_name=cloudlet_name, developer_org_name=developer_name, flavor_name=flavor_name, ip_access=ip_access, number_nodes=number_nodes, deployment=deployment).clusterInst
+        self.clusterInstobj = ClusterInstance(root_url='x')
+        clusterInst = self.clusterInstobj._build(cluster_name=cluster_name, operator_org_name=operator_name, cloudlet_name=cloudlet_name, developer_org_name=developer_name, flavor_name=flavor_name, ip_access=ip_access, number_nodes = number_nodes, deployment = deployment)
+        logging.info(f'Cluster Inst obj created - {clusterInst}')
         self._clusterInst = clusterInst
-        #logging.info('HERE')
         self._region = region
 
         logging.info(f'Adding new clusterInst region={region} cluster_name={cluster_name} operator_name={operator_name} developer_name={developer_name}  cloudlet_name={cloudlet_name} deployment={deployment}  ip_access={ip_access}  flavor_name={flavor_name}  number_nodes={number_nodes}  number_masters={number_masters}')
-        self.new_clusterinst_page.create_clusterInst(region=region, cluster_name=clusterInst['key']['cluster_key']['name'], operator_name=clusterInst['key']['cloudlet_key']['operator_key']['name'], developer_name=clusterInst['key']['developer'], cloudlet_name =clusterInst['key']['cloudlet_key']['name'], deployment=clusterInst['deployment'], flavor_name=clusterInst['flavor']['name'], ip_access=ip_access, number_nodes=clusterInst['num_nodes'])
+        self.new_clusterinst_page.create_clusterInst(region=region, cluster_name=clusterInst['key']['cluster_key']['name'], operator_name=clusterInst['key']['cloudlet_key']['organization'], developer_name=clusterInst['key']['organization'], cloudlet_name=clusterInst['key']['cloudlet_key']['name'], deployment=clusterInst['deployment'], flavor_name=clusterInst['flavor']['name'], ip_access=ip_access, number_nodes=number_nodes)
+        if self.compute_page.wait_for_dialog_box(text="Created ClusterInst successfully", wait=300):
+            self.new_appinst_page.close_alert_box()
+            logging.info('Dialog box text found, Created AppInst successfully')
+        else:
+            raise Exception('Dialog box text NOT found')
 
         self.take_screenshot('add_new_clusterinst_post')
         
@@ -1232,32 +1238,18 @@ class MexConsole() :
 
         if region is None: region = self._region
         if cluster_name is None: cluster_name = self._clusterInst['key']['cluster_key']['name']
-        if operator_name is None: operator_name = self._clusterInst['key']['cloudlet_key']['operator_key']['name']
-        if developer_name is None: developer_name= self._clusterInst['key']['developer']
+        if operator_name is None: operator_name = self._clusterInst['key']['cloudlet_key']['organization']
+        if developer_name is None: developer_name= self._clusterInst['key']['organization']
         if cloudlet_name is None: cloudlet_name = self._clusterInst['key']['cloudlet_key']['name']
         if flavor_name is None: flavor_name= self._clusterInst['flavor']['name']
         if ip_access is None: ip_access=ip_access
 
         logging.info(f'cluster_should_exist region={region}  cluster_name={cluster_name}  developer_name={developer_name}  operator_name={operator_name}  cloudlet_name={cloudlet_name}  flavor_name={flavor_name}  ip_access={ip_access}')
-        
+        self.cluster_instances_page.perform_search(cluster_name)
         if self.cluster_instances_page.is_cluster_instance_present(region=region,  cluster_name=cluster_name,  developer_name=developer_name,  operator_name=operator_name,  cloudlet_name=cloudlet_name,  flavor_name=flavor_name,  ip_access=ip_access):
             logging.info(f'cluster={cluster_name} found') 
         else:
             raise Exception(f'cluster={cluster_name} NOT found')
-        #time.sleep(450)
-        #wait = WebDriverWait(driver, 10)
-        #element = wait.until(ec.self.self.compute_page.is_alert_box_present())
-        
-        #if self.compute_page.get_alert_box_text() == 'Cluster Instance created successfully':
-         #       raise Exception('SUCCESS alert box found')
-        #else:
-         #   raise Exception('SUCCESS alert box not found. got ' + self.compute_page.get_alert_box_text())
-
-        #self.refresh_page()
-        #if self.base_page.wait_for_alert_box(wait=wait, cluster_name=cluster_name):
-           # logging.info('alert box found') 
-       # else:
-            #raise Exception('alert box NOT found')
 
     def cluster_should_not_exist(self, region=None, cluster_name=None, developer_name=None, operator_name=None, cloudlet_name=None, flavor_name=None, ip_access=None, wait=5): 
         self.take_screenshot('cluster_should_exist_pre')
@@ -1266,18 +1258,19 @@ class MexConsole() :
 
         if region is None: region = self._region
         if cluster_name is None: cluster_name = self._clusterInst['key']['cluster_key']['name']
-        if operator_name is None: operator_name = self._clusterInst['key']['cloudlet_key']['operator_key']['name']
-        if developer_name is None: developer_name= self._clusterInst['key']['developer']
+        if operator_name is None: operator_name = self._clusterInst['key']['cloudlet_key']['organization']
+        if developer_name is None: developer_name= self._clusterInst['key']['organization']
         if cloudlet_name is None: cloudlet_name = self._clusterInst['key']['cloudlet_key']['name']
         if flavor_name is None: flavor_name= self._clusterInst['flavor']['name']
-        if ip_access is None: ip_access= self._clusterInst['ip_access']
+        if ip_access is None: ip_access=ip_access
 
+        self.cluster_instances_page.perform_search(cluster_name)
         logging.info(f'cluster_should_not_exist region={region}  cluster_name={cluster_name}  developer_name={developer_name}  operator_name={operator_name}  cloudlet_name={cloudlet_name}  flavor_name={flavor_name}  ip_access={ip_access}')
         #for seconds in range(wait):
         if self.cluster_instances_page.is_cluster_instance_present(region=region,  cluster_name=cluster_name,  developer_name=developer_name,  operator_name=operator_name,  cloudlet_name=cloudlet_name,  flavor_name=flavor_name,  ip_access=ip_access):
-            raise Exception(f'cluster={cluster_name} found')
+            raise Exception(f'cluster={cluster_name} found. Was not expected to be found')
         else:
-            logging.info(f'cluster={cluster_name} NOT found')
+            logging.info(f'cluster={cluster_name} NOT found as expected')
 
     def cluster_progress_is_done(self, region=None, cluster_name=None, developer_name=None, operator_name=None, cloudlet_name=None, flavor_name=None, ip_access=None):
         self.take_screenshot('cluster_should_exist_pre')
@@ -1330,21 +1323,20 @@ class MexConsole() :
     def close_cluster_details(self):
         self.cluster_details_page.click_close_button()
 
-    def delete_cluster(self, cluster_name=None, developer_name=None, operator_name=None, wait=None):
-        #driver = webdriver.Chrome()
-       # self.driver = driver
-        self.refresh_page()
+    def delete_cluster(self, cluster_name=None, developer_name=None, operator_name=None, cloudlet_name=None, wait=None):
         self.take_screenshot('delete_cluster_pre')
         
         wait = int(wait)
 
-        if cluster_name is None: cluster_name =self._clusterInst['key']['cluster_key']['name']
-        if developer_name is None: developer_name=self._clusterInst['key']['developer']
-        if operator_name is None: operator_name=self._clusterInst['key']['cloudlet_key']['operator_key']['name']
+        if cluster_name is None: cluster_name = self._clusterInst['key']['cluster_key']['name']
+        if operator_name is None: operator_name = self._clusterInst['key']['cloudlet_key']['organization']
+        if developer_name is None: developer_name = self._clusterInst['key']['organization']
+        if cloudlet_name is None: cloudlet_name = self._clusterInst['key']['cloudlet_key']['name']
 
         logging.info(f'Deleting cluster cluster_name={cluster_name} developer_name={developer_name} operator={operator_name}')
 
-        self.cluster_instances_page.delete_cluster(cluster_name=cluster_name, operator_name=operator_name, developer_name=developer_name)
+        self.cluster_instances_page.perform_search(cluster_name)
+        self.cluster_instances_page.delete_cluster(cluster_name=cluster_name, operator_name=operator_name, developer_name=developer_name, cloudlet_name=cloudlet_name)
 
         logging.info('Deleted cluster')
         #time.sleep(20)
@@ -1525,10 +1517,10 @@ class MexConsole() :
 
         logging.info(f'Updating app app_name={app_name} developer_name={developer_name} app_version={app_version}')
 
-        self.change_number_of_rows()
+        #self.change_number_of_rows()
         self.apps_page.wait_for_app(region=region, org_name=developer_name, app_name=app_name, app_version=app_version, deployment_type=deployment_type, number_of_pages=number_of_pages)
 
-        if self.apps_page.update_app(app_name=app_name, access_ports=access_ports, scale_with_cluster=scale_with_cluster, auth_public_key=auth_public_key, envvar=envvar, official_fqdn=official_fqdn, android_package=android_package, trusted=trusted, skip_hc=skip_hc, outbound_connections=outbound_connections):
+        if self.apps_page.update_app(app_name=app_name, access_ports=access_ports, scale_with_cluster=scale_with_cluster, auth_public_key=auth_public_key, envvar=envvar, official_fqdn=official_fqdn, android_package=android_package, trusted=trusted, skip_hc=skip_hc, outbound_connections=outbound_connections, app_version=app_version):
             logging.info('Updated app')
         else:
             raise Exception('did NOT update')
@@ -1734,8 +1726,6 @@ class MexConsole() :
             raise Exception('Success alert box not found')
 
     def delete_app(self, region=None, app_name=None, app_version=None, developer_name=None, deployment_type=None, number_of_pages=2, click_previous_page=None, change_rows_per_page=False):
-        if change_rows_per_page:
-            self.change_number_of_rows()
         self.take_screenshot('delete_app_pre')
         
         if region is None: region = self._region
@@ -1781,7 +1771,7 @@ class MexConsole() :
                 self.new_appinst_page.close_alert_box()
                 logging.info('Dialog box text found, Created AppInst successfully')
             else:
-                raise Exception('Dialog box test NOT found')
+                raise Exception('Dialog box text NOT found')
         else:
             raise Exception('did NOT create')
 

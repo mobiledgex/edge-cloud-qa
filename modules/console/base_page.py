@@ -244,6 +244,7 @@ class BasePagePulldownElement(object):
             raise Exception("Could not find dropdown value :", value, e)
         driver.find_element_by_xpath(choice).click()
 
+        # Wait for linear progress bar to hide
         wait.until(expected_conditions.invisibility_of_element_located((By.XPATH,"//div[contains(@class,'MuiLinearProgress-bar2')]")))
 
 class BasePagePulldownMultiElement(object):
@@ -257,9 +258,16 @@ class BasePagePulldownMultiElement(object):
         choice = f'{self.locator2[1]}//span[text()="{value}"]'
         print('*WARN*', 'selecting dropdown value - ', choice)
         driver.find_element_by_xpath(choice).click()
-        pulldown = driver.find_element(*self.locator)
+        pulldown = driver.find_element(*self.locator2)
+        wait = WebDriverWait(driver, 10, poll_frequency=1)
+        wait.until(expected_conditions.element_to_be_clickable((pulldown)))
         pulldown.click()
-        #print('*WARN*', 'clicked it')
+        time.sleep(1)
+
+        # Wait for linear progress bar to hide
+        wait = WebDriverWait(driver, 30, poll_frequency=1)
+        wait.until(expected_conditions.invisibility_of_element_located((By.XPATH,"//div[contains(@class,'MuiLinearProgress-bar2')]")))
+
 
 class BasePageRadioElement(object):
     def __set__(self, obj, value):

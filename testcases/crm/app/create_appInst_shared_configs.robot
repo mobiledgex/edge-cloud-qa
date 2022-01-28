@@ -51,7 +51,7 @@ CreateApp - User shall be able to create k8s IpAccessShared with envVarsYaml Con
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
    
-    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
  
     ${config}=  Set Variable  - name: CrmValue${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
@@ -87,7 +87,7 @@ CreateApp - User shall be able to create k8s IpAccessShared with envVarsYaml Con
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     IF  '${platform_type}' != 'K8SBareMetal'
