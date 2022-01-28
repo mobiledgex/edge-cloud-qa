@@ -29,9 +29,9 @@ class MexApp(object):
         self.alert_receiver = AlertReceiver(root_url='dummy')
         self.operator_reporting = OperatorReporting(root_url='dummy')
 
-    def ping_udp_port(self, host, port):
-        data = 'ping'
-        exp_return_data = 'pong'
+    def ping_udp_port(self, host, port, tag=None):
+        data = f'ping:{tag}'
+        exp_return_data = f'pong:{tag}'
         data_size = sys.getsizeof(bytes(data, 'utf-8'))
         data_to_send = data.encode('ascii')
 
@@ -174,9 +174,9 @@ class MexApp(object):
         if return_data.decode('utf-8') != exp_return_data:
             raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
-    def ping_tcp_port(self, host, port, wait_time=0, tls=False):
-        data = 'ping'
-        exp_return_data = 'pong'
+    def ping_tcp_port(self, host, port, tag=None, wait_time=0, tls=False):
+        data = f'ping:{tag}'
+        exp_return_data = f'pong:{tag}'
         data_size = sys.getsizeof(bytes(data, 'utf-8'))
 
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -195,7 +195,7 @@ class MexApp(object):
 
         return_data = ''
         try:
-            logging.debug('sending data')
+            logging.debug(f'sending data={data}')
             sock.sendall(bytes(data, encoding='utf-8'))
             return_data = sock.recv(data_size)
 
@@ -289,15 +289,15 @@ class MexApp(object):
 
         return resp
 
-    def udp_port_should_be_alive(self, host, port):
-        logging.info('host:' + host + ' port:' + str(port))
+    def udp_port_should_be_alive(self, host, port, tag=None):
+        logging.info(f'host:{host} port:{port} tag:{tag}')
 
         self.wait_for_dns(host)
 
         for attempt in range(1, 4):
             logging.debug(f'UDP port attempt {attempt}')
             try:
-                self.ping_udp_port(host, int(port))
+                self.ping_udp_port(host, int(port), tag)
                 return True
             except Exception as e:
                 logging.debug(f'udp exception caught:{e}')
@@ -306,8 +306,8 @@ class MexApp(object):
                 else:
                     time.sleep(1)
 
-    def tcp_port_should_be_alive(self, host, port, wait_time=0, tls=False, num_tries=4):
-        logging.info(f'host:{host} port:{port} wait_time:{wait_time} tls:{tls} num_tries={num_tries}')
+    def tcp_port_should_be_alive(self, host, port, tag=None, wait_time=0, tls=False, num_tries=4):
+        logging.info(f'host:{host} port:{port} tag:{tag} wait_time:{wait_time} tls:{tls} num_tries={num_tries}')
 
         self.wait_for_dns(host)
         e_return = ''
@@ -315,7 +315,7 @@ class MexApp(object):
         for attempt in range(1, num_tries):
             logging.debug(f'TCP port attempt {attempt}')
             try:
-                self.ping_tcp_port(host, port, wait_time, tls)
+                self.ping_tcp_port(host, port, tag, wait_time, tls)
                 return True
             except Exception as e:
                 e_return = e
