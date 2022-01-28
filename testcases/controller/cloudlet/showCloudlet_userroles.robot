@@ -4,6 +4,7 @@ Documentation   ShowCloudlet user roles
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  DateTime
 Library  Collections
+Library  MexApp
 
 #Test Setup     Setup
 Test Teardown  Teardown
@@ -69,6 +70,8 @@ Setup
    Unlock User
    ${user_token2}=  Login  username=${epochusername2}  password=${password}
 
+   ${current_date}=   Fetch Current Date
+
    ${operator}=  Get Default Organization Name
    ${cloudlet}=  Get Default Cloudlet Name
    Set Suite Variable  ${operator}
@@ -77,6 +80,7 @@ Setup
    Set Suite Variable  ${user_token2}
    Set Suite Variable  ${super_token}
    Set Suite Variable  ${epochusername2}
+   Set Suite Variable  ${current_date}
 
 Developer Setup
    Setup
@@ -94,8 +98,9 @@ Operator Should See All Details
 
    ${key_length}=  Get Length  ${show[0]['data']['crm_access_public_key']}
    Should Be True  len("${show[0]['data']['container_version']}") > 0
-   Should Be True  ${show[0]['data']['created_at']['seconds']} > 0
-   Should Be True  ${show[0]['data']['created_at']['nanos']} > 0
+   #Should Be True  ${show[0]['data']['created_at']['seconds']} > 0
+   #Should Be True  ${show[0]['data']['created_at']['nanos']} > 0
+   Should Contain   ${show[0]['data']['created_at']}   ${current_date}
    Should Be True  ${key_length} > 0
    Should Be True  ${show[0]['data']['default_resource_alert_threshold']} > 0
    Should Be True  len("${show[0]['data']['deployment']}") > 0

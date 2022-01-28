@@ -342,8 +342,9 @@ Operator Cloudlet Info Should Be Correct
 
    ${key_length}=  Get Length  ${show['crm_access_public_key']}
    Should Be True  len("${show['container_version']}") > 0
-   Should Be True  ${show['created_at']['seconds']} > 0
-   Should Be True  ${show['created_at']['nanos']} > 0
+   #Should Be True  ${show['created_at']['seconds']} > 0
+   #Should Be True  ${show['created_at']['nanos']} > 0
+   Should Not Be Empty   ${show['created_at']} 
    Should Be True  ${key_length} > 0
    Should Be True  ${show['default_resource_alert_threshold']} > 0
    Should Be True  len("${show['deployment']}") > 0

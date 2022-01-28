@@ -177,11 +177,10 @@ class CloudletsPage(ComputePage):
     def click_cloudlet_row(self, cloudlet_name, region):
         logging.info('clicking cloudlet' + cloudlet_name + '  ' + region)
         r = self.get_table_row_by_value([(region, 3), (cloudlet_name, 5)])
-        #text_value = r.find_element_by_xpath(f'./td[2]/div').text
-        #print('*WARN*','xxxxx',text_value)
         time.sleep(1)
-        ActionChains(self.driver).click(on_element=r).perform()
-        #r.click()
+        e = r.find_element_by_xpath(f'//span[contains(.,"{cloudlet_name}")]')
+        e.click()
+        return True
     
     def cloudlets_menu_should_exist(self):
         is_present = ComputePage.is_cloudlets_menu_present(self)

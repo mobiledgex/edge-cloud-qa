@@ -63,8 +63,8 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Bonn
  
         Create Cloudlet  region=US  operator_org_name=${operator_name_openstack_bonn}  cloudlet_name=${cloudlet_name_openstack_bonn}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_bonn}  number_dynamic_ips=254  latitude=50.73438    longitude=7.09549  env_vars=FLAVOR_MATCH_PATTERN=m4,MEX_EXT_NETWORK=external-network-02  gpudriver_name=nvidia-450  gpudriver_org=TDG
 
-        Create Resource Tag Table  region=US  resource_table_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_bonn}  tags=pci=t4gpu:1
-        Add Resource Tag  region=US  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_bonn}  tags=pci=t4gpu:1
+        Run Keyword and Ignore Error  Create Resource Tag Table  region=US  resource_table_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_bonn}  tags=pci=t4gpu:1
+        Run Keyword and Ignore Error  Add Resource Tag  region=US  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_bonn}  tags=pci=t4gpu:1
         Add Cloudlet Resource Mapping  region=US  cloudlet_name=${cloudlet_name_openstack_bonn}  operator_org_name=${operator_name_openstack_bonn}  mapping=gpu=${gpu_resource_name}
 
         Create Cluster Instance  region=US  cluster_name=porttestcluster  cloudlet_name=${cloudlet_name_openstack_bonn}  operator_org_name=${operator_name_openstack_bonn}  deployment=kubernetes  flavor_name=${flavor_name_automation}  ip_access=IpAccessDedicated

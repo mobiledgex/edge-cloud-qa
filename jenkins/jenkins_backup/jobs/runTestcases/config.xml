@@ -132,20 +132,19 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>MasterController</string>
-              <string>Controller</string>
-              <string>DME</string>
-              <string>SDK</string>
-              <string>Openstack</string>
-              <string>VCD</string>
-              <string>Vsphere</string>
-              <string>Anthos</string>
-              <string>WebUI</string>
-              <string>Metrics</string>
-              <string>Performance/Security</string>
-            </a>
+          <choices>
+            <string>MasterController</string>
+            <string>Controller</string>
+            <string>DME</string>
+            <string>SDK</string>
+            <string>Openstack</string>
+            <string>VCD</string>
+            <string>Vsphere</string>
+            <string>Anthos</string>
+            <string>WebUI</string>
+            <string>Metrics</string>
+            <string>Performance/Security</string>
+            <string>FRM</string>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>

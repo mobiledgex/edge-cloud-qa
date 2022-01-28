@@ -1,6 +1,14 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <flow-definition plugin="workflow-job@2.42">
-  <actions/>
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.9.2"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.9.2">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -40,90 +48,23 @@
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
-    <script>import java.text.SimpleDateFormat
+    <script>pipeline{
+    agent { label &apos;jenkinsSlave1&apos; }
 
-dateParm = &quot;${VersionToDeploy}&quot;
-
-node(&apos;jenkinsSlave1&apos;){
-    date = new Date()
-    sdate = new SimpleDateFormat(&quot;yyy-MM-dd&quot;)
-    Calendar cal = Calendar.getInstance()
-
-    dateValue = &quot;notset&quot;
-    deployOptions = &apos;notset&apos;
-
-    if(dateParm == &quot;today&quot;) {
-       dateValue = sdate.format(date)
-    } else {
-       dateValue = dateParm
-    }
-    //cycle = Version + &apos;_automation_&apos; + dateValue
-    tag = dateValue
-
-    if(Component == &apos;Everything&apos;) {
-       deployOptions = &apos;-s vault-setup -V &apos; + tag + &apos; qa&apos;
-    } else if(Component == &apos;Console&apos;) {
-       deployOptions = &apos;-C &apos; + &apos;v&apos; + tag + &apos; -s mc qa console&apos;
-   }
-    currentBuild.displayName = tag
-
-    try {
-       stage(&apos;Check Load Exists&apos;) {
-           if(Component == &apos;Everything&apos;) {
-               def s = &apos;curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq &quot;.tags | index(\\&quot;&apos; + tag + &apos;\\&quot;)&quot;&apos;
-               def index  = sh(script: s, returnStdout: true);
-	           int indexnum = index as Integer
-               if(indexnum &lt; 1) {
-                  println &quot;${s} failed&quot;
-                  currentBuild.result = &apos;FAILURE&apos;
-               }
-           } else {
-               echo &apos;skipping load check since component is not Everything&apos;
-           }
-       }
-    }  catch (e) {
-       slackMessage.fail(&apos;load=&apos; + tag + &apos; doesnt exist in registry. Aborting&apos;)
-       error(&apos;Aborting the build&apos;)
-    }
-
-    try {
-       stage(&apos;Checkout&apos;) {
-          dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra&apos;) {
-             sh &apos;rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*&apos;
-             checkout([$class: &apos;GitSCM&apos;,
-             branches: [[name: &apos;master&apos;]],
-             doGenerateSubmoduleConfigurations: false,
-             extensions: [
-                 [$class: &apos;SparseCheckoutPaths&apos;,  sparseCheckoutPaths:[[$class:&apos;SparseCheckoutPath&apos;, path:&apos;ansible/*&apos;]]]
-             ],
-             submoduleCfg: [],
-             userRemoteConfigs: [[credentialsId: &apos;79b116ea-d7ac-4d6c-928d-49b79e5f9bef&apos;,
-             url: &apos;https://github.com/mobiledgex/edge-cloud-infra.git&apos;]]])
-          }
-       }
-    }  catch (e) {
-       slackMessage.fail(&quot;git checkout failed. Aborting&quot;)
-       echo &quot;git failed&quot;
-       error(&apos;Aborting the build&apos;)
-    }
-
-    try {
-       stage(&apos;deploy processes&apos;) {
-          dir(&apos;go/src/github.com/mobiledgex/edge-cloud-infra/ansible&apos;) {
-             // fix known_hosts file since recreating the server causes a mismatch in the file
-             sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationbonncloudlet.tdg.mobiledgex.net&quot;&apos;
-             sh &apos;ssh-keygen -f &quot;/home/jenkins/.ssh/known_hosts&quot; -R &quot;automationhamburgcloudlet.tdg.mobiledgex.net&quot;&apos;
-             echo &apos;./deploy.sh &apos; + deployOptions
-             sh &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;./deploy.sh -y &apos; + deployOptions
-
-             sleep 60  // wait for all pods to come up
-	  }
-       }
-    } catch(e) {
-        slackMessage.fail(&apos;deploy for Build &apos; + tag + &apos; failed. Aborting&apos;)
-        error(&apos;Aborting the build&apos;)
-    }
+    stages {
+        stage(&apos;x&apos;) {
+            steps {
+                script {
+                def export_vars = &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;export VAULT_ADDR=https://vault-qa.mobiledgex.net;&apos;
+                //sh &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;export VAULT_ADDR=https://vault-qa.mobiledgex.net&apos;
+        //sh &apos;echo $GITHUB_TOKEN&apos;
+        def kubectl_setup = export_vars + &apos;vault login -method=github token=&quot;$GITHUB_TOKEN&quot;;vault kv get -field=value secret/ansible/common/kubeconfigs/us | base64 --decode &gt;$HOME/kubeconfig.qa-us;export KUBECONFIG=$HOME/kubeconfig.qa-us;kubectl config use-context teleport.mobiledgex.net;&apos;
+        sh kubectl_setup + &apos;kubectl patch service monitoring-influxdb --type=json -p \&apos;[{&quot;op&quot;:&quot;add&quot;, &quot;path&quot;:&quot;/spec/loadBalancerSourceRanges/-&quot;, &quot;value&quot;:&quot;\&apos;70.114.97.80\&apos;/32&quot;}]\&apos;&apos;  // andy
 }
+            }
+        }
+    }
+}        
 </script>
     <sandbox>true</sandbox>
   </definition>

@@ -48,7 +48,7 @@ GetCloudletResourceQuotaProps - mcctl shall handle failures
       
       # invalid values
       # Unable to parse "platformtype" value "x" as int: invalid syntax  platformtype=x
-      Error: parsing arg "platformtype\=x" failed: unable to parse "x" as int: invalid syntax  platformtype=x
+      Error: parsing arg "platformtype\=x" failed: unable to parse "x" as PlatformType: invalid format, valid values are one of Fake, Dind, Openstack, Azure, Gcp, Edgebox, Fakeinfra, Vsphere, AwsEks, VmPool, AwsEc2, Vcd, K8SBareMetal, Kind, Kindinfra, FakeSingleCluster, Federation, FakeVmPool, or 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17   platformtype=x
 
 # ECQ-3337
 CreateCloudlet with resource quotas - mcctl shall handle failures

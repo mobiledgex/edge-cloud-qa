@@ -3,6 +3,7 @@
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         String
 Library  DateTime
+Library  MexApp
 
 Test Setup     Setup
 Test Teardown  Cleanup provisioning
@@ -30,9 +31,10 @@ CreateCloudlet with all parameters
 
 	#Cloudlet Should Exist   
  
-        Should Be True  ${cloudlet['data']['created_at']['seconds']} > 0
-        Should Be True  ${cloudlet['data']['created_at']['nanos']} > 0
-        Should Be True  'updated_at' in ${cloudlet['data']} and 'seconds' not in ${cloudlet['data']['updated_at']} and 'nanos' not in ${cloudlet['data']['updated_at']}
+        #Should Be True  ${cloudlet['data']['created_at']['seconds']} > 0
+        #Should Be True  ${cloudlet['data']['created_at']['nanos']} > 0
+        Should Contain   ${cloudlet['data']['created_at']}   ${current_date}
+        Should Be True  'updated_at' in ${cloudlet['data']}
 
 # ECQ-905
 CreateCloudlet without the optional parameters
@@ -51,9 +53,10 @@ CreateCloudlet without the optional parameters
 	${cloudlet}=  Create Cloudlet  region=${region}  token=${token}  operator_org_name=${oper}   cloudlet_name=${cldlet}    number_dynamic_ips=256    latitude=35     longitude=-96  use_defaults=False
 	#Cloudlet Should Exist   
 
-        Should Be True  ${cloudlet['data']['created_at']['seconds']} > 0
-        Should Be True  ${cloudlet['data']['created_at']['nanos']} > 0
-        Should Be True  'updated_at' in ${cloudlet['data']} and 'seconds' not in ${cloudlet['data']['updated_at']} and 'nanos' not in ${cloudlet['data']['updated_at']}
+        #Should Be True  ${cloudlet['data']['created_at']['seconds']} > 0
+        #Should Be True  ${cloudlet['data']['created_at']['nanos']} > 0
+        Should Contain   ${cloudlet['data']['created_at']}   ${current_date}
+        Should Be True  'updated_at' in ${cloudlet['data']}
 
 # no longer support accessurl
 # ECQ-906
@@ -95,9 +98,10 @@ CreateCloudlet with required parameters and ipsupport
 	${cloudlet}=  Create Cloudlet  region=${region}  token=${token}   operator_org_name=${oper}   cloudlet_name=${cldlet}   number_dynamic_ips=256     latitude=35     longitude=-96       ip_support=IpSupportDynamic  use_defaults=False
 	#Cloudlet Should Exist   
 
-        Should Be True  ${cloudlet['data']['created_at']['seconds']} > 0
-        Should Be True  ${cloudlet['data']['created_at']['nanos']} > 0
-        Should Be True  'updated_at' in ${cloudlet['data']} and 'seconds' not in ${cloudlet['data']['updated_at']} and 'nanos' not in ${cloudlet['data']['updated_at']}
+        #Should Be True  ${cloudlet['data']['created_at']['seconds']} > 0
+        #Should Be True  ${cloudlet['data']['created_at']['nanos']} > 0
+        Should Contain   ${cloudlet['data']['created_at']}   ${current_date}
+        Should Be True  'updated_at' in ${cloudlet['data']} 
 
 # ECQ-908
 CreateCloudlet with required parameters and staticips
@@ -116,9 +120,10 @@ CreateCloudlet with required parameters and staticips
 	${cloudlet}=  Create Cloudlet  region=${region}  token=${token}   operator_org_name=${oper}   cloudlet_name=${cldlet}   number_dynamic_ips=256     latitude=35     longitude=-96      static_ips=30.30.30.1  use_defaults=False
 	#Cloudlet Should Exist   
 
-        Should Be True  ${cloudlet['data']['created_at']['seconds']} > 0
-        Should Be True  ${cloudlet['data']['created_at']['nanos']} > 0
-        Should Be True  'updated_at' in ${cloudlet['data']} and 'seconds' not in ${cloudlet['data']['updated_at']} and 'nanos' not in ${cloudlet['data']['updated_at']}
+        #Should Be True  ${cloudlet['data']['created_at']['seconds']} > 0
+        #Should Be True  ${cloudlet['data']['created_at']['nanos']} > 0
+        Should Contain   ${cloudlet['data']['created_at']}   ${current_date}
+        Should Be True  'updated_at' in ${cloudlet['data']}
 
 CreateCloudlet without physicalname 
         [Documentation]   
@@ -224,8 +229,10 @@ CreateCloudlet - shall be able to create cloudlet with allianceorgs
 ** Keywords **
 Setup
    ${time}=  Get Current Date  result_format=epoch
+   ${current_date}=   Fetch Current Date
 
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
 
-   Set Suite Variable  ${cloudlet_name}  cloudlet${time} 
+   Set Suite Variable  ${cloudlet_name}  cloudlet${time}
+   Set Suite Variable  ${current_date}

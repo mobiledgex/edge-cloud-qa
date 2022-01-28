@@ -36,11 +36,13 @@ CreateAppInst - shall be able to create/delete docker reservable clusters on CRM
    Should Be Equal  ${app_inst1['data']['uri']}  ${uri}
 
    ${cluster_inst1}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   ${created_epoch}=  Convert to Epoch  ${cluster_inst1[0]['data']['reservation_ended_at']}
    Length Should Be  ${cluster_inst1}  1
    Should Be True  ${cluster_inst1[0]['data']['reservable']} 
    Should Be Equal  ${cluster_inst1[0]['data']['reserved_by']}  ${developer_org_name_automation}
-   Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']} > 0
-   Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['nanos']} > 0
+   #Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']} > 0
+   #Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['nanos']} > 0
+   Should Contain   ${cluster_inst1[0]['data']['reservation_ended_at']}   ${current_date}
 
    Register Client
    ${cloudlet}=  Find Cloudlet  latitude=1  longitude=1  carrier_name=${operator_name_crm}
@@ -52,24 +54,27 @@ CreateAppInst - shall be able to create/delete docker reservable clusters on CRM
    Delete App Instance  region=${region}  app_name=${app_name_default}-1  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app_name_default}-1  cluster_instance_developer_org_name=MobiledgeX
 
    ${cluster_inst11}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   ${updated_epoch1}=   Convert to Epoch  ${cluster_inst11[0]['data']['reservation_ended_at']}
    Length Should Be  ${cluster_inst11}  1
    Should Be True  ${cluster_inst11[0]['data']['reservable']}
    Dictionary Should Not Contain Key  ${cluster_inst11[0]['data']}  reserved_by
-   Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['seconds']} > ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']}
-   Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']} > 0
-   Should Be True  ${cluster_inst11[0]['data']['created_at']['seconds']} == ${cluster_inst1[0]['data']['created_at']['seconds']}
-   Should Be True  ${cluster_inst11[0]['data']['created_at']['nanos']} == ${cluster_inst1[0]['data']['created_at']['nanos']}
+   #Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['seconds']} > ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']}
+   Should Be True  ${updated_epoch1} > ${created_epoch}
+   #Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']} > 0
+   Should Be True  '${cluster_inst11[0]['data']['created_at']}' == '${cluster_inst1[0]['data']['created_at']}'
+   #Should Be True  ${cluster_inst11[0]['data']['created_at']['nanos']} == ${cluster_inst1[0]['data']['created_at']['nanos']}
 
    ${app_inst2}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app_name_default}-1  auto_delete=${False}
    Should Be Equal  ${app_inst2['data']['real_cluster_name']}  ${app_inst1['data']['real_cluster_name']}
    Should Be Equal  ${app_inst2['data']['uri']}  ${app_inst1['data']['uri']}
 
    ${cluster_inst2}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   ${updated_epoch2}=   Convert to Epoch  ${cluster_inst2[0]['data']['reservation_ended_at']}
    Length Should Be  ${cluster_inst2}  1
    Should Be True  ${cluster_inst2[0]['data']['reservable']}
    Should Be Equal  ${cluster_inst2[0]['data']['reserved_by']}  ${cluster_inst1[0]['data']['reserved_by']}
-   Should Be True  ${cluster_inst2[0]['data']['reservation_ended_at']['seconds']} == ${cluster_inst11[0]['data']['reservation_ended_at']['seconds']}
-   Should Be True  ${cluster_inst2[0]['data']['reservation_ended_at']['nanos']} == ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']} 
+   Should Be True  '${cluster_inst2[0]['data']['reservation_ended_at']}' == '${cluster_inst11[0]['data']['reservation_ended_at']}'
+   #Should Be True  ${cluster_inst2[0]['data']['reservation_ended_at']['nanos']} == ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']} 
 
    Register Client
    ${cloudlet2}=  Find Cloudlet  latitude=1  longitude=1  carrier_name=${operator_name_crm}
@@ -81,11 +86,13 @@ CreateAppInst - shall be able to create/delete docker reservable clusters on CRM
    Delete App Instance  region=${region}  app_name=${app_name_default}-1  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app_name_default}-1  cluster_instance_developer_org_name=MobiledgeX
 
    ${cluster_inst21}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   ${updated_epoch3}=   Convert to Epoch  ${cluster_inst21[0]['data']['reservation_ended_at']}
    Length Should Be  ${cluster_inst21}  1
    Should Be True  ${cluster_inst21[0]['data']['reservable']}
    Dictionary Should Not Contain Key  ${cluster_inst11[0]['data']}  reserved_by
-   Should Be True  ${cluster_inst21[0]['data']['reservation_ended_at']['seconds']} > ${cluster_inst2[0]['data']['reservation_ended_at']['seconds']}
-   Should Be True  ${cluster_inst21[0]['data']['reservation_ended_at']['nanos']} > 0
+   #Should Be True  ${cluster_inst21[0]['data']['reservation_ended_at']['seconds']} > ${cluster_inst2[0]['data']['reservation_ended_at']['seconds']}
+   Should Be True  ${updated_epoch3} > ${updated_epoch2}
+   #Should Be True  ${cluster_inst21[0]['data']['reservation_ended_at']['nanos']} > 0
 
    Delete Idle Reservable Cluster Instances  region=${region}
 
@@ -112,11 +119,13 @@ CreateAppInst - shall be able to create/delete k8s reservable clusters on CRM
    Should Be Equal  ${app_inst1['data']['uri']}  ${uri}
 
    ${cluster_inst1}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   ${created_epoch}=  Convert to Epoch  ${cluster_inst1[0]['data']['reservation_ended_at']}
    Length Should Be  ${cluster_inst1}  1
    Should Be True  ${cluster_inst1[0]['data']['reservable']}
    Should Be Equal  ${cluster_inst1[0]['data']['reserved_by']}  ${developer_org_name_automation}
-   Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']} > 0
-   Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['nanos']} > 0
+   #Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']} > 0
+   #Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['nanos']} > 0
+   Should Contain   ${cluster_inst1[0]['data']['reservation_ended_at']}   ${current_date}
 
    Register Client
    ${cloudlet}=  Find Cloudlet  latitude=1  longitude=1  carrier_name=${operator_name_crm}
@@ -128,24 +137,27 @@ CreateAppInst - shall be able to create/delete k8s reservable clusters on CRM
    Delete App Instance  region=${region}  app_name=${app_name_default}-1  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app_name_default}-1  cluster_instance_developer_org_name=MobiledgeX
 
    ${cluster_inst11}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   ${updated_epoch1}=   Convert to Epoch  ${cluster_inst11[0]['data']['reservation_ended_at']}
    Length Should Be  ${cluster_inst11}  1
    Should Be True  ${cluster_inst11[0]['data']['reservable']}
    Dictionary Should Not Contain Key  ${cluster_inst11[0]['data']}  reserved_by
-   Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['seconds']} > ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']}
-   Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']} > 0
-   Should Be True  ${cluster_inst11[0]['data']['created_at']['seconds']} == ${cluster_inst1[0]['data']['created_at']['seconds']}
-   Should Be True  ${cluster_inst11[0]['data']['created_at']['nanos']} == ${cluster_inst1[0]['data']['created_at']['nanos']}
+   #Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['seconds']} > ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']}
+   Should Be True  ${updated_epoch1} > ${created_epoch}
+   #Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']} > 0
+   Should Be True  '${cluster_inst11[0]['data']['created_at']}' == '${cluster_inst1[0]['data']['created_at']}'
+   #Should Be True  ${cluster_inst11[0]['data']['created_at']['nanos']} == ${cluster_inst1[0]['data']['created_at']['nanos']}
 
    ${app_inst2}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app_name_default}-1  auto_delete=${False}
    Should Be Equal  ${app_inst2['data']['real_cluster_name']}  ${app_inst1['data']['real_cluster_name']}
    Should Be Equal  ${app_inst2['data']['uri']}  ${app_inst1['data']['uri']}
 
    ${cluster_inst2}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   ${updated_epoch2}=   Convert to Epoch  ${cluster_inst2[0]['data']['reservation_ended_at']}
    Length Should Be  ${cluster_inst2}  1
    Should Be True  ${cluster_inst2[0]['data']['reservable']}
    Should Be Equal  ${cluster_inst2[0]['data']['reserved_by']}  ${cluster_inst1[0]['data']['reserved_by']}
-   Should Be True  ${cluster_inst2[0]['data']['reservation_ended_at']['seconds']} == ${cluster_inst11[0]['data']['reservation_ended_at']['seconds']}
-   Should Be True  ${cluster_inst2[0]['data']['reservation_ended_at']['nanos']} == ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']}
+   Should Be True  '${cluster_inst2[0]['data']['reservation_ended_at']}' == '${cluster_inst11[0]['data']['reservation_ended_at']}'
+   #Should Be True  ${cluster_inst2[0]['data']['reservation_ended_at']['nanos']} == ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']}
 
    Register Client
    ${cloudlet2}=  Find Cloudlet  latitude=1  longitude=1  carrier_name=${operator_name_crm}
@@ -157,12 +169,14 @@ CreateAppInst - shall be able to create/delete k8s reservable clusters on CRM
    Delete App Instance  region=${region}  app_name=${app_name_default}-1  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app_name_default}-1  cluster_instance_developer_org_name=MobiledgeX
 
    ${cluster_inst21}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   ${updated_epoch3}=   Convert to Epoch  ${cluster_inst21[0]['data']['reservation_ended_at']}
    Length Should Be  ${cluster_inst21}  1
    Should Be True  ${cluster_inst21[0]['data']['reservable']}
    Should Be True  ${cluster_inst21[0]['data']['reservable']}
    Dictionary Should Not Contain Key  ${cluster_inst11[0]['data']}  reserved_by
-   Should Be True  ${cluster_inst21[0]['data']['reservation_ended_at']['seconds']} > ${cluster_inst2[0]['data']['reservation_ended_at']['seconds']}
-   Should Be True  ${cluster_inst21[0]['data']['reservation_ended_at']['nanos']} > 0
+   #Should Be True  ${cluster_inst21[0]['data']['reservation_ended_at']['seconds']} > ${cluster_inst2[0]['data']['reservation_ended_at']['seconds']}
+   #Should Be True  ${cluster_inst21[0]['data']['reservation_ended_at']['nanos']} > 0
+   Should Be True  ${updated_epoch3} > ${updated_epoch2}
 
    Delete Idle Reservable Cluster Instances  region=${region}
 
@@ -174,8 +188,10 @@ Setup
    Create Flavor  region=${region}
 
    ${app_name_default}=  Get Default App Name
+   ${current_date}=   Fetch Current Date
 
    Set Suite Variable  ${app_name_default}
+   Set Suite Variable  ${current_date}
 
 Teardown
    Cleanup Provisioning

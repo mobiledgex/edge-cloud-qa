@@ -21,7 +21,7 @@ ${gpu_resource_name}  mygpuresrouce
 ${cluster_flavor_name}  x1.medium
 
 ${cloudlet_name_openstack_gpu}  automationDusseldorfCloudlet
-${operator_name_openstack}  TDG
+${operator_name}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
@@ -50,10 +50,10 @@ GPU - shall be able to deploy docker dedicated NVidia T4 Passthru GPU app on KVM
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker
     Sleep  30  seconds
     Create App  region=${region}  image_path=${docker_image_gpu}  access_ports=tcp:8008,tcp:8011  image_type=ImageTypeDocker  deployment=docker  #access_type=direct
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_default}
 
     Register Client
     ${cloudlet}=  Find Cloudlet	 latitude=${latitude}  longitude=${longitude}
@@ -87,10 +87,10 @@ GPU - shall be able to deploy docker shared NVidia T4 Passthru GPU app on KVM Op
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=docker
     Sleep  30  seconds
     Create App  region=${region}  image_path=${docker_image_gpu}  access_ports=tcp:8008,tcp:8011  image_type=ImageTypeDocker  deployment=docker
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_default}
 
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -124,10 +124,10 @@ GPU - shall be able to deploy docker compose NVidia T4 Passthru GPU app on KVM O
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker
     Sleep  30  seconds
     Create App  region=${region}  deployment_manifest=${docker_compose_url}  image_path=no_default  access_ports=tcp:8008,tcp:8011  image_type=ImageTypeDocker  deployment=docker  #access_type=direct
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_default}
 
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -161,10 +161,10 @@ GPU - shall be able to deploy k8s shared NVidia T4 Passthru GPU app on KVM Opens
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=kubernetes
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=kubernetes
     Sleep  30  seconds
     Create App  region=${region}  image_path=${docker_image_gpu}  access_ports=tcp:8008,tcp:8011  image_type=ImageTypeDocker  deployment=kubernetes
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_default}
 
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -192,6 +192,6 @@ GPU - shall be able to deploy k8s shared NVidia T4 Passthru GPU app on KVM Opens
 Setup
     Create Flavor  region=${region}  disk=80  optional_resources=gpu=pci:1
 
-    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  mapping=gpu=${gpu_resource_name}
-    Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack}  tags=pci=t4gpu:1
+    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  mapping=gpu=${gpu_resource_name}
+    Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_org_name=${operator_name}  tags=pci=t4gpu:1
 	
