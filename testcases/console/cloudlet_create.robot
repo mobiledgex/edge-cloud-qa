@@ -2,8 +2,9 @@
 Documentation   Create new cloudlet
 
 Library		MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
-Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
-Library         DateTime
+Library     MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
+Library     DateTime
+Library     MexApp
 
 Test Setup      Setup
 Test Teardown   Close Browser
@@ -28,21 +29,18 @@ WebUI - user shall be able to create a new EU cloudlet
 
     FOR  ${x}  IN RANGE  0  60
         ${cloudlet_state}=    Show Cloudlets  region=EU  cloudlet_name=${cloudlet_name}  operator_org_name=GDDT
-        Exit For Loop If  '${cloudlet_state[0]['data']['state']}' == '5'
+        Exit For Loop If  '${cloudlet_state[0]['data']['state']}' == 'Ready'
         Sleep  10s
     END
 
     Cloudlet Should Exist  cloudlet_name=${cloudlet_name}
 
     ${cloudlet_details}=    Show Cloudlets  region=EU  cloudlet_name=${cloudlet_name}  operator_org_name=GDDT
-    ${time}=  Set Variable  ${cloudlet_details[0]['data']['created_at']['seconds']}
-    Log to Console  ${time}
-    ${timestamp}=  Convert Date  ${time}  exclude_millis=yes
-    Log to Console  ${timestamp}
 
     ${details}=  Open Cloudlet Details  cloudlet_name=${cloudlet_name}  region=EU
     Log to Console  ${details}
-    Should Be Equal   ${details['Created']}   ${timestamp}
+    Should Contain   ${details['Created']}   ${current_date}
+    
     Close Cloudlet Details
 
     Search Cloudlet  cloudlet_name=${cloudlet_name}
@@ -116,6 +114,8 @@ WebUI - user shall be able to create a cloudlet with trust policy
 Setup
     ${token}=  Get Supertoken
     ${epoch}=  Get Time  epoch
+    ${current_date}=   MexApp.Fetch Current Date
+    Log to Console   Current Date =  ${current_date}
     ${cloudlet_name}=  Get Default Cloudlet Name
     Log to Console  Cloudlet name =  ${cloudlet_name}
     Open Browser
