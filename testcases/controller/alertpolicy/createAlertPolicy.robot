@@ -65,7 +65,8 @@ ${tt_maxh_convert}=  72h0m0s
 ${error_400_no_name}=     (\'code=400\', \'error={"message":"Invalid alert policy name"}\')
 ${error_400_bad_org}=     (\'code=400\', \'error={"message":"Invalid alert policy organization"}\')
 ${error_400_measure}=     (\'code=400\', \'error={"message":"At least one of the measurements for alert should be set"}\')
-${error_parse_bad_time}=   (\'code=400\', \'error={"message":"Invalid JSON data: Unmarshal duration \\\\"30\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}\')
+${error_parse_bad_time}=  (\'code=400\', \'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string 30 for field \\\\"AlertPolicy.trigger_time\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}\')
+#${error_parse_bad_time}=   (\'code=400\', \'error={"message":"Invalid JSON data: Unmarshal duration \\\\"30\\\\" failed, valid values are 300ms, 1s, 1.5h, 2h45m, etc"}\')
 ${error_400_bad_region}=   (\'code=400\', \'error={"message":"Region \\\\"86\\\\" not found"}\')
 ${error_400_60s_time}=    Error: Bad Request (400), Trigger time cannot be less than 1m0s
 ${error_400_no_trigger}=  Error: Bad Request (400), At least one of the measurements for alert should be set
