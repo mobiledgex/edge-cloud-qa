@@ -2,6 +2,7 @@
 Documentation   Create App with timestamps
 
 Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library         MexApp
 
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
@@ -34,23 +35,29 @@ CreateApp - timestamps shall be created for CreateApp
 *** Keywords ***
 Setup
     Create Flavor  region=${region}
+    ${current_date}=   Fetch Current Date
+
+    Set Suite Variable  ${current_date}
 
 CreateApp and Verify Timestamps
    [Arguments]  &{parms}
 
    ${app}=  Create App  region=${region}  &{parms}  auto_delete=${False}
-
-   Should Be True  ${app['data']['created_at']['seconds']} > 0
-   Should Be True  ${app['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${app['data']} and 'seconds' not in ${app['data']['updated_at']} and 'nanos' not in ${app['data']['updated_at']}
+   ${created_epoch}=  Convert to Epoch  ${app['data']['created_at']}
+   #Should Be True  ${app['data']['created_at']['seconds']} > 0
+   #Should Be True  ${app['data']['created_at']['nanos']} > 0
+   Should Contain   ${app['data']['created_at']}  ${current_date}
+   Should Be True  'updated_at' in ${app['data']}
 
    Sleep  1s
 
    ${app_update}=  Update App  region=${region}  access_ports=tcp:1 
-
-   Should Be True  ${app_update['data']['created_at']['seconds']} > 0
-   Should Be True  ${app_update['data']['created_at']['nanos']} > 0
-   Should Be True  ${app_update['data']['updated_at']['seconds']} > ${app['data']['created_at']['seconds']}
-   Should Be True  ${app_update['data']['updated_at']['nanos']} > 0
+   ${updated_epoch}=  Convert to Epoch   ${app_update['data']['updated_at']}
+   #Should Be True  ${app_update['data']['created_at']['seconds']} > 0
+   #Should Be True  ${app_update['data']['created_at']['nanos']} > 0
+   Should Be True  '${app_update['data']['created_at']}' == '${app['data']['created_at']}'
+   #Should Be True  ${app_update['data']['updated_at']['seconds']} > ${app['data']['created_at']['seconds']}
+   #Should Be True  ${app_update['data']['updated_at']['nanos']} > 0
+   Should Be True   ${updated_epoch} > ${created_epoch}
 
    Delete App  region=${region}

@@ -4,6 +4,7 @@ Documentation   CreateAppInst Reservable Cluster
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
 Library  String
+Library  MexApp
 
 Test Setup	Setup
 Test Teardown   Cleanup Provisioning
@@ -120,12 +121,14 @@ Setup
     ${app_version_default}=  Get Default App Version
     ${developer_name_default}=  Get Default Developer Name
     ${flavor_name_default}=  Get Default Flavor Name
-  
+    ${current_date}=   Fetch Current Date
+ 
     Set Suite Variable  ${region_lc}
     Set Suite Variable  ${app_name_default}
     Set Suite Variable  ${app_version_default}
     Set Suite Variable  ${developer_name_default}
     Set Suite Variable  ${flavor_name_default}
+    Set Suite Variable  ${current_date}
 
 Shall CreatAppInst with Real Cluster Name
    [Arguments]  ${cluster_name}  ${developer_org_name}  ${deployment}  ${image_type}  ${image_path}
@@ -190,21 +193,25 @@ Reservable Cluster Shall Be Reused
    ${app_inst1}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${app_name_default}  auto_delete=${False}
 
    ${cluster_inst1}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   ${created_epoch}=  Convert to Epoch  ${cluster_inst1[0]['data']['reservation_ended_at']}
    Length Should Be  ${cluster_inst1}  1
    Should Be True  ${cluster_inst1[0]['data']['reservable']}
    Should Be Equal  ${cluster_inst1[0]['data']['reserved_by']}  ${developer_org_name_automation}
-   Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']} > 0
-   Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['nanos']} > 0
+   #Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']} > 0
+   #Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['nanos']} > 0
+   Should Contain   ${cluster_inst1[0]['data']['reservation_ended_at']}  ${current_date}
 
    Delete App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${app_name_default}  cluster_instance_developer_org_name=MobiledgeX
 
    ${cluster_inst11}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   ${updated_epoch1}=   Convert to Epoch  ${cluster_inst11[0]['data']['reservation_ended_at']}
    Length Should Be  ${cluster_inst11}  1
    Dictionary Should Not Contain Key  ${cluster_inst11[0]['data']}  reserved_by
-   Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['seconds']} > ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']}
-   Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']} > 0
-   Should Be True  ${cluster_inst11[0]['data']['created_at']['seconds']} == ${cluster_inst1[0]['data']['created_at']['seconds']}
-   Should Be True  ${cluster_inst11[0]['data']['created_at']['nanos']} == ${cluster_inst1[0]['data']['created_at']['nanos']}
+   #Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['seconds']} > ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']}
+   #Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']} > 0
+   Should Be True   ${updated_epoch1} > ${created_epoch}
+   Should Be True  '${cluster_inst11[0]['data']['created_at']}' == '${cluster_inst1[0]['data']['created_at']}'
+   #Should Be True  ${cluster_inst11[0]['data']['created_at']['nanos']} == ${cluster_inst1[0]['data']['created_at']['nanos']}
 
    ${app_inst2}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${app_name_default} 
    Should Be Equal  ${app_inst1['data']['real_cluster_name']}  ${app_inst2['data']['real_cluster_name']}
@@ -213,8 +220,8 @@ Reservable Cluster Shall Be Reused
    Length Should Be  ${cluster_inst2}  1
    Should Be True  ${cluster_inst2[0]['data']['reservable']}
    Should Be Equal  ${cluster_inst2[0]['data']['reserved_by']}  ${cluster_inst1[0]['data']['reserved_by']}
-   Should Be True  ${cluster_inst2[0]['data']['reservation_ended_at']['seconds']} == ${cluster_inst11[0]['data']['reservation_ended_at']['seconds']}
-   Should Be True  ${cluster_inst2[0]['data']['reservation_ended_at']['nanos']} == ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']}
+   Should Be True  '${cluster_inst2[0]['data']['reservation_ended_at']}' == '${cluster_inst11[0]['data']['reservation_ended_at']}'
+   #Should Be True  ${cluster_inst2[0]['data']['reservation_ended_at']['nanos']} == ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']}
 
 DeleteAppInst Should Not Delete Reservable Cluster
    [Arguments]  ${developer_org_name}  ${deployment}  ${image_type}  ${image_path}
@@ -268,7 +275,8 @@ Reservable Cluster Should Be Created
    
    Should Be True  ${cluster_inst[0]['data']['reservable']}  
    Should Be Equal  ${cluster_inst[0]['data']['reserved_by']}  ${developer_org_name}
-   Should Be True   ${cluster_inst[0]['data']['reservation_ended_at']['nanos']} > 0
-   Should Be True   ${cluster_inst[0]['data']['reservation_ended_at']['seconds']} > 0
+   #Should Be True   ${cluster_inst[0]['data']['reservation_ended_at']['nanos']} > 0
+   #Should Be True   ${cluster_inst[0]['data']['reservation_ended_at']['seconds']} > 0
+   Should Contain    ${cluster_inst[0]['data']['reservation_ended_at']}  ${current_date}
  
 
