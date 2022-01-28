@@ -56,26 +56,31 @@ class FlavorsPage(ComputePage):
         if self.is_element_present(NewPageLocators.flavor_flavorname_detail):
             logging.info('Flavorname detail present')
         else:
+            logging.error('Flavorname detail NOT present')
             settings_present = False
 
         if self.is_element_present(NewPageLocators.flavor_ram_detail):
             logging.info('Flavor RAM detail present')
         else:
+            logging.error('Flavor RAM detail NOT present')
             settings_present = False
 
         if self.is_element_present(NewPageLocators.flavor_vcpus_detail):
             logging.info('Flavor vCPUs detail present')
         else:
+            logging.error('Flavor vCPUs detail NOT present')
             settings_present = False
 
         if self.is_element_present(NewPageLocators.flavor_disk_detail):
             logging.info('Flavor Disk detail present')
         else:
+            logging.error('Flavor Disk detail NOT present')
             settings_present = False
 
         if self.is_element_present(NewPageLocators.flavor_gpu_detail):
             logging.info('Flavor GPU detail present')
         else:
+            logging.error('Flavor GPU detail NOT present')
             settings_present = False
 
         return settings_present
@@ -199,9 +204,9 @@ class FlavorsPage(ComputePage):
             return False
 
         time.sleep(1)
-        ActionChains(self.driver).click(on_element=row).perform()
+        e = row.find_element_by_xpath(f'//span[contains(.,"{flavor_name}")]')
+        e.click()
         return True
-        #row.click()
 
     def flavors_menu_should_exist(self):
         is_present = ComputePage.is_flavors_menu_present(self)

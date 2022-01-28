@@ -12,6 +12,7 @@ testcase_components1 = [
     crm_components + "RunDebug",
     crm_components + "AccessCloudlet",
     crm_components + "AlertReceiver",
+    crm_components + "AlertPolicy",
     crm_components + "GPU",
     crm_components + "VMPool",
     crm_components + "AutoProvisioning",

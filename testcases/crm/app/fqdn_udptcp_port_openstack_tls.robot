@@ -270,7 +270,7 @@ Setup
         Set Suite Variable  ${dedicated_ip}  ${None}
     END
  
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}

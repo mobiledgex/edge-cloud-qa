@@ -12,7 +12,7 @@ Test Timeout     ${test_timeout_crm}
 	
 *** Variables ***
 ${cloudlet_name_openstack_gpu}  automationParadiseCloudlet
-${operator_name_openstack}  GDDT 
+${operator_name}  GDDT 
 ${region}  US
 ${mobiledgex_domain}  mobiledgex.net
 ${gpu_resource_name}  mygpuresrouce
@@ -35,7 +35,7 @@ GPU - 1 GPU shall be allocated for K8s IpAccessShared on openstack
    ${cluster_name}=  Get Default Cluster Name
  
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  
    Log to Console  DONE creating cluster instance
 
    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${rootlb}
@@ -53,7 +53,7 @@ GPU - 1 GPU shall be allocated for K8s IpAccessShared on openstack
 
    Should Be Equal              ${cluster_inst['data']['node_flavor']}  ${openstack_flavor_name} 
    Should Be Equal              ${cluster_inst['data']['deployment']}   kubernetes
-   Should Be Equal As Integers  ${cluster_inst['data']['ip_access']}    3 
+   Should Be Equal              ${cluster_inst['data']['ip_access']}    Shared
  
    # verify the NVIDIA is allocated
    Node Should Have GPU      root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}
@@ -67,12 +67,13 @@ GPU - 1 GPU shall be allocated for K8s IpAccessDedicated on openstack
    ${cluster_name}=  Get Default Cluster Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
-   ${openstack_rootlb}=       Catenate  SEPARATOR=.  ${cluster_name}  ${cloudlet_lowercase}
+   ${openstack_rootlb}=       Catenate  SEPARATOR=.  ${cluster_name}-${developer_org_name_automation}  ${cloudlet_lowercase}
+   ${openstack_rootlb}=   Replace String  ${openstack_rootlb}  _  -
 
    ${server_info_node}=    Get Server List  name=${openstack_node_name}
    ${server_info_master}=  Get Server List  name=${openstack_node_master}
@@ -89,9 +90,10 @@ GPU - 1 GPU shall be allocated for K8s IpAccessDedicated on openstack
 
    Should Be Equal              ${cluster_inst['data']['node_flavor']}  ${openstack_flavor_name}
    Should Be Equal              ${cluster_inst['data']['deployment']}   kubernetes
-   Should Be Equal As Integers  ${cluster_inst['data']['ip_access']}    1
+   Should Be Equal              ${cluster_inst['data']['ip_access']}    Dedicated
 
-   ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+   ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}-${developer_org_name_automation}  ${rootlb}
+   ${clusterlb}=  Replace String  ${clusterlb}  _  -
 
    # verify the NVIDIA is allocated
    Node Should Have GPU  root_loadbalancer=${clusterlb}  node=${server_info_node[0]['Networks']}
@@ -109,10 +111,11 @@ GPU - 1 GPU shall be allocated for Docker IpAccessDedicated on openstack
    ${developer_name2}=  Replace String  ${developer_name}  _  -  # replace underscore with dash for openstack lookup
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker
    Log to Console  DONE creating cluster instance
 
-   ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+   ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}-${developer_org_name_automation}  ${rootlb}
+   ${clusterlb}=  Replace String  ${clusterlb}  _  -
    ${clustervm}=  Set Variable  mex-docker-vm-${cloudlet_name_openstack_gpu}-${cluster_name}-${developer_name2}
 
    ${server_info}=    Get Server List  name=${clusterlb}
@@ -140,7 +143,7 @@ GPU - 1 GPU shall be allocated for Docker IpAccessShared on openstack
    ${cluster_name}=  Get Default Cluster Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=docker
    Log to Console  DONE creating cluster instance
 
    ${rootlb}=  Catenate  SEPARATOR=.  shared  ${rootlb}
@@ -155,7 +158,7 @@ GPU - 1 GPU shall be allocated for Docker IpAccessShared on openstack
 
    Should Be Equal              ${cluster_inst['data']['node_flavor']}  ${openstack_flavor_name}
    Should Be Equal              ${cluster_inst['data']['deployment']}   docker
-   Should Be Equal As Integers  ${cluster_inst['data']['ip_access']}    3
+   Should Be Equal              ${cluster_inst['data']['ip_access']}    Shared
 
    Sleep  15s
 
@@ -176,7 +179,7 @@ GPU - no GPU shall be allocated if gpu not specified for K8s IpAccessShared on o
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -214,7 +217,7 @@ GPU - no GPU shall be allocated if gpu not specified for K8s IpAccessDedicated o
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -251,7 +254,7 @@ GPU - No GPU shall be allocated if gpu not specified for Docker on openstack
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker
    Log to Console  DONE creating cluster instance
 
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
@@ -280,7 +283,7 @@ GPU - No GPU shall be allocated if gpu not specified for VM on openstack
 
    Log to Console  START creating VM instance
    Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  developer_org_name=mobiledgex  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015
-   ${app_inst}=  Create App Instance  region=${region}  developer_org_name=mobiledgex  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}
+   ${app_inst}=  Create App Instance  region=${region}  developer_org_name=mobiledgex  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}
    Log to Console  DONE creating VM instance
 
    ${server_info}=    Get Server List  name=mobiledgex${app_name}
@@ -309,7 +312,7 @@ GPU - 1 GPU shall be allocated for each node for K8s IpAccessShared and nodes=2 
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  number_nodes=2  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  number_nodes=2  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -340,12 +343,12 @@ Setup
 
     Set Suite Variable  ${cloudlet_lowercase}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_gpu}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_gpu}-${operator_name}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Create Flavor  region=${region}  disk=80  optional_resources=gpu=pci:1
 
-    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  mapping=gpu=${gpu_resource_name}
-    Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack}  tags=pci=t4gpu:1
+    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  mapping=gpu=${gpu_resource_name}
+    Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_org_name=${operator_name}  tags=pci=t4gpu:1
 
     Set Suite Variable  ${rootlb}

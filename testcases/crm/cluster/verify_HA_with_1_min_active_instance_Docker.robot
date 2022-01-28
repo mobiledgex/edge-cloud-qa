@@ -51,21 +51,21 @@ Create App, Add Autoprovisioning Policy and Deploy an App Instance
 
    @{policy_list}=  Create List  ${policy_name}
    log to console  Creating App and App Instance
-   create app  region=${region}  app_name=${app_name}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policies=@{policy_list}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
+   create app  region=${region}  app_name=${app_name}  deployment=docker  developer_org_name=${orgname}  image_path=${docker_image}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015  app_version=1.0  default_flavor_name=${default_flavor_name}  token=${user_token}
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}  #cluster_instance_name=${cluster_name}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=1.0  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}  #cluster_instance_name=${cluster_name}
 
 Delete app instance and verify auto deployment works again
 
-    delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+    delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
 
-    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}  #cluster_instance_name=${cluster_name}
+    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=1.0  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}  #cluster_instance_name=${cluster_name}
 
 Remove auto provisioning policy from App
-    update app  region=${region}  app_name=${app_name}  developer_org_name=${orgname}  auto_prov_policies=@{EMPTY}  app_version=v1  token=${user_token}
+    update app  region=${region}  app_name=${app_name}  developer_org_name=${orgname}  auto_prov_policies=@{EMPTY}  app_version=1.0  token=${user_token}
 
     sleep  2 minutes
-    app instance should not exist  app_name=${app_name}  region=${region}  app_version=v1  developer_org_name=${orgname}
+    app instance should not exist  app_name=${app_name}  region=${region}  app_version=1.0  developer_org_name=${orgname}
 
 *** Keywords ***
 Setup
@@ -93,7 +93,7 @@ Setup
 
 
 Cleanup
-#    delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+#    delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=1.0
     cleanup provisioning
 
 

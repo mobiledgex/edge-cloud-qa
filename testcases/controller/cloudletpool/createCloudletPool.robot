@@ -3,6 +3,7 @@ Documentation  CreateCloudletPool
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  String
+Library  MexApp
      
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
@@ -24,9 +25,10 @@ CreateCloudletPool - shall be able to create with long pool name
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${name} 
 
-   Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   #Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
+   #Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
+   Should Contain   ${pool_return['data']['created_at']}  ${current_date}   
+   Should Be Empty  ${pool_return['data']['updated_at']}
 
 # ECQ-1657
 CreateCloudletPool - shall be able to create with numbers in pool name 
@@ -41,9 +43,10 @@ CreateCloudletPool - shall be able to create with numbers in pool name
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${epoch} 
 
-   Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   #Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
+   #Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
+   Should Contain   ${pool_return['data']['created_at']}  ${current_date}
+   Should Be Empty  ${pool_return['data']['updated_at']}
 
 # ECQ-2420
 CreateCloudletPool - shall be able to create with 1 cloudlet in cloudlet list
@@ -61,9 +64,10 @@ CreateCloudletPool - shall be able to create with 1 cloudlet in cloudlet list
    Should Be Equal  ${pool_return['data']['cloudlets']}  ${cloudlet_list}
    Length Should Be  ${pool_return['data']['cloudlets']}  1 
 
-   Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   #Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
+   #Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
+   Should Contain   ${pool_return['data']['created_at']}  ${current_date}
+   Should Be Empty  ${pool_return['data']['updated_at']} 
 
 # ECQ-2421
 CreateCloudletPool - shall be able to create with 2 cloudlets in cloudlet list
@@ -81,9 +85,10 @@ CreateCloudletPool - shall be able to create with 2 cloudlets in cloudlet list
    Should Be Equal  ${pool_return['data']['cloudlets']}  ${cloudlet_list}
    Length Should Be  ${pool_return['data']['cloudlets']}  2
 
-   Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   #Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
+   #Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
+   Should Contain   ${pool_return['data']['created_at']}  ${current_date}
+   Should Be Empty  ${pool_return['data']['updated_at']}
  
 *** Keywords ***
 Setup
@@ -92,7 +97,9 @@ Setup
 
    ${pool_name}=  Get Default Cloudlet Pool Name
    ${cloudlet_name}=  Get Default Cloudlet Name
+   ${current_date}=   Fetch Current Date
 
    Set Suite Variable  ${pool_name}
    Set Suite Variable  ${cloudlet_name}
+   Set Suite Variable  ${current_date}
 
