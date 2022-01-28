@@ -79,7 +79,7 @@ class ClusterInstancesPage(ComputePage):
 
     def perform_search(self, searchstring):
         time.sleep(1)
-        logging.info("Clicking Search button and performing search for value on App Instances page - " + searchstring)
+        logging.info("Clicking Search button and performing search for value on Cluster Instances page - " + searchstring)
         we = self.driver.find_element(*ComputePageLocators.searchbutton)
         ActionChains(self.driver).click(on_element=we).perform()
         time.sleep(1)
@@ -141,7 +141,7 @@ class ClusterInstancesPage(ComputePage):
 
         time.sleep(1)
         row.find_element(*DeleteConfirmationPageLocators.yes_button).click()
-
+        time.sleep(1)
 
     def click_cluster_name_heading(self):
         self.driver.find_element(*ClusterInstancesPageLocators.cluster_instances_table_header_clustername).click()
