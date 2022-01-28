@@ -14,6 +14,7 @@ import kubernetes
 from datetime import datetime
 from mex_master_controller.AlertReceiver import AlertReceiver
 from mex_master_controller.OperatorReporting import OperatorReporting
+from dateutil import parser
 
 logger = logging.getLogger(__name__)
 
@@ -1017,3 +1018,7 @@ class MexApp(object):
         tz = pytz.timezone(timezone)
         current_date = datetime.now(tz)
         return current_date.strftime('%Y-%m-%d')
+
+    def convert_to_epoch(self, strtime=None):
+        epoch = parser.parse(strtime).timestamp()
+        return epoch
