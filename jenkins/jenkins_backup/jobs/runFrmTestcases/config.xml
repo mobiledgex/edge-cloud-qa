@@ -6,7 +6,6 @@
       <jobProperties/>
       <triggers/>
       <parameters>
-        <string>Components</string>
         <string>Project</string>
         <string>SlaveNode</string>
         <string>VariableFile</string>
@@ -43,10 +42,6 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>Components</name>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
           <name>Cycle</name>
           <defaultValue>2021-11-05_CirrusR3.1</defaultValue>
           <trim>false</trim>
@@ -79,7 +74,7 @@
           <name>TestTarget</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
-              <string>MasterController</string>
+              <string>FRM</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
@@ -93,47 +88,30 @@
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
     <script>currentBuild.displayName = cycle
-//slackurl = &apos;https://mobiledgex.slack.com/services/hooks/jenkins-ci/&apos;
-//slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
-//slackchannel = &apos;#qa-automation&apos;
 
 automated_component = &quot;Automated&quot;
-automated_components = [automated_component]
-controller_components = [automated_component, &quot;MasterController&quot;]
+frm_components = [automated_component, &quot;FRM&quot;]
 testcase_components = [
-    controller_components + &quot;Account&quot;,
-    controller_components + &quot;UserRole&quot;,
-    controller_components + &quot;User&quot;,
-    controller_components + &quot;Configs&quot;,
-    automated_components  + &quot;Mcctl&quot;,
-    controller_components + &quot;Billing&quot;,
-    controller_components + &quot;ShowNode&quot;,
-    controller_components + &quot;Organization&quot;,
-    controller_components + &quot;Controller&quot;,
-    controller_components + &quot;RateLimit&quot;
+    frm_components
     ]
 
-
 pipeline{
-    agent { label &apos;jenkinsSlave1&apos; }
+    agent { label SlaveNode }
     parameters {
         string(name: &apos;SlaveNode&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
-        string(name: &apos;Components&apos;, defaultValue: &apos;&apos;)
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
         string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
         string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
         string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        choice(name: &apos;TestTarget&apos;, choices: [&apos;MasterController&apos;], description: &apos;&apos;)
+        choice(name: &apos;TestTarget&apos;, choices: [&apos;FRM&apos;], description: &apos;&apos;)
         string(name: &apos;TestTimeout&apos;, defaultValue: &apos;4m&apos;)
     }
 
     stages {
-        stage(&quot;execute tests&quot;) {
+        stage(&quot;execute tests 1&quot;) {
             steps {
-                //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting MC tests&quot;
-
                 script {
                     builds = [:]
                     testcase_components.eachWithIndex { value, index-&gt;
@@ -144,22 +122,23 @@ pipeline{
                                 string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
                                 string(name: &apos;Project&apos;, value: params.Project), 
                                 string(name: &apos;Cycle&apos;, value: params.Cycle), 
-                                string(name: &apos;MasterController&apos;, value: params.MasterController),
-                                string(name: &apos;VariableFile&apos;, value: params.VariableFile),
+                                string(name: &apos;MasterController&apos;, value: params.MasterController), 
+                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
                                 string(name: &apos;TestTarget&apos;, value: params.TestTarget),
                                 string(name: &apos;TestTimeout&apos;, value: params.TestTimeout),
                                 booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
                         }
                     }
-                    parallel builds
+                    catchError {
+                        parallel builds
+                    }
                 }
             }
             post {
-                failure { echo &quot;run MC tests failed&quot;}
+                failure { echo &quot;run FRM tests 1 failed&quot;}
             }
         }
     }
-
 }
 </script>
     <sandbox>true</sandbox>

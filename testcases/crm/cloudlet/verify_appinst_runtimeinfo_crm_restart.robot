@@ -46,12 +46,12 @@ AppInst show displays runtimeinfo after CRM restart
    Stop Crm Docker Container  crm_ip=${crm_ip}
    Start Crm Docker Container  crm_ip=${crm_ip}
 
-   FOR  ${x}  IN RANGE  0  15
+   FOR  ${x}  IN RANGE  0  30
        ${cloudlet_info}=  Show Cloudlet Info   region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-       Exit For Loop If  '${cloudlet_info[0]['data']['state']}' == 2
+       Exit For Loop If  '${cloudlet_info[0]['data']['state']}' == 'Ready'
        Sleep  10s
    END
-   Should Be Equal As Numbers  ${cloudlet_info[0]['data']['state']}  2
+   Should Be Equal  ${cloudlet_info[0]['data']['state']}  Ready
 
    ${app_inst1}=  Show App Instances  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app_name}  token=${tokendev}
 

@@ -33,7 +33,7 @@ ShowLogs - DeveloperManager shall be able to do ShowLogs
 
     ${token}=  Login
 
-    ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}
+    ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}  cluster_instance_developer_org_name=${docker_image_developer}
 
     Should Be Equal  ${stdout}  here's some logs\r\n 
 
@@ -47,7 +47,7 @@ ShowLogs - DeveloperContributor shall be able to do ShowLogs
 
     ${token}=  Login
 
-    ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}
+    ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}  cluster_instance_developer_org_name=${docker_image_developer}
 
     Should Be Equal  ${stdout}  here's some logs\r\n 
 
@@ -61,7 +61,7 @@ ShowLogs - DeveloperViewer shall be able to do ShowLogs
 
     ${token}=  Login
 
-    ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}
+    ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}  cluster_instance_developer_org_name=${docker_image_developer}
 
     Should Be Equal  ${stdout}  here's some logs\r\n
 

@@ -264,6 +264,7 @@ MC - Verify an org can not be deleted while an associated app exists
 	${message}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some ClusterInst
 	${message2}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some AppInst, ClusterInst
 	${message3}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some App, AppInst, ClusterInst
+        ${message4}=  Catenate  SEPARATOR=   {"message":"Organization  ${SPACE}  ${orgname}  ${SPACE}  in use or check failed: region US: in use by some App, ClusterInst
 	Create User       username=${username2}     password=${password}     email_address=${email2}   auto_delete=${False} 
 	Unlock User
 	${user2Token}=   Login    username=${username2}    password=${password}
@@ -274,7 +275,7 @@ MC - Verify an org can not be deleted while an associated app exists
 
 	Run Keyword and Expect Error  *  Delete Org   orgname=${orgname}   token=${adminToken}      use_defaults=${False}
 	${body}=          Response Body
-	Should Contain Any              ${body}         ${message}  ${message2}  ${message3}
+	Should Contain Any              ${body}         ${message}  ${message2}  ${message3}  ${message4}
 
 	${rsp}=  Delete Cluster Instance  region=US  cluster_name=${cluster_name}   cloudlet_name=tmocloud-1   operator_org_name=dmuus   developer_org_name=${orgname}
 

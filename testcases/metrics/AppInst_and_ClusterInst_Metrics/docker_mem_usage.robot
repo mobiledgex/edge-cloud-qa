@@ -72,8 +72,8 @@ Setup
    #${clustername_docker}=   Set Variable  cluster-1582226010-873146-docker
    #${developer_name}=  Set Variable  mobiledgex
 
-   ${app_name}=  Set Variable  app-us
-   ${clustername_docker}=   Set Variable  dockermonitoring
+   ${app_name}=  Set Variable  jme-app
+   ${clustername_docker}=   Set Variable  dockerdedicated
    ${developer_name}=  Set Variable  testmonitor
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
    ${app_name_influx}=  Convert To Lowercase  ${app_name}

@@ -7,7 +7,7 @@ Library  String
 Library  Collections
      
 Test Setup  Setup
-Test Teardown  Cleanup Provisioning
+Test Teardown  Teardown
 
 Test Timeout    ${test_timeout_crm}
 
@@ -122,6 +122,7 @@ Setup
 #   Adduser Role  username=${usernameop_epoch}  orgname=${operator_name_openstack}  role=OperatorManager  
 #
 #   ${tokenop}=  Login  username=${usernameop_epoch}  password=${password}
+   Run Keyword and Ignore Error  Adduser Role   orgname=${operator_name_crm}   username=${op_manager_user_automation}   role=OperatorManager
    ${tokenop}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
 
    Set Suite Variable  ${cloudlet_name}
@@ -129,3 +130,6 @@ Setup
 
    Set Suite Variable  ${env_vars}
 
+Teardown
+    Run Keyword and Ignore Error  RemoveUser Role   orgname=${operator_name_crm}   username=${op_manager_user_automation}   role=OperatorManager
+    Cleanup Provisioning
