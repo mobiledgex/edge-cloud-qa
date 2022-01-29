@@ -2,6 +2,7 @@
 Documentation   CreateClusterInst - created_at and updated_at
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  MexApp
 
 Suite Setup	Setup
 Suite Teardown	Cleanup provisioning
@@ -63,9 +64,10 @@ CreateClusterInst - timestamps shall be created for autocluster docker Instances
     ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=auto${cluster_name}  auto_delete=${False}
 
     ${clusterInst}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst['data']['real_cluster_name']}  developer_org_name=MobiledgeX
-    Should Be True  ${clusterInst[0]['data']['created_at']['seconds']} > 0
-    Should Be True  ${clusterInst[0]['data']['created_at']['nanos']} > 0
-    Should Be True  'updated_at' in ${clusterInst[0]['data']} and 'seconds' not in ${clusterInst[0]['data']['updated_at']} and 'nanos' not in ${clusterInst[0]['data']['updated_at']}
+    #Should Be True  ${clusterInst[0]['data']['created_at']['seconds']} > 0
+    #Should Be True  ${clusterInst[0]['data']['created_at']['nanos']} > 0
+    Should Contain  ${clusterInst[0]['data']['created_at']}  ${current_date}
+    Should Be True  'updated_at' in ${clusterInst[0]['data']}
 
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=auto${cluster_name}  cluster_instance_developer_org_name=MobiledgeX
     Delete App  region=${region}
@@ -86,9 +88,10 @@ CreateClusterInst - timestamps shall be created for autocluster k8s Instances
     ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=auto${cluster_name}  auto_delete=${False}
 
     ${clusterInst}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst['data']['real_cluster_name']}  developer_org_name=MobiledgeX
-    Should Be True  ${clusterInst[0]['data']['created_at']['seconds']} > 0
-    Should Be True  ${clusterInst[0]['data']['created_at']['nanos']} > 0
-    Should Be True  'updated_at' in ${clusterInst[0]['data']} and 'seconds' not in ${clusterInst[0]['data']['updated_at']} and 'nanos' not in ${clusterInst[0]['data']['updated_at']}
+    #Should Be True  ${clusterInst[0]['data']['created_at']['seconds']} > 0
+    #Should Be True  ${clusterInst[0]['data']['created_at']['nanos']} > 0
+    Should Contain  ${clusterInst[0]['data']['created_at']}  ${current_date}
+    Should Be True  'updated_at' in ${clusterInst[0]['data']}
 
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=auto${cluster_name}  cluster_instance_developer_org_name=MobiledgeX
     Delete App  region=${region}
@@ -109,9 +112,10 @@ CreateClusterInst - timestamps shall be created for autocluster helm Instances
     ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=auto${cluster_name}  auto_delete=${False}
 
     ${clusterInst}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst['data']['real_cluster_name']}  developer_org_name=MobiledgeX
-    Should Be True  ${clusterInst[0]['data']['created_at']['seconds']} > 0
-    Should Be True  ${clusterInst[0]['data']['created_at']['nanos']} > 0
-    Should Be True  'updated_at' in ${clusterInst[0]['data']} and 'seconds' not in ${clusterInst[0]['data']['updated_at']} and 'nanos' not in ${clusterInst[0]['data']['updated_at']}
+    #Should Be True  ${clusterInst[0]['data']['created_at']['seconds']} > 0
+    #Should Be True  ${clusterInst[0]['data']['created_at']['nanos']} > 0
+    Should Contain  ${clusterInst[0]['data']['created_at']}  ${current_date}
+    Should Be True  'updated_at' in ${clusterInst[0]['data']}
 
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=auto${cluster_name}  cluster_instance_developer_org_name=MobiledgeX
     Delete App  region=${region}
@@ -121,6 +125,7 @@ CreateClusterInst - timestamps shall be created for autocluster helm Instances
 Setup
     ${token}=  Get Super Token
     ${cluster_name}=  Get Default Cluster Name
+    ${current_date}=   Fetch Current Date
 
     Create Flavor  region=${region}
     ${policy_dev}=  Create Auto Scale Policy  region=${region}   min_nodes=1  max_nodes=2  #use_defaults=${False}
@@ -130,14 +135,17 @@ Setup
     Set Suite Variable  ${policy_automation}
     Set Suite Variable  ${token}
     Set Suite Variable  ${cluster_name}
+    Set Suite Variable  ${current_date}
 
 Create/Update Clusterinst and Check Timestamps
     [Arguments]  &{parms}
 
     ${clusterInst}=  Create Cluster Instance  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  &{parms}  auto_delete=${False} 
-    Should Be True  ${clusterInst['data']['created_at']['seconds']} > 0
-    Should Be True  ${clusterInst['data']['created_at']['nanos']} > 0
-    Should Be True  'updated_at' in ${clusterInst['data']} and 'seconds' not in ${clusterInst['data']['updated_at']} and 'nanos' not in ${clusterInst['data']['updated_at']}
+    ${created_epoch}=  Convert to Epoch  ${clusterInst['data']['created_at']}
+    #Should Be True  ${clusterInst['data']['created_at']['seconds']} > 0
+    #Should Be True  ${clusterInst['data']['created_at']['nanos']} > 0
+    Should Contain  ${clusterInst['data']['created_at']}  ${current_date}
+    Should Be True  'updated_at' in ${clusterInst['data']}
 
     Sleep  1s
 
@@ -145,10 +153,12 @@ Create/Update Clusterinst and Check Timestamps
     ...  ELSE  Set Variable  ${policy_dev['data']['key']['name']}
 
     ${updateInst}=  Update Cluster Instance  region=${region}  token=${token}  cluster_name=${cluster_name}  developer_org_name=${clusterInst['data']['key']['organization']}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  autoscale_policy_name=${autoscale_policy}  use_defaults=${False}
-    Should Be True  ${updateInst['data']['created_at']['seconds']} == ${clusterInst['data']['created_at']['seconds']}
-    Should Be True  ${updateInst['data']['created_at']['nanos']} == ${clusterInst['data']['created_at']['nanos']}
-    Should Be True  ${updateInst['data']['updated_at']['seconds']} > ${clusterInst['data']['created_at']['seconds']}
-    Should Be True  ${updateInst['data']['updated_at']['seconds']} > 0
+    ${updated_epoch}=  Convert to Epoch  ${updateInst['data']['updated_at']}
+    Should Be True  '${updateInst['data']['created_at']}' == '${clusterInst['data']['created_at']}'
+    #Should Be True  ${updateInst['data']['created_at']['nanos']} == ${clusterInst['data']['created_at']['nanos']}
+    #Should Be True  ${updateInst['data']['updated_at']['seconds']} > ${clusterInst['data']['created_at']['seconds']}
+    Should Be True  ${updated_epoch} > ${created_epoch}
+    Should Contain  ${updateInst['data']['updated_at']}  ${current_date}
 
     Delete Cluster Instance  region=${region}  cluster_name=${cluster_name}  developer_org_name=${clusterInst['data']['key']['organization']}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}
 
@@ -156,9 +166,10 @@ CreateClusterinst for Docker and Check Timestamps
     [Arguments]  &{parms}
 
     ${clusterInst}=  Create Cluster Instance  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  &{parms}  auto_delete=${False}
-    Should Be True  ${clusterInst['data']['created_at']['seconds']} > 0
-    Should Be True  ${clusterInst['data']['created_at']['nanos']} > 0
-    Should Be True  'updated_at' in ${clusterInst['data']} and 'seconds' not in ${clusterInst['data']['updated_at']} and 'nanos' not in ${clusterInst['data']['updated_at']}
+    #Should Be True  ${clusterInst['data']['created_at']['seconds']} > 0
+    #Should Be True  ${clusterInst['data']['created_at']['nanos']} > 0
+    Should Contain  ${clusterInst['data']['created_at']}  ${current_date}
+    Should Be True  'updated_at' in ${clusterInst['data']} 
 
     Delete Cluster Instance  region=${region}  cluster_name=${cluster_name}  developer_org_name=${clusterInst['data']['key']['organization']}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}
 
@@ -169,9 +180,10 @@ CreateClusterinst for Docker Autocluster and Check Timestamps
     ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=auto${cluster_name}  &{parms}  auto_delete=${False}  
 
     ${clusterInst}=  Show Cluster Instances  region=${region}  cluster_name=auto${cluster_name}
-    Should Be True  ${clusterInst[0]['data']['created_at']['seconds']} > 0
-    Should Be True  ${clusterInst[0]['data']['created_at']['nanos']} > 0
-    Should Be True  'updated_at' in ${clusterInst[0]['data']} and 'seconds' not in ${clusterInst[0]['data']['updated_at']} and 'nanos' not in ${clusterInst[0]['data']['updated_at']}
+    #Should Be True  ${clusterInst[0]['data']['created_at']['seconds']} > 0
+    #Should Be True  ${clusterInst[0]['data']['created_at']['nanos']} > 0
+    Should Contain  ${clusterInst['data']['created_at']}  ${current_date}
+    Should Be True  'updated_at' in ${clusterInst[0]['data']}
 
     Delete App Instance  region=${region}
     Delete App  region=${region}

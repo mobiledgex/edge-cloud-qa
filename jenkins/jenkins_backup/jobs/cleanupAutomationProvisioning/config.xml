@@ -20,6 +20,7 @@
         <string>CloudletPool</string>
         <string>AutoScalePolicy</string>
         <string>TrustPolicy</string>
+        <string>CloudletToClean</string>
         <string>CloudletPoolInvitation</string>
         <string>ClusterInst</string>
         <string>Cloudlet</string>
@@ -113,6 +114,10 @@
           <name>CRMOverride</name>
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CloudletToClean</name>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -143,6 +148,7 @@ pipeline{
         booleanParam(name: &apos;CloudletPool&apos;, defaultValue: true)
         booleanParam(name: &apos;CloudletPoolInvitation&apos;, defaultValue: true)
         booleanParam(name: &apos;CRMOverride&apos;, defaultValue: false)
+        string(name: &apos;CloudletToClean&apos;)
     }
 
     stages {
@@ -171,6 +177,7 @@ pipeline{
                     script {
                         table_list = &apos;&apos;
                         crmoverride_flag = &apos;&apos;
+                        cloudlet_flag = &apos;&apos;
                         if (String.valueOf(params.BillingOrganization) == &apos;true&apos;) {
                             table_list = table_list + &apos;billingorg,&apos;
                         }
@@ -220,12 +227,14 @@ pipeline{
                             table_list = table_list + &apos;cloudletpoolinvitation,&apos;
                         }
                         if (String.valueOf(params.CRMOverride) == &apos;true&apos;) {
-                            crmoverride_flag = &apos;--crmoverride&apos;
+                            crmoverride_flag = &apos; --crmoverride&apos;
                         }
-
+                        if (params.CloudletToClean != &apos;&apos;) {
+                            cloudlet_flag = &apos; --cloudlet &apos; + params.CloudletToClean 
+                        }
                         table_list = table_list.substring(0, table_list.length() - 1)
-                        echo &apos;cleaning up ${table_list}&apos;
-                        sh &apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 cleanprov.py --tables &apos; + table_list + &apos; --automation &apos; + crmoverride_flag
+                        echo &apos;cleaning up &apos; + table_list
+                        sh &apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 cleanprov.py --tables &apos; + table_list + &apos; --automation &apos; + cloudlet_flag + crmoverride_flag
                     }
                 }
             }

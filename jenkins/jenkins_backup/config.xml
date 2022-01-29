@@ -101,6 +101,7 @@
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
         <string>runCloudletMaintenanceCRMTests</string>
         <string>runCrmAccessCloudletTests</string>
+        <string>runCrmAlertPolicyTests</string>
         <string>runCrmAlertReceiverTests</string>
         <string>runCrmClusterInstTests</string>
         <string>runCrmPlatformTests</string>
@@ -281,6 +282,7 @@
         <string>runCrmTestcases</string>
         <string>runCsharp3</string>
         <string>runDmeTestcases</string>
+        <string>runFrmTestcases</string>
         <string>runMcTestcases</string>
         <string>runMetricsTestcases</string>
         <string>runNmapScan</string>

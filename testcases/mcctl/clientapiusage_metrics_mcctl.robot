@@ -40,7 +40,7 @@ Clientapiusage - mcctl shall be able to request clientapiusage api metrics
       selector=api  app-org=${developer_org_name_automation}  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=PlatformFindCloudlet
       selector=api  cloudlet-org=${operator_name_fake}  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=PlatformFindCloudlet
       selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=VerifyLocation
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  cellid=0
+#      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  cellid=0
       selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  limit=1
       selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  limit=1  starttime=${start_date}  endtime=${end_date}
       selector=api  app-org=${developer_org_name_automation}  numsamples=1
@@ -68,7 +68,7 @@ Clientapiusage - mcctl shall handle clientapiusage metrics failures
       Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                     selector=api  cloudlet-org=automation_dev_org  startage=x
       Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                       selector=api  cloudlet-org=automation_dev_org  endage=x
       Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                                                selector=api  app-org=automation_dev_org  limit=x
-      Error: parsing arg "cellid\=x" failed: unable to parse "x" as int: invalid syntax                                                                               selector=api  app-org=automation_dev_org  cellid=x
+#      Error: parsing arg "cellid\=x" failed: unable to parse "x" as int: invalid syntax                                                                               selector=api  app-org=automation_dev_org  cellid=x
       Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                                                           selector=api  app-org=automation_dev_org  numsamples=x
 
 *** Keywords ***

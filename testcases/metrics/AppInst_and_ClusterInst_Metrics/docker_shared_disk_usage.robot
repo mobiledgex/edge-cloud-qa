@@ -68,7 +68,7 @@ Setup
    #${clustername_docker}=  Catenate  SEPARATOR=-  cluster  ${t}  docker
    #${app_name}=     Catenate  SEPARATOR=  ${app_name}  k8s
 
-   ${app_name}=  Set Variable  app-us
+   ${app_name}=  Set Variable  jme-app
    ${clustername_docker}=   Set Variable  dockershared
    ${developer_name}=  Set Variable  testmonitor
 
@@ -105,7 +105,7 @@ Disk Should Be In Range
 
    # verify values
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} > 0 and ${reading[9]} <= 100000000
+      Should Be True               ${reading[9]} > 100 and ${reading[9]} <= 1000000000
    END
 
 Metrics Should Match Influxdb
