@@ -17,7 +17,7 @@ Suite Setup       Setup
 
 ${cloudlet_name_openstack_metrics}=   packetcloudlet
 ${operator}=                       packet
-${clustername_k8sdedicated}=   k8smonitoring
+${clustername_k8sdedicated}=   k8sdedicated
 ${developer_name}=  testmonitor
 ${app_name}=  jme-k8s
 
@@ -28,7 +28,7 @@ ${username}=  testuser
 ${password}=  testuser
 ${orgname}=   testmonitor
 
-${port}=  8080
+${port}=  8086
 
 ${region}=  US
 
@@ -92,8 +92,8 @@ Setup
    #${clustername_k8sdedicated}=  Catenate  SEPARATOR=-  cluster  ${t}  k8sdedicated
    #${app_name}=     Catenate  SEPARATOR=  ${app_name}  k8s
 
-   ${app_name}=  Set Variable  app-us-k8s
-   ${clustername_k8sdedicated}=   Set Variable  k8smonitoring
+   ${app_name}=  Set Variable  jme-k8s
+   ${clustername_k8sdedicated}=   Set Variable  k8sdedicated
    ${developer_name}=  Set Variable  testmonitor
 
 #   ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}

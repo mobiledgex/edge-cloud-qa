@@ -7,17 +7,22 @@
       <triggers/>
       <parameters>
         <string>SlaveNodeMetrics</string>
+        <string>SlaveNodeFRM</string>
         <string>SlaveNodeVsphere</string>
         <string>SlaveNodeAnthos</string>
+        <string>TestTimeoutFRM</string>
         <string>NumberParallelExecutionsVCD</string>
+        <string>MasterControllerFederation</string>
         <string>OpenStackEnv</string>
         <string>DMERest</string>
         <string>CRMPoolAnthos</string>
         <string>NumberParallelExecutionsAnthos</string>
         <string>NumberParallelExecutionsVsphere</string>
+        <string>TestTimeoutMasterController</string>
         <string>SlaveNodeController</string>
         <string>Version</string>
         <string>SlaveNodeConsole</string>
+        <string>TestTimeoutController</string>
         <string>Console</string>
         <string>SlaveNodeScans</string>
         <string>CRMPoolOpenstack</string>
@@ -37,6 +42,8 @@
         <string>BuildDate</string>
         <string>InfluxDB</string>
         <string>RunFailedOnly</string>
+        <string>TestTimeoutDME</string>
+        <string>TestTimeoutSDK</string>
         <string>MasterController</string>
         <string>CommitVersion</string>
       </parameters>
@@ -82,6 +89,11 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
+          <name>MasterControllerFederation</name>
+          <defaultValue>console-dev.mobiledgex.net:443</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>Controller</name>
           <defaultValue>mexplat-qa-us.ctrl.mobiledgex.net:55001</defaultValue>
           <trim>false</trim>
@@ -107,22 +119,22 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>CRMPoolOpenstack</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;},{&quot;cloudlet&quot;:&quot;packet-qaregression&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;bonn&quot;},{&quot;cloudlet&quot;:&quot;packet-qaregression&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;packet_cloudlet&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>CRMPoolAnthos</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;qa-anthos&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;qa-anthos&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>CRMPoolVCD</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationDallasCloudlet&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationDallasCloudlet&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;qa2-lab&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>CRMPoolVsphere</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;DFWVMW2&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;}]}</defaultValue>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;DFWVMW2&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;dfw2&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -222,6 +234,36 @@
         <hudson.model.StringParameterDefinition>
           <name>SlaveNodeMetrics</name>
           <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNodeFRM</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeoutSDK</name>
+          <defaultValue>5m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeoutController</name>
+          <defaultValue>4m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeoutMasterController</name>
+          <defaultValue>4m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeoutDME</name>
+          <defaultValue>2m</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>TestTimeoutFRM</name>
+          <defaultValue>2m</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>

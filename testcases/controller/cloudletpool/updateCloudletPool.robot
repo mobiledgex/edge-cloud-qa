@@ -4,6 +4,7 @@ Documentation  UpdateCloudletPool
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  String
 Library  Collections
+Library         MexApp
      
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
@@ -20,9 +21,11 @@ UpdateCloudletPool - shall be able to update empty pool with empty pool
    ...  - verify pool is correct
 
    ${pool_return1}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}
-   Should Be True  ${pool_return1['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
+   #Should Be True  ${pool_return1['data']['created_at']['seconds']} > 0
+   #Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
+   #Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
+   Should Contain   ${pool_return1['data']['created_at']}  ${current_date}
+   Should Be Empty  ${pool_return1['data']['updated_at']}
 
    Sleep  1s
 
@@ -32,9 +35,10 @@ UpdateCloudletPool - shall be able to update empty pool with empty pool
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
    Dictionary Should Not Contain Key  ${pool_return['data']}  cloudlets
 
-   Should Be True  ${pool_return['data']['created_at']['seconds']} == ${pool_return1['data']['created_at']['seconds']} 
-   Should Be True  ${pool_return['data']['created_at']['nanos']} == ${pool_return1['data']['created_at']['nanos']} 
-   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   Should Be True  '${pool_return['data']['created_at']}' == '${pool_return1['data']['created_at']}' 
+   #Should Be True  ${pool_return['data']['created_at']['nanos']} == ${pool_return1['data']['created_at']['nanos']} 
+   #Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   Should Be Empty  ${pool_return['data']['updated_at']}
 
 #ECQ-2407
 UpdateCloudletPool - shall be able to update empty pool with 1 cloudlet
@@ -43,15 +47,20 @@ UpdateCloudletPool - shall be able to update empty pool with 1 cloudlet
    ...  - verify pool is correct
 
    ${pool_return1}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}
-   Should Be True  ${pool_return1['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
+   ${created_epoch}=  Convert to Epoch  ${pool_return1['data']['created_at']}
+
+   #Should Be True  ${pool_return1['data']['created_at']['seconds']} > 0
+   #Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
+   #Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
+   Should Contain   ${pool_return1['data']['created_at']}  ${current_date}
+   Should Be Empty  ${pool_return1['data']['updated_at']}
 
    @{cloudlet_list}=  Create List  ${cloudlet_name}
 
    Sleep  1s
 
    ${pool_return}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
+   ${updated_epoch}=  Convert to Epoch  ${pool_return['data']['updated_at']}
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
@@ -59,10 +68,11 @@ UpdateCloudletPool - shall be able to update empty pool with 1 cloudlet
 
    Length Should Be  ${pool_return['data']['cloudlets']}  1
 
-   Should Be True  ${pool_return['data']['created_at']['seconds']} == ${pool_return1['data']['created_at']['seconds']}
-   Should Be True  ${pool_return['data']['created_at']['nanos']} == ${pool_return1['data']['created_at']['nanos']}
-   Should Be True  ${pool_return['data']['updated_at']['seconds']} > ${pool_return1['data']['created_at']['seconds']}
-   Should Be True  ${pool_return['data']['updated_at']['nanos']} > 0
+   Should Be True  '${pool_return['data']['created_at']}' == '${pool_return1['data']['created_at']}'
+   #Should Be True  ${pool_return['data']['created_at']['nanos']} == ${pool_return1['data']['created_at']['nanos']}
+   #Should Be True  ${pool_return['data']['updated_at']['seconds']} > ${pool_return1['data']['created_at']['seconds']}
+   Should Be True   ${updated_epoch} > ${created_epoch}
+   #Should Be True  ${pool_return['data']['updated_at']['nanos']} > 0
 
 # ECQ-2408
 UpdateCloudletPool - shall be able to update empty pool with 2 cloudlets
@@ -71,15 +81,20 @@ UpdateCloudletPool - shall be able to update empty pool with 2 cloudlets
    ...  - verify pool is correct
 
    ${pool_return1}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}
-   Should Be True  ${pool_return1['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
+   ${created_epoch}=  Convert to Epoch  ${pool_return1['data']['created_at']}
+
+   #Should Be True  ${pool_return1['data']['created_at']['seconds']} > 0
+   #Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
+   #Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
+   Should Contain   ${pool_return1['data']['created_at']}  ${current_date}
+   Should Be Empty  ${pool_return1['data']['updated_at']}
 
    @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
 
    Sleep  1s
 
    ${pool_return}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
+   ${updated_epoch}=  Convert to Epoch  ${pool_return['data']['updated_at']}
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
@@ -87,10 +102,11 @@ UpdateCloudletPool - shall be able to update empty pool with 2 cloudlets
 
    Length Should Be  ${pool_return['data']['cloudlets']}  2
 
-   Should Be True  ${pool_return['data']['created_at']['seconds']} == ${pool_return1['data']['created_at']['seconds']}
-   Should Be True  ${pool_return['data']['created_at']['nanos']} == ${pool_return1['data']['created_at']['nanos']}
-   Should Be True  ${pool_return['data']['updated_at']['seconds']} > ${pool_return1['data']['created_at']['seconds']}
-   Should Be True  ${pool_return['data']['updated_at']['nanos']} > 0
+   Should Be True  '${pool_return['data']['created_at']}' == '${pool_return1['data']['created_at']}'
+   #Should Be True  ${pool_return['data']['created_at']['nanos']} == ${pool_return1['data']['created_at']['nanos']}
+   #Should Be True  ${pool_return['data']['updated_at']['seconds']} > ${pool_return1['data']['created_at']['seconds']}
+   Should Be True   ${updated_epoch} > ${created_epoch}
+   #Should Be True  ${pool_return['data']['updated_at']['nanos']} > 0
 
 # ECQ-2409
 UpdateCloudletPool - shall be able to update pool with 2 cloudlets to empty pool
@@ -100,27 +116,33 @@ UpdateCloudletPool - shall be able to update pool with 2 cloudlets to empty pool
 
    @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
    ${pool_return1}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
+   ${created_epoch}=  Convert to Epoch  ${pool_return1['data']['created_at']}
+
    Should Be Equal  ${pool_return1['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return1['data']['key']['organization']}  ${organization}
    Should Be Equal  ${pool_return1['data']['cloudlets']}  ${cloudlet_list}
-   Should Be True  ${pool_return1['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
+   #Should Be True  ${pool_return1['data']['created_at']['seconds']} > 0
+   #Should Be True  ${pool_return1['data']['created_at']['nanos']} > 0
+   #Should Be True  'updated_at' in ${pool_return1['data']} and 'seconds' not in ${pool_return1['data']['updated_at']} and 'nanos' not in ${pool_return1['data']['updated_at']}
+   Should Contain   ${pool_return1['data']['created_at']}  ${current_date}
+   Should Be Empty  ${pool_return1['data']['updated_at']}
 
    @{cloudlet_list2}=  Create List
 
    Sleep  1s
 
    ${pool_return}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list2}
+   ${updated_epoch}=  Convert to Epoch  ${pool_return['data']['updated_at']}
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
    Dictionary Should Not Contain Key  ${pool_return['data']}  cloudlets
 
-   Should Be True  ${pool_return['data']['created_at']['seconds']} == ${pool_return1['data']['created_at']['seconds']}
-   Should Be True  ${pool_return['data']['created_at']['nanos']} == ${pool_return1['data']['created_at']['nanos']}
-   Should Be True  ${pool_return['data']['updated_at']['seconds']} > ${pool_return1['data']['created_at']['seconds']}
-   Should Be True  ${pool_return['data']['updated_at']['nanos']} > 0
+   Should Be True  '${pool_return['data']['created_at']}' == '${pool_return1['data']['created_at']}'
+   #Should Be True  ${pool_return['data']['created_at']['nanos']} == ${pool_return1['data']['created_at']['nanos']}
+   #Should Be True  ${pool_return['data']['updated_at']['seconds']} > ${pool_return1['data']['created_at']['seconds']}
+   Should Be True   ${updated_epoch} > ${created_epoch}
+   #Should Be True  ${pool_return['data']['updated_at']['nanos']} > 0
 
 # ECQ-2410
 UpdateCloudletPool - shall be able to update pool with same cloudlets
@@ -130,16 +152,21 @@ UpdateCloudletPool - shall be able to update pool with same cloudlets
 
    @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
+   ${created_epoch}=  Convert to Epoch  ${pool_return['data']['created_at']}
+
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
    Should Be Equal  ${pool_return['data']['cloudlets']}  ${cloudlet_list}
-   Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   #Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
+   #Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
+   #Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   Should Contain   ${pool_return['data']['created_at']}  ${current_date}
+   Should Be Empty  ${pool_return['data']['updated_at']}
 
    Sleep  1s
 
    ${pool_return2}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
+   ${updated_epoch}=  Convert to Epoch  ${pool_return2['data']['updated_at']}
 
    Should Be Equal  ${pool_return2['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return2['data']['key']['organization']}  ${organization}
@@ -148,10 +175,11 @@ UpdateCloudletPool - shall be able to update pool with same cloudlets
    Length Should Be  ${pool_return['data']['cloudlets']}  2
    Length Should Be  ${pool_return2['data']['cloudlets']}  2
 
-   Should Be True  ${pool_return2['data']['created_at']['seconds']} == ${pool_return['data']['created_at']['seconds']}
-   Should Be True  ${pool_return2['data']['created_at']['nanos']} == ${pool_return['data']['created_at']['nanos']}
-   Should Be True  ${pool_return2['data']['updated_at']['seconds']} > ${pool_return['data']['created_at']['seconds']}
-   Should Be True  ${pool_return2['data']['updated_at']['nanos']} > 0
+   Should Be True  '${pool_return2['data']['created_at']}' == '${pool_return['data']['created_at']}'
+   #Should Be True  ${pool_return2['data']['created_at']['nanos']} == ${pool_return['data']['created_at']['nanos']}
+   #Should Be True  ${pool_return2['data']['updated_at']['seconds']} > ${pool_return['data']['created_at']['seconds']}
+   Should Be True   ${updated_epoch} > ${created_epoch}
+   #Should Be True  ${pool_return2['data']['updated_at']['nanos']} > 0
 
 # ECQ-2411
 UpdateCloudletPool - shall be able to update pool by removing cloudlet
@@ -161,17 +189,22 @@ UpdateCloudletPool - shall be able to update pool by removing cloudlet
 
    @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
+   ${created_epoch}=  Convert to Epoch  ${pool_return['data']['created_at']}
+
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
    Should Be Equal  ${pool_return['data']['cloudlets']}  ${cloudlet_list}
-   Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   #Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
+   #Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
+   #Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   Should Contain   ${pool_return['data']['created_at']}  ${current_date}
+   Should Be Empty  ${pool_return['data']['updated_at']}
 
    Sleep  1s
 
    @{cloudlet_list}=  Create List  tmocloud-2
    ${pool_return2}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
+   ${updated_epoch}=  Convert to Epoch  ${pool_return2['data']['updated_at']}
 
    Should Be Equal  ${pool_return2['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return2['data']['key']['organization']}  ${organization}
@@ -180,10 +213,11 @@ UpdateCloudletPool - shall be able to update pool by removing cloudlet
    Length Should Be  ${pool_return['data']['cloudlets']}  2
    Length Should Be  ${pool_return2['data']['cloudlets']}  1
 
-   Should Be True  ${pool_return2['data']['created_at']['seconds']} == ${pool_return['data']['created_at']['seconds']}
-   Should Be True  ${pool_return2['data']['created_at']['nanos']} == ${pool_return['data']['created_at']['nanos']}
-   Should Be True  ${pool_return2['data']['updated_at']['seconds']} > ${pool_return['data']['created_at']['seconds']}
-   Should Be True  ${pool_return2['data']['updated_at']['nanos']} > 0
+   Should Be True  '${pool_return2['data']['created_at']}' == '${pool_return['data']['created_at']}'
+   #Should Be True  ${pool_return2['data']['created_at']['nanos']} == ${pool_return['data']['created_at']['nanos']}
+   #Should Be True  ${pool_return2['data']['updated_at']['seconds']} > ${pool_return['data']['created_at']['seconds']}
+   Should Be True   ${updated_epoch} > ${created_epoch}
+   #Should Be True  ${pool_return2['data']['updated_at']['nanos']} > 0
 
 # ECQ-2412
 UpdateCloudletPool - shall be able to update pool after adding/removing members
@@ -204,12 +238,16 @@ UpdateCloudletPool - shall be able to update pool after adding/removing members
 
    @{cloudlet_list}=  Create List  ${cloudlet_name}
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
+   ${created_epoch}=  Convert to Epoch  ${pool_return['data']['created_at']}
+
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
    Should Be Equal  ${pool_return['data']['cloudlets']}  ${cloudlet_list}
-   Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
-   Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
-   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   #Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
+   #Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
+   #Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+   Should Contain   ${pool_return['data']['created_at']}  ${current_date}
+   Should Be Empty  ${pool_return['data']['updated_at']}
 
    Add Cloudlet Pool Member  region=${region}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name2}  #cloudlet_name=automationFrankfurtCloudlet
    Add Cloudlet Pool Member  region=${region}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name3}  #cloudlet_name=automationHamburgCloudlet
@@ -219,6 +257,7 @@ UpdateCloudletPool - shall be able to update pool after adding/removing members
  
    @{cloudlet_list_update}=  Create List  ${cloudlet_name4}  ${cloudlet_name}  #automationDusseldorfCloudlet  automationBerlinCloudlet
    ${pool_return2}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list_update}
+   ${updated_epoch}=  Convert to Epoch  ${pool_return2['data']['updated_at']}
 
    Should Be Equal  ${pool_return2['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return2['data']['key']['organization']}  ${organization}
@@ -227,10 +266,11 @@ UpdateCloudletPool - shall be able to update pool after adding/removing members
    Length Should Be  ${pool_return['data']['cloudlets']}  1
    Length Should Be  ${pool_return2['data']['cloudlets']}  2
 
-   Should Be True  ${pool_return2['data']['created_at']['seconds']} == ${pool_return['data']['created_at']['seconds']}
-   Should Be True  ${pool_return2['data']['created_at']['nanos']} == ${pool_return['data']['created_at']['nanos']}
-   Should Be True  ${pool_return2['data']['updated_at']['seconds']} > ${pool_return['data']['created_at']['seconds']}
-   Should Be True  ${pool_return2['data']['updated_at']['nanos']} > 0
+   Should Be True  '${pool_return2['data']['created_at']}' == '${pool_return['data']['created_at']}'
+   #Should Be True  ${pool_return2['data']['created_at']['nanos']} == ${pool_return['data']['created_at']['nanos']}
+   #Should Be True  ${pool_return2['data']['updated_at']['seconds']} > ${pool_return['data']['created_at']['seconds']}
+   Should Be True   ${updated_epoch} > ${created_epoch}
+   #Should Be True  ${pool_return2['data']['updated_at']['nanos']} > 0
 
 # createorgcloudletpool no longer supporte
 # ECQ-2413
@@ -269,6 +309,9 @@ Setup
 
    ${cloudlet_name}=  Get Default Cloudlet Name
    Create Cloudlet  region=${region}  operator_org_name=${organization}
+   
+   ${current_date}=   Fetch Current Date
 
    Set Suite Variable  ${pool_name}
    Set Suite Variable  ${cloudlet_name}
+   Set Suite Variable  ${current_date}
