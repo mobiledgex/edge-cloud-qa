@@ -41,8 +41,9 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
 
 def writefile(s):
     with open(outfile, 'a+') as f:
-        print(s, flush=True)
-        f.write(str(datetime.datetime.now()) + ' ' + s + '\n')
+        datenow = str(datetime.datetime.now())
+        print(datenow + ' ' + s, flush=True)
+        f.write(datenow + ' ' + s + '\n')
 
 
 def start_http_server(thread_name, port):
@@ -67,7 +68,8 @@ def start_udp_ping(thread_name, port):
         writefile(f'start_udp_ping recved udp data from address={client_addr}thread={thread_name} port={port} data={data}')
 
         try:
-            if data.decode('utf8') == 'exit':
+            decoded_data = data.decode('utf8', 'strict')
+            if decoded_data == 'exit':
                 writefile('start_udp_ping shutdown/close socket thread={} port={}'.format(thread_name, port))
                 ssocket.sendto(bytes('bye', encoding='utf-8'), client_addr)
                 ssocket.shutdown(socket.SHUT_RDWR)
@@ -80,7 +82,8 @@ def start_udp_ping(thread_name, port):
             writefile(f'start_udp_ping unknown exception error from address={client_addr} thread={thread_name} port={port} data={data}: {e}')
             continue
 
-        ssocket.sendto(bytes('pong', encoding='utf-8'), client_addr)
+        datasplit = decoded_data.split(':')
+        ssocket.sendto(bytes(f'pong:{datasplit[1]}', encoding='utf-8'), client_addr)
     #    print('recved', data)
 
 
@@ -114,7 +117,7 @@ def start_tcp_ping(thread_name, port):
             try:
                 decoded_data = data.decode('utf8', 'strict')
                 if decoded_data == 'exit':
-                    writefile('start_tcp_ping shutdown/close socket thread={thread_name} port={port}')
+                    writefile(f'start_tcp_ping shutdown/close socket thread={thread_name} port={port}')
                     conn.sendall(bytes('bye', encoding='utf-8'))
                     ssocket.shutdown(socket.SHUT_RDWR)
                     ssocket.close()
@@ -150,9 +153,10 @@ def start_tcp_ping(thread_name, port):
                         writefile(f'readfile error {e}')
                         read_data = f'error: {e}'
                     conn.sendall(bytes(f'{path},{read_data}', encoding='utf-8'))
-                elif decoded_data == 'ping':
-                    writefile('start_tcp_ping ping received thread={thread_name} port={port}')
-                    conn.sendall(bytes('pong', encoding='utf-8'))
+                elif decoded_data.startswith('ping'):
+                    datasplit = decoded_data.split(':')
+                    writefile(f'start_tcp_ping ping received thread={thread_name} port={port} tag={datasplit[1]}')
+                    conn.sendall(bytes(f'pong:{datasplit[1]}', encoding='utf-8'))
                 else:
                     conn.sendall(bytes('unknown', encoding='utf-8'))
             except UnicodeDecodeError as e:
@@ -181,7 +185,7 @@ def start_port_thread(thread_name, port):
             if not data:
                 break
 
-            writefile('start_port_thread recved tcp data from thread={} port={} data={}'.format(thread_name, port, data))
+            writefile('start_port_thread received tcp data from thread={} port={} data={}'.format(thread_name, port, data))
 
             try:
                 protocol, port_start = data.split(':')
