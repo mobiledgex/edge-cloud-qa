@@ -15,14 +15,14 @@ Test Timeout  30m
 *** Variables ***
 ${nogo}=  ${True}
 #${cloudlet_name_crm}  automationDallasCloudlet
-#${cloudlet_name_crm}  qa-anthos
+${cloudlet_name_crm}  qa-anthos
 #${cloudlet_name_crm}  dfw-vsphere
-${cloudlet_name_crm}  DFWVMW2
+#${cloudlet_name_crm}  DFWVMW2
 #${cloudlet_name_crm}  automationBuckhornCloudlet
 ${operator_name_crm}  packet
 #${operator_name_crm}  GDDT
-${developer_org_name}  automation_dev_org
-#${developer_org_name}  MobiledgeX
+#${developer_org_name}  automation_dev_org
+${developer_org_name}  ${developer_org_name_automation} 
 ${developer_org_name_automation}=  ${developer_org_name}
 ${alert_org}=  ${developer_org_name_automation}           
 ${app_org}=    ${developer_org_name_automation}
@@ -31,6 +31,7 @@ ${cluster_name}          alertcluster101
 ${mobiledgex_domain}     mobiledgex.net
 ${docker_image_alerts}   docker-qa.mobiledgex.net/automation_dev_org/images/jmeterplus8086:13.8.6
 ${docker_image_edgex}    docker-qa.mobiledgex.net/mobiledgex/images/jmeterplus8086:13.8.6
+${docker_image_developer}  MobiledgeX
 ${docker_image}=  ${docker_image_alerts}
 ${access_tcp_port}       tcp:8086
 ${ip_access_type}        IpAccessShared
@@ -295,6 +296,16 @@ Setup
       ${allow_serverless}=  Set Variable  ${True}
       Set Suite Variable  ${platform_type}
       Set Suite Variable  ${allow_serverless}
+      ${developer_org_name}=  Set Variable  ${docker_image_developer}
+      Set Suite Variable  ${developer_org_name}
+      ${developer_org_name_automation}=  Set Variable  ${developer_org_name}
+      Set Suite Variable  ${developer_org_name_automation}
+      ${alert_org}=  Set Variable  ${developer_org_name}
+      Set Suite Variable  ${alert_org}
+      ${app_org}=  Set Variable  ${developer_org_name}
+      Set Suite Variable  ${app_org}
+      ${docker_image_edgex}=  Set Variable  ${docker_image_edgex}
+      Set Suite Variable  ${docker_image_edgex}
       Create App  token=${super_token}  region=${region}  image_path=${docker_image_edgex}  app_version=${app_version}  developer_org_name=${developer_org_name}  access_ports=${access_tcp_port}  developer_org_name=${developer_org_name}  image_type=ImageTypeDocker  access_type=loadbalancer  deployment=kubernetes  app_name=${app_name}  allow_serverless=${allow_serverless}  #default_flavor_name=${cluster_flavor_name}
       Log To Console  ${\n}Done Creating App
     ELSE
