@@ -431,4 +431,4 @@ Verify Health Check Ok
         Sleep  2s
     END
 
-    Should Be Equal  ${app_inst[0]['data']['health_check']}  Ok 
+    Should Be Equal  ${app_inst[0]['data']['health_check']}  ${state}

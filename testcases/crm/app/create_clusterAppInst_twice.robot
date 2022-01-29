@@ -92,4 +92,7 @@ Setup
     Set Suite Variable  ${allow_serverless}
 
 Teardown
+    Run Keyword and Ignore Error  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    Run Keyword and Ignore Error  Delete Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm} 
+     
     Cleanup provisioning

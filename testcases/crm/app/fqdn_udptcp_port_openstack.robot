@@ -192,7 +192,7 @@ User shall be able to access HTTP port on CRM
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
     Log To Console  Checking if port is alive
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[0].public_port}   tag=${app_name_default}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[0].public_port}
 
 # ECQ-1314
 User shall be able to access UDP,TCP and HTTP ports on CRM
