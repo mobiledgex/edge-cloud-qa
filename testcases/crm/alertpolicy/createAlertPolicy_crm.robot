@@ -17,10 +17,10 @@ ${nogo}=  ${True}
 #${cloudlet_name_crm}  automationDallasCloudlet
 #${cloudlet_name_crm}  qa-anthos
 #${cloudlet_name_crm}  dfw-vsphere
-#${cloudlet_name_crm}  DFWVMW2
-${cloudlet_name_crm}  automationBuckhornCloudlet
-#${operator_name_crm}  packet
-${operator_name_crm}  GDDT
+${cloudlet_name_crm}  DFWVMW2
+#${cloudlet_name_crm}  automationBuckhornCloudlet
+${operator_name_crm}  packet
+#${operator_name_crm}  GDDT
 ${developer_org_name}  automation_dev_org
 #${developer_org_name}  MobiledgeX
 ${developer_org_name_automation}=  ${developer_org_name}
@@ -103,14 +103,6 @@ ${alertname_totals}=  0
 ${firing_totals}=     0
 
 *** Test Cases ***
-
-
-Create Custom Alert Receiver Selector Testall
-   [Documentation]
-   ...  - Create new alert policies
-
-   Log To Console  ${\n} Create Policies
-   Run Keyword  Create Custom Alert Receiver Selector Testall
 
 #AlertPolicy - Create alert policies for k8s app utilization triggering all supported alert types
 #ECQ-4276
