@@ -61,8 +61,8 @@ User shall be able to access UDP,TCP and HTTP ports on dedicated CRM with num_ma
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb_dedicated}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tag=${app_name_default}
-    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  app_name=${app_name_default}
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  app_name=${app_name_default}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
 
 # ECQ-1539
@@ -92,8 +92,8 @@ User shall be able to access UDP,TCP and HTTP ports on shared CRM with num_maste
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb_shared}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tag=${app_name_default}
-    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  app_name=${app_name_default}
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  app_name=${app_name_default}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
 
 *** Keywords ***
