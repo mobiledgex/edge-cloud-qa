@@ -37,10 +37,10 @@ VM - healthcheck shows HealthCheckFailRootlbOffline when docker container is sto
     ${developer_name_default}=  Get Default Developer Name
     ${version_default}=  Get Default App Version
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
     ${developer_name_default}=  Replace String  ${developer_name_default}  _  -
-    ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
+    ${vm}=  Convert To Lowercase  ${app_name_default}${version_default}-${developer_name_default}
     ${vm}=  Remove String  ${vm}  .
     ${clusterlb}=  Catenate  SEPARATOR=.  ${vm}  ${rootlb}
 
