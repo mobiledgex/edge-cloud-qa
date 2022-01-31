@@ -24,6 +24,21 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
     @IBOutlet weak var Button8: UIButton!
     @IBOutlet weak var Button9: UIButton!
     @IBOutlet weak var Button10: UIButton!
+    @IBOutlet weak var Button11: UIButton!
+    @IBOutlet weak var Button12: UIButton!
+    @IBOutlet weak var Button13: UIButton!
+    @IBOutlet weak var Button14: UIButton!
+    @IBOutlet weak var Button15: UIButton!
+    @IBOutlet weak var Button16: UIButton!
+    @IBOutlet weak var Button17: UIButton!
+    @IBOutlet weak var Button18: UIButton!
+    @IBOutlet weak var Button19: UIButton!
+    @IBOutlet weak var Button20: UIButton!
+    @IBOutlet weak var Button21: UIButton!
+    @IBOutlet weak var Button22: UIButton!
+    @IBOutlet weak var Button23: UIButton!
+    @IBOutlet weak var Button24: UIButton!
+    @IBOutlet weak var Button25: UIButton!
     @IBAction func Button1Click(_ sender: Any) {
         let queue = DispatchQueue.init(label: "testqueue", qos: .background)
         queue.async {
@@ -100,7 +115,129 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
     @IBAction func Button10Click(_ sender: Any) {
         let queue = DispatchQueue.init(label: "testqueue", qos: .background)
         queue.async {
-            print("\n\nStarting AutoMigrate Off Test")
+            print("\n\nStarting Custom Config Closer Cloudlet Trigger Only Test")
+            self.doCloserCloudletTrig()
+        }
+    }
+
+    @IBAction func Button11Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("Starting Custom Config Latency Too High Trigger Only Test")
+            self.doLateHighTrig()
+
+        }
+    }
+
+    @IBAction func Button12Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config App Health State Trigger Only Test")
+            self.doAppHealthTrig()
+        }
+    }
+
+    @IBAction func Button13Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config Cloudlet State Change Trigger Only Test")
+            self.doCloudletStateTrig()
+        }
+    }
+
+    @IBAction func Button14Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config Cloudlet Maintenance State Change Trigger Only Test")
+            self.doCloudletMaintTrig()
+        }
+    }
+
+    @IBAction func Button15Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config Latency Update Null Test")
+            self.doLateNull()
+        }
+    }
+
+    @IBAction func Button16Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config Location Update Null Test")
+            self.doLocNull()
+        }
+    }
+
+    @IBAction func Button17Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config Latency OnInterval Test")
+            self.doLateOnInterval()
+        }
+    }
+
+    @IBAction func Button18Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config Latency OnStart Test")
+            self.doLateOnStart()
+        }
+    }
+
+    @IBAction func Button19Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config Latency OnTrigger Connection Test")
+            self.doLateOnTrigConn()
+        }
+    }
+
+    @IBAction func Button20Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config Latency OnTrigger Ping Test")
+            self.doLateOnTrigPing()
+        }
+    }
+
+    @IBAction func Button21Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("Starting Custom Config Latency OnTrigger Post Tests")
+            self.dotest()
+
+        }
+    }
+
+    @IBAction func Button22Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config Location OnInterval Test")
+            self.doLocOnInterval()
+        }
+    }
+
+    @IBAction func Button23Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config Location OnStart Test")
+            self.doLocOnStart()
+        }
+    }
+
+    @IBAction func Button24Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Custom Config Location OnTrigger Post Test")
+            self.doLocOnTrigPost()
+        }
+    }
+
+    @IBAction func Button25Click(_ sender: Any) {
+        let queue = DispatchQueue.init(label: "testqueue", qos: .background)
+        queue.async {
+            print("\n\nStarting Cloudlet Maintenance Trigger Test")
             self.doAutoMigrateOff()
         }
     }
@@ -320,8 +457,8 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53.55
-        loc.longitude = 9.99
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then{ set -> Promise<DistributedMatchEngine_Loc> in
             print("Leons Location call \(set)")
             print("In testGetLocation")
@@ -341,7 +478,7 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
                 err = "Error doing getLastLocation \(error.localizedDescription)"
                 print("testGetLocation In Catch \(err)")
             }
-        print("Created Promise")
+        print("Created Location Promise")
             // poll
             do {
                 try awaitPromise(promise)
@@ -396,12 +533,12 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53.55
-        loc.longitude = 9.99
+        loc.latitude = 50.75
+        loc.longitude = 7.10
 
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool> in
             if set {
-                print("DefaultNoChanges Location Set To Lat:53 Long:10")
+                print("DefaultNoChanges Location Set To Lat:50.75 Long:7.10")
             } else {
                 print("DefaultNoChanges Location Not Set!")
                 throw MatchingEngineTestError.setLocationFailed
@@ -456,11 +593,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53.55
-        loc.longitude = 9.99
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLatencyUpdate5s Location Set To Lat:53 Long:10")
+                print("DefaultLatencyUpdate5s Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLatencyUpdate5s Location Not Set!")
@@ -514,11 +651,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53.55
-        loc.longitude = 9.99
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLatencyUpdate5s Location Set To Lat:53 Long:10")
+                print("DefaultLatencyUpdate5s Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLatencyUpdate60s Location Not Set!")
@@ -572,11 +709,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53.55
-        loc.longitude = 9.99
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLocationUpdate5s Location Set To Lat:53 Long:10")
+                print("DefaultLocationUpdate5s Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLocationUpdate5s Location Not Set!")
@@ -630,11 +767,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53.55
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLocationUpdate60s Location Set To Lat:53 Long:10")
+                print("DefaultLocationUpdate60s Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLocationUpdate60s Location Not Set!")
@@ -689,11 +826,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLatencyThresholdAbove Location Set To Lat:53 Long:10")
+                print("DefaultLatencyThresholdAbove Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLatencyThresholdAbove Location Not Set!")
@@ -747,11 +884,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLatencyThresholdBelow Location Set To Lat:53 Long:10")
+                print("DefaultLatencyThresholdBelow Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLatencyThresholdBelow Location Not Set!")
@@ -805,11 +942,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLatencyTestPort0 Location Set To Lat:53 Long:10")
+                print("DefaultLatencyTestPort0 Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLatencyTestPort0 Location Not Set!")
@@ -863,11 +1000,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLatencyTestPort2015 Location Set To Lat:53 Long:10")
+                print("DefaultLatencyTestPort2015 Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLatencyTestPort2015 Location Not Set!")
@@ -921,11 +1058,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLatencyTestPort2016 Location Set To Lat:53 Long:10")
+                print("DefaultLatencyTestPort2016 Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLatencyTestPort2016 Location Not Set!")
@@ -979,11 +1116,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLatencyTestPort3765 Location Set To Lat:53 Long:10")
+                print("DefaultLatencyTestPort3765 Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLatencyTestPort3765 Location Not Set!")
@@ -1037,11 +1174,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLatencyTestPort8085 Location Set To Lat:53 Long:10")
+                print("DefaultLatencyTestPort8085 Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLatencyTestPort8085 Location Not Set!")
@@ -1095,11 +1232,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("DefaultLatencyTestPort2085 Location Set To Lat:53 Long:10")
+                print("DefaultLatencyTestPort2085 Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("DefaultLatencyTestPort2085 Location Not Set!")
@@ -1173,11 +1310,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("LatencyTooHigh Trigger Location Set To Lat:53 Long:10")
+                print("LatencyTooHigh Trigger Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("LatencyTooHigh Trigger Location Not Set!")
@@ -1251,11 +1388,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("AppInstanceHealth Trigger Location Set To Lat:53 Long:10")
+                print("AppInstanceHealth Trigger Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("AppInstanceHealth Trigger Location Not Set!")
@@ -1329,11 +1466,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("CloudletState Trigger Location Set To Lat:53 Long:10")
+                print("CloudletState Trigger Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("CloudletState Trigger Location Not Set!")
@@ -1407,11 +1544,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("CloudletMaint Trigger Location Set To Lat:53 Long:10")
+                print("CloudletMaint Trigger Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("CloudletMaint Trigger Location Not Set!")
@@ -1486,11 +1623,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("Single Instance Latency Too High Trigger Location Set To Lat:53 Long:10")
+                print("Single Instance Latency Too High Trigger Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("Single Instance Latency Too High Trigger Location Not Set!")
@@ -1564,11 +1701,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("Single Instance App Health Trigger Location Set To Lat:53 Long:10")
+                print("Single Instance App Health Trigger Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("Single Instance App Health Trigger Location Not Set!")
@@ -1642,11 +1779,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("Single Instance Cloudlet State Trigger Location Set To Lat:53 Long:10")
+                print("Single Instance Cloudlet State Trigger Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("Single Instance Cloudlet State Trigger Location Not Set!")
@@ -1720,11 +1857,11 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("Single Instance Cloudlet Maintence Trigger Location Set To Lat:53 Long:10")
+                print("Single Instance Cloudlet Maintence Trigger Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("Single Instance Cloudlet Maintence Trigger Location Not Set!")
@@ -1773,7 +1910,1247 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         return (success, err)
     }
 
+    func doCloserCloudletTrig() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigCloserCloudletTriggerOnly()
+        if result.0 != true{
+            print("Latency Custom Config Closer Cloudlet Trigger Only Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Closer Cloudlet Trigger Only Test!\n\n")
+        }
+        sleep(5)
 
+    }
+
+    func testCustomConfigCloserCloudletTriggerOnly() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Closer Cloudlet Trigger Only Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Closer Cloudlet Trigger Only Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Closer Cloudlet Trigger Only Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Closer Cloudlet Trigger Only Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Closer Cloudlet Trigger Only Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Closer Cloudlet Trigger Only Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.closerCloudlet];
+            //let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: nil, locationUpdateConfig: locationUpdateConfig, latencyTestNetwork: "")
+            print("Custom Config Closer Cloudlet Trigger Only Config is \(config)")
+            print("Custom Config Closer Cloudlet Trigger Only Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Closer Cloudlet Trigger Only Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Closer Cloudlet Trigger Only Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Closer Cloudlet Trigger Only Error:  \(error)")
+            err = "Custom Config Closer Cloudlet Trigger Only Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(120)
+        matchingEngine.close()
+        print("Closing Custom Config Closer Cloudlet Trigger Only EdgeEvents Connection ")
+        print("Leaving Custom Config Closer Cloudlet Trigger Only - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doLateHighTrig() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigLatencyTooHighTriggerOnly()
+        if result.0 != true{
+            print("Custom Config Latency Too High Trigger Only Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Latency Too High Trigger Only Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigLatencyTooHighTriggerOnly() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Latency Too High Trigger Only Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Latency Too High Trigger Only Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Latency Too High Trigger Only Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Latency Too High Trigger Only Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Latency Too High Trigger Only Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Latency Too High Trigger Only Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.latencyTooHigh];
+            //let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            //let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: nil, locationUpdateConfig: nil, latencyTestNetwork: "")
+            print("Custom Config Latency Too High Trigger Only Config is \(config)")
+            print("Custom Config Latency Too High Trigger Only Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Latency Too High Trigger Only Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Latency Too High Trigger Only Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Latency Too High Trigger Only Error:  \(error)")
+            err = "Custom Config Latency Too High Trigger Only Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(120)
+        matchingEngine.close()
+        print("Closing Custom Config Latency Too High Trigger Only EdgeEvents Connection ")
+        print("Leaving Custom Config Latency Too High Trigger Only - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doAppHealthTrig() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigAppHealthChangeTriggerOnly()
+        if result.0 != true{
+            print("Custom Config App Health Change Trigger Only Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config App Health Change Trigger Only Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigAppHealthChangeTriggerOnly() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config App Health Change Trigger Only Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config App Health Change Trigger Only Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config App Health Change Trigger Only Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config App Health Change Trigger Only Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config App Health Change Trigger Only Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config App Health Change Trigger Only Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.appInstHealthChanged];
+            //let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            //let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: nil, locationUpdateConfig: nil, latencyTestNetwork: "")
+            print("Custom Config App Health Change Trigger Only Config is \(config)")
+            print("Custom Config App Health Change Trigger Only Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config App Health Change Trigger Only Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config App Health Change Trigger Only Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config App Health Change Trigger Only Error:  \(error)")
+            err = "Custom Config App Health Change Trigger Only Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(300)
+        matchingEngine.close()
+        print("Closing Custom Config App Health Change Trigger Only EdgeEvents Connection ")
+        print("Leaving Custom Config App Health Change Trigger Only - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doCloudletStateTrig() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigCloudletStateChangeTriggerOnly()
+        if result.0 != true{
+            print("Custom Config Cloudlet State Change Trigger Only Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Cloudlet State Change Trigger Only Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigCloudletStateChangeTriggerOnly() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Cloudlet State Change Trigger Only Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Cloudlet State Change Trigger Only Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Cloudlet State Change Trigger Only Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Cloudlet State Change Trigger Only Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Cloudlet State Change Trigger Only Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Cloudlet State Change Trigger Only Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletStateChanged];
+            //let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            //let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: nil, locationUpdateConfig: nil, latencyTestNetwork: "")
+            print("Custom Config Cloudlet State Change Trigger Only Config is \(config)")
+            print("Custom Config Cloudlet State Change Trigger Only Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Cloudlet State Change Trigger Only Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Cloudlet State Change Trigger Only Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Cloudlet State Change Trigger Only Error:  \(error)")
+            err = "Custom Config Cloudlet State Change Trigger Only Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(600)
+        matchingEngine.close()
+        print("Closing Custom Config Cloudlet State Change Trigger Only EdgeEvents Connection ")
+        print("Leaving Custom Config Cloudlet State Change Trigger Only - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doCloudletMaintTrig() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigCloudletMaintenanceStateChangeTriggerOnly()
+        if result.0 != true{
+            print("Custom Config Cloudlet Maintenance State Change Trigger Only Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Cloudlet Maintenance State Change Trigger Only Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigCloudletMaintenanceStateChangeTriggerOnly() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Cloudlet Maintenance State Change Trigger Only Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Cloudlet Maintenance State Change Trigger Only Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Cloudlet Maintenance State Change Trigger Only Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Cloudlet Maintenance State Change Trigger Only Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Cloudlet Maintenance State Change Trigger Only Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Cloudlet Maintenance State Change Trigger Only Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletMaintenanceStateChanged];
+            //let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            //let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: nil, locationUpdateConfig: nil, latencyTestNetwork: "")
+            print("Custom Config Cloudlet Maintenance State Change Trigger Only Config is \(config)")
+            print("Custom Config Cloudlet Maintenance State Change Trigger Only Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Cloudlet Maintenance State Change Trigger Only Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Cloudlet Maintenance State Change Trigger Only Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Cloudlet Maintenance State Change Trigger Only Error:  \(error)")
+            err = "Custom Config Cloudlet Maintenance State Change Trigger Only Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(120)
+        matchingEngine.close()
+        print("Closing Custom Config Cloudlet Maintenance State Change Trigger Only EdgeEvents Connection ")
+        print("Leaving Custom Config Cloudlet Maintenance State Change Trigger Only - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doLateNull() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigLatencyUpdateNull()
+        if result.0 != true{
+            print("Custom Config Latency Update Null Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Latency Update Null Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigLatencyUpdateNull() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Latency Update Null Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Latency Update Null Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Latency Update Null Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Latency Update Null Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Single Instance App Health Trigger Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Latency Update Null Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.closerCloudlet, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.appInstHealthChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletMaintenanceStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.error];
+            //let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: nil, locationUpdateConfig: locationUpdateConfig, latencyTestNetwork: "")
+            print("Custom Config Latency Update Null Config is \(config)")
+            print("Custom Config Latency Update Null Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Latency Update Null Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Latency Update Null Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Latency Update Null Error:  \(error)")
+            err = "Custom Config Latency Update Null Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(120)
+        matchingEngine.close()
+        print("Closing Custom Config Latency Update Null EdgeEvents Connection ")
+        print("Leaving Custom Config Latency Update Null - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doLocNull() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigLocationUpdateNull()
+        if result.0 != true{
+            print("Custom Config Location Update Null Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Location Update Null Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigLocationUpdateNull() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Location Update Null Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Location Update Null Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Location Update Null Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Location Update Null Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Location Update Null Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Location Update Null Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.latencyTooHigh, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.appInstHealthChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletMaintenanceStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.error];
+            let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            //let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: latencyUpdateConfig, locationUpdateConfig: nil, latencyTestNetwork: "")
+            print("Custom Config Location Update Null Config is \(config)")
+            print("Custom Config Location Update Null Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Location Update Null Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Location Update Null Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Location Update Null Error:  \(error)")
+            err = "Custom Config Location Update Null Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(120)
+        matchingEngine.close()
+        print("Closing Custom Config Location Update Null EdgeEvents Connection ")
+        print("Leaving Custom Config Location Update Null - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doLateOnInterval() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigLatencyOnInterval()
+        if result.0 != true{
+            print("Custom Config Latency OnInterval Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Latency OnInterval Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigLatencyOnInterval() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Latency OnInterval Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Latency OnInterval Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Latency OnInterval Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Latency OnInterval Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Latency OnInterval Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Latency OnInterval Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> =
+                [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.latencyTooHigh,
+                MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.appInstHealthChanged,
+                MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletStateChanged,
+                MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletMaintenanceStateChanged,
+                MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.error];
+            let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 3)
+            //let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: latencyUpdateConfig, locationUpdateConfig: nil, latencyTestNetwork: "")
+            print("Custom Config Latency OnInterval Config is \(config)")
+            print("Custom Config Latency OnInterval Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Latency OnInterval Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Latency OnInterval Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Latency OnInterval Error:  \(error)")
+            err = "Custom Config Latency OnInterval Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(300)
+        matchingEngine.close()
+        print("Closing Custom Config Latency OnInterval EdgeEvents Connection ")
+        print("Leaving Custom Config Latency OnInterval - Success:  \(success)")
+        return (success, err)
+    }
+
+
+    func doLateOnStart() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigLatencyOnStart()
+        if result.0 != true{
+            print("Custom Config Latency OnStart Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Latency OnStart Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigLatencyOnStart() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Latency OnStart Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Latency OnStart Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Latency OnStart Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Latency OnStart Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Latency OnStart Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Latency OnStart Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.closerCloudlet,
+                MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.latencyTooHigh,
+                MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.appInstHealthChanged,
+                MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletStateChanged,
+                MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletMaintenanceStateChanged,
+                MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.error];
+            let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onStart, updateIntervalSeconds: 30)
+            let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 30, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: latencyUpdateConfig, locationUpdateConfig: locationUpdateConfig, latencyTestNetwork: "")
+            print("Custom Config Latency OnStart Config is \(config)")
+            print("Custom Config Latency OnStart Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Latency OnStart Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Latency OnStart Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Latency OnStart Error:  \(error)")
+            err = "Custom Config Latency OnStart Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(120)
+        matchingEngine.close()
+        print("Closing Custom Config Latency OnStart EdgeEvents Connection ")
+        print("Leaving Custom Config Latency OnStart - Success:  \(success)")
+        return (success, err)
+    }
+
+    
+    
+    func doLateOnTrigConn() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigLatencyOnTriggerConnection()
+        if result.0 != true{
+            print("Custom Config Latency OnTrigger Connection Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Latency OnTrigger Connection Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigLatencyOnTriggerConnection() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Latency OnTrigger Connection Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Latency OnTrigger Connection Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Latency OnTrigger Connection Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Latency OnTrigger Connection Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Latency OnTrigger Connection Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Latency OnTrigger Connection Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.closerCloudlet,                         MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.latencyTooHigh, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.appInstHealthChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletMaintenanceStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.error];
+            let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onTrigger, updateIntervalSeconds: 15) // Shouldn't have updateIntervalSeconds when patteren is OnTrigger
+            let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: latencyUpdateConfig, locationUpdateConfig: locationUpdateConfig, latencyTestNetwork: "")
+           print("Custom Config Latency OnTrigger Connection Config is \(config)")
+            print("Custom Config Latency OnTrigger Connection Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Latency OnTrigger Connection Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Latency OnTrigger Connection Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Latency OnTrigger Connection Error:  \(error)")
+            err = "Custom Config Latency OnTrigger Connection Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(15)
+        // Get edgeEventsConnection
+        //MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsConnection.
+        // Send latencyUpdate using Connedtion and Post
+        sleep(15)
+        // Repeat latencyUpdate send
+        matchingEngine.close()
+        print("Closing Custom Config Latency OnTrigger Connection EdgeEvents Connection ")
+        print("Leaving Custom Config Latency OnTrigger Connection - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doLateOnTrigPing() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigLatencyOnTriggerPing()
+        if result.0 != true{
+            print("Custom Config Latency OnTrigger Ping Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Latency OnTrigger Ping Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigLatencyOnTriggerPing() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Latency OnTrigger Ping Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Latency OnTrigger Ping Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Latency OnTrigger Ping Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Latency OnTrigger Ping Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Latency OnTrigger Ping Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Latency OnTrigger Ping Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.closerCloudlet, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.latencyTooHigh, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.appInstHealthChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletMaintenanceStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.error];
+            let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onTrigger, updateIntervalSeconds: 15)
+            let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onTrigger, updateIntervalSeconds: 15)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: latencyUpdateConfig, locationUpdateConfig: locationUpdateConfig, latencyTestNetwork: "")
+            print("Custom Config Latency OnTrigger Ping Config is \(config)")
+            print("Custom Config Latency OnTrigger Ping Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Latency OnTrigger Ping Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Latency OnTrigger Ping Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Latency OnTrigger Ping Error:  \(error)")
+            err = "Custom Config Latency OnTrigger Ping Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(10)
+        matchingEngine.edgeEventsConnection?.testPingAndPostLatencyUpdate(testPort: 2016, loc: loc)
+        sleep(10)
+        matchingEngine.edgeEventsConnection?.testPingAndPostLatencyUpdate(testPort: 2016, loc: loc)
+        sleep(10)
+        matchingEngine.edgeEventsConnection?.testPingAndPostLatencyUpdate(testPort: 2016, loc: loc)
+        sleep(10)
+        matchingEngine.edgeEventsConnection?.testPingAndPostLatencyUpdate(testPort: 2016, loc: loc)
+        sleep(80)
+        //MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsConnection.testPingAndPostLatencyUpdate(testPort: 2016, loc: loc)
+        matchingEngine.close()
+        print("Closing Custom Config Latency OnTrigger Ping EdgeEvents Connection ")
+        print("Leaving Custom Config Latency OnTrigger Ping - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doLateOnTrigPost() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigLatencyOnTriggerPost()
+        if result.0 != true{
+            print("Custom Config Latency OnTrigger Post Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Latency OnTrigger Post Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigLatencyOnTriggerPost() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Latency OnTrigger Post Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Latency OnTrigger Post Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Latency OnTrigger Post Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Latency OnTrigger Post Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Latency OnTrigger Post Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Latency OnTrigger Post Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.closerCloudlet, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.latencyTooHigh, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.appInstHealthChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletMaintenanceStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.error];
+            let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onTrigger, updateIntervalSeconds: 15)
+            let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: latencyUpdateConfig, locationUpdateConfig: locationUpdateConfig, latencyTestNetwork: "")
+            print("Custom Config Latency OnTrigger Post Config is \(config)")
+            print("Custom Config Latency OnTrigger Post Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Latency OnTrigger Post Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Latency OnTrigger Post Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Latency OnTrigger Post Error:  \(error)")
+            err = "Custom Config Latency OnTrigger Post Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        var appPort1 = DistributedMatchEngine_AppPort.init()
+        sleep(15)
+        //matchingEngine.edgeEventsConnection?.postLatencyUpdate(site: , loc: loc)
+        matchingEngine.close()
+        print("Closing Custom Config Latency OnTrigger Post EdgeEvents Connection ")
+        print("Leaving Custom Config Latency OnTrigger Post - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doLocOnInterval() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigLocationOnInterval()
+        if result.0 != true{
+            print("Custom Config Location OnInterval Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Location OnInterval Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigLocationOnInterval() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Location OnInterval Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Location OnInterval Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Location OnInterval Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Location OnInterval Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Location OnInterval Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Location OnInterval Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.closerCloudlet,  MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.appInstHealthChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletMaintenanceStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.error];
+            //let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 3)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: nil, locationUpdateConfig: locationUpdateConfig, latencyTestNetwork: "")
+            print("Custom Config Location OnInterval Config is \(config)")
+            print("Custom Config Location OnInterval Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Location OnInterval Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Location OnInterval Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Location OnInterval Error:  \(error)")
+            err = "Custom Config Location OnInterval Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(300)
+        matchingEngine.close()
+        print("Closing Custom Config Location OnInterval EdgeEvents Connection ")
+        print("Leaving Custom Config Location OnInterval - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doLocOnStart() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigLocationOnStart()
+        if result.0 != true{
+            print("Custom Config Location OnStart Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Location OnStart Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigLocationOnStart() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Location OnStart Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Location OnStart Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Location OnStart Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Location OnStart Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Location OnStart Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Location OnStart Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.closerCloudlet, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.latencyTooHigh, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.appInstHealthChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletMaintenanceStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.error];
+            let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 30, maxNumberOfUpdates: 2)
+            let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onStart, updateIntervalSeconds: 30)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: latencyUpdateConfig, locationUpdateConfig: locationUpdateConfig, latencyTestNetwork: "")
+            print("Custom Config Location OnStart Config is \(config)")
+            print("Custom Config Location OnStart Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Location OnStart Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Location OnStart Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Location OnStart Error:  \(error)")
+            err = "Custom Config Location OnStart Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(120)
+        matchingEngine.close()
+        print("Closing Custom Config Location OnStart EdgeEvents Connection ")
+        print("Leaving Custom Config Location OnStart - Success:  \(success)")
+        return (success, err)
+    }
+
+    func doLocOnTrigPost() {
+        print("Starting testGetLocation")
+        var result = testGetLocation()
+        if result.0 != true{
+            print("Get Location Failed. Error is \(result.1)")
+            print("Exiting")
+        } else{
+            print("Finished TestGetLocation\n\n")
+        }
+        result = testCustomConfigLocationOnTriggerPost()
+        if result.0 != true{
+            print("Custom Config Location OnTrigger Post Test Failed. Error is \(result.1)")
+            print("Exiting")
+        } else {
+            print("Finished Custom Config Location OnTrigger Post Test!\n\n")
+        }
+        sleep(5)
+
+    }
+
+    func testCustomConfigLocationOnTriggerPost() -> (Bool, String) {
+        let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
+        var success = false
+        var err = ""
+        var loc = DistributedMatchEngine_Loc.init()
+        loc.latitude = 50.75
+        loc.longitude = 7.10
+        let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
+             if set {
+                print("Custom Config Location OnTrigger Post Location Set To Lat:50.75 Long:7.10")
+                success = true
+            }else{
+                print("Custom Config Location OnTrigger Post Location Not Set!")
+                throw MatchingEngineTestError.setLocationFailed
+            }
+            return self.registerClient(matchingEngine: matchingEngine)
+        }.then { regReply -> Promise<Bool> in
+            if !regReply {
+                print("Custom Config Location OnTrigger Post Register Client Failed!")
+                throw MatchingEngineTestError.registerClientFailed
+            }
+            print("Custom Config Location OnTrigger Post Register Client Done!")
+            return self.findCloudlet(matchingEngine: matchingEngine)
+        }.then { cloudlet -> Promise<MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus> in
+            if !cloudlet {
+                print("Custom Config Location OnTrigger Post Find CLoudlet Failed!")
+                throw MatchingEngineTestError.findCloudletFailed
+            }
+            print("Custom Config Location OnTrigger Post Find Cloudlet Done!")
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.closerCloudlet,  MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.appInstHealthChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.cloudletMaintenanceStateChanged, MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.error];
+            //let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 2)
+            let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onTrigger, updateIntervalSeconds: 15)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: nil, locationUpdateConfig: locationUpdateConfig, latencyTestNetwork: "")
+            print("Custom Config Location OnTrigger Post Config is \(config)")
+            print("Custom Config Location OnTrigger Post Starting Edge Event Connection!")
+            return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
+        }.then { status in
+            if status == MobiledgeXiOSLibraryGrpc.EdgeEvents.EdgeEventsStatus.success {
+                print("Custom Config Location OnTrigger Post Edge Events Connection Started!")
+                success = true
+            } else {
+                success = false
+                err = "Custom Config Location OnTrigger Post Edge Events Connection could not start. Bad status!"
+            }
+        }.catch { error  in
+            print("Custom Config Location OnTrigger Post Error:  \(error)")
+            err = "Custom Config Location OnTrigger Post Test Failed "
+        }
+        do {
+            try awaitPromise(promise)
+        } catch {
+            print("error awaiting promise \(error)")
+        }
+        sleep(20)
+        print("Posting Location")
+        matchingEngine.edgeEventsConnection?.postLocationUpdate(loc: loc)
+        sleep(20)
+        print("Posting Location")
+        matchingEngine.edgeEventsConnection?.postLocationUpdate(loc: loc)
+        sleep(20)
+        print("Posting Location")
+        matchingEngine.edgeEventsConnection?.postLocationUpdate(loc: loc)
+        sleep(20)
+        print("Posting Location")
+        matchingEngine.edgeEventsConnection?.postLocationUpdate(loc: loc)
+        sleep(40)
+        matchingEngine.close()
+        print("Closing Custom Config Location OnTrigger Post EdgeEvents Connection ")
+        print("Leaving Custom Config Location OnTrigger Post - Success:  \(success)")
+        return (success, err)
+    }
+    
     func doAutoMigrateOff() {
         print("Starting testGetLocation")
         var result = testGetLocation()
@@ -1783,7 +3160,7 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         } else{
             print("Finished TestGetLocation\n\n")
         }
-        result = testDefaultConfigAutoMigrationOff()
+        result = testCustomConfigAutoMigrationOff()
         if result.0 != true{
             print("AutoMigrate Off Test Failed. Error is \(result.1)")
             print("Exiting")
@@ -1793,17 +3170,17 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
         sleep(5)
 
     }
-
-    func testDefaultConfigAutoMigrationOff() -> (Bool, String) {
+    
+    func testCustomConfigAutoMigrationOff() -> (Bool, String) {
         let matchingEngine = MobiledgeXiOSLibraryGrpc.MatchingEngine()
         var success = false
         var err = ""
         var loc = DistributedMatchEngine_Loc.init()
-        loc.latitude = 53
-        loc.longitude = 10
+        loc.latitude = 50.75
+        loc.longitude = 7.10
         let promise = MobiledgeXiOSLibraryGrpc.MobiledgeXLocation.setLastLocation(loc: loc).then { set -> Promise<Bool>in
              if set {
-                print("AutoMigrate Off Location Set To Lat:53 Long:10")
+                print("AutoMigrate Off Location Set To Lat:50.75 Long:7.10")
                 success = true
             }else{
                 print("AutoMigrate Off Location Not Set!")
@@ -1823,8 +3200,10 @@ class ViewController: UIViewController , CLLocationManagerDelegate {
                 throw MatchingEngineTestError.findCloudletFailed
             }
             print("AutoMigrate Off Find Cloudlet Done!")
-            //let config = matchingEngine.createDefaultEdgeEventsConfig(latencyUpdateIntervalSeconds: 30, locationUpdateIntervalSeconds: 30, latencyThresholdTriggerMs: 250, latencyTestPort: 2016)
-            let config = matchingEngine.createDefaultEdgeEventsConfig(latencyUpdateIntervalSeconds: 10, latencyThresholdTriggerMs: 350)
+            let triggers:Set<MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger> = [MobiledgeXiOSLibraryGrpc.EdgeEvents.FindCloudletEventTrigger.closerCloudlet];
+            //let latencyUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            //let locationUpdateConfig = matchingEngine.createUpdateConfig(updatePattern: MobiledgeXiOSLibraryGrpc.EdgeEvents.UpdateConfig.UpdatePattern.onInterval, updateIntervalSeconds: 15, maxNumberOfUpdates: 0)
+            let config = matchingEngine.createEdgeEventsConfig(newFindCloudletEventTriggers: triggers, latencyThresholdTriggerMs: 300, performanceSwitchMargin: 0.05, latencyTestPort: 0, latencyUpdateConfig: nil, locationUpdateConfig: nil, latencyTestNetwork: "")
             print("AutoMigrate Off Config is \(config)")
             print("AutoMigrate Off Starting Edge Event Connection!")
             return matchingEngine.startEdgeEvents(dmeHost: self.dmeHost, dmePort: self.dmePort, newFindCloudletHandler: self.handleNewFindCloudlet, config: config)
