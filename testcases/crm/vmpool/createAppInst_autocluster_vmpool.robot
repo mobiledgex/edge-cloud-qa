@@ -27,7 +27,7 @@ ${vmpool_name}=  automationVMPool
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${region}=  EU
+${region}=  US
 
 ${clustername}=  andypool
 
@@ -111,7 +111,7 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/docker/lb
 
    ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst['data']['real_cluster_name']}-mobiledgex
    ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${app_inst['data']['real_cluster_name']}-mobiledgex
-   ${internal_name_lb}=  Set Variable  ${app_inst['data']['real_cluster_name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
+   ${internal_name_lb}=  Set Variable  ${app_inst['data']['real_cluster_name']}-mobiledgex.${cloudlet_name_vmpool}-${operator_lc}.${region}.mobiledgex.net
    ${group_name}=  Convert To Lowercase  ${group_name}
    ${internal_name_vm}=  Convert To Lowercase  ${internal_name_vm}
    ${internal_name_lb}=  Convert To Lowercase  ${internal_name_lb}
