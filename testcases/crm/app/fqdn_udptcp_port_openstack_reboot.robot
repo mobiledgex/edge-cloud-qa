@@ -55,8 +55,8 @@ User shall be able to access UDP,TCP and HTTP ports on CRM after reboot
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tag=${app_name_default}
-    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  app_name=${app_name_default}
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  app_name=${app_name_default}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port} 
 
     Reboot Rootlb  root_loadbalancer=${rootlb}
@@ -64,8 +64,8 @@ User shall be able to access UDP,TCP and HTTP ports on CRM after reboot
     Wait For Cloudlet Status Offline  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
     Wait For Cloudlet Status Online  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  timeout=600
 
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  num_tries=90  tag=${app_name_default}
-    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tag=${app_name_default}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  num_tries=90  app_name=${app_name_default}
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  app_name=${app_name_default}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
  
 *** Keywords ***

@@ -405,7 +405,7 @@ AlertReceiver - shall be able to create/receive clusterorg HealthCheckFailServer
 
    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
 
-   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}  tls=${True}  tag=${app_name}
+   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}  tls=${True}  app_name=${app_name}
 
    Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error  cluster_instance_developer_org_name=${cluster_orgname}
 
@@ -591,7 +591,7 @@ AlertReceiver - shall be able to create/receive email alerts with email parm and
 
    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
 
-   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}  tls=${True}  tag=${app_name}
+   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}  tls=${True}  app_name=${app_name}
 
    # create receiver with good email address thus overriding the mexadmin address
    Create Alert Receiver  type=email  severity=error  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}

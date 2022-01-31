@@ -121,7 +121,7 @@ ShowLogs - k8s dedicated shall return logs on CRM
 
     # with since
     Sleep  60 
-    TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
+    TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}  tag=${app_inst['data']['key']['app_key']['name']}
     ${stdout_since}=  Show Logs  region=${region}  since=${since}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with wrong containerid
