@@ -70,11 +70,11 @@ User shall be able to create app with large port range on CRM with k8s and acces
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
-   TCP Port Should Be Alive  ${fqdn_0}  2015  tag=${app_name_default}
-   TCP Port Should Be Alive  ${fqdn_0}  2016  tag=${app_name_default}
+   TCP Port Should Be Alive  ${fqdn_0}  2015  app_name=${app_name_default}
+   TCP Port Should Be Alive  ${fqdn_0}  2016  app_name=${app_name_default}
 
-   UDP Port Should Be Alive  ${fqdn_1}  2015  tag=${app_name_default}
-   UDP Port Should Be Alive  ${fqdn_1}  2016  tag=${app_name_default}
+   UDP Port Should Be Alive  ${fqdn_1}  2015  app_name=${app_name_default}
+   UDP Port Should Be Alive  ${fqdn_1}  2016  app_name=${app_name_default}
 
 *** Keywords ***
 Setup

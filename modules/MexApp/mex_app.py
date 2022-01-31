@@ -30,9 +30,9 @@ class MexApp(object):
         self.alert_receiver = AlertReceiver(root_url='dummy')
         self.operator_reporting = OperatorReporting(root_url='dummy')
 
-    def ping_udp_port(self, host, port, tag=None):
-        data = f'ping:{tag}'
-        exp_return_data = f'pong:{tag}'
+    def ping_udp_port(self, host, port, app_name=None):
+        data = f'ping:{app_name}'
+        exp_return_data = 'pong'
         data_size = sys.getsizeof(bytes(data, 'utf-8'))
         data_to_send = data.encode('ascii')
 
@@ -175,10 +175,10 @@ class MexApp(object):
         if return_data.decode('utf-8') != exp_return_data:
             raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
-    def ping_tcp_port(self, host, port, tag=None, wait_time=0, tls=False):
-        data = f'ping:{tag}'
-        exp_return_data = f'pong:{tag}'
-        data_size = sys.getsizeof(bytes(data, 'utf-8'))
+    def ping_tcp_port(self, host, port, app_name=None, wait_time=0, tls=False):
+        data = f'ping:{app_name}'
+        exp_return_data = 'pong'
+        # data_size = sys.getsizeof(bytes(data, 'utf-8'))
 
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.settimeout(10)
@@ -198,7 +198,8 @@ class MexApp(object):
         try:
             logging.debug(f'sending data={data}')
             sock.sendall(bytes(data, encoding='utf-8'))
-            return_data = sock.recv(data_size)
+            # return_data = sock.recv(data_size)
+            return_data = sock.recv(1024)
 
             logging.debug('data recevied back:' + return_data.decode('utf-8'))
             logging.info(f'holding port for {wait_time}s')
@@ -290,15 +291,15 @@ class MexApp(object):
 
         return resp
 
-    def udp_port_should_be_alive(self, host, port, tag=None):
-        logging.info(f'host:{host} port:{port} tag:{tag}')
+    def udp_port_should_be_alive(self, host, port, app_name=None):
+        logging.info(f'host:{host} port:{port} app_name:{app_name}')
 
         self.wait_for_dns(host)
 
         for attempt in range(1, 4):
             logging.debug(f'UDP port attempt {attempt}')
             try:
-                self.ping_udp_port(host, int(port), tag)
+                self.ping_udp_port(host, int(port), app_name)
                 return True
             except Exception as e:
                 logging.debug(f'udp exception caught:{e}')
@@ -307,8 +308,8 @@ class MexApp(object):
                 else:
                     time.sleep(1)
 
-    def tcp_port_should_be_alive(self, host, port, tag=None, wait_time=0, tls=False, num_tries=4):
-        logging.info(f'host:{host} port:{port} tag:{tag} wait_time:{wait_time} tls:{tls} num_tries={num_tries}')
+    def tcp_port_should_be_alive(self, host, port, app_name=None, wait_time=0, tls=False, num_tries=4):
+        logging.info(f'host:{host} port:{port} app_name:{app_name} wait_time:{wait_time} tls:{tls} num_tries={num_tries}')
 
         self.wait_for_dns(host)
         e_return = ''
@@ -316,7 +317,7 @@ class MexApp(object):
         for attempt in range(1, num_tries):
             logging.debug(f'TCP port attempt {attempt}')
             try:
-                self.ping_tcp_port(host, port, tag, wait_time, tls)
+                self.ping_tcp_port(host, port, app_name, wait_time, tls)
                 return True
             except Exception as e:
                 e_return = e
@@ -427,7 +428,7 @@ class MexApp(object):
         rb = None
 
         if kubeconfig is None:
-           kubeconfig = f'{cluster_name}.{operator_name}.kubeconfig'
+            kubeconfig = f'{cluster_name}.{operator_name}.kubeconfig'
 
         if root_loadbalancer is not None:
             print('*WARN*', 'rootlb')
