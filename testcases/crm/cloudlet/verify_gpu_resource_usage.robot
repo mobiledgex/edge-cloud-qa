@@ -7,7 +7,7 @@ Library  String
 Library  Collections
      
 Test Setup  Setup
-Test Teardown  Teardown
+Test Teardown  Cleanup Provisioning
 
 Test Timeout    ${test_timeout_crm}
 
@@ -17,7 +17,7 @@ ${developer}=  mobiledgex
 
 ${operator_name_openstack}  GDDT
 ${physical_name_openstack}  sunnydale
-${physical_name_crm}  buckhorn
+${physical_name}  buckhorn
 
 ${username}=   mextester06
 ${password}=   ${mextester06_gmail_password}
@@ -38,17 +38,17 @@ Controller displays GPU resource usage of cloudlet and triggers alert when thres
 
    # create cloudlet with resource quotas
    #${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  env_vars=MEX_EXT_NETWORK=external-network-02  gpudriver_name=nvidia-450  gpudriver_org=${operator_name_openstack}  token=${tokenop}  
-   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_crm}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  gpudriver_name=nvidia-450  gpudriver_org=${operator_name_openstack}  env_vars=${env_vars}  token=${tokenop}
+   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  gpudriver_name=nvidia-450  gpudriver_org=${operator_name_openstack}  env_vars=${env_vars}  token=${tokenop}
 
-   Add Cloudlet Resource Mapping   region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_crm}  mapping=gpu=mygpuresrouce  token=${tokenop}
+   Add Cloudlet Resource Mapping   region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  mapping=gpu=mygpuresrouce  token=${tokenop}
 
-   ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  token=${tokenop}
+   ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  token=${tokenop}
    Dictionary Should Not Contain Key  ${resource_usage[0]['info'][2]}  value
    Should Be Equal As Numbers  ${resource_usage[0]['info'][2]['quota_max_value']}  2
 
-   Create Cluster Instance  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor  token=${tokendev}
+   Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor  token=${tokendev}
 
-   ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  token=${tokenop}
+   ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  token=${tokenop}
    log to console  ${resource_usage}
    Should Be Equal As Numbers  ${resource_usage[0]['info'][2]['value']}  1
    
@@ -62,9 +62,9 @@ Controller displays GPU resource usage of cloudlet and triggers alert when thres
    @{resource_list}=  Create List  ${resource1}
 
    # update cloudlet with resource quotas
-   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
+   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
 
-   ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  token=${tokenop}
+   ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  token=${tokenop}
    Should Be Equal As Numbers  ${resource_usage[0]['info'][2]['value']}  1
    Should Be Equal As Numbers  ${resource_usage[0]['info'][2]['quota_max_value']}  4
 
@@ -75,9 +75,9 @@ Controller displays GPU resource usage of cloudlet and triggers alert when thres
    &{resource1}=  Create Dictionary  name=GPUs  value=1
    @{resource_list}=  Create List  ${resource1}
 
-   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
+   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
 
-   ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cluster_name=${cluster_name}1  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor  token=${tokendev} 
+   ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cluster_name=${cluster_name}1  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=automation_gpu_flavor  token=${tokendev} 
    Should Contain  ${error}  ('code=400', 'error={"message":"Not enough resources available: required GPUs is 1 but only 0 out of 1 is available"}')
 
 *** Keywords ***
@@ -136,6 +136,3 @@ Setup
 
    Set Suite Variable  ${env_vars}
 
-Teardown
-   Run Keyword and Ignore Error  RemoveUser Role  orgname=${operator_name_openstack}   username=${op_manager_user_automation}   role=OperatorManager  token=${token}
-   Cleanup Provisioning
