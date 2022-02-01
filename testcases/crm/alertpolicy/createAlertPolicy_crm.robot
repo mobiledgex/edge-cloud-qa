@@ -14,20 +14,24 @@ Test Timeout  30m
 
 *** Variables ***
 ${nogo}=  ${True}
-${cloudlet_name_crm}  automationDallasCloudlet
+#${cloudlet_name_crm}  automationDallasCloudlet
+${cloudlet_name_crm}  qa-anthos
 #${cloudlet_name_crm}  dfw-vsphere
 #${cloudlet_name_crm}  DFWVMW2
 #${cloudlet_name_crm}  automationBonnCloudlet
 ${operator_name_crm}  packet
 #${operator_name_crm}  TDG
-${developer_org_name}  automation_dev_org
-${developer_org_name_automation}  ${developer_org_name}
+#${developer_org_name}  automation_dev_org
+${developer_org_name}  ${developer_org_name_automation} 
+${developer_org_name_automation}=  ${developer_org_name}
 ${alert_org}=  ${developer_org_name_automation}           
 ${app_org}=    ${developer_org_name_automation}
 ${app_name}              alertapp101
 ${cluster_name}          alertcluster101
 ${mobiledgex_domain}     mobiledgex.net
 ${docker_image_alerts}   docker-qa.mobiledgex.net/automation_dev_org/images/jmeterplus8086:13.8.6
+${docker_image_edgex}    docker-qa.mobiledgex.net/mobiledgex/images/jmeterplus8086:13.8.6
+${docker_image_developer}  MobiledgeX
 ${docker_image}=  ${docker_image_alerts}
 ${access_tcp_port}       tcp:8086
 ${ip_access_type}        IpAccessShared
@@ -100,14 +104,6 @@ ${alertname_totals}=  0
 ${firing_totals}=     0
 
 *** Test Cases ***
-
-
-Create Custom Alert Receiver Selector Testall
-   [Documentation]
-   ...  - Create new alert policies
-
-   Log To Console  ${\n} Create Policies
-   Run Keyword  Create Custom Alert Receiver Selector Testall
 
 #AlertPolicy - Create alert policies for k8s app utilization triggering all supported alert types
 #ECQ-4276
@@ -294,9 +290,34 @@ Setup
     Log To Console  ${\n}Creating Flavor
     Create Flavor  token=${super_token}  region=${region}
 
-    Log To Console  ${\n}Creating Cluster Instance
-    Create Cluster Instance  token=${super_token}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=${ip_access_type}  number_masters=${num_master}  number_nodes=${num_nodes}  deployment=kubernetes  developer_org_name=${developer_org_name}  cluster_name=${cluster_name}  #flavor_name=${cluster_flavor_name}
-    Log To Console  ${\n}Done Creating Cluster Instance
+    ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
+
+    IF  '${platform_type}' == 'K8SBareMetal'
+      ${allow_serverless}=  Set Variable  ${True}
+      Set Suite Variable  ${platform_type}
+      Set Suite Variable  ${allow_serverless}
+      ${developer_org_name}=  Set Variable  ${docker_image_developer}
+      Set Suite Variable  ${developer_org_name}
+      ${developer_org_name_automation}=  Set Variable  ${developer_org_name}
+      Set Suite Variable  ${developer_org_name_automation}
+      ${alert_org}=  Set Variable  ${developer_org_name}
+      Set Suite Variable  ${alert_org}
+      ${app_org}=  Set Variable  ${developer_org_name}
+      Set Suite Variable  ${app_org}
+      ${docker_image_edgex}=  Set Variable  ${docker_image_edgex}
+      Set Suite Variable  ${docker_image_edgex}
+      Create App  token=${super_token}  region=${region}  image_path=${docker_image_edgex}  app_version=${app_version}  developer_org_name=${developer_org_name}  access_ports=${access_tcp_port}  developer_org_name=${developer_org_name}  image_type=ImageTypeDocker  access_type=loadbalancer  deployment=kubernetes  app_name=${app_name}  allow_serverless=${allow_serverless}  #default_flavor_name=${cluster_flavor_name}
+      Log To Console  ${\n}Done Creating App
+    ELSE
+      ${allow_serverless}=  Set Variable  ${None}
+      Set Suite Variable  ${allow_serverless}
+      Log To Console  ${\n}Creating App
+      Create App  token=${super_token}  region=${region}  image_path=${docker_image}  app_version=${app_version}  developer_org_name=${developer_org_name}  access_ports=${access_tcp_port}  developer_org_name=${developer_org_name}  image_type=ImageTypeDocker  access_type=loadbalancer  deployment=kubernetes  app_name=${app_name}  allow_serverless=${allow_serverless}  #default_flavor_name=${cluster_flavor_name}
+      Log To Console  ${\n}Done Creating App
+      Log To Console  ${\n}Creating Cluster Instance
+      Create Cluster Instance  token=${super_token}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  ip_access=${ip_access_type}  number_masters=${num_master}  number_nodes=${num_nodes}  deployment=kubernetes  developer_org_name=${developer_org_name}  cluster_name=${cluster_name}  #flavor_name=${cluster_flavor_name}
+      Log To Console  ${\n}Done Creating Cluster Instance
+    END
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
     Log To Console  ${\n}Initial catenation ${rootlb}
@@ -306,15 +327,12 @@ Setup
     Set Suite Variable  ${rootlb}
     Log To Console  ${\n}rootlb catenation ${rootlb}
 
-    Log To Console  Creating App and App Instance
-
-    Create App  token=${super_token}  region=${region}  image_path=${docker_image}  app_version=${app_version}  developer_org_name=${developer_org_name}  access_ports=${access_tcp_port}  developer_org_name=${developer_org_name}  image_type=ImageTypeDocker  access_type=loadbalancer  deployment=kubernetes  app_name=${app_name}  #flavor_name=${cluster_flavor_name}  #allow_serverless=${allow_serverless}  #default_flavor_name=${cluster_flavor_name}
-    Log To Console  ${\n}Done Creating App
+    Log To Console  ${\n}Creating App Instance
 
     Create App Instance  token=${super_token}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  app_version=${app_version}  developer_org_name=${developer_org_name}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
-
+    Log To Console  ${\n}Done Creating Appinst
     ${public_check}=  Show App Instances  token=${super_token}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  app_version=${app_version}  developer_org_name=${developer_org_name}
 
     ${internal_port_val}=  Set Variable  ${public_check[0]['data']['mapped_ports'][0]['internal_port']}
@@ -658,6 +676,7 @@ Show Alert Policies From App
 
 
 Setup Runcommand To Run Measurments
+   
    ${uri_check}=  Show App Instances  token=${super_token}  region=${region}  app_name=${app_name}  region=${region}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_crm}
 
    ${uri_val}=  Set Variable  ${uri_check}[0][data][uri]
@@ -680,11 +699,11 @@ Setup Runcommand To Run Measurments
    ${command_script_pubmain1}=   Convert To Lowercase  ${command_script_pubmain1}
    #test url in case error will show in log
    ##using runcommand to do a ls on the appinst first in case pod is in a bad state. EC-5971 see notes on that
-   ${url_error_test}=  Run Keyword And Ignore Error  Run Command  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  timeout=${timeout}  command=ls
+   ${url_error_test}=  Run Keyword And Ignore Error  Run Command  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cluster_instance_developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  timeout=${timeout}  command=ls
    ${url_error_test}=  Convert To String  ${url_error_test}
    Log To Console  ${url_error_test}
 
-   ${run_script_main}=  Run Command  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  timeout=${timeout}  command=${command_script_pubmain1}
+   ${run_script_main}=  Run Command  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cluster_instance_developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  timeout=${timeout}  command=${command_script_pubmain1}
    Log To Console  Running script commands on appinst for measurements ${\n}${command_script_pubmain1}
 
 
