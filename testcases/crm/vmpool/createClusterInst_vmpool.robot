@@ -27,7 +27,7 @@ ${vmpool_name}=  automationVMPool
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${region}=  EU 
+${region}=  US
 
 ${clustername}=  andypool
 
@@ -55,7 +55,7 @@ VM should be free after CreateClusterInst and UpdateVMPool state=VmForceFree
 
    ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
-   ${internal_name_lb}=  Set Variable  ${cluster_inst['data']['key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
+   ${internal_name_lb}=  Set Variable  ${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org.${cloudlet_name_vmpool}-${operator_lc}.${region}.mobiledgex.net
    ${group_name}=  Convert To Lowercase  ${group_name}
    ${internal_name_vm}=  Convert To Lowercase  ${internal_name_vm}
    ${internal_name_lb}=  Convert To Lowercase  ${internal_name_lb}
@@ -165,7 +165,7 @@ ClusterInst/AppInst shall create with VMPool IpAccessDedicated/docker/lb
 
    ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
-   ${internal_name_lb}=  Set Variable  ${cluster_inst['data']['key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
+   ${internal_name_lb}=  Set Variable  ${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org.${cloudlet_name_vmpool}-${operator_lc}.${region}.mobiledgex.net
    ${group_name}=  Convert To Lowercase  ${group_name}
    ${internal_name_vm}=  Convert To Lowercase  ${internal_name_vm}
    ${internal_name_lb}=  Convert To Lowercase  ${internal_name_lb}
@@ -322,7 +322,7 @@ ClusterInst/AppInst shall create with VMPool IpAccessDedicated/k8s/lb nummasters
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
    ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
-   ${internal_name_lb}=  Set Variable  ${cluster_inst['data']['key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
+   ${internal_name_lb}=  Set Variable  ${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org.${cloudlet_name_vmpool}-${operator_lc}.${region}.mobiledgex.net
    ${internal_name_master}=  Set Variable  mex-k8s-master-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${internal_name_node}=  Set Variable  mex-k8s-node-1-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${group_name}=  Convert To Lowercase  ${group_name}
@@ -562,7 +562,7 @@ ClusterInst shall update with VMPool IpAccessDedicated/k8s/lb nummasters=1 numno
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
    ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
-   ${internal_name_lb}=  Set Variable  ${cluster_inst['data']['key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
+   ${internal_name_lb}=  Set Variable  ${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org.${cloudlet_name_vmpool}-${operator_lc}.${region}.mobiledgex.net
    ${internal_name_master}=  Set Variable  mex-k8s-master-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${internal_name_node}=  Set Variable  mex-k8s-node-1-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${internal_name_node2}=  Set Variable  mex-k8s-node-2-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
