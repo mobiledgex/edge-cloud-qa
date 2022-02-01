@@ -45,7 +45,7 @@ DmePersistentConnection - create of new closer appinst shall return new cloudlet
    ${cloud1}=  Receive Cloudlet Update Event
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.status}  1  #FIND_FOUND
    Should Be True  len('${cloud1.new_cloudlet.edge_events_cookie}') > 100
-   Should Match Regexp  ${cloud1.new_cloudlet.fqdn}  reservable[0-9]-mobiledgex.${cloudlet2}-dmuus.${region_lc}.mobiledgex.net 
+   Should Match Regexp  ${cloud1.new_cloudlet.fqdn}  reservable[0-9]-mobiledgex[0-9]?.${cloudlet2}-dmuus.${region_lc}.mobiledgex.net 
    Should Be Equal  ${cloud1.new_cloudlet.ports}  ${fcloudlet.ports}
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.latitude}  ${cloudlet2_lat}
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.longitude}  ${cloudlet2_long}
@@ -260,7 +260,7 @@ DmePersistentConnection - create of new closer appinst shall return new cloudlet
    ${cloud1}=  Receive Cloudlet Update Event
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.status}  1  #FIND_FOUND
    Should Be True  len('${cloud1.new_cloudlet.edge_events_cookie}') > 100
-   Should Match Regexp  ${cloud1.new_cloudlet.fqdn}  reservable[0-9]-mobiledgex.${cloudlet2}-dmuus.${region_lc}.mobiledgex.net
+   Should Match Regexp  ${cloud1.new_cloudlet.fqdn}  reservable[0-9]-mobiledgex[0-9]?.${cloudlet2}-dmuus.${region_lc}.mobiledgex.net
    Should Be Equal  ${cloud1.new_cloudlet.ports}  ${fcloudlet.ports}
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.latitude}  ${cloudlet2_lat}
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.longitude}  ${cloudlet2_long}
@@ -274,7 +274,7 @@ DmePersistentConnection - create of new closer appinst shall return new cloudlet
    ${cloud1}=  Receive Cloudlet Update Event
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.status}  1  #FIND_FOUND
    Should Be True  len('${cloud1.new_cloudlet.edge_events_cookie}') > 100
-   Should Match Regexp  ${cloud1.new_cloudlet.fqdn}  reservable[0-9]-mobiledgex.${packet_cloudlet_name}-${packet_operator_name}.${region_lc}.mobiledgex.net
+   Should Match Regexp  ${cloud1.new_cloudlet.fqdn}  reservable[0-9]-mobiledgex[0-9]?.${packet_cloudlet_name}-${packet_operator_name}.${region_lc}.mobiledgex.net
    Should Be Equal  ${cloud1.new_cloudlet.ports}  ${fcloudlet.ports}
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.latitude}  ${packet_cloudlet_latitude}
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.cloudlet_location.longitude}  ${packet_cloudlet_longitude}
@@ -295,7 +295,7 @@ Setup
 
    ${c}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=dmuus
 
-   Create App  region=${region}  access_ports=tcp:1  developer_org_name=${developer_org_name_automation}  deployment=docker  image_type=ImageTypeDocker  image_path=${docker_image}
+   Create App  region=${region}  access_ports=tcp:19  developer_org_name=${developer_org_name_automation}  deployment=docker  image_type=ImageTypeDocker  image_path=${docker_image}
    ${dmuus_appinst}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}   cloudlet_name=${c['data']['key']['name']}  operator_org_name=${c['data']['key']['organization']}  cluster_instance_name=autoclusteraa
 
    ${appname}=  Get Default App Name
