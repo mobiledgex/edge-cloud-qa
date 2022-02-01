@@ -379,6 +379,8 @@ pipeline{
                                 string(name: 'Project', value: params.Project),
                                 string(name: 'Cycle', value: cycle),
                                 string(name: 'MasterController', value: params.MasterController),
+                                string(name: 'MasterControllerFederation', value: params.MasterControllerFederation),
+                                string(name: 'MasterControllerFederationPassword', value: params.MasterControllerFederationPassword),
                                 string(name: 'TestTarget', value: 'FRM'),
                                 string(name: 'VariableFile', value: params.VariableFile),
                                 string(name: 'TestTimeout', value: params.TestTimeoutFRM),
