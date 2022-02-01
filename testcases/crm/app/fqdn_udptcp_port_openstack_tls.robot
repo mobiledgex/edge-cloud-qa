@@ -60,10 +60,10 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/shared and 
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[3].fqdn_prefix}  ${cloudlet.fqdn}
 
-   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}  tag=${app_name_default}
-   TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tls=${True}  tag=${app_name_default}
+   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}  app_name=${app_name_default}
+   TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tls=${True}  app_name=${app_name_default}
 
-   UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[3].public_port}  tag=${app_name_default}
+   UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[3].public_port}  app_name=${app_name_default}
 
    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  tls=${True}
 
@@ -103,11 +103,11 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated a
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
 
-   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}  tag=${app_name_default}
-   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].end_port}     tls=${True}  tag=${app_name_default}
+   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}  app_name=${app_name_default}
+   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].end_port}     tls=${True}  app_name=${app_name_default}
    #TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[1].public_port}  tls=${True}
 
-   UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}  tag=${app_name_default}
+   UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}  app_name=${app_name_default}
 
    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  tls=${True}
 

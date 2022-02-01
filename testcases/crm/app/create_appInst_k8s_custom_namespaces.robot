@@ -39,10 +39,10 @@ User shall be able to create a k8s app instance with with custom namespaces
    Register Client
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
 
-   TCP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[0].public_port}  tag=${app_name}
-   TCP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}   tag=${app_name}
+   TCP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[0].public_port}  app_name=${app_name}
+   TCP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}   app_name=${app_name}
 
-   UDP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}   tag=${app_name}
+   UDP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}   app_name=${app_name}
 
    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[3].public_port}
 
