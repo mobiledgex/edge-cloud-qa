@@ -104,12 +104,13 @@ class NewAppInstSettingsPage(NewSettingsFullPage):
 
     def verify_app_inst_progress_dialog_text(self):
         try:
-            wait = WebDriverWait(self.driver, 50, poll_frequency=1)
+            wait = WebDriverWait(self.driver, 300, poll_frequency=1)
             wait.until(expected_conditions.text_to_be_present_in_element((AppInstancesPageLocators.appinst_create_progress_dialog_text),"Created AppInst successfully"))
             dialogtext = self.driver.find_element(*AppInstancesPageLocators.appinst_create_progress_dialog_text).text
             logging.info(f'dialogtext={dialogtext}')
         except Exception as e:
-            logging.error("Caught exception - " + e)
+            logging.error("Caught exception: ")
+            print(e)
             dialogtext = self.driver.find_element(*AppInstancesPageLocators.appinst_create_progress_dialog_text).text
             logging.error(f'Expected text not found={dialogtext}')
 

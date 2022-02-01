@@ -1633,7 +1633,7 @@ class MexConsole() :
         if app_version is None: app_version = self._appInst['key']['app_key']['version']
         if cluster_name is None: cluster_name = self._appInst['key']['cluster_inst_key']['cluster_key']['name']
         if cloudlet_name is None: cloudlet_name = self._appInst['key']['cluster_inst_key']['cloudlet_key']['name']
-        if operator_org_name is None: operator_org_name = self.appInst['key']['cluster_inst_key']['cloudlet_key']['organization']
+        if operator_org_name is None: operator_org_name = self._appInst['key']['cluster_inst_key']['cloudlet_key']['organization']
 
         self.refresh_page()
         self.app_instances_page.perform_search(app_name)
