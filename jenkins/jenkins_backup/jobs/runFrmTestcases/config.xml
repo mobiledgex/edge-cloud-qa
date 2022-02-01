@@ -83,6 +83,16 @@
           <defaultValue>4m</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MasterControllerFederation</name>
+          <defaultValue>console-dev.mobiledgex.net:443</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MasterControllerFederationPassword</name>
+          <defaultValue>mexadmin123</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -102,6 +112,8 @@ pipeline{
         string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
         string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
         string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
+        string(name: &apos;MasterControllerFederation&apos;, defaultValue: &apos;console-dev.mobiledgex.net:443&apos;)
+        string(name: &apos;MasterControllerFederationPassword&apos;, defaultValue: &apos;mexadmin123&apos;)
         string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
         string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
         booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
@@ -123,6 +135,8 @@ pipeline{
                                 string(name: &apos;Project&apos;, value: params.Project), 
                                 string(name: &apos;Cycle&apos;, value: params.Cycle), 
                                 string(name: &apos;MasterController&apos;, value: params.MasterController), 
+                                string(name: &apos;MasterControllerFederation&apos;, value: params.MasterControllerFederation),
+                                string(name: &apos;MasterControllerFederationPassword&apos;, value: params.MasterControllerFederationPassword),
                                 string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
                                 string(name: &apos;TestTarget&apos;, value: params.TestTarget),
                                 string(name: &apos;TestTimeout&apos;, value: params.TestTimeout),
