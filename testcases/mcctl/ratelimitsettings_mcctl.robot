@@ -6,7 +6,7 @@ Library  Collections
 Library  String
 
 Suite Setup  Setup
-Suite Teardown  Cleanup Provisioning
+Suite Teardown  Teardown
 
 Test Timeout  10m
 
@@ -159,6 +159,8 @@ Setup
    ${flow_name}=  Get Default Rate Limiting Flow Name
    Set Suite Variable  ${flow_name}
 
+   Update Settings  region=${region}  disable_rate_limit=${False}
+
 Success Create/Show/Delete Flow Via mcctl
    [Arguments]  &{parms}
 
@@ -181,13 +183,14 @@ Success Create/Show/Delete MaxReqs Via mcctl
 
    Should Be Equal  ${show[0]['key']['rate_limit_key']['api_name']}  ${parms['apiname']}
    Should Be Equal  ${show[0]['key']['max_reqs_settings_name']}  ${parms['maxreqssettingsname']}
-   IF  '${parms['ratelimittarget']}' == 'AllRequests'
-      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  1
-   ELSE IF  '${parms['ratelimittarget']}' == 'PerIp'
-      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  2
-   ELSE IF  '${parms['ratelimittarget']}' == 'PerUser'
-      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  3
-   END
+   Should Be Equal  ${show[0]['key']['rate_limit_key']['rate_limit_target']}  ${parms['ratelimittarget']}
+#   IF  '${parms['ratelimittarget']}' == 'AllRequests'
+#      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  1
+#   ELSE IF  '${parms['ratelimittarget']}' == 'PerIp'
+#      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  2
+#   ELSE IF  '${parms['ratelimittarget']}' == 'PerUser'
+#      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  3
+#   END
 
    IF  'interval' in ${parms}
       Should Be Equal  ${show[0]['settings']['interval']}  ${parms['interval']}
@@ -201,13 +204,17 @@ Success Create/Show/Delete MaxReqs Via mcctl
       Should Be Equal As Numbers   ${show[0]['settings']['max_requests']}  0
    END
 
-   IF  'maxreqsalgorithm' in ${parms}
-      IF  '${parms['maxreqsalgorithm']}' == 'FixedWindowAlgorithm'
-         Should Be Equal As Numbers   ${show[0]['settings']['max_reqs_algorithm']}  1
-      END
-   ELSE
-      Should Be Equal As Numbers   ${show[0]['settings']['max_reqs_algorithm']}  0
-   END
+   Should Be Equal  ${show[0]['settings']['max_reqs_algorithm']}  FixedWindowAlgorithm
+
+#   IF  'maxreqsalgorithm' in ${parms}
+#      Should Be Equal  ${show[0]['settings']['max_reqs_algorithm']}  ${parms['maxreqsalgorithm']}
+#      IF  '${parms['maxreqsalgorithm']}' == 'FixedWindowAlgorithm'
+#         Should Be Equal As Numbers   ${show[0]['settings']['max_reqs_algorithm']}  1
+#      END
+#   ELSE
+#      Should Be Equal  ${show[0]['settings']['max_reqs_algorithm']}  ${parms['maxreqsalgorithm']}
+#      Should Be Equal As Numbers   ${show[0]['settings']['max_reqs_algorithm']}  0
+#   END
 
 Fail Create Flow Via mcctl
    [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
@@ -259,13 +266,7 @@ Success Update/Show Maxreqs Via mcctl
 
    Should Be Equal  ${show[0]['key']['rate_limit_key']['api_name']}  ${parms['apiname']}
    Should Be Equal  ${show[0]['key']['max_reqs_settings_name']}  ${parms['maxreqssettingsname']}
-   IF  '${parms['ratelimittarget']}' == 'AllRequests'
-      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  1
-   ELSE IF  '${parms['ratelimittarget']}' == 'PerIp'
-      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  2
-   ELSE IF  '${parms['ratelimittarget']}' == 'PerUser'
-      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  3
-   END
+   Should Be Equal  ${show[0]['key']['rate_limit_key']['rate_limit_target']}  ${parms['ratelimittarget']}
 
    IF  'interval' in ${parms}
       Should Be Equal  ${show[0]['settings']['interval']}  ${parms['interval']}
@@ -276,7 +277,7 @@ Success Update/Show Maxreqs Via mcctl
    END
 
    IF  'maxreqsalgorithm' in ${parms}
-      Should Be Equal As Numbers   ${show[0]['settings']['max_reqs_algorithm']}  1
+      Should Be Equal   ${show[0]['settings']['max_reqs_algorithm']}  FixedWindowAlgorithm
    END
  
 Fail Update Flow Via mcctl
@@ -300,13 +301,7 @@ Verify Flow
 
    Should Be Equal  ${show[0]['key']['rate_limit_key']['api_name']}  ${parms['apiname']}
    Should Be Equal  ${show[0]['key']['flow_settings_name']}  ${parms['flowsettingsname']}
-   IF  '${parms['ratelimittarget']}' == 'AllRequests'
-      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  1
-   ELSE IF  '${parms['ratelimittarget']}' == 'PerIp'
-      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  2
-   ELSE IF  '${parms['ratelimittarget']}' == 'PerUser'
-      Should Be Equal As Numbers   ${show[0]['key']['rate_limit_key']['rate_limit_target']}  3
-   END
+   Should Be Equal  ${show[0]['key']['rate_limit_key']['rate_limit_target']}  ${parms['ratelimittarget']}
 
    IF  'burstsize' in ${parms}
       Should Be Equal As Numbers   ${show[0]['settings']['burst_size']}  ${parms['burstsize']}
@@ -321,12 +316,11 @@ Verify Flow
    END
 
    IF  'flowalgorithm' in ${parms}
-      IF  '${parms['flowalgorithm']}' == 'TokenBucketAlgorithm'
-         Should Be Equal As Numbers   ${show[0]['settings']['flow_algorithm']}  1
-      ELSE
-         Should Be Equal As Numbers   ${show[0]['settings']['flow_algorithm']}  2
-      END
+      Should Be Equal  ${show[0]['settings']['flow_algorithm']}  ${parms['flowalgorithm']}
    ELSE
-      Should Be Equal As Numbers   ${show[0]['settings']['flow_algorithm']}  0
+      Should Be Equal   ${show[0]['settings']['flow_algorithm']}  TokenBucketAlgorithm
    END
 
+Teardown
+   Update Settings  region=${region}  disable_rate_limit=${True}
+   Cleanup Provisioning 
