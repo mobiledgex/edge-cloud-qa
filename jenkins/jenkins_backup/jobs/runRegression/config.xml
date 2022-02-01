@@ -33,6 +33,7 @@
         <string>NumberParallelExecutionsOpenstack</string>
         <string>SlaveNodeSDK</string>
         <string>Controller</string>
+        <string>MasterControllerFederationPassword</string>
         <string>Project</string>
         <string>SlaveNodeOpenstack</string>
         <string>VariableFile</string>
@@ -94,6 +95,11 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
+          <name>MasterControllerFederationPassword</name>
+          <defaultValue>mexadmin123</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>Controller</name>
           <defaultValue>mexplat-qa-us.ctrl.mobiledgex.net:55001</defaultValue>
           <trim>false</trim>
@@ -119,7 +125,7 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>CRMPoolOpenstack</name>
-          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;bonn&quot;},{&quot;cloudlet&quot;:&quot;packet-qaregression&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;packet_cloudlet&quot;}]}</defaultValue>
+          <defaultValue>{&quot;cloudlet_name_crm&quot;:[{&quot;cloudlet&quot;:&quot;automationBonnCloudlet&quot;,&quot;operator&quot;:&quot;TDG&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;bonn&quot;},{&quot;cloudlet&quot;:&quot;packet-qaregression&quot;,&quot;operator&quot;:&quot;packet&quot;,&quot;region&quot;:&quot;US&quot;,&quot;physical_name&quot;:&quot;packet2&quot;}]}</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -264,11 +270,6 @@
         <hudson.model.StringParameterDefinition>
           <name>TestTimeoutFRM</name>
           <defaultValue>2m</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>MasterControllerFederationPassword</name>
-          <defaultValue>mexadmin123</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
