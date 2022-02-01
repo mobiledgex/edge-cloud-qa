@@ -13,17 +13,20 @@ testcase_components1 = [
     crm_components + "AccessCloudlet",
     crm_components + "AlertReceiver",
     crm_components + "AlertPolicy",
-    crm_components + "GPU",
-    crm_components + "VMPool",
-    crm_components + "AutoProvisioning",
     crm_components + "DMEPersistentConnection"
 ]
 
 testcase_components2 = [
-    crm_components + "CloudletMaintenance",
+    crm_components + "GPU",
+    crm_components + "VMPool",
+    crm_components + "AutoProvisioning"
 ]
 
 testcase_components3 = [
+    crm_components + "CloudletMaintenance",
+]
+
+testcase_components4 = [
     crm_components + "ResourceManagment",
 ]
 
@@ -126,6 +129,7 @@ pipeline{
                                 string(name: 'MasterController', value: mastercontroller), 
                                 string(name: 'VariableFile', value: variablefile), 
                                 string(name: 'CRMPool', value: params.CRMPool),
+                                string(name: 'NumberParallelExecutions', value: '1'),
                                 booleanParam(name: 'RunFailedOnly', value: runfailedonly)]
                         }
                     }
@@ -154,6 +158,7 @@ pipeline{
                                 string(name: 'MasterController', value: mastercontroller),
                                 string(name: 'VariableFile', value: variablefile),
                                 string(name: 'CRMPool', value: params.CRMPool),
+                                string(name: 'NumberParallelExecutions', value: '1'),
                                 booleanParam(name: 'RunFailedOnly', value: runfailedonly)]
                         }
                     }
@@ -165,5 +170,33 @@ pipeline{
             }
         }
 
+        stage("execute tests 4") {
+            steps {
+                script{
+                    builds = [:]
+                    testcase_components4.eachWithIndex { value, index->
+                        echo "${value}"
+                        builds["${value[-1]}"] = {
+                            build job: 'runTestcases', parameters: [
+                                string(name: 'SlaveNode', value: node_name),
+                                string(name: 'TestTarget', value: testtarget),
+                                string(name: 'Components', value: value.join(',')),
+                                string(name: 'Project', value: project),
+                                string(name: 'Cycle', value: cycle),
+                                string(name: 'Controller', value: controller),
+                                string(name: 'MasterController', value: mastercontroller),
+                                string(name: 'VariableFile', value: variablefile),
+                                string(name: 'CRMPool', value: params.CRMPool),
+                                string(name: 'NumberParallelExecutions', value: '1'),
+                                booleanParam(name: 'RunFailedOnly', value: runfailedonly)]
+                        }
+                    }
+                    parallel builds
+                }
+            }
+            post {
+                failure { echo "run tests4 failed"}
+            }
+        }
     }
 }
