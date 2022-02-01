@@ -290,6 +290,7 @@ Setup
 #   ${tokenop}=  Login  username=${usernameop_epoch}  password=${password}
 #   ${tokendev}=  Login  username=${usernamedev_epoch}  password=${password}
 
+   Run Keyword and Ignore Error  Adduser Role   orgname=${operator_name_crm}   username=${op_manager_user_automation}   role=OperatorManager
    ${tokenop}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
    ${tokendev}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 

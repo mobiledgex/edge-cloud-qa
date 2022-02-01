@@ -198,7 +198,9 @@ AlertReceiver - shall be able to create/receive appname/apporg/appversion/appclo
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
 
-   ${clusterlb}=  Convert To Lowercase  ${cluster_name}.${cloudlet_name_crm}.${operator_name_crm}.mobiledgex.net
+   ${clusterlb}=  Convert To Lowercase  ${cluster_name}-${developer_org_name_automation}.${cloudlet_name_crm}-${operator_name_crm}.${region}.mobiledgex.net
+   ${clusterlb}=  Replace String  ${clusterlb}  _  -
+   
    Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
    #Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name}
@@ -289,7 +291,7 @@ AlertReceiver - shall be able to create/receive email/slack region HealthCheckFa
    Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error  region=${region}  cluster_instance_developer_org_name=${developer}
 
    ${developer_dash}=  Replace String  ${developer}  _  -
-   ${clusterlb}=  Convert To Lowercase  ${developer_dash}${app['data']['key']['name']}10.${cloudlet_name_crm}.${operator_name_crm}.mobiledgex.net
+   ${clusterlb}=  Convert To Lowercase  ${app['data']['key']['name']}10-${developer_dash}.${cloudlet_name_crm}-${operator_name_crm}.${region}.mobiledgex.net
    Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
    Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name}
@@ -355,7 +357,7 @@ AlertReceiver - shall be able to create/receive pagerduty/slack region HealthChe
    Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error  region=${region}  cluster_instance_developer_org_name=${developer}
 
    ${developer_dash}=  Replace String  ${developer}  _  -
-   ${clusterlb}=  Convert To Lowercase  ${developer_dash}${app['data']['key']['name']}10.${cloudlet_name_crm}.${operator_name_crm}.mobiledgex.net
+   ${clusterlb}=  Convert To Lowercase  ${app['data']['key']['name']}10-${developer_dash}.${cloudlet_name_crm}-${operator_name_crm}.${region}.mobiledgex.net
 #   ${clusterlb}=  Convert To Lowercase  ${developer_dash}${app_name}10.${cloudlet_name_crm}.${operator_name_crm}.mobiledgex.net
    Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
 

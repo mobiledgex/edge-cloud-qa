@@ -27,7 +27,7 @@ testcase_components3 = [
 ]
 
 testcase_components4 = [
-    crm_components + "ResourceManagment",
+    crm_components + "ResourceManagement",
 ]
 
 node_name = 'notset'

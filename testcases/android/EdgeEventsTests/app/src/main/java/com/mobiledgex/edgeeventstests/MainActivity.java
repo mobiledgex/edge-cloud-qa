@@ -33,11 +33,14 @@ import com.mobiledgex.matchingengine.edgeeventsconfig.FindCloudletEvent;
 import com.mobiledgex.matchingengine.edgeeventsconfig.FindCloudletEventTrigger;
 import com.mobiledgex.matchingengine.performancemetrics.NetTest;
 import com.mobiledgex.matchingengine.DmeDnsException;
+import com.mobiledgex.matchingengine.performancemetrics.Site;
 import com.mobiledgex.mel.MelMessaging;
 import com.mobiledgex.matchingengine.util.RequestPermissions;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
@@ -51,6 +54,7 @@ import com.google.android.gms.location.LocationRequest;
 
 import static com.mobiledgex.matchingengine.edgeeventsconfig.FindCloudletEventTrigger.AppInstHealthChanged;
 import static com.mobiledgex.matchingengine.edgeeventsconfig.FindCloudletEventTrigger.CloserCloudlet;
+import static com.mobiledgex.matchingengine.edgeeventsconfig.FindCloudletEventTrigger.CloudletMaintenanceStateChanged;
 import static com.mobiledgex.matchingengine.edgeeventsconfig.FindCloudletEventTrigger.CloudletStateChanged;
 import static com.mobiledgex.matchingengine.edgeeventsconfig.FindCloudletEventTrigger.LatencyTooHigh;
 //import android.content.SharedPreferences;
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String appVersion = "1.0";
     public static String hostOverride = "us-qa.dme.mobiledgex.net";
     public static String findCloudletCarrierOverride = ""; // Allow "Any" if using "", but this likely breaks test cases.
+    public String host = "";
 
     public static String carrierName = "";
     //public static final String organizationName = "automation_dev_org";
@@ -107,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.READ_PHONE_STATE, // Get network state.
     };
 
-    private LocationCallback mLocationCallback;
+    private NetTest netTest;
+        private LocationCallback mLocationCallback;
     private LocationResult mLocationResult;
     FusedLocationProviderClient fusedLocationClient;
     private LocationRequest mLocationRequest = new LocationRequest();
@@ -182,13 +188,28 @@ public class MainActivity extends AppCompatActivity {
             //testDefaultConfigLatencyTestPortNonExisting();           // ECQ-3701
             //testDefaultConfigLatencyToHighTrigger();                 // ECQ-3702
             //testDefaultConfigAppHealthTrigger();                     // ECQ-3703
-            //testDefaultConfigCloudletStateChangeTrigger();           // ECQ-3704
-            testDefaultConfigCloudletMaintenanceTrigger();           // ECQ-3705 and ECQ-3706
+            //testDefaultConfigCloudletStateChangeTrigger();           // ECQ-3704 and ECQ-3706
+            //testDefaultConfigCloudletMaintenanceTrigger();           // ECQ-3705
             //testDefaultConfigSingleInstLatencyToHighTrigger();       // ECQ-3715
             //testDefaultConfigSingleInstCloudletStateChangeTrigger(); // ECQ-3716
             //testDefaultConfigSingleInstCloudletMaintenanceTrigger(); // ECQ-3717
+            //testCustomConfigCloserCloudletTriggerOnly();             //
+            //testCustomConfigLatencyTooHighTriggerOnly();
+            //testCustomConfigAppInstHealthTriggerOnly();
+            //testCustomConfigCloudletStateTriggerOnly();
+            //testCustomConfigCloudletMaintenanceTriggerOnly();
+            //testCustomConfigLatencyUpdateNull();
+            //testCustomConfigLocationUpdateNull();
+            //testCustomConfigLatencyUpdateonInterval();
+            //testCustomConfigLatencyUpdateonStart();
+            //testCustomConfigLatencyUpdateonTriggerConnectAndPost();
+            //testCustomConfigLatencyUpdateonTriggerPingAndPost();
+            testCustomConfigLatencyUpdateonTriggerPostUpdate();
+            //testCustomConfigLocationUpdateonInterval();
+            //testCustomConfigLocationUpdateonStart();
+            //testCustomConfigLocationUpdateonTriggerPostUpdate();
+            //testCustomConfigAutoMigrationOff();
             //testCloserCloudletTrigger(); // Not a default config test
-            //testCustomConfigAutoMigrationOff(); // Not a default config test
         });
     }
 
@@ -242,9 +263,9 @@ public class MainActivity extends AppCompatActivity {
                     .setOrgName(organizationName)
                     .setAppName(applicationName)
                     .setAppVers(appVersion);
-            if (ids.size() > 0) {
-                regRequestBuilder.setCellId(me.retrieveCellId(context).get(0).second.intValue());
-            }
+            //if (ids.size() > 0) {
+            //    regRequestBuilder.setCellId(me.retrieveCellId(context).get(0).second.intValue());
+            //}
             regRequest = regRequestBuilder.build();
             if (useHostOverride) {
                 registerReply = me.registerClient(regRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -2463,6 +2484,1736 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
+    public void testCustomConfigCloserCloudletTriggerOnly(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config Closer Cloudlet Trigger Only Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger.equals(CloserCloudlet)) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(CloserCloudlet);
+            edgeEventsConfig.latencyUpdateConfig = null;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } //finally {
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigLatencyTooHighTriggerOnly(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config LatencyTooHigh Trigger Only Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger.equals(LatencyTooHigh)) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(LatencyTooHigh);
+            edgeEventsConfig.latencyUpdateConfig = null;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } //finally {
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigAppInstHealthTriggerOnly(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config AppInstHealth Trigger Only Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger.equals(AppInstHealthChanged)) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(AppInstHealthChanged);
+            edgeEventsConfig.latencyUpdateConfig = null;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } //finally {
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigCloudletStateTriggerOnly(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config CloudletStateChange Trigger Only Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger.equals(CloudletStateChanged)) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(CloudletStateChanged);
+            edgeEventsConfig.latencyUpdateConfig = null;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } //finally {
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigCloudletMaintenanceTriggerOnly(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config CloudletMaintenanceStateChange Trigger Only Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger.equals(CloudletMaintenanceStateChanged)) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(CloudletMaintenanceStateChanged);
+            edgeEventsConfig.latencyUpdateConfig = null;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } //finally {
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigLatencyUpdateNull(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config LatencyUpdate Null Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                latencyNewCloudletResponses.add(fce);
+                Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(CloserCloudlet, AppInstHealthChanged, CloudletStateChanged, CloudletMaintenanceStateChanged);
+            edgeEventsConfig.latencyUpdateConfig = null;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } //finally {
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigLocationUpdateNull(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config LocationUpdate Null Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                latencyNewCloudletResponses.add(fce);
+                Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(LatencyTooHigh, AppInstHealthChanged, CloudletStateChanged, CloudletMaintenanceStateChanged);
+            edgeEventsConfig.latencyUpdateConfig = null;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } //finally {
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigLatencyUpdateonInterval(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config LatencyUpdate onInterval Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger != CloserCloudlet) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(LatencyTooHigh, AppInstHealthChanged, CloudletStateChanged, CloudletMaintenanceStateChanged);
+            edgeEventsConfig.latencyUpdateConfig.updatePattern = UpdateConfig.UpdatePattern.onInterval;
+            edgeEventsConfig.latencyUpdateConfig.updateIntervalSeconds = 15;
+            edgeEventsConfig.latencyUpdateConfig.maxNumberOfUpdates = 3;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 4, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } //finally {
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigLatencyUpdateonStart(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config LatencyUpdate onStart Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger != CloserCloudlet) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(LatencyTooHigh, AppInstHealthChanged, CloudletStateChanged, CloudletMaintenanceStateChanged);
+            edgeEventsConfig.latencyUpdateConfig.updatePattern = UpdateConfig.UpdatePattern.onStart;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } finally {
+            me.stopEdgeEvents();
+        }
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigLatencyUpdateonTriggerConnectAndPost(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config LatencyUpdate onTrigger Connect and Post Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger != CloserCloudlet) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(LatencyTooHigh, AppInstHealthChanged, CloudletStateChanged, CloudletMaintenanceStateChanged);
+            edgeEventsConfig.latencyUpdateConfig.updatePattern = UpdateConfig.UpdatePattern.onTrigger;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+            //edgeEventsConfig.latencyTestType = "CONNECT";
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+            Log.i(TAG, "Sleeping for 30 Seconds");
+            TimeUnit.SECONDS.sleep(30);
+
+            Log.i(TAG, "Executing Connect And Post Latency Update");
+            me.getEdgeEventsConnection().testConnectAndPostLatencyUpdate(location);
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } finally {
+            me.stopEdgeEvents();
+        }
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigLatencyUpdateonTriggerPingAndPost(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config LatencyUpdate onTrigger Ping and Post Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger != CloserCloudlet) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(LatencyTooHigh, AppInstHealthChanged, CloudletStateChanged, CloudletMaintenanceStateChanged);
+            edgeEventsConfig.latencyUpdateConfig.updatePattern = UpdateConfig.UpdatePattern.onTrigger;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+            edgeEventsConfig.latencyInternalPort = 2016;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+            Log.i(TAG, "Sleeping for 30 Seconds");
+            TimeUnit.SECONDS.sleep(30);
+
+
+            Log.i(TAG, "Executing Ping And Post Latency Update");
+            me.getEdgeEventsConnection().testPingAndPostLatencyUpdate(location);
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } finally {
+            me.stopEdgeEvents();
+        }
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigLatencyUpdateonTriggerPostUpdate() {
+        Log.i(TAG, "EdgeEvent Starting Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger != CloserCloudlet) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if (error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest) {
+                    Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+            NetTest netTest = new NetTest();
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(LatencyTooHigh, AppInstHealthChanged, CloudletStateChanged, CloudletMaintenanceStateChanged);
+            edgeEventsConfig.latencyUpdateConfig.updatePattern = UpdateConfig.UpdatePattern.onTrigger;
+            edgeEventsConfig.locationUpdateConfig = null;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if (findCloudletReply1.getStatus() == AppClient.FindCloudletReply.FindStatus.FIND_FOUND) {
+                Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " + findCloudletReply1.getFqdn());
+            } else {
+                Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+            List<distributed_match_engine.Appcommon.AppPort> ports = findCloudletReply1.getPortsList();
+            String portListStr = "";
+            boolean first = true;
+            String appPortFormat = "{Protocol: %d, Container Port: %d, External Port: %d, Path Prefix: '%s'}";
+            Log.i(TAG,"EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Getting AppPort");
+            for (distributed_match_engine.Appcommon.AppPort aPort : ports) {
+                if (!first) {
+                    portListStr += ", ";
+
+                }
+                portListStr += String.format(Locale.getDefault(), appPortFormat,
+                        aPort.getProto().getNumber(),
+                        aPort.getInternalPort(),
+                        aPort.getPublicPort(),
+                        aPort.getEndPort());
+
+                host = aPort.getFqdnPrefix() + findCloudletReply1.getFqdn();
+                int knownPort = 2016;
+                int serverPort = aPort.getPublicPort() == 0 ? knownPort : aPort.getPublicPort();
+                if (serverPort == 2016) {
+                    Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Got AppPort " + serverPort);
+                    Site site = new Site(me.getNetworkManager().getActiveNetwork(), NetTest.TestType.CONNECT, 3, host, serverPort);
+                    Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Adding NetTest Site");
+                    netTest.addSite(site);
+                    Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Testing NetTest Site");
+                    netTest.testSites(netTest.TestTimeoutMS);
+                }
+            }
+
+            Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Sleeping for 30 Seconds");
+            TimeUnit.SECONDS.sleep(30);
+
+            Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Executing Post Latency Update");
+            me.getEdgeEventsConnection().postLatencyUpdate(netTest.getSite(host), location);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Response Type: " + s.getEventType().toString());
+                Log.i(TAG, "EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } finally {
+            Log.i(TAG,"EdgeEvent Custom Config LatencyUpdate onTrigger Post LatencyUpdate Test Done");
+            me.stopEdgeEvents();
+        }
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigLocationUpdateonInterval(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config LocationUpdate onInterval Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger != LatencyTooHigh) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(CloserCloudlet, AppInstHealthChanged, CloudletStateChanged, CloudletMaintenanceStateChanged);
+            edgeEventsConfig.latencyUpdateConfig = null;
+            edgeEventsConfig.locationUpdateConfig.updatePattern = UpdateConfig.UpdatePattern.onInterval;
+            edgeEventsConfig.locationUpdateConfig.updateIntervalSeconds = 15;
+            edgeEventsConfig.locationUpdateConfig.maxNumberOfUpdates = 3;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } finally {
+            me.stopEdgeEvents();
+        }
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigLocationUpdateonStart(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config LocationUpdate onStart Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger != LatencyTooHigh) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(CloserCloudlet, AppInstHealthChanged, CloudletStateChanged, CloudletMaintenanceStateChanged);
+            edgeEventsConfig.latencyUpdateConfig = null;
+            edgeEventsConfig.locationUpdateConfig.updatePattern = UpdateConfig.UpdatePattern.onStart;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } finally {
+            me.stopEdgeEvents();
+        }
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigLocationUpdateonTriggerPostUpdate(){
+        Log.i(TAG, "EdgeEvent Starting Custom Config LocationUpdate onTrigger Post LocationUpdate Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                if (fce.trigger != LatencyTooHigh) {
+                    latencyNewCloudletResponses.add(fce);
+                    Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig();
+            //edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            edgeEventsConfig.triggers = EnumSet.of(CloserCloudlet, AppInstHealthChanged, CloudletStateChanged, CloudletMaintenanceStateChanged);
+            edgeEventsConfig.latencyUpdateConfig = null;
+            edgeEventsConfig.locationUpdateConfig.updatePattern = UpdateConfig.UpdatePattern.onTrigger;
+            edgeEventsConfig.latencyThresholdTrigger = 100;
+
+
+            Log.i(TAG, "EdgeEvent Custom Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+            Log.i(TAG, "Sleeping for 30 Seconds");
+            TimeUnit.SECONDS.sleep(30);
+
+            Log.i(TAG, "Executing Post Location Update");
+            me.getEdgeEventsConnection().postLocationUpdate(location);
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            //assertEquals("Must get [" + expectedNum + "] responses back from server.", expectedNum, responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+            //assertEquals("Must get new FindCloudlet responses back from server.", 0, latencyNewCloudletResponses.size());
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } finally {
+            me.stopEdgeEvents();
+        }
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
+
+    public void testCustomConfigAutoMigrationOff(){
+        Log.i(TAG, "\n\nEdgeEvent Starting AutoMigrate Off Test");
+        Future<AppClient.FindCloudletReply> response1;
+        AppClient.FindCloudletReply findCloudletReply1;
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setUseWifiOnly(true);
+
+        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
+        // me.setSSLEnabled(false);
+        // me.setNetworkSwitchingEnabled(false);
+
+        // attach an EdgeEventBus to receive the server response, if any (inline class):
+        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
+        CountDownLatch latch = new CountDownLatch(1);
+        class EventReceiver2 {
+            @Subscribe
+            void HandleFindCloudlet(FindCloudletEvent fce) {
+                latencyNewCloudletResponses.add(fce);
+                Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
+                try {
+                    Log.i(TAG,"Restarting the EdgeEventConnection");
+                    me.switchedToNextCloudlet();
+                }catch(DmeDnsException dde){
+                    Log.i(TAG,"EdgeEvent Caught an exception starting EdgeEventConnection:   " + dde);
+                }
+            }
+
+            @Subscribe
+            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
+                errors.add(error);
+                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
+                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
+                }
+            }
+        }
+
+        EventReceiver2 er = new EventReceiver2();
+        me.getEdgeEventsBus().register(er);
+
+        try {
+            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
+            registerClient(me);
+
+            // Cannot use the older API if overriding.
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+
+            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig(
+                    15,
+                    15,
+                    250,0);
+//            edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
+            me.setEnableEdgeEvents(true);
+
+            me.setAutoMigrateEdgeEventsConnection(false);
+
+            Log.i(TAG, "EdgeEvent Config Settings: " + edgeEventsConfig);
+            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
+
+            if (useHostOverride) {
+                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
+                        MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            } else {
+                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
+                // start on response1
+                me.startEdgeEvents(edgeEventsConfig);
+            }
+            findCloudletReply1 = response1.get();
+            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
+                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
+            }else{
+                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
+            }
+
+
+            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
+
+            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
+            int expectedNum = 2;
+            Log.i(TAG, "EdgeEvent :  " + responses.size());
+            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
+
+            for (AppClient.ServerEdgeEvent s : responses) {
+                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
+                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
+            }
+            Log.i(TAG,"EdgeEvent Finished AutoMigrate Off Test\n\n");
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+        } //finally {
+        //  if (me != null) {
+        //      Log.i(TAG, "Closing matching engine...");
+        //      me.close();
+        //      Log.i(TAG, "MatchingEngine closed for test.");
+        //  }
+        //}
+    }
 
     public void testCloserCloudletTrigger(){
         Log.i(TAG, "EdgeEvent Starting Closer Cloudlet Trigger Test");
@@ -2571,117 +4322,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
                 Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
             }
-
-        } catch (DmeDnsException dde) {
-            Log.e(TAG, Log.getStackTraceString(dde));
-        } catch (ExecutionException ee) {
-            Log.e(TAG, Log.getStackTraceString(ee));
-        } catch (InterruptedException ie) {
-            Log.e(TAG, Log.getStackTraceString(ie));
-        } //finally {
-        //  if (me != null) {
-        //      Log.i(TAG, "Closing matching engine...");
-        //      me.close();
-        //      Log.i(TAG, "MatchingEngine closed for test.");
-        //  }
-        //}
-    }
-
-
-
-    public void testCustomConfigAutoMigrationOff(){
-        Log.i(TAG, "\n\nEdgeEvent Starting AutoMigrate Off Test");
-        Future<AppClient.FindCloudletReply> response1;
-        AppClient.FindCloudletReply findCloudletReply1;
-        me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
-        me.setUseWifiOnly(true);
-
-        // This EdgeEventsConnection test requires an EdgeEvents enabled server.
-        // me.setSSLEnabled(false);
-        // me.setNetworkSwitchingEnabled(false);
-
-        // attach an EdgeEventBus to receive the server response, if any (inline class):
-        ConcurrentLinkedQueue<AppClient.ServerEdgeEvent> responses = new ConcurrentLinkedQueue<>();
-        ConcurrentLinkedQueue<FindCloudletEvent> latencyNewCloudletResponses = new ConcurrentLinkedQueue<>();
-        ConcurrentLinkedQueue<EdgeEventsConnection.EdgeEventsError> errors = new ConcurrentLinkedQueue<>();
-        CountDownLatch latch = new CountDownLatch(1);
-        class EventReceiver2 {
-            @Subscribe
-            void HandleFindCloudlet(FindCloudletEvent fce) {
-                latencyNewCloudletResponses.add(fce);
-                Log.i(TAG, "EdgeEvent Received a New FindCloudlet FQDN: " + fce.newCloudlet.getFqdn() + " Trigger: " + fce.trigger);
-                try {
-                    Log.i(TAG,"Restarting the EdgeEventConnection");
-                    me.switchedToNextCloudlet();
-                }catch(DmeDnsException dde){
-                    Log.i(TAG,"EdgeEvent Caught an exception starting EdgeEventConnection:   " + dde);
-                }
-            }
-
-            @Subscribe
-            void HandleEdgeEvent(EdgeEventsConnection.EdgeEventsError error) {
-                errors.add(error);
-                if(error == EdgeEventsConnection.EdgeEventsError.eventTriggeredButCurrentCloudletIsBest){
-                    Log.i(TAG,"EdgeEvent Received an Error:  " + error);
-                }
-            }
-        }
-
-        EventReceiver2 er = new EventReceiver2();
-        me.getEdgeEventsBus().register(er);
-
-        try {
-            Location location = getTestLocation(); // Test needs this configurable in a sensible way.
-            registerClient(me);
-
-            // Cannot use the older API if overriding.
-            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
-                    .setCarrierName(findCloudletCarrierOverride)
-                    .build();
-
-            EdgeEventsConfig edgeEventsConfig = me.createDefaultEdgeEventsConfig(
-                    15,
-                    15,
-                    250,0);
-//            edgeEventsConfig.latencyTriggerTestMode = MatchingEngine.FindCloudletMode.PROXIMITY;
-            me.setEnableEdgeEvents(true);
-
-            me.setAutoMigrateEdgeEventsConnection(false);
-
-            Log.i(TAG, "EdgeEvent Config Settings: " + edgeEventsConfig);
-            //Log.i(TAG,"EdgeEvent Config Settings: " + edgeEventsConfig.triggers.toString());
-
-            if (useHostOverride) {
-                response1 = me.findCloudletFuture(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS,
-                        MatchingEngine.FindCloudletMode.PROXIMITY);
-                // start on response1
-                me.startEdgeEvents(edgeEventsConfig);
-            } else {
-                response1 = me.findCloudletFuture(findCloudletRequest, GRPC_TIMEOUT_MS, MatchingEngine.FindCloudletMode.PROXIMITY);
-                // start on response1
-                me.startEdgeEvents(edgeEventsConfig);
-            }
-            findCloudletReply1 = response1.get();
-            if(findCloudletReply1.getStatus().toString() == "FIND_FOUND"){
-                Log.i(TAG,"EdgeEvent Got a Cloudlet!: " + findCloudletReply1.getStatus().toString() + "  FQDN: " +  findCloudletReply1.getFqdn());
-            }else{
-                Log.i(TAG, "EdgeEvent Cloudlet NOT Found!:  " + findCloudletReply1.getStatus().toString());
-            }
-
-
-            //assertSame("FindCloudlet1 did not succeed!", findCloudletReply1.getStatus(), FIND_FOUND);
-
-            latch.await(GRPC_TIMEOUT_MS * 3, TimeUnit.MILLISECONDS);
-            int expectedNum = 2;
-            Log.i(TAG, "EdgeEvent :  " + responses.size());
-            // FIXME: For this test, the location is NON-MOCKED, a MOCK location provider is required to get sensible results here, but the location timer task is going.
-
-            for (AppClient.ServerEdgeEvent s : responses) {
-                Log.i(TAG,"EdgeEvent Response Type: " + s.getEventType().toString());
-                Log.i(TAG,"EdgeEvent Latancy Average:  " + s.getStatistics().getAvg());
-            }
-            Log.i(TAG,"EdgeEvent Finished AutoMigrate Off Test\n\n");
 
         } catch (DmeDnsException dde) {
             Log.e(TAG, Log.getStackTraceString(dde));

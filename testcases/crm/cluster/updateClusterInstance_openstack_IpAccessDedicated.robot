@@ -200,11 +200,11 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
 
     FOR  ${x}  IN RANGE  0  40
         ${clusterInst}=  Show Cluster Instances  region=${region}   cluster_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_dedicated}
-        Exit For Loop If  '${clusterInst[0]['data']['state']}' == '5'
+        Exit For Loop If  '${clusterInst[0]['data']['state']}' == 'Ready'
         Sleep  10s
     END
 
-    Should Be Equal As Numbers   ${clusterInst[0]['data']['state']}   5
+    Should Be Equal    ${clusterInst[0]['data']['state']}   Ready
 
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=Unset
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
