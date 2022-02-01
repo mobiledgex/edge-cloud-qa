@@ -7,7 +7,7 @@ Library  String
 Library  Collections
      
 Test Setup  Setup
-Test Teardown  Teardown
+Test Teardown  Cleanup Provisioning
 
 Test Timeout    ${test_timeout_crm}
 
@@ -130,6 +130,3 @@ Setup
 
    Set Suite Variable  ${env_vars}
 
-Teardown
-    Run Keyword and Ignore Error  RemoveUser Role   orgname=${operator_name_crm}   username=${op_manager_user_automation}   role=OperatorManager
-    Cleanup Provisioning

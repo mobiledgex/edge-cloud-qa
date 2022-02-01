@@ -135,12 +135,12 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with with same ports o
 
    Log To Console  Creating App and App Instance
    Create App  region=${region}  app_name=${app_name_1}  app_version=1.0  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  access_ports=tcp:2015,udp:2015 
-   Create App Instance  region=${region}  app_name=${app_name_1}  app_version=1.0  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_k8s}  dedicated_ip=${True}
+   Create App Instance  region=${region}  app_name=${app_name_1}  app_version=1.0  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_k8s}  dedicated_ip=${dedicated_ip}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_1}  app_version=1.0
    #App Instance Should Exist  region=${region}  app_name=${app_name_docker}  app_version=1.0  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
    Create App  region=${region}  app_name=${app_name_2}  app_version=1.0  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  access_ports=tcp:2015,udp:2015
-   Create App Instance  region=${region}  app_name=${app_name_2}  app_version=1.0  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_k8s}  dedicated_ip=${True}
+   Create App Instance  region=${region}  app_name=${app_name_2}  app_version=1.0  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_k8s}  dedicated_ip=${dedicated_ip}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_2}  app_version=1.0
    #App Instance Should Exist  region=${region}  app_name=${app_name_k8s}  app_version=2.0  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
@@ -212,9 +212,17 @@ User shall be able to access TCP/UDP ports for 2 k8s apps with with same ports o
 
 *** Keywords ***
 Setup
-    ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
-    Set Suite Variable  ${platform_type}
+   ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
+   IF  '${platform_type}' == 'K8SBareMetal'
+       Set Suite Variable  ${dedicated_ip}  ${True}
+   ELSE
+       Set Suite Variable  ${dedicated_ip}  ${None}
+   END
+
+   Set Suite Variable  ${platform_type}
+
+   
    Create Flavor  region=${region}
 
    ${app_name_default}=  Get Default App Name
