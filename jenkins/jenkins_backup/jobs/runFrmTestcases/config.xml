@@ -11,8 +11,10 @@
         <string>VariableFile</string>
         <string>TestTarget</string>
         <string>RunFailedOnly</string>
+        <string>MasterControllerFederation</string>
         <string>TestTimeout</string>
         <string>Cycle</string>
+        <string>MasterControllerFederationPassword</string>
         <string>MasterController</string>
         <string>CommitVersion</string>
       </parameters>
