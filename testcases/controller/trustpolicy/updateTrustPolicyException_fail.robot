@@ -272,7 +272,12 @@ UpdateTrustPolicyException - operator update of rules shall return error
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=10  port_range_maximum=1  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
+
+   # rules only
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Operator can update only state field"}')  Update Trust Policy Exception  region=${region}  token=${optoken}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   rule_list=${rulelist}
+
+   # rules and state
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operator can update only state field"}')  Update Trust Policy Exception  region=${region}  token=${optoken}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   rule_list=${rulelist}  state=Active
 
 # ECQ-4176
 UpdateTrustPolicyException - operator update of state=unknown shall return error
@@ -304,7 +309,11 @@ UpdateTrustPolicyException - developer update of state shall return error
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
 
+   # state and rules
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Developer not allowed to update state field"}')  Update Trust Policy Exception  region=${region}  token=${devtoken}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   rule_list=${rulelist}  state=Active
+
+   # state only
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Developer not allowed to update state field"}')  Update Trust Policy Exception  region=${region}  token=${devtoken}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   state=Active
 
 # ECQ-4252
 UpdateTrustPolicyException - developer update of rules after Active shall return error
