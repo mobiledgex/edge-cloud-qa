@@ -80,38 +80,39 @@ UpdateTrustPolicyException - shall be able to delete rules
 
    Length Should Be   ${policy_updated['data']['outbound_security_rules']}  1
 
+# no longer supported as rules are now required
 # ECQ-4149
-UpdateTrustPolicyException - shall be able to delete all rules
-   [Documentation]
-   ...  - send CreateTrustPolicyException with rules
-   ...  - send UpdateTrustPolicyException to remove all rules
-   ...  - verify policy is updated
-
-   [Tags]  TrustPolicyException
-
-   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=6  remote_cidr=1.1.1.1/1
-   &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=2.1.1.1/1
-   @{rulelist}=  Create List  ${rule1}   ${rule2}
-
-   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
-
-   Verify Key  ${policy_return}
-
-   Length Should Be   ${policy_return['data']['outbound_security_rules']}  2
-
-   @{rulelist2}=  Create List  empty
-
-   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   rule_list=${rulelist2}
-
-   Verify Key  ${policy_updated}
-
-   Should Be Equal  ${policy_updated['data']['outbound_security_rules']}  ${None}
+#UpdateTrustPolicyException - shall be able to delete all rules
+#   [Documentation]
+#   ...  - send CreateTrustPolicyException with rules
+#   ...  - send UpdateTrustPolicyException to remove all rules
+#   ...  - verify policy is updated
+#
+#   [Tags]  TrustPolicyException
+#
+#   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=6  remote_cidr=1.1.1.1/1
+#   &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=2.1.1.1/1
+#   @{rulelist}=  Create List  ${rule1}   ${rule2}
+#
+#   ${policy_return}=  Create Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist}
+#
+#   Verify Key  ${policy_return}
+#
+#   Length Should Be   ${policy_return['data']['outbound_security_rules']}  2
+#
+#   @{rulelist2}=  Create List  empty
+#
+#   ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}   rule_list=${rulelist2}
+#
+#   Verify Key  ${policy_updated}
+#
+#   Should Be Equal  ${policy_updated['data']['outbound_security_rules']}  ${None}
 
 # ECQ-4150
 UpdateTrustPolicyException - update with no rules shall not change the rules
    [Documentation]
    ...  - send CreateTrustPolicyException with rules
-   ...  - send UpdateTrustPolicyException with no rules
+   ...  - send UpdateTrustPolicyException with no rules as developer and operator
    ...  - verify policy is not updated
 
    [Tags]  TrustPolicyException
@@ -133,11 +134,12 @@ UpdateTrustPolicyException - update with no rules shall not change the rules
 
    Length Should Be   ${policy_return['data']['outbound_security_rules']}  2
 
+   # developer
    ${policy_updated}=  Update Trust Policy Exception  region=${region}  token=${token}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']} 
 
    Verify Key  ${policy_updated}
 
-   Length Should Be   ${policy_return['data']['outbound_security_rules']}  2
+   Length Should Be   ${policy_updated['data']['outbound_security_rules']}  2
 
    Should Be Equal  ${policy_updated['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal  ${policy_updated['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
@@ -145,6 +147,21 @@ UpdateTrustPolicyException - update with no rules shall not change the rules
    Should Be Equal As Numbers  ${policy_updated['data']['outbound_security_rules'][0]['port_range_max']}  6
    Should Be Equal  ${policy_updated['data']['outbound_security_rules'][1]['protocol']}        icmp
    Should Be Equal  ${policy_updated['data']['outbound_security_rules'][1]['remote_cidr']}     2.1.1.1/1
+
+   # operator
+   ${optoken}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
+   ${policy_updated_op}=  Update Trust Policy Exception  region=${region}  token=${optoken}  app_name=${app_name_automation_trusted}  app_version=1.0  developer_org_name=${developer_org_name_automation}  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}
+
+   Verify Key  ${policy_updated_op}
+
+   Length Should Be   ${policy_updated_op['data']['outbound_security_rules']}  2
+
+   Should Be Equal  ${policy_updated_op['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal  ${policy_updated_op['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
+   Should Be Equal As Numbers  ${policy_updated_op['data']['outbound_security_rules'][0]['port_range_min']}  5
+   Should Be Equal As Numbers  ${policy_updated_op['data']['outbound_security_rules'][0]['port_range_max']}  6
+   Should Be Equal  ${policy_updated_op['data']['outbound_security_rules'][1]['protocol']}        icmp
+   Should Be Equal  ${policy_updated_op['data']['outbound_security_rules'][1]['remote_cidr']}     2.1.1.1/1
 
 # ECQ-4151
 UpdateTrustPolicyException - shall be able to update icmp cidr
