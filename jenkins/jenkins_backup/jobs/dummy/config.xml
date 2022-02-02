@@ -54,13 +54,17 @@
     stages {
         stage(&apos;x&apos;) {
             steps {
-                script {
-                def export_vars = &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;export VAULT_ADDR=https://vault-qa.mobiledgex.net;&apos;
-                //sh &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;export VAULT_ADDR=https://vault-qa.mobiledgex.net&apos;
-        //sh &apos;echo $GITHUB_TOKEN&apos;
-        def kubectl_setup = export_vars + &apos;vault login -method=github token=&quot;$GITHUB_TOKEN&quot;;vault kv get -field=value secret/ansible/common/kubeconfigs/us | base64 --decode &gt;$HOME/kubeconfig.qa-us;export KUBECONFIG=$HOME/kubeconfig.qa-us;kubectl config use-context teleport.mobiledgex.net;&apos;
-        sh kubectl_setup + &apos;kubectl patch service monitoring-influxdb --type=json -p \&apos;[{&quot;op&quot;:&quot;add&quot;, &quot;path&quot;:&quot;/spec/loadBalancerSourceRanges/-&quot;, &quot;value&quot;:&quot;\&apos;70.114.97.80\&apos;/32&quot;}]\&apos;&apos;  // andy
-}
+                stage(&apos;stage1&apos;) {
+                    steps {
+                        script {
+                            def export_vars = &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;export VAULT_ADDR=https://vault-qa.mobiledgex.net;&apos;
+                            //sh &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;export VAULT_ADDR=https://vault-qa.mobiledgex.net&apos;
+                            //sh &apos;echo $GITHUB_TOKEN&apos;
+                            def kubectl_setup = export_vars + &apos;vault login -method=github token=&quot;$GITHUB_TOKEN&quot;;vault kv get -field=value secret/ansible/common/kubeconfigs/us | base64 --decode &gt;$HOME/kubeconfig.qa-us;export KUBECONFIG=$HOME/kubeconfig.qa-us;kubectl config use-context teleport.mobiledgex.net;&apos;
+                            //sh kubectl_setup + &apos;kubectl patch service monitoring-influxdb --type=json -p \&apos;[{&quot;op&quot;:&quot;add&quot;, &quot;path&quot;:&quot;/spec/loadBalancerSourceRanges/-&quot;, &quot;value&quot;:&quot;\&apos;70.114.97.80\&apos;/32&quot;}]\&apos;&apos;  // andy
+                        }
+                    }
+                }
             }
         }
     }
