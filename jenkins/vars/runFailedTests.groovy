@@ -8,6 +8,7 @@ def call(cycle) {
                 string(name: 'MasterController', value: params.MasterController),
                 string(name: 'TestTarget', value: 'MasterController'),
                 string(name: 'VariableFile', value: params.VariableFile),
+                booleanParam(name: 'RunFailedOnly', value: true),
                 string(name: 'NumberParallelExecutions', value: '1')]
         }
     }
@@ -21,6 +22,7 @@ def call(cycle) {
                 string(name: 'MasterController', value: params.MasterController),
                 string(name: 'TestTarget', value: 'Controller'),
                 string(name: 'VariableFile', value: params.VariableFile),
+                booleanParam(name: 'RunFailedOnly', value: true),
                 string(name: 'NumberParallelExecutions', value: '1')]
         }
     }
@@ -34,6 +36,7 @@ def call(cycle) {
                 string(name: 'MasterController', value: params.MasterController),
                 string(name: 'TestTarget', value: 'DME'),
                 string(name: 'VariableFile', value: params.VariableFile),
+                booleanParam(name: 'RunFailedOnly', value: true),
                 string(name: 'NumberParallelExecutions', value: '1')]
         }
     }
