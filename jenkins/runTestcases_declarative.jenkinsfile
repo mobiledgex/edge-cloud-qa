@@ -81,8 +81,6 @@ pipeline{
                        url: 'https://github.com/mobiledgex/edge-cloud-sampleapps.git']]])
                 }
 
-                }
-
                 dir('go/src/github.com/mobiledgex/edge-proto') {
                     sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*'
                     git branch: CommitVersion,
