@@ -58,7 +58,7 @@ GPU - shall be able to deploy k8s shared NVidia T4 Passthru GPU app on KVM Opens
 
     Should Be Equal              ${cluster_inst['data']['node_flavor']}  ${openstack_flavor_name}
     Should Be Equal              ${cluster_inst['data']['deployment']}   kubernetes
-    Should Be Equal As Integers  ${cluster_inst['data']['ip_access']}    3
+    Should Be Equal              ${cluster_inst['data']['ip_access']}    Shared
 
     # verify the NVIDIA is allocated
     Node Should Have GPU      root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}

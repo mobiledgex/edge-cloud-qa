@@ -15,7 +15,7 @@ ${physical_name}=  berlin
 ${cloudlet_name_vmpool}=  automationVMPoolCloudlet
 ${vmpool_name}=  vmpool1595967146-891194
 
-${region}=  EU
+${region}=  US
 
 *** Test Cases ***
 # ECQ-2362
@@ -24,7 +24,7 @@ ClusterInst shall fail with VMPool IpAccessDedicated/docker and over-large flavo
    ...  - IpAccessDedicated/docker CreateClusterInst with VMPool and a flavor larger than the pool
    ...  - verify proper error is received
 
-   Create Flavor  region=${region}  ram=8192  vcpus=1  disk=1
+   Create Flavor  region=${region}  ram=16384  vcpus=1  disk=1
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessDedicated  deployment=docker  
 
@@ -36,7 +36,7 @@ ClusterInst shall fail with VMPool IpAccessShared/docker and over-large flavor
    ...  - IpAccessShared/docker CreateClusterInst with VMPool and a flavor larger than the pool
    ...  - verify proper error is received
 
-   Create Flavor  region=${region}  ram=8192  vcpus=1  disk=1
+   Create Flavor  region=${region}  ram=16384  vcpus=1  disk=1
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessShared  deployment=docker
 
@@ -48,7 +48,7 @@ ClusterInst shall fail with VMPool IpAccessShared/k8s and over-large flavor
    ...  - IpAccessShared/k8s CreateClusterInst with VMPool and a flavor larger than the pool
    ...  - verify proper error is received
 
-   Create Flavor  region=${region}  ram=8192  vcpus=1  disk=1
+   Create Flavor  region=${region}  ram=16384  vcpus=1  disk=1
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessShared  deployment=kubernetes  number_masters=1  number_nodes=1
 
@@ -60,7 +60,7 @@ ClusterInst shall fail with VMPool IpAccessDedicated/k8s and over-large flavor
    ...  - IpAccessDedicated/k8s CreateClusterInst with VMPool and a flavor larger than the pool
    ...  - verify proper error is received
 
-   Create Flavor  region=${region}  ram=8192  vcpus=1  disk=1
+   Create Flavor  region=${region}  ram=16384  vcpus=1  disk=1
    
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessDedicated  deployment=kubernetes  number_masters=1  number_nodes=1
 
