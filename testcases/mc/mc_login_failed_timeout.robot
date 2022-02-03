@@ -213,7 +213,7 @@ MC - Veriy failed login set to 0 works
 
 *** Keywords ***
 Setup
-	${adminToken}=   Login  username=qaadmin  password=mexadminfastedgecloudinfra
+	${adminToken}=   Login  username=${admin_manager_username}  password=${admin_manager_password}
 
 	Set Suite Variable    ${adminToken}
 
