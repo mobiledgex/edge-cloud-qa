@@ -292,12 +292,13 @@ DmePersistentConnection - cloudlet in maintenance mode shall return new alliance
 
    Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
    Receive Cloudlet Maintenance Event  state=NORMAL_OPERATION_INIT
-   ${cloud3}=  Receive Cloudlet Update Event
-   Should Be Equal As Numbers  ${cloud3.new_cloudlet.status}  1  #FIND_FOUND
-   Should Be True  len('${cloud3.new_cloudlet.edge_events_cookie}') > 100
-   Should Be Equal  ${cloud3.new_cloudlet.fqdn}  ${fcloudlet.fqdn}
-   Should Be Equal  ${cloud3.new_cloudlet.ports}  ${fcloudlet.ports}
-   Should Be Equal  ${cloud3.new_cloudlet.cloudlet_location}  ${fcloudlet.cloudlet_location}
+# removed since it should remain on the same cloudlet
+#   ${cloud3}=  Receive Cloudlet Update Event
+#   Should Be Equal As Numbers  ${cloud3.new_cloudlet.status}  1  #FIND_FOUND
+#   Should Be True  len('${cloud3.new_cloudlet.edge_events_cookie}') > 100
+#   Should Be Equal  ${cloud3.new_cloudlet.fqdn}  ${fcloudlet.fqdn}
+#   Should Be Equal  ${cloud3.new_cloudlet.ports}  ${fcloudlet.ports}
+#   Should Be Equal  ${cloud3.new_cloudlet.cloudlet_location}  ${fcloudlet.cloudlet_location}
 
    Update Cloudlet  region=${region}  cloudlet_name=${packet_cloudlet_name}  operator_org_name=${packet_operator_name}  latitude=${packet_cloudlet_latitude}  longitude=${packet_cloudlet_longitude}  alliance_org_list=${allianceorgs}
 
