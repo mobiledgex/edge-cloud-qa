@@ -1,5 +1,5 @@
 def call(cycle) {
-    stages {
+//    stages {
         stage('Run MC Failed Tests') {
             build job: 'runTestcases', parameters: [
                 string(name: 'Components', value: 'Automated'),
@@ -10,6 +10,6 @@ def call(cycle) {
                 string(name: 'VariableFile', value: params.VariableFile),
                 string(name: 'NumberParallelExecutions', value: '1')]
         }
-    }
+//    }
 }
 
