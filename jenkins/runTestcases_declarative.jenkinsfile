@@ -44,13 +44,6 @@ pipeline{
                 //    sh 'rm -rf *'
                 //}
 
-                dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps') {
-                    sh 'rm -rf *'
-                    git branch: 'master',
-                    credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-                    url: 'https://github.com/mobiledgex/edge-cloud-sampleapps.git'
-                }
-
                 dir('go/src/github.com/mobiledgex') {
                     sh 'rm -rf *'
                     checkout([$class: 'GitSCM',
@@ -71,6 +64,13 @@ pipeline{
                         url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
 
                         //unstash 'edge-cloud_stash'
+                }
+
+                dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps') {
+                    sh 'rm -rf *'
+                    git branch: 'master',
+                    credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                    url: 'https://github.com/mobiledgex/edge-cloud-sampleapps.git'
                 }
 
                 dir('go/src/github.com/mobiledgex/edge-proto') {
