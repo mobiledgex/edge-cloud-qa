@@ -92,7 +92,7 @@ class BasePage(object):
     def is_dialog_box_present(self, timeout=30):
         return self.is_element_present(BasePageLocators.dialog_box, timeout=timeout)
 
-    def is_alert_box_present(self, timeout=5):
+    def is_alert_box_present(self, timeout=20):
         return self.is_element_present(BasePageLocators.alert_box, timeout=timeout)
 
     def is_warning_box_present(self, timeout=5):

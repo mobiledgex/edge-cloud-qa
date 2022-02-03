@@ -51,8 +51,8 @@ class DetailsPage(BasePage):
         else:
             totals_rows = self.driver.find_elements(*DetailsPageLocators.details_row)
             total_rows_length = len(totals_rows)
-            if not self.is_element_present(AppsPageLocators.apps_details_configs):
-                total_rows_length = total_rows_length + 1
+           # if not self.is_element_present(AppsPageLocators.apps_details_configs):
+            #    total_rows_length = total_rows_length + 1
             for row in range(1, total_rows_length):
             #for row in self.driver.find_elements(*DetailsPageLocators.details_row):
                 #key = self.get_element_text(DetailsPageLocators.details_row_key)
@@ -62,7 +62,7 @@ class DetailsPage(BasePage):
                 table_column =  f'//tbody/tr[{row}]/td/strong/div'
                 table_column1 = f'//tbody/tr[{row}]/td[2]'
                 key = self.driver.find_element_by_xpath(table_row).text
-                if key == 'Auto Provisioning Policies' or key == 'Created' or key == 'Updated':
+                if key == 'Auto Provisioning Policies' or key == 'Created' or key == 'Updated' or key == 'Configs':
                     value = self.driver.find_element_by_xpath(table_column1).text
                 else:
                     value = self.driver.find_element_by_xpath(table_column).text
