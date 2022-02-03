@@ -661,7 +661,29 @@ pipeline{
                 }
             }
         }
-        
+
+        stage('Rerun Failed Tests') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Rerun Failed tests failed') {
+                    script { runFailedTests(cycle) }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        echo "rerun tests tests failed"
+                        slackMessage.fail('Finished Rerun tests with failures')
+                    }
+                }
+                success {
+                    script {
+                        echo "rerun tests passed"
+                        slackMessage.good('Finished Rerun tests with pass')
+                    }
+                }
+            }
+        }
+
         stage("Performance Tests") {
             steps {
                 script {
