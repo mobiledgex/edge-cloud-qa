@@ -1479,8 +1479,14 @@ class MexMasterController(MexRest):
         """
         return self.cloudlet.show_flavors_for_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def get_app_usage(self, token=None, region=None, app_name=None, app_version=None, developer_org_name=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.usage.get_app_usage(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def get_app_usage(self, token=None, region=None, app_name=None, app_version=None, developer_org_name=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, start_time=None, end_time=None, vm_only=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.usage.get_app_usage(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, start_time=start_time, end_time=end_time, vm_only=vm_only, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_cluster_usage(self, token=None, region=None, developer_org_name=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.usage.get_cluster_usage(token=token, region=region, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_cloudlet_pool_usage(self, token=None, region=None, operator_org_name=None, cloudlet_pool_name=None, start_time=None, end_time=None, show_vm_apps_only=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.usage.get_cloudlet_pool_usage(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, operator_org_name=operator_org_name, start_time=start_time, end_time=end_time, show_vm_apps_only=show_vm_apps_only, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def get_cluster_metrics(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
       return self.cluster_instance.get_cluster_metrics(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
