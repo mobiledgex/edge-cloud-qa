@@ -77,6 +77,51 @@ Cloudletusage - mcctl help shall show
    [Template]  Show Help
    ${Empty}
 
+# ECQ-4341
+Cloudletusage - mcctl shall handle usage failures
+   [Documentation]
+   ...  - send Metrics CloudletUsage via mcctl with various error cases
+   ...  - verify proper error is received
+
+   [Template]  Fail Usage Via mcctl
+      # missing values
+      Error: missing required args: selector  #not sending any args with mcctl
+
+      Error: Bad Request (400), Cloudlet details must be present  selector=
+      Error: Bad Request (400), Cloudlet details must be present  selector=x
+      Error: Bad Request (400), Cloudlet details must be present  selector=resourceusage
+      Error: Bad Request (400), Cloudlet details must be present  selector=flavorusage
+
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"   selector=resourceusage  starttime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"     selector=resourceusage  endtime=x
+      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                     selector=resourceusage  startage=x
+      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                       selector=resourceusage  endage=x
+      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                                           selector=resourceusage  limit=x
+      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                                                      selector=resourceusage  numsamples=x
+
+      Error: Bad Request (400), Cloudlet details must be present  selector=resourceusage  cloudlet=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudlet-org=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudlet=x  cloudlet-org=x
+
+      Error: Bad Request (400), Cloudlet org must be present      selector=resourceusage  cloudlets:0.cloudlet=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudlets:0.cloudlet-org=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudlets:0.cloudlet=x  cloudlets:0.cloudlet-org=x
+
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"   selector=flavorusage  starttime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"     selector=flavorusage  endtime=x
+      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                     selector=flavorusage  startage=x
+      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                       selector=flavorusage  endage=x
+      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                                           selector=flavorusage  limit=x
+      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                                                      selector=flavorusage  numsamples=x
+
+      Error: Bad Request (400), Cloudlet details must be present  selector=flavorusage  cloudlet=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudlet-org=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudlet=x  cloudlet-org=x
+
+      Error: Bad Request (400), Cloudlet org must be present      selector=flavorusage  cloudlets:0.cloudlet=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudlets:0.cloudlet-org=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudlets:0.cloudlet=x  cloudlets:0.cloudlet-org=x
+
 *** Keywords ***
 Setup
    ${epochnow}=  Get Current Date  result_format=epoch
@@ -119,4 +164,12 @@ Show Help
 
    ${cmd}=  Run Keyword If  '${parms}' == '${Empty}'  Set Variable  ${Empty}  ELSE  Set Variable  ${parms}
    Should Contain  ${error}  Usage: mcctl metrics cloudletusage ${cmd}
+
+Fail Usage Via mcctl
+   [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
+
+   ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
+
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  metrics cloudletusage region=${region} ${parmss}    version=${version}
+   Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
