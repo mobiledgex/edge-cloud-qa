@@ -1405,15 +1405,16 @@ class MexMasterController(MexRest):
                                        )
             stdout, stderr = process.communicate()
             logging.info(f'stdout:{stdout} stderr:{stderr}')
-            #print('*WARN*',stdout, stderr)
+            stderr = stderr.decode('utf-8')
+
             if stderr:
-                raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
+                raise Exception(stderr)
 
             return stdout
         except subprocess.CalledProcessError as e:
             raise Exception("runCommanddd failed:", e)
         except Exception as e:
-            raise Exception("runCommanddd failed:", e)
+            raise Exception("runCommand failed with stderr:", e)
 
     def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, static_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, container_version=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, kafka_cluster=None, kafka_user=None, kafka_password=None, alliance_org_list=None, timeout=600, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.cloudlet.create_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, static_ips=static_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, container_version=container_version, override_policy_container_version=override_policy_container_version, deployment_local=deployment_local, notify_server_address=notify_server_address, crm_override=crm_override, infra_api_access=infra_api_access, infra_config_flavor_name=infra_config_flavor_name, infra_config_external_network_name=infra_config_external_network_name, trust_policy=trust_policy, deployment_type=deployment_type, resource_list=resource_list, default_resource_alert_threshold=default_resource_alert_threshold, gpudriver_name=gpudriver_name, gpudriver_org=gpudriver_org, kafka_cluster=kafka_cluster, kafka_user=kafka_user, kafka_password=kafka_password, alliance_org_list=alliance_org_list, stream_timeout=timeout, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
@@ -1451,8 +1452,8 @@ class MexMasterController(MexRest):
     def get_cloudlet_metrics(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.get_cloudlet_metrics(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def get_cloudletusage_metrics(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, selector=None, limit=None, start_time=None, end_time=None, start_age=None, end_age=None, json_data=None, number_samples=None, use_defaults=True, use_thread=False):
-        return self.cloudlet.get_cloudletusage_metrics(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, selector=selector, limit=limit, start_time=start_time, end_time=end_time, start_age=start_age, end_age=end_age, number_samples=number_samples, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def get_cloudletusage_metrics(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, selector=None, limit=None, start_time=None, end_time=None, start_age=None, end_age=None, json_data=None, number_samples=None, cloudlet_list=[], use_defaults=True, use_thread=False):
+        return self.cloudlet.get_cloudletusage_metrics(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, selector=selector, limit=limit, start_time=start_time, end_time=end_time, start_age=start_age, end_age=end_age, number_samples=number_samples, cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def add_cloudlet_resource_mapping(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, mapping=None, json_data=None, use_defaults=True, use_thread=False):
         """ Sends region AddCloudletResMapping

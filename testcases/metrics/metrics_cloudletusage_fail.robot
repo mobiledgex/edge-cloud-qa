@@ -32,6 +32,12 @@ CloudletUsageMetrics - get with no cloudlet org shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Cloudlet details must be present"}
 
+   &{c1}=  Create Dictionary  name=tmocloud-1 
+   @{clist}=  Create List  ${c1}
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_list=${clist}  token=${token}  use_defaults=${False}
+   Should Contain  ${error}  code=400
+   Should Contain  ${error}  {"message":"Cloudlet org must be present"}
+
 # ECQ-4025
 CloudletUsageMetrics - Developer shall not be able to get metrics
    [Documentation]
