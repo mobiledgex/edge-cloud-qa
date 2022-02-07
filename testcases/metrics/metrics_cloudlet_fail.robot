@@ -9,6 +9,7 @@ ${operator}=                       TDG
 	
 *** Test Cases ***
 # this works now
+# ECQ-1554
 #CloudletMetrics - get with no cloudlet name shall return error
 #   [Documentation]
 #   ...  get cloudlet metrics with no cloudlet name
@@ -24,10 +25,11 @@ ${operator}=                       TDG
 #   Should Be Equal As Integers  ${status_code}  400
 #   Should Be Equal              ${body}         {"message":"Cloudlet details must be present"}
 
+# ECQ-1555
 CloudletMetrics - get with no operator name shall return error
    [Documentation]
-   ...  get cloudlet metrics with no operator name
-   ...  verify error
+   ...  - get cloudlet metrics with no operator name
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -41,10 +43,11 @@ CloudletMetrics - get with no operator name shall return error
    Should Contain  ${error2}  code=400
    Should Contain  ${error2}  {"message":"Cloudlet details must be present"}
 
+# ECQ-1556
 CloudletMetrics - get with no cloudlet/operator name shall return error
    [Documentation]
-   ...  get cloudlet metrics with no cloudlet/operator name
-   ...  verify error
+   ...  - get cloudlet metrics with no cloudlet/operator name
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -58,10 +61,11 @@ CloudletMetrics - get with no cloudlet/operator name shall return error
    Should Contain  ${error2}  code=400
    Should Contain  ${error2}  {"message":"Cloudlet details must be present"}
 
+# ECQ-1557
 CloudletMetrics - get with no token name shall return error
    [Documentation]
-   ...  get cloudlet metrics with no token
-   ...  verify error
+   ...  - get cloudlet metrics with no token
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -75,10 +79,11 @@ CloudletMetrics - get with no token name shall return error
    Should Contain  ${error2}  code=400
    Should Contain  ${error2}  {"message":"No bearer token found"}
 
+# ECQ-1558
 CloudletMetrics - get with no selector name shall return error
    [Documentation]
-   ...  get cloudlet metrics with no selector
-   ...  verify error
+   ...  - get cloudlet metrics with no selector
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -86,10 +91,11 @@ CloudletMetrics - get with no selector name shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Invalid cloudlet selector: , must be one of \\\\"network\\\\", \\\\"utilization\\\\", \\\\"ipusage\\\\""} 
 
+# ECQ-1559
 CloudletMetrics - get with invalid selector name shall return error
    [Documentation]
-   ...  get cloudlet metrics with invalid selector
-   ...  verify error
+   ...  - get cloudlet metrics with invalid selector
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -97,10 +103,11 @@ CloudletMetrics - get with invalid selector name shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Invalid cloudlet selector: xx, must be one of \\\\"network\\\\", \\\\"utilization\\\\", \\\\"ipusage\\\\""}
 
+# ECQ-1560
 CloudletMetrics - get with invalid start time shall return error
    [Documentation]
-   ...  get cloudlet metrics with invalid start time
-   ...  verify error
+   ...  - get cloudlet metrics with invalid start time
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -108,7 +115,7 @@ CloudletMetrics - get with invalid start time shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  region=US  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""} 
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
    # EDGECLOUD-1332
    # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
 
@@ -116,12 +123,13 @@ CloudletMetrics - get with invalid start time shall return error
    ${error2}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=ipusage  region=US  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
    #Should Contain  ${error2}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
+# ECQ-1561
 CloudletMetrics - get with invalid end time shall return error
    [Documentation]
-   ...  get cloudlet metrics with invalid end time
-   ...  verify error
+   ...  - get cloudlet metrics with invalid end time
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -129,7 +137,7 @@ CloudletMetrics - get with invalid end time shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  region=US  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""} 
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    # EDGECLOUD-1332
    # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
@@ -138,12 +146,13 @@ CloudletMetrics - get with invalid end time shall return error
    ${error2}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=ipusage  region=US  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
    #Should Contain  ${error2}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
+# ECQ-1562
 CloudletMetrics - get with invalid start/end time shall return error
    [Documentation]
-   ...  get cloudlet metrics with invalid start/end time
-   ...  verify error
+   ...  - get cloudlet metrics with invalid start/end time
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -151,7 +160,7 @@ CloudletMetrics - get with invalid start/end time shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  region=US  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""} 
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    # EDGECLOUD-1332
    # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
@@ -160,12 +169,13 @@ CloudletMetrics - get with invalid start/end time shall return error
    ${error2}=  Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=ipusage  region=US  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
    #Should Contain  ${error2}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error2}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error2}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
+# ECQ-1563
 CloudletMetrics - get with invalid last shall return error
    [Documentation]
-   ...  get cloudlet metrics with invalid last
-   ...  verify error
+   ...  - get cloudlet metrics with invalid last
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -181,10 +191,11 @@ CloudletMetrics - get with invalid last shall return error
    Should Contain  ${error2}  code=400
    Should Contain  ${error2}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
+# ECQ-1564
 CloudletMetrics - get with operator not found shall return an empty list
    [Documentation]
-   ...  get cloudlet metrics with operator not found
-   ...  verify empty list is returned
+   ...  - get cloudlet metrics with operator not found
+   ...  - verify empty list is returned
 
    ${token}=  Get Token
 
@@ -198,10 +209,11 @@ CloudletMetrics - get with operator not found shall return an empty list
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
+# ECQ-1565
 CloudletMetrics - get with cloudlet not found shall return an empty list
    [Documentation]
-   ...  get cloudlet metrics with cloudlet not found
-   ...  verify empty list is returned
+   ...  - get cloudlet metrics with cloudlet not found
+   ...  - verify empty list is returned
 
    ${token}=  Get Token
 
@@ -215,10 +227,11 @@ CloudletMetrics - get with cloudlet not found shall return an empty list
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
+# ECQ-1603
 CloudletMetrics - get without region shall return error
    [Documentation]
-   ...  get cloudlet metrics without region 
-   ...  verify error
+   ...  - get cloudlet metrics without region 
+   ...  - verify error
 
    ${token}=  Get Token
 
