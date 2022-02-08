@@ -311,6 +311,40 @@ Serverless - app1 shall not be able to reach app2
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}1
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}2
 
+# ECQ-4354
+Serverless - shall be able to update appinst with server config
+    [Documentation]
+    ...  - deploy k8s app with allowserverless=true ram=1024, vcpu=1, replicas=1
+    ...  - verify pod comes up with correct configuration
+    ...  - update the app to ram=2048, vcpu=2, replicas=2
+    ...  - refresh the appinst
+    ...  - verify pod comes up with new configuration
+
+    [Tags]  Serverless
+
+    Log To Console  Creating App and App Instance
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  allow_serverless=${True}  serverless_config_ram=1024  serverless_config_vcpus=1  serverless_config_min_replicas=1
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+
+    Wait for K8s Pod To Be Running  root_loadbalancer=${clusterlb}  kubeconfig=${kubeconfig}  pod_name=${app_name_default}  number_of_pods=1
+
+    Pod Should Be Configured Correctly  memory=1Gi  cpu=1
+
+    Ports Should Be Alive
+
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+
+    Update App  region=${region}  serverless_config_ram=2048  serverless_config_vcpus=2  serverless_config_min_replicas=2
+    Refresh App Instance  region=${region}
+
+    Wait for K8s Pod To Be Running  root_loadbalancer=${clusterlb}  kubeconfig=${kubeconfig}  pod_name=${app_name_default}  number_of_pods=2
+
+    Pod Should Be Configured Correctly  memory=2Gi  cpu=2
+
+    Ports Should Be Alive
+
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+
 *** Keywords ***
 Setup
     #${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
