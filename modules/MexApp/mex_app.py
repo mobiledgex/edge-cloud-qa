@@ -461,7 +461,10 @@ class MexApp(object):
         if root_loadbalancer is not None:
             print('*WARN*', 'rootlb')
             # rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig')
-            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
+            if kubeconfig:
+                rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=kubeconfig)
+            else:
+                rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
         else:
             rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
 
@@ -807,20 +810,26 @@ class MexApp(object):
 
         return rb.delete_pod(pod_name)
 
-    def run_command_on_pod(self, pod_name, command, cluster_name, operator_name, root_loadbalancer=None):
+    def run_command_on_pod(self, pod_name, command, cluster_name=None, operator_name=None, kubeconfig=None, root_loadbalancer=None):
         rb = None
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
+            if kubeconfig:
+                rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=kubeconfig)
+            else:
+                rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
         else:
             rb = self.rootlb
 
         pod = rb.get_pod(pod_name)
         return rb.run_command_on_pod(pod, command)
 
-    def describe_pod(self, pod_name, cluster_name, operator_name, root_loadbalancer=None):
+    def describe_pod(self, pod_name, cluster_name=None, operator_name=None, kubeconfig=None, root_loadbalancer=None):
         rb = None
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
+            if kubeconfig:
+                rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=kubeconfig)
+            else:
+                rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
         else:
             rb = self.rootlb
 
