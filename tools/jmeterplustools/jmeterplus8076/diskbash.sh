@@ -2,6 +2,7 @@
 command stty rows 50 cols 132
 echo $normal;clear
 i=1
+nohupout="nohup.out"
 hog="diskloadfile.hog"
 pig="loadfile1.pig"
 ddloop="10"
@@ -38,6 +39,7 @@ printf "\rOverwrite $green $showpig $normal \t$i =======> $normal  $green $showh
         i=$(($i + 1))
 done
 echo $yellow
+command rm -v $nohupout
 today=$(date +"%Y-%m-%d_%R_%r_%s")
 printf "Overwrite file $ddloop times \tsleep $ddsleep secs \tcopy $showpig \t=======>,\
 	$showhog \tbs= $ddbs \tcount= $ddcount \tlook in $pighoglog \t'%s'\n" "diskpighog-${today}.log" >> /$pighoglog
@@ -77,6 +79,7 @@ printf "\rOverwrite $green $showpig $normal \t$i ======> $green $showhog $normal
         i=$(($i + 1))
 done
 echo $yellow
+command rm -v $nohupout
 today=$(date +"%Y-%m-%d_%R_%r_%s")
 printf "Overwrite file $1 times \tsleep $4 secs \tcopy $showpig \t=======>,\
 	$showhog \tbs= $2 \tcount= $3 \tlook in $pighoglog \t'%s'\n" "diskpighog-${today}.log" >> /$pighoglog

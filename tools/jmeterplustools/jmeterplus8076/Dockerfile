@@ -26,5 +26,6 @@ RUN mkdir -p $APACHE_LOG_DIR
 COPY ports.conf /etc/apache2
 COPY 000-default.conf /etc/apache2/sites-enabled
 COPY index.html /var/www/html
-EXPOSE 8076
+COPY index2.html /var/www/index.html
+EXPOSE 8076-8077
 CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
