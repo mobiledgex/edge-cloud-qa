@@ -90,7 +90,8 @@ class MexOperation(MexRest):
                     if 'Ready' not in str(self.resp_text):
                         raise Exception('ERROR: AppInst not updated successfully:' + str(self.resp_text))
                 if 'RefreshAppInst' in url:
-                    if 'Failed: 0' not in str(self.resp_text):
+                    # if 'Failed: 0' not in str(self.resp_text):
+                    if 'Successfully updated AppInst' not in str(self.resp_text):
                         raise Exception('ERROR: AppInst not refreshed successfully:' + str(self.resp_text))
                 if 'CreateClusterInst' in url:
                     if 'Created ClusterInst successfully' not in str(self.resp_text):
