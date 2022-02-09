@@ -22,6 +22,8 @@ class Usage(MexOperation):
 
         if app_name is not None:
             appkey_dict['name'] = app_name
+        if app_version is not None:
+            appkey_dict['version'] = app_version
         if developer_org_name is not None:
             appkey_dict['organization'] = developer_org_name
 
