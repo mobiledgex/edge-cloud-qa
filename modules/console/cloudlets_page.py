@@ -122,7 +122,7 @@ class CloudletsPage(ComputePage):
             else:
                 time.sleep(1)
 
-        logging.error(f'timeout waiting for cloudlet region={region} cloudlet_name={cloudlet_name} operator={operator} latitude={latitude} longitude={longitude} state={state}')
+        logging.warning(f'timeout waiting for cloudlet region={region} cloudlet_name={cloudlet_name} operator={operator} latitude={latitude} longitude={longitude} state={state}')
         return False
 
     def delete_cloudlet(self, region=None, cloudlet_name=None, operator=None):
