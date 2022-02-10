@@ -117,6 +117,10 @@ CloudletUsageMetrics - get with invalid start time shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  cloudlet_name=cloudlet  operator_org_name=operator  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
+   Should Contain  ${error}  code=400
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
+
 # ECQ-4031
 CloudletUsageMetrics - get with invalid end time shall return error
    [Documentation]
@@ -124,6 +128,10 @@ CloudletUsageMetrics - get with invalid end time shall return error
    ...  - verify error
 
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_name=cloudlet  operator_org_name=operator  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
+   Should Contain  ${error}  code=400
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  cloudlet_name=cloudlet  operator_org_name=operator  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
@@ -137,6 +145,10 @@ CloudletUsageMetrics - get with invalid start/end time shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  cloudlet_name=cloudlet  operator_org_name=operator  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
+   Should Contain  ${error}  code=400
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
+
 # ECQ-4033
 CloudletUsageMetrics - get with invalid start age shall return error
    [Documentation]
@@ -144,6 +156,9 @@ CloudletUsageMetrics - get with invalid start age shall return error
    ...  - verify error
 
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_name=cloudlet  operator_org_name=operator  start_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string 2019-09-26T04:01:01 for field \\\\"startage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  cloudlet_name=cloudlet  operator_org_name=operator  start_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string 2019-09-26T04:01:01 for field \\\\"startage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
 # ECQ-4034
@@ -155,6 +170,9 @@ CloudletUsageMetrics - get with invalid end age shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_name=cloudlet  operator_org_name=operator  end_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string 2019-09-26T04:01:01 for field \\\\"endage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  cloudlet_name=cloudlet  operator_org_name=operator  end_age=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string 2019-09-26T04:01:01 for field \\\\"endage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
+
 # ECQ-4035
 CloudletUsageMetrics - get with invalid start/end age shall return error
    [Documentation]
@@ -162,6 +180,9 @@ CloudletUsageMetrics - get with invalid start/end age shall return error
    ...  - verify error
 
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_name=cloudlet  operator_org_name=operator  start_age=x  end_age=2019-09  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string x for field \\\\"startage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  cloudlet_name=cloudlet  operator_org_name=operator  start_age=x  end_age=2019-09  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string x for field \\\\"startage\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')
 
 # ECQ-4036
@@ -173,6 +194,9 @@ CloudletUsageMetrics - get with start age newer than end age shall return error
    #  EDGECLOUD-5681 cloudletusage metrics with startage lower than endage should return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_name=tmocloud-1  operator_org_name=dmuus  start_age=2m  end_age=3m  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Start age must be before (older than) end age"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  cloudlet_name=tmocloud-1  operator_org_name=dmuus  start_age=2m  end_age=3m  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Start age must be before (older than) end age"}')
 
 # ECQ-4037
@@ -202,6 +226,9 @@ CloudletUsageMetrics - get with invalid numsamples shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  number_samples=-1  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"NumSamples cannot be negative"}')
 
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  number_samples=-1  cloudlet_name=cloudlet  operator_org_name=operator  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"NumSamples cannot be negative"}')
+
 # ECQ-4039
 CloudletUsageMetrics - get with operator not found shall return error
    [Documentation]
@@ -211,6 +238,17 @@ CloudletUsageMetrics - get with operator not found shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  limit=1  cloudlet_name=tmocloud-1  operator_org_name=txmus  token=${token}  use_defaults=${False}
    Should Contain  ${error}  ('code=400', 'error={"message":"Cloudlet does not exist"}')
 
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  limit=1  cloudlet_name=tmocloud-1  operator_org_name=txmus  token=${token}  use_defaults=${False}
+   Should Contain  ${error}  ('code=400', 'error={"message":"Cloudlet does not exist"}')
+
+   &{c1}=  Create Dictionary  name=${cloudlet_name_openstack_metrics}  organization=x
+   @{clist}=  Create List  ${c1}
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_list=${clist}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Cloudlet does not exist"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  cloudlet_list=${clist}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Cloudlet does not exist"}')
+
 # ECQ-4040
 CloudletUsageMetrics - get with cloudlet not found shall return error
    [Documentation]
@@ -219,6 +257,17 @@ CloudletUsageMetrics - get with cloudlet not found shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  limit=1  cloudlet_name=cloudlet_name_openstack_metrics  operator_org_name=GDDT  token=${token}  use_defaults=${False}
    Should Contain  ${error}  ('code=400', 'error={"message":"Cloudlet does not exist"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  limit=1  cloudlet_name=cloudlet_name_openstack_metrics  operator_org_name=GDDT  token=${token}  use_defaults=${False}
+   Should Contain  ${error}  ('code=400', 'error={"message":"Cloudlet does not exist"}')
+
+   &{c2}=  Create Dictionary  name=x  organization=${operator}
+   @{clist2}=  Create List  ${c2}
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_list=${clist2}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Cloudlet does not exist"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_list=${clist2}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Cloudlet does not exist"}')
 
 # ECQ-4041
 CloudletUsageMetrics - get without region shall return error
@@ -254,10 +303,16 @@ CloudletUsageMetrics - get with invalid cloudlet shall return error
 
    ${inject}=  Set Variable  \\'\\;drop measurment \"cloudlet-ipusage\"
 
-   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  selector=resourceusage  cloudlet_name=${inject}  operator_org_name=${operator}  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_name=${inject}  operator_org_name=${operator}  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudlet"}')
 
-   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  selector=resourceusage  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${inject}  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${inject}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudletorg"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  cloudlet_name=${inject}  operator_org_name=${operator}  token=${token}  use_defaults=${False}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudlet"}')
+
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${inject}  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudletorg"}')
 
 *** Keywords ***
