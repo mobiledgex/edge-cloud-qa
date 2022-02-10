@@ -266,7 +266,7 @@ CloudletUsageMetrics - get with cloudlet not found shall return error
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_list=${clist2}  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Cloudlet does not exist"}')
 
-   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=resourceusage  cloudlet_list=${clist2}  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Usage Metrics  region=US  selector=flavorusage  cloudlet_list=${clist2}  token=${token}  use_defaults=${False}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Cloudlet does not exist"}')
 
 # ECQ-4041
