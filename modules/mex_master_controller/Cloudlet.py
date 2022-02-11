@@ -255,7 +255,7 @@ class Cloudlet(MexOperation):
 
         return cloudlet_dict
 
-    def _build_metrics(self, type_dict=None, selector=None, method=None, last=None, limit=None, number_samples=None, start_time=None, end_time=None, start_age=None, end_age=None, location_tile=None, device_os=None, device_model=None, device_carrier=None, data_network_type=None, use_defaults=True):
+    def _build_metrics(self, type_dict=None, selector=None, method=None, last=None, limit=None, number_samples=None, start_time=None, end_time=None, start_age=None, end_age=None, location_tile=None, device_os=None, device_model=None, device_carrier=None, data_network_type=None, cloudlet_list=[], use_defaults=True):
         metric_dict = {}
         if type_dict is not None:
             metric_dict.update(type_dict)
@@ -298,6 +298,18 @@ class Cloudlet(MexOperation):
             metric_dict['datanetworktype'] = data_network_type
         if location_tile is not None:
             metric_dict['locationtile'] = location_tile
+
+        cloudlet_dict_list = []
+        for cloudlet in cloudlet_list:
+            cloudlet_dict = {}
+            if 'name' in cloudlet and cloudlet['name'] is not None:
+                cloudlet_dict['name'] = cloudlet['name']
+            if 'organization' in cloudlet and cloudlet['organization'] is not None:
+                cloudlet_dict['organization'] = cloudlet['organization']
+
+            if cloudlet_dict:
+                cloudlet_dict_list.append(cloudlet_dict)
+            metric_dict['cloudlets'] = cloudlet_dict_list
 
         return metric_dict
 
@@ -471,14 +483,14 @@ class Cloudlet(MexOperation):
 
         return self.show(token=token, url=self.metrics_client_cloudlet_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
-    def get_cloudletusage_metrics(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, selector=None, limit=None, start_time=None, end_time=None, start_age=None, end_age=None, number_samples=None, json_data=None, use_defaults=True, use_thread=False):
+    def get_cloudletusage_metrics(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, selector=None, limit=None, start_time=None, end_time=None, start_age=None, end_age=None, number_samples=None, cloudlet_list=[], json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
         metric_dict = msg
         if 'key' in msg:
             metric_dict['cloudlet'] = msg['key']
             del metric_dict['key']
 
-        msg_dict = self._build_metrics(type_dict=metric_dict, selector=selector, limit=limit, start_time=start_time, end_time=end_time, start_age=start_age, end_age=end_age, number_samples=number_samples)
+        msg_dict = self._build_metrics(type_dict=metric_dict, selector=selector, limit=limit, start_time=start_time, end_time=end_time, start_age=start_age, end_age=end_age, number_samples=number_samples, cloudlet_list=cloudlet_list)
 
         return self.show(token=token, url=self.cloudletusage_metrics_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 

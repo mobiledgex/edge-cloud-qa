@@ -226,7 +226,7 @@ class NewCloudletSettingsPage(NewSettingsFullPage):
     def update_cloudlet(self, region=None, cloudlet_name=None, operator=None, latitude=None, longitude=None, number_dynamic_ips=None, maintenance_state=None, trust_policy=None):
         logging.info(f'Updating cloudlet region={region} cloudlet_name={cloudlet_name} operator={operator}')
         self.compute_page = ComputePage(self.driver)
-        row = self.compute_page.get_table_row_by_value([(region, 2), (cloudlet_name, 3), (operator, 4)])
+        row = self.compute_page.get_table_row_by_value([(cloudlet_name, 5), (operator, 4)])
         row.find_element(*ComputePageLocators.table_action).click()
         self.driver.find_element(*ComputePageLocators.table_update).click()
 
@@ -261,8 +261,7 @@ class NewCloudletSettingsPage(NewSettingsFullPage):
         return True
 
     def click_update_cloudlet(self):
-        e = self.driver.find_element(*CloudletsPageLocators.update_button)
-        ActionChains(self.driver).click(on_element=e).perform()     
+        self.driver.find_element(*CloudletsPageLocators.update_button).click()
                               
     def get_cloudlet_manifest(self, cloudlet_name=None):
         yaml_attribute = '-GDDT-pf-external-network-shared-port'

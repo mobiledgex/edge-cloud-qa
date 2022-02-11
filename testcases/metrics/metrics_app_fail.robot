@@ -8,10 +8,11 @@ ${cloudlet_name_openstack_metrics}=   automationSunnydaleCloudletStage
 ${operator}=                       GDDT
 	
 *** Test Cases ***
+# ECQ-1949
 AppMetrics - get with no app shall return error
    [Documentation]
-   ...  get app metrics with no app info
-   ...  verify error
+   ...  - get app metrics with no app info
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -40,10 +41,11 @@ AppMetrics - get with no app shall return error
    Should Contain  ${error2}  code=400
    Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
+# ECQ-1950
 AppMetrics - get with no cloudlet/operator name shall return error
    [Documentation]
-   ...  get app metrics with no cloudlet/operator name
-   ...  verify error
+   ...  - get app metrics with no cloudlet/operator name
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -72,10 +74,11 @@ AppMetrics - get with no cloudlet/operator name shall return error
    Should Contain  ${error2}  code=400
    Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
+# ECQ-1951
 AppMetrics - get with no token name shall return error
    [Documentation]
-   ...  get app metrics with no token
-   ...  verify error
+   ...  - get app metrics with no token
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -104,20 +107,22 @@ AppMetrics - get with no token name shall return error
    Should Contain  ${error2}  code=400
    Should Contain  ${error2}  {"message":"No bearer token found"}
 
+# ECQ-1952
 AppMetrics - get with no selector name shall return error
    [Documentation]
-   ...  get app metrics with no selector
-   ...  verify error
+   ...  - get app metrics with no selector
+   ...  - verify error
 
    ${token}=  Get Token
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Invalid appinst selector: , must be one of \\\\"cpu\\\\", \\\\"mem\\\\", \\\\"disk\\\\", \\\\"network\\\\", \\\\"connections\\\\", \\\\"udp\\\\""} 
 
+# ECQ-1953
 AppMetrics - get with invalid selector name shall return error
    [Documentation]
-   ...  get app metrics with invalid selector
-   ...  verify error
+   ...  - get app metrics with invalid selector
+   ...  - verify error
 
    ${token}=  Get Token
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=xx  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  token=${token}  use_defaults=${False}
@@ -125,121 +130,125 @@ AppMetrics - get with invalid selector name shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Invalid appinst selector: xx, must be one of \\\\"cpu\\\\", \\\\"mem\\\\", \\\\"disk\\\\", \\\\"network\\\\", \\\\"connections\\\\", \\\\"udp\\\\""}
 
+# ECQ-1954
 AppMetrics - get with invalid start time shall return error
    [Documentation]
-   ...  get app metrics with invalid start time
-   ...  verify error
+   ...  - get app metrics with invalid start time
+   ...  - verify error
 
    ${token}=  Get Token
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=cpu  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""} 
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
  
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=disk  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=mem  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=tcp  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=udp  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=network  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
+# ECQ-1955
 AppMetrics - get with invalid end time shall return error
    [Documentation]
-   ...  get app metrics with invalid end time
-   ...  verify error
+   ...  - get app metrics with invalid end time
+   ...  - verify error
 
    ${token}=  Get Token
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=cpu  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=disk  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=mem  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=tcp  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=udp  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=network  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"2019-09-26T04:01:01\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"2019-09-26T04:01:01\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
+# ECQ-1956
 AppMetrics - get with invalid start/end time shall return error
    [Documentation]
-   ...  get app metrics with invalid start/end time
-   ...  verify error
+   ...  - get app metrics with invalid start/end time
+   ...  - verify error
 
    ${token}=  Get Token
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=cpu  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=disk  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=mem  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=tcp  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=udp  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  selector=network  last=1  app_name=automation_api_app  app_version=1.0  cluster_instance_name=cluster  cloudlet_name=cloudlet  operator_org_name=operator  developer_org_name=developer  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    #Should Contain  ${error}  {"message":"Invalid data: parsing time \\\\"\\\\"x\\\\"\\\\" into RFC3339 format failed. Example: \\\\"2006-01-02T15:04:05Z07:00\\\\""}
-   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}
+   Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal time \\\\"x\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z\\\\", or \\\\"2006-01-02T15:04:05+07:00\\\\""}
 
+# ECQ-1957
 AppMetrics - get with invalid last shall return error
    [Documentation]
-   ...  get app metrics with invalid last
-   ...  verify error
+   ...  - get app metrics with invalid last
+   ...  - verify error
 
    ${token}=  Get Token
 
@@ -267,10 +276,11 @@ AppMetrics - get with invalid last shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"Invalid JSON data: Unmarshal error: expected int, but got string for field \\\\"Limit\\\\" at offset
 
+# ECQ-1958
 AppMetrics - get with cluster not found shall return an empty list
    [Documentation]
-   ...  get app metrics with cluster not found
-   ...  verify empty list is returned
+   ...  - get app metrics with cluster not found
+   ...  - verify empty list is returned
 
    ${token}=  Get Token
 
@@ -296,10 +306,11 @@ AppMetrics - get with cluster not found shall return an empty list
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
+# ECQ-1959
 AppMetrics - get with operator not found shall return an empty list
    [Documentation]
-   ...  get app metrics with operator not found
-   ...  verify empty list is returned
+   ...  - get app metrics with operator not found
+   ...  - verify empty list is returned
 
    ${token}=  Get Token
 
@@ -325,10 +336,11 @@ AppMetrics - get with operator not found shall return an empty list
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
+# ECQ-1960
 AppMetrics - get with cloudlet not found shall return an empty list
    [Documentation]
-   ...  get app metrics with cloudlet not found
-   ...  verify empty list is returned
+   ...  - get app metrics with cloudlet not found
+   ...  - verify empty list is returned
 
    ${token}=  Get Token
 
@@ -354,6 +366,7 @@ AppMetrics - get with cloudlet not found shall return an empty list
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
+# ECQ-1961
 AppMetrics - get with appname not found shall return an empty list
    [Documentation]
    ...  get app metrics with cloudlet not found
@@ -381,10 +394,11 @@ AppMetrics - get with appname not found shall return an empty list
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
+# ECQ-1962
 AppMetrics - get without region shall return error
    [Documentation]
-   ...  get app metrics without region 
-   ...  verify error
+   ...  - get app metrics without region 
+   ...  - verify error
 
    ${token}=  Get Token
 

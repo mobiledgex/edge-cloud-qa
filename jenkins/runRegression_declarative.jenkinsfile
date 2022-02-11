@@ -48,6 +48,21 @@ pipeline{
         string(name: 'TestTimeoutMasterController', defaultValue: '4m')
         string(name: 'TestTimeoutDME', defaultValue: '2m')
         string(name: 'TestTimeoutFRM', defaultValue: '2m')
+        booleanParam(name: 'RunControllerTests', defaultValue: true)
+        booleanParam(name: 'RunMCTests', defaultValue: true)
+        booleanParam(name: 'RunDMETests', defaultValue: true)
+        booleanParam(name: 'RunSDKTests', defaultValue: true)
+        booleanParam(name: 'RunOpenstackTests', defaultValue: true)
+        booleanParam(name: 'RunVCDTests', defaultValue: true)
+        booleanParam(name: 'RunVsphereTests', defaultValue: true)
+        booleanParam(name: 'RunAnthosTests', defaultValue: true)
+        booleanParam(name: 'RunMetricsTests', defaultValue: true)
+        booleanParam(name: 'RunFRMTests', defaultValue: true)
+        booleanParam(name: 'RunScanTests', defaultValue: true)
+        booleanParam(name: 'RunConsoleTests', defaultValue: true)
+        booleanParam(name: 'RunPasswordTests', defaultValue: true)
+        booleanParam(name: 'RunPerformanceTests', defaultValue: true)
+        booleanParam(name: 'RunFailedTests', defaultValue: true)
         //choice(name: 'Platform', choices: ['SDK', 'Controller', 'DME', 'Openstack', 'VCD', 'Vshpere', 'Anthos'], description: '')
         //string(name: 'Area', defaultValue: 'flavor')
     }
@@ -243,6 +258,7 @@ pipeline{
         stage("execute parallel tests") {
             parallel {
                 stage('SDK Tests') {
+                    when { params.runSDKTests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'SDK tests failed') {
                             script { slackMessage.good('Starting SDK tests') }
@@ -271,6 +287,7 @@ pipeline{
                     }
                 }
                 stage('DME Tests') {
+                    when { params.runDMETests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'DME tests failed') {
                             script { slackMessage.good('Starting DME tests') }
@@ -305,6 +322,7 @@ pipeline{
                     }
                 }
                 stage('Controller Tests') {
+                    when { params.runControllerTests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Controller tests failed') {
                             script { slackMessage.good('Starting Controller Tests') }
@@ -340,6 +358,7 @@ pipeline{
                 }
               
                 stage('MasterController Tests') {
+                    when { params.runMCTests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'MC tests failed') {
                             script { slackMessage.good('Starting MasterController tests') }
@@ -371,6 +390,7 @@ pipeline{
                 }
 
                 stage('FRM Tests') {
+                    when { params.runFRMTests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'FRM tests failed') {
                             script { slackMessage.good('Starting FRM tests') }
@@ -404,6 +424,7 @@ pipeline{
                 }
   
                 stage('Anthos Tests') {
+                    when { params.runAnthosTests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Anthos tests failed') {
                             script { slackMessage.good('Starting Anthos tests') }
@@ -440,6 +461,7 @@ pipeline{
                 }
               
                 stage('Vsphere Tests') {
+                    when { params.runVsphereTests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Vsphere tests failed') {
                             script { slackMessage.good('Starting Vsphere tests') }
@@ -475,6 +497,7 @@ pipeline{
                     }
                 }
                 stage('VCD Tests') {
+                    when { params.runVCDTests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'VCD tests failed') {
                             script { slackMessage.good('Starting VCD tests') }
@@ -510,6 +533,7 @@ pipeline{
                     }
                 }
                 stage('Openstack Tests') {
+                    when { params.runOpenstackTests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Openstack tests failed') {
                             script { slackMessage.good('Starting Openstack tests') }
@@ -545,6 +569,7 @@ pipeline{
                     }
                 }
                 stage('Scans') {
+                    when { params.runScanTests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Scans failed') {
                             script { slackMessage.good('Starting scan tests') }
@@ -571,6 +596,7 @@ pipeline{
                 }
                 
                 stage('Console') {
+                    when { params.runConsoleTests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Console tests failed') {
                         script { slackMessage.good('Starting Console tests') }
@@ -601,6 +627,7 @@ pipeline{
                 }
                 
                 stage('Metrics') {
+                    when { params.runMetricsTests == true }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Metrics tests failed') {
                             script { slackMessage.good('Starting Metrics tests') }
@@ -632,6 +659,7 @@ pipeline{
             }
         }
         stage("Password Tests") {
+            when { params.runPasswordTests == true }
             steps {
                 script {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Password tests failed') {
@@ -661,8 +689,35 @@ pipeline{
                 }
             }
         }
-        
+
+        stage('Rerun Failed Tests') {
+            when { params.runFailedTests == true }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Rerun Failed tests failed') {
+                    script { 
+                        slackMessage.good('Starting Rerun Failed tests')
+                        runFailedTests(cycle)
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        echo "rerun tests tests failed"
+                        slackMessage.fail('Finished Rerun tests with failures')
+                    }
+                }
+                success {
+                    script {
+                        echo "rerun tests passed"
+                        slackMessage.good('Finished Rerun tests with pass')
+                    }
+                }
+            }
+        }
+
         stage("Performance Tests") {
+            when { params.runPerformanceTests == true }
             steps {
                 script {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Performance tests failed') {
