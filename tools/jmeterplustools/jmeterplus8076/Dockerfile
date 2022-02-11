@@ -12,6 +12,7 @@ COPY stressngbash.sh /
 COPY jmeterx8076.jmx /
 COPY jmeterbash.sh /
 COPY diskbash.sh /
+COPY all_measurements.sh /
 RUN chmod +x /*.sh
 ENV APACHE_RUN_USER  www-data
 ENV APACHE_RUN_GROUP www-data
@@ -26,5 +27,6 @@ RUN mkdir -p $APACHE_LOG_DIR
 COPY ports.conf /etc/apache2
 COPY 000-default.conf /etc/apache2/sites-enabled
 COPY index.html /var/www/html
-EXPOSE 8076
+COPY index2.html /var/www/index.html
+EXPOSE 8076-8077
 CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]

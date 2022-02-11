@@ -973,7 +973,7 @@ class MexConsole() :
         if cloudlet_name is None: cloudlet_name = self._cloudlet['key']['name']
         if operator is None: operator = self._cloudlet['key']['organization'] 
 
-        logging.info(f'Updating cloudlet region={region} cloudlet_name={cloudlet_name} operator={operator}')
+        logging.info(f'Updating cloudlet region={region} cloudlet_name={cloudlet_name} operator={operator} maintenance_state={maintenance_state}')
 
         if self.new_cloudlet_page.update_cloudlet(region=region, cloudlet_name=cloudlet_name, operator=operator, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, maintenance_state=maintenance_state, trust_policy=trust_policy):
             if maintenance_state == 'Maintenance Start' or maintenance_state == 'Maintenance Start No Failover':
@@ -1133,7 +1133,7 @@ class MexConsole() :
         if cloudlet_name is None: cloudlet_name =  self._cloudlet['key']['name']
 
         logging.info('Opening cloudlet details for cloudletname=' + cloudlet_name)
-
+        self.cloudlets_page.perform_search(cloudlet_name)
         self.cloudlets_page.click_cloudlet_row(cloudlet_name=cloudlet_name, region=region)
         time.sleep(1)
         self.take_screenshot('open_cloudlet_details')
