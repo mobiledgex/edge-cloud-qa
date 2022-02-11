@@ -34,6 +34,7 @@ def regressionPrep1() {
 //        }
 //    }
 }
+}
 
 def regressionPrep2() {
     try {
@@ -94,6 +95,7 @@ def regressionPrep2() {
 //            script { slackMessage.good('Regression Prep successfull') }
 //        }
 //    }
+}
 }
 
 def regressionPrepCheck() {
