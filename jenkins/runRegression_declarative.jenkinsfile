@@ -48,6 +48,7 @@ pipeline{
         string(name: 'TestTimeoutMasterController', defaultValue: '4m')
         string(name: 'TestTimeoutDME', defaultValue: '2m')
         string(name: 'TestTimeoutFRM', defaultValue: '2m')
+        booleanParam(name: 'RunDeploy', defaultValue: true)
         booleanParam(name: 'RunControllerTests', defaultValue: true)
         booleanParam(name: 'RunMCTests', defaultValue: true)
         booleanParam(name: 'RunDMETests', defaultValue: true)
@@ -106,6 +107,7 @@ pipeline{
         stage('Regression Prep 2') {
             parallel {
                 stage('Deploy Chef') {
+                    when { expression { params.runDeploy == true } }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'deploy chef failed') {
                             script { deployChef(dateValue) }
@@ -122,6 +124,7 @@ pipeline{
                 }
 
                 stage('Delete Openstack') {
+                    when { expression { params.runDeploy == true } }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete openstack failed') {
                             script { deleteCrm.openstack(cycle) }
@@ -129,6 +132,7 @@ pipeline{
                     }
                 }
                 stage('Delete Anthos') {
+                    when { expression { params.runDeploy == true } }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete anthos failed') {
                             script { deleteCrm.anthos(cycle) }
@@ -136,6 +140,7 @@ pipeline{
                     }
                 }
                 stage('Delete Fake') {
+                    when { expression { params.runDeploy == true } }
                     steps {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete fake failed') {
                             script { deleteCrm.fake(cycle) }
@@ -172,6 +177,7 @@ pipeline{
         }   
         
         stage('Deploy backend in K8s') {
+            when { expression { params.runDeploy == true } }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'deploy failed') {
                     script {
@@ -195,6 +201,7 @@ pipeline{
         }
         
         stage('Create/Upgrade CRMs') {
+            when { expression { params.runDeploy == true } }
             parallel {
                 stage('Create Openstack') {
                     steps {
