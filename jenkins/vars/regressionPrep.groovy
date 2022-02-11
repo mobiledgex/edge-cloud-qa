@@ -2,8 +2,8 @@ def regressionPrep1(dateValue) {
     try {
     parallel ({
         stage('Check Load/Create Cycle') {
-            steps {
-                script {
+//            steps {
+//                script {
 //                    dateValue = determineDateValue()
 //                    cycle = dateValue + '_' + params.Version
 //                    currentBuild.displayName = cycle
@@ -11,16 +11,16 @@ def regressionPrep1(dateValue) {
                     checkLoadExists(dateValue)
                     createCycle(cycle)
                     addTestsToFolder(params.Version, params.Project, cycle)
-                }
+//                }
             }
         }
         stage('Cleanup Provisioning') {
-            steps{
+//            steps{
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'cleanup provisioning failed') {
                     build job: 'cleanupAutomationProvisioning'
                     script {
                         defragEtcd()
-                    }
+//                    }
                 }
             }
         }
