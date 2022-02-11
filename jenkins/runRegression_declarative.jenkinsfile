@@ -77,15 +77,14 @@ pipeline{
                     regressionPrep.regressionPrep1(dateValue)
                  }
             }
+            post {
+                failure {
+                    script {
+                       slackMessage.fail("Load check failed or create cycle failed for " + dateValue + ':' + e + '. Aborting')
+                    }
+                }
+            }
         }
-        post {
-          failure {
-              script {
-                slackMessage.fail("Load check failed or create cycle failed for " + dateValue + ':' + e + '. Aborting')
-              }
-          }
-       }
-
 
         stage('Regression Prep 2') {
             steps {
