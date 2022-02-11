@@ -21,8 +21,11 @@ class User(MexOperation):
         self.current_url = '/auth/user/current'
         self.update_url = '/auth/user/update'
         self.update_restricted_url = '/auth/restricted/user/update'
+        self.create_apikey_url = '/auth/user/create/apikey'
+        self.delete_apikey_url = '/auth/user/delete/apikey'
+        self.show_apikey_url = '/auth/user/show/apikey'
 
-    def _build(self, username=None, password=None, email_address=None, metadata=None, locked=None, family_name=None, given_name=None, nickname=None, enable_totp=None, email_verified=None, role=None, organization=None, use_defaults=True):
+    def _build(self, username=None, password=None, email_address=None, metadata=None, locked=None, family_name=None, given_name=None, nickname=None, enable_totp=None, email_verified=None, role=None, organization=None, description=None, permission_list=[], apikey_id=None, use_defaults=True):
         if username == 'default':
             username = shared_variables_mc.username_default
 
@@ -65,7 +68,20 @@ class User(MexOperation):
             user_dict['role'] = role
         if organization is not None:
             user_dict['org'] = organization
+        if description is not None:
+            user_dict['description'] = description
+        if apikey_id is not None:
+            user_dict['apikeyid'] = apikey_id
 
+        if len(permission_list) > 0:
+            perm_dict_list = []
+            for x, y  in zip(permission_list[::2], permission_list[1::2]):
+                perm_dict = {}
+                perm_dict['action'] = x
+                perm_dict['resource'] = y
+                perm_dict_list.append(perm_dict)
+            user_dict['permissions'] = perm_dict_list
+            
         return user_dict
 
     def _build_update_restricted(self, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, enable_totp=None, failed_logins=None, use_defaults=True):
@@ -167,8 +183,20 @@ class User(MexOperation):
     def delete_user(self, token=None, username=None, json_data=None, use_defaults=False, use_thread=False):
         msg = self._build(username=username, use_defaults=use_defaults)
         msg_dict = msg
-
         return self.delete(token=token, url=self.delete_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def create_user_api_key(self, organization=None, description=None, permission_list=[], token=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(organization=organization, description=description, permission_list=permission_list, use_defaults=use_defaults)
+        msg_dict = msg         
+        return self.create(token=token, url=self.create_apikey_url, json_data=json_data, use_defaults=False, use_thread=use_thread, create_msg=msg_dict)
+
+    def delete_user_api_key(self, apikey_id=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(apikey_id=apikey_id, use_defaults=use_defaults)
+        msg_dict = msg
+        return self.delete(token=token, url=self.delete_apikey_url, json_data=json_data, use_defaults=False, use_thread=use_thread, message=msg_dict)
+                           
+    def show_user_api_key(self, token=None, json_data=None, use_thread=False):
+        return self.show(token=token, url=self.show_apikey_url, json_data=json_data, use_thread=use_thread)
 
     def verify_email(self, username=None, password=None, email_address=None, server='imap.gmail.com', wait=30, mc_address=None):
         if username is None:
