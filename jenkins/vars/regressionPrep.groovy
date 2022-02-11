@@ -91,7 +91,7 @@ def regressionPrep2() {
     }
 }
 
-def regressionPrepCheck()
+def regressionPrepCheck() {
     steps {
         script {
             if(regression_prep_status == false) {
