@@ -24,60 +24,60 @@ CreateAlertReceiver - mcctl shall be able to create/delete email/slack alert
 
    [Template]  Success Create/Delete Alert Receiver Via mcctl
       # email app 
-      name=${recv_name}  type=email  severity=info  app-org=${developer}
-      name=${recv_name}  type=email  severity=info  appname=x  app-org=${developer}
-      name=${recv_name}  type=email  severity=info  appvers=x  app-org=${developer}
-      name=${recv_name}  type=email  severity=info  app-cloudlet=x  app-org=${developer}
-      name=${recv_name}  type=email  severity=info  app-cloudlet-org=x  app-org=${developer}
-      name=${recv_name}  type=email  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x
-      name=${recv_name}  type=email  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x
-      name=${recv_name}  type=email  email=x@yahoo.com  severity=info  app-org=${developer}
+      name=${recv_name}  type=email  severity=info  apporg=${developer}
+      name=${recv_name}  type=email  severity=info  appname=x  apporg=${developer}
+      name=${recv_name}  type=email  severity=info  appvers=x  apporg=${developer}
+      name=${recv_name}  type=email  severity=info  appcloudlet=x  apporg=${developer}
+      name=${recv_name}  type=email  severity=info  appcloudletorg=x  apporg=${developer}
+      name=${recv_name}  type=email  severity=info  apporg=${developer}  appname=x  appvers=x  appcloudlet=x  appcloudletorg=x
+      name=${recv_name}  type=email  severity=info  apporg=${developer}  appname=x  appvers=x  appcloudlet=x  appcloudletorg=x  cluster=x  clusterorg=x
+      name=${recv_name}  type=email  email=x@yahoo.com  severity=info  apporg=${developer}
 
       # email cluster 
-      name=${recv_name}  type=email  severity=info  cluster-org=${developer}
-      name=${recv_name}  type=email  severity=info  cluster=x  cluster-org=${developer}
+      name=${recv_name}  type=email  severity=info  clusterorg=${developer}
+      name=${recv_name}  type=email  severity=info  cluster=x  clusterorg=${developer}
 
       # slack app
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  app-org=${developer}
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  appname=x  app-org=${developer}
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  appvers=x  app-org=${developer}
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  app-cloudlet=x  app-org=${developer}
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  app-cloudlet-org=x  app-org=${developer}
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  apporg=${developer}
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  appname=x  apporg=${developer}
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  appvers=x  apporg=${developer}
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  appcloudlet=x  apporg=${developer}
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  appcloudletorg=x  apporg=${developer}
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  apporg=${developer}  appname=x  appvers=x  appcloudlet=x  appcloudletorg=x
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  apporg=${developer}  appname=x  appvers=x  appcloudlet=x  appcloudletorg=x  cluster=x  clusterorg=x
  
       # slack cluster
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  cluster-org=${developer}
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  cluster=x  cluster-org=${developer}
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  clusterorg=${developer}
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  cluster=x  clusterorg=${developer}
 
       # pagerduty app
-      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  app-org=${developer}
-      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  pagerduty-api-version=v1  severity=info  appname=x  app-org=${developer}
-      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  pagerduty-api-version=v2  severity=info  appvers=x  app-org=${developer}
-      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  app-cloudlet=x  app-org=${developer}
-      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  app-cloudlet-org=x  app-org=${developer}
-      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x
-      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x
+      name=${recv_name}  type=pagerduty  pagerdutyintegrationkey=01234567890123456789012345678901  severity=info  apporg=${developer}
+      name=${recv_name}  type=pagerduty  pagerdutyintegrationkey=01234567890123456789012345678901  pagerdutyapiversion=v1  severity=info  appname=x  apporg=${developer}
+      name=${recv_name}  type=pagerduty  pagerdutyintegrationkey=01234567890123456789012345678901  pagerdutyapiversion=v2  severity=info  appvers=x  apporg=${developer}
+      name=${recv_name}  type=pagerduty  pagerdutyintegrationkey=01234567890123456789012345678901  severity=info  appcloudlet=x  apporg=${developer}
+      name=${recv_name}  type=pagerduty  pagerdutyintegrationkey=01234567890123456789012345678901  severity=info  appcloudletorg=x  apporg=${developer}
+      name=${recv_name}  type=pagerduty  pagerdutyintegrationkey=01234567890123456789012345678901  severity=info  apporg=${developer}  appname=x  appvers=x  appcloudlet=x  appcloudletorg=x
+      name=${recv_name}  type=pagerduty  pagerdutyintegrationkey=01234567890123456789012345678901  severity=info  apporg=${developer}  appname=x  appvers=x  appcloudlet=x  appcloudletorg=x  cluster=x  clusterorg=x
 
       # pagerduty cluster
-      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  cluster-org=${developer}
-      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  cluster=x  cluster-org=${developer}
+      name=${recv_name}  type=pagerduty  pagerdutyintegrationkey=01234567890123456789012345678901  severity=info  clusterorg=${developer}
+      name=${recv_name}  type=pagerduty  pagerdutyintegrationkey=01234567890123456789012345678901  severity=info  cluster=x  clusterorg=${developer}
 
       # email cloudlet 
-      name=${recv_name}  type=email  severity=info  cloudlet-org=${developer}
-      name=${recv_name}  type=email  severity=info  cloudlet=x  cloudlet-org=${developer}
-      name=${recv_name}  type=email  email=x@yahoo.com  severity=info  cloudlet-org=${developer}
+      name=${recv_name}  type=email  severity=info  cloudletorg=${developer}
+      name=${recv_name}  type=email  severity=info  cloudlet=x  cloudletorg=${developer}
+      name=${recv_name}  type=email  email=x@yahoo.com  severity=info  cloudletorg=${developer}
 
       # slack cloudlet
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  cloudlet-org=${developer}
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  cloudlet=x  cloudlet-org=${developer}
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  cloudletorg=${developer}
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  cloudlet=x  cloudletorg=${developer}
 
       # region
-      name=${recv_name}  type=email  severity=info  app-org=${developer}  region=US
-      name=${recv_name}  type=email  severity=info  cluster-org=${developer}  region=US
-      name=${recv_name}  type=email  severity=info  cloudlet-org=${developer}  region=US
-      name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  region=US
-      name=${recv_name}  type=email  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  region=US
+      name=${recv_name}  type=email  severity=info  apporg=${developer}  region=US
+      name=${recv_name}  type=email  severity=info  clusterorg=${developer}  region=US
+      name=${recv_name}  type=email  severity=info  cloudletorg=${developer}  region=US
+      name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  apporg=${developer}  appname=x  appvers=x  appcloudlet=x  appcloudletorg=x  cluster=x  clusterorg=x  region=US
+      name=${recv_name}  type=email  severity=info  apporg=${developer}  appname=x  appvers=x  appcloudlet=x  appcloudletorg=x  cluster=x  clusterorg=x  region=US
 
 # ECQ-2906
 CreateAlertReceiver - mcctl shall handle create failures
@@ -87,30 +87,30 @@ CreateAlertReceiver - mcctl shall handle create failures
 
    [Template]  Fail Create Alert Receiver Via mcctl
       # invalid values
-      Error: Bad Request (400), Receiver type invalid                                                                    name=${recv_name}  type=emai  severity=info  app-org=${developer}
-      Error: Bad Request (400), Alert severity has to be one of "info", "warning", "error"                               name=${recv_name}  type=email  severity=inf  app-org=${developer}
-      Error: Bad Request (400), Unable to create a receiver - Invalid Slack api URL                                      name=${recv_name}  type=slack  severity=info  slack-channel=x  slack-api-url=x  app-org=${developer}
-      Error: Bad Request (400), Unable to create a receiver - bad response status 400 Bad Request[missing host for URL]  name=${recv_name}  type=slack  severity=info  slack-channel=x  slack-api-url=http://  app-org=${developer}
-      Error: Bad Request (400), PagerDuty Integration Key must contain 32 characters                                     name=${recv_name}  type=pagerduty  severity=info  pagerduty-integration-key=0123456789012345678901234567890  app-org=${developer}
-      Error: Bad Request (400), Unable to create a receiver - PagerDuty Integration Api version must be "v1" or "v2"("v2" will be used if not specified)  name=${recv_name}  type=pagerduty  severity=info  pagerduty-integration-key=01234567890123456789012345678901  pagerduty-api-version=v3  app-org=${developer}
+      Error: Bad Request (400), Receiver type invalid                                                                    name=${recv_name}  type=emai  severity=info  apporg=${developer}
+      Error: Bad Request (400), Alert severity has to be one of "info", "warning", "error"                               name=${recv_name}  type=email  severity=inf  apporg=${developer}
+      Error: Bad Request (400), Unable to create a receiver - Invalid Slack api URL                                      name=${recv_name}  type=slack  severity=info  slackchannel=x  slackapiurl=x  apporg=${developer}
+      Error: Bad Request (400), Unable to create a receiver - bad response status 400 Bad Request[missing host for URL]  name=${recv_name}  type=slack  severity=info  slackchannel=x  slackapiurl=http://  apporg=${developer}
+      Error: Bad Request (400), PagerDuty Integration Key must contain 32 characters                                     name=${recv_name}  type=pagerduty  severity=info  pagerdutyintegrationkey=0123456789012345678901234567890  apporg=${developer}
+      Error: Bad Request (400), Unable to create a receiver - PagerDuty Integration Api version must be "v1" or "v2"("v2" will be used if not specified)  name=${recv_name}  type=pagerduty  severity=info  pagerdutyintegrationkey=01234567890123456789012345678901  pagerdutyapiversion=v3  apporg=${developer}
 
       # missing values
-      Error: missing required args: name                                                               type=email  severity=info  app-org=${developer}
-      Error: missing required args: type                                                               name=${recv_name}  severity=info  app-org=${developer}
-      Error: missing required args: severity                                                           name=${recv_name}  type=email  app-org=${developer}
+      Error: missing required args: name                                                               type=email  severity=info  apporg=${developer}
+      Error: missing required args: type                                                               name=${recv_name}  severity=info  apporg=${developer}
+      Error: missing required args: severity                                                           name=${recv_name}  type=email  apporg=${developer}
       #Error: Bad Request (400), Either cloudlet, cluster or app instance details have to be specified  name=${recv_name}  type=email  severity=info    now supported
-      Error: missing required args: severity                                                           name=${recv_name}  type=slack  app-org=${developer}
-      Error: Bad Request (400), Both slack URL and slack channel must be specified                     name=${recv_name}  type=slack  severity=info  slack-channel=x  app-org=${developer}
-      Error: Bad Request (400), Both slack URL and slack channel must be specified                     name=${recv_name}  type=slack  severity=info  slack-api-url=x  app-org=${developer}
-      Error: Bad Request (400), PagerDuty Integration Key must be present                              name=${recv_name}  type=pagerduty  severity=info  slack-channel=x  slack-api-url=x  app-org=${developer}
-      Error: Bad Request (400), PagerDuty Integration Key must be present                              name=${recv_name}  type=pagerduty  severity=info  app-org=${developer}
-      Error: Bad Request (400), PagerDuty Integration Key must be present                              name=${recv_name}  type=pagerduty  severity=info  pagerduty-api-version=v2  app-org=${developer}
+      Error: missing required args: severity                                                           name=${recv_name}  type=slack  apporg=${developer}
+      Error: Bad Request (400), Both slack URL and slack channel must be specified                     name=${recv_name}  type=slack  severity=info  slackchannel=x  apporg=${developer}
+      Error: Bad Request (400), Both slack URL and slack channel must be specified                     name=${recv_name}  type=slack  severity=info  slackapiurl=x  apporg=${developer}
+      Error: Bad Request (400), PagerDuty Integration Key must be present                              name=${recv_name}  type=pagerduty  severity=info  slackchannel=x  slackapiurl=x  apporg=${developer}
+      Error: Bad Request (400), PagerDuty Integration Key must be present                              name=${recv_name}  type=pagerduty  severity=info  apporg=${developer}
+      Error: Bad Request (400), PagerDuty Integration Key must be present                              name=${recv_name}  type=pagerduty  severity=info  pagerdutyapiversion=v2  apporg=${developer}
 
-      AppInst details cannot be specified if this receiver is for cloudlet alerts  name=${recv_name}  type=email  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  cloudlet=x  cloudlet-org=${developer}
-      AppInst details cannot be specified if this receiver is for cloudlet alerts  name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  cloudlet=x  cloudlet-org=${developer}
+      AppInst details cannot be specified if this receiver is for cloudlet alerts  name=${recv_name}  type=email  severity=info  apporg=${developer}  appname=x  appvers=x  appcloudlet=x  appcloudletorg=x  cluster=x  clusterorg=x  cloudlet=x  cloudletorg=${developer}
+      AppInst details cannot be specified if this receiver is for cloudlet alerts  name=${recv_name}  type=slack  slackchannel=x  slackapiurl=http://slack.com  severity=info  apporg=${developer}  appname=x  appvers=x  appcloudlet=x  appcloudletorg=x  cluster=x  clusterorg=x  cloudlet=x  cloudletorg=${developer}
 
       # user
-      Error: Bad Request (400), User is not specifiable, current logged in user will be used  name=${recv_name}  type=emai  severity=info  app-org=${developer}  user=x
+      Error: Bad Request (400), User is not specifiable, current logged in user will be used  name=${recv_name}  type=emai  severity=info  apporg=${developer}  user=x
 
 *** Keywords ***
 Setup
@@ -120,9 +120,9 @@ Setup
 Modify Channel
    [Arguments]  &{parms}
 
-   ${startshash}=  Evaluate  '${parms['slack-channel']}'.startswith('#')
-   ${c}=  Run Keyword If  ${startshash} == ${True}  Set Variable  ${parms['slack-channel']}
-   ...  ELSE  Set Variable  \#${parms['slack-channel']}
+   ${startshash}=  Evaluate  '${parms['slackchannel']}'.startswith('#')
+   ${c}=  Run Keyword If  ${startshash} == ${True}  Set Variable  ${parms['slackchannel']}
+   ...  ELSE  Set Variable  \#${parms['slackchannel']}
 
    [Return]  ${c}
 
@@ -132,10 +132,10 @@ Success Create/Delete Alert Receiver Via mcctl
    &{parms_copy}=  Set Variable  ${parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
-   Remove From Dictionary  ${parms_copy}  slack-api-url  # this is not allowed since it is secret
-   ${modify_channel}=  Run Keyword If  'slack-channel' in ${parms}  Modify Channel  &{parms}
+   Remove From Dictionary  ${parms_copy}  slackapiurl  # this is not allowed since it is secret
+   ${modify_channel}=  Run Keyword If  'slackchannel' in ${parms}  Modify Channel  &{parms}
    
-   Remove From Dictionary  ${parms_copy}  slack-channel 
+   Remove From Dictionary  ${parms_copy}  slackchannel 
    ${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
 
    Run mcctl  alertreceiver create ${parmss}  version=${version} 
@@ -151,25 +151,25 @@ Success Create/Delete Alert Receiver Via mcctl
    Run Keyword If  '${parms['type']}' == 'email' and 'email' in ${parms}  Should Be Equal  ${show[0]['Email']}  ${parms['email']}
    Run Keyword If  '${parms['type']}' == 'email' and 'email' not in ${parms}  Should Be Equal  ${show[0]['Email']}  mexadmin@mobiledgex.net
 
-   Run Keyword If  '${parms['type']}' == 'slack' and 'slack-channel' in ${parms}  Should Be Equal  ${show[0]['SlackChannel']}  ${modify_channel}  #${parms['slack-channel']}
-   Run Keyword If  '${parms['type']}' == 'slack' and 'slack-api-url' in ${parms}  Should Be Equal  ${show[0]['SlackWebhook']}  <hidden>
+   Run Keyword If  '${parms['type']}' == 'slack' and 'slackchannel' in ${parms}  Should Be Equal  ${show[0]['SlackChannel']}  ${modify_channel}  #${parms['slackchannel']}
+   Run Keyword If  '${parms['type']}' == 'slack' and 'slackapiurl' in ${parms}  Should Be Equal  ${show[0]['SlackWebhook']}  <hidden>
 
-   ${apicheck}=  Run Keyword If  '${parms['type']}' == 'pagerduty' and 'pagerduty-api-version' in ${parms}  Set Variable  ${parms['pagerduty-api-version']}
+   ${apicheck}=  Run Keyword If  '${parms['type']}' == 'pagerduty' and 'pagerdutyapiversion' in ${parms}  Set Variable  ${parms['pagerdutyapiversion']}
    ...  ELSE  Set Variable  v2
-   Run Keyword If  '${parms['type']}' == 'pagerduty' and 'pagerduty-api-version' in ${parms}  Should Be Equal  ${show[0]['PagerDutyApiVersion']}  ${apicheck}
-   Run Keyword If  '${parms['type']}' == 'pagerduty' and 'pagerduty-integration-key' in ${parms}  Should Be Equal  ${show[0]['PagerDutyIntegrationKey']}  <hidden>
+   Run Keyword If  '${parms['type']}' == 'pagerduty' and 'pagerdutyapiversion' in ${parms}  Should Be Equal  ${show[0]['PagerDutyApiVersion']}  ${apicheck}
+   Run Keyword If  '${parms['type']}' == 'pagerduty' and 'pagerdutyintegrationkey' in ${parms}  Should Be Equal  ${show[0]['PagerDutyIntegrationKey']}  <hidden>
  
    Run Keyword If  'appname' in ${parms}  Should Be Equal  ${show[0]['AppInst']['app_key']['name']}  ${parms['appname']}
-   Run Keyword If  'app-org' in ${parms}  Should Be Equal  ${show[0]['AppInst']['app_key']['organization']}  ${parms['app-org']}
+   Run Keyword If  'apporg' in ${parms}  Should Be Equal  ${show[0]['AppInst']['app_key']['organization']}  ${parms['apporg']}
    Run Keyword If  'appvers' in ${parms}  Should Be Equal  ${show[0]['AppInst']['app_key']['version']}  ${parms['appvers']}
-   Run Keyword If  'app-cloudlet' in ${parms}  Should Be Equal  ${show[0]['AppInst']['cluster_inst_key']['cloudlet_key']['name']}  ${parms['app-cloudlet']}
-   Run Keyword If  'app-cloudlet-org' in ${parms}  Should Be Equal  ${show[0]['AppInst']['cluster_inst_key']['cloudlet_key']['organization']}  ${parms['app-cloudlet-org']}
+   Run Keyword If  'appcloudlet' in ${parms}  Should Be Equal  ${show[0]['AppInst']['cluster_inst_key']['cloudlet_key']['name']}  ${parms['appcloudlet']}
+   Run Keyword If  'appcloudletorg' in ${parms}  Should Be Equal  ${show[0]['AppInst']['cluster_inst_key']['cloudlet_key']['organization']}  ${parms['appcloudletorg']}
 
    Run Keyword If  'cluster' in ${parms}  Should Be Equal  ${show[0]['AppInst']['cluster_inst_key']['cluster_key']['name']}  ${parms['cluster']}
-   Run Keyword If  'cluster-org' in ${parms}  Should Be Equal  ${show[0]['AppInst']['cluster_inst_key']['organization']}  ${parms['cluster-org']}
+   Run Keyword If  'clusterorg' in ${parms}  Should Be Equal  ${show[0]['AppInst']['cluster_inst_key']['organization']}  ${parms['clusterorg']}
 
    Run Keyword If  'cloudlet' in ${parms}  Should Be Equal  ${show[0]['Cloudlet']['name']}  ${parms['cloudlet']}
-   Run Keyword If  'cloudlet-org' in ${parms}  Should Be Equal  ${show[0]['Cloudlet']['organization']}  ${parms['cloudlet-org']}
+   Run Keyword If  'cloudletorg' in ${parms}  Should Be Equal  ${show[0]['Cloudlet']['organization']}  ${parms['cloudletorg']}
 
    Run Keyword If  'region' in ${parms}  Should Be Equal  ${show[0]['Region']}  ${parms['region']}
 
