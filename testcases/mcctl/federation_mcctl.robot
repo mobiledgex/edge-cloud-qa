@@ -255,7 +255,7 @@ Success FederatorZone Create Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
   
-   Run mcctl  cloudlet create region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} location.latitude=1 location.longitude=1 numdynamicips=1 platformtype=PlatformTypeFake
+   Run mcctl  cloudlet create region=${region} cloudlet=${cloudlet_name} cloudletorg=${operator} location.latitude=1 location.longitude=1 numdynamicips=1 platformtype=PlatformTypeFake
 
    Run mcctl  federatorzone create ${parmss}  version=${version}
 
@@ -263,4 +263,4 @@ Success FederatorZone Create Via mcctl
    Should Not Be Empty  ${show}
 
    Run mcctl  federatorzone delete zoneid=${zone} operatorid=${operator} countrycode=${countrycode}  version=${version}
-   Run mcctl  cloudlet delete region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}  
+   Run mcctl  cloudlet delete region=${region} cloudlet=${cloudlet_name} cloudletorg=${operator}  

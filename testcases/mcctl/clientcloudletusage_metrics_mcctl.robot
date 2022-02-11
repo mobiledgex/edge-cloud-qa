@@ -35,19 +35,19 @@ Clientcloudletusage - mcctl shall be able to request clientcloudletusage latency
    [Tags]  DMEPersistentConnection
 
    [Template]  Success Clientcloudletusage Latency Metrics Via mcctl
-      selector=latency  cloudlet-org=${operator_name_fake}
-      selector=latency  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  
-      selector=latency  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  locationtile=${locationtile}
-      selector=latency  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  devicecarrier=${devicecarrier} 
-      selector=latency  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  datanetworktype=${datanetworktype}
-      selector=latency  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  devicecarrier=${devicecarrier}  datanetworktype=${datanetworktype}
-      selector=latency  cloudlet-org=${operator_name_fake}  limit=1
-      selector=latency  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
-      selector=latency  cloudlet-org=${operator_name_fake}  numsamples=1
-      selector=latency  cloudlet-org=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
-      selector=latency  cloudlet-org=${operator_name_fake}  startage=12h
-      selector=latency  cloudlet-org=${operator_name_fake}  endage=1s
-      selector=latency  cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
+      selector=latency  cloudletorg=${operator_name_fake}
+      selector=latency  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  
+      selector=latency  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  locationtile=${locationtile}
+      selector=latency  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  devicecarrier=${devicecarrier} 
+      selector=latency  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  datanetworktype=${datanetworktype}
+      selector=latency  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  devicecarrier=${devicecarrier}  datanetworktype=${datanetworktype}
+      selector=latency  cloudletorg=${operator_name_fake}  limit=1
+      selector=latency  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
+      selector=latency  cloudletorg=${operator_name_fake}  numsamples=1
+      selector=latency  cloudletorg=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
+      selector=latency  cloudletorg=${operator_name_fake}  startage=12h
+      selector=latency  cloudletorg=${operator_name_fake}  endage=1s
+      selector=latency  cloudletorg=${operator_name_fake}  startage=12h  endage=1s
 
 # ECQ-3452
 Clientcloudletusage - mcctl shall be able to request clientcloudletusage deviceinfo metrics
@@ -58,19 +58,19 @@ Clientcloudletusage - mcctl shall be able to request clientcloudletusage devicei
    [Tags]  DMEPersistentConnection
 
    [Template]  Success Clientcloudletusage DeviceInfo Metrics Via mcctl
-      selector=deviceinfo  cloudlet-org=${operator_name_fake}
-      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}
-      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  locationtile=${locationtile}
-      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  deviceos=${deviceos}
-      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  devicemodel=${devicemodel}
-      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  devicecarrier=${devicecarrier} 
-      selector=deviceinfo  cloudlet-org=${operator_name_fake}  limit=1
-      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}
-      selector=deviceinfo  cloudlet-org=${operator_name_fake}  numsamples=1
-      selector=deviceinfo  cloudlet-org=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
-      selector=deviceinfo  cloudlet-org=${operator_name_fake}  startage=12h
-      selector=deviceinfo  cloudlet-org=${operator_name_fake}  endage=1s
-      selector=deviceinfo  cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
+      selector=deviceinfo  cloudletorg=${operator_name_fake}
+      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}
+      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  locationtile=${locationtile}
+      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  deviceos=${deviceos}
+      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  devicemodel=${devicemodel}
+      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  devicecarrier=${devicecarrier} 
+      selector=deviceinfo  cloudletorg=${operator_name_fake}  limit=1
+      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}
+      selector=deviceinfo  cloudletorg=${operator_name_fake}  numsamples=1
+      selector=deviceinfo  cloudletorg=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
+      selector=deviceinfo  cloudletorg=${operator_name_fake}  startage=12h
+      selector=deviceinfo  cloudletorg=${operator_name_fake}  endage=1s
+      selector=deviceinfo  cloudletorg=${operator_name_fake}  startage=12h  endage=1s
 
 # ECQ-3453
 Clientcloudletusage - mcctl shall handle clientcloudletusage metrics failures
@@ -87,19 +87,19 @@ Clientcloudletusage - mcctl shall handle clientcloudletusage metrics failures
       Error: missing required args:                                                               selector=x
       Error: missing required args:                                                               selector=latency
       Error: missing required args:                                                               selector=latency cloudlet=x
-      Error: Bad Request (400), Invalid clientcloudletusage selector: custom                      selector=custom cloudlet-org=tmus
-      Error: Bad Request (400), Invalid clientcloudletusage selector: x                           selector=x cloudlet-org=tmus
-      Error: Bad Request (400), DeviceOS not allowed for cloudlet latency metric                  selector=latency  cloudlet-org=automation_dev_org  deviceos=x
-      Error: Bad Request (400), DeviceModel not allowed for cloudlet latency metric               selector=latency  cloudlet-org=automation_dev_org  devicemodel=x
-      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z07:00"               selector=latency  cloudlet-org=automation_dev_org  starttime=x
-      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z07:00"                 selector=latency  cloudlet-org=automation_dev_org  endtime=x
-      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc         selector=latency  cloudlet-org=automation_dev_org  startage=x
-      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc           selector=latency  cloudlet-org=automation_dev_org  endage=x
-      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                    selector=latency  cloudlet-org=automation_dev_org  limit=x
-      Error: Bad Request (400), DataNetworkType not allowed for cloudlet deviceinfo metric        selector=deviceinfo  cloudlet-org=tmus  datanetworktype=x
+      Error: Bad Request (400), Invalid clientcloudletusage selector: custom                      selector=custom cloudletorg=tmus
+      Error: Bad Request (400), Invalid clientcloudletusage selector: x                           selector=x cloudletorg=tmus
+      Error: Bad Request (400), DeviceOS not allowed for cloudlet latency metric                  selector=latency  cloudletorg=automation_dev_org  deviceos=x
+      Error: Bad Request (400), DeviceModel not allowed for cloudlet latency metric               selector=latency  cloudletorg=automation_dev_org  devicemodel=x
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"               selector=latency  cloudletorg=automation_dev_org  starttime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"                 selector=latency  cloudletorg=automation_dev_org  endtime=x
+      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc         selector=latency  cloudletorg=automation_dev_org  startage=x
+      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc           selector=latency  cloudletorg=automation_dev_org  endage=x
+      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                    selector=latency  cloudletorg=automation_dev_org  limit=x
+      Error: Bad Request (400), DataNetworkType not allowed for cloudlet deviceinfo metric        selector=deviceinfo  cloudletorg=tmus  datanetworktype=x
       Error: missing required args:                                                               selector=deviceinfo
-      Error: Bad Request (400), DataNetworkType not allowed for cloudlet deviceinfo metric        selector=deviceinfo  cloudlet-org=automation_dev_org  datanetworktype=x
-      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax             selector=latency  cloudlet-org=automation_dev_org  numsamples=x
+      Error: Bad Request (400), DataNetworkType not allowed for cloudlet deviceinfo metric        selector=deviceinfo  cloudletorg=automation_dev_org  datanetworktype=x
+      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax             selector=latency  cloudletorg=automation_dev_org  numsamples=x
 
 *** Keywords ***
 Setup

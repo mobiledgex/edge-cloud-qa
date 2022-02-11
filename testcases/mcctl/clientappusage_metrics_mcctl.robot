@@ -34,22 +34,22 @@ Clientappusage - mcctl shall be able to request clientappusage latency metrics
    [Tags]  DMEPersistentConnection
 
    [Template]  Success Clientappusage Latency Metrics Via mcctl
-      selector=latency  app-org=${developer_org_name_automation}
-      selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  
-      selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0
-      selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation
-      selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}
-      selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}
-      selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}
-      selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  locationtile=${locationtile}
-      selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}  limit=1
-      selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}
-      selector=latency  appname=${app_name_automation}  app-org=${developer_org_name_automation}  datanetworktype=${datanetworktype}
-      selector=latency  app-org=${developer_org_name_automation}  numsamples=1
-      selector=latency  app-org=${developer_org_name_automation}  numsamples=100  starttime=${start_date}  endtime=${end_date}
-      selector=latency  app-org=${developer_org_name_automation}  startage=12h
-      selector=latency  app-org=${developer_org_name_automation}  endage=1s
-      selector=latency  app-org=${developer_org_name_automation}  startage=12h  endage=1s
+      selector=latency  apporg=${developer_org_name_automation}
+      selector=latency  appname=${app_name_automation}  apporg=${developer_org_name_automation}  
+      selector=latency  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0
+      selector=latency  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation
+      selector=latency  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}
+      selector=latency  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}  cloudlet=${cloudlet_name_fake}
+      selector=latency  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}
+      selector=latency  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  locationtile=${locationtile}
+      selector=latency  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}  cloudlet=${cloudlet_name_fake}  limit=1
+      selector=latency  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}  cloudlet=${cloudlet_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}
+      selector=latency  appname=${app_name_automation}  apporg=${developer_org_name_automation}  datanetworktype=${datanetworktype}
+      selector=latency  apporg=${developer_org_name_automation}  numsamples=1
+      selector=latency  apporg=${developer_org_name_automation}  numsamples=100  starttime=${start_date}  endtime=${end_date}
+      selector=latency  apporg=${developer_org_name_automation}  startage=12h
+      selector=latency  apporg=${developer_org_name_automation}  endage=1s
+      selector=latency  apporg=${developer_org_name_automation}  startage=12h  endage=1s
 
 # ECQ-3405
 Clientappusage - mcctl shall be able to request clientappusage deviceinfo metrics
@@ -60,27 +60,27 @@ Clientappusage - mcctl shall be able to request clientappusage deviceinfo metric
    [Tags]  DMEPersistentConnection
 
    [Template]  Success Clientappusage DeviceInfo Metrics Via mcctl
-      selector=deviceinfo  app-org=${developer_org_name_automation}
-      selector=deviceinfo  appname=${app_name_automation}  app-org=${developer_org_name_automation}
-      selector=deviceinfo  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0
-      selector=deviceinfo  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation
-      selector=deviceinfo  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}
-      selector=deviceinfo  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}
-      selector=deviceinfo  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}
-      selector=deviceinfo  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}  limit=1
-      selector=deviceinfo  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}
-      selector=deviceinfo  app-org=${developer_org_name_automation}  deviceos=${deviceos}
-      selector=deviceinfo  app-org=${developer_org_name_automation}  devicemodel=${devicemodel}
-      selector=deviceinfo  app-org=${developer_org_name_automation}  datanetworktype=${datanetworktype}
-      selector=deviceinfo  cloudlet-org=${operator_name_fake}  deviceos=${deviceos}
-      selector=deviceinfo  cloudlet-org=${operator_name_fake}  devicemodel=${devicemodel}
-      selector=deviceinfo  cloudlet-org=${operator_name_fake}  datanetworktype=${datanetworktype}
-      selector=deviceinfo  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}  cloudlet=${cloudlet_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}  deviceos=${deviceos}  devicemodel=${devicemodel}  datanetworktype=${datanetworktype}
-      selector=deviceinfo  app-org=${developer_org_name_automation}  numsamples=1
-      selector=deviceinfo  app-org=${developer_org_name_automation}  numsamples=100  starttime=${start_date}  endtime=${end_date}
-      selector=deviceinfo  app-org=${developer_org_name_automation}  startage=12h
-      selector=deviceinfo  app-org=${developer_org_name_automation}  endage=1s
-      selector=deviceinfo  app-org=${developer_org_name_automation}  startage=12h  endage=1s
+      selector=deviceinfo  apporg=${developer_org_name_automation}
+      selector=deviceinfo  appname=${app_name_automation}  apporg=${developer_org_name_automation}
+      selector=deviceinfo  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0
+      selector=deviceinfo  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation
+      selector=deviceinfo  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}
+      selector=deviceinfo  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}  cloudlet=${cloudlet_name_fake}
+      selector=deviceinfo  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}
+      selector=deviceinfo  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}  cloudlet=${cloudlet_name_fake}  limit=1
+      selector=deviceinfo  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}  cloudlet=${cloudlet_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}
+      selector=deviceinfo  apporg=${developer_org_name_automation}  deviceos=${deviceos}
+      selector=deviceinfo  apporg=${developer_org_name_automation}  devicemodel=${devicemodel}
+      selector=deviceinfo  apporg=${developer_org_name_automation}  datanetworktype=${datanetworktype}
+      selector=deviceinfo  cloudletorg=${operator_name_fake}  deviceos=${deviceos}
+      selector=deviceinfo  cloudletorg=${operator_name_fake}  devicemodel=${devicemodel}
+      selector=deviceinfo  cloudletorg=${operator_name_fake}  datanetworktype=${datanetworktype}
+      selector=deviceinfo  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}  cloudlet=${cloudlet_name_fake}  limit=1  starttime=${start_date}  endtime=${end_date}  deviceos=${deviceos}  devicemodel=${devicemodel}  datanetworktype=${datanetworktype}
+      selector=deviceinfo  apporg=${developer_org_name_automation}  numsamples=1
+      selector=deviceinfo  apporg=${developer_org_name_automation}  numsamples=100  starttime=${start_date}  endtime=${end_date}
+      selector=deviceinfo  apporg=${developer_org_name_automation}  startage=12h
+      selector=deviceinfo  apporg=${developer_org_name_automation}  endage=1s
+      selector=deviceinfo  apporg=${developer_org_name_automation}  startage=12h  endage=1s
 
 # ECQ-3364
 Clientappusage - mcctl shall handle clientappusage metrics failures
@@ -97,18 +97,18 @@ Clientappusage - mcctl shall handle clientappusage metrics failures
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=x
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=latency
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=latency appname=x
-      Error: Bad Request (400), Provided selector "custom" is not valid, must provide only one of "latency", "deviceinfo"\\n    selector=custom app-org=automation_dev_org
-      Error: Bad Request (400), Provided selector "x" is not valid, must provide only one of "latency", "deviceinfo"\\n         selector=x app-org=automation_dev_org
-      Error: Bad Request (400), DeviceOS not allowed for appinst latency metric                                                 selector=latency  app-org=automation_dev_org  deviceos=x
-      Error: Bad Request (400), DeviceModel not allowed for appinst latency metric                                              selector=latency  app-org=automation_dev_org  devicemodel=x
-      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z07:00"       selector=latency  app-org=automation_dev_org  starttime=x
-      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z07:00"         selector=latency  app-org=automation_dev_org  endtime=x
-      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                         selector=latency  cloudlet-org=automation_dev_org  startage=x
-      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                           selector=latency  cloudlet-org=automation_dev_org  endage=x
-      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                                               selector=latency  app-org=automation_dev_org  limit=x
-#      Error: Bad Request (400), LocationTile not allowed for appinst deviceinfo metric                                          selector=deviceinfo  app-org=automation_dev_org  locationtile=${locationtile}
+      Error: Bad Request (400), Provided selector "custom" is not valid, must provide only one of "latency", "deviceinfo"\\n    selector=custom apporg=automation_dev_org
+      Error: Bad Request (400), Provided selector "x" is not valid, must provide only one of "latency", "deviceinfo"\\n         selector=x apporg=automation_dev_org
+      Error: Bad Request (400), DeviceOS not allowed for appinst latency metric                                                 selector=latency  apporg=automation_dev_org  deviceos=x
+      Error: Bad Request (400), DeviceModel not allowed for appinst latency metric                                              selector=latency  apporg=automation_dev_org  devicemodel=x
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"       selector=latency  apporg=automation_dev_org  starttime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"         selector=latency  apporg=automation_dev_org  endtime=x
+      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                         selector=latency  cloudletorg=automation_dev_org  startage=x
+      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                           selector=latency  cloudletorg=automation_dev_org  endage=x
+      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                                               selector=latency  apporg=automation_dev_org  limit=x
+#      Error: Bad Request (400), LocationTile not allowed for appinst deviceinfo metric                                          selector=deviceinfo  apporg=automation_dev_org  locationtile=${locationtile}
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=deviceinfo
-      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                     selector=latency  app-org=automation_dev_org  numsamples=x
+      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                     selector=latency  apporg=automation_dev_org  numsamples=x
 
 *** Keywords ***
 Setup

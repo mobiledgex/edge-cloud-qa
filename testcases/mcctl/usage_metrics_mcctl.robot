@@ -27,12 +27,12 @@ Usage - mcctl shall be able to request cluster usage
    [Setup]  Cluster Setup
 
    [Template]  Success Cluster Usage Via mcctl
-      cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
-      cluster=${cluster_name}  cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
-      cluster=${cluster_name}  cluster-org=automation_dev_org  starttime=${start_date}  endtime=${end_date}
-      cluster=${cluster_name}  cluster-org=automation_dev_org  cloudlet=${cloudlet_name_fake}  starttime=${start_date}  endtime=${end_date}
-      cluster=${cluster_name}  cluster-org=automation_dev_org  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
-      cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      cluster=${cluster_name}  cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      cluster=${cluster_name}  clusterorg=automation_dev_org  starttime=${start_date}  endtime=${end_date}
+      cluster=${cluster_name}  clusterorg=automation_dev_org  cloudlet=${cloudlet_name_fake}  starttime=${start_date}  endtime=${end_date}
+      cluster=${cluster_name}  clusterorg=automation_dev_org  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
 
 # ECQ-3489
 Usage - mcctl shall be able to request app usage
@@ -43,27 +43,27 @@ Usage - mcctl shall be able to request app usage
    [Setup]  App Setup
 
    [Template]  Success App Usage Via mcctl
-      cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
-      app-org=automation_dev_org  starttime=${start_date}  endtime=${end_date}
+      cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      apporg=automation_dev_org  starttime=${start_date}  endtime=${end_date}
 
-      appname=${app_name}  cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
-      appname=${app_name}   app-org=automation_dev_org  starttime=${start_date}  endtime=${end_date}
-      appname=${app_name}   app-org=automation_dev_org  cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
-      appname=${app_name}   app-org=automation_dev_org  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
-      app-org=automation_dev_org  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
-      app-org=automation_dev_org  cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      appname=${app_name}  cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      appname=${app_name}   apporg=automation_dev_org  starttime=${start_date}  endtime=${end_date}
+      appname=${app_name}   apporg=automation_dev_org  cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      appname=${app_name}   apporg=automation_dev_org  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      apporg=automation_dev_org  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      apporg=automation_dev_org  cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
 
-      cluster=${cluster_name}  cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
-      cluster=${cluster_name}  app-org=automation_dev_org  starttime=${start_date}  endtime=${end_date}
-      cluster=${cluster_name}  app-org=automation_dev_org  cloudlet=${cloudlet_name_fake}  starttime=${start_date}  endtime=${end_date}
-      cluster=${cluster_name}  app-org=automation_dev_org  cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
-      cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      cluster=${cluster_name}  cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      cluster=${cluster_name}  apporg=automation_dev_org  starttime=${start_date}  endtime=${end_date}
+      cluster=${cluster_name}  apporg=automation_dev_org  cloudlet=${cloudlet_name_fake}  starttime=${start_date}  endtime=${end_date}
+      cluster=${cluster_name}  apporg=automation_dev_org  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
+      cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}
 
-      cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}  vmonly=false
-      app-org=automation_dev_org  starttime=${start_date}  endtime=${end_date}  vmonly=false
+      cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}  vmonly=false
+      apporg=automation_dev_org  starttime=${start_date}  endtime=${end_date}  vmonly=false
 
-      cloudlet-org=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}  vmonly=true
-      app-org=automation_dev_org  starttime=${start_date}  endtime=${end_date}  vmonly=true
+      cloudletorg=${operator_name_fake}  starttime=${start_date}  endtime=${end_date}  vmonly=true
+      apporg=automation_dev_org  starttime=${start_date}  endtime=${end_date}  vmonly=true
 
 # ECQ-3490
 Usage - mcctl shall be able to request cloudletpool usage
@@ -106,8 +106,8 @@ Usage - mcctl shall handle usage failures
       Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format  app  starttime=x  endtime=2021-06-14T20:49:56Z
       #Error: 2 error  app  starttime=x  endtime=y
       Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format  app  starttime=x  endtime=y
-      #Unable to parse "vmonly" value "x" as bool: invalid syntax, valid values are true, false  app  cloudlet-org=tmus  vmonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
-      Error: parsing arg "vmonly\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false  app  cloudlet-org=tmus  vmonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
+      #Unable to parse "vmonly" value "x" as bool: invalid syntax, valid values are true, false  app  cloudletorg=tmus  vmonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
+      Error: parsing arg "vmonly\=x" failed: unable to parse "x" as bool: invalid syntax, valid values are true, false  app  cloudletorg=tmus  vmonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
 
       #Error: Bad Request (400), Unable to retrieve CloudletPool info  cloudletpool  cloudletpool=x  cloudletpoolorg=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z  #returns empty list now
       #Unable to parse "showvmappsonly" value "x" as bool: invalid syntax, valid values are true, false  cloudletpool  cloudletpool=x  cloudletpoolorg=x  showvmappsonly=x  starttime=2021-06-13T20:39:56Z  endtime=2021-06-14T20:49:56Z
