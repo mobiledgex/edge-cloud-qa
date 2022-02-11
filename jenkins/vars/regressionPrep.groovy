@@ -1,4 +1,4 @@
-def regressionPrep1() {
+def regressionPrep1(dateValue) {
     try {
     parallel ({
         stage('Check Load/Create Cycle') {
@@ -36,7 +36,7 @@ def regressionPrep1() {
 }
 }
 
-def regressionPrep2() {
+def regressionPrep2(dateValue, cycle) {
     try {
     parallel ({
         stage('Deploy Chef') {
