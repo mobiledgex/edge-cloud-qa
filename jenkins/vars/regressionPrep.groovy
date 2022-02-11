@@ -1,5 +1,5 @@
 def regressionPrep1(dateValue) {
-    try {
+//    try {
     parallel ({
         stage('Check Load/Create Cycle') {
 //            steps {
@@ -25,15 +25,16 @@ def regressionPrep1(dateValue) {
 //            }
         }
     })
-    } catch(e) {
+//    } catch(e) {
 //    post {
 //        failure {
 //            script {
                 slackMessage.fail("Load check failed or create cycle failed for " + dateValue + ':' + e + '. Aborting')
+                error('Aborting the build')
 //            }
 //        }
 //    }
-}
+//}
 }
 
 def regressionPrep2(dateValue, cycle) {
