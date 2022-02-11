@@ -36,7 +36,7 @@ def regressionPrep1() {
 def regressionPrep2() {
     parallel {
         stage('Deploy Chef') {
-            when { expression { params.runDeploy == true } }
+            when { expression { params.RunDeploy == true } }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'deploy chef failed') {
                     script { deployChef(dateValue) }
@@ -53,7 +53,7 @@ def regressionPrep2() {
         }
 
         stage('Delete Openstack') {
-            when { expression { params.runDeploy == true } }
+            when { expression { params.RunDeploy == true } }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete openstack failed') {
                     script { deleteCrm.openstack(cycle) }
@@ -61,7 +61,7 @@ def regressionPrep2() {
             }
         }
         stage('Delete Anthos') {
-            when { expression { params.runDeploy == true } }
+            when { expression { params.RunDeploy == true } }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete anthos failed') {
                     script { deleteCrm.anthos(cycle) }
@@ -69,7 +69,7 @@ def regressionPrep2() {
             }
         }
         stage('Delete Fake') {
-            when { expression { params.runDeploy == true } }
+            when { expression { params.RunDeploy == true } }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete fake failed') {
                     script { deleteCrm.fake(cycle) }

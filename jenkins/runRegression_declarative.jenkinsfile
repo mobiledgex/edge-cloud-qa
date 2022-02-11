@@ -96,7 +96,7 @@ pipeline{
         }
 
         stage('Deploy backend in K8s') {
-            when { expression { params.runDeploy == true } }
+            when { expression { params.RunDeploy == true } }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'deploy failed') {
                     script {
@@ -120,7 +120,7 @@ pipeline{
         }
         
         stage('Create/Upgrade CRMs') {
-            when { expression { params.runDeploy == true } }
+            when { expression { params.RunDeploy == true } }
             parallel {
                 stage('Create Openstack') {
                     steps {
