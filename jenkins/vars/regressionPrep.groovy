@@ -1,5 +1,6 @@
 def regressionPrep1() {
-    parallel {
+    try {
+    parallel ({
         stage('Check Load/Create Cycle') {
             steps {
                 script {
@@ -23,18 +24,20 @@ def regressionPrep1() {
                 }
             }
         }
-    }
-    post {
-        failure {
-            script {
+    })
+    } catch(e) {
+//    post {
+//        failure {
+//            script {
                 slackMessage.fail("Load check failed or create cycle failed for " + dateValue + '. Aborting')
-            }
-        }
-    }
+//            }
+//        }
+//    }
 }
 
 def regressionPrep2() {
-    parallel {
+    try {
+    parallel ({
         stage('Deploy Chef') {
             when { expression { params.RunDeploy == true } }
             steps {
@@ -76,19 +79,21 @@ def regressionPrep2() {
                 }
             }
         }
-    }
-    post {
-        failure {
-            script {
+    })
+    slackMessage.good('Regression Prep successfull')
+    } catch (e) { 
+//    post {
+//        failure {
+//            script {
                 currentBuild.result = 'SUCCESS'
                  echo "SSSUUUUCCCCEEEESSS"
                  regression_prep_status = false
-            }
-        }
-        success {
-            script { slackMessage.good('Regression Prep successfull') }
-        }
-    }
+//            }
+//        }
+//        success {
+//            script { slackMessage.good('Regression Prep successfull') }
+//        }
+//    }
 }
 
 def regressionPrepCheck() {
