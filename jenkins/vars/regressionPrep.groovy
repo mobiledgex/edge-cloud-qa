@@ -7,7 +7,7 @@ def regressionPrep1(dateValue) {
 //                    dateValue = determineDateValue()
 //                    cycle = dateValue + '_' + params.Version
 //                    currentBuild.displayName = cycle
-                    slackMessage.good('Starting regression for ' + cycle)
+//                    slackMessage.good('Starting regression for ' + cycle)
                     checkLoadExists(dateValue)
                     createCycle(cycle)
                     addTestsToFolder(params.Version, params.Project, cycle)
@@ -29,8 +29,8 @@ def regressionPrep1(dateValue) {
 //    post {
 //        failure {
 //            script {
-                slackMessage.fail("Load check failed or create cycle failed for " + dateValue + ':' + e + '. Aborting')
-                error('Aborting the build')
+//                slackMessage.fail("Load check failed or create cycle failed for " + dateValue + ':' + e + '. Aborting')
+//                error('Aborting the build')
 //            }
 //        }
 //    }
