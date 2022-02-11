@@ -106,7 +106,8 @@ class tc(unittest.TestCase):
         except grpc.RpcError as e:
             print('error', type(e.code()), e.details())
             expect_equal(e.code(), grpc.StatusCode.UNKNOWN, 'status code')
-            expect_equal(e.details(), 'ClusterInst in use by Application Instance', 'error details')
+            #expect_equal(e.details(), 'ClusterInst in use by Application Instance', 'error details')
+            expect_equal(e.details(), 'ClusterInst in use by AppInst {"app_key":{"organization":"' + developer_name + '","name":"' + app_name + '","version":"' + app_version + '"},"cluster_inst_key":{"cluster_key":{"name":"' + cluster_name + '"},"cloudlet_key":{"organization":"' + operator_name + '","name":"' + cloud_name + '"},"organization":"' + developer_name +'"}}', 'error details')
         else:
             print('cluster deleted')
 

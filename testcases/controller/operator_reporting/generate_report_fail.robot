@@ -75,7 +75,7 @@ Generate Report - Controller throws error if start time format is invalid
     @{index2}=  Split String  ${start_date}  ${SPACE}
     ${start_date}=  Catenate  SEPARATOR=  ${index2[0]}  T${index2[1]}+0530
 
-    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal time \\\\"${start_date}\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}')  Generate Report  organization=${operator}  start_time=${start_date}  end_time=${end_date}  timezone=Asia/Kolkata  use_defaults=${False}  token=${op1_token}
+    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal time \\\\\"${start_date}\\\\\" failed, valid values are RFC3339 format, i.e. \\\\\"2006-01-02T15:04:05Z\\\\\", or \\\\\"2006-01-02T15:04:05+07:00\\\\\""}')  Generate Report  organization=${operator}  start_time=${start_date}  end_time=${end_date}  timezone=Asia/Kolkata  use_defaults=${False}  token=${op1_token}
 
 # ECQ-3817
 Generate Report - Controller throws error if end time format is invalid
@@ -91,7 +91,7 @@ Generate Report - Controller throws error if end time format is invalid
     @{index2}=  Split String  ${start_date}  ${SPACE}
     ${start_date}=  Catenate  SEPARATOR=  ${index2[0]}  T${index2[1]}+05:30
 
-    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal time \\\\"${end_date}\\\\" failed, valid values are RFC3339 format, i.e. \\\\"2006-01-02T15:04:05Z07:00\\\\""}')  Generate Report  organization=${operator}  start_time=${start_date}  end_time=${end_date}  timezone=Asia/Kolkata  use_defaults=${False}  token=${op1_token}
+    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal time \\\\\"${end_date}\\\\\" failed, valid values are RFC3339 format, i.e. \\\\\"2006-01-02T15:04:05Z\\\\\", or \\\\\"2006-01-02T15:04:05+07:00\\\\\""}')  Generate Report  organization=${operator}  start_time=${start_date}  end_time=${end_date}  timezone=Asia/Kolkata  use_defaults=${False}  token=${op1_token}
 
 *** Keywords ***
 Setup
