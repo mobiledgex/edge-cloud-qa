@@ -419,8 +419,8 @@ class MexMasterController(MexRest):
         orginfo = 'Name:' + self.org + '  Type:' + self.orgtype + '  Address:' + self.address + '  Phone:' + self.phone
         return orginfo
 
-    def login(self, username=None, password=None, totp=None, json_data=None, use_defaults=True, use_thread=False):
-        login_return = self.login_class.login(username=username, password=password, totp=totp, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def login(self, username=None, password=None, totp=None, apikey_id=None, apikey=None, json_data=None, use_defaults=True, use_thread=False):
+        login_return = self.login_class.login(username=username, password=password, totp=totp, apikey_id=apikey_id, apikey=apikey, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
         self.token = login_return['token']
         if username == self.admin_username:
@@ -474,6 +474,15 @@ class MexMasterController(MexRest):
 
     def show_role_permissions(self, role=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.role.role_perms(token=token, role=role, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_user_api_key(self, organization=None, description=None, permission_list=[], token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.create_user_api_key(organization=organization, description=description, permission_list=permission_list, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_user_api_key(self, apikey_id=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.delete_user_api_key(apikey_id=apikey_id, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_user_api_key(self, token=None, json_data=None, use_thread=False):
+        return self.user.show_user_api_key(token=token, json_data=json_data, use_thread=use_thread)
 
     def new_password(self, password=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/newpass'

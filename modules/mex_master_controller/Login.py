@@ -17,7 +17,7 @@ class Login(MexOperation):
 
         self.login_url = '/login'
 
-    def _build(self, username=None, password=None, totp=None, use_defaults=True):
+    def _build(self, username=None, password=None, totp=None, apikey_id=None, apikey=None, use_defaults=True):
         if use_defaults:
             if username is None:
                 username = shared_variables_mc.username_default
@@ -37,11 +37,15 @@ class Login(MexOperation):
             shared_variables_mc.password_default = password
         if totp is not None:
             login_dict['totp'] = str(totp)
+        if apikey_id is not None:
+            login_dict['apikeyid'] = str(apikey_id)
+        if apikey is not None:
+            login_dict['apikey'] = str(apikey)
 
         return login_dict
 
-    def login(self, username=None, password=None, totp=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(username=username, password=password, totp=totp, use_defaults=use_defaults)
+    def login(self, username=None, password=None, totp=None, apikey_id=None, apikey=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(username=username, password=password, totp=totp, apikey_id=apikey_id, apikey=apikey, use_defaults=use_defaults)
         msg_dict = msg
 
         return self.create(token=None, url=self.login_url, json_data=json_data, use_defaults=False, use_thread=use_thread, create_msg=msg_dict)
