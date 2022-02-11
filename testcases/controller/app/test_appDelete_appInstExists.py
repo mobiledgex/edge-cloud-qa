@@ -103,7 +103,8 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(apps_post)
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Application in use by static AppInst', 'error details')
+        #expect_equal(error.details(), 'Application in use by static AppInst', 'error details')
+        expect_equal(error.details(), 'Application in use by static AppInst {"app_key":{"organization":"' + developer_name + '","name":"' + app_name + '","version":"' + app_version + '"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"organization":"' + operator_name + '","name":"' + cloud_name + '"},"organization":"MobiledgeX"}}', 'error details')
         expect_equal(found_app, True, 'find app')
 
         assert_expectations()
