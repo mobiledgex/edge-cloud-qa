@@ -1,6 +1,6 @@
 def call(cycle) {
     stage('MC') {
-        when { params.runMCTests == true }
+        when { expression { params.runMCTests == true } }
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Rerun MC tests failed') {
             build job: 'runMcTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeMasterController),
@@ -15,7 +15,7 @@ def call(cycle) {
     }
 
     stage('Controller') {
-        when { params.runControllerTests == true }
+        when { expression { params.runControllerTests == true } }
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Rerun Controller tests failed') {
             build job: 'runControllerTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeController),
@@ -34,7 +34,7 @@ def call(cycle) {
     }
 
     stage('DME') {
-        when { params.runDMETests == true }
+        when { expression { params.runDMETests == true } }
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Rerun DME tests failed') {
             build job: 'runDmeTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeDME),
