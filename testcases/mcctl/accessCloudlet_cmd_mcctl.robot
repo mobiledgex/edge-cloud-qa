@@ -54,7 +54,7 @@ ${nodenamevs} =
 ${nodenameos} =
 ${cluster_org} =
 
-# mcctl --addr https://console-qa.mobiledgex.net:443 --skipverify region AccessCloudlet region=EU cloudlet=automationParadiseCloudlet cloudlet-org=GDDT node-type=sharedrootlb command=ls;exit
+# mcctl --addr https://console-qa.mobiledgex.net:443 --skipverify region AccessCloudlet region=EU cloudlet=automationParadiseCloudlet cloudletorg=GDDT nodetype=sharedrootlb command=ls;exit
 
 
 *** Test Cases ***
@@ -70,16 +70,16 @@ AccessCloudlet - mcctl shall handle error messages
    [Template]  Fail AccessCloudlet Command Via mcctl
 
       Error: missing required args                                           region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}
-      Error: parsing arg "notcloudlet-org\=GDDT" failed: invalid argument: key "notcloudlet-org" not found   region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  notcloudlet-org=${operator_name_openstack}   
-      Error: missing required args: cloudlet                                 region=${region_US}  cloudlet-org=${operator_name_openstack} node-type=sharedrootlb  command=exit
-      Error: missing required args: region                                                        cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack} node-type=sharedrootlb  command=exit
-      Error: Bad Request (400), No cloudlet mgmt node specified              region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  command=a
-      Error: Bad Request (400), Unable to find specified cloudlet mgmt node  region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack} node-type=sharedrootlb node-name=test  command=exit
-      Error: Bad Request (400), Too many nodes matched                       region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack} node-type=  command=exit
-      Error: unable to fetch access URL                                      region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=  node-type=sharedrootlb  command=exit
-      Error: Bad Request (400), No run command specified                     region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}
-      Error: Bad Request (400), Region "ZZ" not found                        region=ZZ            cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  command=exit
-      Error: arg "Error:" not name=val format                                region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  command= exit
+      Error: parsing arg "notcloudletorg\=GDDT" failed: invalid argument: key "notcloudletorg" not found   region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  notcloudletorg=${operator_name_openstack}   
+      Error: missing required args: cloudlet                                 region=${region_US}  cloudletorg=${operator_name_openstack} nodetype=sharedrootlb  command=exit
+      Error: missing required args: region                                                        cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack} nodetype=sharedrootlb  command=exit
+      Error: Bad Request (400), No cloudlet mgmt node specified              region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack}  command=a
+      Error: Bad Request (400), Unable to find specified cloudlet mgmt node  region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack} nodetype=sharedrootlb nodename=test  command=exit
+      Error: Bad Request (400), Too many nodes matched                       region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack} nodetype=  command=exit
+      Error: unable to fetch access URL                                      region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=  nodetype=sharedrootlb  command=exit
+      Error: Bad Request (400), No run command specified                     region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack}
+      Error: Bad Request (400), Region "ZZ" not found                        region=ZZ            cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack}  command=exit
+      Error: arg "Error:" not name=val format                                region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack}  command= exit
 
 
 #ECQ-2966 
@@ -93,14 +93,14 @@ AccessCloudlet - mcctl shall pass cli commands to specified cloudlet and node
    [Template]  Check Response For CLI Sent
 
 #platformvm
-      crmserver  shepherd  cloudletPrometheus  region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=platformvm  node-name=${platformvm}  command="docker ps;exit"
-      command2c  shepherd  cloudletPrometheus  region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=platformvm  node-name=${platformvm}  command="docker logs --tail 100 crmserver >2&1 | grep 140738018"
-      empty      empty     shepherd            region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=platformvm  node-name=${platformvm}  command="stty cols 210;docker logs --tail 12 shepherd"
-      empty      empty     crmserver           region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=platformvm  node-name=${platformvm}  command="stty cols 210;docker logs --tail 10 crmserver"
-      logme      empty     empty               region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=platformvm  node-name=${platformvm}  command="touch logme;ls -l"
-      No such file or directory  empty  empty  region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=platformvm  node-name=${platformvm}  command="rm logme;ls -l logme"
+      crmserver  shepherd  cloudletPrometheus  region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack}  nodetype=platformvm  nodename=${platformvm}  command="docker ps;exit"
+      command2c  shepherd  cloudletPrometheus  region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack}  nodetype=platformvm  nodename=${platformvm}  command="docker logs --tail 100 crmserver >2&1 | grep 140738018"
+      empty      empty     shepherd            region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack}  nodetype=platformvm  nodename=${platformvm}  command="stty cols 210;docker logs --tail 12 shepherd"
+      empty      empty     crmserver           region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack}  nodetype=platformvm  nodename=${platformvm}  command="stty cols 210;docker logs --tail 10 crmserver"
+      logme      empty     empty               region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack}  nodetype=platformvm  nodename=${platformvm}  command="touch logme;ls -l"
+      No such file or directory  empty  empty  region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack}  nodetype=platformvm  nodename=${platformvm}  command="rm logme;ls -l logme"
 #sharedrootlb
-      command2c  envoy     empty               region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=sharedrootlb  node-name=${sharedrootlb}  command="ls -lcth | grep nothing;exit"
+      command2c  envoy     empty               region=${region_US}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudletorg=${operator_name_openstack}  nodetype=sharedrootlb  nodename=${sharedrootlb}  command="ls -lcth | grep nothing;exit"
 
 
 #ECQ-2967
@@ -113,9 +113,9 @@ AccessCloudlet - mcctl shall pass cli commands to a dedicatedrootlb
    [Template]  Check Dedicated Cluster For CLI Sent
 
 #dedicatedrootlb vsphere - using to conservere resources
-      CONTAINER  ID  envoy                            region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudlet-org=${operator_name_vsphere}  node-type=dedicatedrootlb  node-name=${vs_nodename}  command="docker ps;exit"
-      REPOSITORY  TAG  SIZE                           region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudlet-org=${operator_name_vsphere}  node-type=dedicatedrootlb  node-name=${vs_nodename}  command="docker images;exit"
-      ${vs_clusterk8sconfigfile}  kubeconfig  empty   region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudlet-org=${operator_name_vsphere}  node-type=dedicatedrootlb  node-name=${vs_nodename}  command="ls -l;exit"
+      CONTAINER  ID  envoy                            region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudletorg=${operator_name_vsphere}  nodetype=dedicatedrootlb  nodename=${vs_nodename}  command="docker ps;exit"
+      REPOSITORY  TAG  SIZE                           region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudletorg=${operator_name_vsphere}  nodetype=dedicatedrootlb  nodename=${vs_nodename}  command="docker images;exit"
+      ${vs_clusterk8sconfigfile}  kubeconfig  empty   region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudletorg=${operator_name_vsphere}  nodetype=dedicatedrootlb  nodename=${vs_nodename}  command="ls -l;exit"
 
 
 

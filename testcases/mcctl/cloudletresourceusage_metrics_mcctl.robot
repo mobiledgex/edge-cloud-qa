@@ -25,23 +25,23 @@ Cloudletusage - mcctl shall be able to request resourceusage metrics
    ...  - verify success
 
    [Template]  Success Cloudletresourceusage Metrics Via mcctl
-        cloudlet-org=${operator_name_fake}
-        cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  
-        cloudlet-org=${operator_name_fake}  limit=1
-        cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
-        cloudlet-org=${operator_name_fake}  numsamples=1
-        cloudlet-org=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
-        cloudlet-org=${operator_name_fake}  startage=12h
-        cloudlet-org=${operator_name_fake}  endage=1s
-        cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
+        cloudletorg=${operator_name_fake}
+        cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  
+        cloudletorg=${operator_name_fake}  limit=1
+        cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
+        cloudletorg=${operator_name_fake}  numsamples=1
+        cloudletorg=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
+        cloudletorg=${operator_name_fake}  startage=12h
+        cloudletorg=${operator_name_fake}  endage=1s
+        cloudletorg=${operator_name_fake}  startage=12h  endage=1s
 
-        cloudlets:0.cloudlet-org=${operator_name_fake}
-        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudlet-org=${operator_name_fake}
-        cloudlets:0.cloudlet-org=${operator_name_fake}  cloudlets:1.cloudlet-org=${operator_name_openstack}
-        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudlet-org=${operator_name_fake}  cloudlets:1.cloudlet=${cloudlet_name_openstack}  cloudlets:1.cloudlet-org=${operator_name_openstack}
-        cloudlets:0.cloudlet-org=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
-        cloudlets:0.cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
-        cloudlets:0.cloudlet-org=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
+        cloudlets:0.cloudletorg=${operator_name_fake}
+        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudletorg=${operator_name_fake}
+        cloudlets:0.cloudletorg=${operator_name_fake}  cloudlets:1.cloudletorg=${operator_name_openstack}
+        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudletorg=${operator_name_fake}  cloudlets:1.cloudlet=${cloudlet_name_openstack}  cloudlets:1.cloudletorg=${operator_name_openstack}
+        cloudlets:0.cloudletorg=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
+        cloudlets:0.cloudletorg=${operator_name_fake}  startage=12h  endage=1s
+        cloudlets:0.cloudletorg=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
 
 # ECQ-4066
 Cloudletusage - mcctl shall be able to request flavorusage metrics
@@ -50,23 +50,23 @@ Cloudletusage - mcctl shall be able to request flavorusage metrics
    ...  - verify success
 
    [Template]  Success Cloudletflavorusage Metrics Via mcctl
-        cloudlet-org=${operator_name_fake}
-        cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}
-        cloudlet-org=${operator_name_fake}  limit=1
-        cloudlet=${cloudlet_name_fake}  cloudlet-org=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
-        cloudlet-org=${operator_name_fake}  numsamples=1
-        cloudlet-org=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
-        cloudlet-org=${operator_name_fake}  startage=12h
-        cloudlet-org=${operator_name_fake}  endage=1s
-        cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
+        cloudletorg=${operator_name_fake}
+        cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}
+        cloudletorg=${operator_name_fake}  limit=1
+        cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
+        cloudletorg=${operator_name_fake}  numsamples=1
+        cloudletorg=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
+        cloudletorg=${operator_name_fake}  startage=12h
+        cloudletorg=${operator_name_fake}  endage=1s
+        cloudletorg=${operator_name_fake}  startage=12h  endage=1s
 
-        cloudlets:0.cloudlet-org=${operator_name_fake}
-        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudlet-org=${operator_name_fake}
-        cloudlets:0.cloudlet-org=${operator_name_fake}  cloudlets:1.cloudlet-org=${operator_name_openstack}
-        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudlet-org=${operator_name_fake}  cloudlets:1.cloudlet=${cloudlet_name_openstack}  cloudlets:1.cloudlet-org=${operator_name_openstack}
-        cloudlets:0.cloudlet-org=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
-        cloudlets:0.cloudlet-org=${operator_name_fake}  startage=12h  endage=1s
-        cloudlets:0.cloudlet-org=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
+        cloudlets:0.cloudletorg=${operator_name_fake}
+        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudletorg=${operator_name_fake}
+        cloudlets:0.cloudletorg=${operator_name_fake}  cloudlets:1.cloudletorg=${operator_name_openstack}
+        cloudlets:0.cloudlet=${cloudlet_name_fake}  cloudlets:0.cloudletorg=${operator_name_fake}  cloudlets:1.cloudlet=${cloudlet_name_openstack}  cloudlets:1.cloudletorg=${operator_name_openstack}
+        cloudlets:0.cloudletorg=${operator_name_fake}  limit=100  starttime=${start_date}  endtime=${end_date}
+        cloudlets:0.cloudletorg=${operator_name_fake}  startage=12h  endage=1s
+        cloudlets:0.cloudletorg=${operator_name_fake}  numsamples=100  starttime=${start_date}  endtime=${end_date}
 
 # ECQ-4275
 Cloudletusage - mcctl help shall show
