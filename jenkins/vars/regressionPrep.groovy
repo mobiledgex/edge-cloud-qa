@@ -12,17 +12,17 @@ def regressionPrep1(dateValue) {
                     createCycle(cycle)
                     addTestsToFolder(params.Version, params.Project, cycle)
 //                }
-            }
+//            }
         }
         stage('Cleanup Provisioning') {
 //            steps{
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'cleanup provisioning failed') {
+//                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'cleanup provisioning failed') {
                     build job: 'cleanupAutomationProvisioning'
-                    script {
+//                    script {
                         defragEtcd()
 //                    }
-                }
-            }
+//                }
+//            }
         }
     })
     } catch(e) {
