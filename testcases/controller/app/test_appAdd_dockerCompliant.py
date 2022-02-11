@@ -27,7 +27,7 @@ cluster_name = 'cluster' + stamp
 #app_name = 'app' + stamp
 app_name = 'server_ping_threaded'
 app = 'server_ping_threaded' + stamp
-app_version = '5.0'
+app_version = '12.0'
 access_ports = 'tcp:1'
 docker = 'docker-qa.mobiledgex.net'
 
