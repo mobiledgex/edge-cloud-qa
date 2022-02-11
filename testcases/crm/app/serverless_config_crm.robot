@@ -25,11 +25,13 @@ ${longitude}      -96.7970
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
-# ECQ-2505
+# ECQ-4342
 Serverless - shall be able to create appinst with server config of ram=1024, vcpu=1, replicas=1
     [Documentation]
     ...  - deploy k8s app with allowserverless=true ram=1024, vcpu=1, replicas=1
     ...  - verify pod comes up with correct configuration
+
+    [Tags]  Serverless
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  allow_serverless=${True}  serverless_config_ram=1024  serverless_config_vcpus=1  serverless_config_min_replicas=1
@@ -43,10 +45,13 @@ Serverless - shall be able to create appinst with server config of ram=1024, vcp
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
+# ECQ-4343
 Serverless - shall be able to create appinst with server config of ram=2000, vcpu=2, replicas=2
     [Documentation]
     ...  - deploy k8s app with allowserverless=true ram=2000, vcpu=2, replicas=2
     ...  - verify pod comes up with correct configuration
+
+    [Tags]  Serverless
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  allow_serverless=${True}  serverless_config_ram=2000  serverless_config_vcpus=2  serverless_config_min_replicas=2
@@ -60,10 +65,13 @@ Serverless - shall be able to create appinst with server config of ram=2000, vcp
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
+# ECQ-4344
 Serverless - shall be able to create appinst with server config of ram=4096, vcpu=3, replicas=3
     [Documentation]
     ...  - deploy k8s app with allowserverless=true ram=4096, vcpu=3, replicas=3
     ...  - verify pod comes up with correct configuration
+
+    [Tags]  Serverless
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  allow_serverless=${True}  serverless_config_ram=4096  serverless_config_vcpus=3  serverless_config_min_replicas=3
@@ -77,10 +85,13 @@ Serverless - shall be able to create appinst with server config of ram=4096, vcp
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
+# ECQ-4345
 Serverless - shall be able to create appinst with allowserverless=True and no config
     [Documentation]
     ...  - deploy k8s app with allowserverless=true only
     ...  - verify pod comes up with correct configuration from defaultflavor
+
+    [Tags]  Serverless
 
     ${flavor_default}=  Get Default Flavor Name
 
@@ -98,10 +109,13 @@ Serverless - shall be able to create appinst with allowserverless=True and no co
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
+# ECQ-4346
 Serverless - shall be able to create appinst with allowserverless=True and ram only
     [Documentation]
     ...  - deploy k8s app with allowserverless=true and ram only
     ...  - verify pod comes up with correct configuration
+
+    [Tags]  Serverless
 
     ${flavor_default}=  Get Default Flavor Name
 
@@ -119,10 +133,13 @@ Serverless - shall be able to create appinst with allowserverless=True and ram o
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
+# ECQ-4347
 Serverless - shall be able to create appinst with allowserverless=True and vcpus only
     [Documentation]
     ...  - deploy k8s app with allowserverless=true and vcpus only
     ...  - verify pod comes up with correct configuration
+
+    [Tags]  Serverless
 
     ${flavor_default}=  Get Default Flavor Name
 
@@ -140,10 +157,13 @@ Serverless - shall be able to create appinst with allowserverless=True and vcpus
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
-Serverless - shall be able to create appinst with allowserverless=True and replicas
+# ECQ-4348
+Serverless - shall be able to create appinst with allowserverless=True and replicas only
     [Documentation]
     ...  - deploy k8s app with allowserverless=true and replicas only
     ...  - verify pod comes up with correct configuration
+
+    [Tags]  Serverless
 
     ${flavor_default}=  Get Default Flavor Name
 
@@ -161,10 +181,13 @@ Serverless - shall be able to create appinst with allowserverless=True and repli
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
+# ECQ-4349
 Serverless - shall be able to create appinst with server config and ram=1024, vcpu=0.5, replicas=1
     [Documentation]
     ...  - deploy k8s app with allowserverless=true and ram=1024, vcpu=0.5, replicas=1
     ...  - verify pod comes up with correct configuration
+
+    [Tags]  Serverless
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  allow_serverless=${True}  serverless_config_ram=1024  serverless_config_vcpus=0.5  serverless_config_min_replicas=1
@@ -178,10 +201,13 @@ Serverless - shall be able to create appinst with server config and ram=1024, vc
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
+# ECQ-4350
 Serverless - shall be able to create appinst with server config and ram=1024, vcpu=4.444, replicas=2
     [Documentation]
     ...  - deploy k8s app with allowserverless=true and ram=1024, vcpu=4.444, replicas=2
     ...  - verify pod comes up with correct configuration
+
+    [Tags]  Serverless
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  allow_serverless=${True}  serverless_config_ram=1024  serverless_config_vcpus=4.444  serverless_config_min_replicas=2
@@ -195,10 +221,13 @@ Serverless - shall be able to create appinst with server config and ram=1024, vc
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
+# ECQ-4351
 Serverless - shall be able to create appinst with server config and ram=1024, vcpu=0.001, replicas=2
     [Documentation]
     ...  - deploy k8s app with allowserverless=true and ram=1024, vcpu=0.001, replicas=2 
     ...  - verify pod comes up with correct configuration
+
+    [Tags]  Serverless
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  allow_serverless=${True}  serverless_config_ram=1024  serverless_config_vcpus=0.001  serverless_config_min_replicas=2
@@ -212,10 +241,15 @@ Serverless - shall be able to create appinst with server config and ram=1024, vc
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
+# ECQ-4352
 Serverless - shall be able to create appinst with server config of ram=50000, vcpu=500, replicas=500
     [Documentation]
     ...  - deploy k8s app with allowserverless=true and ram=5000, vcpu=5, replicas=5
     ...  - verify error is returned for not enough resources 
+
+    [Tags]  Serverless
+
+    EDGECLOUD-6111 appinst create on anthos with resources that are too large returns success but pods still pending
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  allow_serverless=${True}  serverless_config_ram=50000  serverless_config_vcpus=500  serverless_config_min_replicas=500
@@ -225,11 +259,14 @@ Serverless - shall be able to create appinst with server config of ram=50000, vc
 
     Pod Should Be Configured Correctly  memory=5000Mi  cpu=5
 
+# ECQ-4353
 Serverless - app1 shall not be able to reach app2
     [Documentation]
     ...  - deploy 2 k8s app with allowserverless=true 
     ...  - verify pod comes up with correct configuration
     ...  - verify each pod cannot reach the http port of the other pod
+
+    [Tags]  Serverless
 
     ${kubeconfig1}=  Replace String  ${kubeconfig}  ${app_name_default}  ${app_name_default}1
     ${kubeconfig2}=  Replace String  ${kubeconfig}  ${app_name_default}  ${app_name_default}2
@@ -255,8 +292,8 @@ Serverless - app1 shall not be able to reach app2
     Wait for K8s Pod To Be Running  root_loadbalancer=${clusterlb}  kubeconfig=${kubeconfig1}  pod_name=${app_name_default}1  number_of_pods=1
     Wait for K8s Pod To Be Running  root_loadbalancer=${clusterlb}  kubeconfig=${kubeconfig2}  pod_name=${app_name_default}2  number_of_pods=1
 
-    Pod Should Be Configured Correctly  memory=1Gi  cpu=1m  kubeconfig_file=${kubeconfig1} 
-    Pod Should Be Configured Correctly  memory=1Gi  cpu=1m  kubeconfig_file=${kubeconfig2}
+    Pod Should Be Configured Correctly  memory=1Gi  cpu=1  kubeconfig_file=${kubeconfig1} 
+    Pod Should Be Configured Correctly  memory=1Gi  cpu=1  kubeconfig_file=${kubeconfig2}
 
     Ports Should Be Alive  http=${True}
  
@@ -274,9 +311,44 @@ Serverless - app1 shall not be able to reach app2
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}1
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}2
 
+# ECQ-4354
+Serverless - shall be able to update appinst with server config
+    [Documentation]
+    ...  - deploy k8s app with allowserverless=true ram=1024, vcpu=1, replicas=1
+    ...  - verify pod comes up with correct configuration
+    ...  - update the app to ram=2048, vcpu=2, replicas=2
+    ...  - refresh the appinst
+    ...  - verify pod comes up with new configuration
+
+    [Tags]  Serverless
+
+    Log To Console  Creating App and App Instance
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2016  allow_serverless=${True}  serverless_config_ram=1024  serverless_config_vcpus=1  serverless_config_min_replicas=1
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+
+    Wait for K8s Pod To Be Running  root_loadbalancer=${clusterlb}  kubeconfig=${kubeconfig}  pod_name=${app_name_default}  number_of_pods=1
+
+    Pod Should Be Configured Correctly  memory=1Gi  cpu=1
+
+    Ports Should Be Alive
+
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+
+    Update App  region=${region}  serverless_config_ram=2048  serverless_config_vcpus=2  serverless_config_min_replicas=2
+    Refresh App Instance  region=${region}
+
+    Wait for K8s Pod To Be Running  root_loadbalancer=${clusterlb}  kubeconfig=${kubeconfig}  pod_name=${app_name_default}  number_of_pods=2
+
+    Pod Should Be Configured Correctly  memory=2Gi  cpu=2
+
+    Ports Should Be Alive
+
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+
 *** Keywords ***
 Setup
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    #${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}  ${operator_name_crm}  ${mobiledgex_domain}
+    ${rootlb}=  Set Variable  ${cloudlet_name_crm}-${operator_name_crm}.${region}.${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
@@ -301,7 +373,7 @@ Setup
 
         ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
     ELSE
-        ${clusterlb}=  Catenate  SEPARATOR=.  defaultclust  ${rootlb}
+        ${clusterlb}=  Catenate  SEPARATOR=.  shared  ${rootlb}
         ${dev_name_hyphen}=  Replace String  ${dev_name}  _  -
         ${app_version_change}=  Replace String  ${app_version_default}  .  ${EMPTY}
         ${kubeconfig}=  Set Variable  defaultclust.${operator_name_crm}.${dev_name_hyphen}-${app_name_default}-${app_version_change}-${cluster_name_default}
