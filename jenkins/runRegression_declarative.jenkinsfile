@@ -74,7 +74,7 @@ pipeline{
                     dateValue = determineDateValue()
                     cycle = dateValue + '_' + params.Version
                     currentBuild.displayName = cycle
-                    regressionPrep1()
+                    regressionPrep.regressionPrep1()
                  }
             }
         }
@@ -82,7 +82,7 @@ pipeline{
         stage('Regression Prep 2') {
             steps {
                 script {
-                    regressionPrep2()
+                    regressionPrep.regressionPrep2()
                 }
             }
         }
@@ -90,7 +90,7 @@ pipeline{
         stage('Regression Prep Check') {
             steps {
                 script {
-                    regressionPrepCheck()
+                    regressionPrep.regressionPrepCheck()
                 }
             }
         }
