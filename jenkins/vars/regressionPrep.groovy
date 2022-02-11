@@ -29,7 +29,7 @@ def regressionPrep1(dateValue) {
 //    post {
 //        failure {
 //            script {
-                slackMessage.fail("Load check failed or create cycle failed for " + dateValue + '. Aborting')
+                slackMessage.fail("Load check failed or create cycle failed for " + dateValue + ':' + e + '. Aborting')
 //            }
 //        }
 //    }
