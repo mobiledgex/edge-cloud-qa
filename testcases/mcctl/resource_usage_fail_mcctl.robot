@@ -209,14 +209,14 @@ Metrics Cloudletusage - mcctl shall handle failures
       Error: Bad Request (400), Cloudlet details must be present  cloudlet=automationSunnydaleCloudlet selector=flavorusage
 
       # invalid values
-      Error: Bad Request (400), Cloudlet does not exist  cloudlet-org=x selector=resourceusage
-      Error: Bad Request (400), Invalid cloudletusage selector: x, must be one of "resourceusage", "flavorusage"  selector=x cloudlet-org=${operator_name_openstack}
-      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"      selector=resourceusage cloudlet-org=${operator_name_openstack} starttime=x
-      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"        selector=resourceusage cloudlet-org=${operator_name_openstack} endtime=x
-      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc         selector=resourceusage cloudlet-org=${operator_name_openstack} startage=x
-      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc           selector=resourceusage cloudlet-org=${operator_name_openstack} endage=x
-      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                               selector=resourceusage cloudlet-org=${operator_name_openstack} limit=x
-      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                                          selector=resourceusage cloudlet-org=${operator_name_openstack} numsamples=x
+      Error: Bad Request (400), Cloudlet does not exist  cloudletorg=x selector=resourceusage
+      Error: Bad Request (400), Invalid cloudletusage selector: x, must be one of "resourceusage", "flavorusage"  selector=x cloudletorg=${operator_name_openstack}
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"      selector=resourceusage cloudletorg=${operator_name_openstack} starttime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"        selector=resourceusage cloudletorg=${operator_name_openstack} endtime=x
+      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc         selector=resourceusage cloudletorg=${operator_name_openstack} startage=x
+      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc           selector=resourceusage cloudletorg=${operator_name_openstack} endage=x
+      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                               selector=resourceusage cloudletorg=${operator_name_openstack} limit=x
+      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                                          selector=resourceusage cloudletorg=${operator_name_openstack} numsamples=x
 
 *** Keywords ***
 Setup
