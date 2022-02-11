@@ -3,9 +3,9 @@ def regressionPrep1() {
         stage('Check Load/Create Cycle') {
             steps {
                 script {
-#                    dateValue = determineDateValue()
-#                    cycle = dateValue + '_' + params.Version
-#                    currentBuild.displayName = cycle
+//                    dateValue = determineDateValue()
+//                    cycle = dateValue + '_' + params.Version
+//                    currentBuild.displayName = cycle
                     slackMessage.good('Starting regression for ' + cycle)
                     checkLoadExists(dateValue)
                     createCycle(cycle)
