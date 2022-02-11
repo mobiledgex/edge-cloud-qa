@@ -22,7 +22,7 @@ ${operator_name_openstack}  GDDT
 ${docker_image}    docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0
 ${docker_command}  ./server_ping_threaded.py
 
-${num_lines}=  13
+${num_lines}=  14
 
 ${test_timeout_crm}  15 min
 
@@ -61,7 +61,7 @@ ShowLogs - k8s shared shall return logs on CRM
 
     # with since
     Sleep  60 
-    TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}  tag=${app_inst['data']['key']['app_key']['name']}
+    TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}  app_name=${app_inst['data']['key']['app_key']['name']}
     ${stdout_since}=  Show Logs  region=${region}  since=${since}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with wrong containerid
@@ -84,7 +84,7 @@ ShowLogs - k8s shared shall return logs on CRM
     Length Should Be  ${stdout_id_lines}           ${num_lines}
     Length Should Be  ${stdout_tail_lines}         1
     Length Should Be  ${stdout_timestamps_lines}   3
-    Length Should Be  ${stdout_since_lines}        2
+    Length Should Be  ${stdout_since_lines}        3
 
 # ECQ-1888
 ShowLogs - k8s dedicated shall return logs on CRM
@@ -121,7 +121,7 @@ ShowLogs - k8s dedicated shall return logs on CRM
 
     # with since
     Sleep  60 
-    TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}  tag=${app_inst['data']['key']['app_key']['name']}
+    TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}  app_name=${app_inst['data']['key']['app_key']['name']}
     ${stdout_since}=  Show Logs  region=${region}  since=${since}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_developer_name}
 
     # with wrong containerid
@@ -144,7 +144,7 @@ ShowLogs - k8s dedicated shall return logs on CRM
     Length Should Be  ${stdout_id_lines}           ${num_lines}
     Length Should Be  ${stdout_tail_lines}         1
     Length Should Be  ${stdout_timestamps_lines}   3
-    Length Should Be  ${stdout_since_lines}        2
+    Length Should Be  ${stdout_since_lines}        3
 
 # ECQ-1889
 ShowLogs - docker dedicated shall return logs on CRM

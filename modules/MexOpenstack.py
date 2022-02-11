@@ -605,6 +605,7 @@ class MexOpenstack():
         o_out=self._execute_cmd(cmd)
 
         if name:
+            found = False
             groups = json.loads(o_out)
             for group in groups:
                 print(group['Name'],name)
@@ -613,8 +614,12 @@ class MexOpenstack():
                     cmd = f'{src_cmd};openstack security group show {groupid} -f json'
                     logging.debug(f'getting openstack security groups with cmd = {cmd}')
                     o_out=self._execute_cmd(cmd)
+                    found = True
                     break
-                
+               
+            if not found:
+                raise Exception(f'security group not found with name={name}')  
+
         return json.loads(o_out)
 
     def create_stack(self, file, name):
