@@ -28,26 +28,26 @@ Clientapiusage - mcctl shall be able to request clientapiusage api metrics
    ...  - verify success
 
    [Template]  Success Clientapiusage API Metrics Via mcctl
-      selector=api  app-org=${developer_org_name_automation}
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0
-#      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation
-#      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  cluster-org=${developer}
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=FindCloudlet
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=RegisterClient
-      selector=api  app-org=${developer_org_name_automation}  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=PlatformFindCloudlet
-      selector=api  cloudlet-org=${operator_name_fake}  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=PlatformFindCloudlet
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  dme-org=${operator_dme}  method=VerifyLocation
-#      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  cellid=0
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  limit=1
-      selector=api  appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0  dme-cloudlet=${cloudlet_dme}  limit=1  starttime=${start_date}  endtime=${end_date}
-      selector=api  app-org=${developer_org_name_automation}  numsamples=1
-      selector=api  app-org=${developer_org_name_automation}  numsamples=1  starttime=${start_date}  endtime=${end_date}
-      selector=api  app-org=${developer_org_name_automation}  startage=12h
-      selector=api  app-org=${developer_org_name_automation}  endage=1s
-      selector=api  app-org=${developer_org_name_automation}  startage=12h  endage=1s
+      selector=api  apporg=${developer_org_name_automation}
+      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  
+      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0
+#      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation
+#      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  cluster=autoclusterautomation  clusterorg=${developer}
+      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  dmecloudlet=${cloudlet_dme}
+      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  dmecloudlet=${cloudlet_dme}  dmeorg=${operator_dme}
+      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  dmecloudlet=${cloudlet_dme}  dmeorg=${operator_dme}  method=FindCloudlet
+      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  dmecloudlet=${cloudlet_dme}  dmeorg=${operator_dme}  method=RegisterClient
+      selector=api  apporg=${developer_org_name_automation}  dmecloudlet=${cloudlet_dme}  dmeorg=${operator_dme}  method=PlatformFindCloudlet
+      selector=api  cloudletorg=${operator_name_fake}  dmecloudlet=${cloudlet_dme}  dmeorg=${operator_dme}  method=PlatformFindCloudlet
+      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  dmecloudlet=${cloudlet_dme}  dmeorg=${operator_dme}  method=VerifyLocation
+#      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  dmecloudlet=${cloudlet_dme}  cellid=0
+      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  dmecloudlet=${cloudlet_dme}  limit=1
+      selector=api  appname=${app_name_automation}  apporg=${developer_org_name_automation}  appvers=1.0  dmecloudlet=${cloudlet_dme}  limit=1  starttime=${start_date}  endtime=${end_date}
+      selector=api  apporg=${developer_org_name_automation}  numsamples=1
+      selector=api  apporg=${developer_org_name_automation}  numsamples=1  starttime=${start_date}  endtime=${end_date}
+      selector=api  apporg=${developer_org_name_automation}  startage=12h
+      selector=api  apporg=${developer_org_name_automation}  endage=1s
+      selector=api  apporg=${developer_org_name_automation}  startage=12h  endage=1s
 
 # ECQ-3571
 Clientapiusage - mcctl shall handle clientapiusage metrics failures
@@ -62,14 +62,14 @@ Clientapiusage - mcctl shall handle clientapiusage metrics failures
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=x
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=api
       Error: Bad Request (400), Must provide either App organization or Cloudlet organization                                   selector=api appname=x
-      Error: Bad Request (400), Invalid dme selector: x                                                                         selector=x app-org=automation_dev_org
-      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z07:00"   selector=api  app-org=automation_dev_org  starttime=x
-      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z07:00"     selector=api  app-org=automation_dev_org  endtime=x
-      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                     selector=api  cloudlet-org=automation_dev_org  startage=x
-      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                       selector=api  cloudlet-org=automation_dev_org  endage=x
-      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                                                selector=api  app-org=automation_dev_org  limit=x
-#      Error: parsing arg "cellid\=x" failed: unable to parse "x" as int: invalid syntax                                                                               selector=api  app-org=automation_dev_org  cellid=x
-      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                                                           selector=api  app-org=automation_dev_org  numsamples=x
+      Error: Bad Request (400), Invalid dme selector: x                                                                         selector=x apporg=automation_dev_org
+      Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"   selector=api  apporg=automation_dev_org  starttime=x
+      Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"     selector=api  apporg=automation_dev_org  endtime=x
+      Error: parsing arg "startage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                     selector=api  cloudletorg=automation_dev_org  startage=x
+      Error: parsing arg "endage\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc                       selector=api  cloudletorg=automation_dev_org  endage=x
+      Error: parsing arg "limit\=x" failed: unable to parse "x" as int: invalid syntax                                                                                selector=api  apporg=automation_dev_org  limit=x
+#      Error: parsing arg "cellid\=x" failed: unable to parse "x" as int: invalid syntax                                                                               selector=api  apporg=automation_dev_org  cellid=x
+      Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                                                           selector=api  apporg=automation_dev_org  numsamples=x
 
 *** Keywords ***
 Setup
