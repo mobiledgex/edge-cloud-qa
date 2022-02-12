@@ -59,7 +59,20 @@
     stages {
         stage(&apos;Run Failed Tests&apos;) {
             steps {
-                runFailedTests(&apos;2022-02-03-1_CirrusR3.1&apos;)
+                script {
+                    def dateValue = &quot;dateValue&quot;
+                    def s = &apos;curl -s https://robot\\$qa:RIuSwsdA9naFkunkDtg7TrPOHG3YoqS8@harbor.mobiledgex.net/v2/mobiledgex/edge-cloud/tags/list | jq &quot;.tags | index(\\&quot;&apos; + dateValue + &apos;\\&quot;)&quot;&apos;
+                    def index  = sh(script: s, returnStdout: true);
+                    println index.getClass() 
+                    println &quot;xxxx${index}x&quot;
+                    if(index.trim() == &quot;null&quot;) {
+                        println &quot;${s} failed&quot;
+                        currentBuild.result = &apos;FAILURE&apos;
+                    } else {
+                        println &quot;load ${dateValue} found&quot;
+                    }
+}
+                //runFailedTests(&apos;2022-02-03-1_CirrusR3.1&apos;)
                 //def export_vars = &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;export VAULT_ADDR=https://vault-qa.mobiledgex.net;&apos;
                 //sh &apos;export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID=&quot;22c16b60-1ac5-4a32-cc07-05037475a717&quot;;export VAULT_SECRET_ID=&quot;67c96872-878e-9442-4440-ff76ce65cea5&quot;;export VAULT_ADDR=https://vault-qa.mobiledgex.net&apos;
                 //sh &apos;echo $GITHUB_TOKEN&apos;

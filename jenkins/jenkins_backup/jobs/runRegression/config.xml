@@ -8,45 +8,60 @@
       <parameters>
         <string>SlaveNodeMetrics</string>
         <string>SlaveNodeFRM</string>
-        <string>SlaveNodeVsphere</string>
-        <string>SlaveNodeAnthos</string>
+        <string>RunFailedTests</string>
         <string>TestTimeoutFRM</string>
-        <string>NumberParallelExecutionsVCD</string>
-        <string>MasterControllerFederation</string>
         <string>OpenStackEnv</string>
-        <string>DMERest</string>
+        <string>RunAnthosTests</string>
         <string>CRMPoolAnthos</string>
         <string>NumberParallelExecutionsAnthos</string>
         <string>NumberParallelExecutionsVsphere</string>
         <string>TestTimeoutMasterController</string>
+        <string>RunMCTests</string>
         <string>SlaveNodeController</string>
         <string>Version</string>
+        <string>SlaveNodeMasterController</string>
+        <string>NumberParallelExecutionsOpenstack</string>
+        <string>SlaveNodeSDK</string>
+        <string>MasterControllerFederationPassword</string>
+        <string>Project</string>
+        <string>VariableFile</string>
+        <string>CRMPoolVsphere</string>
+        <string>SlaveNodeVCD</string>
+        <string>RunFRMTests</string>
+        <string>RunOpenstackTests</string>
+        <string>RunFailedOnly</string>
+        <string>RunPerformanceTests</string>
+        <string>TestTimeoutSDK</string>
+        <string>RunDeploy</string>
+        <string>CommitVersion</string>
+        <string>RunSDKTests</string>
+        <string>SlaveNodeVsphere</string>
+        <string>SlaveNodeAnthos</string>
+        <string>NumberParallelExecutionsVCD</string>
+        <string>RunDMETests</string>
+        <string>RunConsoleTests</string>
+        <string>MasterControllerFederation</string>
+        <string>DMERest</string>
         <string>SlaveNodeConsole</string>
         <string>TestTimeoutController</string>
         <string>Console</string>
         <string>SlaveNodeScans</string>
         <string>CRMPoolOpenstack</string>
-        <string>SlaveNodeMasterController</string>
         <string>DME</string>
+        <string>RunControllerTests</string>
+        <string>RunMetricsTests</string>
         <string>DMERestCert</string>
         <string>SlaveNodeDME</string>
-        <string>NumberParallelExecutionsOpenstack</string>
-        <string>SlaveNodeSDK</string>
         <string>Controller</string>
-        <string>MasterControllerFederationPassword</string>
-        <string>Project</string>
+        <string>RunVCDTests</string>
         <string>SlaveNodeOpenstack</string>
-        <string>VariableFile</string>
         <string>CRMPoolVCD</string>
-        <string>CRMPoolVsphere</string>
-        <string>SlaveNodeVCD</string>
         <string>BuildDate</string>
         <string>InfluxDB</string>
-        <string>RunFailedOnly</string>
+        <string>RunVsphereTests</string>
+        <string>RunScanTests</string>
         <string>TestTimeoutDME</string>
-        <string>TestTimeoutSDK</string>
         <string>MasterController</string>
-        <string>CommitVersion</string>
       </parameters>
       <options/>
     </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
@@ -273,6 +288,10 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
+          <name>RunDeploy</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
           <name>RunControllerTests</name>
           <defaultValue>true</defaultValue>
         </hudson.model.BooleanParameterDefinition>
@@ -326,10 +345,6 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>RunFailedTests</name>
-          <defaultValue>true</defaultValue>
-        </hudson.model.BooleanParameterDefinition>
-        <hudson.model.BooleanParameterDefinition>
-          <name>runDeploy</name>
           <defaultValue>true</defaultValue>
         </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
