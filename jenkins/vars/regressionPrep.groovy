@@ -34,6 +34,28 @@ def regressionPrep1(dateValue, cycle) {
         'Pull Image': {
             pullImage(dateValue)
         } 
+        'Delete Openstack': {
+            if(params.RunDeploy == true) {
+                deleteCrm.openstack(cycle)
+            } else {
+                println("skipping Delete Openstack since RunDeploy=${params.RunDeploy}")
+            }
+
+        },
+        'Delete Anthos': {
+            if(params.RunDeploy == true) {
+                deleteCrm.anthos(cycle)
+            } else {
+                println("skipping Delete Anthos since RunDeploy=${params.RunDeploy}")
+            }
+        },
+        'Delete Fake') {
+            if(params.RunDeploy == true) {
+                deleteCrm.fake(cycle)
+            } else {
+                println("skipping Delete Fake since RunDeploy=${params.RunDeploy}")
+            }
+        }
     )
 //    } catch(e) {
 //    post {
