@@ -1,4 +1,4 @@
-def regressionPrep1(dateValue) {
+def regressionPrep1(dateValue, cycle) {
 //    try {
     parallel (
         'Check Load/Create Cycle': {
@@ -8,7 +8,7 @@ def regressionPrep1(dateValue) {
 //                    cycle = dateValue + '_' + params.Version
 //                    currentBuild.displayName = cycle
 //                    slackMessage.good('Starting regression for ' + cycle)
-                    checkLoadExists(dateValue)
+//                    checkLoadExists(dateValue)
                     createCycle(cycle)
                     addTestsToFolder(params.Version, params.Project, cycle)
 //                }
@@ -17,7 +17,7 @@ def regressionPrep1(dateValue) {
         'Cleanup Provisioning': {
 //            steps{
 //                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'cleanup provisioning failed') {
-                    build job: 'cleanupAutomationProvisioning'
+                    //build job: 'cleanupAutomationProvisioning'
 //                    script {
                         defragEtcd()
 //                    }
