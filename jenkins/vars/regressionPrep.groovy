@@ -1,7 +1,7 @@
 def regressionPrep1(dateValue, cycle) {
 //    try {
     parallel (
-        'Check Load/Create Cycle': {
+        'Create Cycle': {
 //            steps {
 //                script {
 //                    dateValue = determineDateValue()
@@ -14,16 +14,26 @@ def regressionPrep1(dateValue, cycle) {
 //                }
 //            }
         },
-        'Cleanup Provisioning': {
+        'Cleanup/Defrag': {
 //            steps{
 //                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'cleanup provisioning failed') {
-                    //build job: 'cleanupAutomationProvisioning'
+                      build job: 'cleanupAutomationProvisioning'
 //                    script {
                         defragEtcd()
 //                    }
 //                }
 //            }
-        }
+        },
+        'Deploy Chef': {
+            if(params.RunDeploy == true) {
+                deployChef(dateValue)
+            } else {
+                println("skipping Deploy Chef since RunDeploy=${params.RunDeploy}")
+            }
+        },
+        'Pull Image': {
+            pullImage(dateValue)
+        } 
     )
 //    } catch(e) {
 //    post {
