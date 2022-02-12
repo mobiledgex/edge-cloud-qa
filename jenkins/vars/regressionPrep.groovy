@@ -1,7 +1,7 @@
-def regressionPrep1(dateValue) {
+def egressionPrep1(dateValue) {
 //    try {
-    parallel ({
-        stage('Check Load/Create Cycle') {
+    parallel (
+        'Check Load/Create Cycle': {
 //            steps {
 //                script {
 //                    dateValue = determineDateValue()
@@ -13,8 +13,8 @@ def regressionPrep1(dateValue) {
                     addTestsToFolder(params.Version, params.Project, cycle)
 //                }
 //            }
-        }
-        stage('Cleanup Provisioning') {
+        },
+        'Cleanup Provisioning': {
 //            steps{
 //                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'cleanup provisioning failed') {
                     build job: 'cleanupAutomationProvisioning'
@@ -24,7 +24,7 @@ def regressionPrep1(dateValue) {
 //                }
 //            }
         }
-    })
+    )
 //    } catch(e) {
 //    post {
 //        failure {
