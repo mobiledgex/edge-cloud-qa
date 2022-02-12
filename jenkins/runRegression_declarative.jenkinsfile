@@ -75,13 +75,14 @@ pipeline{
                     cycle = dateValue + '_' + params.Version
                     currentBuild.displayName = cycle
                     slackMessage.good('Starting regression for ' + cycle)
-                    regressionPrep.regressionPrep1(dateValue)
+                    checkLoadExists(dateValue)
+                    regressionPrep.regressionPrep1(dateValue, cycle)
                  }
             }
             post {
                 failure {
                     script {
-                       slackMessage.fail("Load check failed or create cycle failed for " + dateValue + '. Aborting')
+                       slackMessage.fail("Regression Prep failed for " + dateValue + '. Aborting')
                     }
                 }
             }
