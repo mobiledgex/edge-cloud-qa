@@ -33,7 +33,7 @@ def regressionPrep1(dateValue, cycle) {
         },
         'Pull Image': {
             pullImage(dateValue)
-        } 
+        }, 
         'Delete Openstack': {
             if(params.RunDeploy == true) {
                 deleteCrm.openstack(cycle)
