@@ -5,6 +5,7 @@ def call(dateValue) {
     if(index.trim() == 'null') {
         println "${s} failed"
         currentBuild.result = 'FAILURE'
+        error('load ${dateValue} not found')
     } else {
         println "load ${dateValue} found"
     }
