@@ -4,7 +4,7 @@ import groovy.transform.Field
 
 def call(dateValue) {
     dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
-        sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*'
+        sh '[[ -f $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra ]] && rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*'
         checkout([$class: 'GitSCM',
             branches: [[name: 'master']],
             doGenerateSubmoduleConfigurations: false,
