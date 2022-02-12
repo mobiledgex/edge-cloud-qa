@@ -1,4 +1,4 @@
-def egressionPrep1(dateValue) {
+def regressionPrep1(dateValue) {
 //    try {
     parallel (
         'Check Load/Create Cycle': {
