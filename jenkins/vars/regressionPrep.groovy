@@ -49,7 +49,7 @@ def regressionPrep1(dateValue, cycle) {
                 println("skipping Delete Anthos since RunDeploy=${params.RunDeploy}")
             }
         },
-        'Delete Fake') {
+        'Delete Fake': {
             if(params.RunDeploy == true) {
                 deleteCrm.fake(cycle)
             } else {
