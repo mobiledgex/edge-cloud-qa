@@ -4,4 +4,8 @@
     <job>runRegression</job>
     <id>247</id>
   </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>dummy</job>
+    <id>83</id>
+  </flow-owner>
 </list>

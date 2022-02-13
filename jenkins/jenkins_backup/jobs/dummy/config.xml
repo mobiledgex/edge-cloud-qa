@@ -60,16 +60,22 @@
         stage(&apos;Run Failed Tests&apos;) {
             steps {
                 script {
-                    def dateValue = &quot;dateValue&quot;
-                    def s = &apos;curl -s https://robot\\$qa:RIuSwsdA9naFkunkDtg7TrPOHG3YoqS8@harbor.mobiledgex.net/v2/mobiledgex/edge-cloud/tags/list | jq &quot;.tags | index(\\&quot;&apos; + dateValue + &apos;\\&quot;)&quot;&apos;
-                    def index  = sh(script: s, returnStdout: true);
-                    println index.getClass() 
-                    println &quot;xxxx${index}x&quot;
-                    if(index.trim() == &quot;null&quot;) {
-                        println &quot;${s} failed&quot;
-                        currentBuild.result = &apos;FAILURE&apos;
-                    } else {
-                        println &quot;load ${dateValue} found&quot;
+                    catchError(buildResult: &apos;SUCCESS&apos;, stageResult: &apos;FAILURE&apos;, message: &apos;deploy failed&apos;) {
+                        def dateValue = &quot;2022-02-12&quot;
+                        def cycle = dateValue + &apos;_&apos; + &apos;CirrusR3.1&apos;
+                        checkLoadExists(dateValue)
+                        regressionPrep.regressionPrep1(dateValue, cycle)
+                        //def s = &apos;curl -s https://robot\\$qa:RIuSwsdA9naFkunkDtg7TrPOHG3YoqS8@harbor.mobiledgex.net/v2/mobiledgex/edge-cloud/tags/list | jq &quot;.tags | index(\\&quot;&apos; + dateValue + &apos;\\&quot;)&quot;&apos;
+                        //def index  = sh(script: s, returnStdout: true);
+                        //println index.getClass() 
+                        //println &quot;xxxx${index}x&quot;
+                        //if(index.trim() == &quot;nul&quot;) {
+                        //    println &quot;${s} failed&quot;
+                        //    currentBuild.result = &apos;FAILURE&apos;
+                        //} else {
+                        //    println &quot;load ${dateValue} found&quot;
+                        //    error(&apos;x&apos;)
+                    //    }
                     }
 }
                 //runFailedTests(&apos;2022-02-03-1_CirrusR3.1&apos;)
@@ -78,6 +84,25 @@
                 //sh &apos;echo $GITHUB_TOKEN&apos;
                 //def kubectl_setup = export_vars + &apos;vault login -method=github token=&quot;$GITHUB_TOKEN&quot;;vault kv get -field=value secret/ansible/common/kubeconfigs/us | base64 --decode &gt;$HOME/kubeconfig.qa-us;export KUBECONFIG=$HOME/kubeconfig.qa-us;kubectl config use-context teleport.mobiledgex.net;&apos;
                 //sh kubectl_setup + &apos;kubectl patch service monitoring-influxdb --type=json -p \&apos;[{&quot;op&quot;:&quot;add&quot;, &quot;path&quot;:&quot;/spec/loadBalancerSourceRanges/-&quot;, &quot;value&quot;:&quot;\&apos;70.114.97.80\&apos;/32&quot;}]\&apos;&apos;  // andy
+            }
+            post {
+                failure {
+                    script {
+                        input message: &apos;xDeploy failed for continue regression anyway?&apos;
+                        echo &apos;continuing&apos;
+                        //currentBuild.result = &apos;SUCCESS&apos;
+                    }
+                }
+                success {
+                    echo &apos;stage successful&apos;
+                }
+            }
+        }
+        stage(&apos;proceed&apos;) {
+            steps {
+                script{
+                    echo &apos;proceed&apos;
+                }
             }
         }
     }
