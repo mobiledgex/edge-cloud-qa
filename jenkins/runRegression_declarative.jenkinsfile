@@ -1,7 +1,7 @@
 gitcred = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
 dateValue = 'notset'
 cycle = 'notset'
-regression_prep_status = true
+regression_prep_status = null
 create_cloudlet_status = true
 
 pipeline{
@@ -86,7 +86,12 @@ pipeline{
                     script {
 //                       slackMessage.fail("Regression Prep failed for " + dateValue + '. Aborting')
                        println('regression prep failed. setting regression_prep_status to false')
-//                       regression_prep_status = false
+                       regression_prep_status = false
+                    }
+                }
+                success {
+                    script {
+                        regression_prep_status = true
                     }
                 }
             }
@@ -98,7 +103,20 @@ pipeline{
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'regression prep 2 failed') {
                     script {
                         regressionPrep.regressionPrep2(dateValue, cycle)
-                        regression_prep_status = true
+                        if (regression_prep_status == true) { regression_prep_status = false }
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                       println('regression prep failed. setting regression_prep_status to false')
+                       regression_prep_status = false
+                    }
+                }
+                success {
+                    script {
+                        if (regression_prep_status != false) { regression_prep_status = true }
                     }
                 }
             }
@@ -108,6 +126,7 @@ pipeline{
         stage('Regression Prep Check') {
             steps {
                 script {
+                    println('calling regressionprepcheck status')
                     regressionPrep.regressionPrepCheck(regression_prep_status)
                 }
             }
