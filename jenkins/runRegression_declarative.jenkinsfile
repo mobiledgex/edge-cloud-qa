@@ -82,24 +82,25 @@ pipeline{
             post {
                 failure {
                     script {
-                       slackMessage.fail("Regression Prep failed for " + dateValue + '. Aborting')
+//                       slackMessage.fail("Regression Prep failed for " + dateValue + '. Aborting')
+                       regression_prep_status = false
                     }
                 }
             }
         }
 
-        stage('Regression Prep 2') {
-            steps {
-                script {
-                    regressionPrep.regressionPrep2(dateValue, cycle)
-                }
-            }
-        }
+//        stage('Regression Prep 2') {
+//            steps {
+//                script {
+//                    regressionPrep.regressionPrep2(dateValue, cycle)
+//                }
+//            }
+//        }
 
         stage('Regression Prep Check') {
             steps {
                 script {
-                    regressionPrep.regressionPrepCheck()
+                    regressionPrep.regressionPrepCheck(regression_pre_status)
                 }
             }
         }
