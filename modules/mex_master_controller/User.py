@@ -71,7 +71,7 @@ class User(MexOperation):
         if description is not None:
             user_dict['description'] = description
         if apikey_id is not None:
-            user_dict['apikeyid'] = apikey_id
+            user_dict['Id'] = apikey_id
 
         if len(permission_list) > 0:
             perm_dict_list = []
@@ -195,8 +195,10 @@ class User(MexOperation):
         msg_dict = msg
         return self.delete(token=token, url=self.delete_apikey_url, json_data=json_data, use_defaults=False, use_thread=use_thread, message=msg_dict)
                            
-    def show_user_api_key(self, token=None, json_data=None, use_thread=False):
-        return self.show(token=token, url=self.show_apikey_url, json_data=json_data, use_thread=use_thread)
+    def show_user_api_key(self, apikey_id=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(apikey_id=apikey_id, use_defaults=use_defaults)
+        msg_dict = msg        
+        return self.show(token=token, url=self.show_apikey_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
     def verify_email(self, username=None, password=None, email_address=None, server='imap.gmail.com', wait=30, mc_address=None):
         if username is None:

@@ -481,8 +481,8 @@ class MexMasterController(MexRest):
     def delete_user_api_key(self, apikey_id=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.user.delete_user_api_key(apikey_id=apikey_id, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def show_user_api_key(self, token=None, json_data=None, use_thread=False):
-        return self.user.show_user_api_key(token=token, json_data=json_data, use_thread=use_thread)
+    def show_user_api_key(self, apikey_id=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.show_user_api_key(apikey_id=apikey_id, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def new_password(self, password=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/newpass'
