@@ -70,19 +70,22 @@ pipeline{
     stages {
         stage('Regression Prep 1') {
             steps {
-                script {
-                    dateValue = determineDateValue()
-                    cycle = dateValue + '_' + params.Version
-                    currentBuild.displayName = cycle
-                    slackMessage.good('Starting regression for ' + cycle)
-                    checkLoadExists(dateValue)
-                    regressionPrep.regressionPrep1(dateValue, cycle)
-                 }
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'regression prep failed') {
+                    script {
+                        dateValue = determineDateValue()
+                        cycle = dateValue + '_' + params.Version
+                        currentBuild.displayName = cycle
+                        slackMessage.good('Starting regression for ' + cycle)
+                        checkLoadExists(dateValue)
+                        regressionPrep.regressionPrep1(dateValue, cycle)
+                     }
+                }
             }
             post {
                 failure {
                     script {
 //                       slackMessage.fail("Regression Prep failed for " + dateValue + '. Aborting')
+                       println('regression prep failed. setting regression_prep_status to false')
                        regression_prep_status = false
                     }
                 }
@@ -100,7 +103,7 @@ pipeline{
         stage('Regression Prep Check') {
             steps {
                 script {
-                    regressionPrep.regressionPrepCheck(regression_pre_status)
+                    regressionPrep.regressionPrepCheck(regression_prep_status)
                 }
             }
         }
