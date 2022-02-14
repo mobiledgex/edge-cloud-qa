@@ -137,7 +137,8 @@ pipeline{
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'deploy failed') {
                     script {
                         slackMessage.good('Deploying backend')
-                        deployEdgeCloud(dateValue)
+                        //deployEdgeCloud(dateValue)
+                        println('deployEdgeCloud')
                     }
                 }
             }
