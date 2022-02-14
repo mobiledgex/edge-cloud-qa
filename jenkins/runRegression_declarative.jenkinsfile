@@ -70,7 +70,7 @@ pipeline{
     stages {
         stage('Regression Prep 1') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'regression prep failed') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'regression prep 1 failed') {
                     script {
                         dateValue = determineDateValue()
                         cycle = dateValue + '_' + params.Version
@@ -86,19 +86,23 @@ pipeline{
                     script {
 //                       slackMessage.fail("Regression Prep failed for " + dateValue + '. Aborting')
                        println('regression prep failed. setting regression_prep_status to false')
-                       regression_prep_status = false
+//                       regression_prep_status = false
                     }
                 }
             }
         }
 
-//        stage('Regression Prep 2') {
-//            steps {
-//                script {
-//                    regressionPrep.regressionPrep2(dateValue, cycle)
-//                }
-//            }
-//        }
+        // regressionprep needs to be split since some things rely on cycle existing
+        stage('Regression Prep 2') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'regression prep 2 failed') {
+                    script {
+                        regressionPrep.regressionPrep2(dateValue, cycle)
+                        regression_prep_status = true
+                    }
+                }
+            }
+        }
 
         // this is required for the input step to work correctly. Seems to need to be in its own stage
         stage('Regression Prep Check') {
