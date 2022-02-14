@@ -128,10 +128,10 @@ CloudletPoolUsage - get with invalid cloudlet pool shall return error
    ${inject}=  Set Variable  \\'\\;drop measurment \"cloudlet-ipusage\"
 
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Pool Usage  region=US  start_time=2006-01-02T15:04:05Z  end_time=2006-01-02T15:04:05Z  cloudlet_pool_name=${inject}  operator_org_name=${operator}  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudlet"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudletpool"}')
 
    ${error}=  Run Keyword and Expect Error  *  Get Cloudlet Pool Usage  region=US  start_time=2006-01-02T15:04:05Z  end_time=2006-01-02T15:04:05Z  cloudlet_pool_name=${cloudlet_name_openstack_metrics}  operator_org_name=${inject}   token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudletorg"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid cloudletpoolorg"}')
 
 # ECQ-4340
 CloudletPoolUsage - get with invalid showvmappsonly shall return error
