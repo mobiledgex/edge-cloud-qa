@@ -88,7 +88,7 @@
             post {
                 failure {
                     script {
-                        input message: &apos;xDeploy failed for continue regression anyway?&apos;
+                        //input message: &apos;xDeploy failed for continue regression anyway?&apos;
                         echo &apos;continuing&apos;
                         //currentBuild.result = &apos;SUCCESS&apos;
                     }
@@ -101,6 +101,7 @@
         stage(&apos;proceed&apos;) {
             steps {
                 script{
+                    input message: &apos;xDeploy failed for continue regression anyway?&apos;
                     echo &apos;proceed&apos;
                 }
             }
