@@ -1,5 +1,5 @@
 def regressionPrep1(dateValue, cycle) {
-//    try {
+    try {
     parallel (
         'Create Cycle': {
 //            steps {
@@ -57,16 +57,16 @@ def regressionPrep1(dateValue, cycle) {
             }
         }
     )
-//    } catch(e) {
+    } catch(e) {
 //    post {
 //        failure {
 //            script {
 //                slackMessage.fail("Load check failed or create cycle failed for " + dateValue + ':' + e + '. Aborting')
-//                error('Aborting the build')
+                error('regressionprep failed in parallel try/catch')
 //            }
 //        }
 //    }
-//}
+}
 }
 
 def regressionPrep2(dateValue, cycle) {
@@ -135,7 +135,7 @@ def regressionPrepCheck(regression_prep_status) {
 //    steps {
 //        script {
             if(regression_prep_status == false) {
-                slackMessage.fail('Regression Prep Failed. Waiting for input')
+                slackMessage.warning('Regression Prep Failed. Waiting for input')
                 input message: 'Regression Prep failed. Continue?'
                 slackMessage.good('Regression proceeding')
                 currentBuild.result = 'SUCCESS'
