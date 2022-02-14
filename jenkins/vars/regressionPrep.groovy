@@ -62,7 +62,8 @@ def regressionPrep1(dateValue, cycle) {
 //        failure {
 //            script {
 //                slackMessage.fail("Load check failed or create cycle failed for " + dateValue + ':' + e + '. Aborting')
-                error('regressionprep 1 failed in parallel try/catch')
+                //error('regressionprep 1 failed in parallel try/catch')
+                  throw new Exception("regressionprep 1 failed in parallel try/catch")
 //            }
 //        }
 //    }
@@ -114,6 +115,8 @@ def regressionPrep2(dateValue, cycle) {
     )
     } catch (e) { 
         error('regressionprep 2 failed in parallel try/catch')
+        throw new Exception("regressionprep 2 failed in parallel try/catch")
+
 
 //    post {
 //        failure {
