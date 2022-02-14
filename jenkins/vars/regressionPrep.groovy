@@ -71,7 +71,7 @@ def regressionPrep1(dateValue, cycle) {
 
 def regressionPrep2(dateValue, cycle) {
     try {
-    parallel ({
+    parallel (
 //        stage('Deploy Chef') {
 //            when { expression { params.RunDeploy == true } }
 //            steps {
@@ -111,7 +111,7 @@ def regressionPrep2(dateValue, cycle) {
                 println("skipping Delete Fake since RunDeploy=${params.RunDeploy}")
             }
         }
-    })
+    )
     } catch (e) { 
         error('regressionprep 2 failed in parallel try/catch')
 
