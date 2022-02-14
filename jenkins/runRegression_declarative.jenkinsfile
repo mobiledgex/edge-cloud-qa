@@ -103,7 +103,6 @@ pipeline{
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'regression prep 2 failed') {
                     script {
                         regressionPrep.regressionPrep2(dateValue, cycle)
-                        if (regression_prep_status == true) { regression_prep_status = false }
                     }
                 }
             }
