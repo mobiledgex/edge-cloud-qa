@@ -131,7 +131,7 @@ def regressionPrep2(dateValue, cycle) {
 }
 }
 
-def regressionPrepCheck() {
+def regressionPrepCheck(regression_prep_status) {
 //    steps {
 //        script {
             if(regression_prep_status == false) {
