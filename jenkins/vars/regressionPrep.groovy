@@ -133,6 +133,7 @@ def regressionPrep2(dateValue, cycle) {
 def regressionPrepCheck(regression_prep_status) {
 //    steps {
 //        script {
+            println("regressionprepcheck status=${regression_prep_status}")
             if(regression_prep_status == false) {
                 slackMessage.warning('Regression Prep Failed. Waiting for input')
                 input message: 'Regression Prep failed. Continue?'
