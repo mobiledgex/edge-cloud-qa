@@ -45,7 +45,7 @@ pipeline{
                 //}
 
                 dir('go/src/github.com/mobiledgex') {
-                    sh 'rm -rf *'
+                    sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-qa/*'
                     checkout([$class: 'GitSCM',
                         branches: [[name: 'master']],
                         doGenerateSubmoduleConfigurations: false,
@@ -82,13 +82,13 @@ pipeline{
                 }
 
                 dir('go/src/github.com/mobiledgex/edge-proto') {
-                    sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*'
+                    sh 'rm -rf *'
                     git branch: CommitVersion,
                     credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
                     url: 'https://github.com/mobiledgex/edge-proto.git'
                 }
                 dir('go/src/github.com/mobiledgex/edge-cloud') {
-                   sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*'
+                   sh 'rm -rf *'
     
                    checkout([$class: 'GitSCM',
                        branches: [[name: CommitVersion]],

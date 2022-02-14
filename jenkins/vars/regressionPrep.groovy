@@ -62,7 +62,7 @@ def regressionPrep1(dateValue, cycle) {
 //        failure {
 //            script {
 //                slackMessage.fail("Load check failed or create cycle failed for " + dateValue + ':' + e + '. Aborting')
-                error('regressionprep failed in parallel try/catch')
+                error('regressionprep 1 failed in parallel try/catch')
 //            }
 //        }
 //    }
@@ -72,55 +72,54 @@ def regressionPrep1(dateValue, cycle) {
 def regressionPrep2(dateValue, cycle) {
     try {
     parallel ({
-        stage('Deploy Chef') {
-            when { expression { params.RunDeploy == true } }
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'deploy chef failed') {
-                    script { deployChef(dateValue) }
-                }
-            }
-        }
+//        stage('Deploy Chef') {
+//            when { expression { params.RunDeploy == true } }
+//            steps {
+//                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'deploy chef failed') {
+//                    script { deployChef(dateValue) }
+//                }
+//            }
+//        }
+//
+//        stage('Pull Image') {
+//            steps {
+//                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'pull image failed') {
+//                    script { pullImage(dateValue) }
+//                }
+//            }
+//        }
 
-        stage('Pull Image') {
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'pull image failed') {
-                    script { pullImage(dateValue) }
-                }
+        'Delete Openstack': {
+            if(params.RunDeploy == true) {
+                deleteCrm.openstack(cycle)
+            } else {
+                println("skipping Delete Openstack since RunDeploy=${params.RunDeploy}")
             }
-        }
 
-        stage('Delete Openstack') {
-            when { expression { params.RunDeploy == true } }
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete openstack failed') {
-                    script { deleteCrm.openstack(cycle) }
-                }
+        },
+        'Delete Anthos': {
+            if(params.RunDeploy == true) {
+                deleteCrm.anthos(cycle)
+            } else {
+                println("skipping Delete Anthos since RunDeploy=${params.RunDeploy}")
             }
-        }
-        stage('Delete Anthos') {
-            when { expression { params.RunDeploy == true } }
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete anthos failed') {
-                    script { deleteCrm.anthos(cycle) }
-                }
-            }
-        }
-        stage('Delete Fake') {
-            when { expression { params.RunDeploy == true } }
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'delete fake failed') {
-                    script { deleteCrm.fake(cycle) }
-                }
+        },
+        'Delete Fake': {
+            if(params.RunDeploy == true) {
+                deleteCrm.fake(cycle)
+            } else {
+                println("skipping Delete Fake since RunDeploy=${params.RunDeploy}")
             }
         }
     })
-    slackMessage.good('Regression Prep successfull')
     } catch (e) { 
+        error('regressionprep 2 failed in parallel try/catch')
+
 //    post {
 //        failure {
 //            script {
-                currentBuild.result = 'SUCCESS'
-                 echo "SSSUUUUCCCCEEEESSS"
+//                currentBuild.result = 'SUCCESS'
+//                 echo "SSSUUUUCCCCEEEESSS"
                  regression_prep_status = false
 //            }
 //        }
