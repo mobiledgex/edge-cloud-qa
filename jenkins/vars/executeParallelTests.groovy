@@ -289,18 +289,18 @@ def metrics_tests(cycle) {
 
 def call(cycle) {
     parallel (
-        'SDK Tests': { steps { sdk_tests(cycle) } },
-        'DME Tests': { steps { dme_tests(cycle) } },
-        'Controller Tests': { steps { controller_tests(cycle) } },
-        'MC Tests': { steps { mc_tests(cycle) } },
-        'FRM Tests': { steps { frm_tests(cycle) } },
-        'Anthos Tests': { steps { anthos_tests(cycle) } },
-        'Vsphere Tests': { steps { vsphere_tests(cycle) } },
-        'Openstack Tests': { steps { openstack_tests(cycle) } },
-        'VCD Tests': { steps { vcd_tests(cycle) } },
-        'Scan Tests': { steps { scan_tests(cycle) } },
-        'Console Tests': { steps { console_tests(cycle) } },
-        'Metrics Tests': { steps { metrics_tests(cycle) } }
+        'SDK Tests': { sdk_tests(cycle) },
+        'DME Tests': { dme_tests(cycle) },
+        'Controller Tests': { controller_tests(cycle) },
+        'MC Tests': { mc_tests(cycle) },
+        'FRM Tests': { frm_tests(cycle) },
+        'Anthos Tests': { anthos_tests(cycle) },
+        'Vsphere Tests': { vsphere_tests(cycle) },
+        'Openstack Tests': { openstack_tests(cycle) },
+        'VCD Tests': { vcd_tests(cycle) },
+        'Scan Tests': { scan_tests(cycle) },
+        'Console Tests': { console_tests(cycle) },
+        'Metrics Tests': { metrics_tests(cycle) }
     )
 }
 
