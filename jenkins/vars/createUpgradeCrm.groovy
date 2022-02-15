@@ -66,3 +66,19 @@ def upgrade(cycle, dateValue) {
         string(name: 'NumberParallelExecutions', value: '10')]
 }
 
+def call(cycle, dateValue) {
+    parallel (
+        'Create Openstack' : {
+            openstack(cycle)
+        },
+        'Create Anthos': {
+            anthos(cycle)
+        },
+        'Create Fake': {
+            fake(cycle)
+        },
+        'Upgrade Cloudlets': {
+            upgrade(cycle, dateValue)
+        }
+    )
+}
