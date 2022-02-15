@@ -13,7 +13,7 @@ def sdk_tests(cycle) {
             slackMessage.good('Finished SDK tests with pass')
         } else {
             println('skipping sdk tests')
-            slackMessage.good('Skipping SDK tests')
+            slackMessage.warning('Skipping SDK tests')
         }
     } catch(e) {
         slackMessage.fail('Finished SDK tests with failures')
@@ -42,7 +42,7 @@ def dme_tests(cycle) {
             slackMessage.good('Finished DME tests with pass')
         } else {
             println('skipping dme tests')
-            slackMessage.good('Skipping DME tests')
+            slackMessage.warning('Skipping DME tests')
         }
     } catch(e) {
         slackMessage.fail('Finished DME tests with failures')
@@ -71,7 +71,7 @@ def controller_tests(cycle) {
             slackMessage.good('Finished Controller tests with pass')
         } else {
             println('skipping controller tests')
-            slackMessage.good('Skipping Controller tests')
+            slackMessage.warning('Skipping Controller tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Controller tests with failures')
@@ -97,7 +97,7 @@ def mc_tests(cycle) {
             slackMessage.good('Finished MC tests with pass')
         } else {
             println('skipping mc tests')
-            slackMessage.good('Skipping MC tests')
+            slackMessage.warning('Skipping MC tests')
         }
     } catch(e) {
         slackMessage.fail('Finished MC tests with failures')
@@ -125,7 +125,7 @@ def frm_tests(cycle) {
             slackMessage.good('Finished FRM tests with pass')
         } else {
             println('skipping frm tests')
-            slackMessage.good('Skipping FRM tests')
+            slackMessage.warning('Skipping FRM tests')
         }
     } catch(e) {
         slackMessage.fail('Finished FRM tests with failures')
@@ -156,7 +156,7 @@ def anthos_tests(cycle) {
             slackMessage.good('Finished Anthos tests with pass')
         } else {
             println('skipping anthos tests')
-            slackMessage.good('Skipping Anthos tests')
+            slackMessage.warning('Skipping Anthos tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Anthos tests with failures')
@@ -187,7 +187,7 @@ def vsphere_tests(cycle) {
             slackMessage.good('Finished Vsphere tests with pass')
         } else {
             println('skipping vsphere tests')
-            slackMessage.good('Skipping Vsphere tests')
+            slackMessage.warning('Skipping Vsphere tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Vsphere tests with failures')
@@ -217,7 +217,7 @@ def vcd_tests(cycle) {
             slackMessage.good('Finished VCD tests with pass')
         } else {
             println('skipping vcd tests')
-            slackMessage.good('Skipping VCD tests')
+            slackMessage.warning('Skipping VCD tests')
         }
     } catch(e) {
         slackMessage.fail('Finished VCD tests with failures')
@@ -247,7 +247,7 @@ def openstack_tests(cycle) {
             slackMessage.good('Finished Openstack tests with pass')
         } else {
             println('skipping openstack tests')
-            slackMessage.good('Skipping Openstack tests')
+            slackMessage.warning('Skipping Openstack tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Openstack tests with failures')
@@ -267,7 +267,7 @@ def scan_tests(cycle) {
             slackMessage.good('Finished Scan tests with pass')
         } else {
             println('skipping scan tests')
-            slackMessage.good('Skipping Scan tests')
+            slackMessage.warning('Skipping Scan tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Scan tests with failures')
@@ -291,7 +291,7 @@ def console_tests(cycle) {
             slackMessage.good('Finished Console tests with pass')
         } else {
             println('skipping console tests')
-            slackMessage.good('Skipping Console tests')
+            slackMessage.warning('Skipping Console tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Console tests with failures')
@@ -315,7 +315,7 @@ def metrics_tests(cycle) {
             slackMessage.good('Finished Metrics tests with pass')
         } else {
             println('skipping metrics tests')
-            slackMessage.good('Skipping Metrics tests')
+            slackMessage.warning('Skipping Metrics tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Metrics tests with failures')
