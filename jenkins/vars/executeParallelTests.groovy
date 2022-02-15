@@ -1,6 +1,6 @@
 def sdk_tests(cycle) {
     try {
-        if(params.runSDKTests == true) {
+        if(params.RunSDKTests == true) {
             slackMessage.good('Starting SDK tests')
             build job: 'runSdkTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeSDK),
@@ -20,7 +20,7 @@ def sdk_tests(cycle) {
 
 def dme_tests(cycle) {
     try {
-        if(params.runDMETests == true) {
+        if(params.RunDMETests == true) {
             slackMessage.good('Starting DME tests')
             build job: 'runDmeTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeDME),
@@ -46,7 +46,7 @@ def dme_tests(cycle) {
 
 def controller_tests(cycle) {
     try {
-        if(params.runControllerTests == true) {
+        if(params.RunControllerTests == true) {
             slackMessage.good('Starting Controller tests')
             build job: 'runControllerTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeController),
@@ -72,7 +72,7 @@ def controller_tests(cycle) {
 
 def mc_tests(cycle) {
     try {
-        if(params.runMCTests == true) {
+        if(params.RunMCTests == true) {
             slackMessage.good('Starting MC tests')
             build job: 'runMcTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeMasterController),
@@ -95,7 +95,7 @@ def mc_tests(cycle) {
 
 def frm_tests(cycle) {
     try {
-        if(params.runFRMTests == true) {
+        if(params.RunFRMTests == true) {
             slackMessage.good('Starting FRM tests')
             build job: 'runFrmTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeFRM),
@@ -120,7 +120,7 @@ def frm_tests(cycle) {
 
 def anthos_tests(cycle) {
     try {
-        if(params.runAnthosTests == true) {
+        if(params.RunAnthosTests == true) {
             slackMessage.good('Starting Anthos tests')
             build job: 'runCrmTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeAnthos),
@@ -148,7 +148,7 @@ def anthos_tests(cycle) {
 
 def vsphere_tests(cycle) {
     try {
-        if(params.runVsphereTests == true) {
+        if(params.RunVsphereTests == true) {
             slackMessage.good('Starting Vsphere tests')
             build job: 'runCrmTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeVsphere),
@@ -176,7 +176,7 @@ def vsphere_tests(cycle) {
 
 def vcd_tests(cycle) {
     try {
-        if(params.runVCDTests == true) {
+        if(params.RunVCDTests == true) {
             slackMessage.good('Starting VCD tests')
             build job: 'runCrmTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeVCD),
@@ -203,7 +203,7 @@ def vcd_tests(cycle) {
 
 def openstack_tests(cycle) {
     try {
-        if(params.runOpenstackTests == true) {
+        if(params.RunOpenstackTests == true) {
             slackMessage.good('Starting Openstack tests')
             build job: 'runCrmTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeOpenstack),
@@ -230,7 +230,7 @@ def openstack_tests(cycle) {
 
 def scan_tests(cycle) {
     try {
-        if(params.runScanTests == true) {
+        if(params.RunScanTests == true) {
             slackMessage.good('Starting Scan tests')
             build job: 'runScans', parameters: [
                 string(name: 'Cycle', value: cycle),
@@ -247,7 +247,7 @@ def scan_tests(cycle) {
 
 def console_tests(cycle) {
     try {
-        if(params.runConsoleTests == true) {
+        if(params.RunConsoleTests == true) {
             slackMessage.good('Starting Console tests')
             build job: 'runConsoleTestcases', parameters: [
                 string(name: 'Cycle', value: cycle),
@@ -268,7 +268,7 @@ def console_tests(cycle) {
 
 def metrics_tests(cycle) {
     try {
-        if(params.runMetricsTests == true) {
+        if(params.RunMetricsTests == true) {
             slackMessage.good('Starting Metrics tests')
             build job: 'runMetricsTestcases', parameters: [
                 string(name: 'Cycle', value: cycle),
