@@ -66,7 +66,7 @@ def upgrade(cycle, dateValue) {
         string(name: 'NumberParallelExecutions', value: '10')]
 }
 
-def call(cycle, dateValue) {
+def createUpgrade(cycle, dateValue) {
     parallel (
         'Create Openstack' : {
             openstack(cycle)
@@ -82,3 +82,13 @@ def call(cycle, dateValue) {
         }
     )
 }
+
+def createUpgradeCheck(create_cloudlet_status) {
+    println("create_cloudlet_status status=${create_cloudlet_status}")
+    if(create_cloudlet_status == false) {
+        slackMessage.warning('Create/Upgrade CRMs Failed. Waiting for input')
+        input message: 'Create/Upgrade CRMs failed. Continue?'
+        slackMessage.good('Regression proceeding')
+    }
+}
+
