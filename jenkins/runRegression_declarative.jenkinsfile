@@ -150,6 +150,7 @@ pipeline{
                         slackMessage.good('Deploying backend')
                         deployEdgeCloud(dateValue)
                         //println('deployEdgeCloud')
+                        deploy_status = true
                     }
                 }
             }
