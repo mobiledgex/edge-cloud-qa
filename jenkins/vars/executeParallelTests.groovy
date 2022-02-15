@@ -1,6 +1,7 @@
 def sdk_tests(cycle) {
     try {
         if(params.RunSDKTests == true) {
+            println('starting SDK tests')
             slackMessage.good('Starting SDK tests')
             build job: 'runSdkTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeSDK),
@@ -11,16 +12,19 @@ def sdk_tests(cycle) {
                 booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
             slackMessage.good('Finished SDK tests with pass')
         } else {
+            println('skipping sdk tests')
             slackMessage.good('Skipping SDK tests')
         }
     } catch(e) {
         slackMessage.fail('Finished SDK tests with failures')
+        error('Finished SDK tests with failures')
     } 
 }
 
 def dme_tests(cycle) {
     try {
         if(params.RunDMETests == true) {
+            println('starting DME tests')
             slackMessage.good('Starting DME tests')
             build job: 'runDmeTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeDME),
@@ -37,16 +41,19 @@ def dme_tests(cycle) {
                 booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
             slackMessage.good('Finished DME tests with pass')
         } else {
+            println('skipping dme tests')
             slackMessage.good('Skipping DME tests')
         }
     } catch(e) {
         slackMessage.fail('Finished DME tests with failures')
+        error('Finished DME tests with failures')
     }
 }
 
 def controller_tests(cycle) {
     try {
         if(params.RunControllerTests == true) {
+            println('starting DME tests')
             slackMessage.good('Starting Controller tests')
             build job: 'runControllerTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeController),
@@ -63,16 +70,19 @@ def controller_tests(cycle) {
                 booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
             slackMessage.good('Finished Controller tests with pass')
         } else {
+            println('skipping controller tests')
             slackMessage.good('Skipping Controller tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Controller tests with failures')
+        error('Finished Controller tests with failures')
     }
 }
 
 def mc_tests(cycle) {
     try {
         if(params.RunMCTests == true) {
+            println('starting MC tests')
             slackMessage.good('Starting MC tests')
             build job: 'runMcTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeMasterController),
@@ -86,16 +96,19 @@ def mc_tests(cycle) {
 
             slackMessage.good('Finished MC tests with pass')
         } else {
+            println('skipping mc tests')
             slackMessage.good('Skipping MC tests')
         }
     } catch(e) {
         slackMessage.fail('Finished MC tests with failures')
+        error('Finished MC tests with failures')
     }
 }
 
 def frm_tests(cycle) {
     try {
         if(params.RunFRMTests == true) {
+            println('starting FRM tests')
             slackMessage.good('Starting FRM tests')
             build job: 'runFrmTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeFRM),
@@ -111,16 +124,19 @@ def frm_tests(cycle) {
 
             slackMessage.good('Finished FRM tests with pass')
         } else {
+            println('skipping frm tests')
             slackMessage.good('Skipping FRM tests')
         }
     } catch(e) {
         slackMessage.fail('Finished FRM tests with failures')
+        error('Finished FRM tests with failures')
     }
 }
 
 def anthos_tests(cycle) {
     try {
         if(params.RunAnthosTests == true) {
+            println('starting anthos tests')
             slackMessage.good('Starting Anthos tests')
             build job: 'runCrmTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeAnthos),
@@ -139,16 +155,19 @@ def anthos_tests(cycle) {
 
             slackMessage.good('Finished Anthos tests with pass')
         } else {
+            println('skipping anthos tests')
             slackMessage.good('Skipping Anthos tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Anthos tests with failures')
+        error('Finished Anthos tests with failures')
     }
 }
 
 def vsphere_tests(cycle) {
     try {
         if(params.RunVsphereTests == true) {
+            println('starting vshere tests')
             slackMessage.good('Starting Vsphere tests')
             build job: 'runCrmTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeVsphere),
@@ -167,16 +186,19 @@ def vsphere_tests(cycle) {
 
             slackMessage.good('Finished Vsphere tests with pass')
         } else {
+            println('skipping vsphere tests')
             slackMessage.good('Skipping Vsphere tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Vsphere tests with failures')
+        error('Finished Vsphere tests with failures')
     }
 }
 
 def vcd_tests(cycle) {
     try {
         if(params.RunVCDTests == true) {
+            println('starting vcd tests')
             slackMessage.good('Starting VCD tests')
             build job: 'runCrmTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeVCD),
@@ -194,16 +216,19 @@ def vcd_tests(cycle) {
                 booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
             slackMessage.good('Finished VCD tests with pass')
         } else {
+            println('skipping vcd tests')
             slackMessage.good('Skipping VCD tests')
         }
     } catch(e) {
         slackMessage.fail('Finished VCD tests with failures')
+        error('Finished VCD tests with failures')
     }
 }
 
 def openstack_tests(cycle) {
     try {
         if(params.RunOpenstackTests == true) {
+            println('starting openstack tests')
             slackMessage.good('Starting Openstack tests')
             build job: 'runCrmTestcases', parameters: [
                 string(name: 'SlaveNode', value: params.SlaveNodeOpenstack),
@@ -221,16 +246,19 @@ def openstack_tests(cycle) {
                 booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
             slackMessage.good('Finished Openstack tests with pass')
         } else {
+            println('skipping openstack tests')
             slackMessage.good('Skipping Openstack tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Openstack tests with failures')
+        error('Finished Openstack tests with failures')
     }
 }
 
 def scan_tests(cycle) {
     try {
         if(params.RunScanTests == true) {
+            println('starting scan tests')
             slackMessage.good('Starting Scan tests')
             build job: 'runScans', parameters: [
                 string(name: 'Cycle', value: cycle),
@@ -238,16 +266,19 @@ def scan_tests(cycle) {
             ]
             slackMessage.good('Finished Scan tests with pass')
         } else {
+            println('skipping scan tests')
             slackMessage.good('Skipping Scan tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Scan tests with failures')
+        error('Finished Scan tests with failures')
     }
 }
 
 def console_tests(cycle) {
     try {
         if(params.RunConsoleTests == true) {
+            println('starting console tests')
             slackMessage.good('Starting Console tests')
             build job: 'runConsoleTestcases', parameters: [
                 string(name: 'Cycle', value: cycle),
@@ -259,16 +290,19 @@ def console_tests(cycle) {
             ]
             slackMessage.good('Finished Console tests with pass')
         } else {
+            println('skipping console tests')
             slackMessage.good('Skipping Console tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Console tests with failures')
+        error('Finished Console tests with failures')
     }
 }
 
 def metrics_tests(cycle) {
     try {
         if(params.RunMetricsTests == true) {
+            println('starting metrics tests')
             slackMessage.good('Starting Metrics tests')
             build job: 'runMetricsTestcases', parameters: [
                 string(name: 'Cycle', value: cycle),
@@ -280,10 +314,12 @@ def metrics_tests(cycle) {
             ]
             slackMessage.good('Finished Metrics tests with pass')
         } else {
+            println('skipping metrics tests')
             slackMessage.good('Skipping Metrics tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Metrics tests with failures')
+        error('Finished Metrics tests with failures')
     }
 }
 
