@@ -4,6 +4,7 @@ cycle = 'notset'
 regression_prep_status = null
 deploy_status = false
 create_cloudlet_status = false
+execute_tests = false
 
 pipeline{
     agent { label 'jenkinsSlave1' }
@@ -64,6 +65,7 @@ pipeline{
         booleanParam(name: 'RunConsoleTests', defaultValue: true)
         booleanParam(name: 'RunPerformanceTests', defaultValue: true)
         booleanParam(name: 'RunFailedTests', defaultValue: true)
+        booleanParam(name: 'RunReport', defaultValue: true)
     }
 
     stages {
@@ -194,6 +196,7 @@ pipeline{
         stage("execute parallel tests") {
             steps {
                 script {
+                    execute_tests = true
                     executeParallelTests()
                 }
             }
@@ -274,21 +277,39 @@ pipeline{
                     }
                 }
             }
-            post {
-                always {
-                    dir('go/src/github.com/mobiledgex/jenkins') {
-                        sh('export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + params.Project + ' --version ' + params.Version + ' --cycle ' + cycle + ' --enddate')
-                    }
-                    script {
-                        script { slackMessage.good('Creating Report') }
-                        job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis
-                        job_duration_string = job_duration.toString()
-                        build job: 'createReport', parameters: [
-                            string(name: 'Project', value: params.Project), 
-                            string(name: 'Version', value: params.Version), 
-                            string(name: 'Cycle', value: cycle), 
-                            string(name: 'JobDuration', value: job_duration_string)]
-                    }  
+//            post {
+//                always {
+//                    dir('go/src/github.com/mobiledgex/jenkins') {
+//                        sh('export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + params.Project + ' --version ' + params.Version + ' --cycle ' + cycle + ' --enddate')
+//                    }
+//                    script {
+//                        script { slackMessage.good('Creating Report') }
+//                        job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis
+//                        job_duration_string = job_duration.toString()
+//                        build job: 'createReport', parameters: [
+//                            string(name: 'Project', value: params.Project), 
+//                            string(name: 'Version', value: params.Version), 
+//                            string(name: 'Cycle', value: cycle), 
+//                            string(name: 'JobDuration', value: job_duration_string)]
+//                    }  
+//                }
+//            }
+        }
+        stage("Run Report") {
+            when { expression { params.RunReport == true } }
+            dir('go/src/github.com/mobiledgex/jenkins') {
+                sh('export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + params.Project + ' --version ' + params.Version + ' --cycle ' + cycle + ' --enddate')
+            }
+            steps {
+                script {
+                    slackMessage.good('Creating Report') 
+                    job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis
+                    job_duration_string = job_duration.toString()
+                    build job: 'createReport', parameters: [
+                        string(name: 'Project', value: params.Project),
+                        string(name: 'Version', value: params.Version),
+                        string(name: 'Cycle', value: cycle),
+                        string(name: 'JobDuration', value: job_duration_string)]
                 }
             }
         }
