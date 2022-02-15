@@ -53,7 +53,9 @@
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
-    <script>pipeline{
+    <script>regression_prep_status = true
+
+pipeline{
     agent { label &apos;jenkinsSlave1&apos; }
 
     stages {
@@ -64,7 +66,10 @@
                         def dateValue = &quot;2022-02-12&quot;
                         def cycle = dateValue + &apos;_&apos; + &apos;CirrusR3.1&apos;
                         checkLoadExists(dateValue)
+                        println(&quot;cbr0 ${currentBuild.result}&quot;)
                         regressionPrep.regressionPrep1(dateValue, cycle)
+                        println(&quot;cbrafterprep ${currentBuild.result}&quot;)
+
                         //def s = &apos;curl -s https://robot\\$qa:RIuSwsdA9naFkunkDtg7TrPOHG3YoqS8@harbor.mobiledgex.net/v2/mobiledgex/edge-cloud/tags/list | jq &quot;.tags | index(\\&quot;&apos; + dateValue + &apos;\\&quot;)&quot;&apos;
                         //def index  = sh(script: s, returnStdout: true);
                         //println index.getClass() 
@@ -88,16 +93,26 @@
             post {
                 failure {
                     script {
+                        println(&quot;cbrpostfailure ${currentBuild.result}&quot;)
                         //input message: &apos;xDeploy failed for continue regression anyway?&apos;
                         echo &apos;continuing&apos;
                         //currentBuild.result = &apos;SUCCESS&apos;
                     }
                 }
                 success {
+                    println(&quot;cbrpostsuccess ${currentBuild.result}&quot;)
                     echo &apos;stage successful&apos;
                 }
             }
         }
+        stage(&apos;Regression Prep Check&apos;) {
+            steps {
+                script {
+                    regressionPrep.regressionPrepCheck(regression_prep_status)
+                }
+            }
+        }
+
         stage(&apos;proceed&apos;) {
             steps {
                 script{
