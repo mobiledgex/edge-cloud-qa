@@ -296,7 +296,7 @@ pipeline{
 //            }
         }
         stage("Run Report") {
-            when { expression { params.RunReport == true } }
+            when { expression { params.RunReport == true && execute_tests == true} }
             dir('go/src/github.com/mobiledgex/jenkins') {
                 sh('export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + params.Project + ' --version ' + params.Version + ' --cycle ' + cycle + ' --enddate')
             }
