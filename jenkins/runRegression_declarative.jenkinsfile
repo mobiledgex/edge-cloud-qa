@@ -195,9 +195,11 @@ pipeline{
 
         stage("execute parallel tests") {
             steps {
-                script {
-                    execute_tests = true
-                    executeParallelTests()
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'execute parallel tests failed') {
+                    script {
+                        execute_tests = true
+                        executeParallelTests(cycle)
+                    }
                 }
             }
         }
