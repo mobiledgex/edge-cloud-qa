@@ -2,7 +2,8 @@ gitcred = '79b116ea-d7ac-4d6c-928d-49b79e5f9bef'
 dateValue = 'notset'
 cycle = 'notset'
 regression_prep_status = null
-create_cloudlet_status = true
+deploy_status = false
+create_cloudlet_status = false
 
 pipeline{
     agent { label 'jenkinsSlave1' }
@@ -63,20 +64,32 @@ pipeline{
         booleanParam(name: 'RunConsoleTests', defaultValue: true)
         booleanParam(name: 'RunPerformanceTests', defaultValue: true)
         booleanParam(name: 'RunFailedTests', defaultValue: true)
-        //choice(name: 'Platform', choices: ['SDK', 'Controller', 'DME', 'Openstack', 'VCD', 'Vshpere', 'Anthos'], description: '')
-        //string(name: 'Area', defaultValue: 'flavor')
     }
 
     stages {
+        stage('Check Load Exists') {
+            steps {
+                script {
+                    dateValue = determineDateValue()
+                    cycle = dateValue + '_' + params.Version
+                    currentBuild.displayName = cycle
+                    slackMessage.good('Starting regression for ' + cycle)
+                    checkLoadExists(dateValue)
+                }
+            }
+            post {
+                failure {
+                    script {
+                       slackMessage.fail('Load ' + dateValue + ' does not exist. Aborting')
+                    }
+                }
+            }
+        }
+
         stage('Regression Prep 1') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'regression prep 1 failed') {
                     script {
-                        dateValue = determineDateValue()
-                        cycle = dateValue + '_' + params.Version
-                        currentBuild.displayName = cycle
-                        slackMessage.good('Starting regression for ' + cycle)
-                        checkLoadExists(dateValue)
                         regressionPrep.regressionPrep1(dateValue, cycle)
                      }
                 }
@@ -84,8 +97,7 @@ pipeline{
             post {
                 failure {
                     script {
-//                       slackMessage.fail("Regression Prep failed for " + dateValue + '. Aborting')
-                       println('regression prep failed. setting regression_prep_status to false')
+                       println('regression 1 prep failed. setting regression_prep_status to false')
                        regression_prep_status = false
                     }
                 }
@@ -109,7 +121,7 @@ pipeline{
             post {
                 failure {
                     script {
-                       println('regression prep failed. setting regression_prep_status to false')
+                       println('regression 2 prep failed. setting regression_prep_status to false')
                        regression_prep_status = false
                     }
                 }
@@ -125,7 +137,6 @@ pipeline{
         stage('Regression Prep Check') {
             steps {
                 script {
-                    println('calling regressionprepcheck status')
                     regressionPrep.regressionPrepCheck(regression_prep_status)
                 }
             }
@@ -137,86 +148,50 @@ pipeline{
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'deploy failed') {
                     script {
                         slackMessage.good('Deploying backend')
-                        //deployEdgeCloud(dateValue)
-                        println('deployEdgeCloud')
+                        deployEdgeCloud(dateValue)
+                        //println('deployEdgeCloud')
                     }
                 }
             }
             post {
-                failure { 
+                always { 
                     script {
-                        slackMessage.warning('Deploy failed for ' + dateValue + '. Requesting input to continue') 
-                        input message: 'Deploy failed for ' + dateValue + ' Continue regression anyway?'
-                        slackMessage.good('Regression proceeding for ' + dateValue)
+                        if (deploy_status == false) {
+                            slackMessage.warning('Deploy failed for ' + dateValue + '. Waiting for input') 
+                            input message: 'Deploy failed for ' + dateValue + ' Continue regression anyway?'
+                            slackMessage.good('Regression proceeding')
+                        } else {
+                            slackMessage.good('Deploy successfull')
+                        }
                     }
-                }
-                success {
-                    script { slackMessage.good('Deploy successfull for ' + dateValue) }
                 }
             }
         }
         
         stage('Create/Upgrade CRMs') {
             when { expression { params.RunDeploy == true } }
-            parallel {
-                stage('Create Openstack') {
-                    steps {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'create openstack failed') {
-                            script { createUpgradeCrm.openstack(cycle) }
-                        }
-                    }
-                }
-                stage('Create Anthos') {
-                    steps {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'create anthos failed') {
-                            script { createUpgradeCrm.anthos(cycle) }
-                        }
-                    }
-                }
-                stage('Create Fake') {
-                    steps {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'create fake failed') {
-                            script { createUpgradeCrm.fake(cycle) }
-                        }
-                    }
-                }
-                
-                stage('Upgrade Cloudlets') {
-                    steps {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'upgrade cloudlets failed') {
-                            script { createUpgradeCrm.upgrade(cycle, dateValue) }
-                        }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'create crm failed') {
+                    script {
+                        createUpgradeCrm(cycle, dateValue)
+                        create_cloudlet_status = true
                     }
                 }
             }
             post {
-                failure {
-                    script { 
-                        currentBuild.result = 'SUCCESS'
-                        echo "SSSUUUUCCCCEEEESSS"
-                        create_cloudlet_status = false
+                always { 
+                    script {
+                        if (create_cloudlet_status == false) {
+                            slackMessage.warning('Create/Upgrade CRM Failed. Waiting for input') 
+                            input message: 'Create/Upgrade CRM failed. Continue regression anyway?'
+                            slackMessage.good('Regression proceeding')
+                        } else {
+                            slackMessage.good('Create/Upgrade CRM successfull')
+                        }
                     }
                 }
-                success {
-                    script { slackMessage.good('Create/Upgrade CRM successfull') }
-                }
             }
-
         }
-
-        stage('Create/Upgrade CRM Check') {
-            steps {
-                script {
-                    if(create_cloudlet_status == false) {
-                        slackMessage.fail('Create/Upgrade CRM Failed. Waiting for input')
-                        input message: 'Create/Upgrade CRM failed. Continue?'
-                        slackMessage.good('Regression proceeding')
-                        currentBuild.result = 'SUCCESS'
-                        echo "SSSUUUUCCCCEEEESSS33333"
-                    }
-                }
-            }
-        }        
 
         stage("execute parallel tests") {
             steps {
@@ -225,408 +200,7 @@ pipeline{
                 }
             }
         }
-//            parallel {
-//                stage('SDK Tests') {
-//                    when { expression { params.runSDKTests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'SDK tests failed') {
-//                            script { slackMessage.good('Starting SDK tests') }
-//                            build job: 'runSdkTestcases', parameters: [
-//                                string(name: 'SlaveNode', value: params.SlaveNodeSDK), 
-//                                string(name: 'Project', value: params.Project), 
-//                                string(name: 'Cycle', value: cycle), 
-//                                string(name: 'TestTarget', value: 'SDK'),
-//                                string(name: 'TestTimeout', value: params.TestTimeoutSDK),
-//                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
- //                       }
-//                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run SDK tests failed"
-//                                slackMessage.fail('Finished SDK tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run SDK tests passed"
-//                                slackMessage.good('Finished SDK tests with pass')
-//                            }
-//                        }
-//                    }
-//                }
-//                stage('DME Tests') {
-//                    when { expression { params.runDMETests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'DME tests failed') {
-//                            script { slackMessage.good('Starting DME tests') }
-//                            build job: 'runDmeTestcases', parameters: [
-//                                string(name: 'SlaveNode', value: params.SlaveNodeDME), 
-//                                string(name: 'Project', value: params.Project), 
-//                                string(name: 'Cycle', value: cycle), 
-//                                string(name: 'Controller', value: params.Controller), 
-//                                string(name: 'MasterController', value: params.MasterController),
-//                                string(name: 'DME', value: params.DME),
-//                                string(name: 'DMERest', value: params.DMERest),
-//                                string(name: 'DMERestCert', value: params.DMERestCert),
-//                                string(name: 'TestTarget', value: 'DME'),
-//                                string(name: 'VariableFile', value: params.VariableFile), 
-//                                string(name: 'TestTimeout', value: params.TestTimeoutDME),
-//                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
-//                        }
-//                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run DNE tests failed"
-//                                slackMessage.fail('Finished DME tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run DME tests passed"
-//                                slackMessage.good('Finished DME tests with pass')
-//                            }
-//                        }
-//                    }
-//                }
-//                stage('Controller Tests') {
-//                    when { expression { params.runControllerTests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Controller tests failed') {
-//                            script { slackMessage.good('Starting Controller Tests') }
-//                            build job: 'runControllerTestcases', parameters: [
-//                                string(name: 'SlaveNode', value: params.SlaveNodeController), 
-//                                string(name: 'Project', value: params.Project), 
-//                                string(name: 'Cycle', value: cycle), 
-//                                string(name: 'Controller', value: params.Controller), 
-//                                string(name: 'MasterController', value: params.MasterController),
-//                                string(name: 'DME', value: params.DME),
-//                                string(name: 'DMERest', value: params.DMERest),
-//                                string(name: 'DMERestCert', value: params.DMERestCert),
-//                                string(name: 'TestTarget', value: 'Controller'),
-//                                string(name: 'VariableFile', value: params.VariableFile), 
-//                                string(name: 'TestTimeout', value: params.TestTimeoutController),
-//                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
-//                        }
-//                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run Controller tests failed"
-//                                slackMessage.fail('Finished Controller tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run Controller tests passed"
-//                                slackMessage.good('Finished Controller tests with pass')
-//                            }
-//                        }
-//                    }
-//                }
-//              
-//                stage('MasterController Tests') {
-//                    when { expression { params.runMCTests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'MC tests failed') {
-//                            script { slackMessage.good('Starting MasterController tests') }
-//                            build job: 'runMcTestcases', parameters: [
-//                                string(name: 'SlaveNode', value: params.SlaveNodeMasterController), 
-//                                string(name: 'Project', value: params.Project), 
-//                                string(name: 'Cycle', value: cycle), 
-//                                string(name: 'MasterController', value: params.MasterController),
-//                                string(name: 'TestTarget', value: 'MasterController'),
-//                                string(name: 'VariableFile', value: params.VariableFile),
-//                                string(name: 'TestTimeout', value: params.TestTimeoutMasterController),
-//                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
-//                        }
-//                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run MasterController tests failed"
-//                                slackMessage.fail('Finished MasterController tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run MasterController tests passed"
-//                                slackMessage.good('Finished MasterController tests with pass')
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                stage('FRM Tests') {
-//                    when { expression { params.runFRMTests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'FRM tests failed') {
-//                            script { slackMessage.good('Starting FRM tests') }
-//                            build job: 'runFrmTestcases', parameters: [
-//                                string(name: 'SlaveNode', value: params.SlaveNodeFRM),
-//                                string(name: 'Project', value: params.Project),
-//                                string(name: 'Cycle', value: cycle),
-//                                string(name: 'MasterController', value: params.MasterController),
-//                                string(name: 'MasterControllerFederation', value: params.MasterControllerFederation),
-//                                string(name: 'MasterControllerFederationPassword', value: params.MasterControllerFederationPassword),
-//                                string(name: 'TestTarget', value: 'FRM'),
-//                                string(name: 'VariableFile', value: params.VariableFile),
-//                                string(name: 'TestTimeout', value: params.TestTimeoutFRM),
-//                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
-//                        }
-//                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run FRM tests failed"
-//                                slackMessage.fail('Finished FRM tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run FRM tests passed"
-//                                slackMessage.good('Finished FRM tests with pass')
-//                            }
-//                        }
-//                    }
-//                }
-//  
-//                stage('Anthos Tests') {
-//                    when { expression { params.runAnthosTests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Anthos tests failed') {
-//                            script { slackMessage.good('Starting Anthos tests') }
-//                            build job: 'runCrmTestcases', parameters: [
-//                                string(name: 'SlaveNode', value: params.SlaveNodeAnthos), 
-//                                string(name: 'Project', value: params.Project), 
-//                                string(name: 'Cycle', value: cycle), 
-//                                string(name: 'Controller', value: params.Controller), 
-//                                string(name: 'MasterController', value: params.MasterController),
-//                                string(name: 'DME', value: params.DME),
-//                                string(name: 'DMERest', value: params.DMERest),
-//                                string(name: 'DMERestCert', value: params.DMERestCert),
-//                                string(name: 'TestTarget', value: 'Anthos'),
-//                                string(name: 'VariableFile', value: params.VariableFile), 
-//                                string(name: 'CRMPool', value: params.CRMPoolAnthos),
-//                                string(name: 'NumberParallelExecutions', value: params.NumberParallelExecutionsAnthos),
-//                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
-//                        }
- //                   }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run Anthos tests failed"
-//                                slackMessage.fail('Finished Anthos tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run Anthos tests passed"
-//                                slackMessage.good('Finished Anthos tests with pass')
-//                            }
-//                        }
-//                    }
-//                }
-//              
-//                stage('Vsphere Tests') {
-//                    when { expression { params.runVsphereTests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Vsphere tests failed') {
-//                            script { slackMessage.good('Starting Vsphere tests') }
-//                            build job: 'runCrmTestcases', parameters: [
-//                                string(name: 'SlaveNode', value: params.SlaveNodeVsphere), 
-//                                string(name: 'Project', value: params.Project), 
-//                                string(name: 'Cycle', value: cycle), 
-//                                string(name: 'Controller', value: params.Controller), 
-//                                string(name: 'MasterController', value: params.MasterController),
-//                                string(name: 'DME', value: params.DME),
-//                                string(name: 'DMERest', value: params.DMERest),
-//                                string(name: 'DMERestCert', value: params.DMERestCert),
-//                                string(name: 'TestTarget', value: 'Vsphere'),
-//                                string(name: 'VariableFile', value: params.VariableFile), 
-//                                string(name: 'CRMPool', value: params.CRMPoolVsphere),
-//                                string(name: 'NumberParallelExecutions', value: params.NumberParallelExecutionsVsphere),
-//                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
-//                        }
-//                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run Vsphere tests failed"
-//                                slackMessage.fail('Finished Vsphere tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run Vsphere tests passed"
-//                                slackMessage.good('Finished Vsphere tests with pass')
-//                            }
-//                        }
-//                    }
-//                }
-//                stage('VCD Tests') {
-//                    when { expression { params.runVCDTests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'VCD tests failed') {
-//                            script { slackMessage.good('Starting VCD tests') }
-//                            build job: 'runCrmTestcases', parameters: [
-//                                string(name: 'SlaveNode', value: params.SlaveNodeVCD), 
-//                                string(name: 'Project', value: params.Project), 
-//                                string(name: 'Cycle', value: cycle), 
-//                                string(name: 'Controller', value: params.Controller), 
-//                                string(name: 'MasterController', value: params.MasterController),
-//                                string(name: 'DME', value: params.DME),
-//                                string(name: 'DMERest', value: params.DMERest),
-//                                string(name: 'DMERestCert', value: params.DMERestCert),
-//                                string(name: 'TestTarget', value: 'VCD'),
-//                                string(name: 'VariableFile', value: params.VariableFile), 
-//                                string(name: 'CRMPool', value: params.CRMPoolVCD),
-//                                string(name: 'NumberParallelExecutions', value: params.NumberParallelExecutionsVCD),
-//                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
-//                        }
-//                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run VCD tests failed"
-//                                slackMessage.fail('Finished VCD tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run VCD tests passed"
- //                               slackMessage.good('Finished VCD tests with pass')
-//                            }
-//                        }
-//                    }
-//                }
-//                stage('Openstack Tests') {
-//                    when { expression { params.runOpenstackTests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Openstack tests failed') {
-//                            script { slackMessage.good('Starting Openstack tests') }
-//                            build job: 'runCrmTestcases', parameters: [
-//                                string(name: 'SlaveNode', value: params.SlaveNodeOpenstack), 
-//                                string(name: 'Project', value: params.Project), 
-//                                string(name: 'Cycle', value: cycle), 
-//                                string(name: 'Controller', value: params.Controller), 
-//                                string(name: 'MasterController', value: params.MasterController),
-//                                string(name: 'DME', value: params.DME),
-//                                string(name: 'DMERest', value: params.DMERest),
-//                                string(name: 'DMERestCert', value: params.DMERestCert),
-//                                string(name: 'TestTarget', value: 'Openstack'),
-//                                string(name: 'VariableFile', value: params.VariableFile), 
-//                                string(name: 'CRMPool', value: params.CRMPoolOpenstack),
-//                                string(name: 'NumberParallelExecutions', value: params.NumberParallelExecutionsOpenstack),
-//                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
-//                        }
-//                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run Openstack tests failed"
-//                                slackMessage.fail('Finished Openstack tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run Openstack tests passed"
-//                                slackMessage.good('Finished Openstack tests with pass')
-//                            }
-//                        }
-//                    }
-//                }
-//                stage('Scans') {
-//                    when { expression { params.runScanTests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Scans failed') {
-//                            script { slackMessage.good('Starting scan tests') }
-//                            build job: 'runScans', parameters: [
-//                                string(name: 'Cycle', value: cycle), 
-//                                string(name: 'SlaveNode', value: params.SlaveNodeScans)
-//                                ]
-//                        }
-//                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run scan tests failed"
-//                                slackMessage.fail('Finished scan tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run scan tests passed"
-//                                slackMessage.good('Finished scan tests with pass')
-//                            }
-//                        }
-//                    }
-//                }
-//                
-//                stage('Console') {
-//                    when { expression { params.runConsoleTests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Console tests failed') {
-//                        script { slackMessage.good('Starting Console tests') }
-//                            build job: 'runConsoleTestcases', parameters: [
-//                                string(name: 'Cycle', value: cycle), 
-//                                string(name: 'Project', value: params.Project), 
-//                                string(name: 'Console', value: params.Console),
-//                                string(name: 'MasterController', value: params.MasterController),
-//                                string(name: 'TestTarget', value: 'WebUI'),
-//                                string(name: 'SlaveNode', value: params.SlaveNodeConsole)
-//                                ]
-//                        }
-//                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run console tests failed"
-//                                slackMessage.fail('Finished Console tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run console tests passed"
-//                                slackMessage.good('Finished Console tests with pass')
-//                            }
- //                       }
-//                    }
-//                }
-//                
-//                stage('Metrics') {
- //                   when { expression { params.runMetricsTests == true } }
-//                    steps {
-//                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Metrics tests failed') {
-//                            script { slackMessage.good('Starting Metrics tests') }
-//                            build job: 'runMetricsTestcases', parameters: [
-//                                string(name: 'Cycle', value: cycle), 
-//                                string(name: 'Project', value: params.Project), 
-//                                string(name: 'Console', value: params.Console),
-//                                string(name: 'MasterController', value: params.MasterController),
-//                                string(name: 'TestTarget', value: 'Metrics'),
-//                                string(name: 'SlaveNode', value: params.SlaveNodeMetrics)
-//                                ]
-//                        }
-//                    }
-//                    post {
-//                        failure {
-//                            script {
-//                                echo "run console tests failed"
-//                                slackMessage.fail('Finished Console tests with failures')
-//                            }
-//                        }
-//                        success {
-//                            script {
-//                                echo "run console tests passed"
-//                                slackMessage.good('Finished Console tests with pass')
-////                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
+
         stage("Password Tests") {
             when { expression { params.runMCTests == true } }
             steps {
