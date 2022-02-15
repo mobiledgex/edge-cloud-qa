@@ -148,7 +148,7 @@ pipeline{
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'deploy failed') {
                     script {
                         slackMessage.good('Deploying backend')
-                        deployEdgeCloud('dateValue')
+                        deployEdgeCloud(dateValue)
                         //println('deployEdgeCloud')
                     }
                 }
@@ -173,22 +173,18 @@ pipeline{
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'create crm failed') {
                     script {
-                        createUpgradeCrm(cycle, dateValue)
+                        createUpgradeCrm.createUpgrade(cycle, dateValue)
                         create_cloudlet_status = true
                     }
                 }
             }
-            post {
-                always { 
-                    script {
-                        if (create_cloudlet_status == false) {
-                            slackMessage.warning('Create/Upgrade CRM Failed. Waiting for input') 
-                            input message: 'Create/Upgrade CRM failed. Continue regression anyway?'
-                            slackMessage.good('Regression proceeding')
-                        } else {
-                            slackMessage.good('Create/Upgrade CRM successfull')
-                        }
-                    }
+        }
+
+        // this is required for the input step to work correctly. Seems to need to be in its own stage
+        stage('Create/Upgrade CRM Check') {
+            steps {
+                script {
+                    createUpgradeCrm.createUpgradeCheck(create_cloudlet_status)
                 }
             }
         }
