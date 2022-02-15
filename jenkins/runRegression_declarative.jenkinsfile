@@ -183,6 +183,7 @@ pipeline{
 
         // this is required for the input step to work correctly. Seems to need to be in its own stage
         stage('Create/Upgrade CRM Check') {
+            when { expression { params.RunDeploy == true } }
             steps {
                 script {
                     createUpgradeCrm.createUpgradeCheck(create_cloudlet_status)
