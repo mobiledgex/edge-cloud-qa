@@ -280,8 +280,50 @@ CreateCloudlet - create with same alliance org as own org shall return error
    @{alliance_list}=  Create List  ${oper}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot add cloudlet\\'s own org \\\\"azure\\\\" as alliance org"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
 
+# ECQ-4361
+CreateCloudlet - create with singlekubernetesclusterowner on non baremetal cloudlet shall return error
+   [Documentation]
+   ...  - send CreateCloudlet with singlekubernetesclusterowner set for all non baremetal cloudlet types
+   ...  - verify error is returned
+
+   [Tags]  SingleKubernetesClusterOwner
+
+   [Template]  Create Cloudlet with singlekubernetesclusterowner
+
+   Fake
+   Dind
+   Openstack
+   Azure
+   Gcp
+   Edgebox
+   Fakeinfra
+   Vsphere
+   AwsEks
+   VmPool  ${vmpool_name}
+   AwsEc2
+   Vcd
+   Kind
+   Kindinfra
+   Federation
+   FakeVmPool  ${vmpool_name}
+
+# ECQ-4362
+CreateCloudlet - create with singlekubernetesclusterowner set to nonexistent org shall return error
+   [Documentation]
+   ...  - send CreateCloudlet with singlekubernetesclusterowner to org that doesnt exist
+   ...  - verify error is returned
+
+   [Tags]  SingleKubernetesClusterOwner
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org orgnotfound not found"}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  single_kubernetes_cluster_owner=orgnotfound  token=${token}
+
 ** Keywords **
 Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
+
+Create Cloudlet with singlekubernetesclusterowner
+   [Arguments]  ${platform}  ${vmpool}=${None}
+
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Single kubernetes cluster owner can only be set on a single cluster platform","code":400}}')  Create Cloudlet  region=US  operator_org_name=TDG  latitude=1  longitude=1  number_dynamic_ips=1  platform_type=${platform}  single_kubernetes_cluster_owner=${developer_org_name_automation}  vm_pool=${vmpool}  token=${token}
 
