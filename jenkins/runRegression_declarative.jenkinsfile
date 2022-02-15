@@ -200,7 +200,7 @@ pipeline{
         }
 
         stage("Password Tests") {
-            when { expression { params.runMCTests == true } }
+            when { expression { params.RunMCTests == true } }
             steps {
                 script {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Password tests failed') {
@@ -232,7 +232,7 @@ pipeline{
         }
 
         stage('Rerun Failed Tests') {
-            when { expression { params.runFailedTests == true } }
+            when { expression { params.RunFailedTests == true } }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Rerun Failed tests failed') {
                     script { 
@@ -258,7 +258,7 @@ pipeline{
         }
 
         stage("Performance Tests") {
-            when { expression { params.runPerformanceTests == true } }
+            when { expression { params.RunPerformanceTests == true } }
             steps {
                 script {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', message: 'Performance tests failed') {
