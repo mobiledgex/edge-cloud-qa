@@ -7,7 +7,7 @@ Library         DateTime
 Library         Collections
 
 Test Setup      Setup
-Test Teardown   Close Browser
+Test Teardown   Teardown
 
 Test Timeout    20 minutes
 
@@ -26,25 +26,23 @@ WebUI - user shall be able to change latitude and longitude of an existing cloud
     Open Cloudlets
 
     Search Cloudlet  cloudlet_name=${cloudlet_name}
-    MexConsole.Update Cloudlet  region=US  cloudlet_name=${cloudlet_name}  operator=packet  latitude=11  longitude=11
+    MexConsole.Update Cloudlet  region=US  cloudlet_name=${cloudlet_name}  operator=packet  latitude=37  longitude=-119
 
     ${cloudlet_details}=    Show Cloudlets  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=packet
-    Should Be Equal As Numbers  ${cloudlet_details[0]['data']['location']['latitude']}  11
-    Should Be Equal As Numbers  ${cloudlet_details[0]['data']['location']['longitude']}  11
+    Should Be Equal As Numbers  ${cloudlet_details[0]['data']['location']['latitude']}  37
+    Should Be Equal As Numbers  ${cloudlet_details[0]['data']['location']['longitude']}  -119
 
-    ${time}=  Set Variable  ${cloudlet_details[0]['data']['updated_at']['seconds']}
-    Log to Console  ${time}
-    ${timestamp}=  Convert Date  ${time}  exclude_millis=yes
-    Log to Console  ${timestamp}
+    ${CurrentDate}=  Get Current Date  result_format=%Y-%m-%d
+    Log to Console  ${CurrentDate}
+
 
     ${details}=  Open Cloudlet Details  region=US  cloudlet_name=${cloudlet_name}
     Log to Console  ${details}
-    Should Be Equal   ${details['Updated']}   ${timestamp}
-    Close Cloudlet Details
+    Should Contain   ${details['Updated']}   ${CurrentDate}
+    Should Contain   ${details['Cloudlet Location']}   "latitude": 37
+    Should Contain   ${details['Cloudlet Location']}   "longitude": -119
 
-    Search Cloudlet  cloudlet_name=${cloudlet_name}
-    MexConsole.Delete Cloudlet  cloudlet_name=${cloudlet_name}  region=US  operator=packet
-    Cloudlet Should Not Exist  cloudlet_name=${cloudlet_name}  region=US  operator_name=packet
+    Close Cloudlet Details
 
 WebUI - user shall be able to change number of dynamic IPs of an existing cloudlet
     [Documentation]
@@ -60,19 +58,14 @@ WebUI - user shall be able to change number of dynamic IPs of an existing cloudl
     ${cloudlet_details}=    Show Cloudlets  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=packet  number_dynamic_ips=250
     Should Be Equal As Numbers  ${cloudlet_details[0]['data']['num_dynamic_ips']}  250
 
-    ${time}=  Set Variable  ${cloudlet_details[0]['data']['updated_at']['seconds']}
-    Log to Console  ${time}
-    ${timestamp}=  Convert Date  ${time}  exclude_millis=yes
-    Log to Console  ${timestamp}
+    ${CurrentDate}=  Get Current Date  result_format=%Y-%m-%d
+    Log to Console  ${CurrentDate}
 
     ${details}=  Open Cloudlet Details  region=US  cloudlet_name=${cloudlet_name}
     Log to Console  ${details}
-    Should Be Equal   ${details['Updated']}   ${timestamp}
+    Should Contain   ${details['Updated']}   ${CurrentDate}
+    Should Be Equal as Numbers   ${details['Number of Dynamic IPs']}   250
     Close Cloudlet Details
-
-    Search Cloudlet  cloudlet_name=${cloudlet_name}
-    MexConsole.Delete Cloudlet  cloudlet_name=${cloudlet_name}  region=US  operator=packet
-    Cloudlet Should Not Exist  cloudlet_name=${cloudlet_name}  region=US  operator_name=packet
 
 *** Keywords ***
 Setup
@@ -86,4 +79,5 @@ Setup
     Set Suite Variable  ${cloudlet_name}
 
 Teardown
+    Cleanup Provisioning
     Close Browser
