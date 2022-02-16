@@ -42,9 +42,9 @@ MC - Login with a 2FA user
 # ECQ-4267
 MC - Update a non 2FA user to a 2FA user
    [Documentation]
-   ...  create a non 2FA user 
-   ...  update the user to a 2FA user
-   ...  verify the 2FA user can log in
+   ...  - create a non 2FA user 
+   ...  - update the user to a 2FA user
+   ...  - verify the 2FA user can log in
 
    ${epoch}=       Get Current Date  result_format=epoch
    ${non2fauser}=  Set Variable      username${epoch}
@@ -64,9 +64,9 @@ MC - Update a non 2FA user to a 2FA user
 # ECQ-4268
 MC - Update a 2FA user to a non 2FA user
    [Documentation]
-   ...  Create a 2FA user 
-   ...  Update the user to a non 2FA user
-   ...  verify the non 2FA user can login 
+   ...  - Create a 2FA user 
+   ...  - Update the user to a non 2FA user
+   ...  - verify the non 2FA user can login 
 
    ${epoch}=       Get Current Date  result_format=epoch
    ${new2fauser}=    Set Variable      username${epoch}
