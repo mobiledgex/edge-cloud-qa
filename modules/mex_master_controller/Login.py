@@ -5,6 +5,7 @@ import base64
 import struct
 import hmac
 import hashlib
+import pyotp
 
 from mex_master_controller.MexOperation import MexOperation
 
@@ -51,13 +52,5 @@ class Login(MexOperation):
         return self.create(token=None, url=self.login_url, json_data=json_data, use_defaults=False, use_thread=use_thread, create_msg=msg_dict)
 
     def get_totp(self, totp_shared_key):
-        return self._get_hotp_token(secret=totp_shared_key, intervals_no=int(time.time()) // 30)
-
-    def _get_hotp_token(self, secret, intervals_no):
-        key = base64.b32decode(secret, True)
-        msg = struct.pack(">Q", intervals_no)
-        h = hmac.new(key, msg, hashlib.sha1).digest()
-        o = h[19] & 15
-        h = (struct.unpack(">I", h[o:o + 4])[0] & 0x7fffffff) % 1000000
-
-        return h
+        totp = pyotp.TOTP(totp_shared_key)
+        return totp.now() 
