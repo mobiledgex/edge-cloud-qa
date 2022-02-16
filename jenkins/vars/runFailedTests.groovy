@@ -10,11 +10,11 @@ def mc_tests(cycle) {
                 string(name: 'TestTarget', value: 'MasterController'),
                 string(name: 'VariableFile', value: params.VariableFile),
                 string(name: 'TestTimeout', value: params.TestTimeoutMasterController),
-                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
+                booleanParam(name: 'RunFailedOnly', value: true)]
 
             slackMessage.good('Finished MC Failed tests with pass')
         } else {
-            slackMessage.good('Skipping MC Failed tests')
+            slackMessage.warning('Skipping MC Failed tests')
         }
     } catch(e) {
         slackMessage.fail('Finished MC Failed tests with failures')
@@ -37,10 +37,10 @@ def controller_tests(cycle) {
                 string(name: 'TestTarget', value: 'Controller'),
                 string(name: 'VariableFile', value: params.VariableFile),
                 string(name: 'TestTimeout', value: params.TestTimeoutController),
-                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
+                booleanParam(name: 'RunFailedOnly', value: true)]
             slackMessage.good('Finished Controller Failed tests with pass')
         } else {
-            slackMessage.good('Skipping Controller Failed tests')
+            slackMessage.warning('Skipping Controller Failed tests')
         }
     } catch(e) {
         slackMessage.fail('Finished Controller Failed tests with failures')
@@ -63,10 +63,10 @@ def dme_tests(cycle) {
                 string(name: 'TestTarget', value: 'DME'),
                 string(name: 'VariableFile', value: params.VariableFile),
                 string(name: 'TestTimeout', value: params.TestTimeoutDME),
-                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
+                booleanParam(name: 'RunFailedOnly', value: true)]
             slackMessage.good('Finished DME Failed tests with pass')
         } else {
-            slackMessage.good('Skipping DME Failed tests')
+            slackMessage.warning('Skipping DME Failed tests')
         }
     } catch(e) {
         slackMessage.fail('Finished DME Failed tests with failures')
