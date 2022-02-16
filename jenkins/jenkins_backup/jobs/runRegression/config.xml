@@ -10,6 +10,7 @@
         <string>SlaveNodeFRM</string>
         <string>RunFailedTests</string>
         <string>TestTimeoutFRM</string>
+        <string>RunReport</string>
         <string>OpenStackEnv</string>
         <string>RunAnthosTests</string>
         <string>CRMPoolAnthos</string>
@@ -345,6 +346,10 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>RunFailedTests</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RunReport</name>
           <defaultValue>true</defaultValue>
         </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
