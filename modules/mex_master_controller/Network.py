@@ -23,7 +23,7 @@ class Network(MexOperation):
         node_dict = {}
 
         if connection_type is not None:
-           network_dict['connection_type'] = connection_type
+            network_dict['connection_type'] = connection_type
 
         if federated_org is not None:
             cloudlet_key_dict['federated_organization'] = federated_org
@@ -48,13 +48,13 @@ class Network(MexOperation):
                 if 'destination_cidr' in route and route['destination_cidr'] is not None:
                     route_dict['destination_cidr'] = route['destination_cidr']
                 if 'next_hop_ip' in route and route['next_hop_ip'] is not None:
-                    route_dict['next_hop_ip'] = route['next_hop_ip']                    
+                    route_dict['next_hop_ip'] = route['next_hop_ip']
                 if route_dict:
                     route_dict_list.append(route_dict)
             network_dict['routes'] = route_dict_list
         else:
             network_dict['routes'] = []
- 
+
         return network_dict
 
     def create_network(self, token=None, region=None, network_name=None, cloudlet_name=None, cloudlet_org=None, connection_type=None, federated_org=None, route_list=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
