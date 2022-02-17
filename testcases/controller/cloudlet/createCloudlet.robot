@@ -226,6 +226,17 @@ CreateCloudlet - shall be able to create cloudlet with allianceorgs
    ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}3  operator_org_name=${operator_name_fake}  alliance_org_list=${alliance_list}  token=${token}
    Should Be True  'alliance_orgs' not in ${cloudlet['data']}
 
+# ECQ-4363
+CreateCloudlet - shall be able to create cloudlet with singlekubernetesclusterowner
+   [Documentation]
+   ...  - send CreateCloudlet with singlekubernetesclusterowner
+   ...  - verify the cloudlet is created
+
+   [Tags]  SingleKubernetesClusterOwner
+
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  single_kubernetes_cluster_owner=${developer_org_name_automation}  platform_type=FakeSingleCluster  token=${token}
+   Should Be Equal  ${cloudlet['data']['single_kubernetes_cluster_owner']}  ${developer_org_name_automation}
+
 ** Keywords **
 Setup
    ${time}=  Get Current Date  result_format=epoch
