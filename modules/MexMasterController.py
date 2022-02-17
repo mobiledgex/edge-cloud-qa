@@ -57,6 +57,7 @@ from mex_master_controller.OperatorReporting import OperatorReporting
 from mex_master_controller.Usage import Usage
 from mex_master_controller.Federation import Federation
 from mex_master_controller.Login import Login
+from mex_master_controller.Network import Network
 
 import shared_variables_mc
 import shared_variables
@@ -231,6 +232,7 @@ class MexMasterController(MexRest):
         self.operator_reporting = OperatorReporting(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.usage = Usage(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.federation = Federation(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.network = Network(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -1687,6 +1689,18 @@ class MexMasterController(MexRest):
 
     def update_trust_policy_exception(self, token=None, region=None, policy_name=None, app_name=None, developer_org_name=None, app_version=None, cloudlet_pool_name=None, cloudlet_pool_org_name=None, rule_list=[], state=None, json_data=None, use_defaults=True, use_thread=False):
         return self.trust_policy.update_trust_policy_exception(token=token, region=region, policy_name=policy_name, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_pool_name=cloudlet_pool_name, cloudlet_pool_org_name=cloudlet_pool_org_name, rule_list=rule_list, state=state, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_network(self, token=None, region=None, network_name=None, cloudlet_name=None, cloudlet_org=None, connection_type=None, federated_org=None, route_list=[], json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        return self.network.create_network(token=token, region=region, network_name=network_name, cloudlet_name=cloudlet_name, cloudlet_org=cloudlet_org, connection_type=connection_type, federated_org=federated_org, route_list=route_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def delete_network(self, token=None, region=None, network_name=None, cloudlet_name=None, cloudlet_org=None, connection_type=None, federated_org=None, route_list=[], json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        return self.network.delete_network(token=token, region=region, network_name=network_name, cloudlet_name=cloudlet_name, cloudlet_org=cloudlet_org, connection_type=connection_type, federated_org=federated_org, route_list=route_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_network(self, token=None, region=None, network_name=None, cloudlet_name=None, cloudlet_org=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        return self.network.show_network(token=token, region=region, network_name=network_name, cloudlet_name=cloudlet_name, cloudlet_org=cloudlet_org, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_network(self, token=None, region=None, network_name=None, cloudlet_name=None, cloudlet_org=None, connection_type=None, federated_org=None, route_list=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        return self.network.update_network(token=token, region=region, network_name=network_name, cloudlet_name=cloudlet_name, cloudlet_org=cloudlet_org, connection_type=connection_type, federated_org=federated_org, route_list=route_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def create_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, email_address=None, pagerduty_integration_key=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, app_cloudlet_name=None, app_cloudlet_org=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.alert_receiver.create_alert_receiver(token=token, region=region, receiver_name=receiver_name, type=type, severity=severity, email_address=email_address, pagerduty_integration_key=pagerduty_integration_key, slack_channel=slack_channel, slack_api_url=slack_api_url, app_name=app_name, app_version=app_version, app_cloudlet_name=app_cloudlet_name, app_cloudlet_org=app_cloudlet_org, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name,  developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
