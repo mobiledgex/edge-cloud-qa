@@ -90,8 +90,8 @@ class Network(MexOperation):
         msg_dict = {'Network': msg}
 
         msg_dict_show = None
-        if 'name' in msg['name']:
-            msg_show = self._build(network_name=msg['name'], use_defaults=False)
+        if 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']['cloudlet_key'] and 'name' in msg['key']['cloudlet_key']:
+            msg_show = self._build(network_name=msg['key']['name'], cloudlet_name=msg['key']['cloudlet_key']['name'], cloudlet_org=msg['key']['cloudlet_key']['organization'], use_defaults=False)
             msg_dict_show = {'Network': msg_show}
 
         return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)
