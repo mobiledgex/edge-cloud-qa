@@ -33,6 +33,7 @@ testcase_components4 = [
 node_name = 'notset'
 if(testtarget == 'Anthos') {
     echo "testtarget is Anthos"
+    testcase_components1 = testcase_components1.add([crm_components + "Serverless"])
     testcase_components1 = testcase_components1.minus([crm_components + "ClusterInst"])
     testcase_components1 = testcase_components1.minus([crm_components + "GPU"])
     testcase_components1 = testcase_components1.minus([crm_components + "VMPool"])
