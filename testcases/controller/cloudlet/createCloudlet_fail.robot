@@ -315,7 +315,17 @@ CreateCloudlet - create with singlekubernetesclusterowner set to nonexistent org
 
    [Tags]  SingleKubernetesClusterOwner
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org orgnotfound not found"}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  single_kubernetes_cluster_owner=orgnotfound  token=${token}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org orgnotfound not found"}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  platform_type=K8SBareMetal  single_kubernetes_cluster_owner=orgnotfound  token=${token}
+
+# ECQ-4371
+CreateCloudlet - create with singlekubernetesclusterowner set to operator org shall return error
+   [Documentation]
+   ...  - send CreateCloudlet with singlekubernetesclusterowner to an operator org
+   ...  - verify error is returned
+
+   [Tags]  SingleKubernetesClusterOwner
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org orgnotfound not found"}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  platform_type=K8SBareMetal  single_kubernetes_cluster_owner=${oper}  token=${token}
 
 ** Keywords **
 Setup
