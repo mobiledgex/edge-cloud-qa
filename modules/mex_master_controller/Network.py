@@ -68,7 +68,7 @@ class Network(MexOperation):
 
         msg_dict_show = None
         if 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']['cloudlet_key'] and 'name' in msg['key']['cloudlet_key']:
-            msg_show = self._build(network_name=msg['key']['name'], cloudlet_name=msg['key']['cloudlet_key']['name'], cloudlet_org=msg['key']['cloudlet_key']['organization'], use_defaults=False)
+            msg_show = self._build(network_name=msg['key']['name'], cloudlet_name=msg['key']['cloudlet_key']['name'], cloudlet_org=msg['key']['cloudlet_key']['organization'], federated_org=federated_org, use_defaults=False)
             msg_dict_show = {'Network': msg_show}
 
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
@@ -79,8 +79,8 @@ class Network(MexOperation):
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def show_network(self, token=None, region=None, network_name=None, cloudlet_name=None, cloudlet_org=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(network_name=network_name, cloudlet_name=cloudlet_name, cloudlet_org=cloudlet_org, use_defaults=use_defaults)
+    def show_network(self, token=None, region=None, network_name=None, cloudlet_name=None, cloudlet_org=None, connection_type=None, federated_org=None, route_list=[], json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(network_name=network_name, cloudlet_name=cloudlet_name, cloudlet_org=cloudlet_org, federated_org=federated_org, route_list=route_list, use_defaults=use_defaults)
         msg_dict = {'Network': msg}
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
@@ -91,7 +91,7 @@ class Network(MexOperation):
 
         msg_dict_show = None
         if 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']['cloudlet_key'] and 'name' in msg['key']['cloudlet_key']:
-            msg_show = self._build(network_name=msg['key']['name'], cloudlet_name=msg['key']['cloudlet_key']['name'], cloudlet_org=msg['key']['cloudlet_key']['organization'], use_defaults=False)
+            msg_show = self._build(network_name=msg['key']['name'], cloudlet_name=msg['key']['cloudlet_key']['name'], cloudlet_org=msg['key']['cloudlet_key']['organization'], federated_org=federated_org, use_defaults=False)
             msg_dict_show = {'Network': msg_show}
 
         return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)
