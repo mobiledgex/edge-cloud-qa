@@ -61,7 +61,7 @@ CreateCloudletPool - shall be able to create with 1 cloudlet in cloudlet list
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
-   Should Be Equal  ${pool_return['data']['cloudlets']}  ${cloudlet_list}
+   Should Be Equal  ${pool_return['data']['cloudlets'][0]['name']}  ${cloudlet_list[0]}
    Length Should Be  ${pool_return['data']['cloudlets']}  1 
 
    #Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
@@ -82,7 +82,7 @@ CreateCloudletPool - shall be able to create with 2 cloudlets in cloudlet list
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
-   Should Be Equal  ${pool_return['data']['cloudlets']}  ${cloudlet_list}
+   #Should Be Equal  ${pool_return['data']['cloudlets']}  ${cloudlet_list}
    Length Should Be  ${pool_return['data']['cloudlets']}  2
 
    #Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
