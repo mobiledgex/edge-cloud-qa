@@ -17,7 +17,7 @@ pipeline{
         string(name: 'DMERestCert', defaultValue: '')
         string(name: 'Console', defaultValue: 'https://console-qa.mobiledgex.net')
         string(name: 'VariableFile', defaultValue: 'automation_variables.py')
-        string(name: 'InfluxDB', defaultValue: 'notset')
+        string(name: 'InfluxDB', defaultValue: 'us-qa.influxdb.mobiledgex.net:8086')
         string(name: 'OpenStackEnv', defaultValue: 'notset')
         string(name: 'CRMUpgradeVersion', defaultValue: 'notset')
         string(name: 'CommitVersion', defaultValue: 'master')
