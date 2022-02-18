@@ -16,7 +16,7 @@ class CloudletPool(MexOperation):
         self.show_url = '/auth/ctrl/ShowCloudletPool'
         self.update_url = '/auth/ctrl/UpdateCloudletPool'
 
-    def _build(self, cloudlet_pool_name=None, organization=None, cloudlet_list=None, include_fields=False, use_defaults=True):
+    def _build(self, cloudlet_pool_name=None, organization=None, cloudlet_list=[], include_fields=False, use_defaults=True):
         _fields_list = []
         _operator_name_field_number = '2.1'
         _pool_name_field_number = '2.2'
@@ -41,14 +41,18 @@ class CloudletPool(MexOperation):
             pool_key_dict['organization'] = organization
             _fields_list.append(_operator_name_field_number)
 
-        if cloudlet_list is not None:
-            list1 = []
+        cloudlet_list_dict = []
+        for cloudlet in cloudlet_list:
+            cloudlet_dict = {}
+            if 'name' in cloudlet and cloudlet['name'] is not None:
+                cloudlet_dict["name"] = cloudlet['name']
+            if 'federated_org' in cloudlet and cloudlet['federated_org'] is not None:
+                cloudlet_dict['federated_organization'] = cloudlet['federated_org']
 
-            for i in range(len(cloudlet_list)):
-                dict1 = {}
-                dict1["name"] = cloudlet_list[i]
-                list1.append(dict1)
-            pool_dict['cloudlets'] = list1
+            if cloudlet_dict:
+                cloudlet_list_dict.append(cloudlet_dict)
+
+            pool_dict['cloudlets'] = cloudlet_list_dict
             _fields_list.append(_cloudlets_field_number)
 
         if pool_key_dict:
@@ -61,7 +65,7 @@ class CloudletPool(MexOperation):
 
         return pool_dict
 
-    def create_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, cloudlet_list=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+    def create_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, cloudlet_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         msg = self._build(cloudlet_pool_name=cloudlet_pool_name, organization=operator_org_name, cloudlet_list=cloudlet_list, use_defaults=use_defaults)
         msg_dict = {'cloudletpool': msg}
 
@@ -81,7 +85,7 @@ class CloudletPool(MexOperation):
 
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
 
-    def update_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, cloudlet_list=None, json_data=None, include_fields=True, use_defaults=True, auto_delete=True, use_thread=False):
+    def update_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, cloudlet_list=[], json_data=None, include_fields=True, use_defaults=True, auto_delete=True, use_thread=False):
         msg = self._build(cloudlet_pool_name=cloudlet_pool_name, organization=operator_org_name, cloudlet_list=cloudlet_list, include_fields=include_fields, use_defaults=use_defaults)
         msg_dict = {'cloudletpool': msg}
 
@@ -98,7 +102,7 @@ class CloudletPool(MexOperation):
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def show_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, cloudlet_list=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+    def show_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, cloudlet_list=[], operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(cloudlet_pool_name=cloudlet_pool_name, cloudlet_list=cloudlet_list, organization=operator_org_name, use_defaults=use_defaults)
         msg_dict = {'cloudletpool': msg}
 
