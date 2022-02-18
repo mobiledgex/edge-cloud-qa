@@ -56,12 +56,13 @@ CreateCloudletPool - shall be able to create with 1 cloudlet in cloudlet list
 
    Create Cloudlet  region=${region}  operator_org_name=${organization}
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name}
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   @{cloudlet_list}=  Create List  ${cloudlet1}
 
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
-   Should Be Equal  ${pool_return['data']['cloudlets'][0]['name']}  ${cloudlet_list[0]}
+   Should Be Equal  ${pool_return['data']['cloudlets'][0]['name']}  ${cloudlet_name}
    Length Should Be  ${pool_return['data']['cloudlets']}  1 
 
    #Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
@@ -77,11 +78,15 @@ CreateCloudletPool - shall be able to create with 2 cloudlets in cloudlet list
 
    Create Cloudlet  region=${region}  operator_org_name=${organization}
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   &{cloudlet2}=  Create Dictionary  name=tmocloud-2
+   @{cloudlet_list}=  Create List  ${cloudlet1}  ${cloudlet2}  
 
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
+   Should Be Equal  ${pool_return['data']['cloudlets'][0]['name']}  ${cloudlet_name}
+   Should Be Equal  ${pool_return['data']['cloudlets'][1]['name']}  tmocloud-2
    #Should Be Equal  ${pool_return['data']['cloudlets']}  ${cloudlet_list}
    Length Should Be  ${pool_return['data']['cloudlets']}  2
 

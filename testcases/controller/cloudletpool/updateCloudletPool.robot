@@ -56,7 +56,8 @@ UpdateCloudletPool - shall be able to update empty pool with 1 cloudlet
    Should Contain   ${pool_return1['data']['created_at']}  ${current_date}
    Should Be Empty  ${pool_return1['data']['updated_at']}
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name}
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   @{cloudlet_list}=  Create List  ${cloudlet1}
 
    Sleep  1s
 
@@ -65,7 +66,7 @@ UpdateCloudletPool - shall be able to update empty pool with 1 cloudlet
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
-   Should Be Equal  ${pool_return['data']['cloudlets'][0]['name']}  ${cloudlet_list[0]}
+   Should Be Equal  ${pool_return['data']['cloudlets'][0]['name']}  ${cloudlet_list[0]['name']}
    Should Be Equal  ${pool_return['data']['cloudlets'][0]['organization']}  ${organization}
 
    Length Should Be  ${pool_return['data']['cloudlets']}  1
@@ -91,7 +92,9 @@ UpdateCloudletPool - shall be able to update empty pool with 2 cloudlets
    Should Contain   ${pool_return1['data']['created_at']}  ${current_date}
    Should Be Empty  ${pool_return1['data']['updated_at']}
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   &{cloudlet2}=  Create Dictionary  name=tmocloud-2
+   @{cloudlet_list}=  Create List  ${cloudlet1}  ${cloudlet2}
 
    Sleep  1s
 
@@ -116,7 +119,9 @@ UpdateCloudletPool - shall be able to update pool with 2 cloudlets to empty pool
    ...  - send UpdateCloudletPool on empty pool with 2 cloudlets
    ...  - verify pool is correct
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   &{cloudlet2}=  Create Dictionary  name=tmocloud-2
+   @{cloudlet_list}=  Create List  ${cloudlet1}  ${cloudlet2}
    ${pool_return1}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
    ${created_epoch}=  Convert to Epoch  ${pool_return1['data']['created_at']}
 
@@ -130,7 +135,7 @@ UpdateCloudletPool - shall be able to update pool with 2 cloudlets to empty pool
    Should Contain   ${pool_return1['data']['created_at']}  ${current_date}
    Should Be Empty  ${pool_return1['data']['updated_at']}
 
-   @{cloudlet_list2}=  Create List
+   @{cloudlet_list2}=  Create List  empty
 
    Sleep  1s
 
@@ -154,7 +159,9 @@ UpdateCloudletPool - shall be able to update pool with same cloudlets
    ...  - send UpdateCloudletPool on pool with same cloudlets
    ...  - verify pool is correct
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   &{cloudlet2}=  Create Dictionary  name=tmocloud-2
+   @{cloudlet_list}=  Create List  ${cloudlet1}  ${cloudlet2}
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
    ${created_epoch}=  Convert to Epoch  ${pool_return['data']['created_at']}
 
@@ -191,7 +198,9 @@ UpdateCloudletPool - shall be able to update pool by removing cloudlet
    ...  - send UpdateCloudletPool on pool with 2 cloudlets to 1 cloudlet
    ...  - verify pool is correct
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name}  tmocloud-2
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   &{cloudlet2}=  Create Dictionary  name=tmocloud-2
+   @{cloudlet_list}=  Create List  ${cloudlet1}  ${cloudlet2}
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
    ${created_epoch}=  Convert to Epoch  ${pool_return['data']['created_at']}
 
@@ -206,13 +215,13 @@ UpdateCloudletPool - shall be able to update pool by removing cloudlet
 
    Sleep  1s
 
-   @{cloudlet_list}=  Create List  tmocloud-2
+   @{cloudlet_list}=  Create List  ${cloudlet2}
    ${pool_return2}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
    ${updated_epoch}=  Convert to Epoch  ${pool_return2['data']['updated_at']}
 
    Should Be Equal  ${pool_return2['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return2['data']['key']['organization']}  ${organization}
-   Should Be Equal  ${pool_return2['data']['cloudlets'][0]['name']}  ${cloudlet_list[0]}
+   Should Be Equal  ${pool_return2['data']['cloudlets'][0]['name']}  ${cloudlet_list[0]['name']}
 
    Length Should Be  ${pool_return['data']['cloudlets']}  2
    Length Should Be  ${pool_return2['data']['cloudlets']}  1
@@ -240,13 +249,14 @@ UpdateCloudletPool - shall be able to update pool after adding/removing members
    Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name3}  operator_org_name=${organization}
    Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name4}  operator_org_name=${organization}
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name}
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   @{cloudlet_list}=  Create List  ${cloudlet1}
    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
    ${created_epoch}=  Convert to Epoch  ${pool_return['data']['created_at']}
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['key']['organization']}  ${organization}
-   Should Be Equal  ${pool_return['data']['cloudlets'][0]['name']}  ${cloudlet_list[0]}
+   Should Be Equal  ${pool_return['data']['cloudlets'][0]['name']}  ${cloudlet_list[0]['name']}
    #Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
    #Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
    #Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
@@ -258,8 +268,10 @@ UpdateCloudletPool - shall be able to update pool after adding/removing members
    Remove Cloudlet Pool Member  region=${region}  operator_org_name=${organization}  cloudlet_name=${cloudlet_name3}  #cloudlet_name=automationHamburgCloudlet
 
    Sleep  1s
- 
-   @{cloudlet_list_update}=  Create List  ${cloudlet_name4}  ${cloudlet_name}  #automationDusseldorfCloudlet  automationBerlinCloudlet
+
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name4}
+   &{cloudlet2}=  Create Dictionary  name=${cloudlet_name}
+   @{cloudlet_list_update}=  Create List  ${cloudlet1}  ${cloudlet2}
    ${pool_return2}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list_update}
    ${updated_epoch}=  Convert to Epoch  ${pool_return2['data']['updated_at']}
 
