@@ -356,7 +356,8 @@ Setup
 
    Create Cloudlet  region=${region}  token=${op_token}  operator_org_name=${organization}
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name}
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   @{cloudlet_list}=  Create List  ${cloudlet1}
    Create Cloudlet Pool  region=${region}  token=${op_token}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
 
    Set Suite Variable  ${super_token}
