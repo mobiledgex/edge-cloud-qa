@@ -169,7 +169,8 @@ Setup
 
    Create Cloudlet  region=${region}  token=${op_token}  operator_org_name=${organization}
 
-   @{cloudlet_list}=  Create List  ${cloudlet_name}
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   @{cloudlet_list}=  Create List  ${cloudlet1}
    Create Cloudlet Pool  region=${region}  token=${op_token}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
 
    Set Suite Variable  ${super_token}
@@ -199,9 +200,9 @@ Get Cloudlets From Pools
 
    @{cloudlet_list}=  Create List
    FOR  ${pool}  IN  @{pools}
-      IF  'cloudlets' in ${pool['data']}
+      IF  ${pool['data']['cloudlets']} is not None
          FOR  ${cloud}  IN  @{pool['data']['cloudlets']}
-            Append To List  ${cloudlet_list}  ${cloud}
+            Append To List  ${cloudlet_list}  ${cloud['name']}
          END
       END
    END

@@ -111,7 +111,8 @@ CreateCloudletPool - creating with cloudletlist with appinst shall return error
    Create App  region=${region}  access_ports=tcp:1  token=${token}
    ${ap}=  Create App Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=tmus  cluster_instance_name=autoclusterxx  auto_delete=${False}
 
-   ${clist}=  Create List  ${cloudlet_name}
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   ${clist}=  Create List  ${cloudlet1}
    ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool  region=${region}  token=${token}  operator_org_name=${operator}  cloudlet_list=${clist}
 
    Delete App Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=tmus  cluster_instance_name=autoclusterxx
@@ -138,7 +139,8 @@ CreateCloudletPool - creating with cloudletlist with clusterinst shall return er
    Create Flavor  region=${region}
    Create Cluster Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=tmus  cluster_name=xxxxxx  auto_delete=${False}
 
-   ${clist}=  Create List  ${cloudlet_name}
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}
+   ${clist}=  Create List  ${cloudlet1}
    ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool  region=${region}  token=${token}  operator_org_name=${operator}  cloudlet_list=${clist}
 
    Delete Cluster Instance  region=${region}  token=${token}  cloudlet_name=${cloudlet_name}  operator_org_name=tmus  cluster_name=xxxxxx
