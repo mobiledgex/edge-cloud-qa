@@ -35,7 +35,9 @@ class CloudletPoolMember(MexOperation):
         if operator_org_name is not None:
             pool_key_dict['organization'] = operator_org_name
         if cloudlet_name is not None:
-            pool_dict['cloudlet_name'] = cloudlet_name
+            dict1 = {}
+            dict1["name"] = cloudlet_name
+            pool_dict['cloudlet'] = dict1
 
         if pool_key_dict:
             pool_dict['key'] = pool_key_dict

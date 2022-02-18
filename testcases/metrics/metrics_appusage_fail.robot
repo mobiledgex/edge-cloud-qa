@@ -197,14 +197,14 @@ AppUsage - get with invalid vmonly shall return error
    ...  - verify error
 
    ${error}=  Run Keyword and Expect Error  *  Get App Usage  region=US  start_time=2006-01-02T15:04:05Z  end_time=2006-01-02T15:04:05Z  app_name=automation_api_app  app_version=1.0  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  vm_only=x  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected bool, but got string for field \\\\"VmOnly\\\\" at offset 319, valid values are true, false"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected bool, but got string for field \\\\"VmOnly\\\\" at offset 337, valid values are true, false"}')
 
    ${error}=  Run Keyword and Expect Error  *  Get App Usage  region=US  start_time=2006-01-02T15:04:05Z  end_time=2006-01-02T15:04:05Z  app_name=automation_api_app  app_version=1.0  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  vm_only=1  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected bool, but got string for field \\\\"VmOnly\\\\" at offset 319, valid values are true, false"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected bool, but got string for field \\\\"VmOnly\\\\" at offset 337, valid values are true, false"}')
 
    ${inject}=  Set Variable  \\'\\;drop measurment \"cloudlet-ipusage\"
    ${error}=  Run Keyword and Expect Error  *  Get App Usage  region=US  start_time=2006-01-02T15:04:05Z  end_time=2006-01-02T15:04:05Z  app_name=automation_api_app  app_version=1.0  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  vm_only=${inject}  token=${token}  use_defaults=${False}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected bool, but got string for field \\\\"VmOnly\\\\" at offset 360, valid values are true, false"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected bool, but got string for field \\\\"VmOnly\\\\" at offset 378, valid values are true, false"}')
 
 *** Keywords ***
 Setup
