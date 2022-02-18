@@ -63,7 +63,7 @@ class Network(MexOperation):
 
         msg_dict_delete = None
         if auto_delete and 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']['cloudlet_key'] and 'name' in msg['key']['cloudlet_key']:
-            msg_delete = self._build(network_name=msg['key']['name'], cloudlet_name=msg['key']['cloudlet_key']['name'], cloudlet_org=msg['key']['cloudlet_key']['organization'], use_defaults=False)
+            msg_delete = self._build(network_name=msg['key']['name'], cloudlet_name=msg['key']['cloudlet_key']['name'], cloudlet_org=msg['key']['cloudlet_key']['organization'], federated_org=federated_org, use_defaults=False)
             msg_dict_delete = {'Network': msg_delete}
 
         msg_dict_show = None
