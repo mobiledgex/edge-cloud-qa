@@ -29,7 +29,7 @@ pipeline{
         string(name: 'NumberParallelExecutionsVCD', defaultValue: '2')
         string(name: 'NumberParallelExecutionsVsphere', defaultValue: '2')
         string(name: 'VariableFile', defaultValue: 'automation_variables.py')
-        string(name: 'InfluxDB', defaultValue: 'notset')
+        string(name: 'InfluxDB', defaultValue: 'us-qa.influxdb.mobiledgex.net:8086')
         string(name: 'OpenStackEnv', defaultValue: 'notset')
         string(name: 'CommitVersion', defaultValue: 'master')
         booleanParam(name: 'RunFailedOnly', defaultValue: false)

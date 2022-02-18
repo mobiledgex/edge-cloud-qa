@@ -310,6 +310,7 @@ def metrics_tests(cycle) {
                 string(name: 'Console', value: params.Console),
                 string(name: 'MasterController', value: params.MasterController),
                 string(name: 'TestTarget', value: 'Metrics'),
+                string(name: 'InfluxDB', value: params.InfluxDB),
                 string(name: 'SlaveNode', value: params.SlaveNodeMetrics)
             ]
             slackMessage.good('Finished Metrics tests with pass')
