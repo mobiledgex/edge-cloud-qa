@@ -70,11 +70,12 @@ UpdateCloudletPool - update with cloudlet not in org shall return error
 
    Create Cloudlet Pool  region=${region}  operator_org_name=${organization}
 
-   @{cloudlet_list}=  Create List  tmocloud-1
+   &{cloudlet1}=  Create Dictionary  name=tmocloud-1
+   @{cloudlet_list}=  Create List  ${cloudlet1}
 
    ${error}=  Run Keyword and Expect Error  *  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Cloudlets tmocloud-1 not found"}
+   Should Contain   ${error}  error={"message":"Cloudlets {\\\\"organization\\\\":\\\\"GDDT\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"} not found"}
 
 # ECQ-2419
 UpdateCloudletPool - update with cloudlet not exist shall return error
@@ -84,11 +85,12 @@ UpdateCloudletPool - update with cloudlet not exist shall return error
 
    Create Cloudlet Pool  region=${region}  operator_org_name=${organization}
 
-   @{cloudlet_list}=  Create List  xxxxxxxtmocloud-1
+   &{cloudlet1}=  Create Dictionary  name=xxxxxxxtmocloud-1
+   @{cloudlet_list}=  Create List  ${cloudlet1}
 
    ${error}=  Run Keyword and Expect Error  *  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list}
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Cloudlets xxxxxxxtmocloud-1 not found"}
+   Should Contain   ${error}  error={"message":"Cloudlets {\\\\"organization\\\\":\\\\"GDDT\\\\",\\\\"name\\\\":\\\\"xxxxxxxtmocloud-1\\\\"} not found"}
 
 *** Keywords ***
 Setup
