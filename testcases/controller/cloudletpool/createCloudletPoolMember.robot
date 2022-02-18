@@ -29,7 +29,8 @@ CreateCloudletPoolMember - shall be able to create with long pool name
 
    Should Be Equal  ${pool_return[0]['data']['key']['name']}                   ${name} 
    Should Be Equal  ${pool_return[0]['data']['key']['organization']}           ${operator}
-   Should Be Equal  ${pool_return[0]['data']['cloudlets'][0]}                  ${cloudlet}
+   Should Be Equal  ${pool_return[0]['data']['cloudlets'][0]['name']}          ${cloudlet}
+   Should Be Equal  ${pool_return[0]['data']['cloudlets'][0]['organization']}  ${operator}
 
    Length Should Be  ${pool_return[0]['data']['cloudlets']}   1
 
@@ -49,7 +50,8 @@ CreateCloudletPoolMember - shall be able to create with numbers in pool name
 
    Should Be Equal  ${pool_return[0]['data']['key']['name']}                   ${epoch}
    Should Be Equal  ${pool_return[0]['data']['key']['organization']}           ${operator}
-   Should Be Equal  ${pool_return[0]['data']['cloudlets'][0]}                  ${cloudlet}
+   Should Be Equal  ${pool_return[0]['data']['cloudlets'][0]['name']}          ${cloudlet}
+   Should Be Equal  ${pool_return[0]['data']['cloudlets'][0]['organization']}  ${operator}
 
    Length Should Be  ${pool_return[0]['data']['cloudlets']}   1
 
@@ -72,8 +74,8 @@ CreateCloudletPoolMember - shall be able to add multiple members to a pool
 
    Should Be Equal  ${pool_return[0]['data']['key']['name']}                   ${epoch}
    Should Be Equal  ${pool_return[0]['data']['key']['organization']}           ${operator}
-   Should Be Equal  ${pool_return[0]['data']['cloudlets'][0]}                  ${cloudlet}
-   Should Be Equal  ${pool_return[0]['data']['cloudlets'][1]}                  tmocloud-2
+   Should Be Equal  ${pool_return[0]['data']['cloudlets'][0]['name']}          ${cloudlet}
+   Should Be Equal  ${pool_return[0]['data']['cloudlets'][1]['name']}          tmocloud-2
 
    Length Should Be  ${pool_return[0]['data']['cloudlets']}   2
 
@@ -82,8 +84,8 @@ CreateCloudletPoolMember - shall be able to add multiple members to a pool
 
    Should Be Equal  ${pool_return2[0]['data']['key']['name']}                   ${epoch}
    Should Be Equal  ${pool_return2[0]['data']['key']['organization']}           ${operator}
-   Should Be Equal  ${pool_return2[0]['data']['cloudlets'][0]}                  ${cloudlet}
-   Should Be Equal  ${pool_return2[0]['data']['cloudlets'][1]}                  tmocloud-2
+   Should Be Equal  ${pool_return2[0]['data']['cloudlets'][0]['name']}          ${cloudlet}
+   Should Be Equal  ${pool_return2[0]['data']['cloudlets'][1]['name']}          tmocloud-2
 
    Length Should Be  ${pool_return2[0]['data']['cloudlets']}   2
 
@@ -92,8 +94,8 @@ CreateCloudletPoolMember - shall be able to add multiple members to a pool
 
    Should Be Equal  ${pool_return3[0]['data']['key']['name']}                   ${epoch}
    Should Be Equal  ${pool_return3[0]['data']['key']['organization']}           ${operator}
-   Should Be Equal  ${pool_return3[0]['data']['cloudlets'][0]}                  ${cloudlet}
-   Should Be Equal  ${pool_return3[0]['data']['cloudlets'][1]}                  tmocloud-2
+   Should Be Equal  ${pool_return3[0]['data']['cloudlets'][0]['name']}          ${cloudlet}
+   Should Be Equal  ${pool_return3[0]['data']['cloudlets'][1]['name']}          tmocloud-2
 
    Length Should Be  ${pool_return3[0]['data']['cloudlets']}   2
 

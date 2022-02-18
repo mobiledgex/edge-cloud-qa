@@ -42,7 +42,13 @@ class CloudletPool(MexOperation):
             _fields_list.append(_operator_name_field_number)
 
         if cloudlet_list is not None:
-            pool_dict['cloudlets'] = cloudlet_list
+            list1 = []
+
+            for i in range(len(cloudlet_list)):
+                dict1 = {}
+                dict1["name"] = cloudlet_list[i]
+                list1.append(dict1)
+            pool_dict['cloudlets'] = list1
             _fields_list.append(_cloudlets_field_number)
 
         if pool_key_dict:
