@@ -104,7 +104,7 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>InfluxDB</name>
-          <defaultValue>notset</defaultValue>
+          <defaultValue>us-qa.influxdb.mobiledgex.net:8086</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
