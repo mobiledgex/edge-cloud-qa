@@ -10,6 +10,7 @@
         <string>SlaveNode</string>
         <string>VariableFile</string>
         <string>TestTarget</string>
+        <string>InfluxDB</string>
         <string>RunFailedOnly</string>
         <string>TestTimeout</string>
         <string>Cycle</string>
