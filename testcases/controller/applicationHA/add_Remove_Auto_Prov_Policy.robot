@@ -28,22 +28,22 @@ Add/RemoveAppAutoProvPolicy - mcctl shall be able to add AutoProvPolicy to App
 
    [Template]  Add/Remove auto prov. policy to App via mcctl
 
-      app-org=${developer}  appname=${app_name}  appvers=1.0  autoprovpolicy=${autoprov_name}1
+      apporg=${developer}  appname=${app_name}  appvers=1.0  autoprovpolicy=${autoprov_name}1
 
 Add/RemoveAppAutoProvPolicy - mcctl shall handle create failures
 
    [Template]   Fail to Add Auto Provisioning Policy Via mcctl
       # missing values
       Error: missing required args:   #not sending any args with mcctl
-      Error: missing required args:  app-org=${developer}  #missing args
-      Error: missing required args: appname appvers  app-org=${developer}  autoprovpolicy=${autoprov_name}1  #missing args
-      Error: missing required args: appname  app-org=${developer}  autoprovpolicy=${autoprov_name}1  appvers=1.0  #missing args
-      Error: Bad Request (400), App key {"organization":"${developer}","name":"x","version":"1.0"} not found  app-org=${developer}  appname=x  appvers=1.0  autoprovpolicy=${autoprov_name}1  #invalid appname
-      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  app-org=${developer}  appname=${app_name}  appvers=1.0  autoprovpolicy=x  #invalid autoprovpolicy
+      Error: missing required args:  apporg=${developer}  #missing args
+      Error: missing required args: appname appvers  apporg=${developer}  autoprovpolicy=${autoprov_name}1  #missing args
+      Error: missing required args: appname  apporg=${developer}  autoprovpolicy=${autoprov_name}1  appvers=1.0  #missing args
+      Error: Bad Request (400), App key {"organization":"${developer}","name":"x","version":"1.0"} not found  apporg=${developer}  appname=x  appvers=1.0  autoprovpolicy=${autoprov_name}1  #invalid appname
+      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  apporg=${developer}  appname=${app_name}  appvers=1.0  autoprovpolicy=x  #invalid autoprovpolicy
       #Error: Bad Request (400), App key {"organization":"${developer}"} not found:  Error: Bad Request (400), App key {} not found  #Error: Bad Request (400), App key {"organization":"${developer}"} not found
       #Error: Bad Request (400), App key {"organization":"${developer}"} not found:  Error: Bad Request (400), App key {"organization":"${developer}"} not found  appkey.organization=${developer}  #Error: Bad Request (400), App key {"organization":"${developer}"} not found
       #Error: Bad Request (400), App key {"organization":"${developer}","name":"${app_name}"} not found:  Error: Bad Request (400), App key {"organization":"${developer}","name":"${app_name}"} not found  appkey.organization=${developer}  appkey.name=${app_name}
-      #Error: invalid args: app-org:  Error: invalid args: app-org  app-org=${developer}  appkey.name=${app_name}  appkey.version=1.0  autoprovpolicy=${autoprov_name}1
+      #Error: invalid args: apporg:  Error: invalid args: apporg  apporg=${developer}  appkey.name=${app_name}  appkey.version=1.0  autoprovpolicy=${autoprov_name}1
       #Error: invalid args: name:  Error: invalid args: name  appkey.name=${developer}  name=${app_name}  appkey.version=1.0  autoprovpolicy=${autoprov_name}1
       #Error: invalid args: version:  Error: invalid args: version  appkey.name=${developer}  appkey.name=${app_name}  version=1.0  autoprovpolicy=${autoprov_name}1
 
