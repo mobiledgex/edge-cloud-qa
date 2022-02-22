@@ -100,12 +100,12 @@ Cloudletusage - mcctl shall handle usage failures
       Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                                                      selector=resourceusage  numsamples=x
 
       Error: Bad Request (400), Cloudlet details must be present  selector=resourceusage  cloudlet=x
-      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudlet-org=x
-      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudlet=x  cloudlet-org=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudletorg=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudlet=x  cloudletorg=x
 
       Error: Bad Request (400), Cloudlet org must be present      selector=resourceusage  cloudlets:0.cloudlet=x
-      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudlets:0.cloudlet-org=x
-      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudlets:0.cloudlet=x  cloudlets:0.cloudlet-org=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudlets:0.cloudletorg=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=resourceusage  cloudlets:0.cloudlet=x  cloudlets:0.cloudletorg=x
 
       Error: parsing arg "starttime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"   selector=flavorusage  starttime=x
       Error: parsing arg "endtime\=x" failed: unable to parse "x" as time: invalid format, valid values are RFC3339 format, i.e. "2006-01-02T15:04:05Z", or "2006-01-02T15:04:05+07:00"     selector=flavorusage  endtime=x
@@ -115,12 +115,12 @@ Cloudletusage - mcctl shall handle usage failures
       Error: parsing arg "numsamples\=x" failed: unable to parse "x" as int: invalid syntax                                                                      selector=flavorusage  numsamples=x
 
       Error: Bad Request (400), Cloudlet details must be present  selector=flavorusage  cloudlet=x
-      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudlet-org=x
-      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudlet=x  cloudlet-org=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudletorg=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudlet=x  cloudletorg=x
 
       Error: Bad Request (400), Cloudlet org must be present      selector=flavorusage  cloudlets:0.cloudlet=x
-      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudlets:0.cloudlet-org=x
-      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudlets:0.cloudlet=x  cloudlets:0.cloudlet-org=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudlets:0.cloudletorg=x
+      Error: Bad Request (400), Cloudlet does not exist           selector=flavorusage  cloudlets:0.cloudlet=x  cloudlets:0.cloudletorg=x
 
 *** Keywords ***
 Setup
