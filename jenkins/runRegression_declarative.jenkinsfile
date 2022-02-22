@@ -47,7 +47,7 @@ pipeline{
         string(name: 'SlaveNodeFRM', defaultValue: 'jenkinsSlave1')
         string(name: 'TestTimeoutSDK', defaultValue: '5m')
         string(name: 'TestTimeoutController', defaultValue: '4m')
-        string(name: 'TestTimeoutMasterController', defaultValue: '4m')
+        string(name: 'TestTimeoutMasterController', defaultValue: '10m')
         string(name: 'TestTimeoutDME', defaultValue: '2m')
         string(name: 'TestTimeoutFRM', defaultValue: '2m')
         booleanParam(name: 'RunDeploy', defaultValue: true)
