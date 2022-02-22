@@ -38,9 +38,11 @@ from console.auto_scale_policy_page import AutoScalePolicyPage
 from console.new_auto_scale_policy_page import NewAutoScalePolicyPage
 from console.privacy_policy_page import PrivacyPolicyPage
 from console.new_privacy_policy_page import NewPrivacyPolicyPage
-from mex_controller_classes import Flavor, Cloudlet, Organization, App, AppInstance, AutoScalePolicy
+from mex_controller_classes import Flavor, Cloudlet, Organization, App, AppInstance, AutoScalePolicy, Network
 from mex_master_controller.ClusterInstance import ClusterInstance
 from mex_master_controller.TrustPolicy import TrustPolicy
+from console.networks_page import NetworksPage
+from console.new_network_page import NewNetworkPage
 
 import shared_variables_mc
 
@@ -76,6 +78,7 @@ class MexConsole() :
 
         self._region = None
         self._flavor = None
+        self._network = None
         self._cloudlet = None
 
         self._mail = None
@@ -132,6 +135,8 @@ class MexConsole() :
         self.cloudlet_details_page = None
         self.cluster_details_page = None
         self.organization_details_page = None
+        self.networks_page = None
+        self.new_network_page = None
         self._init_shared_variables()
 
     def open_browser(self):
@@ -171,6 +176,8 @@ class MexConsole() :
         self.new_autoscalepolicy_page = NewAutoScalePolicyPage(self.driver)
         self.privacy_policy_page = PrivacyPolicyPage(self.driver)
         self.new_privacy_policy_page = NewPrivacyPolicyPage(self.driver)
+        self.networks_page = NetworksPage(self.driver)
+        self.new_network_page = NewNetworkPage(self.driver)
 
     # Change browser to 'Chrome'/'Firefox' when desired
     def login_to_mex_console(self, browser='Chrome', username=None, password=None, enter_key=False, use_defaults=True):
@@ -398,6 +405,25 @@ class MexConsole() :
         time.sleep(3)  # wait for table to load. maybe a better way to do this
 
         self.take_screenshot('open_flavors_post')
+
+    def open_networks(self):
+        self.take_screenshot('open_networks_pre')
+
+        self.compute_page.click_networks()
+
+        if self.compute_page.is_table_heading_present('Networks'):
+            logging.info('networks heading present')
+        else:
+            raise Exception('networks heading not present')
+
+        if self.networks_page.is_networks_table_header_present():
+            logging.info('networks table header present')
+        else:
+            raise Exception('networks table header not present')
+
+        time.sleep(3)
+
+        self.take_screenshot('open_networks_post')
 
     def open_flavors_page(self):
         self.take_screenshot('open_flavors_pre')
@@ -834,7 +860,112 @@ class MexConsole() :
                     raise Exception('SUCCESS alert box not found. got ' + self.compute_page.get_alert_box_text())
             else:
                 raise Exception('success alert box not found')
-  
+
+    def add_new_network(self, region=None, network_name=None, operator=None, cloudlet=None, connectiontype=None, routes=None):
+        self.take_screenshot('add_new_network_pre')
+
+        self.compute_page.click_add_button()
+        if self.new_network_page.are_elements_present():
+            logging.info('click New Network button verification succeeded')
+        else:
+            raise Exception('click New Network button verification failed')
+
+        network = Network(region=region, network_name=network_name, cloudlet=cloudlet, operator=operator, connectiontype=connectiontype).network
+        logging.info(f'network created:{network}')
+        self._network = network
+        self._region = region
+        shared_variables_mc.region_default = region
+
+        logging.info(f'Adding new network region={region} network_name={network_name} operator={operator} cloudlet={cloudlet}  connectiontype={connectiontype} ')
+        self.new_network_page.create_network(region=region, network_name=network_name, operator=operator, cloudlet=cloudlet, connectiontype=connectiontype)
+        time.sleep(3)
+        self.take_screenshot('add_new_network_post')
+
+        if self.compute_page.is_alert_box_present():
+            if self.compute_page.get_alert_box_text() != 'Network ' + network['key'][
+                'name'] + ' created successfully':
+                raise Exception('SUCCESS alert box not found. got ' + self.compute_page.get_alert_box_text())
+        else:
+            raise Exception('success alert box not found')
+
+    def network_should_exist(self, region=None, network_name=None, operator=None, cloudlet=None, connectiontype=None):
+        self.take_screenshot('network_should_exist_pre')
+        logging.info(f'Verifying Network exists region={region} network_name={network_name} operator={operator} cloudlet={cloudlet}  connectiontype={connectiontype} ')
+
+        if region is None: region = self._region
+        if operator is None: operator = self._network['operator']
+        if cloudlet is None: cloudlet = self._network['cloudlet']
+        if connectiontype is None: connectiontype = self._network['connectiontype']
+
+        self.networks_page.perform_search(network_name)
+        if self.networks_page.wait_for_network(region=region, network_name=network_name, cloudlet=cloudlet,
+                                           organization=operator, connection_type=connectiontype):
+            logging.info('*** Network Found ***')
+        else:
+            raise Exception('*** Network NOT found ***')
+
+    def network_should_not_exist(self, region=None, network_name=None, operator=None, cloudlet=None, connectiontype=None):
+        self.take_screenshot('network_should_exist_pre')
+        logging.info(f'Verifying Network exists region={region} network_name={network_name} operator={operator} cloudlet={cloudlet}  connectiontype={connectiontype} ')
+
+        if region is None: region = self._region
+        if operator is None: operator = self._network['operator']
+        if cloudlet is None: cloudlet = self._network['cloudlet']
+        if connectiontype is None: connectiontype = self._network['connectiontype']
+
+        self.networks_page.perform_search(network_name)
+        if self.networks_page.wait_for_network(region=region, network_name=network_name, cloudlet=cloudlet,
+                                           organization=operator, connection_type=connectiontype):
+            raise Exception('*** Network Found . Expected to be not found***')
+        else:
+            logging.info('*** Network not found as expected ***')
+
+    def delete_network(self, region=None, network_name=None, operator=None, cloudlet=None, connectiontype=None):
+
+        if region is None: region = self._region
+        if operator is None: operator = self._network['operator']
+        if cloudlet is None: cloudlet = self._network['cloudlet']
+        if connectiontype is None: connectiontype = self._network['connectiontype']
+
+        self.networks_page.perform_search(network_name)
+        self.networks_page.wait_for_network(region=region, network_name=network_name, cloudlet=cloudlet,
+                                            organization=operator, connection_type=connectiontype)
+        logging.info(f'Deleting network region={region} network_name={network_name} cloudlet={cloudlet} organization={operator} connection_type={connectiontype}  ')
+        self.take_screenshot('delete_network_pre')
+
+        self.networks_page.delete_network(region=region, network_name=network_name, cloudlet=cloudlet,organization=operator, connection_type=connectiontype)
+
+        time.sleep(1)
+
+        if self.compute_page.is_alert_box_present():
+            logging.info('alert box present')
+            if self.compute_page.get_alert_box_text() != 'Network ' + network_name + ' deleted successfully':
+                raise Exception('delete alert box text not found. Got: ' + self.compute_page.get_alert_box_text())
+            else:
+                logging.info('delete alert box found with expected text')
+        else:
+            raise Exception('delete alert box not found')
+
+    def open_network_details(self, network_name, region=None):
+        if region is None: region = self._region
+
+        logging.info('Opening network details for networkname=' + network_name)
+        self.networks_page.click_network_row(network_name=network_name, region=region)
+        time.sleep(1)
+        self.take_screenshot('open_network_details')
+
+        if self.networks_page.are_network_details_present():
+            logging.info('Network details page verification succeeded')
+        else:
+            raise Exception('Network details page verification failed')
+
+        details = self.details_page.get_details()
+
+        return details
+
+    def close_network_details(self):
+        self.details_page.click_close_button()
+
     def change_number_of_rows(self):
         self.flavors_page.flavor_rows_per_page()
 
