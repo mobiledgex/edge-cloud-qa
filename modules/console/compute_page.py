@@ -258,6 +258,10 @@ class ComputePage(BasePage):
         #self.driver.find_element(*ComputePageLocators.flavors_button).click()
         self.click_element(ComputePageLocators.flavors_button)
 
+    def click_networks(self):
+        logging.info('click Networks')
+        self.click_element(ComputePageLocators.networks_button)
+
     def click_cloudlets(self):
         logging.info('click Cloudlets')
         #self.driver.find_element(*ComputePageLocators.cloudlets_button).click()
