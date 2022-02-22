@@ -193,14 +193,14 @@ RunDebug - mcctl shall send available commands to every cloudlet region and node
 *** Keywords ***
 Cleanup Provisioning
    Log to Console  \nCleaning up CloudletPool ${mcctlautomationpool} 
-   Run mcctl  cloudletpool delete region=US cloudlets=DFWVMW2 name=${mcctlautomationpool} org=packet
+   Run mcctl  cloudletpool delete region=US cloudlets:0.name=DFWVMW2 name=${mcctlautomationpool} org=packet
    MexMasterController.Cleanup Provisioning
 
 Setup
    ${epoch}=  Get Time  epoch
    ${mcctlautomationpool}=  Catenate  ${cpoc}${epoch}${pool_name}
    Set Suite Variable  ${mcctlautomationpool} 
-   Run mcctl  cloudletpool create region=US cloudlets=DFWVMW2 name=${mcctlautomationpool} org=packet
+   Run mcctl  cloudletpool create region=US cloudlets:0.name=DFWVMW2 name=${mcctlautomationpool} org=packet
    
 
 Check Output For All Known Cmd Node Shepherd
