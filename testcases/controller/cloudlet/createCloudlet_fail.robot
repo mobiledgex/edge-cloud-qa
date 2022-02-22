@@ -299,13 +299,13 @@ CreateCloudlet - create with singlekubernetesclusterowner on non baremetal cloud
    Fakeinfra
    Vsphere
    AwsEks
-   VmPool  ${vmpool_name}
+   VmPool  dummyVMPool
    AwsEc2
    Vcd
    Kind
    Kindinfra
    Federation
-   FakeVmPool  ${vmpool_name}
+   FakeVmPool  dummyVMPool
 
 # ECQ-4362
 CreateCloudlet - create with singlekubernetesclusterowner set to nonexistent org shall return error
