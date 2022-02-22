@@ -12,6 +12,7 @@ app_version_default = '1.0'
 # developer_name_default = 'developer' + default_time_stamp
 developer_name_default = 'automation_dev_org'
 flavor_name_default = 'flavor' + default_time_stamp
+network_name_default = 'network' + default_time_stamp
 cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
 organization_name_default = 'org' + default_time_stamp
 cloudletpool_name_default = 'cloudletpool' + default_time_stamp
