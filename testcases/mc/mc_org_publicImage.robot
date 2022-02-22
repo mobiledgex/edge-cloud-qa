@@ -112,7 +112,7 @@ MC - User shall be able to pull docker image from another org with publicimages
 *** Keywords ***
 Setup
     Pull Image From Docker  username=root  password=sandhill  server=${server}  org_name=mobiledgex  app_name=${app_name}  app_version=${app_version}
-    Tag Image               username=root  password=sandhill  server=${server}  app_name=${app_name}  source_name=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
+    Tag Image               username=root  password=sandhill  server=${server}  app_name=${app_name}  source_name=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:11.0  target_name=server_ping_threaded:11.0
 
 Teardown
     Cleanup Provisioning

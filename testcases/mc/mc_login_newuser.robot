@@ -95,6 +95,7 @@ Setup
    ${email}=  Set Variable  ${username}@gmail.com
 
    Login  username=${admin_manager_username}  password=${admin_manager_password}
+   Skip Verify Email
    Create User   username=${username}     password=${password}     email_address=${email}	
 
    Unlock User  username=${username}
