@@ -152,8 +152,6 @@ class NetworksPageLocators(object):
     networks_organizationlabel_detail = (By.XPATH, '//td/strong[text()="Organization"]')
     networks_cloudletlabel_detail = (By.XPATH, '//td/strong[text()="Cloudlet"]')
     networks_routeslabel_detail = (By.XPATH, '//td/strong[text()="Routes"]')
-    networks_networkname_input = (By.XPATH, '//input[@placeholder="Enter Network Name"]')
-    networks_connectiontype_pulldown = (By.XPATH, '//div[@id="connectionType"]')
 
 class CloudletsPageLocators(object):
     cloudlets_table_header_region = (By.XPATH, '//div[@id="mex-data-grid"]//span[contains(@class,"textHeader") and contains(text(), "Region")]')
@@ -495,6 +493,19 @@ class NewPageLocators(object):
     cloudlet_advancedsettings_button = (By.XPATH, '//div[@class="ui grid"]//h3[text()="Advanced Settings"]/button[@type="button"]')
     trust_policy_pulldown = (By.XPATH, '//div[@id="trustPolicyName"]')
     trust_policy_row = (By.XPATH, '//div[text()="Trust Policy"]')
+
+    network_operator_label_name = (By.XPATH, '//div[text()="Operator"]/sup[text()=" *"]')
+    network_operator_input = (By.XPATH, '//div[contains(@class,"default text") and text()="Select Operator"]')
+    network_operator_pulldown = (By.XPATH, '//div[@id="operatorName"]')
+    network_cloudlet_label_name = (By.XPATH, '//div[text()="Cloudlet Name"]/sup[text()=" *"]')
+    network_cloudletname_input = (By.XPATH, '//div[contains(@class,"default text") and text()="Select Cloudlet Name"]')
+    network_cloudletname_pulldown = (By.XPATH, '//div[@id="cloudletName"]')
+    network_networkname_label_name = (By.XPATH, '//div[text() ="Network Name"]/sup[text() = " *"]')
+    network_networkname_input = (By.XPATH, '//input[@placeholder="Enter Network Name"]')
+    network_connectiontype_label_name = (By.XPATH, '//div[text()="Connection Type"]/sup[text()=" *"]')
+    network_connectiontype_input = (By.XPATH, '//div[contains(@class,"default text") and text()="Enter Connection Type"]')
+    network_connectiontype_pulldown = (By.XPATH, '//div[@id="connectionType"]')
+    network_routes_add = (By.XPATH, '//div//h3[text()="Routes"]//button')
 
 class NewPageFullLocators(object):
     settings_window = (By.XPATH, '//*[@class="ui grid"]')
