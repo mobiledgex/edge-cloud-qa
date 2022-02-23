@@ -101,11 +101,11 @@ UpdateTrustPolicy - update without protocol shall return error
 
    &{rule_update}=  Create Dictionary  remote_cidr=2.1.1.1/1
    @{rulelist_update}=  Create List  ${rule_update}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (tcp,udp,icmp)"}')   Update Trust Policy  region=${region}  rule_list=${rulelist_update}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (TCP,UDP,ICMP)"}')   Update Trust Policy  region=${region}  rule_list=${rulelist_update}
 
    @{rulelist}=  Create List  ${rule1}  ${rule2}
    Create Trust Policy  region=${region}  policy_name=${name}_1  rule_list=${rulelist}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (tcp,udp,icmp)"}')   Update Trust Policy  region=${region}  policy_name=${name}_1  rule_list=${rulelist_update}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (TCP,UDP,ICMP)"}')   Update Trust Policy  region=${region}  policy_name=${name}_1  rule_list=${rulelist_update}
 
 # ECQ-3039
 UpdateTrustPolicy - update with invalid CIDR shall return error 
@@ -227,19 +227,19 @@ UpdateTrustPolicy - update with icmp and port range shall return error
 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_minimum=10  port_range_maximum=0  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_minimum=10  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_maximum=10  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_minimum=0  port_range_maximum=10  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
 # ECQ-3043
 UpdateTrustPolicy - update with minport>maxport shall return error
@@ -296,7 +296,7 @@ UpdateTrustPolicy - update with trust policy and maintenance mode shall return e
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
 
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
@@ -344,7 +344,7 @@ UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mi
 
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/24
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
@@ -365,10 +365,10 @@ UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mi
 
    # update cloudlet with new trust policy with mismatch port list
    ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist11}  operator_org_name=${operator_name_fake}  token=${token}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy or exception to match required connection udp:3.1.1.1/24:1001-1003 for App {\\\\"organization\\\\":\\\\"${developer_org}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}') 
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy or exception to match required connection UDP:3.1.1.1/24:1001-1003 for App {\\\\"organization\\\\":\\\\"${developer_org}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}') 
 
    ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist2}  operator_org_name=${operator_name_fake}  token=${token}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy or exception to match required connection udp:3.1.1.1/24:1001-1003 for App {\\\\"organization\\\\":\\\\"${developer_org}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy or exception to match required connection UDP:3.1.1.1/24:1001-1003 for App {\\\\"organization\\\\":\\\\"${developer_org}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
 
 *** Keywords ***
 Setup
