@@ -39,7 +39,7 @@ pipeline{
                                 string(name: 'Project', value: params.Project), 
                                 string(name: 'Cycle', value: params.Cycle), 
                                 string(name: 'MasterController', value: params.MasterController), 
-                                string(name: 'InfluxDB', defaultValue: 'us-qa.influxdb.mobiledgex.net:8086'),
+                                string(name: 'InfluxDB', value: params.InfluxDB),
                                 string(name: 'VariableFile', value: params.VariableFile), 
                                 string(name: 'TestTarget', value: params.TestTarget),
                                 string(name: 'TestTimeout', value: params.TestTimeout),
