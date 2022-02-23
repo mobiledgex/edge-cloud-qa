@@ -4,6 +4,7 @@ Documentation   ShowAppInstClient requests
 Library  MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  DateTime
+Library  MexApp
 
 Test Setup	Setup
 Test Teardown	Cleanup provisioning
@@ -34,15 +35,22 @@ ShowAppInstClient - request shall return the FindCloudlet requests
 
    ${pre}=  Get Show App Instance Client Metrics Output
    ${len_pre}=  Get Length  ${pre}
-   ${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
-
+   #${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+   IF  ${len_pre} == 0
+       ${pre_last}=  Set Variable  0
+   ELSE
+       ${seconds}=  Convert To Epoch  ${pre[-1]['data']['location']['timestamp']}
+       ${pre_last}=  Set Variable  ${seconds}
+   END
    ${cloudlet}=  Find Cloudlet  carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
 
    MexMasterController.Wait For Replies  ${t}
     
    ${metrics}=  Get Show App Instance Client Metrics Output
    ${len_metrics}=  Get Length  ${metrics}
-   ${metrics_last}=  Set Variable  ${metrics[-1]['data']['location']['timestamp']['seconds']}
+   ${seconds1}=  Convert To Epoch  ${metrics[-1]['data']['location']['timestamp']}
+   ${metrics_last}=  Set Variable  ${seconds1}
+   #${metrics_last}=  Set Variable  ${metrics[-1]['data']['location']['timestamp']['seconds']}
 
    Should Be True  ${len_metrics} == ${len_pre}+1
    Should Be True  ${metrics_last} > ${pre_last}  
@@ -68,15 +76,22 @@ ShowAppInstClient - request with unique_id shall return the FindCloudlet request
 #   Show App Instance Client Metrics  region=US  app_name=automation_api_app  developer_org_name=MobiledgeX  app_version=1.0  cloudlet_name=tmocloud-1  operator_org_name=dmuus  cluster_instance_name=autoclusterautomation
    ${pre}=  Get Show App Instance Client Metrics Output
    ${len_pre}=  Get Length  ${pre}
-   ${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
-
+   #${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+   IF  ${len_pre} == 0
+       ${pre_last}=  Set Variable  0
+   ELSE
+       ${seconds}=  Convert To Epoch  ${pre[-1]['data']['location']['timestamp']}
+       ${pre_last}=  Set Variable  ${seconds}
+   END
    ${cloudlet}=  Find Cloudlet  carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
 
    MexMasterController.Wait For Replies  ${t}
 
    ${metrics}=  Get Show App Instance Client Metrics Output
    ${len_metrics}=  Get Length  ${metrics}
-   ${metrics_last}=  Set Variable  ${metrics[-1]['data']['location']['timestamp']['seconds']}
+   ${seconds1}=  Convert To Epoch  ${metrics[-1]['data']['location']['timestamp']}
+   ${metrics_last}=  Set Variable  ${seconds1}
+   #${metrics_last}=  Set Variable  ${metrics[-1]['data']['location']['timestamp']['seconds']}
 
    Should Be Equal  ${metrics[-1]['data']['client_key']['unique_id']}  123456789012345678901234567
    Should Be Equal  ${metrics[-1]['data']['client_key']['unique_id_type']}  automation
@@ -150,7 +165,13 @@ ShowAppInstClient - clients shall timeout via appinstclientcleanupinterval
 
    ${pre}=  Get Show App Instance Client Metrics Output
    ${len_pre}=  Get Length  ${pre}
-   ${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+   #${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+   IF  ${len_pre} == 0
+       ${pre_last}=  Set Variable  0
+   ELSE
+       ${seconds}=  Convert To Epoch  ${pre[-1]['data']['location']['timestamp']}
+       ${pre_last}=  Set Variable  ${seconds}
+   END
 
    # do findcloudlet to generate metrics
    ${cloudlet}=  Find Cloudlet  carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
@@ -160,7 +181,9 @@ ShowAppInstClient - clients shall timeout via appinstclientcleanupinterval
    # get metrics after findcloudlet
    ${metrics}=  Get Show App Instance Client Metrics Output
    ${len_metrics}=  Get Length  ${metrics}
-   ${metrics_last}=  Set Variable  ${metrics[-1]['data']['location']['timestamp']['seconds']}
+   ${seconds1}=  Convert To Epoch  ${metrics[-1]['data']['location']['timestamp']}
+   ${metrics_last}=  Set Variable  ${seconds1}
+   #${metrics_last}=  Set Variable  ${metrics[-1]['data']['location']['timestamp']['seconds']}
 
    Should Be True  ${len_metrics} == ${len_pre}+1
    Should Be True  ${metrics_last} > ${pre_last}
@@ -214,7 +237,13 @@ ShowAppInstClient Metrics Shall return FindCloudlet Request
 
    ${pre}=  Get Show App Instance Client Metrics Output
    ${len_pre}=  Get Length  ${pre}
-   ${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+   #${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+   IF  ${len_pre} == 0
+       ${pre_last}=  Set Variable  0
+   ELSE
+       ${seconds}=  Convert To Epoch  ${pre[-1]['data']['location']['timestamp']}
+       ${pre_last}=  Set Variable  ${seconds}
+   END
 
    ${cloudlet}=  Find Cloudlet  carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
 
@@ -222,7 +251,9 @@ ShowAppInstClient Metrics Shall return FindCloudlet Request
 
    ${metrics}=  Get Show App Instance Client Metrics Output
    ${len_metrics}=  Get Length  ${metrics}
-   ${metrics_last}=  Set Variable  ${metrics[-1]['data']['location']['timestamp']['seconds']}
+   ${seconds1}=  Convert To Epoch  ${metrics[-1]['data']['location']['timestamp']}
+   ${metrics_last}=  Set Variable  ${seconds1}
+   #${metrics_last}=  Set Variable  ${metrics[-1]['data']['location']['timestamp']['seconds']}
 
    Should Be Equal  ${metrics[-1]['data']['client_key']['unique_id']}  123456789012345678901234567
    Should Be Equal  ${metrics[-1]['data']['client_key']['unique_id_type']}  automation
@@ -261,6 +292,7 @@ Values Should Be Valid
       #Should Be True  ${m['data']['location']['altitude']} > 0
       #Should Be True  ${m['data']['location']['speed']} > 0
 
-      Should Be True  ${m['data']['location']['timestamp']['seconds']} > 0
-      Should Be True  ${m['data']['location']['timestamp']['nanos']} > 0
+      Should Not Be Empty  ${m['data']['location']['timestamp']}
+      #Should Be True  ${m['data']['location']['timestamp']['seconds']} > 0
+      #Should Be True  ${m['data']['location']['timestamp']['nanos']} > 0
    END

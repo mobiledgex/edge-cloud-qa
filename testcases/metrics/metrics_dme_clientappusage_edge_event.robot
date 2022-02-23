@@ -867,7 +867,7 @@ Setup
     ${settings_pre}=   Show Settings  region=${region}
     Set Suite Variable  ${settings_pre}
 
-    @{collection_intervals}=  Create List  10s  2m10s  3m10s
+    @{collection_intervals}=  Create List  15s  2m10s  3m10s
     Update Settings  region=${region}  edge_events_metrics_collection_interval=${edge_collection_timer}s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}  location_tile_side_length_km=1
     Sleep  15s
 
@@ -876,19 +876,19 @@ Setup
     #${cloudlet1}=  Find Cloudlet   carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud2_long}
     Should Be Equal As Numbers  ${cloudlet1.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet1.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet1.fqdn}  shared.${cloudlet_name}.dmuus.mobiledgex.net
+    Should Be Equal  ${cloudlet1.fqdn}  shared.${cloudlet_name}-dmuus.us.mobiledgex.net
 
     ${r2}=  Register Client  app_name=${app_name}2  app_version=1.0  developer_org_name=${developer_org_name_automation}
     ${cloudlet2}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud2_long}
     Should Be Equal As Numbers  ${cloudlet2.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet2.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet2.fqdn}  shared.${cloudlet_name}.dmuus.mobiledgex.net
+    Should Be Equal  ${cloudlet2.fqdn}  shared.${cloudlet_name}-dmuus.us.mobiledgex.net
 
     ${r3}=  Register Client  app_name=${app_name}3  app_version=1.0  developer_org_name=${developer_org_name_automation}
     ${cloudlet3}=  Find Cloudlet  carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud2_long}
     Should Be Equal As Numbers  ${cloudlet3.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet3.edge_events_cookie}') > 100
-    Should Be Equal  ${cloudlet3.fqdn}  shared.${cloudlet2_name}.dmuus.mobiledgex.net
+    Should Be Equal  ${cloudlet3.fqdn}  shared.${cloudlet2_name}-dmuus.us.mobiledgex.net
 
     @{samples1}=  Create List  ${10.4}  ${4.20}  ${30}  ${440}  ${0.50}  ${6.00}  ${170.45}
     ${num_samples1}=  Get Length  ${samples1}
@@ -905,19 +905,19 @@ Setup
     # this should return cloud2 
     ${lu}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud2_lat}  longitude=${cloud2_long}  signal_strength=${signal_strength}  data_network_type=${data_network_type}l1
     Should Be Equal As Numbers  ${lu.new_cloudlet.status}  1  #FIND_FOUND
-    Should Be Equal  ${lu.new_cloudlet.fqdn}  shared.${cloudlet2_name}.dmuus.mobiledgex.net
+    Should Be Equal  ${lu.new_cloudlet.fqdn}  shared.${cloudlet2_name}-dmuus.us.mobiledgex.net
     # connection to cloud2
     Create DME Persistent Connection  carrier_name=${carrier_name}  session_cookie=${r1.session_cookie}  edge_events_cookie=${lu.new_cloudlet.edge_events_cookie}  device_os=${device_os}  device_model=${device_model}  signal_strength=${signal_strength}  data_network_type=${data_network_type}c2
     # this should return cloud1
     ${lu3}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud1_long}  signal_strength=${signal_strength}  data_network_type=${data_network_type}l2
     Should Be Equal As Numbers  ${lu3.new_cloudlet.status}  1  #FIND_FOUND
-    Should Be Equal  ${lu3.new_cloudlet.fqdn}  shared.${cloudlet_name}.dmuus.mobiledgex.net
+    Should Be Equal  ${lu3.new_cloudlet.fqdn}  shared.${cloudlet_name}-dmuus.us.mobiledgex.net
     # connect back to cloud1 with same deviceinfo
     Create DME Persistent Connection  carrier_name=${carrier_name}  session_cookie=${r1.session_cookie}  edge_events_cookie=${lu3.new_cloudlet.edge_events_cookie}  device_os=${device_os}  device_model=${device_model}  signal_strength=${signal_strength}  data_network_type=${data_network_type}c1
     # this should return cloud2
     ${lu4}=  Send Location Update Edge Event  carrier_name=${operator_name_fake}  latitude=${cloud2_lat}  longitude=${cloud2_long}  signal_strength=${signal_strength_2}  data_network_type=${data_network_type}l3
     Should Be Equal As Numbers  ${lu4.new_cloudlet.status}  1  #FIND_FOUND
-    Should Be Equal  ${lu4.new_cloudlet.fqdn}  shared.${cloudlet2_name}.dmuus.mobiledgex.net
+    Should Be Equal  ${lu4.new_cloudlet.fqdn}  shared.${cloudlet2_name}-dmuus.us.mobiledgex.net
 
 #    Terminate DME Persistent Connection
 
@@ -991,7 +991,7 @@ Teardown Settings
    Login
 
    @{collection_intervals}=  Create List  ${settings['edge_events_metrics_continuous_queries_collection_intervals'][0]['interval']}  ${settings['edge_events_metrics_continuous_queries_collection_intervals'][1]['interval']}  ${settings['edge_events_metrics_continuous_queries_collection_intervals'][2]['interval']}
-   Update Settings  region=${region}  edge_events_metrics_collection_interval=${settings['appinst_client_cleanup_interval']}  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}
+   Update Settings  region=${region}  edge_events_metrics_collection_interval=${settings['edge_events_metrics_collection_interval']}  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}
 
    Teardown
 
