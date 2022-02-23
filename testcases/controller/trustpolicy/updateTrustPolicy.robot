@@ -39,12 +39,12 @@ UpdateTrustPolicy - shall be able to add rules
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  5
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  6
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][1]['protocol']}     icmp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][1]['protocol']}     ICMP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][1]['remote_cidr']}  2.1.1.1/1
 
    Should Be Equal As Numbers  ${numrules}  2
@@ -66,12 +66,12 @@ UpdateTrustPolicy - shall be able to delete rules
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                           ${operator_name}
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  5
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  6
 
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][1]['protocol']}     icmp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][1]['protocol']}     ICMP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}  2.1.1.1/1
 
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
@@ -88,7 +88,7 @@ UpdateTrustPolicy - shall be able to delete rules
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  5
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  6
@@ -112,12 +112,12 @@ UpdateTrustPolicy - shall be able to delete all rules
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                           ${operator_name}
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  5
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  6
 
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][1]['protocol']}     icmp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][1]['protocol']}     ICMP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}  2.1.1.1/1
 
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
@@ -149,12 +149,12 @@ UpdateTrustPolicy - update with no rules shall not change the rules
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                           ${operator_name}
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  5
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  6
 
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][1]['protocol']}     icmp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][1]['protocol']}     ICMP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}  2.1.1.1/1
 
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
@@ -168,12 +168,12 @@ UpdateTrustPolicy - update with no rules shall not change the rules
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  5
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  6
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][1]['protocol']}     icmp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][1]['protocol']}     ICMP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][1]['remote_cidr']}  2.1.1.1/1
 
    Should Be Equal As Numbers  ${numrules}  2
@@ -196,7 +196,7 @@ UpdateTrustPolicy - shall be able to update icmp cidr
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                           ${operator_name}
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}     icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}     ICMP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}  1.1.1.1/1 
 
    Should Be Equal As Numbers  ${numrules}  1
@@ -207,7 +207,7 @@ UpdateTrustPolicy - shall be able to update icmp cidr
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
-   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['protocol']}     icmp
+   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['protocol']}     ICMP
    Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}  2.1.1.1/1
 
 # ECQ-3052
@@ -229,7 +229,7 @@ UpdateTrustPolicy - shall be able to update with tcp and no maxport
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp 
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  5
@@ -246,7 +246,7 @@ UpdateTrustPolicy - shall be able to update with tcp and no maxport
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     2.1.1.1/1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  6
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  6
@@ -269,7 +269,7 @@ UpdateTrustPolicy - shall be able to create with tcp and maxport=0
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  9
@@ -284,7 +284,7 @@ UpdateTrustPolicy - shall be able to create with tcp and maxport=0
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     2.1.1.1/1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  6
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  6
@@ -307,7 +307,7 @@ UpdateTrustPolicy - shall be able to update with tcp and minport/maxport
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  5
@@ -322,7 +322,7 @@ UpdateTrustPolicy - shall be able to update with tcp and minport/maxport
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     6.1.1.1/1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  6
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  66
@@ -348,7 +348,7 @@ UpdateTrustPolicy - shall be able to update with tcp and min/max port numbers
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  16
@@ -363,7 +363,7 @@ UpdateTrustPolicy - shall be able to update with tcp and min/max port numbers
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        TCP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     6.1.1.1/1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  65535 
@@ -389,7 +389,7 @@ UpdateTrustPolicy - shall be able to update with udp and no maxport
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1
@@ -404,7 +404,7 @@ UpdateTrustPolicy - shall be able to update with udp and no maxport
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     6.1.1.1/1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  100
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  100 
@@ -430,7 +430,7 @@ UpdateTrustPolicy - shall be able to update with udp and maxport=0
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  100
@@ -445,7 +445,7 @@ UpdateTrustPolicy - shall be able to update with udp and maxport=0
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     6.1.1.1/1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  100
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  100
@@ -471,7 +471,7 @@ UpdateTrustPolicy - shall be able to update with udp and minport/maxport
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  5
@@ -486,7 +486,7 @@ UpdateTrustPolicy - shall be able to update with udp and minport/maxport
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     6.1.1.1/1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  100
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  155
@@ -512,7 +512,7 @@ UpdateTrustPolicy - shall be able to update with udp and min/max port numbers
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  12
@@ -527,7 +527,7 @@ UpdateTrustPolicy - shall be able to update with udp and min/max port numbers
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
 
-   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     6.1.1.1/1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_min']}  1
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][0]['port_range_max']}  65535 
@@ -556,17 +556,17 @@ UpdateTrustPolicy - shall be able to update with tcp/udp/icmp
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
    
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp 
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        ICMP 
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        tcp 
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        TCP 
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_min']}  1 
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_max']}  65
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  3
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  6
@@ -585,17 +585,17 @@ UpdateTrustPolicy - shall be able to update with tcp/udp/icmp
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     2.1.1.1/3
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_min']}  11
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_max']}  651
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     4.1.1.1/2
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  31
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  61
@@ -626,32 +626,32 @@ UpdateTrustPolicy - shall be able to update with duplicate policy items
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        ICMP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][1]}  port_range_min
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][1]}  port_range_max
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  65
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][3]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][3]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][3]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][3]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][3]['port_range_max']}  65
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][4]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][4]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][4]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][4]['port_range_min']}  3
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][4]['port_range_max']}  6
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][5]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][5]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][5]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][5]['port_range_min']}  3
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][5]['port_range_max']}  6
@@ -673,32 +673,32 @@ UpdateTrustPolicy - shall be able to update with duplicate policy items
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     2.1.1.1/3
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        ICMP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     2.1.1.1/3
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][1]}  port_range_min
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][1]}  port_range_max
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     2.1.1.1/1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  65
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][3]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][3]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][3]['remote_cidr']}     2.1.1.1/1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][3]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][3]['port_range_max']}  65
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][4]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][4]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][4]['remote_cidr']}     2.1.1.1/2
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][4]['port_range_min']}  3
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][4]['port_range_max']}  6
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][5]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][5]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][5]['remote_cidr']}     2.1.1.1/2
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][5]['port_range_min']}  3
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][5]['port_range_max']}  6
@@ -726,17 +726,17 @@ UpdateTrustPolicy - shall be able to update with same rules
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${operator_name}
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_max']}  65
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  3
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  6
@@ -750,17 +750,17 @@ UpdateTrustPolicy - shall be able to update with same rules
    Should Be Equal  ${policy_return2['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return2['data']['key']['organization']}                              ${operator_name}
 
-   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${policy_return2['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${policy_return2['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${policy_return2['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][1]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][1]['port_range_max']}  65
 
-   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][2]['protocol']}        UDP
    Should Be Equal  ${policy_return2['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][2]['port_range_min']}  3
    Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][2]['port_range_max']}  6
@@ -787,7 +787,7 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlet
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
 
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001 
@@ -808,17 +808,17 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlet
    Should Be Equal  ${policy_post['data']['key']['name']}           ${policy_name}
    Should Be Equal  ${policy_post['data']['key']['organization']}   ${operator_name_fake}
 
-   Should Be Equal  ${policy_post['data']['outbound_security_rules'][2]['protocol']}        icmp 
+   Should Be Equal  ${policy_post['data']['outbound_security_rules'][2]['protocol']}        ICMP
    Should Be Equal  ${policy_post['data']['outbound_security_rules'][2]['remote_cidr']}     4.1.1.1/1
    Should Not Contain  ${policy_post['data']['outbound_security_rules'][2]}  port_range_min
    Should Not Contain  ${policy_post['data']['outbound_security_rules'][2]}  port_range_max
 
-   Should Be Equal  ${policy_post['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_post['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${policy_post['data']['outbound_security_rules'][1]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers   ${policy_post['data']['outbound_security_rules'][1]['port_range_min']}  3002
    Should Be Equal As Numbers   ${policy_post['data']['outbound_security_rules'][1]['port_range_max']}  4002
 
-   Should Be Equal  ${policy_post['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal  ${policy_post['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal  ${policy_post['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers  ${policy_post['data']['outbound_security_rules'][0]['port_range_min']}  3001 
    Should Be Equal As Numbers  ${policy_post['data']['outbound_security_rules'][0]['port_range_max']}  4001 
@@ -850,7 +850,7 @@ UpdateTrustPolicy - shall be able to update policy in use by multiple cloudlets
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
 
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
@@ -879,17 +879,17 @@ UpdateTrustPolicy - shall be able to update policy in use by multiple cloudlets
    Should Be Equal  ${policy_post['data']['key']['name']}           ${policy_name}
    Should Be Equal  ${policy_post['data']['key']['organization']}   ${operator_name_fake}
 
-   Should Be Equal  ${policy_post['data']['outbound_security_rules'][2]['protocol']}        icmp
+   Should Be Equal  ${policy_post['data']['outbound_security_rules'][2]['protocol']}        ICMP
    Should Be Equal  ${policy_post['data']['outbound_security_rules'][2]['remote_cidr']}     4.1.1.1/1
    Should Not Contain  ${policy_post['data']['outbound_security_rules'][2]}  port_range_min
    Should Not Contain  ${policy_post['data']['outbound_security_rules'][2]}  port_range_max
 
-   Should Be Equal  ${policy_post['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_post['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${policy_post['data']['outbound_security_rules'][1]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers   ${policy_post['data']['outbound_security_rules'][1]['port_range_min']}  3002
    Should Be Equal As Numbers   ${policy_post['data']['outbound_security_rules'][1]['port_range_max']}  4002
 
-   Should Be Equal  ${policy_post['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal  ${policy_post['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal  ${policy_post['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers  ${policy_post['data']['outbound_security_rules'][0]['port_range_min']}  3001
    Should Be Equal As Numbers  ${policy_post['data']['outbound_security_rules'][0]['port_range_max']}  4001
@@ -928,7 +928,7 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlets in mainte
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
 
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
