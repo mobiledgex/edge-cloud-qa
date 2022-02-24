@@ -876,8 +876,8 @@ class MexConsole() :
         self._region = region
         shared_variables_mc.region_default = region
 
-        logging.info(f'Adding new network region={region} network_name={network_name} operator={operator} cloudlet={cloudlet}  connectiontype={connectiontype} ')
-        self.new_network_page.create_network(region=region, network_name=network_name, operator=operator, cloudlet=cloudlet, connectiontype=connectiontype)
+        logging.info(f'Adding new network region={region} network_name={network_name} operator={operator} cloudlet={cloudlet}  connectiontype={connectiontype} routes={routes}')
+        self.new_network_page.create_network(region=region, network_name=network_name, operator=operator, cloudlet=cloudlet, connectiontype=connectiontype, route_list=routes)
         time.sleep(3)
         self.take_screenshot('add_new_network_post')
 
