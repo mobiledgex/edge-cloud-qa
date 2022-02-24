@@ -110,6 +110,10 @@ CreateApp - mcctl shall be able to create/show/delete app
       appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remotecidr=1.1.1.1/1  requiredoutboundconnections:0.portrangemin=2  requiredoutboundconnections:1.protocol=tcp  requiredoutboundconnections:1.remotecidr=1.1.1.1/1  requiredoutboundconnections:1.portrangemin=2  defaultflavor=${flavor_name_automation}
       appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remotecidr=1.1.1.1/1  requiredoutboundconnections:0.portrangemin=2  requiredoutboundconnections:0.portrangemax=6  requiredoutboundconnections:1.protocol=tcp  requiredoutboundconnections:1.remotecidr=1.1.1.1/1  requiredoutboundconnections:1.portrangemin=20  requiredoutboundconnections:1.portrangemax=60  defaultflavor=${flavor_name_automation}
 
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=kubernetes        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=TCP  requiredoutboundconnections:0.remotecidr=1.1.1.1/1  requiredoutboundconnections:0.portrangemin=2  requiredoutboundconnections:0.portrangemax=6  requiredoutboundconnections:1.protocol=UDP  requiredoutboundconnections:1.remotecidr=1.1.1.1/1  requiredoutboundconnections:1.portrangemin=20  requiredoutboundconnections:1.portrangemax=60  requiredoutboundconnections:2.protocol=ICMP  requiredoutboundconnections:2.remotecidr=1.1.1.1/1  defaultflavor=${flavor_name_automation}
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=docker        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tCP  requiredoutboundconnections:0.remotecidr=1.1.1.1/1  requiredoutboundconnections:0.portrangemin=2  requiredoutboundconnections:0.portrangemax=6  requiredoutboundconnections:1.protocol=UdP  requiredoutboundconnections:1.remotecidr=1.1.1.1/1  requiredoutboundconnections:1.portrangemin=20  requiredoutboundconnections:1.portrangemax=60  requiredoutboundconnections:2.protocol=ICMp  requiredoutboundconnections:2.remotecidr=1.1.1.1/1  defaultflavor=${flavor_name_automation}
+
+
       # serverless
       appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${False}  defaultflavor=${flavor_name_automation}
       appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  allowserverless=${True}  defaultflavor=${flavor_name_automation}
@@ -200,15 +204,15 @@ CreateApp - mcctl shall handle create failures
       #Unable to parse "trusted" value "yes" as bool: invalid syntax, valid values are true, false     appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=yes  direct not supported
 
       # requiredoutboundconnections
-      Bad Request (400), Port range must be empty for icmp   appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.portrangemin=1  requiredoutboundconnections:0.remotecidr=1.1.1.1/1
+      Bad Request (400), Port range must be empty for ICMP   appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.portrangemin=1  requiredoutboundconnections:0.remotecidr=1.1.1.1/1
       Error: Bad Request (400), Invalid min port: 0   appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.portrangemin=0  requiredoutboundconnections:0.remotecidr=1.1.1.1/1
       Error: Bad Request (400), Invalid min port: 0   appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=udp  requiredoutboundconnections:0.portrangemin=0  requiredoutboundconnections:0.remotecidr=1.1.1.1/1
-      Error: Bad Request (400), Protocol must be one of: (tcp,udp,icmp)  appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=cmp  requiredoutboundconnections:0.portrangemin=1  requiredoutboundconnections:0.remotecidr=1.1.1.1/1
+      Error: Bad Request (400), Protocol must be one of: (TCP,UDP,ICMP)  appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=cmp  requiredoutboundconnections:0.portrangemin=1  requiredoutboundconnections:0.remotecidr=1.1.1.1/1
       Error: Bad Request (400), Invalid CIDR address:    appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=icmp
       Error: Bad Request (400), Invalid min port: 0    appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp 
       Error: Bad Request (400), Invalid CIDR address:    appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=udp  requiredoutboundconnections:0.portrangemin=1
       Error: Bad Request (400), Invalid min port: 0   appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remotecidr=1.1.1.1/1
-      Error: Bad Request (400), Protocol must be one of: (tcp,udp,icmp)  appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=  # remove the ports
+      Error: Bad Request (400), Protocol must be one of: (TCP,UDP,ICMP)  appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=  # remove the ports
       Bad Request (400), Invalid min port: 0   appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.portrangemax=1  requiredoutboundconnections:0.remotecidr=1.1.1.1/1
       Bad Request (400), Min port range: 2 cannot be higher than max: 1   appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.portrangemin=2  requiredoutboundconnections:0.portrangemax=1  requiredoutboundconnections:0.remotecidr=1.1.1.1/1
 
@@ -371,7 +375,8 @@ Success Create/Show/Delete App Via mcctl
    Run Keyword If  'requiredoutboundconnections:0.remotecidr' in ${parms}  Should Be Equal  ${show[0]['required_outbound_connections'][0]['remote_cidr']}  ${parms['requiredoutboundconnections:0.remotecidr']}
    #Run Keyword If  'requiredoutboundconnections:0.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:0.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][0]}  portrangemin
    IF  'requiredoutboundconnections:0.protocol' in ${parms}
-      Should Be Equal  ${show[0]['required_outbound_connections'][0]['protocol']}  ${parms['requiredoutboundconnections:0.protocol']}
+      ${protocol_upper0}=  Convert To Uppercase  ${parms['requiredoutboundconnections:0.protocol']}
+      Should Be Equal  ${show[0]['required_outbound_connections'][0]['protocol']}  ${protocol_upper0}
       IF  '${parms['requiredoutboundconnections:0.protocol']}' != 'icmp'
          Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][0]['port_range_min']}  ${parms['requiredoutboundconnections:0.portrangemin']}
          IF  'requiredoutboundconnections:0.portrangemax' in ${parms}
@@ -386,7 +391,8 @@ Success Create/Show/Delete App Via mcctl
    #Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][1]}  port_range_min
    #Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][1]['port_range_min']}  ${parms['requiredoutboundconnections:1.portrangemin']}
    IF  'requiredoutboundconnections:1.protocol' in ${parms}
-      Should Be Equal  ${show[0]['required_outbound_connections'][1]['protocol']}  ${parms['requiredoutboundconnections:1.protocol']}
+      ${protocol_upper1}=  Convert To Uppercase  ${parms['requiredoutboundconnections:1.protocol']}
+      Should Be Equal  ${show[0]['required_outbound_connections'][1]['protocol']}  ${protocol_upper1}
       IF  '${parms['requiredoutboundconnections:1.protocol']}' != 'icmp'
          Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][1]['port_range_min']}  ${parms['requiredoutboundconnections:1.portrangemin']}
          IF  'requiredoutboundconnections:1.portrangemax' in ${parms}
@@ -469,14 +475,21 @@ Success Update/Show App Via mcctl
    ...  ELSE  Should Not Contain  ${show[0]}  trusted
    Run Keyword If  'trusted' in ${parms}  Run Keyword If  ${parms['trusted']} == ${False}  Should Not Contain  ${show[0]}  trusted
 
-   Run Keyword If  'requiredoutboundconnections:0.protocol' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][0]['protocol']}  ${parms['requiredoutboundconnections:0.protocol']}
-   Run Keyword If  'requiredoutboundconnections:0.remotecidr' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][0]['remote_cidr']}  ${parms['requiredoutboundconnections:0.remotecidr']}
-   Run Keyword If  'requiredoutboundconnections:0.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:0.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][0]}  port_range_min
-   Run Keyword If  'requiredoutboundconnections:0.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:0.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][0]['port_range_min']}  ${parms['requiredoutboundconnections:0.portrangemin']}
-   Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][1]['protocol']}  ${parms['requiredoutboundconnections:1.protocol']}
-   Run Keyword If  'requiredoutboundconnections:1.remotecidr' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][1]['remote_cidr']}  ${parms['requiredoutboundconnections:1.remotecidr']}
-   Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][1]}  port_range_min
-   Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][1]['port_range_min']}  ${parms['requiredoutboundconnections:1.portrangemin']}
+   IF  'requiredoutboundconnections:0.protocol' in ${parms}
+      ${protocol_upper0}=  Convert To Uppercase  ${parms['requiredoutboundconnections:0.protocol']}
+      Should Contain  ${show[0]['required_outbound_connections'][0]['protocol']}  ${protocol_upper0}
+      Should Contain  ${show[0]['required_outbound_connections'][0]['remote_cidr']}  ${parms['requiredoutboundconnections:0.remotecidr']}
+      Run Keyword If  '${parms['requiredoutboundconnections:0.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][0]}  port_range_min
+      Run Keyword If  '${parms['requiredoutboundconnections:0.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][0]['port_range_min']}  ${parms['requiredoutboundconnections:0.portrangemin']}
+   END
+
+   IF  'requiredoutboundconnections:1.protocol' in ${parms}
+      ${protocol_upper1}=  Convert To Uppercase  ${parms['requiredoutboundconnections:1.protocol']}
+      Should Contain  ${show[0]['required_outbound_connections'][1]['protocol']}  ${protocol_upper1}
+      Should Contain  ${show[0]['required_outbound_connections'][1]['remote_cidr']}  ${parms['requiredoutboundconnections:1.remotecidr']}
+      Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][1]}  port_range_min
+      Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][1]['port_range_min']}  ${parms['requiredoutboundconnections:1.portrangemin']}
+   END
    Run Keyword If  'requiredoutboundconnections:0.portrangemax' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:0.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][0]['port_range_max']}  ${parms['requiredoutboundconnections:0.portrangemax']}
 
    IF  'autoprovpolicies' in ${parms}
