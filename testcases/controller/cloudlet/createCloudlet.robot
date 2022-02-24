@@ -160,7 +160,7 @@ CreateCloudlet - shall be able to create cloudlet with trust policy
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
 
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001

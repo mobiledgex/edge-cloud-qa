@@ -42,17 +42,17 @@ CreateTrustPolicy - OperatorManager shall be able to create/show/delete a trust 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${orgname}
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_max']}  65
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  3
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  6
@@ -92,17 +92,17 @@ CreateTrustPolicy - OperatorContributor shall be able to create/show/delete a tr
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${orgname}
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_max']}  65
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  3
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  6
@@ -152,17 +152,17 @@ CreateTrustPolicy - OperatorViewer shall not be able to create/delete but view a
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${orgname}
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_max']}  65
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  3
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  6
@@ -229,15 +229,15 @@ CreateTrustPolicy - DeveloperManager shall not be able to create/delete but view
 
    Should Be Equal  ${show[0]['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${show[0]['data']['key']['organization']}                              ${orgname}_op
-   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_max
-   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_min']}  1
    Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_max']}  65
-   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['protocol']}        UDP
    Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_min']}  3
    Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_max']}  6
@@ -298,17 +298,17 @@ CreateTrustPolicy - DeveloperContributor shall not be able to create/delete but 
    Should Be Equal  ${show[0]['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${show[0]['data']['key']['organization']}                              ${orgname}_op
 
-   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_min']}  1
    Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_max']}  65
 
-   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['protocol']}        UDP
    Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_min']}  3
    Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_max']}  6
@@ -372,17 +372,17 @@ CreateTrustPolicy - DeveloperViewer shall not be able to create/delete but view 
    Should Be Equal  ${show[0]['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${show[0]['data']['key']['organization']}                              ${orgname}_op
 
-   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_min']}  1
    Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_max']}  65
 
-   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['protocol']}        UDP
    Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_min']}  3
    Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_max']}  6

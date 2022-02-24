@@ -73,7 +73,7 @@ Federation create - Controller shall throw error while creating two federations 
     ${federator1}=  Create Federator  region=${region}  operatorid=${selfoperator}  countrycode=${selfcountrycode}  mcc=${mcc}  mnc=${mnc}    auto_delete=${False}
     ${federationid1}=  Set Variable  ${federator1['federationid']}
 
-    Run Keyword and Expect Error  ('code=400', 'error={"message":"Partner federation with same self federation id \\\\\"${federationid}\\\\\" already exists"}')  Create Federation  selfoperatorid=${selfoperator}  selffederationid=${federationid1}  operatorid=tmus  countrycode=${partnercountrycode}  federationid=${partnerfederationid}  federationaddr=${federationaddr}  apikey=${partnerapikey}  federation_name=${federation_name}1
+    Run Keyword and Expect Error  ('code=400', 'error={"message":"Partner federation with same federation id \\\\\"${partnerfederationid}\\\\\" already exists"}')  Create Federation  selfoperatorid=${selfoperator}  selffederationid=${federationid1}  operatorid=tmus  countrycode=${partnercountrycode}  federationid=${partnerfederationid}  federationaddr=${federationaddr}  apikey=${partnerapikey}  federation_name=${federation_name}1
 
     Delete Federator  operatorid=${selfoperator}  federationid=${federationid1}
 
@@ -107,7 +107,7 @@ Federation create - Controller shall throw error with invalid countrycode
     ${partnerfederationid}=  Generate Random String  32  [LETTERS][NUMBERS]
     ${partnerapikey}=  Generate Random String  32  [LETTERS][NUMBERS]
 
-    Run Keyword and Expect Error  ('code=400', 'error={"message":"Self federator with ID \\\\\"XX\\\\\" does not exist for operator \\\\\"${selfoperator}\\\\\""}')  Create Federation  selfoperatorid=${selfoperator}  selffederationid=${federationid}  operatorid=${partneroperator}  countrycode=XX  federationid=${partnerfederationid}  federationaddr=${federationaddr}  apikey=${partnerapikey}
+    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid country code \\\\\"XX\\\\\". It must be a valid ISO 3166-1 Alpha-2 code for the country"}')  Create Federation  selfoperatorid=${selfoperator}  selffederationid=${federationid}  operatorid=${partneroperator}  countrycode=XX  federationid=${partnerfederationid}  federationaddr=${federationaddr}  apikey=${partnerapikey}
 
 # ECQ-4205
 Federation create - Controller shall throw error with invalid federation name
