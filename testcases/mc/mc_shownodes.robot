@@ -271,7 +271,7 @@ Verify Shepherd
    Should Be True  len("${node['data']['key']['cloudlet_key']['name']}") > 0
    Should Be True  len("${node['data']['key']['cloudlet_key']['organization']}") > 0
 
-   Should Be Equal   ${node['data']['key']['name']}  ${node['data']['hostname']}
+   Should Be Equal   ${node['data']['key']['name']}  ${node['data']['hostname']}-primary
 
    Should Be True  len("${node['data']['key']['cloudlet_key']['name']}") > 0
    Should Match Regexp  ${node['data']['properties']['InfraBuildDate']}  ^\\b\\w{3}\\b \\b\\w{3}\\b
@@ -316,7 +316,7 @@ Verify CRM
    Should Be True  len("${node['data']['key']['cloudlet_key']['name']}") > 0
    Should Be True  len("${node['data']['key']['cloudlet_key']['organization']}") > 0
 
-   Should Be Equal   ${node['data']['key']['name']}  ${node['data']['hostname']}
+   Should Be Equal   ${node['data']['key']['name']}  ${node['data']['hostname']}-primary
 
    Should Match Regexp  ${node['data']['container_version']}  ^\\d{4}-\\d{2}-\\d{2}$
 
