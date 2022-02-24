@@ -277,6 +277,9 @@ class MexMasterController(MexRest):
     def get_default_flavor_name(self):
         return shared_variables.flavor_name_default
 
+    def get_default_network_name(self):
+        return shared_variables.network_name_default
+
     def get_default_cloudlet_name(self):
         return shared_variables.cloudlet_name_default
 

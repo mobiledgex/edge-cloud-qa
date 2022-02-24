@@ -94,17 +94,17 @@ CreateTrustPolicy - user shall be able to create a policy in an operator org
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}                              ${orgname}
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        ICMP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
    Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        TCP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_min']}  1
    Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_max']}  65
 
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        UDP
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  3
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  6
