@@ -55,12 +55,12 @@ CreateApp - Error shall be received for invalid requiredoutboundconnections parm
    ('code\=400', 'error\={"message":"Invalid min port: 0"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,0,1000,1.1.1.1/24
    Unmarshal error: expected uint32, but got string for field \\\\"App.required_outbound_connections.port_range_min\\\\"   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,x,1000,1.1.1.1/24
    Unmarshal error: expected uint32, but got string for field \\\\"App.required_outbound_connections.port_range_max\\\\"   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,1,x1000,1.1.1.1/24
-   ('code\=400', 'error\={"message":"Protocol must be one of: (tcp,udp,icmp)"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=dp,1001,20013,1.1.1.1/24
+   ('code\=400', 'error\={"message":"Protocol must be one of: (TCP,UDP,ICMP)"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=dp,1001,20013,1.1.1.1/24
 
    Unmarshal error: expected uint32, but got string for field \\\\"App.required_outbound_connections.port_range_min\\\\"   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,,20013,1.1.1.1/24
    Unmarshal error: expected uint32, but got string for field \\\\"App.required_outbound_connections.port_range_max\\\\"   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,1,,1.1.1.1/24
    ('code\=400', 'error\={"message":"Invalid CIDR address: "}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=udp,1001,20013,
-   ('code\=400', 'error\={"message":"Protocol must be one of: (tcp,udp,icmp)"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=,1001,20013,1.1.1.1/24
+   ('code\=400', 'error\={"message":"Protocol must be one of: (TCP,UDP,ICMP)"}')   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}   required_outbound_connections=,1001,20013,1.1.1.1/24
 
 # ECQ-3084
 CreateApp - Error shall be received for invalid trusted parm
@@ -506,7 +506,8 @@ Create Trusted App With RequiredOutboundConnections
 
    ${conn_counter}=  Set Variable  0
    FOR  ${i}  IN  @{parms['required_outbound_connections']}
-      Should Be Equal  ${i['protocol']}  ${app['data']['required_outbound_connections'][${conn_counter}]['protocol']}
+      ${protocol}=  Convert to Uppercase  ${i['protocol']}
+      Should Be Equal  ${protocol}  ${app['data']['required_outbound_connections'][${conn_counter}]['protocol']}
       Should Be Equal  ${i['remote_cidr']}  ${app['data']['required_outbound_connections'][${conn_counter}]['remote_cidr']}
       Run Keyword If  'port' in ${i}  Run Keyword If  ${i['port']} != 0  Should Be Equal as Numbers  ${i['port']}  ${app['data']['required_outbound_connections'][${conn_counter}]['port']}
       ${conn_counter}=  Evaluate  ${conn_counter}+1

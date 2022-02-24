@@ -361,7 +361,8 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall no
 
     # verify app2 uses port 10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
+    #Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
+    Should Match Regexp   '${appInst_2.mapped_ports[0].public_port}'   \\b\\d{5}\\b
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          1  #LProtoTCP
     #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
@@ -539,14 +540,16 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
 
     # verify app2 uses port 10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
+    #Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
+    Should Match Regexp   '${appInst_2.mapped_ports[0].public_port}'   \\b\\d{5}\\b
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          1  #LProtoTCP
     #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
     # verify app2 uses port 10001
     Should Be Equal As Integers  ${appInst_3.mapped_ports[0].internal_port}  10000
-    Should Be Equal As Integers  ${appInst_3.mapped_ports[0].public_port}    10001
+    #Should Be Equal As Integers  ${appInst_3.mapped_ports[0].public_port}    10001
+    Should Match Regexp   '${appInst_3.mapped_ports[0].public_port}'   \\b\\d{5}\\b
     Should Be Equal As Integers  ${appInst_3.mapped_ports[0].proto}          1  #LProtoTCP
     #Should Be Equal              ${appInst_3.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_3}
     Length Should Be   ${appInst_3.mapped_ports}  1
@@ -588,14 +591,16 @@ AppInst - appInst shall not allocate TCP port 10000 if already allocated
 
     # verify app1 uses port 10000
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  10000
-    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    10000
+    #Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    10000
+    Should Match Regexp   '${appInst_1.mapped_ports[0].public_port}'   \\b\\d{5}\\b
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          1  #LProtoTCP
     #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 10001
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  10000
-    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10001
+    #Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10001
+    Should Match Regexp   '${appInst_2.mapped_ports[0].public_port}'   \\b\\d{5}\\b
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          1  #LProtoTCP
     #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
@@ -774,14 +779,16 @@ AppInst - User shall be able to add/delete dedicated/shared app/appInst with sam
 
     # verify app2 uses port 1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
+    #Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
+    Should Match Regexp   '${appInst_2.mapped_ports[0].public_port}'   \\b\\d{5}\\b
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          1  #LProtoTCP
     #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
     # verify app2 uses port 10000
     Should Be Equal As Integers  ${appInst_2_2.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst_2_2.mapped_ports[0].public_port}    10000
+    #Should Be Equal As Integers  ${appInst_2_2.mapped_ports[0].public_port}    10000
+    Should Match Regexp   '${appInst_2_2.mapped_ports[0].public_port}'   \\b\\d{5}\\b
     Should Be Equal As Integers  ${appInst_2_2.mapped_ports[0].proto}          1  #LProtoTCP
     #Should Be Equal              ${appInst_2_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1

@@ -166,7 +166,7 @@ Delete Flavor
 
 Delete App
 
-    Run mcctl  app delete region=${region} app-org=${developer_org_name} appname=${app_name} appvers=${jmp8086_ver}
+    Run mcctl  app delete region=${region} apporg=${developer_org_name} appname=${app_name} appvers=${jmp8086_ver}
     Log To Console  ${\n}Deleteing app
     ${policy_show_app}=  Run Keyword  Show Apps  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}
     ${len_app}=  Get Length  ${policy_show_app}
