@@ -32,7 +32,7 @@ Verify Common Data
 
    Should Match Regexp  ${node['data']['build_date']}  ^\\D{3} \\D{3}
    Should Be Equal      ${node['data']['key']['region']}  US
-   Should Match Regexp  ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
+   Should Match Regexp  ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
    Should Be Equal      ${node['data']['build_head']}  ${node['data']['build_master']}
    #Should Be Equal As Numbers      ${node['data']['notify_id']}  1
    ${notifyid}=  Run Keyword  Evaluate  type(${node['data']['notify_id']}) == int
@@ -125,7 +125,7 @@ DME Should Exist
       Run Keyword If  "${node['data']['key']['type']}" == 'dme'  Verify DME  ${node}
    END
 
-   Run keyword if  ${num_found}!=${2}  fail  DMEs Not Found
+   Run keyword if  ${num_found}!=${1}  fail  DMEs Not Found
 
 Verify DME 
    [Arguments]  ${node}

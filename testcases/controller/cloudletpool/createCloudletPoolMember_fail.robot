@@ -119,7 +119,10 @@ CreateCloudletPoolMember - create operator not found shall return error
 
    #Create Cloudlet Pool  region=US  token=${token}  operator_org_name=${operator}
 
-   ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  region=US  token=${token}  operator_org_name=tmusxxx  cloudlet_name=tmocloud-1
+   ${cloudlet_name}=  Get Default Cloudlet Name
+   Create Cloudlet  region=US  operator_org_name=tmus  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=31  longitude=-91
+
+   ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  region=US  token=${token}  operator_org_name=tmusxxx  cloudlet_name=${cloudlet_name}
   
    ${pool_name}=  Get Default Cloudlet Pool Name
  
@@ -139,7 +142,7 @@ CreateCloudletPoolMember - create cloudlet not found shall return error
    ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  region=US  token=${token}  operator_org_name=tmus  cloudlet_name=tmocloud-1xx
    
    Should Contain  ${error}   400
-   Should Contain  ${error}   {"message":"Cloudlets tmocloud-1xx not found"}
+   Should Contain  ${error}   {"message":"Cloudlets {\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-1xx\\\\"} not found"}
 
 # ECQ-3751
 CreateCloudletPoolMember - adding cloudlet with appinst shall return error
