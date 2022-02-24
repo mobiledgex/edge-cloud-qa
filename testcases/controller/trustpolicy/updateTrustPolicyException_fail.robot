@@ -109,10 +109,10 @@ UpdateTrustPolicyException - update without protocol shall return error
 
    &{rule_update}=  Create Dictionary  remote_cidr=2.1.1.1/1
    @{rulelist_update}=  Create List  ${rule_update}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (tcp,udp,icmp)"}')   Update Trust Policy Exception  region=${region}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist_update}  token=${token}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (TCP,UDP,ICMP)"}')   Update Trust Policy Exception  region=${region}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist_update}  token=${token}
 
    @{rulelist}=  Create List  ${rule1}  ${rule2}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (tcp,udp,icmp)"}')   Update Trust Policy Exception  region=${region}  policy_name=${name}_1  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist_update}  token=${token}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (TCP,UDP,ICMP)"}')   Update Trust Policy Exception  region=${region}  policy_name=${name}_1  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist_update}  token=${token}
 
 # ECQ-4170
 UpdateTrustPolicyException - update with invalid CIDR shall return error 
@@ -223,19 +223,19 @@ UpdateTrustPolicyException - update with icmp and port range shall return error
 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_minimum=10  port_range_maximum=0  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Update Trust Policy Exception  region=${region}  token=${token}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Update Trust Policy Exception  region=${region}  token=${token}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist} 
 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_minimum=10  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Update Trust Policy Exception  region=${region}  token=${token}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Update Trust Policy Exception  region=${region}  token=${token}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist} 
 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_maximum=10  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Update Trust Policy Exception  region=${region}  token=${token}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Update Trust Policy Exception  region=${region}  token=${token}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist} 
 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_minimum=0  port_range_maximum=10  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Update Trust Policy Exception  region=${region}  token=${token}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Update Trust Policy Exception  region=${region}  token=${token}  policy_name=${policy_name}  app_name=${app_name_automation_trusted}  app_version=1.0  cloudlet_pool_name=${pool['data']['key']['name']}  cloudlet_pool_org_name=${pool['data']['key']['organization']}  rule_list=${rulelist} 
 
 # ECQ-4174
 UpdateTrustPolicyException - update with minport>maxport shall return error
