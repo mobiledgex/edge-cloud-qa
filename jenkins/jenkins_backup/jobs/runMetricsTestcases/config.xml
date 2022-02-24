@@ -10,6 +10,7 @@
         <string>SlaveNode</string>
         <string>VariableFile</string>
         <string>TestTarget</string>
+        <string>InfluxDB</string>
         <string>RunFailedOnly</string>
         <string>TestTimeout</string>
         <string>Cycle</string>
@@ -72,8 +73,10 @@
         </hudson.model.BooleanParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>TestTarget</name>
-          <choices>
-            <string>Metrics</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>Metrics</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -81,74 +84,42 @@
           <defaultValue>45m</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>InfluxDB</name>
+          <defaultValue>us-qa.influxdb.mobiledgex.net:8086</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
-    <script>currentBuild.displayName = cycle
-//slackurl = &apos;https://mobiledgex.slack.com/services/hooks/jenkins-ci/&apos;
-//slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
-//slackchannel = &apos;#qa-automation&apos;
-
-automated_component = &quot;Automated&quot;
-metrics_components = [automated_component, &quot;Metrics&quot;]
-testcase_components = [
-    metrics_components + &quot;AppInst&quot;,
-    metrics_components + &quot;Cloudlet&quot;,
-    metrics_components + &quot;ClusterInst&quot;,
-    metrics_components + &quot;DME&quot;,
-    metrics_components + &quot;VM&quot;
-    ]
-
-pipeline{
-    agent { label &apos;jenkinsSlave1&apos; }
-    parameters {
-        string(name: &apos;SlaveNode&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
-        string(name: &apos;Cycle&apos;, defaultValue: &apos;2021-11-05_CirrusR3.1&apos;)
-        string(name: &apos;Project&apos;, defaultValue: &apos;ECQ&apos;)
-        string(name: &apos;MasterController&apos;, defaultValue: &apos;console-qa.mobiledgex.net:443&apos;)
-        string(name: &apos;VariableFile&apos;, defaultValue: &apos;automation_variables.py&apos;)
-        string(name: &apos;CommitVersion&apos;, defaultValue: &apos;master&apos;)
-        booleanParam(name: &apos;RunFailedOnly&apos;, defaultValue: false)
-        choice(name: &apos;TestTarget&apos;, choices: [&apos;Metrics&apos;], description: &apos;&apos;)
-        string(name: &apos;TestTimeout&apos;, defaultValue: &apos;45m&apos;)
-    }
-
-    stages {
-        stage(&quot;execute tests 1&quot;) {
-            steps {
-                //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Starting Controller tests&quot;
-
-                script {
-                    builds = [:]
-                    testcase_components.eachWithIndex { value, index-&gt;
-                        echo &quot;${value}&quot;
-                        builds[&quot;${value[-1]}&quot;] = {
-                            build job: &apos;runTestcases&apos;, parameters: [
-                                string(name: &apos;SlaveNode&apos;, value: params.SlaveNode), 
-                                string(name: &apos;Components&apos;, value: value.join(&apos;,&apos;)), 
-                                string(name: &apos;Project&apos;, value: params.Project), 
-                                string(name: &apos;Cycle&apos;, value: params.Cycle), 
-                                string(name: &apos;MasterController&apos;, value: params.MasterController), 
-                                string(name: &apos;VariableFile&apos;, value: params.VariableFile), 
-                                string(name: &apos;TestTarget&apos;, value: params.TestTarget),
-                                string(name: &apos;TestTimeout&apos;, value: params.TestTimeout),
-                                booleanParam(name: &apos;RunFailedOnly&apos;, value: params.RunFailedOnly)]
-                        }
-                    }
-                    catchError {
-                        parallel builds
-                    }
-                }
-            }
-            post {
-                failure { echo &quot;run metrics tests failed&quot;}
-            }
-        }
-    }
-}
-</script>
-    <sandbox>true</sandbox>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@4.10.0">
+      <configVersion>2</configVersion>
+      <userRemoteConfigs>
+        <hudson.plugins.git.UserRemoteConfig>
+          <url>https://github.com/mobiledgex/edge-cloud-qa.git</url>
+          <credentialsId>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</credentialsId>
+        </hudson.plugins.git.UserRemoteConfig>
+      </userRemoteConfigs>
+      <branches>
+        <hudson.plugins.git.BranchSpec>
+          <name>*/master</name>
+        </hudson.plugins.git.BranchSpec>
+      </branches>
+      <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+      <submoduleCfg class="empty-list"/>
+      <extensions>
+        <hudson.plugins.git.extensions.impl.SparseCheckoutPaths>
+          <sparseCheckoutPaths>
+            <hudson.plugins.git.extensions.impl.SparseCheckoutPath>
+              <path>jenkins</path>
+            </hudson.plugins.git.extensions.impl.SparseCheckoutPath>
+          </sparseCheckoutPaths>
+        </hudson.plugins.git.extensions.impl.SparseCheckoutPaths>
+      </extensions>
+    </scm>
+    <scriptPath>jenkins/runMetricsTestcases_declarative.jenkinsfile</scriptPath>
+    <lightweight>true</lightweight>
   </definition>
   <triggers/>
   <disabled>false</disabled>

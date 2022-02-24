@@ -66,6 +66,33 @@ class Flavor():
         
         self.flavor = flavor_dict
 
+
+class Network():
+    network = None
+
+    def __init__(self, region=None, network_name=None, cloudlet=None, operator=None, connectiontype=None, routes=None):
+        network_dict = {}
+
+        self.region = region
+        self.network_name = network_name
+        self.operator = operator
+        self.cloudlet = cloudlet
+        self.connectiontype = connectiontype
+
+
+        if self.network_name is not None:
+            network_dict['key'] = {'name': self.network_name}
+        if self.region is not None:
+            network_dict['region'] = self.region
+        if self.operator is not None:
+            network_dict['operator'] = self.operator
+        if self.cloudlet is not None:
+            network_dict['cloudlet'] = self.cloudlet
+        if self.connectiontype is not None:
+            network_dict['connectiontype'] = self.connectiontype
+
+        self.network = network_dict
+
 class Cloudlet():
     cloudlet = None
     
