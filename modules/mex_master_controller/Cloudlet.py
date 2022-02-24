@@ -231,6 +231,8 @@ class Cloudlet(MexOperation):
                 elif 'OPENRC_DATA' in var:
                     key, value = var.split('OPENRC_DATA=')
                     key = 'OPENRC_DATA'
+                else:
+                    key, value = var.split('=')
                 access_dict[key] = value
             cloudlet_dict['access_vars'] = access_dict
 
