@@ -340,6 +340,7 @@ class MexApp(object):
         data_size = sys.getsizeof(bytes(data, 'utf-8'))
 
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.settimeout(10)
         client_socket.connect((host, int(port)))
 
         return_data = ''
@@ -347,6 +348,26 @@ class MexApp(object):
             logging.debug('sending data')
             client_socket.sendall(bytes(data, encoding='utf-8'))
             return_data = client_socket.recv(data_size)
+            logging.debug('data recevied back:' + return_data.decode('utf-8'))
+            client_socket.close()
+            return return_data
+        except Exception as e:
+            print('caught exception')
+            client_socket.close()
+            raise Exception('error=', e)
+
+    def _send_udp_data(self, host, port, data):
+        data_size = sys.getsizeof(bytes(data, 'utf-8'))
+
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.settimeout(10)
+        client_socket.connect((host, int(port)))
+
+        return_data = ''
+        try:
+            logging.debug('sending data')
+            client_socket.sendto(data.encode('ascii'), (host, int(port)))
+            (return_data, addr) = client_socket.recvfrom(data_size)
             logging.debug('data recevied back:' + return_data.decode('utf-8'))
             client_socket.close()
             return return_data
@@ -378,11 +399,16 @@ class MexApp(object):
 
         return_data = None
         for attempt in range(1, 4):
-            logging.debug(f'TCP port attempt {attempt}')
+            logging.debug(f'{protocol} port attempt {attempt}')
             try:
-                return_data = self._send_tcp_data(vm, vm_port, data).decode('utf-8')
+                if protocol.lower() == 'tcp':
+                    return_data = self._send_tcp_data(vm, vm_port, data).decode('utf-8')
+                elif protocol.lower() == 'udp':
+                    return_data = self._send_udp_data(vm, vm_port, data).decode('utf-8')
+                else:
+                    raise Exception(f'protocol={protocol} not known')
             except Exception as e:
-                logging.debug(f'tcp exception caught:{e}')
+                logging.debug(f'{protocol} exception caught:{e}')
                 if attempt == 3:
                     raise Exception(e)
                 else:

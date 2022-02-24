@@ -881,6 +881,7 @@ Setup
     #${cloudlet1}=  Find Cloudlet   carrier_name=${operator_name_fake}  latitude=${cloud1_lat}  longitude=${cloud2_long}
     Should Be Equal As Numbers  ${cloudlet1.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet1.edge_events_cookie}') > 100
+
     Should Be Equal  ${cloudlet1.fqdn}  shared.${cloudlet_name}-dmuus.${region_lc}.mobiledgex.net
 
     ${r2}=  Register Client  app_name=${app_name}2  app_version=1.0  developer_org_name=${developer_org_name_automation}
