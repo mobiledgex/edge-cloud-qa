@@ -220,7 +220,7 @@ UpdateCloudlet - shall be able to update cloudlet with trust policy
    ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
@@ -264,7 +264,7 @@ UpdateCloudlet - shall be able to add trust policy to cloudlet
    ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
@@ -300,7 +300,7 @@ UpdateCloudlet - shall be able to remove trust policy from cloudlet
    ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
-   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        UDP
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
