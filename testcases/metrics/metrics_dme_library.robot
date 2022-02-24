@@ -1308,7 +1308,7 @@ DeveloperOperator shall be able to get client app usage metrics with starttime a
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    log to console  ${num_readings}
 
-   Should Be True  ${num_readings} <= 100
+   Should Be True  ${num_readings} <= 1000
 
    [Return]  ${metrics}  ${time_diff}
 
@@ -1348,7 +1348,7 @@ Operator shall be able to get client cloudlet usage metrics with starttime and e
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    log to console  ${num_readings}
 
-   Should Be True  ${num_readings} <= 100
+   Should Be True  ${num_readings} <= 1000
 
    [Return]  ${metrics}  ${time_diff}
 
