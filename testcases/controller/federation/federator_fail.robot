@@ -219,7 +219,7 @@ Org delete - Controller shall throw error while deleting an operator org with a 
 
     ${orgname}=  Create Org  token=${super_token}  orgtype=operator
     Create Federator  region=${region}  operatorid=${orgname}  countrycode=${countrycode}  mcc=${mcc}  mnc=${mnc}  federationid=${federationid}
-    Run Keyword and Expect Error  ('code=400', 'error={"message":"Database error"}')  Delete Org
+    Run Keyword and Expect Error  ('code=400', 'error={"message":"Organization is in use by federator"}')  Delete Org
 
 *** Keywords ***
 Setup
