@@ -20,11 +20,20 @@ class OperatorNameElement(BasePagePulldownElement):
 class ConnectionType(BasePagePulldownElement):
     locator = NewPageLocators.network_connectiontype_pulldown
 
+class DestCIDRElement(BasePageElement):
+    locator = NewPageLocators.network_routes_destcidr
+
+class DestHopIPElement(BasePageElement):
+    locator = NewPageLocators.network_routes_desthopIP
+
+
 class NewNetworkPage(NewSettingsPage):
     network_name = NetworkNameElement()
     operator = OperatorNameElement()
     cloudlet = CloudletNameElement()
     connectiontype = ConnectionType()
+    destcidr = DestCIDRElement()
+    desthopip = DestHopIPElement()
 
     def is_operator_label_present(self):
         return self.is_element_present(NewPageLocators.network_operator_label_name)
@@ -90,7 +99,7 @@ class NewNetworkPage(NewSettingsPage):
 
         return settings_present
 
-    def create_network(self, region=None, network_name=None, operator=None, cloudlet=None, connectiontype=None, routes=None):
+    def create_network(self, region=None, network_name=None, operator=None, cloudlet=None, connectiontype=None, route_list=None):
         logging.info('Creating Network')
 
         self.region = region
@@ -101,6 +110,17 @@ class NewNetworkPage(NewSettingsPage):
         time.sleep(1)
         self.network_name = network_name
         self.connectiontype = connectiontype
+
+        if route_list is not None:
+            logging.info('Input routes - ' + route_list )
+            routes_info = route_list.split(',')
+            for i in range(len(routes_info)):
+                route_details = routes_info[i].split(':')
+                dest_cidr_value = route_details[0]
+                dest_hop_ip_value = route_details[1]
+                self.driver.find_element(*NewPageLocators.network_routes_add).click()
+                self.destcidr = dest_cidr_value
+                self.desthopip = dest_hop_ip_value
 
         time.sleep(3)
         self.take_screenshot('add_new_network.png')
