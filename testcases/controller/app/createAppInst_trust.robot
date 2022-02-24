@@ -505,7 +505,8 @@ Fail Create Trusted AppInst with Out Of Range RequiredOutboundConnections
 
    ${appinst}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${appname}  auto_delete=${False}
 
-   Should Be Equal  ${appinst}  ('code=200', 'error={"result":{"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy or exception to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_cidr']}:${parms['required_outbound_connections_list'][0]['port_range_minimum']}-${parms['required_outbound_connections_list'][0]['port_range_maximum']} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}","code":400}}\')
+   ${protocol}=  Convert To Uppercase  ${parms['required_outbound_connections_list'][0]['protocol']}
+   Should Be Equal  ${appinst}  ('code=200', 'error={"result":{"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy or exception to match required connection ${protocol}:${parms['required_outbound_connections_list'][0]['remote_cidr']}:${parms['required_outbound_connections_list'][0]['port_range_minimum']}-${parms['required_outbound_connections_list'][0]['port_range_maximum']} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}","code":400}}\')
 
 Fail Create Trusted AppInst with RequiredOutboundConnections
    [Arguments]  &{parms}
@@ -530,7 +531,8 @@ Fail Create Trusted AppInst with RequiredOutboundConnections
          ${port_max}=  Run Keyword If  'port_range_maximum' in ${parms['required_outbound_connections_list'][0]}  Set Variable  ${parms['required_outbound_connections_list'][0]['port_range_maximum']}
       END
 
-   Should Be Equal  ${appinst}  ('code=400', 'error={"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy or exception to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_cidr']}:${port_min}-${port_max} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}-${app_counter}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}\')
+   ${protocol}=  Convert To Uppercase  ${parms['required_outbound_connections_list'][0]['protocol']}
+   Should Be Equal  ${appinst}  ('code=400', 'error={"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy or exception to match required connection ${protocol}:${parms['required_outbound_connections_list'][0]['remote_cidr']}:${port_min}-${port_max} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}-${app_counter}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}\')
 
 Fail Create Untrusted AppInst
    [Arguments]  ${error_msg}  &{parms}  
