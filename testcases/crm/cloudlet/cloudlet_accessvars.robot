@@ -29,6 +29,19 @@ CreateCloudlet - User shall be able to create a cloudlet with access_vars
 
   Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name_openstack_accessvars}  operator_org_name=${operator_name_crm}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_accessvars}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  access_vars=CACERT_DATA=${cacert_data},OPENRC_DATA=${openrc_data}  env_vars=${env_vars}  timeout=900
 
+# ECQ-4387
+CreateCloudlet - User shall not be able to create a cloudlet with invalid access_vars
+   [Documentation]
+   ...  - do CreateCloudlet with invalid access vars parm
+   ...  - verify error occurs
+   ...  - do it again to verify cleanup happened the 1st time and doesnt give cloudlet already exists
+
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Invalid accessvars, missing OPENRC_DATA","code":400}}')  Create Cloudlet  region=${region}   operator_org_name=${operator_name_crm}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_accessvars}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  access_vars=x=1  env_vars=${env_vars}  timeout=900
+   
+   # run again to make sure cleanup happened after 1st failure
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Invalid accessvars, missing OPENRC_DATA","code":400}}')  Create Cloudlet  region=${region}   operator_org_name=${operator_name_crm}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_accessvars}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  access_vars=x=1  env_vars=${env_vars}  timeout=900
+
+  
 *** Keywords ***
 Setup
    #Create Org
