@@ -15,37 +15,37 @@ class NetworksPage(ComputePage):
         if self.is_element_present(NetworksPageLocators.networks_table_header_region):
             logging.info('region header present')
         else:
-            logging.warning('region header not present')
+            logging.error('region header not present')
             header_present = False
 
         if self.is_element_present(NetworksPageLocators.networks_table_header_networkname):
             logging.info('networkname header present')
         else:
-            logging.warning('networkname header not present')
+            logging.error('networkname header not present')
             header_present = False
 
         if self.is_element_present(NetworksPageLocators.networks_table_connection_type):
             logging.info('connection type header present')
         else:
-            logging.warning('connection type not present')
+            logging.error('connection type not present')
             header_present = False
 
         if self.is_element_present(NetworksPageLocators.networks_table_header_cloudlet):
             logging.info('cloudlet header present')
         else:
-            logging.warning('cloudlet header not present')
+            logging.error('cloudlet header not present')
             header_present = False
 
         if self.is_element_present(NetworksPageLocators.networks_table_header_organization):
             logging.info('organization header present')
         else:
-            logging.warning('organization not present')
+            logging.error('organization not present')
             header_present = False
 
         if self.is_element_present(NetworksPageLocators.networks_table_header_actions):
             logging.info('actions header present')
         else:
-            logging.warning('actions header not present')
+            logging.error('actions header not present')
             header_present = False
 
         return header_present

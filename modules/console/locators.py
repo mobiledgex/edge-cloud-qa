@@ -507,6 +507,8 @@ class NewPageLocators(object):
     network_connectiontype_input = (By.XPATH, '//div[contains(@class,"default text") and text()="Enter Connection Type"]')
     network_connectiontype_pulldown = (By.XPATH, '//div[@id="connectionType"]')
     network_routes_add = (By.XPATH, '//div//h3[text()="Routes"]//button')
+    network_routes_destcidr = (By.XPATH, '//div[@id="routes"]//input[@placeholder="Enter Destination CIDR"]')
+    network_routes_desthopIP = (By.XPATH, '//div[@id="routes"]//input[@placeholder="Enter Destination Hop IP"]')
 
 class NewPageFullLocators(object):
     settings_window = (By.XPATH, '//*[@class="ui grid"]')
