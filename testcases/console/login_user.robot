@@ -40,7 +40,15 @@ WebUI - User shall be able to login with non-mexadmin email
 
    [Tags]  passing
 
-   Login to Mex Console  browser=${browser}  username=${console_email}  password=${console_password}
+   ${epoch}=  Get Time  epoch
+   ${new_username}=  Catenate  SEPARATOR=   ${username}   ${epoch}
+   ${email}=  Catenate  SEPARATOR=   ${username}  +  ${epoch}  @gmail.com
+   Skip Verify Email
+   Create User  username=${new_username}   password=${password}   email_address=${email}  email_check=False
+   Unlock User  username=${new_username}
+
+   Login to Mex Console  browser=${browser}  username=${email}  password=${password}
+
 
 WebUI - User shall not be able to login with non-verified account
    [Documentation]

@@ -92,7 +92,7 @@ CreateTrustPolicyException - create exception without protocol shall return erro
    &{rule}=  Create Dictionary  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (tcp,udp,icmp)"}')   Create Trust Policy Exception  region=${region}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (TCP,UDP,ICMP)"}')   Create Trust Policy Exception  region=${region}  rule_list=${rulelist} 
 
 # ECQ-4118
 CreateTrustPolicyException - create exception with invalid CIDR shall return error 
@@ -188,16 +188,16 @@ CreateTrustPolicyException - create exception with icmp and port range shall ret
 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_minimum=10  port_range_maximum=0  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Create Trust Policy Exception  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Create Trust Policy Exception  region=${region}  token=${token}  rule_list=${rulelist} 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_minimum=10  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Create Trust Policy Exception  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Create Trust Policy Exception  region=${region}  token=${token}  rule_list=${rulelist} 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_maximum=10  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Create Trust Policy Exception  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Create Trust Policy Exception  region=${region}  token=${token}  rule_list=${rulelist} 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_minimum=0  port_range_maximum=10  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Create Trust Policy Exception  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for ICMP"}')  Create Trust Policy Exception  region=${region}  token=${token}  rule_list=${rulelist} 
 
 # ECQ-4122
 CreateTrustPolicyException - create exception with minport>maxport shall return error
