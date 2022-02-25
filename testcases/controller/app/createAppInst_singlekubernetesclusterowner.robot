@@ -39,8 +39,8 @@ CreateAppInst - Error shall be received for docker/vm appinst on cloudlet with s
 
    [Template]  Fail Create AppInst with SingleKubernetesClusterOwner
 
-   error=('code=400', 'error={"message":"Cannot deploy docker App into kubernetes ClusterInst"}')  image_type=Docker  deployment=docker  access_type=loadbalancer  image_path=${docker_image}
-   error=x  image_type=Qcow    deployment=vm        access_type=loadbalancer  image_path=${qcow_centos_image}
+   error=('code=400', 'error={"message":"Cannot deploy docker app to single kubernetes cloudlet"}')  image_type=Docker  deployment=docker  access_type=loadbalancer  image_path=${docker_image}
+   error=('code=400', 'error={"message":"Cannot deploy vm app to single kubernetes cloudlet"}')      image_type=Qcow    deployment=vm        access_type=loadbalancer  image_path=${qcow_centos_image}
 
 # ECQ-4368
 CreateAppInst - Error shall be received when realclustername != defaultclust for cloudlet singlekubernetesclusterowner
