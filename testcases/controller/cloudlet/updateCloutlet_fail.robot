@@ -466,10 +466,10 @@ UpdateCloudlet - update with developer alliance org shall return error
    ${cloudlet}=  Create Cloudlet  region=${region}
 
    @{alliance_list}=  Create List  automation_dev_org
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}   alliance_org_list=${alliance_list}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation for alliance org automation_dev_org only allowed for orgs of type operator"}')    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}   alliance_org_list=${alliance_list}
 
    @{alliance_list}=  Create List  dmuus  automation_dev_org
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}   alliance_org_list=${alliance_list}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation for alliance org automation_dev_org only allowed for orgs of type operator"}')    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}   alliance_org_list=${alliance_list}
 
 # ECQ-3974
 UpdateCloudlet - update with unknown alliance org shall return error
@@ -487,7 +487,7 @@ UpdateCloudlet - update with unknown alliance org shall return error
    ${cloudlet}=  Create Cloudlet  region=${region}
 
    @{alliance_list}=  Create List  notknown
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org notknown not found"}')    Update Cloudlet  region=US  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}    alliance_org_list=${alliance_list}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Alliance org notknown not found"}')    Update Cloudlet  region=US  cloudlet_name=${cloudlet['data']['key']['name']}  operator_org_name=${cloudlet['data']['key']['organization']}    alliance_org_list=${alliance_list}
 
 # ECQ-4007
 UpdateCloudlet - update with duplicate alliance org shall return error
