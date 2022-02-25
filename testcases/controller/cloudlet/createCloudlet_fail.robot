@@ -315,7 +315,7 @@ CreateCloudlet - create with singlekubernetesclusterowner set to nonexistent org
 
    [Tags]  SingleKubernetesClusterOwner
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org orgnotfound not found"}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  platform_type=K8SBareMetal  single_kubernetes_cluster_owner=orgnotfound  token=${token}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Single kubernetes cluster owner org orgnotfound not found"}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  platform_type=K8SBareMetal  single_kubernetes_cluster_owner=orgnotfound  token=${token}
 
 # ECQ-4371
 CreateCloudlet - create with singlekubernetesclusterowner set to operator org shall return error
@@ -325,7 +325,7 @@ CreateCloudlet - create with singlekubernetesclusterowner set to operator org sh
 
    [Tags]  SingleKubernetesClusterOwner
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org orgnotfound not found"}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  platform_type=K8SBareMetal  single_kubernetes_cluster_owner=${oper}  token=${token}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation for single kubernetes cluster owner org azure only allowed for orgs of type developer"}')  Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  platform_type=K8SBareMetal  single_kubernetes_cluster_owner=${oper}  token=${token}
 
 ** Keywords **
 Setup
