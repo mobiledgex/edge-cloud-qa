@@ -32,7 +32,7 @@ AddAllianceOrg - add unknown alliance orgs to cloudlet shall return error
    [Tags]  AllianceOrg
 
    ${error}=  Run Keyword and Expect Error  *  Add Cloudlet Alliance Org  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=tmus  alliance_org_name=tmusx
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Org tmusx not found"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Alliance org tmusx not found"}')
 
 # ECQ-3966
 AddAllianceOrg - add developer alliance orgs to cloudlet shall return error
@@ -43,7 +43,7 @@ AddAllianceOrg - add developer alliance orgs to cloudlet shall return error
    [Tags]  AllianceOrg
 
    ${error}=  Run Keyword and Expect Error  *  Add Cloudlet Alliance Org  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=tmus  alliance_org_name=automation_dev_org
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Operation for alliance org automation_dev_org only allowed for orgs of type operator"}')
 
 # ECQ-4008
 AddAllianceOrg - add same alliance org to cloudlet shall return error
