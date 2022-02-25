@@ -242,10 +242,10 @@ CreateCloudlet - create with developer alliance org shall return error
    [Tags]  AllianceOrg
 
    @{alliance_list}=  Create List  automation_dev_org
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation for alliance org automation_dev_org only allowed for orgs of type operator"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
 
    @{alliance_list}=  Create List  dmuus  automation_dev_org
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation for alliance org automation_dev_org only allowed for orgs of type operator"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
 
 # ECQ-3972
 CreateCloudlet - create with unknown alliance org shall return error
@@ -256,7 +256,7 @@ CreateCloudlet - create with unknown alliance org shall return error
    [Tags]  AllianceOrg
 
    @{alliance_list}=  Create List  notknown
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Org notknown not found"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Alliance org notknown not found"}')    Create Cloudlet  region=US  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  alliance_org_list=${alliance_list}  token=${token}
 
 # ECQ-4006
 CreateCloudlet - create with duplicate alliance org shall return error
