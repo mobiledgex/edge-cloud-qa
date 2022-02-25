@@ -293,14 +293,20 @@ Setup
    ${app_name}=  Get Default App Name
    ${autoprov_name}=  Get Default Auto Provisioning Policy Name
 
+   ${dev_token}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
+#   ${op_token}=   Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
+   ${super_token}=  Get Super Token
+   Set Suite Variable  ${dev_token}
+#   Set Suite Variable  ${op_token}
+   Set Suite Variable  ${super_token}
    Set Suite Variable  ${app_name}
    Set Suite Variable  ${autoprov_name}
 
    &{cloudlet1}=  create dictionary  name=tmocloud-1  organization=dmuus
    &{cloudlet2}=  create dictionary  name=tmocloud-2  organization=dmuus
    @{cloudletlist}=  create list  ${cloudlet1}  ${cloudlet2}
-   Create Auto Provisioning Policy  region=${region}  policy_name=${autoprov_name}1  min_active_instances=1  max_instances=2  developer_org_name=${developer}  cloudlet_list=${cloudletlist}
-   Create Auto Provisioning Policy  region=${region}  policy_name=${autoprov_name}2  min_active_instances=1  max_instances=2  developer_org_name=${developer}  cloudlet_list=${cloudletlist}
+   Create Auto Provisioning Policy  region=${region}  policy_name=${autoprov_name}1  min_active_instances=1  max_instances=2  developer_org_name=${developer}  cloudlet_list=${cloudletlist}  token=${super_token}
+   Create Auto Provisioning Policy  region=${region}  policy_name=${autoprov_name}2  min_active_instances=1  max_instances=2  developer_org_name=${developer}  cloudlet_list=${cloudletlist}  token=${super_token}
 
    @{autoprovpolicies}=  Create List  ${autoprov_name}1  ${autoprov_name}2
    Set Suite Variable  @{autoprovpolicies}
@@ -313,9 +319,9 @@ Success Create/Show/Delete App Via mcctl
    Remove From Dictionary  ${parms_copy}  deploymentmanifest
    ${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
  
-   Run mcctl  app create region=${region} ${parmss} --debug  version=${version}
-   ${show}=  Run mcctl  app show region=${region} ${parmss_modify}  version=${version}
-   Run mcctl  app delete region=${region} ${parmss_modify}  version=${version}
+   Run mcctl  app create region=${region} ${parmss} --token=${dev_token} --debug  version=${version}
+   ${show}=  Run mcctl  app show region=${region} ${parmss_modify} --token=${dev_token}  version=${version}
+   Run mcctl  app delete region=${region} ${parmss_modify} --token=${dev_token}  version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['appname']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['apporg']}
@@ -429,29 +435,29 @@ Update Setup
    Set Suite Variable  ${app_name_helm}
    Set Suite Variable  ${autoprovpolicy_name}
 
-   Run mcctl  autoprovpolicy create region=${region} name=${autoprovpolicy_name}0 apporg=${developer} deployclientcount=1 minactiveinstances=1 cloudlets:0.key.organization=dmuus cloudlets:0.key.name=tmocloud-1
-   Run mcctl  autoprovpolicy create region=${region} name=${autoprovpolicy_name} apporg=${developer} deployclientcount=1 minactiveinstances=1 cloudlets:0.key.organization=dmuus cloudlets:0.key.name=tmocloud-1
+   Run mcctl  autoprovpolicy create region=${region} name=${autoprovpolicy_name}0 apporg=${developer} deployclientcount=1 minactiveinstances=1 cloudlets:0.key.organization=dmuus cloudlets:0.key.name=tmocloud-1 --token=${dev_token}  version=${version}
+   Run mcctl  autoprovpolicy create region=${region} name=${autoprovpolicy_name} apporg=${developer} deployclientcount=1 minactiveinstances=1 cloudlets:0.key.organization=dmuus cloudlets:0.key.name=tmocloud-1 --token=${dev_token}  version=${version}
 
-   Run mcctl  app create region=${region} appname=${app_name_k8s} apporg=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=kubernetes imagepath=${docker_image} defaultflavor=automation_api_flavor autoprovpolicies=${autoprovpolicy_name}0  version=${version}
-   Run mcctl  app create region=${region} appname=${app_name_docker} apporg=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=docker imagepath=${docker_image} defaultflavor=automation_api_flavor  version=${version}
-   Run mcctl  app create region=${region} appname=${app_name_helm} apporg=${developer} appvers=1.0 imagetype=ImageTypeHelm deployment=helm imagepath=${docker_image} defaultflavor=automation_api_flavor  version=${version}
-   Run mcctl  app create region=${region} appname=${app_name_vm} apporg=${developer} appvers=1.0 imagetype=ImageTypeQcow deployment=vm imagepath=${qcow_centos_image} defaultflavor=automation_api_flavor  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_k8s} apporg=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=kubernetes imagepath=${docker_image} defaultflavor=automation_api_flavor autoprovpolicies=${autoprovpolicy_name}0 --token=${dev_token}  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_docker} apporg=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=docker imagepath=${docker_image} defaultflavor=automation_api_flavor --token=${dev_token}  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_helm} apporg=${developer} appvers=1.0 imagetype=ImageTypeHelm deployment=helm imagepath=${docker_image} defaultflavor=automation_api_flavor --token=${dev_token}  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_vm} apporg=${developer} appvers=1.0 imagetype=ImageTypeQcow deployment=vm imagepath=${qcow_centos_image} defaultflavor=automation_api_flavor --token=${dev_token}  version=${version}
 
 Update Teardown
-   Run mcctl  app delete region=${region} appname=${app_name_k8s} apporg=${developer} appvers=1.0  version=${version}
-   Run mcctl  app delete region=${region} appname=${app_name_docker} apporg=${developer} appvers=1.0  version=${version}
-   Run mcctl  app delete region=${region} appname=${app_name_helm} apporg=${developer} appvers=1.0  version=${version}
-   Run mcctl  app delete region=${region} appname=${app_name_vm} apporg=${developer} appvers=1.0  version=${version}
-   Run mcctl  autoprovpolicy delete region=${region} name=${autoprovpolicy_name}0 apporg=${developer}  version=${version}
-   Run mcctl  autoprovpolicy delete region=${region} name=${autoprovpolicy_name} apporg=${developer}  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_k8s} apporg=${developer} appvers=1.0 --token=${dev_token}  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_docker} apporg=${developer} appvers=1.0 --token=${dev_token}  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_helm} apporg=${developer} appvers=1.0 --token=${dev_token}  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_vm} apporg=${developer} appvers=1.0 --token=${dev_token}  version=${version}
+   Run mcctl  autoprovpolicy delete region=${region} name=${autoprovpolicy_name}0 apporg=${developer} --token=${dev_token}  version=${version}
+   Run mcctl  autoprovpolicy delete region=${region} name=${autoprovpolicy_name} apporg=${developer} --token=${dev_token}  version=${version}
 
 Success Update/Show App Via mcctl
    [Arguments]  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  app update region=${region} ${parmss}  version=${version}
-   ${show}=  Run mcctl  app show region=${region} ${parmss}  version=${version}
+   Run mcctl  app update region=${region} ${parmss} --token=${dev_token}  version=${version}
+   ${show}=  Run mcctl  app show region=${region} ${parmss} --token=${dev_token}  version=${version}
 
    #Verify Show  show=${show}  &{parms}
    Should Be Equal  ${show[0]['key']['name']}  ${parms['appname']}
@@ -506,7 +512,7 @@ Fail Create App Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app create region=${region} ${parmss}  version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app create region=${region} ${parmss} --token=${dev_token}  version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
 Fail Update App Via mcctl
@@ -514,6 +520,6 @@ Fail Update App Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app update region=${region} ${parmss}    version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app update region=${region} ${parmss} --token=${dev_token}    version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
