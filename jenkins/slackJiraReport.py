@@ -93,6 +93,8 @@ def build_report_blocks():
     if report_warning:
         report_text += f'\\n{report_warning}'
     print(report_text)
+    report_size = len(report_text)
+    logger.info(f'report size is {report_size}')
 
     block = f'''[
                   {{
@@ -112,6 +114,8 @@ def build_report_blocks():
                 ]'''
 
     print('block', block)
+    block_size = len(block)
+    logger.info(f'block size is {block_size}')
 
     return block
 
