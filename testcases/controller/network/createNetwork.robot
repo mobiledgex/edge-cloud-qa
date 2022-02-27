@@ -64,7 +64,7 @@ ${error_400_cloudletnotfound}=  ('code=400', 'error={"message":"Cloudlet key {\\
 
 *** Test Cases ***
 
-#ECQ
+#ECQ-4389
 CreateNetwork - shall be able to create with long network name
    [Documentation]
    ...  - send CreateNetwork with long network name for each type network
@@ -105,7 +105,7 @@ CreateNetwork - shall be able to create with long network name
    Should Be Equal  ${network3_return['data']['routes']}  ${routelist3}
    Should Be Equal  ${network3_return['data']['key']['name']}  ${name}${name_3}
 
-#ECQ
+#ECQ-4390
 CreateNetwork - shall be able to create network with numbers in name
    [Documentation]
    ...  - send CreateNetwork with numbers in network name for each type network
@@ -147,11 +147,12 @@ CreateNetwork - shall be able to create network with numbers in name
    Should Be Equal  ${network3_return['data']['routes']}  ${routelist3}
    Should Be Equal  ${network3_return['data']['key']['name']}  ${name_3}${epoch}
 
-#ECQ
+#ECQ-4391
 CreateNetwork - shall be able to update and show network
    [Documentation]
-   ...  - send CreateNetwork with numbers in network name for each type network
+   ...  - send CreateNetwork with numbers and letters in network name for each type network
    ...  - verify networks are created
+   ...  - send UpdateNetwork and verify networks are updated
 
    ${epoch}=  Get Time  epoch
    ${epoch}=  Convert To String  ${epoch}
@@ -185,7 +186,7 @@ CreateNetwork - shall be able to update and show network
    Should Be Equal  ${network1_show}[0][data][routes]  ${routelist2}
    Should Contain   ${network1_show}[0][data][key][name]}  ${name_1}${epoch}
 
-#ECQ
+#ECQ-4392
 CreateNetwork - shall be able to handle errors 
    [Documentation]
    ...  - send CreateNetwork with invalid values
