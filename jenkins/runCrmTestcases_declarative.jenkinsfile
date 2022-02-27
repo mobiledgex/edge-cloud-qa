@@ -34,24 +34,24 @@ node_name = 'notset'
 if(testtarget == 'Anthos') {
     echo "testtarget is Anthos"
 //    testcase_components1 = testcase_components1.plus([crm_components + "Serverless"])
-    testcase_components2 = testcase_components1.minus([crm_components + "ClusterInst"])
-    testcase_components2 = testcase_components1.minus([crm_components + "GPU"])
-    testcase_components2 = testcase_components1.minus([crm_components + "VMPool"])
-    testcase_components2 = testcase_components1.minus([crm_components + "AutoProvisioning"])
+    testcase_components1 = testcase_components1.minus([crm_components + "ClusterInst"])
+    testcase_components2 = testcase_components2.minus([crm_components + "GPU"])
+    testcase_components2 = testcase_components2.minus([crm_components + "VMPool"])
+    testcase_components2 = testcase_components2.minus([crm_components + "AutoProvisioning"])
     
     node_name = 'jenkinsSlave1'
 } else if(testtarget == 'Vsphere') {
     echo "testtarget is Vsphere"
-    testcase_components2 = testcase_components1.minus([crm_components + "GPU"])
-    testcase_components2 = testcase_components1.minus([crm_components + "VMPool"])
-    testcase_components2 = testcase_components1.minus([crm_components + "AutoProvisioning"])
+    testcase_components2 = testcase_components2.minus([crm_components + "GPU"])
+    testcase_components2 = testcase_components2.minus([crm_components + "VMPool"])
+    testcase_components2 = testcase_components2.minus([crm_components + "AutoProvisioning"])
 
     node_name = 'jenkinsSlave2'
 } else if(testtarget == 'VCD') {
     echo "testtarget is VCD"
-    testcase_components2 = testcase_components1.minus([crm_components + "GPU"])
-    testcase_components2 = testcase_components1.minus([crm_components + "VMPool"])
-    testcase_components2 = testcase_components1.minus([crm_components + "AutoProvisioning"])
+    testcase_components2 = testcase_components2.minus([crm_components + "GPU"])
+    testcase_components2 = testcase_components2.minus([crm_components + "VMPool"])
+    testcase_components2 = testcase_components2.minus([crm_components + "AutoProvisioning"])
 
     node_name = 'jenkinsGcpSlave2'
 } else if(testtarget == 'Openstack') {
