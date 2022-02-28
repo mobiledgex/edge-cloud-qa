@@ -1,2 +1,19 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<list/>
+<list>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runRegression</job>
+    <id>301</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runMcTestcases</job>
+    <id>61</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>6246</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>upgradeEdgecloud</job>
+    <id>161</id>
+  </flow-owner>
+</list>
