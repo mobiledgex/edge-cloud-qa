@@ -48,6 +48,10 @@
           <boolean>true</boolean>
         </entry>
         <entry>
+          <string>upgradeEdgecloud</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
           <string>runRegression</string>
           <boolean>true</boolean>
         </entry>
