@@ -249,12 +249,14 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckOk when TCP port with skip_
 
     Stop TCP Port  ${tcp_fqdn}  ${cloudlet.ports[1].public_port}
     
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}   Ok
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  app_name=${app_name_default}
 
     Stop TCP Port  ${tcp_fqdn}  ${cloudlet.ports[0].public_port}
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
+
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  ServerFail
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -279,7 +281,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  Ok
 
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -291,7 +293,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
 
     Stop TCP Port  ${tcp_fqdn}  2015
 
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  Ok
 
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}
 
@@ -315,7 +317,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
 
     Stop TCP Port  ${tcp_fqdn}  2016
 
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  Ok
 
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -326,7 +328,7 @@ IpAccessDedicated k8s - healthcheck shows proper state when skip_hc_ports has a 
 
     Stop TCP Port  ${tcp_fqdn}  2015
 
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  Ok
 
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}
 
@@ -372,10 +374,12 @@ IpAccessDedicated k8s - healthcheck shows proper state after UpdateApp
 
     Stop TCP Port  ${tcp_fqdn}  2016
 
-    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  FailServerFail 
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  Ok
 
     Stop TCP Port  ${tcp_fqdn}  2015
     Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
+
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  ServerFail
 
 *** Keywords ***
 Setup
