@@ -212,7 +212,7 @@ CreateCloudlet - create with developer org shall return error
 
    ${org}=  Create Org  orgtype=developer
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Create Cloudlet  region=US  operator_org_name=${org}  latitude=1  longitude=1  number_dynamic_ips=1 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation for org ${org} only allowed for orgs of type operator"}')    Create Cloudlet  region=US  operator_org_name=${org}  latitude=1  longitude=1  number_dynamic_ips=1 
 
 # ECQ-3503
 CreateCloudlet - create with kafka user/password but no cluster shall return error
