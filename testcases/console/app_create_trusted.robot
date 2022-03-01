@@ -5,7 +5,7 @@ Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_C
 Library         Collections
 
 Test Setup      Setup
-Test Teardown   Close Browser
+Test Teardown   Teardown
 
 Test Timeout    10 minutes
 
@@ -46,24 +46,24 @@ Web UI - User shall be able to create a Trusted App which requires Outbound Conn
 
     Add New App  region=EU  app_name=${app_name}  developer_name=${developer_name}  deployment_type=kubernetes  access_ports=tcp:2015  trusted=True  outbound_connections=${rulelist}
 
-    @{apps_details}=    Show Apps  region=EU
+    ${apps_details}=    Show Apps  region=EU  app_name=${app_name}
+    Log to Console  ${apps_details}
 
-    FOR  ${row}  IN  @{apps_details}
-        ${var}=  Set Variable If  '${row['data']['key']['name']}' == '${app_name}'  ${row}
-        Exit For Loop If  '${row['data']['key']['name']}' == '${app_name}'
-    END
+    Should Be Equal              ${apps_details[0]['data']['required_outbound_connections'][0]['protocol']}  TCP
+    Should Be Equal As Numbers   ${apps_details[0]['data']['required_outbound_connections'][0]['port_range_min']}  1001
+    Should Be Equal As Numbers   ${apps_details[0]['data']['required_outbound_connections'][0]['port_range_max']}  1005
+    Should Be Equal              ${apps_details[0]['data']['required_outbound_connections'][0]['remote_cidr']}  3.1.1.1/32
 
-    Should Be Equal  ${var['data']['required_outbound_connections'][0]['protocol']}  tcp
-    Should Be Equal As Numbers   ${var['data']['required_outbound_connections'][0]['port_range_min']}  1001
-    Should Be Equal As Numbers   ${var['data']['required_outbound_connections'][0]['port_range_max']}  1005
-    Should Be Equal  ${var['data']['required_outbound_connections'][0]['remote_cidr']}  3.1.1.1/32
-
-    ${app_details}=  Open App Details
-    Should Be Equal             ${app_details['Trusted']}  Yes
-    Dictionary Should Contain Key   ${app_details}  Required Outbound Connections
+    ${ui_app_details}=  Open App Details  region=EU  app_name=${app_name}
+    Should Be Equal                 ${ui_app_details['Trusted']}  Yes
+    Dictionary Should Contain Key   ${ui_app_details}  Required Outbound Connections
+    Should Contain                  ${ui_app_details['Required Outbound Connections']}  "protocol": "TCP"
+    Should Contain                  ${ui_app_details['Required Outbound Connections']}  "port_range_min": 1001
+    Should Contain                  ${ui_app_details['Required Outbound Connections']}  "port_range_max": 1005
+    Should Contain                  ${ui_app_details['Required Outbound Connections']}  "remote_cidr": "3.1.1.1/32"
     Close Apps Details
 
-    MexConsole.Delete App  click_previous_page=off
+    MexConsole.Delete App  app_name=${app_name}
 
 *** Keywords ***
 Setup
@@ -78,3 +78,5 @@ Setup
 
 Teardown
     Close Browser
+    Run Keyword and Ignore Error  MexMasterController.Delete App  region=EU  app_name=${app_name}  developer_org_name=${developer_name}
+
