@@ -49,7 +49,7 @@ Federator create - Controller shall throw error with developer org as operatorid
 
     @{mnc}=  Create List  ${mnc1}
 
-    Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')  Create Federator  region=${region}  operatorid=${developer_org_name_automation}  countrycode=${countrycode}  mcc=${mcc}  mnc=${mnc}  
+    Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation for org ${developer_org_name_automation} only allowed for orgs of type operator"}')  Create Federator  region=${region}  operatorid=${developer_org_name_automation}  countrycode=${countrycode}  mcc=${mcc}  mnc=${mnc}  
 
 # ECQ-4190
 Federator create - Controller shall throw error with invalid countrycode
