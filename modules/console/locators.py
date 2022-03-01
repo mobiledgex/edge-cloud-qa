@@ -373,7 +373,7 @@ class AppsPageLocators(object):
     apps_details_deployment_manifest = (By.XPATH, '//td[text()="Deployment Manifest"]')
     trusted_app_toggle_button = (By.XPATH, '//div[contains(text(),"Trusted")]/ancestor::div[contains(@class,"formRow-13")]//span[@class="MuiIconButton-label"]/input[contains(@class,"MuiSwitch-input")]')
     create_instance = (By.XPATH, './/li[text()="Create Instance"]')
-    outbound_connections_button = (By.XPATH, '//h3[contains(.,"Required Outbound Connections")]/button')
+    outbound_connections_button = (By.XPATH, '//h3[contains(.,"Required Outbound Connections")]//button')
     outbound_connections_protocol_pulldown = (By.XPATH, '//div[@id="ocProtocol"]//div[text()="Select"]')
     outbound_connections_portrangemin_input = (By.XPATH, '(//div[@id="requiredOutboundConnectionmulti"]//div[@class="ui input"]/input)[1]')
     outbound_connections_portrangemax_input = (By.XPATH, '(//div[@id="requiredOutboundConnectionmulti"]//div[@class="ui input"]/input)[2]')
