@@ -3,7 +3,7 @@ Documentation   Create new App
 Library         MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
 Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
 Test Setup      Setup
-Test Teardown   Close Browser
+Test Teardown   Teardown
 
 Test Timeout    40 minutes
 
@@ -48,12 +48,19 @@ Web UI - User shall be able to update a Docker App for EU Region to include Envi
     MexConsole.Update App  envvar=${config}
     Sleep  5s
 
-    @{app_details}=    Show Apps  region=EU
+    @{app_details}=    Show Apps  region=EU  app_name=${app_name}
 
     FOR  ${row}  IN  @{app_details}
         Run Keyword If  '${row['data']['key']['name']}' == '${app_name}'  Should Be Equal  ${row['data']['configs'][0]['config'].replace('\r\n', '\n')}  ${config.replace('\r\n', '\n')}
     END
 
+    ${app_details_ui}=  Open App Details   app_name=${app_name}  region=EU  app_org=${developer_name}   deployment_type=kubernetes   app_version=1.0
+    Log to Console   ${app_details_ui}
+
+    Should Contain   ${app_details_ui['Configs']}   Kind Config\nEnvironment Variables Yaml\n
+    Should Contain   ${app_details_ui['Configs']}   ${config}
+
+    Close Details
     MexConsole.Delete App  click_previous_page=off  change_rows_per_page=True
 
     App Should Not Exist

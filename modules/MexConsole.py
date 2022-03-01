@@ -330,9 +330,6 @@ class MexConsole() :
 
         if contains_organizations:
             self.compute_page.click_organizations()
-       
-        if change_rows_per_page:
-            self.compute_page.org_rows_per_page()
 
         if self.compute_page.is_table_heading_present('Organizations'):
             logging.info('organization heading present')
