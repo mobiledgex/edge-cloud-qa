@@ -63,7 +63,7 @@ CreateCloudlet - mcctl shall handle create failures
       Error: OK (200), Must specify both kafka username and password, or neither  cloudlet=${cloudlet_name}  cloudletorg=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  kafkapassword=password
 
       # alliance orgs
-      Error: Bad Request (400), Org notfound not found  cloudlet=${cloudlet_name}  cloudletorg=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs=notfound
+      Error: Bad Request (400), Alliance org notfound not found  cloudlet=${cloudlet_name}  cloudletorg=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  allianceorgs=notfound
 
 # ECQ-3087
 UpdateCloudlet - mcctl shall handle update cloudlet 
