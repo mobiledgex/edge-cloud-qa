@@ -1,0 +1,113 @@
+currentBuild.displayName = cycle
+
+automated_component = "Automated"
+controller_components = [automated_component, "Controller"]
+testcase_components = [
+    controller_components + "Flavor",
+    controller_components + "OperatorCode",
+    controller_components + "ControllerSpecific",
+    controller_components + "ClusterInst",
+    controller_components + "App",
+    controller_components + "Cloudlet",
+    controller_components + "AppInst",
+    controller_components + "TrustPolicy",
+    controller_components + "TrustPolicyException",
+    controller_components + "AlertReceiver",
+    controller_components + "Settings",
+    controller_components + "AutoScale",
+    controller_components + "RateLimit",
+    controller_components + "AlertPolicy",
+    controller_components + "RunCommand",
+    controller_components + "ShowLogs",
+    controller_components + "RunConsole",
+    controller_components + "VMPool",
+    controller_components + "GPUDriver",
+    controller_components + "Federation",
+    controller_components + "OperatorReporting",
+    controller_components + "Network"
+    ]
+
+testcase_components2 = [
+    controller_components + "CloudletPool",
+    controller_components + "CloudletPoolMember",
+    controller_components + "OrgCloudlet"
+]
+
+pipeline{
+    agent { label 'jenkinsSlave1' }
+    parameters {
+        string(name: 'SlaveNode', defaultValue: 'jenkinsSlave1')
+        string(name: 'Cycle', defaultValue: '2021-11-05_CirrusR3.1')
+        string(name: 'Project', defaultValue: 'ECQ')
+        string(name: 'MasterController', defaultValue: 'console-qa.mobiledgex.net:443')
+        string(name: 'Controller', defaultValue: 'mexplat-qa-us.ctrl.mobiledgex.net:55001')
+        string(name: 'VariableFile', defaultValue: 'automation_variables.py')
+        string(name: 'CommitVersion', defaultValue: 'master')
+        booleanParam(name: 'RunFailedOnly', defaultValue: false)
+        choice(name: 'TestTarget', choices: ['Controller'], description: '')
+        string(name: 'TestTimeout', defaultValue: '4m')
+    }
+
+    stages {
+        stage("execute tests 1") {
+            steps {
+                script {
+                    builds = [:]
+                    testcase_components.eachWithIndex { value, index->
+                        echo "${value}"
+                        builds["${value[-1]}"] = {
+                            build job: 'runTestcases', parameters: [
+                                string(name: 'SlaveNode', value: params.SlaveNode), 
+                                string(name: 'Components', value: value.join(',')), 
+                                string(name: 'Project', value: params.Project), 
+                                string(name: 'Cycle', value: params.Cycle), 
+                                string(name: 'Controller', value: params.Controller), 
+                                string(name: 'MasterController', value: params.MasterController), 
+                                string(name: 'VariableFile', value: params.VariableFile), 
+                                string(name: 'TestTarget', value: params.TestTarget),
+                                string(name: 'TestTimeout', value: params.TestTimeout),
+                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
+                        }
+                    }
+                    catchError {
+                        parallel builds
+                    }
+                }
+            }
+            post {
+                failure { echo "run controller tests 1 failed"}
+            }
+        }
+ 
+        stage("execute tests 2") {
+            steps {
+                script {
+                    builds = [:]
+                    testcase_components2.eachWithIndex { value, index->
+                        echo "${value}"
+                        builds["${value[-1]}"] = {
+                            build job: 'runTestcases', parameters: [
+                                string(name: 'SlaveNode', value: params.SlaveNode), 
+                                string(name: 'Components', value: value.join(',')), 
+                                string(name: 'Project', value: params.Project), 
+                                string(name: 'Cycle', value: params.Cycle), 
+                                string(name: 'Controller', value: params.Controller), 
+                                string(name: 'MasterController', value: params.MasterController), 
+                                string(name: 'VariableFile', value: params.VariableFile), 
+                                string(name: 'TestTarget', value: params.TestTarget),
+                                string(name: 'TestTimeout', value: params.TestTimeout),
+                                booleanParam(name: 'RunFailedOnly', value: params.RunFailedOnly)]
+                        }
+                    }
+                    catchError {
+                        parallel builds
+                    }
+                }
+            }
+            post {
+                failure { echo "run controller tests 2 failed"}
+            }
+        }
+    }
+}
+
