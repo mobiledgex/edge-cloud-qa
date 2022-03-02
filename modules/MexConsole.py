@@ -600,7 +600,7 @@ class MexConsole() :
 
     def open_organization_details(self, organization):
         self.compute_page.click_organizations()
-        self.change_number_of_rows()
+        #self.change_number_of_rows()
         logging.info('Opening organization details for organization=' + organization)
 
         self.organizations_page.click_organization_row(organization=organization)
