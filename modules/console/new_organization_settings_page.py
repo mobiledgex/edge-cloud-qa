@@ -118,13 +118,13 @@ class NewOrganizationSettingsPage(BasePage):
             settings_present = False
 
         if org_type == "Developer":
-            if self.is_type_label_present() and self.is_type_developer_label_present():
+            if self.is_type_label_present() :
                 logging.info('Type Developer label present')
             else:
                 logging.error('Type Developer label not present')
                 settings_present = False
         else:
-            if self.is_type_label_present() and self.is_type_operator_label_present():
+            if self.is_type_label_present():
                 logging.info('Type Operator label present')
             else:
                 logging.error('Type Operator label not present')

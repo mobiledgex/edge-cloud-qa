@@ -6,7 +6,7 @@ Library         MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
 Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
 
 Test Setup      Setup
-Test Teardown   Close Browser
+Test Teardown   Teardown
 
 Test Timeout    40 minutes
 
@@ -56,7 +56,7 @@ Web UI - user shall be able to create a new US clusterinst with Docker Dedicated
 
 
     Delete Cluster  cluster_name=${cluster_instance_name_default}  wait=${wait}
-
+    Sleep  5s
     Cluster Should Not Exist  cluster_name=${cluster_instance_name_default}
 
 Web UI - user shall be able to create a new EU clusterinst with Kubernetes Shared Ip Access
@@ -138,3 +138,4 @@ Setup
 
 Teardown
     Close Browser
+    Cleanup Provisioning
