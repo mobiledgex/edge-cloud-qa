@@ -81,6 +81,8 @@ Clientappusage - mcctl shall be able to request clientappusage deviceinfo metric
       selector=deviceinfo  apporg=${developer_org_name_automation}  startage=12h
       selector=deviceinfo  apporg=${developer_org_name_automation}  endage=1s
       selector=deviceinfo  apporg=${developer_org_name_automation}  startage=12h  endage=1s
+      selector=deviceinfo  cloudletorg=${operator_name_fake}
+      selector=deviceinfo  cloudlet=${cloudlet_name_fake}  cloudletorg=${operator_name_fake}
 
 # ECQ-3364
 Clientappusage - mcctl shall handle clientappusage metrics failures
