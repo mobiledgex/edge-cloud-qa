@@ -586,11 +586,13 @@ class DeleteConfirmationPageLocators(object):
     content_item = (By.XPATH, '//button[@class="content"]/p/b')
 
 class OrganizationsPageLocators(object):
-    table_header_organization = (By.XPATH, '//label[text()="Organizations"]')
-    table_header_type = (By.XPATH, '//table/thead/tr/th/span/div[text()="Type"]')
-    table_header_phone = (By.XPATH, '//table/thead/tr/th/span[text()="Phone"]')
-    table_header_address = (By.XPATH, '//table/thead/tr/th/span[text()="Address"]')
-    table_header_edit = (By.XPATH, '//table/thead/tr/th[text()="Actions"]')
+    table_header_organization = (By.XPATH, '//div[@id="mex-data-grid"]//span[contains(@class,"textHeader") and contains(text(), "Organization")]')
+    table_header_type = (By.XPATH, '//div[@id="mex-data-grid"]//span[contains(@class,"textHeader") and contains(text(), "Type")]')
+    table_header_role = (By.XPATH, '//div[@id="mex-data-grid"]//span[contains(@class,"textHeader") and contains(text(), "Role")]')
+    table_header_phone = (By.XPATH, '//div[@id="mex-data-grid"]//span[contains(@class,"textHeader") and contains(text(), "Phone")]')
+    table_header_address = (By.XPATH, '//div[@id="mex-data-grid"]//span[contains(@class,"textHeader") and contains(text(), "Address")]')
+    table_header_publicimage = (By.XPATH, '//div[@id="mex-data-grid"]//span[contains(@class,"textHeader") and contains(text(), "Public Image")]')
+    table_header_edit = (By.XPATH, '//div[@id="mex-data-grid"]//span[contains(@class,"textHeader") and contains(text(), "Actions")]')
 
     #add_organization_user = (By.XPATH, './/button[text()="Add User"]')
     add_organization_user = (By.XPATH, '//li[text()="Add User"]')
@@ -638,7 +640,7 @@ class NewOrganizationPageLocators(object):
     step3_inactive = (By.XPATH, '//*[@class="ui tablet stackable steps"]/div[3][@class="step"]//div[div[1]="Step 3" and div[2]="Review Organization"]')
 
     #organization_name_label = (By.XPATH, '//*[@class="ui form fieldForm"]/div[3]//div[@class="ui grid"]/div[1]/div[1]/div[text()="Organization Name *"]')
-    organization_name_label = (By.XPATH, '//div[text()="Organization Name"]/sup[text()=" *"]')
+    organization_name_label = (By.XPATH, '//div[text()="Organization"]/sup[text()=" *"]')
     #organization_name_input = (By.XPATH, '//*[@class="ui form fieldForm"]/div[3]//div[@class="ui grid"]/div[1]/div[2]//div[@class="ui input"]/input')
     organization_name_input = (By.XPATH, '//div[@class="ui input"]/input[@placeholder="Enter Organization Name"]')
     #address_label = (By.XPATH, '//*[@class="ui form fieldForm"]/div[3]//div[@class="ui grid"]/div[2]/div[1]/div[text()="Address *"]')

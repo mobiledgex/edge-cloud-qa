@@ -1,5 +1,5 @@
 from console.compute_page import ComputePage
-from console.locators import OrganizationsPageLocators, ComputePageLocators, DeleteConfirmationPageLocators
+from console.locators import OrganizationsPageLocators, ComputePageLocators, DeleteConfirmationPageLocators, CloudletsPageLocators
 from selenium.webdriver.common.action_chains import ActionChains
 import logging
 import time
@@ -15,10 +15,10 @@ class OrganizationsPage(ComputePage):
             logging.error('organization header NOT present')
             header_present = False
 
-        if self.is_element_present(OrganizationsPageLocators.table_header_type):
-            logging.info('type header present')
+        if self.is_element_present(OrganizationsPageLocators.table_header_role):
+            logging.info('role header present')
         else:
-            logging.error('type header NOT present')
+            logging.error('role header NOT present')
             header_present = False
 
         if self.is_element_present(OrganizationsPageLocators.table_header_phone):
@@ -33,10 +33,16 @@ class OrganizationsPage(ComputePage):
             logging.error('address header NOT present')
             header_present = False
 
-        if self.is_element_present(OrganizationsPageLocators.table_header_edit):
-            logging.info('edit header present')
+        if self.is_element_present(OrganizationsPageLocators.table_header_publicimage):
+            logging.info('public image header present')
         else:
-            logging.error('edit header NOT present')
+            logging.error('public image header NOT present')
+            header_present = False
+
+        if self.is_element_present(OrganizationsPageLocators.table_header_edit):
+            logging.info('actions header present')
+        else:
+            logging.error('actions header NOT present')
             header_present = False
 
         return header_present
@@ -179,7 +185,7 @@ class OrganizationsPage(ComputePage):
     def click_organization_row(self, organization):
         #is_present = ComputePage.click_organization_details(self)
         #is_present.click()
-        row = self.get_table_row_by_value([(organization, 1)])
+        row = self.get_table_row_by_value([(organization, 2)])
         time.sleep(1)
         ActionChains(self.driver).click(on_element=row).perform()
         #row.click()
