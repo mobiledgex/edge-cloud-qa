@@ -835,6 +835,50 @@ DMEMetrics - OperatorViewer shall be able to get DME Client App DeviceInfo metri
 ##   DeviceInfo App Should Be Found  ${app_name}2  ${metrics}  cloudlet=${cloudlet1}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 #   DeviceInfo App Should Be Found  ${app_name}3  ${metrics}  cloudlet=${cloudlet2_name}  device_network_type=${data_network_type}  device_carrier=${carrier_name}  numsessions=1
 
+DMEMetrics - Shall be able to get DME Client App Latency/DeviceInfo metrics with cloudletorg only
+   [Documentation]
+   ...  - request latency clientappusage metrics with cloudletorg only
+   ...  - verify info is correct
+
+   ${metrics1}=  OperatorManager shall be able to get client app usage metrics  selector=latency  operator_org_name=${operator_name_fake}
+
+   ${metrics2}=  OperatorManager shall be able to get client app usage metrics  selector=deviceinfo  operator_org_name=${operator_name_fake}
+
+   Latency App Should Be Found  ${app_name}3  ${metrics1}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  device_network_type=${data_network_type}  raw=${True}
+
+   FOR  ${m}  IN  @{metrics1['data'][0]['Series']}
+      Should Be True  '${m['tags']['cloudletorg']}' == '${operator_name_fake}'
+   END
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics2}
+
+   FOR  ${m}  IN  @{metrics2['data'][0]['Series']}
+      Should Be True  '${m['tags']['cloudletorg']}' == '${operator_name_fake}'
+   END
+
+DMEMetrics - Shall be able to get DME Client App Latency/DeviceInfo metrics with cloudlet/cloudletorg only
+   [Documentation]
+   ...  - request latency clientappusage metrics with cloudlet and cloudletorg only
+   ...  - verify info is correct
+
+   ${metrics1}=  OperatorManager shall be able to get client app usage metrics  selector=latency  cloudlet_name=tmocloud-2  operator_org_name=${operator_name_fake}
+
+   ${metrics2}=  OperatorManager shall be able to get client app usage metrics  selector=deviceinfo  cloudlet_name=tmocloud-2  operator_org_name=${operator_name_fake}
+
+   Latency App Should Be Found  ${app_name}3  ${metrics1}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2  device_network_type=${data_network_type}  raw=${True}
+
+   FOR  ${m}  IN  @{metrics1['data'][0]['Series']}
+      Should Be True  '${m['tags']['cloudlet']}' == 'tmocloud-2'
+      Should Be True  '${m['tags']['cloudletorg']}' == '${operator_name_fake}'
+   END
+
+   DeviceInfo Metrics Headings Should Be Correct  ${metrics2}
+
+   FOR  ${m}  IN  @{metrics2['data'][0]['Series']}
+      Should Be True  '${m['tags']['cloudlet']}' == 'tmocloud-2'
+      Should Be True  '${m['tags']['cloudletorg']}' == '${operator_name_fake}'
+   END
+
 *** Keywords ***
 Setup
     ${epoch}=  Get Time  epoch
