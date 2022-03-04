@@ -1,10 +1,4 @@
-import json
 import logging
-import imaplib
-import time
-import email
-import subprocess
-import shlex
 import shared_variables
 import shared_variables_mc
 
@@ -12,16 +6,18 @@ from mex_master_controller.MexOperation import MexOperation
 
 logger = logging.getLogger(__name__)
 
+
 class Org(MexOperation):
     def __init__(self, root_url, prov_stack=None, token=None, super_token=None, thread_queue=None):
         super().__init__(root_url=root_url, prov_stack=prov_stack, token=token, super_token=super_token, thread_queue=thread_queue)
 
         self.show_url = '/auth/org/show'
+        self.update_url = '/auth/org/update'
 
-    def _build(self, org_name=None, org_type=None, address=None, phone=None, public_images=None, delete_in_progress=None, edgebox_only=None, use_defaults=True):
+    def _build(self, org_name=None, org_type=None, address=None, phone=None, public_images=None, delete_in_progress=None, edgebox_only=None, created_at=None, parent=None, use_defaults=True):
         if org_name == 'default':
             org_name = shared_variables.organization_name_default
-            
+
         if use_defaults:
             if org_name is None:
                 org_name = shared_variables.organization_name_default
@@ -44,6 +40,10 @@ class Org(MexOperation):
             org_dict['deleteinprogress'] = delete_in_progress
         if edgebox_only is not None:
             org_dict['edgeboxonly'] = edgebox_only
+        if created_at is not None:
+            org_dict['CreatedAt'] = created_at
+        if parent is not None:
+            org_dict['parent'] = parent
 
         return org_dict
 
@@ -52,3 +52,13 @@ class Org(MexOperation):
         msg_dict = msg
 
         return self.show(token=token, url=self.show_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def update_org(self, token=None, org_name=None, org_type=None, address=None, phone=None, public_images=None, delete_in_progress=None, edgebox_only=None, created_at=None, parent=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(org_name=org_name, org_type=org_type, address=address, phone=phone, public_images=public_images, delete_in_progress=delete_in_progress, edgebox_only=edgebox_only, created_at=created_at, parent=parent, use_defaults=False)
+        msg_dict = msg
+
+        msg_dict_show = None
+        if 'name' in msg:
+            msg_dict_show = self._build(org_name=org_name, org_type=org_type, address=address, phone=phone, public_images=public_images, delete_in_progress=delete_in_progress, edgebox_only=edgebox_only, use_defaults=False)
+
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)[0]
