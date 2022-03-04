@@ -2,14 +2,30 @@
 <list>
   <flow-owner plugin="workflow-job@2.42">
     <job>runRegression</job>
-    <id>303</id>
+    <id>304</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runDmeTestcases</job>
+    <id>86</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runCrmTestcases</job>
-    <id>258</id>
+    <id>262</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runMetricsTestcases</job>
+    <id>42</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runTestcases</job>
-    <id>6511</id>
+    <id>6606</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>6643</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>6668</id>
   </flow-owner>
 </list>
