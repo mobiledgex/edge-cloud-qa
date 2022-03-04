@@ -750,6 +750,13 @@ class MexMasterController(MexRest):
 
         return self.org.show_org(token=token, org_name=org_name, org_type=org_type, address=address, phone=phone, public_images=public_images, delete_in_progress=delete_in_progress, edgebox_only=edgebox_only, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+    def update_org(self, token=None, org_name=None, org_type=None, address=None, phone=None, public_images=None, delete_in_progress=None, edgebox_only=None, created_at=None, parent=None, json_data=None, use_defaults=True, use_thread=False):
+        if use_defaults:
+            if org_name is None:
+                org_name = self.organization_name
+
+        return self.org.update_org(token=token, org_name=org_name, org_type=org_type, address=address, phone=phone, public_images=public_images, delete_in_progress=delete_in_progress, edgebox_only=edgebox_only, created_at=created_at, parent=parent, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
     def delete_org(self, orgname=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/org/delete'
         payload = None
