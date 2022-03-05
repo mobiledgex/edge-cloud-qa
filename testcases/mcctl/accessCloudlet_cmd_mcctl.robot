@@ -1,3 +1,4 @@
+# -*- coding: robot -*-
 *** Settings ***
 Documentation  AccessCloudlet mcctl
 
@@ -29,7 +30,6 @@ ${node_name}=  automationDusseldorfCloudlet-TDG-pf
 ${mobiledgex_domain}=  mobiledgex.net
 ${platformvm}=
 ${sharedrootlb}=
-${cluster_name_mcctl_access}=  cluster-16mcctlaccess  #want to be specific yet still be able for the cleanup to delete if teardown fails
 ${region_EU}=  EU
 ${region_US}=  US
 ${operator_org_name}=  packet
@@ -52,9 +52,9 @@ ${vs_clusterk8sconfigfile}=
 ${os_clusterk8sconfigfile}=
 ${nodenamevs} =
 ${nodenameos} =
-${cluster_org} =
-
-# mcctl --addr https://console-qa.mobiledgex.net:443 --skipverify region AccessCloudlet region=EU cloudlet=automationDusseldorfCloudlet cloudletorg=TDG nodetype=sharedrootlb command=ls;exit
+${cluster_org}=  automation-dev-org
+${tty_error4}=   ('runCommand failed with stderr:', Exception('Error: Cannot use tty, input is not a terminal\\nUsage: mcctl accesscloudlet [flags] [args]\\n\\nRequired Args:\\n  region        Region name\\n  cloudletorg   Organization of the cloudlet site\\n  cloudlet      Name of the cloudlet\\n\\nOptional Args:\\n  federatedorg  Federated operator organization who shared this cloudlet\\n  command       Command or Shell\\n  nodetype      Type of Cloudlet Mgmt Node\\n  nodename      Name of Cloudlet Mgmt Node\\n\\nFlags:\\n  -h, --help          help for accesscloudlet\\n  -i, --interactive   send stdin\\n  -t, --tty           treat stdin and stout as a tty\\n'))
+${lb_dedicated}=  dedicatedrootlb
 
 
 *** Test Cases ***
@@ -109,7 +109,8 @@ AccessCloudlet - mcctl shall pass cli commands to a dedicatedrootlb
     ...  create a dedicatedrootlb cluster inst and use accesscloudlet to login
     ...  verify mcctl accesscloudlet can login and issue commands to return docker and file information
     ...  verify the cluster k8s config file was created using cli ls command
-
+    ...  verify error if input is not a terminal and -t for tty is used
+   [Setup]  Setup
    [Template]  Check Dedicated Cluster For CLI Sent
 
 #dedicatedrootlb vsphere - using to conservere resources
@@ -118,27 +119,60 @@ AccessCloudlet - mcctl shall pass cli commands to a dedicatedrootlb
       ${vs_clusterk8sconfigfile}  kubeconfig  empty   region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudletorg=${operator_name_vsphere}  nodetype=dedicatedrootlb  nodename=${vs_nodename}  command="ls -l;exit"
 
 
-
 *** Keywords ***
 Setup
-    ${vs_clusterk8sconfigfile}=  Catenate  SEPARATOR=.  ${cluster_name_mcctl_access}  operator_org_name=${operator_name_vsphere}  kubeconfig   #cluster-16mcctlaccess.packet.kubeconfig
-    Set Suite Variable  ${vs_clusterk8sconfigfile}
+   Create Flavor          ram=1024  vcpus=1  disk=1  region=US
+   #Create Cluster #creating specific dedicatedrootlb on vsphere - using it to conservere resources for this mcctl test
+   ${cluster_default}=  Get Default Cluster Name
+   Set Suite Variable  ${cluster_default}
+   ${flavor_name}=   Get Default Flavor Name
+   ${region}=  Set Variable  US
+   Log to Console  START creating cluster instance
+   Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name_vsphere}  operator_org_name=${operator_name_vsphere}  cluster_name=${cluster_default}  number_nodes=0  number_masters=0  ip_access=Dedicated   #Shared   #ip_access=IpAccessDedicated
+   Log to Console  DONE creating cluster instance
+   ${cluster_inst}=  Show Cluster Instances  region=${region}  cloudlet_name=${cloudlet_name_vsphere}  cluster_name=${cluster_default}  use_defaults=False
+   ${cluster_inst_name}=  Set Variable  ${cluster_inst}[0][data][key][cluster_key][name]    
+   Set Suite Variable  ${cluster_inst_name}
+   ${cluster_cloudlet_name}=  Set Variable  ${cluster_inst}[0][data][key][cloudlet_key][name]
+   Set Suite Variable  ${cluster_cloudlet_name}
+   ${cluster_inst_org}=  Set Variable       ${cluster_inst}[0][data][key][organization]
+   Set Suite Variable  ${cluster_inst_org}
+   ${cluster_inst_lb}=  Set Variable  ${cluster_inst}[0][data][resources][vms][0][name]
+   Set Suite Variable  ${cluster_inst_lb}
+   ${vs_clusterk8sconfigfile}=  Catenate  SEPARATOR=.  ${cluster_default}  ${operator_name_vsphere}  kubeconfig   #cluster-16mcctlaccess.packet.kubeconfig
+   Set Suite Variable  ${vs_clusterk8sconfigfile}
 
-    ${cloudnodesvs}=  Show Cloudlet Info  region=${region_US}  cloudlet_name=${cloudlet_name_vsphere}
-    ${vs_nodename}=  Catenate  SEPARATOR=.  ${cluster_name_mcctl_access}  ${cloudlet_name_vsphere}  ${operator_name_vsphere}  ${mobiledgex_domain}
-    ${vs_nodename}=  Convert To Lowercase  ${nodenamevs}
+   Should Contain  ${cluster_inst}[0][data][key][cluster_key][name]   ${cluster_default} 
+   Should Contain  ${cluster_inst}[0][data][key][cloudlet_key][name]  ${cloudlet_name_vsphere}
 
-    Set Suite Variable  ${vs_nodename}
-
+   #{dedicatedrootlb cluster1646365600-072066-automation-dev-org.dfwvmw2-packet.us.mobiledgex.net}
+   ${vs_nodename}=  Catenate  SEPARATOR=.  ${cluster_inst_name}-${cluster_org}  ${cloudlet_name_vsphere}-${operator_name_vsphere}  ${region}  ${mobiledgex_domain}
+   ${vs_nodename}=  Convert To Lowercase  ${vs_nodename}
+   Set Suite Variable  ${vs_nodename}
+   Should Contain  ${cluster_inst}[0][data][fqdn]  ${vs_nodename}
 
 Check Dedicated Cluster For CLI Sent
    [Arguments]  ${output_msg}  ${output_msg2}  ${output_msg3}  &{parms}
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
+   # no flag
    ${std_output}=  Run mcctl  accesscloudlet ${parmss}
    Set Test Variable  ${std_output}
    Should Contain Any  ${std_output}  ${output_msg}  ${output_msg2}  ${output_msg3}
 
+   # flag -t tty error
+   ${command_parms}=  Set Variable  ${parms['command']}
+   Set Variable  ${command_parms}
+   ${flag_t_err}=  Run Keyword and Expect Error  *   Run mcctl  accesscloudlet region=${region_US} cloudlet=${cloudlet_name_vsphere} cloudletorg=${operator_name_vsphere} nodetype=dedicatedrootlb nodename=${vs_nodename} command=${command_parms} -t
+   Convert To String  ${flag_t_err}
+   Set Variable  ${flag_t_err}
+   Should Be True   ${flag_t_err}  ${tty_error4}
+
+   # flag -i interactive without error
+   ${parmss3}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
+   ${flag_i}=  Run mcctl  accesscloudlet ${parmss3}-i
+   Set Test Variable  ${flag_i}
+   Should Contain Any  ${flag_i}  ${output_msg}  ${output_msg2}  ${output_msg3}   
 
 Check Response For CLI Sent
    [Arguments]  ${output_msg}  ${output_msg2}  ${output_msg3}  &{parms}
@@ -150,7 +184,7 @@ Check Response For CLI Sent
    ${platformvm}=  Catenate  SEPARATOR=-  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  pf
    Set Test Variable  ${platformvm}
 
-#{platformvm automationHamburgCloudlet-TDG-pf} {sharedrootlb automationhamburgcloudlet.tdg.mobiledgex.net}
+   #{platformvm automationHamburgCloudlet-TDG-pf} {sharedrootlb automationhamburgcloudlet.tdg.mobiledgex.net}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
@@ -182,4 +216,34 @@ Fail AccessCloudlet Command Via mcctl
    ${std_output}=  Run Keyword and Expect Error  *  Run mcctl  accesscloudlet ${parmss}
    Should Contain Any  ${std_output}  ${error_msg}
 
+AlreadySetup
+   #keeping this section for easy trouble shooting existing clusters for manual testing
+   ${tty_errors}  Set Variable
+   Set Suite Variable  ${tty_errors}
+   ${tty_err_st}  Set Variable
+   Set Suite Variable  ${tty_err_st}
+   ${region}  Set Variable  US
+   Set Suite Variable  ${region}
+   ${cluster_default}  Set Variable  cluster1646455152-164335
+   Set Suite Variable   ${cluster_default}
+   Log to Console  START creating cluster instance
+   Log to Console  DONE creating cluster instance
+   ${cluster_inst}=  Show Cluster Instances  region=${region}  cloudlet_name=${cloudlet_name_vsphere}  cluster_name=${cluster_default}  use_defaults=False
+   ${cluster_inst_name}=  Set Variable  ${cluster_inst}[0][data][key][cluster_key][name]
+   Set Suite Variable  ${cluster_inst_name}
+   ${cluster_cloudlet_name}=  Set Variable  ${cluster_inst}[0][data][key][cloudlet_key][name]
+   Set Suite Variable  ${cluster_cloudlet_name}
+   ${cluster_inst_org}=  Set Variable       ${cluster_inst}[0][data][key][organization]
+   Set Suite Variable  ${cluster_inst_org}
+   ${cluster_inst_lb}=  Set Variable  ${cluster_inst}[0][data][resources][vms][0][name]
+   Set Suite Variable  ${cluster_inst_lb}
+   ${vs_clusterk8sconfigfile}=  Catenate  SEPARATOR=.  ${cluster_default}  ${operator_name_vsphere}  kubeconfig
+   Set Suite Variable  ${vs_clusterk8sconfigfile}
 
+   Should Contain  ${cluster_inst}[0][data][key][cluster_key][name]   ${cluster_default}
+   Should Contain  ${cluster_inst}[0][data][key][cloudlet_key][name]  ${cloudlet_name_vsphere}
+   #{dedicatedrootlb cluster1646365600-072066-automation-dev-org.dfwvmw2-packet.us.mobiledgex.net}
+   ${vs_nodename}=  Catenate  SEPARATOR=.  ${cluster_inst_name}-${cluster_org}  ${cloudlet_name_vsphere}-${operator_name_vsphere}  ${region}  ${mobiledgex_domain}
+   ${vs_nodename}=  Convert To Lowercase  ${vs_nodename}
+   Set Suite Variable  ${vs_nodename}
+   Should Contain  ${cluster_inst}[0][data][fqdn]  ${vs_nodename}
