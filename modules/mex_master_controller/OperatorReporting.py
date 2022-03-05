@@ -106,7 +106,7 @@ class OperatorReporting(MexOperation):
         msg = self._build(reporter_name=reporter_name, organization=organization, use_defaults=use_defaults)
         msg_dict = msg
 
-        return self.show(token=token, url=self.show_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.show(token=token, url=self.show_url, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
    
     def generate_report(self, token=None, organization=None, start_time=None, end_time=None, timezone=None, use_defaults=True, use_thread=False, json_data=None):
         msg = self._build(organization=organization, start_time=start_time, end_time=end_time, timezone=timezone, use_defaults=use_defaults)
@@ -119,7 +119,7 @@ class OperatorReporting(MexOperation):
         msg = self._build(organization=organization, use_defaults=use_defaults)
         msg_dict = msg
 
-        return self.show(token=token, url=self.show_report_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.show(token=token, url=self.show_report_url, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
 
     def download_report(self, token=None, organization=None, filename=None, use_defaults=False, use_thread=False, json_data=None):
         msg = self._build(organization=organization, filename=filename, use_defaults=use_defaults)
