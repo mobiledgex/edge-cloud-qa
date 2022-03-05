@@ -3,6 +3,7 @@ Documentation  RunCommand for k8s/docker
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 Library  String
+Library  Collections
 
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -44,16 +45,52 @@ RunCommand - k8s shared shall return command result on CRM
     log to console  ${app_inst}
     ${token}=  Login
 
-    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
+    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=hostname
 
-    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=whoami
+    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=hostname
+
+    ${stdout_noid_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname;hostname;hostname;${SPACE}${SPACE}hostname"
+
+    ${stdout_id_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname${SPACE}${SPACE};${SPACE}${SPACE}hostname;hostname;hostname"
+
+    ${stdout_noid_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname && hostname &&${SPACE}${SPACE}hostname && hostname"
+
+    ${stdout_id_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname;hostname;hostname;hostname"
 
     ${error}=  Run Keyword and Expect Error  *  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound  command=whoami
 	
-    Should Be Equal  ${stdout_noid}  root\r\n
-    Should Be Equal  ${stdout_id}  root\r\n
+    Should Start With  ${stdout_noid}  ${app_inst['data']['key']['app_key']['name']}
+    Should Start With  ${stdout_id}  ${app_inst['data']['key']['app_key']['name']}
     Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
 
+    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+
+    @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
+    @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
+    @{split_id_multi_1}=  Split To Lines  ${stdout_id_multi_1}
+    @{split_id_multi_2}=  Split To Lines  ${stdout_id_multi_2}
+    ${count_noid_multi_1}=  Count Values In List  ${split_noid_multi_1}  ${stdout_id.strip()}
+    ${count_noid_multi_2}=  Count Values In List  ${split_noid_multi_2}  ${stdout_id.strip()}
+    ${count_id_multi_1}=    Count Values In List  ${split_id_multi_1}  ${stdout_id.strip()}
+    ${count_id_multi_2}=    Count Values In List  ${split_id_multi_2}  ${stdout_id.strip()}
+
+    Length Should Be  ${split_noid_multi_1}  4
+    Length Should Be  ${split_noid_multi_2}  4
+    Length Should Be  ${split_id_multi_1}    4
+    Length Should Be  ${split_id_multi_2}    4
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_noid_multi_2}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_1}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_2}
+    Should Be Equal As Numbers  ${count_noid_multi_1}  4
+    Should Be Equal As Numbers  ${count_noid_multi_2}  4
+    Should Be Equal As Numbers  ${count_id_multi_1}    4
+    Should Be Equal As Numbers  ${count_id_multi_2}    4
+ 
 # ECQ-1487
 RunCommand - k8s dedicated shall return command result on CRM
     [Documentation]
@@ -74,17 +111,53 @@ RunCommand - k8s dedicated shall return command result on CRM
     log to console  ${app_inst}
     ${token}=  Login
 
-    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
+    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=hostname
 
-    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=whoami
+    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=hostname
+
+    ${stdout_noid_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname;hostname;hostname;${SPACE}${SPACE}hostname"
+
+    ${stdout_id_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname${SPACE}${SPACE};${SPACE}${SPACE}hostname;hostname;hostname"
+
+    ${stdout_noid_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname && hostname &&${SPACE}${SPACE}hostname && hostname"
+
+    ${stdout_id_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname;hostname;hostname;hostname"
 
     ${error}=  Run Keyword and Expect Error  *  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound  command=whoami
 
     log to console   ${stdout_noid}
 
-    Should Be Equal  ${stdout_noid}  root\r\n
-    Should Be Equal  ${stdout_id}  root\r\n
+    Should Start With  ${stdout_noid}  ${app_inst['data']['key']['app_key']['name']}
+    Should Start With  ${stdout_id}  ${app_inst['data']['key']['app_key']['name']}
     Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
+
+    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+
+    @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
+    @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
+    @{split_id_multi_1}=  Split To Lines  ${stdout_id_multi_1}
+    @{split_id_multi_2}=  Split To Lines  ${stdout_id_multi_2}
+    ${count_noid_multi_1}=  Count Values In List  ${split_noid_multi_1}  ${stdout_id.strip()}
+    ${count_noid_multi_2}=  Count Values In List  ${split_noid_multi_2}  ${stdout_id.strip()}
+    ${count_id_multi_1}=    Count Values In List  ${split_id_multi_1}  ${stdout_id.strip()}
+    ${count_id_multi_2}=    Count Values In List  ${split_id_multi_2}  ${stdout_id.strip()}
+
+    Length Should Be  ${split_noid_multi_1}  4
+    Length Should Be  ${split_noid_multi_2}  4
+    Length Should Be  ${split_id_multi_1}    4
+    Length Should Be  ${split_id_multi_2}    4
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_noid_multi_2}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_1}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_2}
+    Should Be Equal As Numbers  ${count_noid_multi_1}  4
+    Should Be Equal As Numbers  ${count_noid_multi_2}  4
+    Should Be Equal As Numbers  ${count_id_multi_1}    4
+    Should Be Equal As Numbers  ${count_id_multi_2}    4
 
 # ECQ-1488
 RunCommand - docker dedicated shall return command result on CRM
@@ -102,17 +175,54 @@ RunCommand - docker dedicated shall return command result on CRM
     log to console  ${app_inst}
     ${token}=  Login
 
-    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
+    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=hostname
 
     log to console   aaa ${stdout_noid}\n
 
-    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=whoami
+    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=hostname
+
+    ${stdout_noid_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname;hostname;hostname;${SPACE}${SPACE}hostname"
+
+    ${stdout_id_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname${SPACE}${SPACE};${SPACE}${SPACE}hostname;hostname;hostname"
+
+    ${stdout_noid_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname && hostname &&${SPACE}${SPACE}hostname && hostname"
+
+    ${stdout_id_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname;hostname;hostname;hostname"
 
     ${error}=  Run Keyword and Expect Error  *  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound  command=whoami
 
-    Should Be Equal  ${stdout_noid}  root\r\n
-    Should Be Equal  ${stdout_id}  root\r\n
+    ${cloudlet_name_lc}=  Convert To Lowercase  ${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
+    Should Start With  ${stdout_noid}  mex-docker-vm-${cloudlet_name_lc}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}
+    Should Start With  ${stdout_id}    mex-docker-vm-${cloudlet_name_lc}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']} 
     Should Contain   ${error}  Error: No such container: notfound 
+
+    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\n
+    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\n
+
+    @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
+    @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
+    @{split_id_multi_1}=  Split To Lines  ${stdout_id_multi_1}
+    @{split_id_multi_2}=  Split To Lines  ${stdout_id_multi_2}
+    ${count_noid_multi_1}=  Count Values In List  ${split_noid_multi_1}  ${stdout_id.strip()}
+    ${count_noid_multi_2}=  Count Values In List  ${split_noid_multi_2}  ${stdout_id.strip()}
+    ${count_id_multi_1}=    Count Values In List  ${split_id_multi_1}  ${stdout_id.strip()}
+    ${count_id_multi_2}=    Count Values In List  ${split_id_multi_2}  ${stdout_id.strip()}
+
+    Length Should Be  ${split_noid_multi_1}  4
+    Length Should Be  ${split_noid_multi_2}  4
+    Length Should Be  ${split_id_multi_1}    4
+    Length Should Be  ${split_id_multi_2}    4
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_noid_multi_2}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_1}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_2}
+    Should Be Equal As Numbers  ${count_noid_multi_1}  4
+    Should Be Equal As Numbers  ${count_noid_multi_2}  4
+    Should Be Equal As Numbers  ${count_id_multi_1}    4
+    Should Be Equal As Numbers  ${count_id_multi_2}    4
 
 # ECQ-2062
 RunCommand - docker shared shall return command result on CRM
@@ -130,17 +240,54 @@ RunCommand - docker shared shall return command result on CRM
     log to console  ${app_inst}
     ${token}=  Login
 
-    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
+    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=hostname
 
     log to console   aaa ${stdout_noid}\n
 
-    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=whoami
+    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=hostname
+
+    ${stdout_noid_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname;hostname;hostname;${SPACE}${SPACE}hostname"
+
+    ${stdout_id_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname${SPACE}${SPACE};${SPACE}${SPACE}hostname;hostname;hostname"
+
+    ${stdout_noid_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname && hostname &&${SPACE}${SPACE}hostname && hostname"
+
+    ${stdout_id_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname;hostname;hostname;hostname"
 
     ${error}=  Run Keyword and Expect Error  *  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound  command=whoami
 
-    Should Be Equal  ${stdout_noid}  root\r\n
-    Should Be Equal  ${stdout_id}  root\r\n
+    ${cloudlet_name_lc}=  Convert To Lowercase  ${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
+    Should Start With  ${stdout_noid}  mex-docker-vm-${cloudlet_name_lc}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}
+    Should Start With  ${stdout_id}    mex-docker-vm-${cloudlet_name_lc}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}
     Should Contain   ${error}  Error: No such container: notfound
+
+    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\n
+    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\n
+
+    @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
+    @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
+    @{split_id_multi_1}=  Split To Lines  ${stdout_id_multi_1}
+    @{split_id_multi_2}=  Split To Lines  ${stdout_id_multi_2}
+    ${count_noid_multi_1}=  Count Values In List  ${split_noid_multi_1}  ${stdout_id.strip()}
+    ${count_noid_multi_2}=  Count Values In List  ${split_noid_multi_2}  ${stdout_id.strip()}
+    ${count_id_multi_1}=    Count Values In List  ${split_id_multi_1}  ${stdout_id.strip()}
+    ${count_id_multi_2}=    Count Values In List  ${split_id_multi_2}  ${stdout_id.strip()}
+
+    Length Should Be  ${split_noid_multi_1}  4
+    Length Should Be  ${split_noid_multi_2}  4
+    Length Should Be  ${split_id_multi_1}    4
+    Length Should Be  ${split_id_multi_2}    4
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_noid_multi_2}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_1}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_2}
+    Should Be Equal As Numbers  ${count_noid_multi_1}  4
+    Should Be Equal As Numbers  ${count_noid_multi_2}  4
+    Should Be Equal As Numbers  ${count_id_multi_1}    4
+    Should Be Equal As Numbers  ${count_id_multi_2}    4
 
 # ECQ-2586
 RunCommand - docker dedicated idle timeout shall be 30min on CRM
@@ -184,17 +331,54 @@ RunCommand - docker autocluster shall return command result on CRM
     log to console  ${app_inst}
     ${token}=  Login
 
-    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
+    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=hostname
 
     log to console   aaa ${stdout_noid}\n
 
-    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=whoami
+    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=hostname
+
+    ${stdout_noid_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname;hostname;hostname;${SPACE}${SPACE}hostname"
+
+    ${stdout_id_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname${SPACE}${SPACE};${SPACE}${SPACE}hostname;hostname;hostname"
+
+    ${stdout_noid_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname && hostname &&${SPACE}${SPACE}hostname && hostname"
+
+    ${stdout_id_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname;hostname;hostname;hostname"
 
     ${error}=  Run Keyword and Expect Error  *  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound  command=whoami
 
-    Should Be Equal  ${stdout_noid}  root\r\n
-    Should Be Equal  ${stdout_id}  root\r\n
+    ${cloudlet_name_lc}=  Convert To Lowercase  ${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
+    Should Start With  ${stdout_noid}  mex-docker-vm-${cloudlet_name_lc}-reservable
+    Should Start With  ${stdout_id}    mex-docker-vm-${cloudlet_name_lc}-reservable
     Should Contain   ${error}  Error: No such container: notfound
+
+    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\n
+    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\n
+
+    @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
+    @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
+    @{split_id_multi_1}=  Split To Lines  ${stdout_id_multi_1}
+    @{split_id_multi_2}=  Split To Lines  ${stdout_id_multi_2}
+    ${count_noid_multi_1}=  Count Values In List  ${split_noid_multi_1}  ${stdout_id.strip()}
+    ${count_noid_multi_2}=  Count Values In List  ${split_noid_multi_2}  ${stdout_id.strip()}
+    ${count_id_multi_1}=    Count Values In List  ${split_id_multi_1}  ${stdout_id.strip()}
+    ${count_id_multi_2}=    Count Values In List  ${split_id_multi_2}  ${stdout_id.strip()}
+
+    Length Should Be  ${split_noid_multi_1}  4
+    Length Should Be  ${split_noid_multi_2}  4
+    Length Should Be  ${split_id_multi_1}    4
+    Length Should Be  ${split_id_multi_2}    4
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_noid_multi_2}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_1}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_2}
+    Should Be Equal As Numbers  ${count_noid_multi_1}  4
+    Should Be Equal As Numbers  ${count_noid_multi_2}  4
+    Should Be Equal As Numbers  ${count_id_multi_1}    4
+    Should Be Equal As Numbers  ${count_id_multi_2}    4
 
 # ECQ-3220
 RunCommand - k8s autocluster shall return command result on CRM
@@ -214,15 +398,51 @@ RunCommand - k8s autocluster shall return command result on CRM
     log to console  ${app_inst}
     ${token}=  Login
 
-    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
+    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=hostname
 
-    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=whoami
+    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=hostname
+
+    ${stdout_noid_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname;hostname;hostname;${SPACE}${SPACE}hostname"
+
+    ${stdout_id_multi_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname${SPACE}${SPACE};${SPACE}${SPACE}hostname;hostname;hostname"
+
+    ${stdout_noid_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=bash -c "hostname && hostname &&${SPACE}${SPACE}hostname && hostname"
+
+    ${stdout_id_multi_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command=bash -c "hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_1}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname && hostname && hostname && hostname"
+
+    ${stdout_nobash_2}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  command="hostname;hostname;hostname;hostname"
 
     ${error}=  Run Keyword and Expect Error  *  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  cluster_instance_developer_org_name=${app_inst['data']['key']['cluster_inst_key']['organization']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound  command=whoami
 
-    Should Be Equal  ${stdout_noid}  root\r\n
-    Should Be Equal  ${stdout_id}  root\r\n
+    Should Start With  ${stdout_noid}  ${app_inst['data']['key']['app_key']['name']}
+    Should Start With  ${stdout_id}  ${app_inst['data']['key']['app_key']['name']}
     Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
+
+    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+
+    @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
+    @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
+    @{split_id_multi_1}=  Split To Lines  ${stdout_id_multi_1}
+    @{split_id_multi_2}=  Split To Lines  ${stdout_id_multi_2}
+    ${count_noid_multi_1}=  Count Values In List  ${split_noid_multi_1}  ${stdout_id.strip()}
+    ${count_noid_multi_2}=  Count Values In List  ${split_noid_multi_2}  ${stdout_id.strip()}
+    ${count_id_multi_1}=    Count Values In List  ${split_id_multi_1}  ${stdout_id.strip()}
+    ${count_id_multi_2}=    Count Values In List  ${split_id_multi_2}  ${stdout_id.strip()}
+
+    Length Should Be  ${split_noid_multi_1}  4
+    Length Should Be  ${split_noid_multi_2}  4
+    Length Should Be  ${split_id_multi_1}    4
+    Length Should Be  ${split_id_multi_2}    4
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_noid_multi_2}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_1}
+    Lists Should Be Equal  ${split_noid_multi_1}  ${split_id_multi_2}
+    Should Be Equal As Numbers  ${count_noid_multi_1}  4
+    Should Be Equal As Numbers  ${count_noid_multi_2}  4
+    Should Be Equal As Numbers  ${count_id_multi_1}    4
+    Should Be Equal As Numbers  ${count_id_multi_2}    4
 
 *** Keywords ***
 Setup
@@ -233,7 +453,7 @@ Setup
     ${platform_type}  Get Cloudlet Platform Type  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
 
     ${cluster_name}=  Set Variable  cluster${epoch}
-
+    
     IF  '${platform_type}' == 'K8SBareMetal'
         ${allow_serverless}=  Set Variable  ${True}
         ${cluster_developer_name}=  Set Variable  MobiledgeX
