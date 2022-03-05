@@ -231,7 +231,7 @@ class RunCommand(MexOperation):
                 return dataqueue
         data = asyncio.get_event_loop().run_until_complete(wsconnect())
 
-        if 'Error from server' in data:
+        if 'Error from server' in data or data.startswith('Error:'):
             raise Exception(f'error={data}')
 
         return data
