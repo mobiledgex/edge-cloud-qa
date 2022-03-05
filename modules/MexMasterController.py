@@ -58,6 +58,7 @@ from mex_master_controller.Usage import Usage
 from mex_master_controller.Federation import Federation
 from mex_master_controller.Login import Login
 from mex_master_controller.Network import Network
+from mex_master_controller.Events import Events
 
 import shared_variables_mc
 import shared_variables
@@ -233,6 +234,7 @@ class MexMasterController(MexRest):
         self.usage = Usage(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.federation = Federation(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.network = Network(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.events = Events(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -1973,7 +1975,7 @@ class MexMasterController(MexRest):
     def delete_reporter(self, token=None, reporter_name=None, organization=None, use_defaults=True, use_thread=False):
         return self.operator_reporting.delete_reporter(token=token, reporter_name=reporter_name, organization=organization, use_defaults=use_defaults, use_thread=use_thread)
 
-    def show_reporter(self, token=None, reporter_name=None, organization=None, use_defaults=True, use_thread=False):
+    def show_reporter(self, token=None, reporter_name=None, organization=None, use_defaults=False, use_thread=False):
         return self.operator_reporting.show_reporter(token=token, reporter_name=reporter_name, organization=organization, use_defaults=use_defaults, use_thread=use_thread)
 
     def generate_report(self, token=None, organization=None, start_time=None, end_time=None, timezone=None, use_defaults=True, use_thread=False):
@@ -2076,6 +2078,9 @@ class MexMasterController(MexRest):
 
     def unshare_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, use_defaults=False, use_thread=False):
         return self.federation.unshare_federatorzone(token=token, zoneid=zoneid, selfoperatorid=selfoperatorid, federation_name=federation_name, use_defaults=use_defaults)
+
+    def show_events(self, token=None, region=None, use_defaults=False, use_thread=False):
+        return self.events.show_events(token=token, region=region, use_defaults=use_defaults)
 
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
