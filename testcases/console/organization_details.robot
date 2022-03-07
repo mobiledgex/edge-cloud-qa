@@ -25,16 +25,15 @@ WebUI - user shall be able view organization details
    ...  Verify details are correct
    [Tags]  passing
 
-   @{ws}=  Show Organizations
+   @{ws}=  Show Organizations  token=${token}
 
    Open Organizations
 
    #update for bug 1391
 
    FOR  ${row}  IN  @{ws}   
-      # open first organization
-      ${details}=  Open Organization Details  organization=${row['Name']}
-      log to console  ${details}
+      ${ui_details}=  Open Organization Details  organization=${row['Name']}
+      Log to Console  ${ui_details}
       ${org_lowercase}=  Convert to Lowercase  ${row['Name']}
     
       ${instructions}=  Catenate  SEPARATOR=  If your image is docker, please upload your image with your MobiledgeX Account Credentials to our docker registry using the following docker commands.\n
@@ -49,36 +48,28 @@ WebUI - user shall be able view organization details
       log to console  -------------------
       log to console  ${instructions}
       log to console  ====================
-      log to console  ${details['instructions']}
-      Should Be Equal             ${details['Organization']}  ${row['Name']}
-      Should Be Equal             ${details['Type']}          ${row['Type']}
-      Run Keyword If  'Phone' in ${details}    Should Be Equal             ${details['Phone']}         ${row['Phone']}
-      Run Keyword If  'Address' in ${details}  Should Be Equal             ${details['Address']}       ${row['Address']}
+      log to console  ${ui_details['instructions']}
+      Should Be Equal             ${ui_details['Organization']}  ${row['Name']}
+      Should Be Equal             ${ui_details['Type']}          ${row['Type']}
+      Run Keyword If  'Phone' in ${ui_details}    Should Be Equal             ${ui_details['Phone']}         ${row['Phone']}
+      Run Keyword If  'Address' in ${ui_details}  Should Be Equal             ${ui_details['Address']}       ${row['Address']}
       ${Value}=   Verify Instructions   orgtype=${row['Type']}  organization=${row['Name']}
       #Run Keyword If  '${row['Type']}' == 'developer'  Should Be Equal  ${details['instructions']}  ${instructions}  ELSE  Should Be Equal  ${details['instructions']}  ${EMPTY} 
-      Run Keyword If  '${row['Type']}' == 'developer'  Should Be Equal  ${Value}  True  ELSE  Should Be Equal  ${Value}  EMPTY
- 
+      Run Keyword If  '${row['Type']}' == 'developer'          Should Be Equal  ${Value}  True  ELSE  Should Be Equal  ${Value}  EMPTY
+      Run Keyword If  'EdgeboxOnly' in ${row}        Should Be Equal             ${ui_details['Edgebox Only']}       Yes
+      Run Keyword If  'PublicImages' in ${row}       Should Be Equal             ${ui_details['Public Image']}       Yes
       Close Organization Details
    END
-#   # open last organization
-#   ${details}=  Open Organization Details  organization=${ws[-1]['Name']}
-#   log to console  ${details}
 
-#   Should Be Equal             ${details['Organization']}  ${ws[-1]['Name']}
-#   Should Be Equal             ${details['Type']}          ${ws[-1]['Type']}
-#   Should Be Equal             ${details['Phone']}         ${ws[-1]['Phone']}
-#   Should Be Equal             ${details['Address']}       ${ws[-1]['Address']}
-
-#   Close Organization Details
 
 *** Keywords ***
 	
 Setup
-    Log to console  login
     Open Browser	
     Login to Mex Console  browser=${browser}  #username=${console_username}  password=${console_password}
     Open Compute
+    ${token}=  Get Supertoken
+    Set Suite Variable  ${token}
 
 Teardown
     Close Browser
-    #Cleanup Provisioning

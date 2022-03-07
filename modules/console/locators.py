@@ -551,7 +551,7 @@ class DetailsPageLocators(object):
     #details_row_value = (By.XPATH, './td[2]')
     details_row_value = (By.XPATH, '//tbody[@class="MuiTableBody-root"]/tr/td/div')
     #details_title = (By.CSS_SELECTOR, 'div.ui.small.modal.transition.visible.active div.header')
-    details_title = (By.CSS_SELECTOR, 'label.content_title_label')
+    details_title = (By.XPATH, '//div[@id="mex-list-view"]//h4')
     close_button =  (By.XPATH, '//span[text()="close"]/ancestor::button')
     region_label =  (By.XPATH, '//*[@class="ui small modal transition visible active"]//div[text()="Region"]')
 
@@ -613,17 +613,23 @@ class OrganizationsPageLocators(object):
     role_pulldown_option_contributor = (By.XPATH, '//*[@class="ui grid popup_user"]//div[@name="selectRole" and @role="listbox"]//div[@role="option"]/span[text()="Contributor"]')
     role_pulldown_option_manager = (By.XPATH, '//*[@class="ui grid popup_user"]//div[@name="selectRole" and @role="listbox"]//div[@role="option"]/span[text()="Manager"]')
     role_pulldown_option_viewer = (By.XPATH, '//*[@class="ui grid popup_user"]//div[@name="selectRole" and @role="listbox"]//div[@role="option"]/span[text()="Viewer"]')
- 
-class OrganizationDetailsPageLocators(object):
-    organization_label = (By.XPATH, '//table//tr[1]/td[1][text()="Organization"]')
-    type_label = (By.XPATH, '//table//tr[2]/td[1][text()="Type"]')
-    phone_label = (By.XPATH, '//table//tr[3]/td[1][text()="Phone"]')
-    address_label = (By.XPATH, '//table//tr[4]/td[1][text()="Address"]')
+    organizationpage_searchbutton = (By.XPATH, '//div[contains(@class,"MuiInputBase-root MuiInput-root makeStyles-inputRoot")]')
+    organizationpage_searchInput = (By.XPATH, '//div[contains(@class,"MuiInputBase-root MuiInput-root makeStyles-inputRoot")]//input')
 
-    organization_field = (By.XPATH, '//table//tr[1]/td[2]')
-    type_field = (By.XPATH, '//table//tr[2]/td[2]')
-    phone_field = (By.XPATH, '//table//tr[3]/td[2]')
-    address_field = (By.XPATH, '//table//tr[4]/td[2]')
+class OrganizationDetailsPageLocators(object):
+    organization_label = (By.XPATH, '//td/strong[text()="Organization"]')
+    type_label = (By.XPATH, '//td/strong[text()="Type"]')
+    role_label = (By.XPATH, '//td/strong[text()="Role"]')
+    phone_label = (By.XPATH, '//td/strong[text()="Phone"]')
+    address_label = (By.XPATH, '//td/strong[text()="Address"]')
+    publicimage_label = (By.XPATH, '//td/strong[text()="Public Image"]')
+
+    organization_field = (By.XPATH, '//td/strong[text()="Organization"]/parent::td/following-sibling::td')
+    type_field = (By.XPATH, '//td/strong[text()="Type"]/parent::td/following-sibling::td')
+    role_field = (By.XPATH, '//td/strong[text()="Role"]/parent::td/following-sibling::td')
+    phone_field = (By.XPATH, '//td/strong[text()="Phone"]/parent::td/following-sibling::td')
+    address_field = (By.XPATH, '//td/strong[text()="Address"]/parent::td/following-sibling::td')
+    publicimage_field = (By.XPATH, '//td/strong[text()="Public Image"]/parent::td/following-sibling::td')
 
     instructions_text = (By.XPATH, '//*[@class="ui small modal transition visible active"]//div[@class="ui grid"]//div[@class="column"]')
     
