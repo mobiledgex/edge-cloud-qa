@@ -1,3 +1,4 @@
+# -*- coding: robot -*-
 *** Settings ***
 Documentation  Resource Management functional tests
 
