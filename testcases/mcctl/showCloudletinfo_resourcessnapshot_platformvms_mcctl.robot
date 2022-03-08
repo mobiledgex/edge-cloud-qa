@@ -18,6 +18,10 @@ ${vcd_cloudlet}=  automationDallasCloudlet
 ${vcd_org}=  packet
 ${region}=  US
 ${mobiledgex_domain}=  mobiledgex.net
+${type_rlb}=  rootlb
+${type_drlb}=  dedicatedrootlb
+${platform_vm}=  platformvm
+${platform_none}=  platform
 
 *** Test Cases ***
 # EC-6249
@@ -56,17 +60,45 @@ Resources Snapshot Via mcctl
    
    Dictionary Should Contain Key  ${cloudlet_info[0]}  resources_snapshot
    Should Be Equal  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][0]['name']}  ${cloudlet_pf}
-   Should Be Equal  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][0]['type']}  platform
+   Should Be Equal  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][0]['type']}  ${platform_vm}
    Should Be Equal  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][0]['status']}  ACTIVE
    Dictionary Should Contain Key  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][0]['ipaddresses'][0]}   externalIp
 
    Should Be Equal  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['name']}  ${cloudlet_lb}
    # Note this field will change to dedicatedrootlb by end of march 2022
-   Should Be Equal  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['type']}  rootlb
+   Should Be Equal  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['type']}  ${type_dlb}
    Should Be Equal  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['status']}  ACTIVE
    Dictionary Should Contain Key  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['ipaddresses'][0]}   externalIp
 
 #notes: by end of march 2022
+#EC-6249 EDGECLOUD-6244 and https://github.com/mobiledgex/edge-cloud-infra/pull/2003 and 1673 pull for name consolidation includes platform ==> platformvm  rootlb ==> dedicatedrootlb
+#// Cloudlet Platform nodes -- update IsPlatformNode if adding to this list
+#NEW 
+#var NodeTypeAppVM = "appvm"
+#var NodeTypeSharedRootLB = "sharedrootlb"
+#var NodeTypeDedicatedRootLB = "dedicatedrootlb"
+#var NodeTypePlatformVM = "platformvm"
+#var NodeTypePlatformHost = "platformhost"
+#var NodeTypePlatformClusterMaster = "platform-cluster-master"
+#var NodeTypePlatformClusterPrimaryNode = "platform-cluster-primary-node"
+#var NodeTypePlatformClusterSecondaryNode = "platform-cluster-secondary-node"
+#
+#// Cloudlet Compute nodes
+#var NodeTypeClusterMaster = "cluster-master"
+#var NodeTypeClusterK8sNode = "cluster-k8s-node"
+#var NodeTypeClusterDockerNode = "cluster-docker-node"
+#OLD
+#// cloudlet vm types
+#var VMTypeAppVM = "appvm"
+#var VMTypeRootLB = "rootlb"
+#var VMTypePlatform = "platform"
+#var VMTypePlatformClusterMaster = "platform-cluster-master"
+#var VMTypePlatformClusterPrimaryNode = "platform-cluster-primary-node"
+#var VMTypePlatformClusterSecondaryNode = "platform-cluster-secondary-node"
+#
+#var VMTypeClusterMaster = "cluster-master"
+#var VMTypeClusterK8sNode = "cluster-k8s-node"
+#var VMTypeClusterDockerNode = "cluster-docker-node"
 #mcctl  --addr https://console-qa.mobiledgex.net cloudletinfo show region=EU cloudlet=eucloud-1|egrep -A 13 resourcessnapshot
 #  resourcessnapshot:
 #    platformvms:
@@ -83,10 +115,10 @@ Resources Snapshot Via mcctl
 #      ipaddresses:
 #      - externalip: 10.101.100.11
 #will now show
-#  resourcessnapshot:
+# resourcessnapshot:
 #    platformvms:
 #    - name: fake-platform-vm
-#      type: platform
+#      type: platformvm
 #      status: ACTIVE
 #      infraflavor: x1.small
 #      ipaddresses:
@@ -95,5 +127,4 @@ Resources Snapshot Via mcctl
 #      type: dedicatedrootlb
 #      status: ACTIVE
 #      infraflavor: x1.small
-#      ipaddresses:
-#      - externalip: 10.101.100.11
+#      ipaddresses: 10.101.100.11
