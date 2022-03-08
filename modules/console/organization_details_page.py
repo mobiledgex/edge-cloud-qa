@@ -11,11 +11,17 @@ class OrganizationDetailsPage(DetailsPage):
     def is_type_label_present(self):
         return self.is_element_present(OrganizationDetailsPageLocators.type_label)
 
+    def is_role_label_present(self):
+        return self.is_element_present(OrganizationDetailsPageLocators.role_label)
+
     def is_phone_label_present(self):
         return self.is_element_present(OrganizationDetailsPageLocators.phone_label)
 
     def is_address_label_present(self):
         return self.is_element_present(OrganizationDetailsPageLocators.address_label)
+
+    def is_publicimage_label_present(self):
+        return self.is_element_present(OrganizationDetailsPageLocators.publicimage_label)
 
     def is_organization_value_present(self, organization):
         return self.is_element_present(OrganizationDetailsPageLocators.organization_field, organization)
@@ -23,11 +29,17 @@ class OrganizationDetailsPage(DetailsPage):
     def is_type_value_present(self):
         return self.is_element_present(OrganizationDetailsPageLocators.type_field)
 
+    def is_role_value_present(self):
+        return self.is_element_present(OrganizationDetailsPageLocators.role_field)
+
     def is_phone_value_present(self):
         return self.is_element_present(OrganizationDetailsPageLocators.phone_field)
 
     def is_address_value_present(self):
         return self.is_element_present(OrganizationDetailsPageLocators.address_field)
+
+    def is_publicimage_value_present(self):
+        return self.is_element_present(OrganizationDetailsPageLocators.publicimage_field)
 
     def are_elements_present(self, organization):
         elements_present = True
@@ -43,26 +55,44 @@ class OrganizationDetailsPage(DetailsPage):
         if self.is_type_label_present() and self.is_type_value_present():
             logging.info('type present')
         else:
-            logging.info('type NOT present')
+            logging.error('type NOT present')
             elements_present = False
+
+        if self.is_role_label_present():
+            if self.is_role_value_present():
+                logging.info('role present')
+            else:
+                logging.error('role NOT present')
+                elements_present = False
+        else:
+            logging.error('role label not present')
 
         if self.is_phone_label_present():
             if self.is_phone_value_present():
                 logging.info('phone present')
             else:
-                logging.info('phone NOT present')
+                logging.error('phone NOT present')
                 elements_present = False
         else:
-            logging.info('phone label not present')
+            logging.error('phone label not present')
 
         if self.is_address_label_present():
             if self.is_address_value_present():
                 logging.info('address present')
             else:
-                logging.info('address NOT present')
+                logging.error('address NOT present')
                 elements_present = False
         else:
-            logging.info('address label not present')
+            logging.error('address label not present')
+
+        if self.is_publicimage_label_present():
+            if self.is_publicimage_value_present():
+                logging.info('public image present')
+            else:
+                logging.error('public image NOT present')
+                elements_present = False
+        else:
+            logging.error('public image label not present')
 
         return elements_present
 
