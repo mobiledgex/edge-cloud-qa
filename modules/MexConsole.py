@@ -382,7 +382,6 @@ class MexConsole() :
     def open_accounts_page(self):
         self.take_screenshot('open_accounts_pre')
         self.compute_page.click_accounts()
-    
 
     def open_flavors(self):
         self.take_screenshot('open_flavors_pre')
@@ -600,8 +599,9 @@ class MexConsole() :
 
     def open_organization_details(self, organization):
         self.compute_page.click_organizations()
-        #self.change_number_of_rows()
+
         logging.info('Opening organization details for organization=' + organization)
+        self.organizations_page.perform_search(organization)
 
         self.organizations_page.click_organization_row(organization=organization)
 
@@ -611,7 +611,6 @@ class MexConsole() :
             raise Exception('organization details page verification failed')
 
         details = self.organization_details_page.get_details()
-        logging.info('andy')
         return details
 
     def close_organization_details(self):

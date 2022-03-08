@@ -183,12 +183,27 @@ class OrganizationsPage(ComputePage):
         self.driver.find_element(*CloudletsPageLocators.cloudlets_table_header_operator).click()
 
     def click_organization_row(self, organization):
-        #is_present = ComputePage.click_organization_details(self)
-        #is_present.click()
-        row = self.get_table_row_by_value([(organization, 2)])
+        try:
+            row = self.get_table_row_by_value([(organization, 2)])
+            print('*WARN*', 'row = ', row)
+            e = row.find_element_by_xpath(f'//span[contains(.,"{organization}")]')
+            e.click()
+        except:
+            raise Exception('row is not found while trying to click app row or could not click row')
+
         time.sleep(1)
-        ActionChains(self.driver).click(on_element=row).perform()
-        #row.click()
+        return True
+
+    def perform_search(self, searchstring):
+        time.sleep(1)
+        logging.info("Clicking Search button and performing search for value - " + searchstring)
+        we = self.driver.find_element(*OrganizationsPageLocators.organizationpage_searchbutton)
+        ActionChains(self.driver).click(on_element=we).perform()
+        time.sleep(1)
+        we_Input = self.driver.find_element(*OrganizationsPageLocators.organizationpage_searchInput)
+        self.driver.execute_script("arguments[0].value = '';", we_Input)
+        we_Input.send_keys(searchstring)
+        time.sleep(1)
 
     def click_user_check(self, organization=None):
         if organization != None:
