@@ -447,6 +447,9 @@ class MexMasterController(MexRest):
     def create_controller(self, region=None, controller_address=None, influxdb_address=None, token=None):
         return self.controller.create_controller(region=region, controller_address=controller_address, influxdb_address=influxdb_address, token=token)
 
+    def show_controller(self, region=None, controller_address=None, influxdb_address=None, token=None):
+        return self.controller.show_controller(region=region, controller_address=controller_address, influxdb_address=influxdb_address, token=token)
+
     def create_user(self, username=None, password=None, email_address=None, email_password=None, family_name=None, given_name=None, nickname=None, enable_totp=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, auto_show=True):
         self.username = username
         self.password = password
