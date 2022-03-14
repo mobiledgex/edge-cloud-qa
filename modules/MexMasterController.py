@@ -59,6 +59,7 @@ from mex_master_controller.Federation import Federation
 from mex_master_controller.Login import Login
 from mex_master_controller.Network import Network
 from mex_master_controller.Events import Events
+from mex_master_controller.Artifactory import Artifactory
 
 import shared_variables_mc
 import shared_variables
@@ -235,6 +236,7 @@ class MexMasterController(MexRest):
         self.federation = Federation(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.network = Network(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.events = Events(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.artifactory = Artifactory(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -2084,6 +2086,9 @@ class MexMasterController(MexRest):
 
     def show_events(self, token=None, region=None, use_defaults=False, use_thread=False):
         return self.events.show_events(token=token, region=region, use_defaults=use_defaults)
+
+    def show_artifactory_summary(self, token=None, use_thread=False):
+        return self.artifactory.show_summary(token=token, use_thread=use_thread)
 
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
