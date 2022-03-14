@@ -233,7 +233,7 @@ class AppInstance(MexOperation):
 
         return client_dict
 
-    def create_app_instance(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, real_cluster_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, dedicated_ip=None, cleanup_cluster_instance=True, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=600):
+    def create_app_instance(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, real_cluster_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, dedicated_ip=None, cleanup_cluster_instance=True, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=600, websocket_token=None):
         msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, real_cluster_name=real_cluster_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, crm_override=crm_override, dedicated_ip=dedicated_ip, use_defaults=use_defaults)
         msg_dict = {'appinst': msg}
 
@@ -275,7 +275,7 @@ class AppInstance(MexOperation):
 
             msg_dict_show = {'appinst': msg_show}
 
-        create_return = self.create(token=token, url=self.create_url, delete_url=self.delete_url, delete_autocluster_url=cluster_delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, delete_autocluster_msg=cluster_delete_msg, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)
+        create_return = self.create(token=token, url=self.create_url, delete_url=self.delete_url, delete_autocluster_url=cluster_delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, delete_autocluster_msg=cluster_delete_msg, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout, websocket_token=websocket_token)
         # return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)[0]
 
         if use_thread:
