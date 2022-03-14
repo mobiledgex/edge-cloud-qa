@@ -25,7 +25,6 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using DistributedMatchEngine;
-using DistributedMatchEngine.Mel;
 
 namespace RestSample
 {
@@ -91,15 +90,6 @@ namespace RestSample
         {
             return 2;
         }
-    }
-
-    public class TestMelMessaging : MelMessagingInterface
-    {
-        public bool IsMelEnabled() { return false; }
-        public string GetMelVersion() { return ""; }
-        public string GetUid() { return ""; }
-        public string SetToken(string token, string app_name) { return ""; }
-        public string GetManufacturer() { return "DummyManufacturer"; }
     }
 
     class Program
@@ -216,7 +206,7 @@ namespace RestSample
 
                 Console.WriteLine("RC Reply:  " + registerClientReply.status.ToString());
 
-                if (registerClientReply.status.ToString() != "RS_SUCCESS")
+                if (registerClientReply.status != ReplyStatus.Success )
                 {
                     Console.WriteLine("RegisterClient Failed!!!" + registerClientReply.status.ToString());
                     Console.WriteLine("Test Case Failed!!!");
@@ -385,14 +375,14 @@ namespace RestSample
                 // Awaits:
                 var findCloudletReply = await getConnectionWorkflowTask;
 
-                if (findCloudletReply.status.ToString() == "FIND_FOUND")
+                if (findCloudletReply.status == FindCloudletReply.FindStatus.Found)
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.fqdn);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.latitude);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.longitude + "\n");
                 }
-                if (findCloudletReply.status.ToString() == "FIND_NOTFOUND")
+                if (findCloudletReply.status == FindCloudletReply.FindStatus.Notfound)
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("Test Case Failed!!!");
