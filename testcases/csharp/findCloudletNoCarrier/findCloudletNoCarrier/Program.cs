@@ -324,8 +324,7 @@ namespace MexGrpcSampleConsoleApp
                 var fcRequest = me.CreateFindCloudletRequest(location);
                 fcRequest.CarrierName = getCarrierName();
                 var findCloudletResponse = await me.FindCloudlet(host: dmeHost, port: dmePort, fcRequest, mode: FindCloudletMode.PROXIMITY);
-                string fcStatus = findCloudletResponse.Status.ToString();
-                if (fcStatus == "FindFound")
+                if (findCloudletResponse.Status == FindCloudletReply.Types.FindStatus.FindFound)
                 {
                     Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
                     Console.WriteLine("FindCloudlet Response: " + findCloudletResponse);

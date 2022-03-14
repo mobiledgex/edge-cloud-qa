@@ -324,9 +324,8 @@ namespace MexGrpcSampleConsoleApp
                 Console.WriteLine("\nVerifying Location: " + getLocation());
                 var verifyLocationRequest = me.CreateVerifyLocationRequest(location);
                 var verifyResponse = await me.VerifyLocation(host: dmeHost, port: dmePort, verifyLocationRequest);
-                string locationStatus = verifyResponse.GpsLocationStatus.ToString();
                 string locationAccuracy = verifyResponse.GpsLocationAccuracyKm.ToString();
-                if (locationStatus == "LocRoamingCountryMismatch")
+                if (verifyResponse.GpsLocationStatus == VerifyLocationReply.Types.GPSLocationStatus.LocRoamingCountryMismatch)
                 {
                     Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
                     Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GpsLocationAccuracyKm);

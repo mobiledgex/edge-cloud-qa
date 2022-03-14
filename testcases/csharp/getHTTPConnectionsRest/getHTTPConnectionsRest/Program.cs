@@ -22,8 +22,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Net.Http;
 using DistributedMatchEngine;
-using DistributedMatchEngine.Mel;
-
 
 namespace RestSample
 {
@@ -89,15 +87,6 @@ namespace RestSample
         {
             return 2;
         }
-    }
-
-    public class TestMelMessaging : MelMessagingInterface
-    {
-        public bool IsMelEnabled() { return false; }
-        public string GetMelVersion() { return ""; }
-        public string GetUid() { return ""; }
-        public string SetToken(string token, string app_name) { return ""; }
-        public string GetManufacturer() { return "DummyManufacturer"; }
     }
 
     class Program
@@ -203,7 +192,7 @@ namespace RestSample
                 // location in an Unity application should be from an application context
                 // LocationService.
                 var locTask = Util.GetLocationFromDevice();
-                var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVers, developerAuthToken, cellID, me.GetUniqueIDType(), me.GetUniqueIDType());
+                var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVers, developerAuthToken, me.GetUniqueIDType(), me.GetUniqueIDType());
                 // APIs depend on Register client to complete successfully:
                 RegisterClientReply registerClientReply;
                 try
@@ -211,7 +200,7 @@ namespace RestSample
                     try
                     {
                         registerClientReply = await me.RegisterClient(host, MatchingEngine.defaultDmeRestPort, registerClientRequest);
-                        if(registerClientReply.status != ReplyStatus.RS_SUCCESS)
+                        if(registerClientReply.status != ReplyStatus.Success)
                         {
                             Console.WriteLine("RegisterClient Failed! " + registerClientReply.status);
                             Console.WriteLine("Test Case Failed!!!");
@@ -241,7 +230,7 @@ namespace RestSample
                 var loc = await locTask;
 
                 // Independent requests:
-                var verifyLocationRequest = me.CreateVerifyLocationRequest(loc, carrierName, cellID);
+                var verifyLocationRequest = me.CreateVerifyLocationRequest(loc, carrierName);
                 var findCloudletRequest = me.CreateFindCloudletRequest(loc);
                 //var getLocationRequest = me.CreateGetLocationRequest(carrierName, cellID, tags);
 
@@ -255,7 +244,7 @@ namespace RestSample
                     try
                     {
                         findCloudletReply = await me.FindCloudlet(host, MatchingEngine.defaultDmeRestPort, findCloudletRequest);
-                        if(findCloudletReply.status != FindCloudletReply.FindStatus.FIND_FOUND)
+                        if(findCloudletReply.status != FindCloudletReply.FindStatus.Found)
                         {
                             Console.WriteLine("FindCloudlet Failed! " + findCloudletReply.status);
                             Console.WriteLine("Test Case Failed!!!");
@@ -276,7 +265,7 @@ namespace RestSample
 
                     if (findCloudletReply != null)
                     {
-                        if (findCloudletReply.status.ToString() == "FIND_NOTFOUND")
+                        if (findCloudletReply.status == FindCloudletReply.FindStatus.Notfound)
                         {
                             Console.WriteLine("No App Instance Found!!! Test Case Failed!!");
                             Environment.Exit(1);

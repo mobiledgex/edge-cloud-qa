@@ -4,7 +4,6 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using DistributedMatchEngine;
-using DistributedMatchEngine.Mel;
 
 namespace RestSample
 {
@@ -70,15 +69,6 @@ namespace RestSample
         {
             return 2;
         }
-    }
-
-    public class TestMelMessaging : MelMessagingInterface
-    {
-        public bool IsMelEnabled() { return false; }
-        public string GetMelVersion() { return ""; }
-        public string GetUid() { return ""; }
-        public string SetToken(string token, string app_name) { return ""; }
-        public string GetManufacturer() { return "DummyManufacturer"; }
     }
 
     class Program
@@ -166,7 +156,7 @@ namespace RestSample
 
                 // Awaits:
                 var findCloudletReply = await findCloudletTask;
-                if (findCloudletReply.status.ToString() == "FIND_FOUND")
+                if (findCloudletReply.status == FindCloudletReply.FindStatus.Found)
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.fqdn);
@@ -175,7 +165,7 @@ namespace RestSample
                     Console.WriteLine("Test Case Failed!!!");
                     Environment.Exit(1);
                 }
-                if (findCloudletReply.status.ToString() == "FIND_UNKNOWN")
+                if (findCloudletReply.status == FindCloudletReply.FindStatus.Unknown)
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.fqdn);
@@ -184,7 +174,7 @@ namespace RestSample
                     Console.WriteLine("Test Case Failed!!!");
                     Environment.Exit(1);
                 }
-                if (findCloudletReply.status.ToString() == "FIND_NOTFOUND")
+                if (findCloudletReply.status == FindCloudletReply.FindStatus.Notfound)
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("Test Case Passed!!!");

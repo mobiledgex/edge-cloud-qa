@@ -199,6 +199,12 @@ namespace MexGrpcSampleConsoleApp
                 var verifyLocationRequest = me.CreateVerifyLocationRequest(location);
                 verifyLocationRequest.SessionCookie = "XXX";
                 var verifyResponse = await me.VerifyLocation(host: dmeHost, port: dmePort, verifyLocationRequest);
+                if(verifyResponse.GpsLocationStatus == VerifyLocationReply.Types.GPSLocationStatus.LocVerified)
+                {
+                    Console.WriteLine("VerifyLocation Reply Status: " + verifyResponse.GpsLocationStatus);
+                    Console.WriteLine("TestCase Fail!!");
+                    Environment.Exit(1);
+                }
             }
             catch (Grpc.Core.RpcException replyerror)
             {

@@ -318,19 +318,18 @@ namespace MexGrpcSampleConsoleApp
             // Blocking GRPC call:
             var fcRequest = me.CreateFindCloudletRequest(location);
             var findCloudletResponse = await me.FindCloudlet(host: dmeHost, port: dmePort, fcRequest, mode: FindCloudletMode.PROXIMITY);
-            string fcStatus = findCloudletResponse.Status.ToString();
-            if (fcStatus == "FindFound")
+            if (findCloudletResponse.Status == FindCloudletReply.Types.FindStatus.FindFound)
             {
-                Console.WriteLine("Testcase Passed!");
                 Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
                 Console.WriteLine("FindCloudlet Response: " + findCloudletResponse);
+                Console.WriteLine("Testcase Passed!");
                 Environment.Exit(0);
             }
             else
             {
-                Console.WriteLine("Testcase Failed!");
                 Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
                 Console.WriteLine("FindCloudlet Response: " + findCloudletResponse);
+                Console.WriteLine("Testcase Failed!");
                 Environment.Exit(1);
             }
 
