@@ -33,6 +33,7 @@ class Cloudlet(MexOperation):
         self.showflavorsfor_url = '/auth/ctrl/ShowFlavorsForCloudlet'
         self.add_alliance_org_url = '/auth/ctrl/AddCloudletAllianceOrg'
         self.remove_alliance_org_url = '/auth/ctrl/RemoveCloudletAllianceOrg'
+        self.show_org_info_url = '/auth/orgcloudletinfo/show'
 
     def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, maintenance_state=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, default_resource_alert_threshold=None, gpudriver_name=None, gpudriver_org=None, kafka_cluster=None, kafka_user=None, kafka_password=None, flavor_name=None, alliance_org_list=None, single_kubernetes_cluster_owner=None, platform_high_availability=False, include_fields=False, use_defaults=True):
 
@@ -263,6 +264,14 @@ class Cloudlet(MexOperation):
 
         return cloudlet_dict
 
+    def _build_orgcloudletinfo(self, cloudlet_name=None, operator_org_name=None, use_defaults=True):
+        cloudlet_dict = {}
+
+        if operator_org_name is not None:
+            cloudlet_dict['org'] = operator_org_name
+
+        return cloudlet_dict
+
     def _build_metrics(self, type_dict=None, selector=None, method=None, last=None, limit=None, number_samples=None, start_time=None, end_time=None, start_age=None, end_age=None, location_tile=None, device_os=None, device_model=None, device_carrier=None, data_network_type=None, cloudlet_list=[], use_defaults=True):
         metric_dict = {}
         if type_dict is not None:
@@ -443,6 +452,12 @@ class Cloudlet(MexOperation):
         msg_dict = {'cloudletinfo': msg}
 
         return self.show(token=token, url=self.show_info_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
+
+    def show_org_cloudlet_info(self, token=None, region=None, operator_org_name=None, json_data=None, use_defaults=False, use_thread=False):
+        msg = self._build_orgcloudletinfo(operator_org_name=operator_org_name, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.show_org_info_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
 
     def inject_cloudlet_info(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, container_version=None, controller=None, notify_id=None, os_max_ram=None, os_max_vcores=None, os_max_vol_gb=None, state=None, status=None, flavor_name=None, flavor_disk=None, flavor_ram=None, flavor_vcpus=None, json_data=None, use_defaults=False, use_thread=False):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
