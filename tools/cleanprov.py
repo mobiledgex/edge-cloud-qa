@@ -354,9 +354,11 @@ def clean_ratelimitsettingsflow():
 
     print('clean ratelimitsettingsflow')
     try:
+        mc.update_settings(region=region, token=mc.super_token, disable_rate_limit=False, use_defaults=False)
         app_list = mc.show_rate_limit_flow(region=region, token=mc.super_token, use_defaults=False)
     except Exception as e:
         print(f'error showing ratelimit settings, {e}.continuing to next item')
+        mc.update_settings(region=region, token=mc.super_token, disable_rate_limit=True, use_defaults=False)
         return
     print('applist', app_list)
     print('key', key_pattern)
@@ -376,6 +378,7 @@ def clean_ratelimitsettingsflow():
                         print(f'error deleting {name}, {e}.continuing to next item')
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
+    mc.update_settings(region=region, token=mc.super_token, disable_rate_limit=True, use_defaults=False)
 
 
 def clean_ratelimitsettingsmaxreqs():
@@ -383,9 +386,11 @@ def clean_ratelimitsettingsmaxreqs():
 
     print('clean ratelimitsettingsmaxreqs')
     try:
+        mc.update_settings(region=region, token=mc.super_token, disable_rate_limit=False, use_defaults=False)
         app_list = mc.show_rate_limit_max_requests(region=region, token=mc.super_token, use_defaults=False)
     except Exception as e:
         print(f'error showing ratelimit max request settings, {e}.continuing to next item')
+        mc.update_settings(region=region, token=mc.super_token, disable_rate_limit=True, use_defaults=False)
         return
 
     print('applist', app_list)
@@ -406,7 +411,7 @@ def clean_ratelimitsettingsmaxreqs():
                         print(f'error deleting {name}, {e}.continuing to next item')
                 else:
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
-
+        mc.update_settings(region=region, token=mc.super_token, disable_rate_limit=True, use_defaults=False)
 
 def clean_trustpolicy():
     global key_pattern
