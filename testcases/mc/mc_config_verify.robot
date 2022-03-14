@@ -34,6 +34,9 @@ MC - Admin shall be able to show the config
 	Should Contain   ${config}   FailedLoginLockoutTimeSec1
 	Should Contain   ${config}   FailedLoginLockoutThreshold2
 	Should Contain   ${config}   FailedLoginLockoutTimeSec2
+        Should Contain   ${config}   UserLoginTokenValidDuration
+        Should Contain   ${config}   ApiKeyLoginTokenValidDuration
+        Should Contain   ${config}   WebsocketTokenValidDuration
 
 # ECQ-2773
 MC - Admin shall be able to set the SkipVerifyEmail config item
@@ -354,6 +357,49 @@ MC - Verify FailedLoginLockoutTimeSec2 can not be lower than FailedLoginLockoutT
 	${config}=   Show Config    token=${adminToken}
 	Should Be Equal As Numbers   ${config['FailedLoginLockoutTimeSec2']}   ${2default}
 
+# ECQ-4414
+MC - Admin shall be able to set the token validation config items
+        [Documentation]
+        ...  - set UserLoginTokenValidDuration, ApiKeyLoginTokenValidDuration, WebsocketTokenValidDuration
+        ...  - verify values are updated
+
+        [Teardown]  Config Cleanup
+
+        Set Token Duration Config   user_login_token_valid_duration=4m1s
+        ${config}=   Show Config    token=${adminToken}
+        Should Be Equal  ${config['UserLoginTokenValidDuration']}  4m1s 
+        Set Token Duration Config   user_login_token_valid_duration=24h
+        ${config}=   Show Config    token=${adminToken}
+        Should Be Equal   ${config['UserLoginTokenValidDuration']}   24h0m0s
+
+        Set Token Duration Config   api_key_login_token_valid_duration=1s
+        ${config}=   Show Config    token=${adminToken}
+        Should Be Equal  ${config['ApiKeyLoginTokenValidDuration']}  1s
+        Set Token Duration Config   api_key_login_token_valid_duration=1m5s
+        ${config}=   Show Config    token=${adminToken}
+        Should Be Equal   ${config['ApiKeyLoginTokenValidDuration']}   1m5s
+
+        Set Token Duration Config   websocket_token_valid_duration=100h4m1s
+        ${config}=   Show Config    token=${adminToken}
+        Should Be Equal  ${config['WebsocketTokenValidDuration']}  100h4m1s
+        Set Token Duration Config   websocket_token_valid_duration=24m
+        ${config}=   Show Config    token=${adminToken}
+        Should Be Equal   ${config['WebsocketTokenValidDuration']}   24m0s
+
+# ECQ-4415
+MC - Token validation config items shall error on invalid data
+        [Documentation]
+        ...  - set UserLoginTokenValidDuration, ApiKeyLoginTokenValidDuration, WebsocketTokenValidDuration to invalid data
+        ...  - verify error is returned
+
+        [Teardown]  Config Cleanup
+
+        Run Keyword and Expect Error  ('code=400', 'error={"message":"User login token valid duration cannot be less than 3 minutes"}')  Set Token Duration Config   user_login_token_valid_duration=1s
+        Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string ones for field \\\\"UserLoginTokenValidDuration\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')  Set Token Duration Config   user_login_token_valid_duration=ones
+
+        Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string ones for field \\\\"ApiKeyLoginTokenValidDuration\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')  Set Token Duration Config   api_key_login_token_valid_duration=ones
+
+        Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid JSON data: Unmarshal error: expected duration, but got string ones for field \\\\"WebsocketTokenValidDuration\\\\", valid values are 300ms, 1s, 1.5h, 2h45m, etc"}')  Set Token Duration Config   websocket_token_valid_duration=ones
 
 *** Keywords ***
 Setup
@@ -364,3 +410,10 @@ Setup
         Set Suite Variable   ${adminToken}
 	Set Suite Variable   ${admindefaultlvl}
 	Set Suite Variable   ${userdefaultlvl}
+
+Config Cleanup
+    Set Token Duration Config   user_login_token_valid_duration=24h0m0s
+    Set Token Duration Config   api_key_login_token_valid_duration=4h0m0s
+    Set Token Duration Config   websocket_token_valid_duration=2m0s
+
+    Cleanup Provisioning
