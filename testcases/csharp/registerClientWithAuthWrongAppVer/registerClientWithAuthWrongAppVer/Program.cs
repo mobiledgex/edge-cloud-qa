@@ -171,6 +171,13 @@ namespace MexGrpcSampleConsoleApp
             {
                 var regReply = await me.RegisterClient(host: dmeHost, port: dmePort, registerClientRequest);
 
+                if (regReply.Status.ToString() == "RsUnknown")
+                {
+                    Console.WriteLine("RegisterClient Reply Status :  " + regReply.Status);
+                    Console.WriteLine("TestCase Fail!!");
+                    Environment.Exit(1);
+                }
+
                 Console.WriteLine("RegisterClient Reply Status :  " + regReply.Status);
 
                 Console.WriteLine("AuthToken is correct!");

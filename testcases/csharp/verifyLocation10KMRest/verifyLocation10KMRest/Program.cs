@@ -7,7 +7,6 @@ using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DistributedMatchEngine;
-using DistributedMatchEngine.Mel;
 
 namespace RestSample
 {
@@ -73,15 +72,6 @@ namespace RestSample
         {
             return 2;
         }
-    }
-
-    public class TestMelMessaging : MelMessagingInterface
-    {
-        public bool IsMelEnabled() { return false; }
-        public string GetMelVersion() { return ""; }
-        public string GetUid() { return ""; }
-        public string SetToken(string token, string app_name) { return ""; }
-        public string GetManufacturer() { return "DummyManufacturer"; }
     }
 
     class Program
@@ -234,12 +224,12 @@ namespace RestSample
 
                 // Awaits:
                 var verifyLocationReply = await verfiyLocationTask;
-                if (verifyLocationReply.gps_location_status.ToString() == "LOC_UNKNOWN")
+                if (verifyLocationReply.gps_location_status == VerifyLocationReply.GPSLocationStatus.Unknown)
                 {
                     Console.WriteLine("Verify Location Failed!!");
                     Environment.Exit(1);
                 }
-                if (verifyLocationReply.gps_location_status.ToString() == "LOC_VERIFIED" && verifyLocationReply.gps_location_accuracy_km.ToString() == "10")
+                if (verifyLocationReply.gps_location_status == VerifyLocationReply.GPSLocationStatus.Verified && verifyLocationReply.gps_location_accuracy_km.ToString() == "10")
                 {
                     Console.WriteLine("VerifyLocation Reply - Status: " + verifyLocationReply.gps_location_status);
                     Console.WriteLine("VerifyLocation Reply - Accuracy: " + verifyLocationReply.gps_location_accuracy_km + "KM");
