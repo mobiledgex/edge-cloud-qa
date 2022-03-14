@@ -146,8 +146,8 @@ namespace MexGrpcSampleConsoleApp
             string developerAuthToken = "";
 
             // Generate the authToken
-            //var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
-            var pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
+            var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
+            //var pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
             System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("genauthtoken");
             psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname automation_dev_leon -privkeyfile " + pubkey;
             psi.RedirectStandardOutput = true;
@@ -170,6 +170,13 @@ namespace MexGrpcSampleConsoleApp
             try
             {
                 var regReply = await me.RegisterClient(host: dmeHost, port: dmePort, registerClientRequest);
+
+                if (regReply.Status.ToString() == "RsUnknown")
+                {
+                    Console.WriteLine("RegisterClient Reply Status :  " + regReply.Status);
+                    Console.WriteLine("TestCase Fail!!");
+                    Environment.Exit(1);
+                }
 
                 Console.WriteLine("RegisterClient Reply Status :  " + regReply.Status);
 

@@ -4,7 +4,6 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using DistributedMatchEngine;
-using DistributedMatchEngine.Mel;
 namespace RestSample
 {
     // This interface is optional but is used in the sample.
@@ -69,15 +68,6 @@ namespace RestSample
         {
             return 2;
         }
-    }
-
-    public class TestMelMessaging : MelMessagingInterface
-    {
-        public bool IsMelEnabled() { return false; }
-        public string GetMelVersion() { return ""; }
-        public string GetUid() { return ""; }
-        public string SetToken(string token, string app_name) { return ""; }
-        public string GetManufacturer() { return "DummyManufacturer"; }
     }
 
     class Program
