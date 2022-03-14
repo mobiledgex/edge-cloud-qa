@@ -4,7 +4,6 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using DistributedMatchEngine;
-using DistributedMatchEngine.Mel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -75,15 +74,6 @@ namespace RestSample
         }
     }
 
-    public class TestMelMessaging : MelMessagingInterface
-    {
-        public bool IsMelEnabled() { return false; }
-        public string GetMelVersion() { return ""; }
-        public string GetUid() { return ""; }
-        public string SetToken(string token, string app_name) { return ""; }
-        public string GetManufacturer() { return "DummyManufacturer"; }
-    }
-
     class Program
     {
         static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
@@ -120,8 +110,8 @@ namespace RestSample
                 //port = MatchingEngine.defaultDmeRestPort;
 
                 // Generate the authToken
-                //string pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
-                string pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
+                string pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
+                //string pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
                 System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("genauthtoken");
                 psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname automation_dev_org -privkeyfile " + pubkey;
                 psi.RedirectStandardOutput = true;
@@ -148,7 +138,7 @@ namespace RestSample
                 // Await synchronously.
                 //Console.WriteLine("Port: " + port);
                 var registerClientReply = await me.RegisterClient(host, port, registerClientRequest);
-                if (registerClientReply.status != ReplyStatus.RS_SUCCESS)
+                if (registerClientReply.status != ReplyStatus.Success)
                 {
                     Console.WriteLine("RegisterClient Failed! " + registerClientReply.status);
                     Console.WriteLine("Test Case Failed!!!");

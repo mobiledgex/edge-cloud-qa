@@ -154,8 +154,14 @@ namespace MexGrpcSampleConsoleApp
             var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVers);
             var regReply = await me.RegisterClient(host: dmeHost, port: dmePort, registerClientRequest);
 
+            if (regReply.Status.ToString() == "RsUnknown")
+            {
+                Console.WriteLine("RegisterClient Reply Status :  " + regReply.Status);
+                Console.WriteLine("TestCase Fail!!");
+                Environment.Exit(1);
+            }
+
             Console.WriteLine("RegisterClient Reply Status :  " + regReply.Status);
-            //Console.WriteLine("RegisterClient TokenServerURI: " + regReply.TokenServerURI);
 
             //Verify the Token Server URI is correct
             if (regReply.TokenServerUri != tokenServerURI)

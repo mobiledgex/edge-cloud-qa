@@ -318,45 +318,11 @@ namespace MexGrpcSampleConsoleApp
                 return;
             }
 
-
-            // Call the remainder. Verify and Find cloudlet.
-
-            //try
-            //{
-            // Async version can also be used. Blocking:
-            //Console.WriteLine("\nVerifying Location: " + getLocation());
-            //var verifyResponse = VerifyLocation(token);
-            //string locationStatus = verifyResponse.GpsLocationStatus.ToString();
-            //string locationAccuracy = verifyResponse.GPSLocationAccuracyKM.ToString();
-            //if (locationStatus == "LocVerified")
-            //{
-            //Console.WriteLine("Testcase Passed!");
-            //   Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
-            //  Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GPSLocationAccuracyKM);
-            //Environment.Exit(0);
-            //}
-            //else
-            //{
-            //Console.WriteLine("Testcase Failed!");
-            //Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
-            //Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GPSLocationAccuracyKM);
-            //Environment.Exit(1);
-            //}
-
-            //}
-            //catch (Grpc.Core.RpcException replyerror)
-            //{
-            //   Console.WriteLine("Testcase Failed!" + replyerror.StatusCode + replyerror.Status);
-            //   Environment.Exit(1);
-            //}
-
-            // Blocking GRPC call:
             try
             {
                 var fcRequest = me.CreateFindCloudletRequest(location);
                 var findCloudletResponse = await me.FindCloudlet(host: dmeHost, port: dmePort, fcRequest, mode: FindCloudletMode.PROXIMITY);
-                string fcStatus = findCloudletResponse.Status.ToString();
-                if (fcStatus == "FindFound")
+                if (findCloudletResponse.Status == FindCloudletReply.Types.FindStatus.FindFound)
                 {
                     Console.WriteLine("Testcase Failed!");
                     Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
