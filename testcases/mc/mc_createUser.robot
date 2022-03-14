@@ -15,6 +15,16 @@ ${password}=   mexadminfastedgecloudinfra
 ${tld_file}=  tlds_list.txt
 	
 *** Test Cases ***
+# ECQ-4419
+MC - User shall not be able to create a 1 char username
+    [Documentation]
+    ...  - create a 1 char username
+    ...  - verify proper error
+
+    ${error}=  Run Keyword and Expect Error  *  Create User  username=a  password=${password}  email_address=a@auto.com
+
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"POST https://gitlab-qa.mobiledgex.net/api/v4/users: 400 {message: {username: [is too short (minimum is 2 characters)]}}"}')
+
 # ECQ-2715
 MC - User shall be able to create a new user
 	[Documentation]
@@ -26,7 +36,8 @@ MC - User shall be able to create a new user
 
         ${long_name}  Generate Random String   59
 	#@{usernames}=  Create List  1  a  _username  123lkjsdfh12jsd12  MYNAME  a-----   dlfjoiwefmsifqwleko23kjsdlijalskdfjqoiwjlkadsjfoiajlrejqwoiejalksdjfoiqwjflkajsdoifjqwiojfaoifjaiosjfiwjefoiajsdflkajlfkjaskldfjaoijfalksdjfoiajsdflkjasoifjasdlkjfalisjdfklajsdflkajsflkajsflkj  my_username
-        @{usernames}=  Create List  1  a  _username  123lkjsdfh12jsd12  MYNAME  a-----  ${long_name}  my_username
+        #@{usernames}=  Create List  1  a  _username  123lkjsdfh12jsd12  MYNAME  a-----  ${long_name}  my_username
+        @{usernames}=  Create List  _username  123lkjsdfh12jsd12  MYNAME  a-----  ${long_name}  my_username
 
 	FOR  ${name}  IN  @{usernames}
 	  ${email}=  Catenate  SEPARATOR=  ${name}  @auto.com
@@ -160,8 +171,10 @@ MC - User shall not be able to create the same new user twice same info
 	...  delete the user
 	...  ECQ-2727
 
-        Create User   username=myusername   password=${password}   email_address=xy@xy.com    use_defaults=${False}
-	Run Keyword and Expect Error  ('code=400', 'error={"message":"Username with name myusername (case-insensitive) already exists"}')  Create User   username=myusername    password=${password}   email_address=xy@xy.com   use_defaults=${False}
+        ${epoch}=  Get Current Date  result_format=epoch
+
+        Create User   username=myusername${epoch}   password=${password}   email_address=xy${epoch}@xy.com    use_defaults=${False}
+	Run Keyword and Expect Error  ('code=400', 'error={"message":"Username with name myusername${epoch} (case-insensitive) already exists"}')  Create User   username=myusername${epoch}    password=${password}   email_address=xy${epoch}@xy.com   use_defaults=${False}
 
 # ECQ-2728	
 MC - User shall not be able to create the same new user twice different password
@@ -171,8 +184,10 @@ MC - User shall not be able to create the same new user twice different password
 	...  delete the user
 	...  ECQ-2728
 
-        Create User   username=myusername   password=${password}   email_address=xy@xy.com    use_defaults=${False}
-	Run Keyword and Expect Error  ('code=400', 'error={"message":"Username with name myusername (case-insensitive) already exists"}')  Create User   username=myusername    password=user45newvigaveveateat1726354   email_address=xy@xy.com   use_defaults=${False}
+        ${epoch}=  Get Current Date  result_format=epoch
+
+        Create User   username=myusername${epoch}   password=${password}   email_address=xy${epoch}@xy.com    use_defaults=${False}
+	Run Keyword and Expect Error  ('code=400', 'error={"message":"Username with name myusername${epoch} (case-insensitive) already exists"}')  Create User   username=myusername${epoch}    password=user45newvigaveveateat1726354   email_address=xy${epoch}@xy.com   use_defaults=${False}
 
 # ECQ-2732
 MC - User shall not be able to create the same new user twice different email
@@ -181,9 +196,11 @@ MC - User shall not be able to create the same new user twice different email
 	...  verify the proper error is received
 	...  delete the user
 	...  ECQ-2732
-
-        Create User   username=myusername   password=${password}   email_address=xy@xy.com    use_defaults=${False}
-	Run Keyword and Expect Error  ('code=400', 'error={"message":"Username with name myusername (case-insensitive) already exists"}')  Create User   username=myusername    password=${password}   email_address=xyz@xyz.com   use_defaults=${False}
+       
+        ${epoch}=  Get Current Date  result_format=epoch
+ 
+        Create User   username=myusername${epoch}   password=${password}   email_address=xy${epoch}@xy.com    use_defaults=${False}
+	Run Keyword and Expect Error  ('code=400', 'error={"message":"Username with name myusername${epoch} (case-insensitive) already exists"}')  Create User   username=myusername${epoch}    password=${password}   email_address=xyz${epoch}x@xyz.com   use_defaults=${False}
 
 # ECQ-2733
 MC - User shall not be able to create the superuser twice same info
@@ -319,4 +336,3 @@ Delete Users In Background
    END
 
    Wait For Replies    @{handle_list}
-
