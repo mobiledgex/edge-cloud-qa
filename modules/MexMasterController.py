@@ -948,6 +948,9 @@ class MexMasterController(MexRest):
     def show_cloudlet_info(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=False, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
         return self.cloudlet.show_cloudlet_info(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults, use_thread=use_thread)
 
+    def show_org_cloudlet_info(self, token=None, region=None, operator_org_name=None, json_data=None, use_defaults=False, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
+        return self.cloudlet.show_org_cloudlet_info(token=token, region=region, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
+
     def inject_cloudlet_info(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, container_version=None, controller=None, notify_id=None, os_max_ram=None, os_max_vcores=None, os_max_vol_gb=None, state=None, status=None, flavor_name=None, flavor_disk=None, flavor_ram=None, flavor_vcpus=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
         return self.cloudlet.inject_cloudlet_info(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, controller=controller, notify_id=notify_id, os_max_ram=os_max_ram, os_max_vcores=os_max_vcores, os_max_vol_gb=os_max_vol_gb, state=state, status=status, flavor_name=flavor_name, flavor_disk=flavor_disk, flavor_ram=flavor_ram, flavor_vcpus=flavor_vcpus, use_defaults=use_defaults, use_thread=use_thread)
 
