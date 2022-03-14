@@ -60,6 +60,7 @@ from mex_master_controller.Login import Login
 from mex_master_controller.Network import Network
 from mex_master_controller.Events import Events
 from mex_master_controller.Artifactory import Artifactory
+from mex_master_controller.WebSocketToken import WebSocketToken
 
 import shared_variables_mc
 import shared_variables
@@ -104,6 +105,7 @@ class MexMasterController(MexRest):
         self.admin_password = self.password
        
         self.super_token = None
+        self.websocket_token = None
         self._decoded_token = None
         self.orgname = None
         self.orgtype = None
@@ -237,6 +239,7 @@ class MexMasterController(MexRest):
         self.network = Network(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.events = Events(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.artifactory = Artifactory(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.mexwebsocket = WebSocketToken(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def reload_defaults(self):
         importlib.reload(shared_variables)
@@ -1263,7 +1266,7 @@ class MexMasterController(MexRest):
         """
         return self.app.update_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, auto_prov_policies=auto_prov_policies,  alert_policies=alert_policies, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, skip_hc_ports=skip_hc_ports, annotations=annotations, trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, allow_serverless=allow_serverless, serverless_config_vcpus=serverless_config_vcpus, serverless_config_ram=serverless_config_ram, serverless_config_min_replicas=serverless_config_min_replicas, use_defaults=use_defaults)
 
-    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, real_cluster_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, dedicated_ip=None, crm_override=None, cleanup_cluster_instance=True, json_data=None, use_defaults=True, auto_delete=True, use_thread=False, timeout=600):
+    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, real_cluster_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, dedicated_ip=None, crm_override=None, cleanup_cluster_instance=True, json_data=None, use_defaults=True, auto_delete=True, use_thread=False, timeout=600, websocket_token=None):
         """ Send region CreateAppInst
         """
         if developer_org_name is None:
@@ -1272,7 +1275,7 @@ class MexMasterController(MexRest):
         if cluster_instance_developer_org_name is None:
             if self.organization_name:
                 if cluster_instance_name is not None and not cluster_instance_name.startswith('autocluster'): cluster_instance_developer_org_name = self.organization_name
-        return self.app_instance.create_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, real_cluster_name=real_cluster_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, privacy_policy=privacy_policy, shared_volume_size=shared_volume_size, dedicated_ip=dedicated_ip, crm_override=crm_override, cleanup_cluster_instance=cleanup_cluster_instance, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread, stream_timeout=timeout)
+        return self.app_instance.create_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, real_cluster_name=real_cluster_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, privacy_policy=privacy_policy, shared_volume_size=shared_volume_size, dedicated_ip=dedicated_ip, crm_override=crm_override, cleanup_cluster_instance=cleanup_cluster_instance, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread, stream_timeout=timeout, websocket_token=websocket_token)
 
     def get_create_app_instance_stream(self):
         return self.app_instance.create_app_instance_stream()
@@ -1858,6 +1861,11 @@ class MexMasterController(MexRest):
             token=self.super_token
         return self.config.update_config(token=token, threshold2_delay = threshold2_delay, use_defaults=use_defaults, use_thread=use_thread)
 
+    def set_token_duration_config(self, user_login_token_valid_duration=None, api_key_login_token_valid_duration=None, websocket_token_valid_duration=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, user_login_token_valid_duration=user_login_token_valid_duration, api_key_login_token_valid_duration=api_key_login_token_valid_duration, websocket_token_valid_duration=websocket_token_valid_duration, use_defaults=use_defaults, use_thread=use_thread)
+
     
     def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, timeout=None, json_data=None, use_defaults=True, use_thread=False): 
         if developer_org_name is None:
@@ -2089,6 +2097,10 @@ class MexMasterController(MexRest):
 
     def show_artifactory_summary(self, token=None, use_thread=False):
         return self.artifactory.show_summary(token=token, use_thread=use_thread)
+
+    def create_websocket_token(self, token=None):
+        self.websocket_token = self.mexwebsocket.create_token(token=token)
+        return self.websocket_token
 
     def run_mcctl(self, parms, version='latest', output_format='json', token=None):
         if token is None:
