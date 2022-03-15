@@ -65,7 +65,7 @@ class OrganizationDetailsPage(DetailsPage):
                 logging.error('role NOT present')
                 elements_present = False
         else:
-            logging.error('role label not present')
+            logging.info('role label not present')
 
         if self.is_phone_label_present():
             if self.is_phone_value_present():
@@ -74,7 +74,7 @@ class OrganizationDetailsPage(DetailsPage):
                 logging.error('phone NOT present')
                 elements_present = False
         else:
-            logging.error('phone label not present')
+            logging.info('phone label not present')
 
         if self.is_address_label_present():
             if self.is_address_value_present():
@@ -83,7 +83,7 @@ class OrganizationDetailsPage(DetailsPage):
                 logging.error('address NOT present')
                 elements_present = False
         else:
-            logging.error('address label not present')
+            logging.info('address label not present')
 
         if self.is_publicimage_label_present():
             if self.is_publicimage_value_present():
@@ -92,7 +92,7 @@ class OrganizationDetailsPage(DetailsPage):
                 logging.error('public image NOT present')
                 elements_present = False
         else:
-            logging.error('public image label not present')
+            logging.info('public image label not present')
 
         return elements_present
 
