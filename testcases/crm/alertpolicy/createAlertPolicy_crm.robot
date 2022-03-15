@@ -1,4 +1,4 @@
-#-*- coding: robot -*-
+Poll for#-*- coding: robot -*-
 
 *** Settings ***
 Documentation  CreateAlertPolicy on CRM
@@ -15,14 +15,14 @@ Test Timeout  30m
 *** Variables ***
 ${nogo}=  ${True}
 #${cloudlet_name_crm}  automationDallasCloudlet
-${cloudlet_name_crm}  qa-anthos
+#${cloudlet_name_crm}  qa-anthos
 #${cloudlet_name_crm}  dfw-vsphere
 #${cloudlet_name_crm}  DFWVMW2
-#${cloudlet_name_crm}  automationBuckhornCloudlet
-${operator_name_crm}  packet
-#${operator_name_crm}  GDDT
-#${developer_org_name}  automation_dev_org
-${developer_org_name}  ${developer_org_name_automation} 
+${cloudlet_name_crm}  automationBuckhornCloudlet
+#${operator_name_crm}  packet
+${operator_name_crm}  GDDT
+${developer_org_name}  automation_dev_org
+#${developer_org_name}  ${developer_org_name_automation} 
 ${developer_org_name_automation}=  ${developer_org_name}
 ${alert_org}=  ${developer_org_name_automation}           
 ${app_org}=    ${developer_org_name_automation}
@@ -40,7 +40,7 @@ ${ip_access}             ${ip_access_type}
 ${num_master}       1
 ${num_nodes}        0
 #default alert_policy_min_trigger_time
-${tt_3s}=             3s
+${tt_12s}=           12s
 ${tt_s}=             30s
 ${tt_30s}=           30s
 ${tt_32s}=           32s
@@ -79,23 +79,20 @@ ${dsk_util_val}=  1
 ${acx_util_val}=  5
 ${cpu_trig_val}=  15s
 ${mem_trig_val}=  12s
-${dsk_trig_val}=  3s
+${dsk_trig_val}=  12s
 ${acx_trig_val}=  14s
 ${script_runtime}=   125
 ${script2_runtime}=  125
 ${influx_wait_seconds}=  30seconds
 ${influx2_wait_seconds}=  30seconds
-${script_primer}=    60
+${script_primer}=    85
+${script_diskbash_secs}=  ${script_primer}
 ${script_stress}=  stresscombobash.sh
 ${command_script_delay}=  20
 ${public_tcp_port}=  8086
 ${public_check}=  
 ${timeout}=  120
-${loop_c}=  20
-${loop_5}=  5
-${loop_10}=  10
-${loop_15}=  15
-${loop_20}=  20
+${loop_c}=  15
 #delay to wait to make sure measurement script has stopped.
 ${alert_clear_delay}=  60seconds
 #poll time to wait during loop to check firing
@@ -124,19 +121,19 @@ Create new alert policies for cpu mem disk and active-connections
    Log To Console  ${\n} Create Policies
    Run Keyword  Create Policies
 
-Update mc settings alertpolicymintriggertime to 3s
+Update mc settings alertpolicymintriggertime to 12s
    [Documentation]
-   ...  - Set alertpolicymintriggertime to 3s
+   ...  - Set alertpolicymintriggertime to 12s
 
-   Log To Console  ${\n}Set Trigger Time Policy 3s
-   Run Keyword  Set Trigger Time Policy 3s
+   Log To Console  ${\n}Set Trigger Time Policy 12s
+   Run Keyword  Set Trigger Time Policy 12s
 
 Update existing policies with new values
    [Documentation]
    ...  - Update alertpolicy values for trigger severity and utilization
 
-   Log To Console  ${\n}Update Policies Severity Warning Trigger3s
-   Run Keyword  Update Policies Severity Warning Trigger3s
+   Log To Console  ${\n}Update Policies Severity Warning Trigger12s
+   Run Keyword  Update Policies Severity Warning Trigger12s
 
 Add alert policies to k8s app so appinst will trigger alerts
    [Documentation]
@@ -152,35 +149,6 @@ Show alert policies added to k8s app
    Log To Console  ${\n} Show Alert Policies From App
    Run Keyword  Show Alert Policies From App
 
-Use runcommand on appinst to test script is creating utilization for alerts
-   [Documentation]
-   ...  - Create utilization to trigger k8s appinst alerts
-   ...  - Use the appinst created and issue a Runcommand to start utilization script 
-
-   Log To Console  ${\n}Setup Runcommand To Run Measurments
-   Run Keyword  Setup Runcommand To Run Measurments
-
-Check the metrics from the utilization script and check for alerts
-   [Documentation]
-   ...  - Test that the appinst utilization script and influxdb metrics are working
-
-   Log To Console  ${\n}Get Metrics Primer
-   Log To Console  Waiting ${script_primer} seconds for influxdb 
-   Sleep  ${script_primer}
-   Run Keyword  Get Metrics Primer
-   Log To Console  Testing metrics and script to generate utilization
-   Log To Console  Show Alerts Firing Primer
-   Run Keyword  Show Alerts Firing Primer
-
-Verify all alerts are cleared for mem disk cpu and active-connections
-   [Documentation]
-   ...  - Test that any alerts have cleared after the utilization script stops
-
-   Log To Console  ${\n}Verify no alerts are triggering from utilization primer
-   Log To Console  Show Alerts Cleared
-   Run Keyword  Show Alerts Cleared
-   Log To Console  Getting trigger values and metrics values
-
 Run utilization script and verify all alert types are firing for k8s appinst
    [Documentation]
    ...  - Run appinst script to generate utilization for triggering alerts
@@ -193,6 +161,20 @@ Run utilization script and verify all alert types are firing for k8s appinst
    Log To Console  Show Alerts Cleared
    Run Keyword  Show Alerts Cleared
 
+#Run disk utilization script and verify disk alert is firing for k8s appinst
+#   [Documentation]
+#   ...  - Run appinst script to generate utilization for disk alert
+#   ...  - Poll for alerts firing and verify disk cleared after trigger duration is no longer met
+#
+#   Log To Console  removing file rm -v nohup.out
+#   Sleep  10seconds
+#   Log To Console  ${\n}Setup Runcommand To Run diskbash
+#   Run Keyword  Setup Runcommand To Run Diskbash
+#   Log To Console  Show Disk Alert Firing
+#   Run Keyword  Show Disk Alert Firing
+#   Log To Console  Show Disk Alert Cleared
+#   Run Keyword  Show Disk Alert Cleared
+
 Set mc settings alertpolicymintriggertime back to 30s
    [Documentation]
    ...  - Set the mc alertpolicytrigger to 30s
@@ -200,6 +182,7 @@ Set mc settings alertpolicymintriggertime back to 30s
 
    Log To Console  ${\n}Reset Trigger Time Policy 30s
    Run Keyword  Reset Trigger Time Policy 30s
+   Sleep  1seconds
 
 *** Keywords ***
 Setup
@@ -271,10 +254,6 @@ Setup
     Set Suite Variable  ${wrn}          warning
     Set Suite Variable  ${inf}          info
     Set Suite Variable  ${loop_c}   20
-    Set Suite Variable  ${loop_5}    5
-    Set Suite Variable  ${loop_10}  10
-    Set Suite Variable  ${loop_15}  15
-    Set Suite Variable  ${loop_20}  20
     #Log naming to console checking webui manually durring testing
     Log To Console  ${\n}${CPU_policy}
     Log To Console  ${\n}${MEM_policy}
@@ -323,6 +302,8 @@ Setup
     Log To Console  ${\n}Initial catenation ${rootlb}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
     Log To Console  ${\n}Conversion to lowercase ${rootlb}
+    ${shared_rootlb}=  Set Variable  ${rootlb}
+    Set Suite Variable  ${shared_rootlb}
     ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
     Set Suite Variable  ${rootlb}
     Log To Console  ${\n}rootlb catenation ${rootlb}
@@ -399,8 +380,8 @@ Create Custom Alert Receiver Selector Testall
 
 Reset Trigger Time Policy 30s
    # Show current settings for trriger time and set back to 30s which is the default when test is complete
-   # Run mcctl  settings update alertpolicymintriggertime=30s region=EU
-   # Run mcctl  settings update alertpolicymintriggertime=30s region=US
+   ${show_us}=  Run Keyword  Show Settings  token=${super_token}  region=US
+   ${show_eu}=  Run Keyword  Show Settings  token=${super_token}  region=EU
    ${set_tt_us}=  Run Keyword  Update Settings  token=${super_token}  region=US  alert_policy_min_trigger_time=${tt_30s}
    ${set_tt_eu}=  Run Keyword  Update Settings  token=${super_token}  region=EU  alert_policy_min_trigger_time=${tt_30s}
    ${show_us}=  Run Keyword  Show Settings  token=${super_token}  region=US
@@ -410,16 +391,16 @@ Reset Trigger Time Policy 30s
    Run Keywords    Should Be Equal As Strings  ${tt_us}  ${tt_30s}  AND  Log To Console  ${\n}alert_policy_min_trigger_time US= ${tt_us}
    Run Keywords    Should Be Equal As Strings  ${tt_eu}  ${tt_30s}  AND  Log To Console  ${\n}alert_policy_min_trigger_time EU= ${tt_eu}
 
-Set Trigger Time Policy 3s
-   # In order to update alert policy trigger less than 30s this setting must be changed to 3s
-   ${set_tt_us}=  Run Keyword  Update Settings  token=${super_token}  region=US  alert_policy_min_trigger_time=${tt_3s}
-   ${set_tt_eu}=  Run Keyword  Update Settings  token=${super_token}  region=EU  alert_policy_min_trigger_time=${tt_3s}
+Set Trigger Time Policy 12s
+   # In order to update alert policy trigger less than 30s this setting must be changed to 12s
+   ${set_tt_us}=  Run Keyword  Update Settings  token=${super_token}  region=US  alert_policy_min_trigger_time=${tt_12s}
+   ${set_tt_eu}=  Run Keyword  Update Settings  token=${super_token}  region=EU  alert_policy_min_trigger_time=${tt_12s}
    ${show_us}=  Run Keyword  Show Settings  token=${super_token}  region=US
    ${show_eu}=  Run Keyword  Show Settings  token=${super_token}  region=EU
    ${tt_us}=  Set Variable  ${show_us['alert_policy_min_trigger_time']}
    ${tt_eu}=  Set Variable  ${show_eu['alert_policy_min_trigger_time']}
-   Run Keywords    Should Be Equal As Strings  ${tt_us}  ${tt_3s}  AND  Log To Console  ${\n}alert_policy_min_trigger_time US= ${tt_us}
-   Run Keywords    Should Be Equal As Strings  ${tt_eu}  ${tt_3s}  AND  Log To Console  ${\n}alert_policy_min_trigger_time EU= ${tt_eu}
+   Run Keywords    Should Be Equal As Strings  ${tt_us}  ${tt_12s}  AND  Log To Console  ${\n}alert_policy_min_trigger_time US= ${tt_us}
+   Run Keywords    Should Be Equal As Strings  ${tt_eu}  ${tt_12s}  AND  Log To Console  ${\n}alert_policy_min_trigger_time EU= ${tt_eu}
 
 Create Policies
    #Creating Alert Policies if exists already test will not error and status of exists or created will be displayed
@@ -505,7 +486,7 @@ Delete Policies
    Run Keyword If     ${acx_err}!=${acx_policy_name}     Log To Console  ${\n}${ACX_policy} was deleted
 
 Update Policies Severity Warning Trigger30
-#Update Alert Policies intial trigger has to be updated with 30s until the mc settings is changed to 3s 
+#Update Alert Policies intial trigger has to be updated with 30s until the mc settings is changed to 12s 
    ${nogo}          Set Variable  null
    ${wrn}           Set Variable  warning
    ${inf}           Set Variable  info
@@ -567,14 +548,14 @@ Update Policies Severity Warning Trigger30
    Run Keyword If  '${nogo}'=='${True}'  Should Be Equal  ${acx_plcy_trig}  ${tt_policy}
    Sleep  2seconds
 
-Update Policies Severity Warning Trigger3s
+Update Policies Severity Warning Trigger12s
 #Update Alert Policies - After mc settings have been changed
    ${nogo}          Set Variable  null
    ${wrn}           Set Variable  warning
    ${inf}           Set Variable  info
    ${err}           Set Variable  error
-   ${tt_s}          Set Variable  ${tt_3s}
-   ${tt_policy}     Set Variable  ${tt_3s}
+   ${tt_s}          Set Variable  ${tt_12s}
+   ${tt_policy}     Set Variable  ${tt_12s}
    ${cpu_util_val}  Set Variable  ${cpu_util_val}
    ${mem_util_val}  Set Variable  ${mem_util_val}
    ${dsk_util_val}  Set Variable  ${dsk_util_val}
@@ -676,13 +657,9 @@ Show Alert Policies From App
 
 
 Setup Runcommand To Run Measurments
-   
    ${uri_check}=  Show App Instances  token=${super_token}  region=${region}  app_name=${app_name}  region=${region}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_crm}
-
    ${uri_val}=  Set Variable  ${uri_check}[0][data][uri]
    ${uri_val}=  Convert To Lowercase  ${uri_val}
-
-   Sleep  ${poll_time}
    ${script_runtime}        Set Variable   ${script2_runtime}
    ${script_primer}         Set Variable   ${script_primer}
    ${command_script_sh}     Set Variable   sh all_measurements.sh ${script_runtime}
@@ -697,52 +674,91 @@ Setup Runcommand To Run Measurments
    ${command_script2}=           Convert To Lowercase  ${command_script2}
    ${command_script_pubprime1}=  Convert To Lowercase  ${command_script_pubprime1}
    ${command_script_pubmain1}=   Convert To Lowercase  ${command_script_pubmain1}
-   #test url in case error will show in log
+   ${access_cmd}   Set Variable  cat mexprometheusappname1 2>&1
+   ${runcmd_ls}    Set Variable  ls -l
    ##using runcommand to do a ls on the appinst first in case pod is in a bad state. EC-5971 see notes on that
-   ${url_error_test}=  Run Keyword And Ignore Error  Run Command  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cluster_instance_developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  timeout=${timeout}  command=ls
+   ${url_error_test}=  Run Keyword And Ignore Error  Run Command  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cluster_instance_developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  timeout=${timeout}  command=${runcmd_ls}
    ${url_error_test}=  Convert To String  ${url_error_test}
-   Log To Console  ${url_error_test}
+#   Log To Console  ${url_error_test}
+   ${mexprometheus_appname1}=  Run Keyword And Ignore Error  Access Cloudlet  token=${super_token}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_cmd}  node_type=  node_name=${shared_rootlb}
+   ${mexprometheus_appname1}=  Convert To String  ${mexprometheus_appname1}
+#   Log To Console  ${mexprometheus_appname1}
 
    ${run_script_main}=  Run Command  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cluster_instance_developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  timeout=${timeout}  command=${command_script_pubmain1}
    Log To Console  Running script commands on appinst for measurements ${\n}${command_script_pubmain1}
 
 
-Get Metrics Primer
-   FOR  ${i}  IN RANGE  ${loop_5}
-   Sleep  ${poll_time}
-    ${cpu_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=cpu  last=1
-    ${mem_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=mem  last=1
-    ${dsk_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=disk  last=1
-    ${acx_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=connections  last=1
+Setup Runcommand To Run Diskbash
+   ${uri_check}=  Show App Instances  token=${super_token}  region=${region}  app_name=${app_name}  region=${region}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_crm}
+   ${uri_val}=  Set Variable  ${uri_check}[0][data][uri]
+   ${uri_val}=  Convert To Lowercase  ${uri_val}
+   ${access_cmd}   Set Variable  cat mexprometheusappname1 2>&1
+   ${runcmd_ls}    Set Variable  ls -l
 
-   FOR  ${i}  IN RANGE  ${loop_10}
-       IF  ${cpu_metrics} != {'data': [{'Series': None, 'Messages': None}]}
-           ${cpu_metric_name}=  Convert To String  ${cpu_metrics['data'][0]['Series'][0]['columns'][9]}
-           ${cpu_metric_val}=  Convert To String  ${cpu_metrics['data'][0]['Series'][0]['values'][0][9]}
-           END
-       IF  ${mem_metrics} != {'data': [{'Series': None, 'Messages': None}]}
-           ${mem_metric_name}=  Convert To String  ${mem_metrics['data'][0]['Series'][0]['columns'][9]}
-           ${mem_metric_val}=  Convert To String  ${mem_metrics['data'][0]['Series'][0]['values'][0][9]}
-           END
+   Sleep  ${poll_time}
+   ${command_script_sh}     Set Variable   sh all_measurements.sh ${script_primer}
+   ${command_script_sh}=    Convert To Lowercase  ${command_script_sh}
+   #using runcommand to do a ls on the appinst first in case pod is in a bad state. EC-5971 see notes on that
+   ${url_error_test}=  Run Keyword And Ignore Error  Run Command  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cluster_instance_developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  timeout=${timeout}  command=${runcmd_ls}
+   ${url_error_test}=  Convert To String  ${url_error_test}
+#   Log To Console  ${url_error_test}
+   Sleep  30seconds
+   ${mexprometheus_appname1}=  Run Keyword And Ignore Error  Access Cloudlet  token=${super_token}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  region=${region}  command=${access_cmd}  node_type=  node_name=${shared_rootlb}
+   ${mexprometheus_appname1}=  Convert To String  ${mexprometheus_appname1}
+#   Log To Console  ${mexprometheus_appname1}
+
+   ${run_script_main}=  Run Command  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  cluster_instance_developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  timeout=${timeout}  command=${command_script_sh}
+   Log To Console  Running script commands on appinst for measurements ${\n}${command_script_sh}
+
+Show Disk Alert Firing
+    Set Suite Variable  ${alertname_totals}   0
+    Set Suite Variable  ${firing_totals}      0
+    Set Suite Variable  ${dsk_firing_total}   0
+    Set Suite Variable  ${dsk_firing_cnt}     0
+    Set Suite Variable  ${dsk_firing_val}     0
+    Set Suite Variable  ${dsk_alertname_total}   0
+    Set Suite Variable  ${dsk_alertname_cnt}     0
+    Set Suite Variable  ${dsk_alertname_val}     0
+    Set Suite Variable  ${loop_c}   20
+    Set Suite Variable  ${poll_time}  10seconds
+
+   FOR  ${i}  IN RANGE  ${loop_c}
+#   Log To Console  ${\n}Waiting for triggers >=1 ${DSK_policy}=${dsk_firing_total}
+
+         ${dsk_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${DSK_policy}
+         ${len_dsk}=  Get Length  ${dsk_firing}
+         Sleep  1seconds
+         IF  ${len_dsk} > 0
+            ${dsk_firing_cnt}=     Get Count  ${dsk_firing}$[key][data][state]  firing
+            ${dsk_alertname_cnt}=  Get Count  ${dsk_firing}$[key][data][labels][alertname]  ${DSK_policy}
+            ${dsk_firing_val}=     Convert To String  ${dsk_firing}[0][data][value]
+            ${dsk_alertname_val}=  Convert To String  ${dsk_firing}[0][data][labels][alertname]
+            ${dsk_firing_total}=     Evaluate  ${dsk_firing_cnt} + ${dsk_firing_total} + 0
+            ${dsk_alertname_total}=  Evaluate  ${dsk_alertname_cnt} + ${dsk_alertname_total} + 0
+            Run Keywords   Should Contain  ${dsk_alertname_val}  ${DSK_policy}    AND  Log To Console  DSK alert name firing was ${dsk_alertname_val}
+#            Log To Console  DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} GB
+            END
+   Sleep  ${poll_time}
+   ${alertname_totals}=     Evaluate  ${dsk_alertname_total} + 0
+   ${firing_totals}=        Evaluate  ${dsk_firing_total} + 0
+#   Log To Console  ${\n}Waiting Fire>0 for ${DSK_policy}=${dsk_firing_total} BIGloop ${i}of${loop_c} FT-all=${firing_totals}
+#   Log To Console  ${\n}Waiting Name>0 for ${DSK_policy}=${dsk_alertname_total} ${ACX_policy}=${acx_alertname_total} BIGloop ${i}of${loop_c} AN-all=${alertname_totals}
+   Exit For Loop If  ${dsk_firing_total} > 0
+   Exit For Loop If  ${dsk_alertname_total} > 0
+   END
+    #Get influx metrics to compare to alerts trigger
+    ${dsk_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=disk  last=1
+    Sleep  1seconds
+    Log To Console  ${dsk_metrics}
        IF  ${dsk_metrics} != {'data': [{'Series': None, 'Messages': None}]}
            ${dsk_metric_name}=  Convert To String  ${dsk_metrics['data'][0]['Series'][0]['columns'][9]}
            ${dsk_metric_val}=  Convert To String  ${dsk_metrics['data'][0]['Series'][0]['values'][0][9]}
            END
-       IF  ${acx_metrics} != {'data': [{'Series': None, 'Messages': None}]}
-           ${acx_metric_name}=  Convert To String  ${acx_metrics['data'][0]['Series'][0]['columns'][9]}
-           ${acx_metric_val}=  Convert To String  ${acx_metrics['data'][0]['Series'][0]['values'][0][9]}
-           END
-   Exit For Loop If  ${cpu_metrics} and ${mem_metrics} and ${dsk_metrics} and ${acx_metrics} != {'data': [{'Series': None, 'Messages': None}]}
-   Sleep  ${poll_time}
-   END
-   END
-   Log To Console  ${\n}There should be metrics if so then  runcommand and appinst are working if no metrics this test most likely will fail
-   Log To Console  ${cpu_metric_name}=${cpu_metric_val} %
-   Log To Console  ${mem_metric_name}=${mem_metric_val} Bytes
-   Log To Console  ${dsk_metric_name}=${dsk_metric_val} Bytes
-   Log To Console  ${acx_metric_val} active connections if 0 something went wrong
-   Log To Console  ${\n}This was a primer check that influx has data before testing alert policy triggers
+         Log To Console  ${\n}There should be metrics
+         Log To Console  ${dsk_metric_name}=${dsk_metric_val} Bytes
+         Log To Console  ${\n}These results should have triggered disk alert 
 
+   Run Keywords   Should Be True  ${dsk_firing_total} > 0   AND   Log To Console  ${DSK_policy} alert triggered DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} Bytes
 
 Show Alerts Firing
     Set Suite Variable  ${alertname_totals}   0
@@ -772,14 +788,10 @@ Show Alerts Firing
     Set Suite Variable  ${dsk_alertname_val}     0
     Set Suite Variable  ${acx_alertname_val}     0
     Set Suite Variable  ${loop_c}   20
-    Set Suite Variable  ${loop_5}    5
-    Set Suite Variable  ${loop_10}  10
-    Set Suite Variable  ${loop_15}  15
-    Set Suite Variable  ${loop_20}  20
     Set Suite Variable  ${poll_time}  5seconds
 
    FOR  ${i}  IN RANGE  ${loop_c}
-   Log To Console  ${\n}Waiting for triggers >=1 ${CPU_policy}=${cpu_firing_total} ${MEM_policy}=${mem_firing_total} ${DSK_policy}=${dsk_firing_total} ${ACX_policy}=${acx_firing_total}
+#   Log To Console  ${\n}Waiting for triggers >=1 ${CPU_policy}=${cpu_firing_total} ${MEM_policy}=${mem_firing_total} ${DSK_policy}=${dsk_firing_total} ${ACX_policy}=${acx_firing_total}
 
          ${cpu_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${CPU_policy}
          ${len_cpu}=  Get Length  ${cpu_firing}
@@ -791,8 +803,10 @@ Show Alerts Firing
             ${cpu_alertname_val}=  Convert To String  ${cpu_firing}[0][data][labels][alertname]
             ${cpu_firing_total}=     Evaluate  ${cpu_firing_cnt} + ${cpu_firing_total} + 0
             ${cpu_alertname_total}=  Evaluate  ${cpu_alertname_cnt} + ${cpu_alertname_total} + 0
-            Run Keywords   Should Contain  ${cpu_alertname_val}  ${CPU_policy}    AND  Log To Console  CPU alert name firing was ${cpu_alertname_val}
-            Log To Console  CPU alert utilization value=${cpu_util_val}% firing value=${cpu_firing_val}%
+            Run Keyword   Should Contain  ${cpu_alertname_val}  ${CPU_policy}
+#            Log To Console  CPU alert name firing was ${cpu_alertname_val}
+#            Log To Console  CPU alert utilization value=${cpu_util_val}% firing value=${cpu_firing_val}%
+            ${cpu_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=cpu  last=1
             END
          ${mem_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${MEM_policy}
          ${len_mem}=  Get Length  ${mem_firing}
@@ -804,8 +818,10 @@ Show Alerts Firing
             ${mem_alertname_val}=  Convert To String  ${mem_firing}[0][data][labels][alertname]
             ${mem_firing_total}=     Evaluate  ${mem_firing_cnt} + ${mem_firing_total} + 0
             ${mem_alertname_total}=  Evaluate  ${mem_alertname_cnt} + ${mem_alertname_total} + 0
-            Run Keywords   Should Contain  ${mem_alertname_val}  ${MEM_policy}    AND  Log To Console  MEM alert name firing was ${mem_alertname_val}
-            Log To Console  MEM alert utilization value=${mem_util_val}% firing value=${mem_firing_val} GB
+            Should Contain  ${mem_alertname_val}  ${MEM_policy}
+ #           Log To Console  MEM alert name firing was ${mem_alertname_val}
+ #           Log To Console  MEM alert utilization value=${mem_util_val}% firing value=${mem_firing_val} GB
+            ${mem_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=mem  last=1
             END
          ${dsk_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${DSK_policy}
          ${len_dsk}=  Get Length  ${dsk_firing}
@@ -817,8 +833,10 @@ Show Alerts Firing
             ${dsk_alertname_val}=  Convert To String  ${dsk_firing}[0][data][labels][alertname]
             ${dsk_firing_total}=     Evaluate  ${dsk_firing_cnt} + ${dsk_firing_total} + 0
             ${dsk_alertname_total}=  Evaluate  ${dsk_alertname_cnt} + ${dsk_alertname_total} + 0
-            Run Keywords   Should Contain  ${dsk_alertname_val}  ${DSK_policy}    AND  Log To Console  DSK alert name firing was ${dsk_alertname_val}
-            Log To Console  DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} GB
+            Should Contain  ${dsk_alertname_val}  ${DSK_policy}
+#            Log To Console  DSK alert name firing was ${dsk_alertname_val}
+#            Log To Console  DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} GB
+            ${dsk_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=disk  last=1
             END
          ${acx_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${ACX_policy}
          ${len_acx}=  Get Length  ${acx_firing}
@@ -830,26 +848,21 @@ Show Alerts Firing
             ${acx_alertname_val}=  Convert To String  ${acx_firing}[0][data][labels][alertname]
             ${acx_firing_total}=     Evaluate  ${acx_firing_cnt} + ${acx_firing_total} + 0
             ${acx_alertname_total}=  Evaluate  ${acx_alertname_cnt} + ${acx_alertname_total} + 0
-            Run Keywords   Should Contain  ${acx_alertname_val}  ${ACX_policy}    AND  Log To Console  ACX alert name firing was ${acx_alertname_val}
-            Log To Console  ACX alert utilization value=${acx_util_val}% firing value=${acx_firing_val} connections
+            Should Contain  ${acx_alertname_val}  ${ACX_policy}
+#            Log To Console  ACX alert name firing was ${acx_alertname_val}
+#            Log To Console  ACX alert utilization value=${acx_util_val}% firing value=${acx_firing_val} connections
+            ${acx_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=connections  last=1
             END
    Sleep  ${poll_time} 
    ${alertname_totals}=     Evaluate  ${cpu_alertname_total} + ${mem_alertname_total} + ${dsk_alertname_total} + ${acx_alertname_total} + 0 
    ${firing_totals}=        Evaluate  ${cpu_firing_total} + ${mem_firing_total} + ${dsk_firing_total} + ${acx_firing_total} + 0
-   Log To Console  ${\n}Waiting Fire>0 for ${CPU_policy}=${cpu_firing_total} ${MEM_policy}=${mem_firing_total} ${DSK_policy}=${dsk_firing_total} ${ACX_policy}=${acx_firing_total} BIGloop ${i}of${loop_c} FT-all=${firing_totals}
-   Log To Console  ${\n}Waiting Name>0 for ${CPU_policy}=${cpu_alertname_total} ${MEM_policy}=${mem_alertname_total} ${DSK_policy}=${dsk_alertname_total} ${ACX_policy}=${acx_alertname_total} BIGloop ${i}of${loop_c} AN-all=${alertname_totals}
+#   Log To Console  ${\n}Waiting Fire>0 for ${CPU_policy}=${cpu_firing_total} ${MEM_policy}=${mem_firing_total} ${DSK_policy}=${dsk_firing_total} ${ACX_policy}=${acx_firing_total} BIGloop ${i}of${loop_c} FT-all=${firing_totals}
+#   Log To Console  ${\n}Waiting Name>0 for ${CPU_policy}=${cpu_alertname_total} ${MEM_policy}=${mem_alertname_total} ${DSK_policy}=${dsk_alertname_total} ${ACX_policy}=${acx_alertname_total} BIGloop ${i}of${loop_c} AN-all=${alertname_totals}
    Exit For Loop If  ${cpu_firing_total} and ${mem_firing_total} and ${dsk_firing_total} and ${acx_firing_total} > 0
    Exit For Loop If  ${cpu_alertname_total} and ${mem_alertname_total} and ${dsk_alertname_total} and ${acx_alertname_total} > 0
    END
     #Get influx metrics to compare to alerts trigger
-    ${cpu_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=cpu  last=1
-    Sleep  1seconds
-    ${mem_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=mem  last=1
-    Sleep  1seconds
-    ${dsk_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=disk  last=1
-    Sleep  1seconds
-    ${acx_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=connections  last=1
-    Log To Console  ${cpu_metrics}
+   Log To Console  ${\n}There should be metrics for cpu mem disk active-connections
        IF  ${cpu_metrics} != {'data': [{'Series': None, 'Messages': None}]}
            ${cpu_metric_name}=  Convert To String  ${cpu_metrics['data'][0]['Series'][0]['columns'][9]}
            ${cpu_metric_val}=  Convert To String  ${cpu_metrics['data'][0]['Series'][0]['values'][0][9]}
@@ -866,152 +879,17 @@ Show Alerts Firing
            ${acx_metric_name}=  Convert To String  ${acx_metrics['data'][0]['Series'][0]['columns'][9]}
            ${acx_metric_val}=  Convert To String  ${acx_metrics['data'][0]['Series'][0]['values'][0][9]}
            END
-         Log To Console  ${\n}There should be metrics 
-         Log To Console  ${cpu_metric_name}=${cpu_metric_val} %
-         Log To Console  ${mem_metric_name}=${mem_metric_val} Bytes
-         Log To Console  ${dsk_metric_name}=${dsk_metric_val} Bytes
-         Log To Console  ${acx_metric_val} active connections
-         Log To Console  ${\n}These results should have triggered all 4 triggers in one test
+#         Log To Console  ${\n}There should be metrics 
+   Log To Console  ${cpu_metric_name}=${cpu_metric_val} %
+   Log To Console  ${mem_metric_name}=${mem_metric_val} Bytes
+   Log To Console  ${dsk_metric_name}=${dsk_metric_val} Bytes
+   Log To Console  ${acx_metric_name}=${acx_metric_val} active connections
+   Log To Console  ${\n}These results triggered ${CPU_policy} ${MEM_policy} ${DSK_policy} ${ACX_policy}
 
    Run Keywords   Should Be True  ${cpu_firing_total} > 0   AND   Log To Console  ${\n}${CPU_policy} alert triggered CPU alert utilization value=${cpu_util_val}% firing value=${cpu_firing_val}%
    Run Keywords   Should Be True  ${mem_firing_total} > 0   AND   Log To Console  ${MEM_policy} alert triggered MEM alert utilization value=${mem_util_val}% firing value=${mem_firing_val} Bytes
    Run Keywords   Should Be True  ${dsk_firing_total} > 0   AND   Log To Console  ${DSK_policy} alert triggered DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} Bytes
    Run Keywords   Should Be True  ${acx_firing_total} > 0   AND   Log To Console  ${ACX_policy} tirigger value active-connections=${acx_util_val} firing value=${acx_firing_val} active connections
-#   Log To Console  ${\n}${CPU_policy} alert triggered CPU alert utilization value=${cpu_util_val}% firing value=${cpu_firing_val}%
-#   Log To Console  ${MEM_policy} alert triggered MEM alert utilization value=${mem_util_val}% firing value=${mem_firing_val} Bytes
-#   Log To Console  ${DSK_policy} alert triggered DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} Bytes
-#   Log To Console  ${ACX_policy} tirigger value active-connections=${acx_util_val} firing value=${acx_firing_val} active connections
-
-Show Alerts Firing Primer
-    Set Suite Variable  ${alertname_totals}   0
-    Set Suite Variable  ${firing_totals}      0
-    Set Suite Variable  ${cpu_firing_total}   0
-    Set Suite Variable  ${mem_firing_total}   0
-    Set Suite Variable  ${dsk_firing_total}   0
-    Set Suite Variable  ${acx_firing_total}   0
-    Set Suite Variable  ${cpu_firing_cnt}     0
-    Set Suite Variable  ${mem_firing_cnt}     0
-    Set Suite Variable  ${dsk_firing_cnt}     0
-    Set Suite Variable  ${acx_firing_cnt}     0
-    Set Suite Variable  ${cpu_firing_val}     0
-    Set Suite Variable  ${mem_firing_val}     0
-    Set Suite Variable  ${dsk_firing_val}     0
-    Set Suite Variable  ${acx_firing_val}     0
-    Set Suite Variable  ${cpu_alertname_total}   0
-    Set Suite Variable  ${mem_alertname_total}   0
-    Set Suite Variable  ${dsk_alertname_total}   0
-    Set Suite Variable  ${acx_alertname_total}   0
-    Set Suite Variable  ${cpu_alertname_cnt}     0
-    Set Suite Variable  ${mem_alertname_cnt}     0
-    Set Suite Variable  ${dsk_alertname_cnt}     0
-    Set Suite Variable  ${acx_alertname_cnt}     0
-    Set Suite Variable  ${cpu_alertname_val}     0
-    Set Suite Variable  ${mem_alertname_val}     0
-    Set Suite Variable  ${dsk_alertname_val}     0
-    Set Suite Variable  ${acx_alertname_val}     0
-    Set Suite Variable  ${loop_c}   5
-    Set Suite Variable  ${loop_20}  20
-    Set Suite Variable  ${primer_poll_time}  35seconds
-   Log To Console  This is a primer to wait for stats in influxdb
-   FOR  ${i}  IN RANGE  ${loop_c}
-   Log To Console  ${\n}Monitoring triggers >=1 ${CPU_policy}=${cpu_firing_total} ${MEM_policy}=${mem_firing_total} ${DSK_policy}=${dsk_firing_total} ${ACX_policy}=${acx_firing_total}
-
-         ${cpu_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${CPU_policy}
-         ${len_cpu}=  Get Length  ${cpu_firing}
-         Sleep  1seconds
-         IF  ${len_cpu} > 0
-            ${cpu_firing_cnt}=     Get Count  ${cpu_firing}$[key][data][state]  firing
-            ${cpu_alertname_cnt}=  Get Count  ${cpu_firing}$[key][data][labels][alertname]  ${CPU_policy}
-            ${cpu_firing_val}=     Convert To String  ${cpu_firing}[0][data][value]
-            ${cpu_alertname_val}=  Convert To String  ${cpu_firing}[0][data][labels][alertname]
-            ${cpu_firing_total}=     Evaluate  ${cpu_firing_cnt} + ${cpu_firing_total} + 0
-            ${cpu_alertname_total}=  Evaluate  ${cpu_alertname_cnt} + ${cpu_alertname_total} + 0
-            Run Keywords   Should Contain  ${cpu_alertname_val}  ${CPU_policy}    AND  Log To Console  CPU alert name firing was ${cpu_alertname_val}
-            Log To Console  CPU alert utilization value=${cpu_util_val}% firing value=${cpu_firing_val}%
-            END
-         ${mem_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${MEM_policy}
-         ${len_mem}=  Get Length  ${mem_firing}
-         Sleep  1seconds
-         IF  ${len_mem} > 0
-            ${mem_firing_cnt}=     Get Count  ${mem_firing}$[key][data][state]  firing
-            ${mem_alertname_cnt}=  Get Count  ${mem_firing}$[key][data][labels][alertname]  ${MEM_policy}
-            ${mem_firing_val}=     Convert To String  ${mem_firing}[0][data][value]
-            ${mem_alertname_val}=  Convert To String  ${mem_firing}[0][data][labels][alertname]
-            ${mem_firing_total}=     Evaluate  ${mem_firing_cnt} + ${mem_firing_total} + 0
-            ${mem_alertname_total}=  Evaluate  ${mem_alertname_cnt} + ${mem_alertname_total} + 0
-            Run Keywords   Should Contain  ${mem_alertname_val}  ${MEM_policy}    AND  Log To Console  MEM alert name firing was ${mem_alertname_val}
-            Log To Console  MEM alert utilization value=${mem_util_val}% firing value=${mem_firing_val} GB
-            END
-         ${dsk_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${DSK_policy}
-         ${len_dsk}=  Get Length  ${dsk_firing}
-         Sleep  1seconds
-         IF  ${len_dsk} > 0
-            ${dsk_firing_cnt}=     Get Count  ${dsk_firing}$[key][data][state]  firing
-            ${dsk_alertname_cnt}=  Get Count  ${dsk_firing}$[key][data][labels][alertname]  ${DSK_policy}
-            ${dsk_firing_val}=     Convert To String  ${dsk_firing}[0][data][value]
-            ${dsk_alertname_val}=  Convert To String  ${dsk_firing}[0][data][labels][alertname]
-            ${dsk_firing_total}=     Evaluate  ${dsk_firing_cnt} + ${dsk_firing_total} + 0
-            ${dsk_alertname_total}=  Evaluate  ${dsk_alertname_cnt} + ${dsk_alertname_total} + 0
-            Run Keywords   Should Contain  ${dsk_alertname_val}  ${DSK_policy}    AND  Log To Console  DSK alert name firing was ${dsk_alertname_val}
-            Log To Console  DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} GB
-            END
-         ${acx_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${ACX_policy}
-         ${len_acx}=  Get Length  ${acx_firing}
-         Sleep  1seconds
-         IF  ${len_acx} > 0
-            ${acx_firing_cnt}=     Get Count  ${acx_firing}$[key][data][state]  firing
-            ${acx_alertname_cnt}=  Get Count  ${acx_firing}$[key][data][labels][alertname]  ${ACX_policy}
-            ${acx_firing_val}=     Convert To String  ${acx_firing}[0][data][value]
-            ${acx_alertname_val}=  Convert To String  ${acx_firing}[0][data][labels][alertname]
-            ${acx_firing_total}=     Evaluate  ${acx_firing_cnt} + ${acx_firing_total} + 0
-            ${acx_alertname_total}=  Evaluate  ${acx_alertname_cnt} + ${acx_alertname_total} + 0
-            Run Keywords   Should Contain  ${acx_alertname_val}  ${ACX_policy}    AND  Log To Console  ACX alert name firing was ${acx_alertname_val}
-            Log To Console  ACX alert utilization value=${acx_util_val}% firing value=${acx_firing_val} connections
-            END
-   Sleep  ${primer_poll_time}
-   ${alertname_totals}=     Evaluate  ${cpu_alertname_total} + ${mem_alertname_total} + ${dsk_alertname_total} + ${acx_alertname_total} + 0
-   ${firing_totals}=        Evaluate  ${cpu_firing_total} + ${mem_firing_total} + ${dsk_firing_total} + ${acx_firing_total} + 0
-   Log To Console  ${\n}Waiting Fire>0 for ${CPU_policy}=${cpu_firing_total} ${MEM_policy}=${mem_firing_total} ${DSK_policy}=${dsk_firing_total} ${ACX_policy}=${acx_firing_total} BIGloop ${i}of${loop_c} FT-all=${firing_totals}
-   Log To Console  ${\n}Monitoring Name>0 for ${CPU_policy}=${cpu_alertname_total} ${MEM_policy}=${mem_alertname_total} ${DSK_policy}=${dsk_alertname_total} ${ACX_policy}=${acx_alertname_total} BIGloop ${i}of${loop_c} AN-all=${alertname_totals}
-   Exit For Loop If  ${cpu_firing_total} and ${mem_firing_total} and ${dsk_firing_total} and ${acx_firing_total} > 0
-   Exit For Loop If  ${cpu_alertname_total} and ${mem_alertname_total} and ${dsk_alertname_total} and ${acx_alertname_total} > 0
-   END
-    #Get influx metrics to compare to alerts trigger
-    ${cpu_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=cpu  last=1
-    Sleep  1seconds
-    ${mem_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=mem  last=1
-    Sleep  1seconds
-    ${dsk_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=disk  last=1
-    Sleep  1seconds
-    ${acx_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=connections  last=1
-    Log To Console  ${cpu_metrics}
-       IF  ${cpu_metrics} != {'data': [{'Series': None, 'Messages': None}]}
-           ${cpu_metric_name}=  Convert To String  ${cpu_metrics['data'][0]['Series'][0]['columns'][9]}
-           ${cpu_metric_val}=  Convert To String  ${cpu_metrics['data'][0]['Series'][0]['values'][0][9]}
-           END
-       IF  ${mem_metrics} != {'data': [{'Series': None, 'Messages': None}]}
-           ${mem_metric_name}=  Convert To String  ${mem_metrics['data'][0]['Series'][0]['columns'][9]}
-           ${mem_metric_val}=  Convert To String  ${mem_metrics['data'][0]['Series'][0]['values'][0][9]}
-           END
-       IF  ${dsk_metrics} != {'data': [{'Series': None, 'Messages': None}]}
-           ${dsk_metric_name}=  Convert To String  ${dsk_metrics['data'][0]['Series'][0]['columns'][9]}
-           ${dsk_metric_val}=  Convert To String  ${dsk_metrics['data'][0]['Series'][0]['values'][0][9]}
-           END
-       IF  ${acx_metrics} != {'data': [{'Series': None, 'Messages': None}]}
-           ${acx_metric_name}=  Convert To String  ${acx_metrics['data'][0]['Series'][0]['columns'][9]}
-           ${acx_metric_val}=  Convert To String  ${acx_metrics['data'][0]['Series'][0]['values'][0][9]}
-           END
-   Log To Console  ${\n}Metrics should be reporting before triggers can be tested
-   Run Keyword If  ${cpu_metric_val} >= 0  Log To Console  ${cpu_metric_name}=${cpu_metric_val} %
-   Run Keyword If  ${mem_metric_val} >= 0  Log To Console  ${mem_metric_name}=${mem_metric_val} Bytes
-   Run Keyword If  ${dsk_metric_val} >= 0  Log To Console  ${dsk_metric_name}=${dsk_metric_val} Bytes
-   Run Keyword If  ${acx_metric_val} >= 0  Log To Console  ${acx_metric_val} active connections
-   Log To Console  ${\n}These results are a primer and should not show Message None error
-   Log To Console  ${\n}Testing output format for trigger value and firing value
-   Log To Console  ${\n}${CPU_policy} alert triggered CPU alert utilization value=${cpu_util_val}% firing value=${cpu_firing_val}%
-   Log To Console  ${MEM_policy} alert triggered MEM alert utilization value=${mem_util_val}% firing value=${mem_firing_val} Bytes
-   Log To Console  ${DSK_policy} alert triggered DSK alert utilization value=${dsk_util_val}% firing value=${dsk_firing_val} Bytes
-   Log To Console  ${ACX_policy} tirigger value active-connections=${acx_util_val} firing value=${acx_firing_val} active connections
 
 Show Alerts Cleared
     Set Suite Variable  ${firing_totals}      0
@@ -1029,7 +907,7 @@ Show Alerts Cleared
     Set Suite Variable  ${acx_firing_val}     0
    Log To Console  Waiting ${alert_clear_delay} before polling
    Sleep  ${alert_clear_delay}
-   FOR  ${i}  IN RANGE  ${loop_10}
+   FOR  ${i}  IN RANGE  ${loop_c}
          ${cpu_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${CPU_policy}
          ${len_cpu}=  Get Length  ${cpu_firing}
          ${mem_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${MEM_policy}
@@ -1038,7 +916,6 @@ Show Alerts Cleared
          ${len_dsk}=  Get Length  ${dsk_firing}
          ${acx_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${ACX_policy}
          ${len_acx}=  Get Length  ${acx_firing}
-
          ${cpu_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${CPU_policy}
          ${len_cpu}=  Get Length  ${cpu_firing}         
          IF  ${len_cpu} <= 0
@@ -1067,18 +944,17 @@ Show Alerts Cleared
             ${acx_firing_val}=     Convert To String  ${acx_firing_cnt}
             ${acx_firing_total}=   Evaluate  ${acx_firing_val} + ${acx_firing_total} + 0
             END
-
-   Log To Console  ${\n}Waiting for alerts to clear ${CPU_policy}=${len_cpu} ${MEM_policy}=${len_mem} ${DSK_policy}=${len_acx} ${ACX_policy}=${len_acx} loop ${i} of ${loop_10}
-   ${firing_totals}=         Evaluate   ${cpu_firing_total} + ${mem_firing_total} + ${dsk_firing_total} + ${acx_firing_total} + 0
+         ${cpu_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=cpu  last=1
+         ${mem_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=mem  last=1
+         ${dsk_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=disk  last=1
+         ${acx_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=connections  last=1
+#   Log To Console  ${\n}Waiting for alerts to clear ${CPU_policy}=${len_cpu} ${MEM_policy}=${len_mem} ${DSK_policy}=${len_dsk} ${ACX_policy}=${len_acx} loop ${i} of ${loop_c}
+   ${firing_totals}=   Evaluate   ${cpu_firing_total} + ${mem_firing_total} + ${dsk_firing_total} + ${acx_firing_total} + 0
    Exit For Loop If  ${firing_totals} <= 0
    Sleep  ${poll_time}
    END
    #Check influx metrics values - note trigger time being over the value set is checked by polling this is just informational at this point
-    ${cpu_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=cpu  last=1
-    ${mem_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=mem  last=1
-    ${dsk_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=disk  last=1
-    ${acx_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=connections  last=1
-   FOR  ${i}  IN RANGE  ${loop_10}
+   Log To Console  ${\n}These are the metrics at time of clear for cpu mem disk active-connections
        IF  ${cpu_metrics} != {'data': [{'Series': None, 'Messages': None}]}
            ${cpu_metric_name}=  Convert To String  ${cpu_metrics['data'][0]['Series'][0]['columns'][9]}
            ${cpu_metric_val}=  Convert To String  ${cpu_metrics['data'][0]['Series'][0]['values'][0][9]}
@@ -1095,18 +971,49 @@ Show Alerts Cleared
            ${acx_metric_name}=  Convert To String  ${acx_metrics['data'][0]['Series'][0]['columns'][9]}
            ${acx_metric_val}=  Convert To String  ${acx_metrics['data'][0]['Series'][0]['values'][0][9]}
            END
-   Exit For Loop If  ${cpu_metrics} and ${mem_metrics} and ${dsk_metrics} and ${acx_metrics} != {'data': [{'Series': None, 'Messages': None}]}
+
+   Run Keywords   Should Be True  ${cpu_firing_total} <= 0   AND   Log To Console  ${\n}${cpu_metric_name}=${cpu_metric_val} %
+   Run Keywords   Should Be True  ${mem_firing_total} <= 0   AND   Log To Console  ${mem_metric_name}=${mem_metric_val} Bytes
+   Run Keywords   Should Be True  ${dsk_firing_total} <= 0   AND   Log To Console  ${dsk_metric_name}=${dsk_metric_val} Bytes
+   Run Keywords   Should Be True  ${acx_firing_total} <= 0   AND   Log To Console  ${acx_metric_name}=${acx_metric_val} active connections
+
+Show Disk Alert Cleared
+    Set Suite Variable  ${firing_totals}      0
+    Set Suite Variable  ${dsk_firing_total}   0
+    Set Suite Variable  ${dsk_firing_cnt}     0
+    Set Suite Variable  ${dsk_firing_val}     0
+   Log To Console  Waiting ${alert_clear_delay} before polling
+   Sleep  ${alert_clear_delay}
+   FOR  ${i}  IN RANGE  ${loop_10}
+         ${dsk_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${DSK_policy}
+         ${len_dsk}=  Get Length  ${dsk_firing}
+
+         ${dsk_firing}=  Run Keyword  Show Alerts  token=${super_token}  region=${region}  alert_name=${DSK_policy}
+         ${len_dsk}=  Get Length  ${dsk_firing}
+         IF  ${len_dsk} <= 0
+            ${dsk_firing_cnt}=     Get Count  ${dsk_firing}$[key][data][state]  firing
+            ${dsk_firing_val}=     Convert To String  ${dsk_firing_cnt}
+            ${dsk_firing_total}=   Evaluate  ${dsk_firing_val} + ${dsk_firing_total} + 0
+            END
+
+#   Log To Console  ${\n}Waiting for disk alert to clear ${DSK_policy}=${len_dsk} loop ${i} of ${loop_c}
+   ${firing_totals}=         Evaluate   ${dsk_firing_total} + 0
+   Exit For Loop If  ${firing_totals} <= 0
    Sleep  ${poll_time}
    END
-    Run Keywords   Should Be True  ${cpu_firing_total} <= 0   AND   Log To Console  ${\n}${cpu_metric_name}=${cpu_metric_val}
-    Run Keywords   Should Be True  ${mem_firing_total} <= 0   AND   Log To Console  ${mem_metric_name}=${mem_metric_val}
+   #Check influx metrics values - note trigger time being over the value set is checked by polling this is just informational at this point
+    ${dsk_metrics}=  Run Keyword  Get App Metrics  token=${super_token}  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  operator_org_name=${operator_name_crm}  cloudlet_name=${cloudlet_name_crm}  selector=disk  last=1
+   FOR  ${i}  IN RANGE  ${loop_c}
+       IF  ${dsk_metrics} != {'data': [{'Series': None, 'Messages': None}]}
+           ${dsk_metric_name}=  Convert To String  ${dsk_metrics['data'][0]['Series'][0]['columns'][9]}
+           ${dsk_metric_val}=  Convert To String  ${dsk_metrics['data'][0]['Series'][0]['values'][0][9]}
+           END
+   Exit For Loop If  ${dsk_metrics} != {'data': [{'Series': None, 'Messages': None}]}
+   Sleep  ${poll_time}
+   END
     Run Keywords   Should Be True  ${dsk_firing_total} <= 0   AND   Log To Console  ${dsk_metric_name}=${dsk_metric_val}
-    Run Keywords   Should Be True  ${acx_firing_total} <= 0   AND   Log To Console  ${acx_metric_name}=${acx_metric_val}
 
-    Log To Console  ${\n}${CPU_policy} alert cleared CPU alert utilization value=${cpu_util_val}% cleared ${cpu_metric_name}=${cpu_metric_val} %
-    Log To Console  ${MEM_policy} alert cleared MEM alert utilization value=${mem_util_val}% cleared ${mem_metric_name}=${mem_metric_val} Bytes
     Log To Console  ${DSK_policy} alert cleared DSK alert utilization value=${dsk_util_val}% cleared ${dsk_metric_name}=${dsk_metric_val} Bytes
-    Log To Console  ${ACX_policy} alert cleared ACX alert active-connections=${acx_util_val} cleared ${acx_metric_name}=${acx_metric_val} active connections
 
 Set Variable Pass
   Set Suite Variable  ${alert_pass}       1
