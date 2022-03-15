@@ -624,7 +624,8 @@ class RunCommand():
         #self.run_command = runcommand_dict
 
 class AutoScalePolicy():
-    def __init__(self, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, include_fields=False, use_defaults=True):
+    def __init__(self, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None,
+                  stabilizationWindow=None, include_fields=False, use_defaults=True, targetCPU=None, targetMemory=None, targetActiveConnections=None):
 
         self.policy = None
 
@@ -634,7 +635,10 @@ class AutoScalePolicy():
         self.max_nodes = max_nodes
         self.scale_up_cpu_threshold = scale_up_cpu_threshold
         self.scale_down_cpu_threshold = scale_down_cpu_threshold
-        self.trigger_time = trigger_time
+        self.stabilizationWindow = stabilizationWindow
+        self.targetCPU = targetCPU
+        self.targetMemory = targetMemory
+        self.targetActiveConnections = targetActiveConnections
 
         _fields_list = []
         _developer_field_number = "2.1"
@@ -643,7 +647,11 @@ class AutoScalePolicy():
         _max_nodes_field_number = "4"
         _scale_up_cpu_threshold_field_number = "5"
         _scale_down_cpu_threshold_field_number = "6"
-        _trigger_time_field_number = "7"
+        _stabilization_window = "7"
+        _target_CPU = "8"
+        _target_Memory = "9"
+        _target_activeconnections = "10"
+        #_trigger_time_field_number = "7"
                 
         if policy_name == 'default':
             self.policy_name = shared_variables.autoscalepolicy_name_default
@@ -655,7 +663,7 @@ class AutoScalePolicy():
             if max_nodes is None: self.max_nodes = 2
             if scale_up_cpu_threshold is None: self.scale_up_cpu_threshold = 50
             if scale_down_cpu_threshold is None: self.scale_down_cpu_threshold = 40
-            if trigger_time is None: self.trigger_time = 30
+            if stabilizationWindow is None: self.stabilizationWindow = 30
 
         policy_dict = {}
         policy_key_dict = {}
@@ -686,9 +694,21 @@ class AutoScalePolicy():
             policy_dict['scale_down_cpu_thresh'] = int(self.scale_down_cpu_threshold)
             _fields_list.append(_scale_down_cpu_threshold_field_number)
             
-        if self.trigger_time is not None:
-            policy_dict['trigger_time_sec'] = int(self.trigger_time)
-            _fields_list.append(_trigger_time_field_number)
+        if self.stabilizationWindow is not None:
+            policy_dict['stabilization_window'] = int(self.stabilizationWindow)
+            _fields_list.append(_stabilization_window)
+
+        if self.targetCPU is not None:
+            policy_dict['target_CPU'] = int(self.targetCPU)
+            _fields_list.append(_target_CPU)
+
+        if self.targetMemory is not None:
+            policy_dict['target_Memory'] = int(self.targetMemory)
+            _fields_list.append(_target_Memory)
+
+        if self.targetActiveConnections is not None:
+            policy_dict['target_ActiveConnections'] = int(self.targetActiveConnections)
+            _fields_list.append(_target_activeconnections)
         
         if include_fields and _fields_list:
             policy_dict['fields'] = []
