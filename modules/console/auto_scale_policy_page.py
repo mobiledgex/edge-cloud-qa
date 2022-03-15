@@ -17,6 +17,17 @@ class AutoScalePolicyPage(ComputePage):
 
         return False
 
+    def perform_search(self, searchstring):
+        time.sleep(1)
+        logging.info("Clicking Search button and performing search for value - " + searchstring)
+        we = self.driver.find_element(*AutoScalePolicyPageLocators.searchbutton)
+        ActionChains(self.driver).click(on_element=we).perform()
+        time.sleep(1)
+        we_Input = self.driver.find_element(*AutoScalePolicyPageLocators.searchInput)
+        self.driver.execute_script("arguments[0].value = '';", we_Input)
+        we_Input.send_keys(searchstring)
+        time.sleep(1)
+
     def wait_for_policy(self, region=None, developer_org_name=None, policy_name=None, min_nodes=None, max_nodes=None,  wait=3):
         logging.info(f'wait_for_app region={region} developer_org_name={developer_org_name} policy_name={policy_name} min_nodes={min_nodes} max_nodes={max_nodes}')
 
@@ -35,19 +46,14 @@ class AutoScalePolicyPage(ComputePage):
 
     def delete_autoscalepolicy(self, region=None, developer_org_name=None, policy_name=None):
         logging.info(f'deleting Auto Scale Policy policy_name={policy_name}')
-        totals_rows = self.driver.find_elements(*ComputePageLocators.details_row)
-        total_rows_length = len(totals_rows)
-        total_rows_length += 1
-        for row in range(1, total_rows_length):
-            table_column =  f'//tbody/tr[{row}]/td[4]/div'
-            value = self.driver.find_element_by_xpath(table_column).text
-            if value == policy_name:
-                i = row
-                break
 
-        table_action = f'//tbody/tr[{i}]/td[7]//button[@aria-label="Action"]'
-        e = self.driver.find_element_by_xpath(table_action)
+        self.perform_search(policy_name)
+        row = self.get_table_row_by_value([(policy_name, 4)])
+        print('*WARN*', 'row = ', row)
+        e = row.find_element(*ComputePageLocators.table_action)
         ActionChains(self.driver).click(on_element=e).perform()
         self.driver.find_element(*ComputePageLocators.table_delete).click()
-        self.driver.find_element(*DeleteConfirmationPageLocators.yes_button).click()    
+
+        time.sleep(1)
+        row.find_element(*DeleteConfirmationPageLocators.yes_button).click()
 
