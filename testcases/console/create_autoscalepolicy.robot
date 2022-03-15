@@ -3,7 +3,7 @@ Documentation   Create new Auto Scale Policy
 Library         MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
 Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
 Test Setup      Setup
-Test Teardown   Close Browser
+Test Teardown   Teardown
 
 Test Timeout    40 minutes
 
@@ -20,16 +20,15 @@ Web UI - User shall be able to create an Auto Scale Policy
     ...  Create a new Auto Scale Policy
     ...  Verify Policy details in backend
 
-    Add New Autoscalepolicy  region=EU  developer_org_name=${developer_name}  policy_name=${policy_name}
+    Add New Autoscalepolicy  region=EU  developer_org_name=${developer_name}  policy_name=${policy_name}  targetCPU=2
 
-    Autoscalepolicy Should Exist  change_rows_per_page=True
+    Autoscalepolicy Should Exist  policy_name=${policy_name}
 
-    ${policy_details}=    Show Autoscale Policy  region=EU  policy_name=${policy_name}
+    ${policy_details}=    Show Autoscale Policy  region=EU  policy_name=${policy_name}  developer_org_name=${developer_name}
     Should Be Equal As Integers  ${policy_details[0]['data']['min_nodes']}  1
     Should Be Equal As Integers  ${policy_details[0]['data']['max_nodes']}   2
-    Should Be Equal As Integers  ${policy_details[0]['data']['scale_up_cpu_thresh']}  50
-    Should Be Equal As Integers  ${policy_details[0]['data']['scale_down_cpu_thresh']}  40
-    Should Be Equal As Integers  ${policy_details[0]['data']['trigger_time_sec']}  30
+    Should Be Equal As Integers  ${policy_details[0]['data']['stabilization_window_sec']}  30
+    Should Be Equal As Integers  ${policy_details[0]['data']['target_cpu']}  2
 
     MexConsole.Delete Autoscalepolicy 
 
@@ -47,3 +46,4 @@ Setup
 
 Teardown
     Close Browser
+    Run Keyword and Ignore Error  MexMasterController.Delete Autoscale policy  policy_name=${policy_name}  region=EU
