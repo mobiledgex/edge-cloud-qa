@@ -26,6 +26,7 @@ class AutoScalePolicy(MexOperation):
         scale_down_cpu_threshold = scale_down_cpu_threshold
         trigger_time = trigger_time
 
+
         _fields_list = []
         _developer_field_number = "2.1"
         _name_field_number = "2.2"
@@ -58,6 +59,7 @@ class AutoScalePolicy(MexOperation):
             if trigger_time is None:
                 trigger_time = 30
 
+
         policy_dict = {}
         policy_key_dict = {}
         if policy_name is not None:
@@ -87,27 +89,6 @@ class AutoScalePolicy(MexOperation):
             except Exception:
                 policy_dict['max_nodes'] = max_nodes
             _fields_list.append(_max_nodes_field_number)
-
-        if scale_up_cpu_threshold is not None:
-            try:
-                policy_dict['scale_up_cpu_thresh'] = int(scale_up_cpu_threshold)
-            except Exception:
-                policy_dict['scale_up_cpu_thresh'] = scale_up_cpu_threshold
-            _fields_list.append(_scale_up_cpu_threshold_field_number)
-
-        if scale_down_cpu_threshold is not None:
-            try:
-                policy_dict['scale_down_cpu_thresh'] = int(scale_down_cpu_threshold)
-            except Exception:
-                policy_dict['scale_down_cpu_thresh'] = scale_down_cpu_threshold
-            _fields_list.append(_scale_down_cpu_threshold_field_number)
-
-        if trigger_time is not None:
-            try:
-                policy_dict['trigger_time_sec'] = int(trigger_time)
-            except Exception:
-                policy_dict['trigger_time_sec'] = trigger_time
-            _fields_list.append(_trigger_time_field_number)
 
         if target_cpu is not None:
             try:
