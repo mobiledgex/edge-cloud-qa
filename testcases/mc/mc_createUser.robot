@@ -239,6 +239,22 @@ MC - User shall not be able to create the user with a weak password
 
 	Run Keyword and Expect Error  ('code=400', 'error={"message":"Password too weak, requires crack time 31.0 days but is less than a second. Please increase length or complexity"}')  Create User   username=myusername    password=password123    email_address=xy@xy.com   use_defaults=${False}
 
+# ECQ-4424
+MC - User shall be able to create/delete/create the same user
+    [Documentation]
+    ...  - create a user
+    ...  - delete the user
+    ...  - create the same user again
+    ...  - verify the same user is created successfully
+
+    ${epoch}=  Get Current Date  result_format=epoch
+    ${name}=  Set Variable  user${epoch}
+    ${email}=  Set Variable  user+${epoch}@mail.com
+
+    Create User  username=${name}  password=${password}  email_address=${email}
+    Delete User  username=${name}
+    Create User  username=${name}  password=${password}  email_address=${email}
+
 # ECQ-2981
 MC - User shall be able to create a new user with all TLDs
         [Documentation]
