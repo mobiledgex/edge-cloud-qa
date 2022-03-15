@@ -286,10 +286,10 @@ DeleteApiKey - mcctl shall handle a deleteuserapikey failure
       Missing API key ID                        apikeyid=         token=${devmgrtoken}
       API key ID not found                      apikeyid=xxxx     token=${devmgrtoken}        #/EDGECLOUD-6212
 
-# 
+# ECQ-4425
 DeleteApiKey - mcctl shall not allow a user's apikey to be deleted by another user
    [Documentation]
-   ...  - send Fail Delete User ApiKey Via mcctl with various missing/bad parms 
+   ...  - send  Fail Delete Another Users ApiKey Via mcctl with two tokens with parms 
    ...  - verify the correct error message is received
 
    [Template]  Fail Delete Another Users ApiKey Via mcctl
