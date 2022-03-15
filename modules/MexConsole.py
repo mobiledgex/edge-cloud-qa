@@ -1510,22 +1510,26 @@ class MexConsole() :
 
         self.take_screenshot('add_new_privacypolicy_post')
 
-    def add_new_autoscalepolicy(self, region=None, developer_org_name=None, policy_name=None, min_nodes=None, max_nodes=None, scale_down_threshold=None, scale_up_threshold=None, trigger_time=None):
+    def add_new_autoscalepolicy(self, region=None, developer_org_name=None, policy_name=None, min_nodes=None, max_nodes=None, scale_down_threshold=None, scale_up_threshold=None,
+                                stabilizationwindow=None, targetCPU=None, targetMemory=None, targetActiveConnections=None):
         self.take_screenshot('add_new_autoscalepolicy_pre')
 
-        self.compute_page.click_new_button()
+        self.compute_page.click_add_button()
       
         if self.new_autoscalepolicy_page.are_elements_present():
             logging.info('click New Auto Scale Policy button verification succeeded')
         else:
             raise Exception('click New Auto Scale Policy button verification failed')
 
-        policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_threshold, scale_down_cpu_threshold=scale_down_threshold, trigger_time=trigger_time).policy
+        policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_threshold, scale_down_cpu_threshold=scale_down_threshold,
+                                 stabilizationWindow=stabilizationwindow, targetCPU=targetCPU, targetMemory=targetMemory, targetActiveConnections=targetActiveConnections).policy
         logging.info(f'Policy is {policy}')
         self._policy = policy
         self._region = region
 
-        if self.new_autoscalepolicy_page.create_policy(region=region, developer_org_name=policy['key']['organization'], policy_name=policy['key']['name'], min_nodes=policy['min_nodes'], max_nodes=policy['max_nodes'], scale_down_threshold=policy['scale_down_cpu_thresh'], scale_up_threshold=policy['scale_up_cpu_thresh'], trigger_time=policy['trigger_time_sec']):
+        if self.new_autoscalepolicy_page.create_policy(region=region, developer_org_name=policy['key']['organization'], policy_name=policy['key']['name'], min_nodes=policy['min_nodes'], max_nodes=policy['max_nodes'], scale_down_threshold=policy['scale_down_cpu_thresh'], scale_up_threshold=policy['scale_up_cpu_thresh'],
+                        stabilization_window=policy['stabilization_window'], targetCPU=targetCPU,
+                        targetMemory=targetMemory, targetActiveConnectiobs=targetActiveConnections):
             logging.info('create New Auto Scale Policy succeeded')
         else:
             raise Exception('did NOT create')
@@ -1695,8 +1699,6 @@ class MexConsole() :
             raise Exception('Policy NOT found')
 
     def autoscalepolicy_should_exist(self, region=None, developer_org_name=None, policy_name=None, min_nodes=None, max_nodes=None, change_rows_per_page=False):
-        if change_rows_per_page:
-            self.change_number_of_rows()
         self.take_screenshot('autoscalepolicy_should_exist_pre')
 
         if region is None: region = self._region
@@ -1705,6 +1707,7 @@ class MexConsole() :
         if min_nodes is None: min_nodes = self._policy['min_nodes']
         if max_nodes is None: max_nodes = self._policy['max_nodes']
 
+        self.autoscalepolicy_page.perform_search(policy_name)
         if self.autoscalepolicy_page.wait_for_policy(region=region, developer_org_name=developer_org_name, policy_name=policy_name, min_nodes=min_nodes, max_nodes=max_nodes):
             logging.info('Policy found')
         else:
@@ -1835,8 +1838,6 @@ class MexConsole() :
                 raise Exception('Failure alert box not found')
     
     def delete_autoscalepolicy(self, region=None, developer_org_name=None, policy_name=None, change_rows_per_page=False):
-        if change_rows_per_page:
-            self.change_number_of_rows()
         self.take_screenshot('delete_autoscalepolicy_pre')
         if region is None: region = self._region
         if policy_name is None: policy_name = self._policy['key']['name']
