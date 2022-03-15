@@ -239,8 +239,6 @@ MC - Verify view apikey permissions
    ${perm0act}=    Set Variable    view      #action
    ${perm0res}=    Set Variable    users     #resource
    ${permlist}=    Create List     ${perm0act}  ${perm0res} 
-   ${role1}=       Set Variable    DeveloperViewer
-   ${role2}=       Set Variable    OperatorViewer
    
 	
    ${devtoken}=     Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
@@ -264,8 +262,8 @@ MC - Verify view apikey permissions
 
    Delete User Api Key  apikey_id=${resp['Id']}   token=${devtoken}   use_defaults=${False}
 
-   ${apikeytoken}=     Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
-   ${resp1}=  Create User Api Key  organization=${oporg}   description=${desc}   token=${apikeytoken}  permission_list=${permlist}  use_defaults=${False}
+   ${optoken}=     Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
+   ${resp1}=  Create User Api Key  organization=${oporg}   description=${desc}   token=${optoken}   permission_list=${permlist}   use_defaults=${False}
    Should Contain  ${resp1}   ${key}
    Should Contain  ${resp1}   ${keyid}
 
@@ -279,11 +277,11 @@ MC - Verify view apikey permissions
    Should Contain   ${cloudlets1}   code=403
    Should Contain   ${cloudlets1}   Forbidden
 
-   ${poollist}=     Run Keyword and Expect Error  *   Show Cloudlet Pool   region=US  
+   ${poollist}=     Run Keyword and Expect Error  *   Show Cloudlet Pool   region=US  token=${apikeytoken}
    Should Contain   ${poollist}   code=403
    Should Contain   ${poollist}   Forbidden
 
-   Delete User Api Key  apikey_id=${resp1['Id']}   token=${devtoken}   use_defaults=${False}
+   Delete User Api Key  apikey_id=${resp1['Id']}   token=${optoken}   use_defaults=${False}
 
 # ECQ-4383
 MC - Verify manage apikey permissions
@@ -329,32 +327,32 @@ MC - Verify manage apikey permissions
    ${perm0res}=       Set Variable    cloudlets     #resource
    ${permlist}=       Create List     ${perm0act}  ${perm0res} 
 
-   ${apikeytoken}=     Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
-   ${resp1}=  Create User Api Key  organization=tmus   description=${desc}   token=${apikeytoken}  permission_list=${permlist}  use_defaults=${False}
+   ${optoken}=     Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
+   ${resp1}=  Create User Api Key  organization=tmus   description=${desc}   token=${optoken}  permission_list=${permlist}  use_defaults=${False}
    Should Contain  ${resp1}   ${key}
    Should Contain  ${resp1}   ${keyid}
 
    ${apikeytoken}=  Login   apikey_id=${resp1['Id']}   apikey=${resp1['ApiKey']}
    Should Not Be Empty   ${apikeytoken}
 
-   ${cloudlet}=  Create Cloudlet   region=US  operator_org_name=${oporg}   cloudlet_name=${cldlet}   number_dynamic_ips=256     latitude=35     longitude=-96  ip_support=IpSupportDynamic    static_ips=30.30.30.1   auto_delete=${False}
+   ${cloudlet}=  Create Cloudlet   region=US  operator_org_name=${oporg}   cloudlet_name=${cldlet}   number_dynamic_ips=256     latitude=35     longitude=-96  ip_support=IpSupportDynamic    static_ips=30.30.30.1   token=${apikeytoken}   auto_delete=${False}
    Should Contain   ${cloudlet['data']['created_at']}   ${current_date}
    Should Be True  'updated_at' in ${cloudlet['data']}
 
-   ${cloudlets}=  Show Cloudlets   region=US   operator_org_name=${oporg}   cloudlet_name=${cldlet} 
+   ${cloudlets}=  Show Cloudlets   region=US   operator_org_name=${oporg}   cloudlet_name=${cldlet}   token=${apikeytoken}
    Should Contain    ${cloudlets[0]['data']['key']['name']}    ${cldlet}     
    Should Contain    ${cloudlets[0]['data']['key']['organization']}    ${oporg}    
 	
 
-   Delete Cloudlet     region=US    operator_org_name=${oporg}       cloudlet_name=${cldlet}
-   ${cloudlets}=  Show Cloudlets   region=US   operator_org_name=${oporg}   cloudlet_name=${cldlet} 
+   Delete Cloudlet     region=US    operator_org_name=${oporg}       cloudlet_name=${cldlet}    token=${apikeytoken}
+   ${cloudlets}=  Show Cloudlets   region=US   operator_org_name=${oporg}   cloudlet_name=${cldlet}    token=${apikeytoken}
    Should Be Empty    ${cloudlets}     
 
-   ${poollist}=   Run Keyword and Expect Error  *  Show Cloudlet Pool   region=US  
+   ${poollist}=   Run Keyword and Expect Error  *  Show Cloudlet Pool   region=US   token=${apikeytoken}
    Should Contain   ${poollist}   code=403
    Should Contain   ${poollist}   Forbidden
 
-   Delete User Api Key  apikey_id=${resp1['Id']}   token=${devtoken}   use_defaults=${False}
+   Delete User Api Key  apikey_id=${resp1['Id']}   token=${optoken}   use_defaults=${False}
 
 # ECQ-4384
 MC - Verify valid viewer permissions are returned
