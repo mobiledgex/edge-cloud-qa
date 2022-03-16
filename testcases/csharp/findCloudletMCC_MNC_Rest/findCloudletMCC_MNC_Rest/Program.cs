@@ -31,7 +31,7 @@ namespace RestSample
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
             dict["DataNetworkPath"] = carrierInfo.GetDataNetworkPath();
-            dict["CarrierName"] = carrierInfo.GetCurrentCarrierName();
+            dict["CarrierName"] = carrierInfo.GetMccMnc();
             dict["SignalStrength"] = carrierInfo.GetSignalStrength().ToString();
             dict["DeviceModel"] = "C#SDK";
             dict["DeviceOS"] = "TestOS";
@@ -54,12 +54,12 @@ namespace RestSample
 
         public string GetCurrentCarrierName()
         {
-            return "26201";
+            return "31031";
         }
 
         public string GetMccMnc()
         {
-            return "26201";
+            return "31031";
         }
 
         public string GetDataNetworkPath()
@@ -76,7 +76,7 @@ namespace RestSample
     class Program
     {
         static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
-        static string carrierName = "26211";
+        static string carrierName = "31031";
         //static string appName = "EmptyMatchEngineApp";
         //static string devName = "EmptyMatchEngineApp";
         static string orgName = "automation_dev_org";
