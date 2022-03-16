@@ -30,6 +30,8 @@ ${docker_node}=      docker-cluster-node
 ${status_active}=  ACTIVE
 ${status_off}=     SHUTOFF
 ${status_error}=   ERROR
+${status_p_on}=    POWERED_ON
+${status_p_off}=   POWERED_OFF
 #name changes used checking old load
 ${type_rlb_old}=  rootlb
 ${platform_old}=  platform
@@ -87,7 +89,7 @@ Resources Snapshot Via mcctl
    ${cloudlet_lb}=  Catenate  SEPARATOR=.  ${cloudlet_parms}  ${org_parms}  ${mobiledgex_domain}
    ${cloudlet_lb}=  Convert To Lowercase  ${cloudlet_lb}
    Set Test Variable  ${cloudlet_lb}
-   @{node_status}=  Create List   ${status_active}  ${status_off}  ${status_error}
+   @{node_status}=  Create List   ${status_active}  ${status_off}  ${status_error}  ${status_p_on}  ${status_p_off}
    
    Dictionary Should Contain Key  ${cloudlet_info[0]}  resources_snapshot
    Should Be Equal  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][0]['name']}  ${cloudlet_pf}
@@ -119,8 +121,8 @@ Cluster Resources Snapshot Via mcctl
 
    @{type_error}=  Create List   ${type_unknown}  ${ip_none}
    Should Be True  len(@{type_error}) >= 2
-   @{node_status}=  Create List   ${status_active}  ${status_off}  ${status_error}
-   Should Be True  len(@{node_status}) >= 3
+   @{node_status}=  Create List   ${status_active}  ${status_off}  ${status_error}  ${status_p_on}  ${status_p_off}
+   Should Be True  len(@{node_status}) >= 5
    @{type_old}=  Create List   ${type_rlb_old}  ${master_old}  ${node_k8s_old} 
    Should Be True  len(@{type_old}) >= 3
    @{type_new}=  Create List   ${type_drlb}  ${k8s_master}  ${k8s_node}  ${type_drlb}
@@ -129,7 +131,7 @@ Cluster Resources Snapshot Via mcctl
    Dictionary Should Contain Key  ${cluster_info[0]}  resources
    Should Be Equal  ${cluster_info[0]['key']['cloudlet_key']['name']}  ${cloudlet_parms}
    Should Be Equal  ${cluster_info[0]['key']['cloudlet_key']['organization']}  ${org_parms}
-   Should Contain Any  ${cluster_info[0]['resources']['vms'][0]['status']} IN  @{node_status}
+   Should Contain Any  ${cluster_info[0]['resources']['vms'][0]['status']}  IN  @{node_status}
    Should Contain Any  ${cluster_info[0]['resources']['vms'][0]['type']}  IN  @{type_new}   # OR  @{type_old}  OR  @{type_error}
    Should Contain Any  ${cluster_info[0]['resources']['vms'][1]['type']}  IN  @{type_new}   # OR  @{type_old}  OR  @{type_error} 
    Should Contain Any  ${cluster_info[0]['resources']['vms'][2]['type']}  IN  @{type_new}   # OR  @{type_old}  OR  @{type_error} 
