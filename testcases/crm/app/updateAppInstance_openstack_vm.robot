@@ -207,7 +207,7 @@ User shall be able to reboot VM based App Inst with AccessTypeLoadBalancer
     ${version_default}=  Get Default App Version
 
     ${developer_name_default}=  Replace String  ${developer_name_default}  _  -
-    ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
+    ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}-${cloudlet_name_crm}-${operator_name_crm}
     ${vm}=  Remove String  ${vm}  .
 
     Log To Console  Creating App and App Instance
