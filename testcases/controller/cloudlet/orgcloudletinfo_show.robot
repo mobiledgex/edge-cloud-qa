@@ -69,6 +69,7 @@ Operator shall not be able to see all orgcloudletinfo data
         Should Be Equal  ${cloudlet['resources_snapshot']['platform_vms']}   ${None}
         Should Be Equal  ${cloudlet['resources_snapshot']['vm_app_insts']}   ${None}
 
+        Should Not Contain  ${cloudlet}  controller
     END
 
 Developer shall not be able to see orgcloudletinfo data

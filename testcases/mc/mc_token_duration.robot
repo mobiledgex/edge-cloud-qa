@@ -79,7 +79,7 @@ MC - Websocket token shall expire based on WebsocketTokenValidDuration config va
     Sleep  1m10s
     ${deverror}=  Run Keyword and Expect Error  *  Create App Instance  region=US  token=${devtoken}  websocket_token=${dev_wstoken}  app_name=${app_name_automation}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autoclusterws
 
-    Should Contain  ${deverror}  ('code=400', 'error={"message":"Token is expired by 1
+    Should Contain  ${deverror}  ('code=400', 'error={"code":400,"data":{"message":"Invalid or expired jwt"}}\\n')
  
 *** Keywords ***
 Setup
