@@ -275,7 +275,7 @@ class tc_getqospositionkpi_ratelimit(unittest.TestCase):
 
         expect(self.success_count > 100, 'number of successes')
         expect(self.fail_count < 400, 'number of failures')
-        expect(endtime - starttime > 60, 'time diff')
+        expect(endtime - starttime > 50, 'time diff')
         for f in fail_list:
             correct_error = False
             r = json.loads(f)
@@ -306,7 +306,7 @@ class tc_getqospositionkpi_ratelimit(unittest.TestCase):
 
         expect(self.success_count > 100, 'number of successes')
         expect(self.fail_count < 400, 'number of failures')
-        expect(endtime - starttime > 60, 'time diff')
+        expect(endtime - starttime > 50, 'time diff')
         for f in fail_list:
             correct_error = False
             r = json.loads(f)
