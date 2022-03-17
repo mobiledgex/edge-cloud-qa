@@ -6,7 +6,7 @@ Library  String
 Library  Collections
 
 Test Setup      Setup
-Test Teardown   Cleanup provisioning
+#Test Teardown   Cleanup provisioning
 
 Test Timeout    50 min 
 	
@@ -67,8 +67,8 @@ RunCommand - k8s shared shall return command result on CRM
     Should Start With  ${stdout_id}  ${app_inst['data']['key']['app_key']['name']}
     Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
 
-    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
-    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+    Should Contain  ${stdout_nobash_2}  starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+    Should Contain  ${stdout_nobash_1}  starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
 
     @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
     @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
@@ -135,8 +135,8 @@ RunCommand - k8s dedicated shall return command result on CRM
     Should Start With  ${stdout_id}  ${app_inst['data']['key']['app_key']['name']}
     Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
 
-    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
-    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+    Should Contain  ${stdout_nobash_2}  starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+    Should Contain  ${stdout_nobash_1}  starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
 
     @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
     @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
@@ -200,8 +200,8 @@ RunCommand - docker dedicated shall return command result on CRM
     Should Start With  ${stdout_id}    mex-docker-vm-${cloudlet_name_lc}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']} 
     Should Contain   ${error}  Error: No such container: notfound 
 
-    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\n
-    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\n
+    Should Contain  ${stdout_nobash_2}  starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\n
+    Should Contain  ${stdout_nobash_1}  starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\n
 
     @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
     @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
@@ -265,8 +265,8 @@ RunCommand - docker shared shall return command result on CRM
     Should Start With  ${stdout_id}    mex-docker-vm-${cloudlet_name_lc}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}
     Should Contain   ${error}  Error: No such container: notfound
 
-    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\n
-    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\n
+    Should Contain  ${stdout_nobash_2}  starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\n
+    Should Contain  ${stdout_nobash_1}  starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\n
 
     @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
     @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
@@ -356,8 +356,8 @@ RunCommand - docker autocluster shall return command result on CRM
     Should Start With  ${stdout_id}    mex-docker-vm-${cloudlet_name_lc}-reservable
     Should Contain   ${error}  Error: No such container: notfound
 
-    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\n
-    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\n
+    Should Contain  ${stdout_nobash_2}  starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\n
+    Should Contain  ${stdout_nobash_1}  starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\n
 
     @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
     @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
@@ -420,8 +420,8 @@ RunCommand - k8s autocluster shall return command result on CRM
     Should Start With  ${stdout_id}  ${app_inst['data']['key']['app_key']['name']}
     Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
 
-    Should Be Equal  ${stdout_nobash_2}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
-    Should Be Equal  ${stdout_nobash_1}  OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+    Should Contain  ${stdout_nobash_2}  starting container process caused: exec: "hostname;hostname;hostname;hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
+    Should Contain  ${stdout_nobash_1}  starting container process caused: exec: "hostname && hostname && hostname && hostname": executable file not found in $PATH: unknown\r\ncommand terminated with exit code 126\r\n
 
     @{split_noid_multi_1}=  Split To Lines  ${stdout_noid_multi_1}
     @{split_noid_multi_2}=  Split To Lines  ${stdout_noid_multi_2}
