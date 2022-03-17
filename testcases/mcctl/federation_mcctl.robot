@@ -36,7 +36,7 @@ Federator create - mcctl shall handle failures
 
       # invalid values
       Error: Bad Request (400), Org XX not found  operatorid=XX  countrycode=${countrycode}  mcc=${mcc}  mnc=${mnc}
-      Error: Bad Request (400), Operation only allowed for organizations of type operator  operatorid=${developer}  countrycode=${countrycode}  mcc=${mcc}  mnc=${mnc}
+      Error: Bad Request (400), Operation for org MobiledgeX only allowed for orgs of type operator  operatorid=${developer}  countrycode=${countrycode}  mcc=${mcc}  mnc=${mnc}
       Error: Bad Request (400), Invalid country code "XX". It must be a valid ISO 3166-1 Alpha-2 code for the country  operatorid=${operator}  countrycode=XX  mcc=${mcc}  mnc=${mnc}
 
 # ECQ-4229
