@@ -182,7 +182,7 @@ AddAllianceOrg - mcctl shall handle cloudlet addallianceorg failures
       Error: missing required args  cloudlet=${cloudlet_name} organization=${cloudlet_name}
       Error: missing required args  cloudletorg=${cloudlet_name} organization=${cloudlet_name}
 
-      Error: Bad Request (400), Org notfound not found  cloudlet=tmocloud-2 cloudletorg=dmuus organization=notfound
+      Error: Bad Request (400), Alliance org notfound not found  cloudlet=tmocloud-2 cloudletorg=dmuus organization=notfound
 
       Error: Bad Request (400), Cloudlet key {"organization":"yyyy","name":"xxxx"} not found  cloudlet=xxxx cloudletorg=yyyy organization=dmuus
 
