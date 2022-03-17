@@ -39,8 +39,8 @@ class MexOperation(MexRest):
         self.thread_queue = thread_queue
         self.create_stream_output = []
 
-    def create(self, token=None, url=None, delete_url=None, delete_autocluster_url=None, show_url=None, region=None, use_thread=False, json_data=None, use_defaults=False, create_msg=None, delete_msg=None, delete_autocluster_msg=None, show_msg=None, thread_name=None, stream=False, stream_timeout=None, websocket_token=None):
-        return self.send(message_type='create', token=token, url=url, delete_url=delete_url, delete_autocluster_url=delete_autocluster_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, delete_autocluster_message=delete_autocluster_msg, show_message=show_msg, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout, websocket_token=websocket_token)
+    def create(self, token=None, url=None, delete_url=None, delete_autocluster_url=None, show_url=None, region=None, use_thread=False, json_data=None, use_defaults=False, create_msg=None, delete_msg=None, delete_autocluster_msg=None, show_msg=None, thread_name=None, stream=False, stream_timeout=None, websocket_token=None, websocket_origin=None):
+        return self.send(message_type='create', token=token, url=url, delete_url=delete_url, delete_autocluster_url=delete_autocluster_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, delete_autocluster_message=delete_autocluster_msg, show_message=show_msg, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout, websocket_token=websocket_token, websocket_origin=websocket_origin)
 
     def delete(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, stream=False, stream_timeout=None):
         return self.send(message_type='delete', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, stream=stream, stream_timeout=stream_timeout)
@@ -56,7 +56,7 @@ class MexOperation(MexRest):
     def update(self, token=None, url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, show_msg=None, stream=False, stream_timeout=None, thread_name=None):
         return self.send(message_type='update', token=token, url=url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, thread_name=thread_name, message=message, show_message=show_msg, stream=stream, stream_timeout=stream_timeout)
 
-    def send(self, message_type, token=None, url=None, delete_url=None, delete_autocluster_url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, delete_message=None, delete_autocluster_message=None, show_message=None, thread_name='thread_name', stream=False, stream_timeout=5, websocket_token=None):
+    def send(self, message_type, token=None, url=None, delete_url=None, delete_autocluster_url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, delete_message=None, delete_autocluster_message=None, show_message=None, thread_name='thread_name', stream=False, stream_timeout=5, websocket_token=None, websocket_origin=None):
         full_url = self.root_url + url
         if websocket_token:
             full_url = full_url.replace('http', 'ws').replace('api', 'ws/api')
@@ -93,7 +93,7 @@ class MexOperation(MexRest):
                     received_resp_text = self.resp_text
                 else:
                     stream_to_use = False  # set to false since it is a web socket
-                    ws_connection = MexWebSocket(url=url, token=websocket_token)
+                    ws_connection = MexWebSocket(url=url, token=websocket_token, origin=websocket_origin)
                     ws_connection.send_data(payload)
                     ws_connection.receive_data()
                     received_status_code = ws_connection.status_code
@@ -213,6 +213,8 @@ class MexOperation(MexRest):
                 if websocket_token is None:
                     received_status_code = self.resp.status_code
                     received_resp_text = self.resp_text
+                else:
+                    received_resp_text = str(e)
 
                 if stream_to_use:
                     try:
