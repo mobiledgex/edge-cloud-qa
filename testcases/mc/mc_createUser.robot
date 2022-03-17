@@ -23,7 +23,7 @@ MC - User shall not be able to create a 1 char username
 
     ${error}=  Run Keyword and Expect Error  *  Create User  username=a  password=${password}  email_address=a@auto.com
 
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"POST https://gitlab-qa.mobiledgex.net/api/v4/users: 400 {message: {username: [is too short (minimum is 2 characters)]}}"}')
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"Gitlab user create failed"}')
 
 # ECQ-2715
 MC - User shall be able to create a new user
