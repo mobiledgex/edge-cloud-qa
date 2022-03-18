@@ -442,7 +442,10 @@ class MexMasterController(MexRest):
         self._create_classes()
 
         return self.token
-       
+    
+    def reset_password(self, email_address=None, email_password=None, callback_url=None, email_check=False, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.reset_password(email_address=email_address, email_password=email_password, callback_url=callback_url, email_check=email_check, use_defaults=use_defaults, use_thread=use_thread)
+ 
     def get_totp(self, totp_shared_key):
         return self.login_class.get_totp(totp_shared_key)
  
@@ -455,12 +458,12 @@ class MexMasterController(MexRest):
     def show_controller(self, region=None, controller_address=None, influxdb_address=None, token=None):
         return self.controller.show_controller(region=region, controller_address=controller_address, influxdb_address=influxdb_address, token=token)
 
-    def create_user(self, username=None, password=None, email_address=None, email_password=None, family_name=None, given_name=None, nickname=None, enable_totp=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, auto_show=True):
+    def create_user(self, username=None, password=None, email_address=None, email_password=None, family_name=None, given_name=None, nickname=None, enable_totp=None, server='imap.gmail.com', callback_url=None, email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, auto_show=True):
         self.username = username
         self.password = password
         self.email_address = email_address
 
-        return self.user.create_user(username=username, password=password, email_address=email_address, email_password=email_password, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, server=server, email_check=email_check, auto_delete=auto_delete, auto_show=auto_show, use_defaults=use_defaults, use_thread=use_thread)
+        return self.user.create_user(username=username, password=password, email_address=email_address, email_password=email_password, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, server=server, callback_url=callback_url, email_check=email_check, auto_delete=auto_delete, auto_show=auto_show, use_defaults=use_defaults, use_thread=use_thread)
 
     def show_user(self,  username=None, email_address=None, family_name=None, given_name=None, nickname=None, role=None, organization=None, locked=None, enable_totp=None, email_verified=None, token=None, json_data=None, use_defaults=True):
         return self.user.show_user(token=token, username=username, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, role=role, organization=organization, locked=locked, enable_totp=enable_totp, email_verified=email_verified, json_data=json_data, use_defaults=use_defaults)
@@ -1423,13 +1426,16 @@ class MexMasterController(MexRest):
     def verify_email_via_mc(self, token=None):
         return self.verify_email_mc.verify_email(token=token)
 
-    def verify_email(self, username=None, password=None, email_address=None, server='imap.gmail.com', wait=30):
+    def verify_email(self, email_type='newuser', username=None, password=None, email_address=None, server='imap.gmail.com', wait=30):
         if username is None: username = self.username
         if password is None: password = self.password
         if email_address is None: email_address = self.email_address
         mc_address = self.mc_address
     
-        return self.user.verify_email(username=username, password=password, email_address=email_address, server='imap.gmail.com', wait=30, mc_address=mc_address)
+        return self.user.verify_email(email_type=email_type, username=username, password=password, email_address=email_address, server='imap.gmail.com', wait=30, mc_address=mc_address)
+
+    def verify_password_reset_email(self, username=None, password=None, email_address=None, server='imap.gmail.com', wait=30):
+        return self.verify_email(email_type='passwordreset', username=None, password=None, email_address=None, server='imap.gmail.com', wait=30)
 
     def _run_command(self, cmd):
         try:
