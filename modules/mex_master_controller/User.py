@@ -24,8 +24,9 @@ class User(MexOperation):
         self.create_apikey_url = '/auth/user/create/apikey'
         self.delete_apikey_url = '/auth/user/delete/apikey'
         self.show_apikey_url = '/auth/user/show/apikey'
+        self.reset_password_url = '/passwordresetrequest'
 
-    def _build(self, username=None, password=None, email_address=None, metadata=None, locked=None, family_name=None, given_name=None, nickname=None, enable_totp=None, email_verified=None, role=None, organization=None, description=None, permission_list=[], apikey_id=None, use_defaults=True):
+    def _build(self, username=None, password=None, email_address=None, metadata=None, locked=None, family_name=None, given_name=None, nickname=None, enable_totp=None, email_verified=None, role=None, organization=None, description=None, permission_list=[], apikey_id=None, callback_url=None, use_defaults=True):
         if username == 'default':
             username = shared_variables_mc.username_default
 
@@ -41,6 +42,7 @@ class User(MexOperation):
         # shared_variables_mc.password_default = password
 
         user_dict = {}
+        verify_dict = {}
 
         if username is not None:
             user_dict['name'] = username
@@ -72,16 +74,31 @@ class User(MexOperation):
             user_dict['description'] = description
         if apikey_id is not None:
             user_dict['Id'] = apikey_id
+        if callback_url is not None:
+            verify_dict['callbackurl'] = callback_url
 
         if len(permission_list) > 0:
             perm_dict_list = []
-            for x, y  in zip(permission_list[::2], permission_list[1::2]):
+            for x, y in zip(permission_list[::2], permission_list[1::2]):
                 perm_dict = {}
                 perm_dict['action'] = x
                 perm_dict['resource'] = y
                 perm_dict_list.append(perm_dict)
             user_dict['permissions'] = perm_dict_list
-            
+
+        if verify_dict:
+            user_dict['verify'] = verify_dict
+
+        return user_dict
+
+    def _build_reset(self, email_address=None, callback_url=None, use_defaults=True):
+        user_dict = {}
+
+        if email_address is not None:
+            user_dict['email'] = email_address
+        if callback_url is not None:
+            user_dict['callbackurl'] = callback_url
+
         return user_dict
 
     def _build_update_restricted(self, username=None, email_address=None, email_verified=None, family_name=None, given_name=None, nickname=None, locked=None, enable_totp=None, failed_logins=None, use_defaults=True):
@@ -117,11 +134,11 @@ class User(MexOperation):
 
         return user_dict
 
-    def create_user(self, username=None, password=None, email_address=None, family_name=None, given_name=None, nickname=None, email_password=None, enable_totp=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, auto_show=True):
+    def create_user(self, username=None, password=None, email_address=None, family_name=None, given_name=None, nickname=None, email_password=None, enable_totp=None, server='imap.gmail.com', callback_url=None, email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, auto_show=True):
         if not email_password:
             email_password = password
 
-        msg = self._build(username=username, password=password, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, use_defaults=use_defaults)
+        msg = self._build(username=username, password=password, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, callback_url=callback_url, use_defaults=use_defaults)
         msg_dict = msg
 
         msg_dict_show = None
@@ -139,7 +156,7 @@ class User(MexOperation):
             thread_name += username
 
         if email_check:
-            logger.info(f'checking email with email={email_address} password={password}')
+            logger.info(f'checking email with email={email_address} password={email_password}')
             mail = imaplib.IMAP4_SSL(server)
             mail.login(email_address, email_password)
             mail.select('inbox')
@@ -159,6 +176,31 @@ class User(MexOperation):
         msg_dict = msg
 
         return self.show(token=token, url=self.show_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def reset_password(self, email_address=None, email_password=None, callback_url=None, email_check=False, server='imap.gmail.com', json_data=None, use_defaults=True, use_thread=False, auto_show=True):
+        msg = self._build_reset(email_address=email_address, callback_url=callback_url, use_defaults=use_defaults)
+        msg_dict = msg
+
+        msg_dict_show = None
+        if auto_show and email_address:
+            msg_show = self._build(email_address=email_address, use_defaults=False)
+            msg_dict_show = msg_show
+
+        if email_check:
+            logger.info(f'checking email with email={email_address} password={email_password}')
+            mail = imaplib.IMAP4_SSL(server)
+            mail.login(email_address, email_password)
+            mail.select('inbox')
+            self._mail = mail
+            logger.info('login successful')
+
+            status, email_list_pre = mail.search(None, '(SUBJECT "Password Reset Request")')
+            mail_ids_pre = email_list_pre[0].split()
+            num_emails_pre = len(mail_ids_pre)
+            self._mail_count = num_emails_pre
+            logger.info(f'number of emails pre is {num_emails_pre}')
+
+        return self.create(token=None, url=self.reset_password_url, show_url=self.show_url, region=None, json_data=json_data, use_defaults=False, use_thread=use_thread, create_msg=msg_dict, show_msg=msg_dict_show, stream=None, stream_timeout=None)
 
     def current_user(self, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.show(token=token, url=self.current_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=None)[0]
@@ -187,20 +229,20 @@ class User(MexOperation):
 
     def create_user_api_key(self, organization=None, description=None, permission_list=[], token=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(organization=organization, description=description, permission_list=permission_list, use_defaults=use_defaults)
-        msg_dict = msg         
+        msg_dict = msg
         return self.create(token=token, url=self.create_apikey_url, json_data=json_data, use_defaults=False, use_thread=use_thread, create_msg=msg_dict)
 
     def delete_user_api_key(self, apikey_id=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(apikey_id=apikey_id, use_defaults=use_defaults)
         msg_dict = msg
         return self.delete(token=token, url=self.delete_apikey_url, json_data=json_data, use_defaults=False, use_thread=use_thread, message=msg_dict)
-                           
+
     def show_user_api_key(self, apikey_id=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(apikey_id=apikey_id, use_defaults=use_defaults)
-        msg_dict = msg        
+        msg_dict = msg
         return self.show(token=token, url=self.show_apikey_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def verify_email(self, username=None, password=None, email_address=None, server='imap.gmail.com', wait=30, mc_address=None):
+    def verify_email(self, email_type='newuser', subject='Welcome to MobiledgeX!', username=None, password=None, email_address=None, server='imap.gmail.com', wait=30, mc_address=None):
         if username is None:
             username = self.username
         if password is None:
@@ -208,12 +250,30 @@ class User(MexOperation):
         if email_address is None:
             email_address = self.email_address
 
+        if email_type == 'newuser':
+            subject = 'Welcome to MobiledgeX!'
+            body_to_check = 'Thanks for creating a MobiledgeX account! You are now one step away from utilizing the power of the edge. Please verify this email account by clicking on the link below. Then you\'ll be able to login and get started.'
+            link_to_check = f'Click to verify: https://{shared_variables_mc.console_url}/#/verify?token='
+            footer1_to_check = f'For security, this request was received for {email_address} from'
+            footer2_to_check = 'If you are not expecting this email, please ignore this email or contact MobiledgeX support for assistance.'
+        elif email_type == 'passwordreset':
+            subject = 'Password Reset Request'
+            body_to_check = 'You recently requested to reset your password for your MobiledgeX account. Use the link below to reset it. This password reset is only valid for the next 1 hour.'
+            link_to_check = 'Reset your password: https://console-qa.mobiledgex.net/#/passwordreset?token='
+            footer1_to_check = 'For security, this request was received from'
+            footer2_to_check = 'If you did not request this password reset, please ignore this email or contact MobiledgeX support for assistance.'
+        else:
+            raise Exception(f'invalid email_type={email_type}')
+
         self.mc_address = mc_address
         mail = self._mail
         num_emails_pre = self._mail_count
+        logging.info(f'verifying email for email={email_address} username={username} password={password}')
+
         for attempt in range(wait):
             mail.recent()
-            status, email_list = mail.search(None, '(SUBJECT "Welcome to MobiledgeX!")')
+            logging.info(f'looking for email with SUBJECT "{subject}"')
+            status, email_list = mail.search(None, f'(SUBJECT "{subject}")')
             mail_ids = email_list[0].split()
             num_emails = len(mail_ids)
             logging.info(f'number of emails found is {num_emails}')
@@ -235,13 +295,13 @@ class User(MexOperation):
                         else:
                             raise Exception('Greetings not found')
 
-                        if 'Thanks for creating a MobiledgeX account! You are now one step away from utilizing the power of the edge. Please verify this email account by clicking on the link below. Then you\'ll be able to login and get started.' in payload:
+                        if body_to_check in payload:
                             logging.info('body1 found')
                         else:
                             raise Exception('Body1 not found')
 
-                        # if f'Click to verify: {self.console_url}/verify?token=' in payload:
-                        if 'Copy and paste to verify your email:' in payload:
+                        logging.info(f'checking email for {link_to_check}')
+                        if link_to_check in payload:
                             for line in payload.split('\n'):
                                 if 'mcctl user verifyemail token=' in line:
                                     # label, link = line.split('Click to verify:')
@@ -259,11 +319,11 @@ class User(MexOperation):
                         else:
                             raise Exception('Verify link not found')
 
-                        if f'For security, this request was received for {email_address} from' in payload and 'If you are not expecting this email, please ignore this email or contact MobiledgeX support for assistance.' in payload and 'Thanks!' in payload and 'MobiledgeX Team' in payload:
+                        if footer1_to_check in payload and footer2_to_check in payload and 'Thanks!' in payload and 'MobiledgeX Team' in payload:
                             logging.info('body2 link found')
                         else:
                             raise Exception('Body2 not found')
-                        return True
+                        return payload
             time.sleep(1)
 
         raise Exception('verification email not found')
