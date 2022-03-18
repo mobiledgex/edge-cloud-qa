@@ -71,6 +71,7 @@ MC - Admin remove an AdminViewer role from a user
 	...  admin remove an adminviewer role from a user  
 	...  verify the message returned 
 
+        Login  username=${epochusername}   password=${password}  
         Adduser Role     username=${epochusername}         role=AdminViewer        token=${adminToken}        use_defaults=${False}
 	${showadmin}=    Show Role Assignment    token=${adminToken}
 	${admin}=        Removeuser Role         token=${adminToken}
