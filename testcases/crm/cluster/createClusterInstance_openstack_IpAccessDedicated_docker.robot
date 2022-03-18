@@ -11,8 +11,8 @@ Test Teardown   Cleanup provisioning
 Test Timeout     ${test_timeout_crm} 
 	
 *** Variables ***
-${cloudlet_name_openstack_dedicated}  automationBuckhornCloudlet
-${operator_name_openstack}  GDDT 
+${cloudlet_name_crm}  automationBuckhornCloudlet
+${operator_name_crm}  GDDT 
 ${mobiledgex_domain}  mobiledgex.net
 ${region}             US
 
@@ -33,7 +33,7 @@ ClusterInst shall create with IpAccessDedicated/docker on CRM
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}-mobiledgex  ${rootlb}
 	 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=0  number_masters=0  ip_access=IpAccessDedicated  deployment=docker
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  number_nodes=0  number_masters=0  ip_access=IpAccessDedicated  deployment=docker
    Log to Console  DONE creating cluster instance
 
    IF  '${platform_type}' == 'Openstack'
@@ -43,7 +43,7 @@ ClusterInst shall create with IpAccessDedicated/docker on CRM
       ${server_info_node}=    Get Server List  name=${openstack_node_name}
       ${server_info_master}=  Get Server List  name=${openstack_node_master}
       ${server_info_lb}=      Get Server List  name=${clusterlb}
-      ${server_info_crm}=      Get Server List  name=${cloudlet_name_openstack_dedicated}.${operator_name_openstack}.pf
+      ${server_info_crm}=      Get Server List  name=${cloudlet_name_crm}.${operator_name_crm}.pf
 
       # verify dedicated cluster as it own security group
       ${crm_networks}=  Split String  ${server_info_crm[0]['Networks']}  =
@@ -85,11 +85,11 @@ Setup
     Set Suite Variable  ${platform_type}
 
     ${epoch_time}=  Get Time  epoch
-    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_dedicated}
+    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
 
     Set Suite Variable  ${cloudlet_lowercase}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}-${operator_name_openstack}  ${region}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
