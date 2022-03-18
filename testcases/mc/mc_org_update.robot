@@ -25,7 +25,7 @@ MC - Shall be able to update an operator org
     delete_in_progress=${True}
     delete_in_progress=${False}
     edgebox_only=${True}
-    edgebox_only=${False}
+    #edgebox_only=${False}
 
 # ECQ-4406
 MC - Shall be able to update an developer org
@@ -57,7 +57,7 @@ MC - Shall not be able to update restricted parms or bad values in an operator o
 
     Cannot update created at  created_at=2006-01-02T15:04:05Z
     Cannot update parent  parent=x
-    Cannot update edgeboxonly field for Organization  edgebox_only=${True}
+    Cannot update edgeboxonly field for Organization  edgebox_only=${False}
 
     Gitlab project ${org_name} not found  public_images=${True}
 

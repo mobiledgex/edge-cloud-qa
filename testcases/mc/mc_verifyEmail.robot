@@ -46,8 +46,8 @@ MC - Verify the SkipVerifyEmail change works
         #Should Be Equal              ${variable['Message']}         user created
 
 	${error}=    Run Keyword and Expect Error  *   Login   username=${newuser}   password=${password}
-	Should Contain  ${error}    responseCode = 400
-	Should Contain  ${error}    {"message":"Email not verified yet"}
+	#Should Contain  ${error}    responseCode = 400
+	Should Be Equal  ${error}    ('code=400', 'error={"message":"Email not verified yet"}')
 
 	Set Skip Verify Email  skip_verify_email=True 
 	${config}=   Show Config    token=${adminToken}
