@@ -8,7 +8,7 @@ Library  String
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
 
-Test Timeout  15m
+Test Timeout  25m
 
 *** Variables ***
 ${region}=  US
@@ -125,6 +125,22 @@ CreateApp - mcctl shall be able to create/show/delete app
       appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        imagepath=${docker_image}       accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800  defaultflavor=${flavor_name_automation}
       appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          imagepath=${qcow_centos_image}  accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800  defaultflavor=${flavor_name_automation}
 
+      # qos session 
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=0
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=1
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=2
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=3
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=4
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=NoPriority
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=LowLatency
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=ThroughputDownS
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=ThroughputDownM
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=ThroughputDownL
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionduration=1s
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=NoPriority  qossessionduration=1m1s
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=LowLatency  qossessionduration=1h1m1s
+      appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=ThroughputDownS  qossessionduration=1ms
+
 # ECQ-2890
 CreateApp - mcctl shall handle create failures
    [Documentation]
@@ -228,6 +244,11 @@ CreateApp - mcctl shall handle create failures
       Error: parsing arg "serverlessconfig.vcpus\=-1" failed: unable to parse "-1" as unsigned decimal: invalid format  appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  defaultflavor=${flavor_name_automation}  allowserverless=${True}  serverlessconfig.vcpus=-1  serverlessconfig.ram=2  serverlessconfig.minreplicas=1
       Error: parsing arg "serverlessconfig.ram\=-1" failed: unable to parse "-1" as uint: invalid syntax  appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  defaultflavor=${flavor_name_automation}  allowserverless=${True}  serverlessconfig.vcpus=1  serverlessconfig.ram=-1  serverlessconfig.minreplicas=1
 
+      # qos priority session
+      Error: parsing arg "qossessionprofile\=x" failed: unable to parse "x" as QosSessionProfile: invalid format, valid values are one of NoPriority, LowLatency, ThroughputDownS, ThroughputDownM, ThroughputDownL, or 0, 1, 2, 3, 4  appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionprofile=x
+      Error: parsing arg "qossessionduration\=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionduration=1
+      Error: parsing arg "qossessionduration\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  appname=${app_name}  apporg=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       accessports=tcp:20150  defaultflavor=${flavor_name_automation}  qossessionduration=x
+      
 # ECQ-2891
 UpdateApp - mcctl shall handle update app 
    [Documentation]
@@ -278,6 +299,13 @@ UpdateApp - mcctl shall handle update app
       appname=${app_name_helm}    apporg=${developer}  appvers=1.0  accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
       appname=${app_name_vm}      apporg=${developer}  appvers=1.0  accessports=tcp:2015:tls,tcp:2016,udp:2016:nginx,udp:2015:maxpktsize=1800
 
+      # qos priority
+      appname=${app_name_docker}  apporg=${developer}  appvers=1.0  qossessionprofile=LowLatency
+      appname=${app_name_docker}  apporg=${developer}  appvers=1.0  qossessionprofile=ThroughputDownS
+      appname=${app_name_docker}  apporg=${developer}  appvers=1.0  qossessionprofile=ThroughputDownM
+      appname=${app_name_docker}  apporg=${developer}  appvers=1.0  qossessionprofile=ThroughputDownL
+      appname=${app_name_docker}  apporg=${developer}  appvers=1.0  qossessionprofile=LowLatency  qossessionduration=1m1s
+
 # ECQ-3618
 UpdateApp - mcctl shall handle update failures
    [Documentation]
@@ -287,6 +315,11 @@ UpdateApp - mcctl shall handle update failures
    [Template]  Fail Update App Via mcctl
 
       Error: parsing arg "autoprovpolicies:empty\=xx" failed: unable to parse "xx" as bool, valid values are true, false  appname=andyautoprov appvers=1.0 apporg=automation_dev_org autoprovpolicies:empty=xx 
+
+      # qos priority session
+      Error: parsing arg "qossessionprofile\=x" failed: unable to parse "x" as QosSessionProfile: invalid format, valid values are one of NoPriority, LowLatency, ThroughputDownS, ThroughputDownM, ThroughputDownL, or 0, 1, 2, 3, 4  appname=${app_name}  apporg=${developer}  appvers=1.0  qossessionprofile=x
+      Error: parsing arg "qossessionduration\=1" failed: unable to parse "1" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  appname=${app_name}  apporg=${developer}  appvers=1.0  qossessionduration=1
+      Error: parsing arg "qossessionduration\=x" failed: unable to parse "x" as duration: invalid format, valid values are 300ms, 1s, 1.5h, 2h45m, etc  appname=${app_name}  apporg=${developer}  appvers=1.0  qossessionduration=x
  
 *** Keywords ***
 Setup
@@ -319,9 +352,9 @@ Success Create/Show/Delete App Via mcctl
    Remove From Dictionary  ${parms_copy}  deploymentmanifest
    ${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
  
-   Run mcctl  app create region=${region} ${parmss} --token=${dev_token} --debug  version=${version}
-   ${show}=  Run mcctl  app show region=${region} ${parmss_modify} --token=${dev_token}  version=${version}
-   Run mcctl  app delete region=${region} ${parmss_modify} --token=${dev_token}  version=${version}
+   Run mcctl  app create region=${region} ${parmss}  token=${dev_token} --debug  version=${version}
+   ${show}=  Run mcctl  app show region=${region} ${parmss_modify}  token=${dev_token}  version=${version}
+   Run mcctl  app delete region=${region} ${parmss_modify}  token=${dev_token}  version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['appname']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['apporg']}
@@ -421,6 +454,18 @@ Success Create/Show/Delete App Via mcctl
       END
    END
 
+   IF  'qossessionprofile' in ${parms}
+      Run Keyword If  '${parms['qossessionprofile']}' == '0' or '${parms['qossessionprofile']}' == 'NoPriority'  Should Not Contain  ${show[0]}  qos_session_profile
+      Run Keyword If  '${parms['qossessionprofile']}' == '1' or '${parms['qossessionprofile']}' == 'LowLatency'  Should Be Equal  ${show[0]['qos_session_profile']}   LowLatency
+      Run Keyword If  '${parms['qossessionprofile']}' == '2' or '${parms['qossessionprofile']}' == 'ThroughputDownS'  Should Be Equal  ${show[0]['qos_session_profile']}   ThroughputDownS
+      Run Keyword If  '${parms['qossessionprofile']}' == '3' or '${parms['qossessionprofile']}' == 'ThroughputDownM'  Should Be Equal  ${show[0]['qos_session_profile']}   ThroughputDownM
+      Run Keyword If  '${parms['qossessionprofile']}' == '4' or '${parms['qossessionprofile']}' == 'ThroughputDownL'  Should Be Equal  ${show[0]['qos_session_profile']}   ThroughputDownL
+   END
+
+   IF  'qossessionduration' in ${parms}
+      Should Be Equal  ${show[0]['qos_session_duration']}  ${parms['qossessionduration']}
+   END
+
 Update Setup
    ${app_name}=  Get Default App Name
    ${app_name_k8s}=  Set Variable  ${app_name}_k8s
@@ -435,29 +480,32 @@ Update Setup
    Set Suite Variable  ${app_name_helm}
    Set Suite Variable  ${autoprovpolicy_name}
 
-   Run mcctl  autoprovpolicy create region=${region} name=${autoprovpolicy_name}0 apporg=${developer} deployclientcount=1 minactiveinstances=1 cloudlets:0.key.organization=tmus cloudlets:0.key.name=tmocloud-1 --token=${dev_token}  version=${version}
-   Run mcctl  autoprovpolicy create region=${region} name=${autoprovpolicy_name} apporg=${developer} deployclientcount=1 minactiveinstances=1 cloudlets:0.key.organization=tmus cloudlets:0.key.name=tmocloud-1 --token=${dev_token}  version=${version}
+   ${dev_token}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
+   Set Suite Variable  ${dev_token}
 
-   Run mcctl  app create region=${region} appname=${app_name_k8s} apporg=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=kubernetes imagepath=${docker_image} defaultflavor=automation_api_flavor autoprovpolicies=${autoprovpolicy_name}0 --token=${dev_token}  version=${version}
-   Run mcctl  app create region=${region} appname=${app_name_docker} apporg=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=docker imagepath=${docker_image} defaultflavor=automation_api_flavor --token=${dev_token}  version=${version}
-   Run mcctl  app create region=${region} appname=${app_name_helm} apporg=${developer} appvers=1.0 imagetype=ImageTypeHelm deployment=helm imagepath=${docker_image} defaultflavor=automation_api_flavor --token=${dev_token}  version=${version}
-   Run mcctl  app create region=${region} appname=${app_name_vm} apporg=${developer} appvers=1.0 imagetype=ImageTypeQcow deployment=vm imagepath=${qcow_centos_image} defaultflavor=automation_api_flavor --token=${dev_token}  version=${version}
+   Run mcctl  autoprovpolicy create region=${region} name=${autoprovpolicy_name}0 apporg=${developer} deployclientcount=1 minactiveinstances=1 cloudlets:0.key.organization=tmus cloudlets:0.key.name=tmocloud-1  token=${dev_token}  version=${version}
+   Run mcctl  autoprovpolicy create region=${region} name=${autoprovpolicy_name} apporg=${developer} deployclientcount=1 minactiveinstances=1 cloudlets:0.key.organization=tmus cloudlets:0.key.name=tmocloud-1  token=${dev_token}  version=${version}
+
+   Run mcctl  app create region=${region} appname=${app_name_k8s} apporg=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=kubernetes imagepath=${docker_image} defaultflavor=automation_api_flavor autoprovpolicies=${autoprovpolicy_name}0  token=${dev_token}  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_docker} apporg=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=docker imagepath=${docker_image} defaultflavor=automation_api_flavor  token=${dev_token}  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_helm} apporg=${developer} appvers=1.0 imagetype=ImageTypeHelm deployment=helm imagepath=${docker_image} defaultflavor=automation_api_flavor  token=${dev_token}  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_vm} apporg=${developer} appvers=1.0 imagetype=ImageTypeQcow deployment=vm imagepath=${qcow_centos_image} defaultflavor=automation_api_flavor  token=${dev_token}  version=${version}
 
 Update Teardown
-   Run mcctl  app delete region=${region} appname=${app_name_k8s} apporg=${developer} appvers=1.0 --token=${dev_token}  version=${version}
-   Run mcctl  app delete region=${region} appname=${app_name_docker} apporg=${developer} appvers=1.0 --token=${dev_token}  version=${version}
-   Run mcctl  app delete region=${region} appname=${app_name_helm} apporg=${developer} appvers=1.0 --token=${dev_token}  version=${version}
-   Run mcctl  app delete region=${region} appname=${app_name_vm} apporg=${developer} appvers=1.0 --token=${dev_token}  version=${version}
-   Run mcctl  autoprovpolicy delete region=${region} name=${autoprovpolicy_name}0 apporg=${developer} --token=${dev_token}  version=${version}
-   Run mcctl  autoprovpolicy delete region=${region} name=${autoprovpolicy_name} apporg=${developer} --token=${dev_token}  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_k8s} apporg=${developer} appvers=1.0  token=${dev_token}  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_docker} apporg=${developer} appvers=1.0  token=${dev_token}  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_helm} apporg=${developer} appvers=1.0  token=${dev_token}  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_vm} apporg=${developer} appvers=1.0  token=${dev_token}  version=${version}
+   Run mcctl  autoprovpolicy delete region=${region} name=${autoprovpolicy_name}0 apporg=${developer}  token=${dev_token}  version=${version}
+   Run mcctl  autoprovpolicy delete region=${region} name=${autoprovpolicy_name} apporg=${developer}  token=${dev_token}  version=${version}
 
 Success Update/Show App Via mcctl
    [Arguments]  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  app update region=${region} ${parmss} --token=${dev_token}  version=${version}
-   ${show}=  Run mcctl  app show region=${region} ${parmss} --token=${dev_token}  version=${version}
+   Run mcctl  app update region=${region} ${parmss}  token=${dev_token}  version=${version}
+   ${show}=  Run mcctl  app show region=${region} ${parmss}  token=${dev_token}  version=${version}
 
    #Verify Show  show=${show}  &{parms}
    Should Be Equal  ${show[0]['key']['name']}  ${parms['appname']}
@@ -506,13 +554,25 @@ Success Update/Show App Via mcctl
    END
 
    Run Keyword If  'accessports' in ${parms}  Should Be Equal  ${show[0]['access_ports']}  ${parms['accessports']}
+
+   IF  'qossessionprofile' in ${parms}
+      Run Keyword If  '${parms['qossessionprofile']}' == '0' or '${parms['qossessionprofile']}' == 'NoPriority'  Should Not Contain  ${show[0]}  qos_session_profile
+      Run Keyword If  '${parms['qossessionprofile']}' == '1' or '${parms['qossessionprofile']}' == 'LowLatency'  Should Be Equal  ${show[0]['qos_session_profile']}   LowLatency
+      Run Keyword If  '${parms['qossessionprofile']}' == '2' or '${parms['qossessionprofile']}' == 'ThroughputDownS'  Should Be Equal  ${show[0]['qos_session_profile']}   ThroughputDownS
+      Run Keyword If  '${parms['qossessionprofile']}' == '3' or '${parms['qossessionprofile']}' == 'ThroughputDownM'  Should Be Equal  ${show[0]['qos_session_profile']}   ThroughputDownM
+      Run Keyword If  '${parms['qossessionprofile']}' == '4' or '${parms['qossessionprofile']}' == 'ThroughputDownL'  Should Be Equal  ${show[0]['qos_session_profile']}   ThroughputDownL
+   END
+
+   IF  'qossessionduration' in ${parms}
+      Should Be Equal  ${show[0]['qos_session_duration']}  ${parms['qossessionduration']}
+   END
  
 Fail Create App Via mcctl
    [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app create region=${region} ${parmss} --token=${dev_token}  version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app create region=${region} ${parmss}  token=${dev_token}  version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
 Fail Update App Via mcctl
@@ -520,6 +580,6 @@ Fail Update App Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app update region=${region} ${parmss} --token=${dev_token}    version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app update region=${region} ${parmss}  token=${dev_token}    version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
