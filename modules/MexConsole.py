@@ -1164,7 +1164,7 @@ class MexConsole() :
         self.new_cloudlet_page.create_cloudlet(region=region, cloudlet_name=cloudlet['key']['name'], operator_name=cloudlet['key']['organization'], latitude=cloudlet['location']['latitude'], longitude=cloudlet['location']['longitude'], ip_support=cloudlet['ip_support'], number_dynamic_ips=cloudlet['num_dynamic_ips'], physical_name=cloudlet['physical_name'], platform_type=cloudlet['platform_type'], infra_api_access=mode, trust_policy=trust_policy)
    
         if mode == 'Direct':
-            if self.compute_page.wait_for_dialog_box(text="Waiting for run lists to be executed on Platform Server", wait=400):
+            if self.compute_page.wait_for_dialog_box(text="Waiting for run lists to be executed on Platform Server", wait=500):
                 self.new_cloudlet_page.close_alert_box()
             else:
                 raise Exception('Dialog box text NOT found')
