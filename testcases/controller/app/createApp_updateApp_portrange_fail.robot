@@ -47,7 +47,7 @@ CreateApp - Create shall fail for UDP port out of range on k8s access_type=loadb
     ...  - create a k8s loadbalancer app with UDP port range greater than max
     ...  - verify proper error is returned
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=udp:23-1023  deployment=kubernetes  access_type=loadbalancer
+    ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=udp:54-1054  deployment=kubernetes  access_type=loadbalancer
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid deployment manifest, Kubernetes deployment not allowed to specify more than 1000 udp ports"}')
 
 # ECQ-2100
@@ -156,7 +156,7 @@ UpdateApp - Update shall fail for UDP port out of range on k8s access_type=loadb
 
     Create App  region=US  access_ports=tcp:1-5  deployment=kubernetes  access_type=loadbalancer
 
-    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=udp:1-1001
+    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=udp:54-1054
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid deployment manifest, Kubernetes deployment not allowed to specify more than 1000 udp ports"}')
 
 # ECQ-2104
