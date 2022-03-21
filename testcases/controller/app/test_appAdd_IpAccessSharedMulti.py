@@ -415,7 +415,7 @@ class tc(unittest.TestCase):
         # create the app
         # contains ip_access=IpAccessShared and 100 upd ports
         udp_list = ''
-        for i in range(100):
+        for i in range(54,154):
             udp_list += 'udp:' + str(i+1) + ','
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                              app_name=app_name,
@@ -640,7 +640,7 @@ class tc(unittest.TestCase):
         # create the app
         # contains ip_access=IpAccessShared and 100 upd ports
         udp_list = ''
-        for i in range(100):
+        for i in range(54,154):
             udp_list += 'udp:' + str(i+1) + ','
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
                                              app_name=app_name,
