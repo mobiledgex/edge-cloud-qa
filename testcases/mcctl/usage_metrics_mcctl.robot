@@ -144,7 +144,8 @@ App Setup
 Cloudlet Setup
    App Setup
 
-   @{cloudlet_list}=  Create List  tmocloud-2
+   &{cloudlet1}=  Create Dictionary  name=tmocloud-2
+   @{cloudlet_list}=  Create List  ${cloudlet1}
    ${pool}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_list=${cloudlet_list}
    ${cloudletpool_name}=  Set Variable  ${pool['data']['key']['name']}
 
