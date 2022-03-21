@@ -24,7 +24,7 @@ Web UI - User shall be able to create an Auto Scale Policy
 
     Autoscalepolicy Should Exist  policy_name=${policy_name}
 
-    ${policy_details}=    Show Autoscale Policy  region=EU  policy_name=${policy_name}  developer_org_name=${developer_name}
+    ${policy_details}=    Show Autoscale Policy  region=EU  policy_name=${policy_name}  developer_org_name=${developer_name}  token=${token}  use_defaults=${False}
     Should Be Equal As Integers  ${policy_details[0]['data']['min_nodes']}  1
     Should Be Equal As Integers  ${policy_details[0]['data']['max_nodes']}   2
     Should Be Equal As Integers  ${policy_details[0]['data']['stabilization_window_sec']}  30
