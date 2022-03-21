@@ -79,4 +79,4 @@ Setup
 
 Teardown
     Close Browser
-    Cleanup Provisioning
+    Run Keyword And Ignore Error  Cleanup Provisioning
