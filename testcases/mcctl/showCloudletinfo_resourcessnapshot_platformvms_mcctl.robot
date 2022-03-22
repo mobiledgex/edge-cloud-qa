@@ -57,6 +57,7 @@ showCloudletinfo - mcctl shall be able to request resources snapshot status
    [Template]  Resources Snapshot Via mcctl
         region=${region}  cloudlet=${openstack_cloudlet}  cloudletorg=${openstack_org}
         region=${region}  cloudlet=${vcd_cloudlet}  cloudletorg=${vcd_org}
+
 # EC-6263
 showClusterinfo - mcctl shall be able to request resources snapshot info
    [Documentation]
@@ -100,7 +101,8 @@ Resources Snapshot Via mcctl
    Should Be Equal  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['name']}  ${cloudlet_lb}
    Should Be Equal  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['type']}  ${type_srlb}
    Should Contain Any  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['status']}  IN  @{node_status}
-   Dictionary Should Contain Key  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['ipaddresses'][0]}   externalIp
+   Should Be True  'externalIp' in ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['ipaddresses'][0]} or 'externalIp' in ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['ipaddresses'][1]}
+   #Dictionary Should Contain Key  ${cloudlet_info[0]['resources_snapshot']['platform_vms'][1]['ipaddresses'][0]}   externalIp
 
 
 Cluster Resources Snapshot Via mcctl
