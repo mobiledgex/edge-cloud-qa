@@ -34,7 +34,8 @@ ShowOrgCloudlet - org shall be assigned to 1 cloudlet
 
    [Tags]  CloudletPoolAccess
 
-   @{cloudlet_list}  Create List  ${cloudlets[1]['cloudlet']}
+   &{cloudlet1}  Create Dictionary  name=${cloudlets[1]['cloudlet']}
+   @{cloudlet_list}  Create List  ${cloudlet1}
 
    Run Keyword If  '${cloudlets[1]['operator']}' != 'dmuus'  Adduser Role  token=${super_token}  orgname=${cloudlets[1]['operator']}  username=${op_manager_user_automation}  role=OperatorManager
 
@@ -905,7 +906,8 @@ ShowOrgCloudlet - org shall not show if invite rejected
 
    [Tags]  CloudletPoolAccess
 
-   @{cloudlet_list}  Create List  ${cloudlets[1]['cloudlet']}
+   &{cloudlet1}  Create Dictionary  name=${cloudlets[1]['cloudlet']}
+   @{cloudlet_list}  Create List  ${cloudlet1}
 
    Run Keyword If  '${cloudlets[1]['operator']}' != 'dmuus'  Adduser Role  token=${super_token}  orgname=${cloudlets[1]['operator']}  username=${op_manager_user_automation}  role=OperatorManager
 
