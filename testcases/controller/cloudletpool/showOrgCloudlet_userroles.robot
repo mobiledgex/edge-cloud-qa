@@ -330,7 +330,7 @@ Developer Cloudlet Info Should Be Correct
    Should Be True  ${show['location']['latitude']} >= -90 and ${show['location']['latitude']} <= 90
    Should Not Be Empty  ${show['location']['longitude']} >= -180 and ${show['location']['longitude']} <= 180
    #Should Be True  ${show['state']} > 0
-   Should Be Equal  ${show['state']}  Ready
+   Should Contain Any  ${show['state']}  Ready  CrmInitok  DeleteRequested  DeleteError
    Should Be True  ${show['num_dynamic_ips']} > 0
    #Should Be True  'trust_policy_state' in ${show} or 'trust_policy' in ${show}
    #Run Keyword If  'trust_policy_state' in ${show}  Should Be True  ${show['trust_policy_state']} > 0
@@ -357,6 +357,6 @@ Operator Cloudlet Info Should Be Correct
    Should Be True  ${show['num_dynamic_ips']} > 0
    Should Be True  len("${show['notify_srv_addr']}") > 0
    Should Be Equal  ${show['physical_name']}  ${cloudlet}
-   Should Be Equal  ${show['state']}  Ready
+   Should Contain Any  ${show['state']}  Ready  CrmInitok  DeleteRequested  DeleteError
    Should Be Equal  ${show['trust_policy_state']}  NotPresent
 
