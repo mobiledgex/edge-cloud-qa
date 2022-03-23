@@ -50,7 +50,8 @@ WebUI - user shall be able view organization details
       log to console  ====================
       log to console  ${ui_details['instructions']}
       Should Be Equal             ${ui_details['Organization']}  ${row['Name']}
-      Should Be Equal             ${ui_details['Type']}          ${row['Type']}
+      ${org_type}=                Convert to Lowercase  ${ui_details['Type']}
+      Should Be Equal             ${org_type}          ${row['Type']}
       Run Keyword If  'Phone' in ${ui_details}    Should Be Equal             ${ui_details['Phone']}         ${row['Phone']}
       Run Keyword If  'Address' in ${ui_details}  Should Be Equal             ${ui_details['Address']}       ${row['Address']}
       ${Value}=   Verify Instructions   orgtype=${row['Type']}  organization=${row['Name']}
