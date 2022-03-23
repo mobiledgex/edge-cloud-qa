@@ -15,22 +15,16 @@ class OrganizationsPage(ComputePage):
             logging.error('organization header NOT present')
             header_present = False
 
-        if self.is_element_present(OrganizationsPageLocators.table_header_role):
-            logging.info('role header present')
+        if self.is_element_present(OrganizationsPageLocators.table_header_type):
+            logging.info('type header present')
         else:
-            logging.error('role header NOT present')
+            logging.error('type header NOT present')
             header_present = False
 
         if self.is_element_present(OrganizationsPageLocators.table_header_phone):
             logging.info('phone header present')
         else:
             logging.error('phone header NOT present')
-            header_present = False
-
-        if self.is_element_present(OrganizationsPageLocators.table_header_address):
-            logging.info('address header present')
-        else:
-            logging.error('address header NOT present')
             header_present = False
 
         if self.is_element_present(OrganizationsPageLocators.table_header_publicimage):

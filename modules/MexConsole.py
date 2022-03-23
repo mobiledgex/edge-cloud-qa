@@ -1561,7 +1561,7 @@ class MexConsole() :
         port_details = app['access_ports']
         print('*WARN*', 'image_path=', app['image_path'])
 
-        image_path_docker_default = 'docker-qa.mobiledgex.net/' + app['key']['organization'].lower() + '/images/' + app['key']['name'] + ':' + app['key']['version']
+        image_path_docker_default = 'https://docker-qa.mobiledgex.net/' + app['key']['organization'].lower() + '/images/' + app['key']['name'] + ':' + app['key']['version']
         image_path_vm_default = 'https://artifactory.mobiledgex.net/artifactory/repo-' + app['key']['organization']
         image_path_helm_default = 'https://chart.registry.com/charts:' + app['key']['organization'] + "/" + app['key']['name']
         print('*WARN*', 'image_path_default =', image_path_vm_default)
@@ -1639,7 +1639,8 @@ class MexConsole() :
 
         self.take_screenshot('update_autoscalepolicy_post')
 
-    def update_app(self, region=None, app_name=None, app_version=None, developer_name=None, deployment_type=None, flavor_name=None, access_ports=None, scale_with_cluster=False, auth_public_key=None, envvar=None, official_fqdn=None, android_package=None, trusted=False, skip_hc=None, outbound_connections=[], number_of_pages=2):
+    def update_app(self, region=None, app_name=None, app_version=None, developer_name=None, deployment_type=None, flavor_name=None, access_ports=None, scale_with_cluster=False, auth_public_key=None, envvar=None, official_fqdn=None, android_package=None, trusted=False, skip_hc=None, outbound_connections=[], number_of_pages=2,
+                    qos_nw_prioritization=None, qos_session_duration=None):
         if region is None: region = self._region
         if app_name is None: app_name = self._app['key']['name']
         if developer_name is None: developer_name = self._app['key']['organization']
@@ -1651,7 +1652,8 @@ class MexConsole() :
         #self.change_number_of_rows()
         self.apps_page.wait_for_app(region=region, org_name=developer_name, app_name=app_name, app_version=app_version, deployment_type=deployment_type, number_of_pages=number_of_pages)
 
-        if self.apps_page.update_app(app_name=app_name, access_ports=access_ports, scale_with_cluster=scale_with_cluster, auth_public_key=auth_public_key, envvar=envvar, official_fqdn=official_fqdn, android_package=android_package, trusted=trusted, skip_hc=skip_hc, outbound_connections=outbound_connections, app_version=app_version):
+        if self.apps_page.update_app(app_name=app_name, access_ports=access_ports, scale_with_cluster=scale_with_cluster, auth_public_key=auth_public_key, envvar=envvar, official_fqdn=official_fqdn, android_package=android_package, trusted=trusted, skip_hc=skip_hc, outbound_connections=outbound_connections, app_version=app_version,
+                                     qos_nw_prioritization=qos_nw_prioritization, qos_session_duration=qos_session_duration):
             logging.info('Updated app')
         else:
             raise Exception('did NOT update')

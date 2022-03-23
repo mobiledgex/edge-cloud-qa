@@ -388,6 +388,10 @@ class AppsPageLocators(object):
     outbound_connections_portrangemin_input = (By.XPATH, '(//div[@id="requiredOutboundConnectionmulti"]//div[@class="ui input"]/input)[1]')
     outbound_connections_portrangemax_input = (By.XPATH, '(//div[@id="requiredOutboundConnectionmulti"]//div[@class="ui input"]/input)[2]')
     outbound_connections_remoteip_input = (By.XPATH, '(//div[@id="requiredOutboundConnectionmulti"]//div[@class="ui input"]/input)[3]')
+    qos_network_prioritization_pulldown = (By.XPATH, '//div[@id="qosSessionProfile"]')
+    qos_session_duration_hours = (By.XPATH, '//label[contains(.,"hour")]/preceding-sibling::input')
+    qos_session_duration_mins = (By.XPATH, '//label[contains(.,"min")]/preceding-sibling::input[1]')
+    qos_session_duration_seconds = (By.XPATH, '//label[contains(.,"sec")]/preceding-sibling::input[1]')
 
 class AppInstancesPageLocators(object):
     app_instances_table_header_region = (By.XPATH, '//div[@id="mex-data-grid"]//span[contains(@class,"textHeader") and contains(text(), "Region")]')
@@ -667,7 +671,7 @@ class NewOrganizationPageLocators(object):
     phone_label = (By.XPATH, '//div[text()="Phone"]/sup[text()=" *"]')
     #phone_input = (By.XPATH, '//*[@class="ui form fieldForm"]/div[3]//div[@class="ui grid"]/div[3]/div[2]//div[@class="ui input"]/input')
     phone_input = (By.XPATH, '//div[@class="ui input"]/input[@placeholder="Enter Phone Number"]')
-    type_label =  (By.XPATH, '//div[text()="Type"]/sup[text()=" *"]')
+    type_label =  (By.XPATH, '//div[text()="Type"]')
     #type_developer_label = (By.XPATH, '//*[@class="ui form fieldForm"]//div[@class="ui grid"]/div[1]/div[2]//div[@class="ui radio checkbox"]/label[text()="Developer"]')
     type_developer_label = (By.XPATH, '//div[@class="eleven wide column"]/div[@id="type" and @class="ui disabled fluid search selection dropdown"]')
     #type_operator_label = (By.XPATH, '//*[@class="ui form fieldForm"]//div[@class="ui grid"]/div[1]/div[2]//div[@class="ui radio checkbox"]/label[text()="Operator"]')
