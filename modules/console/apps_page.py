@@ -133,7 +133,8 @@ class AppsPage(ComputePage):
         time.sleep(1)
         row.find_element(*DeleteConfirmationPageLocators.yes_button).click()
 
-    def update_app(self,  app_name=None, access_ports=None, scale_with_cluster=False, auth_public_key=None, envvar=None, official_fqdn=None, android_package=None, configs_kind=None, trusted=False, skip_hc=None, outbound_connections=[], app_version=None):
+    def update_app(self,  app_name=None, access_ports=None, scale_with_cluster=False, auth_public_key=None, envvar=None, official_fqdn=None, android_package=None, configs_kind=None, trusted=False, skip_hc=None, outbound_connections=[], app_version=None,
+                   qos_nw_prioritization=None, qos_session_duration=None):
         logging.info(f'Updating app app_name={app_name}')
 
         self.perform_search(app_name)
@@ -181,6 +182,23 @@ class AppsPage(ComputePage):
                     self.driver.find_element(*AppsPageLocators.outbound_connections_port_input).send_keys(port)
                 remote_ip = outbound_connections[j]['remote_ip']
                 self.driver.find_element(*AppsPageLocators.outbound_connections_remoteip_input).send_keys(remote_ip)
+
+        if qos_nw_prioritization is not None:
+            e = self.driver.find_element(*AppsPageLocators.qos_network_prioritization_pulldown)
+            e.location_once_scrolled_into_view
+            ActionChains(self.driver).click(on_element=e).perform()
+            value_to_select = f'.//div[@role="listbox"]//span[text()="{qos_nw_prioritization}"]'
+            self.driver.find_element_by_xpath(value_to_select).click()
+
+        if qos_session_duration:
+            if 'hour' in qos_session_duration[0]:
+                e = self.driver.find_element(*AppsPageLocators.qos_session_duration_hours)
+                self.driver.execute_script("arguments[0].value = '';", e)
+                e.send_keys(qos_session_duration[0]['hour'])
+            if 'min' in qos_session_duration[0]:
+                self.driver.find_element(*AppsPageLocators.qos_session_duration_mins).send_keys(qos_session_duration[0]['min'])
+            if 'sec' in qos_session_duration[0]:
+                self.driver.find_element(*AppsPageLocators.qos_session_duration_seconds).send_keys(qos_session_duration[0]['sec'])
 
         time.sleep(2)
         self.click_update_app()
