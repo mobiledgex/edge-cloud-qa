@@ -1,0 +1,7 @@
+version: '3'
+services:
+  jmeterplus8086:
+    image: jmeterplus8086:14.8.6
+    container_name: jmeterplus8086
+    ports:
+      - "8086"
