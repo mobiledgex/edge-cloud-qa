@@ -176,10 +176,14 @@ class AppsPage(ComputePage):
                 ActionChains(self.driver).click(on_element=e).perform()
                 protocol = outbound_connections[j]['protocol']
                 proto = f'.//div[@role="listbox"]//span[text()="{protocol}"]'
-                #self.driver.find_element_by_xpath(proto).click()
-                if 'port' in outbound_connections[j]:
-                    port = outbound_connections[j]['port']
-                    self.driver.find_element(*AppsPageLocators.outbound_connections_port_input).send_keys(port)
+                if 'portrangemin' in outbound_connections[j]:
+                    portvalue = outbound_connections[j]['portrangemin']
+                    self.driver.find_element(*AppsPageLocators.outbound_connections_portrangemin_input).send_keys(
+                        portvalue)
+                if 'portrangemax' in outbound_connections[j]:
+                    portvalue = outbound_connections[j]['portrangemax']
+                    self.driver.find_element(*AppsPageLocators.outbound_connections_portrangemax_input).send_keys(
+                        portvalue)
                 remote_ip = outbound_connections[j]['remote_ip']
                 self.driver.find_element(*AppsPageLocators.outbound_connections_remoteip_input).send_keys(remote_ip)
 
