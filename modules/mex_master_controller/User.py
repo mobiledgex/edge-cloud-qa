@@ -4,6 +4,7 @@ import time
 import email
 import subprocess
 import shlex
+import json
 import shared_variables_mc
 
 from mex_master_controller.MexOperation import MexOperation
@@ -302,20 +303,21 @@ class User(MexOperation):
 
                         logging.info(f'checking email for {link_to_check}')
                         if link_to_check in payload:
-                            for line in payload.split('\n'):
-                                if 'mcctl user verifyemail token=' in line:
-                                    # label, link = line.split('Click to verify:')
-                                    self._verify_link = line.rstrip()
-
-                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadminfastedgecloudinfra --skipverify'
-                                    logging.info('login with:' + cmd)
-                                    self._run_command(cmd)
-                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest {line} --addr https://{self.mc_address} --skipverify '
-                                    logging.info('verifying email with:' + cmd)
-                                    self._run_command(cmd)
-
-                                    break
                             logging.info('verify link found')
+                            for line in payload.split('\n'):
+                                logging.info(f'sdfdsff {link_to_check}')
+                                if link_to_check in line:
+                                    linksplit = line.split(': ')
+                                    url_split = linksplit[1].rstrip().replace('#/verify', 'api/v1/verifyemail').split('?')
+                                    token_split = url_split[1].split('=')
+                                    token_dict = {'token': f'{token_split[1]}'}
+                                    logging.info(f'clicking link={url_split[0]}')
+                                    self.post(url_split[0], data=json.dumps(token_dict))
+                                    if 'message' in self.decoded_data and self.decoded_data['message'] == 'Email verified, thank you':
+                                        logging.info('email successfuly verified')
+                                    else:
+                                        raise Exception(f'email verify failed link={url_split[0]} Got {self.decoded_data}')
+                                    break
                         else:
                             raise Exception('Verify link not found')
 
