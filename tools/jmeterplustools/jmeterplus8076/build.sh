@@ -6,4 +6,4 @@ echo $version > VERSION
 docker build -t jmeterplus8076:$version .
 docker tag jmeterplus8076:$version docker-qa.mobiledgex.net/automation_dev_org/images/jmeterplus8076:$version
 docker tag jmeterplus8076:$version docker-qa.mobiledgex.net/mobiledgex/images/jmeterplus8076:$version
-#docker tag jmeterplus8076:$version docker-qa.mobiledgex.net/wwtdev/images/jmeterplus8076:$version
+docker tag jmeterplus8076:$version docker-qa.mobiledgex.net/wwtdev/images/jmeterplus8076:$version
