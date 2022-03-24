@@ -36,10 +36,10 @@ class NetworksPage(ComputePage):
             logging.error('cloudlet header not present')
             header_present = False
 
-        if self.is_element_present(NetworksPageLocators.networks_table_header_organization):
-            logging.info('organization header present')
+        if self.is_element_present(NetworksPageLocators.networks_table_header_operator):
+            logging.info('operator header present')
         else:
-            logging.error('organization not present')
+            logging.error('operator header not present')
             header_present = False
 
         if self.is_element_present(NetworksPageLocators.networks_table_header_actions):
@@ -65,10 +65,10 @@ class NetworksPage(ComputePage):
             logging.error('Connection Type label detail NOT present')
             settings_present = False
 
-        if self.is_element_present(NetworksPageLocators.networks_organizationlabel_detail):
-            logging.info('Organization label detail present')
+        if self.is_element_present(NetworksPageLocators.networks_operatorlabel_detail):
+            logging.info('Operator label detail present')
         else:
-            logging.error('Organization label detail NOT present')
+            logging.error('Operator label detail NOT present')
             settings_present = False
 
         if self.is_element_present(NetworksPageLocators.networks_cloudletlabel_detail):
