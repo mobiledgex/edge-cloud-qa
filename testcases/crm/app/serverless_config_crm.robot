@@ -249,15 +249,13 @@ Serverless - shall be able to create appinst with server config of ram=50000, vc
 
     [Tags]  Serverless
 
-    EDGECLOUD-6111 appinst create on anthos with resources that are too large returns success but pods still pending
+    # EDGECLOUD-6111 appinst create on anthos with resources that are too large returns success but pods still pending - closed
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  allow_serverless=${True}  serverless_config_ram=50000  serverless_config_vcpus=500  serverless_config_min_replicas=500
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    ${error}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
-    Wait for K8s Pod To Be Running  root_loadbalancer=${clusterlb}  kubeconfig=${kubeconfig}  pod_name=${app_name_default}  number_of_pods=5
-
-    Pod Should Be Configured Correctly  memory=5000Mi  cpu=5
+    Should Be Equal  ${error}  ('code=200', 'error={"result":{"message":"Encountered failures: Create App Inst failed: app wait error, Run container failed, pod could not be scheduled, message: 0/2 nodes are available: 1 Insufficient cpu, 1 Insufficient memory, 1 node(s) had taint {node-role.kubernetes.io/master: }, that the pod didn\\\'t tolerate.","code":400}}')
 
 # ECQ-4353
 Serverless - app1 shall not be able to reach app2
