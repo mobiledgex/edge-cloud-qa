@@ -42,7 +42,7 @@ WebUI - User shall be able to create a new network in US region with Connect To 
     Should Be Equal                     ${network_ui_details}[Network Name]      ${network_name_default}
     Should Be Equal                     ${network_ui_details}[Connection Type]   ${connectiontype}
     Should Be Equal                     ${network_ui_details}[Cloudlet]          ${cloudlet}
-    Should Be Equal                     ${network_ui_details}[Organization]      ${operator}
+    Should Be Equal                     ${network_ui_details}[Operator]          ${operator}
 
     Close Network Details
     MexConsole.Delete Network  region=${region}  network_name=${network_name_default}
@@ -74,7 +74,7 @@ WebUI - User shall be able to create a new network in US region with Connect To 
     Should Be Equal                     ${network_ui_details}[Network Name]      ${network_name_default}
     Should Be Equal                     ${network_ui_details}[Connection Type]   ${connectiontype}
     Should Be Equal                     ${network_ui_details}[Cloudlet]          ${cloudlet}
-    Should Be Equal                     ${network_ui_details}[Organization]      ${operator}
+    Should Be Equal                     ${network_ui_details}[Operator]          ${operator}
     Should Contain                      ${network_ui_details}[Routes]            "destination_cidr": "11.71.71.1/16"
     Should Contain                      ${network_ui_details}[Routes]            "next_hop_ip": "11.70.70.1"
 
@@ -97,3 +97,4 @@ Setup
 Teardown
     Close Browser
     Cleanup Provisioning
+    Run Keyword and Ignore Error  MexMasterController.Delete Network  region=US  network_name=${network_name_default}  cloudlet_org=packet
