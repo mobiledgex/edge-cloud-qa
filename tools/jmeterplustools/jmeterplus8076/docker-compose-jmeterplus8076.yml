@@ -1,0 +1,9 @@
+version: '3'
+services:
+  wwtdev9090jmeter:
+    image: jmeterplus8076:14.7.6
+    container_name: jmeterplus8076
+    ports:
+      - "8076"
+      - "8077"
+      - "9090"
