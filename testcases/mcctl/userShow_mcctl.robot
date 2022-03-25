@@ -30,6 +30,30 @@ ShowUser - mcctl shall be able to show users
        name_to_check=mexadmin                   nickname=mexadmin
        name_to_check=op_contributor_automation  name=op_contributor_automation
 
+# ECQ-4437
+User - mcctl shall be able to show the current user
+   [Documentation]
+   ...  - send user current via mcctl
+   ...  - verify success
+
+   ${token}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
+
+   ${result}=  Run mcctl  user current  token=${token}  version=${version}
+
+   Should Be Equal  ${result['Name']}  ${dev_manager_user_automation}
+   Should Contain  ${result['Email']}  gmail.com
+
+   Should Be True   ${result['EmailVerified']}
+   Should Not Be True  ${result['Locked']}  
+
+   Should Be True  len('${result['CreatedAt']}') > 0
+   Should Be True  len('${result['UpdatedAt']}') > 0
+   Should Be True  len('${result['LastLogin']}') > 0
+   Should Be True  len('${result['PassCrackTimeSec']}') > 0
+
+   ${error}=  Run Keyword and Expect Error  *  Run mcctl  user current --data "{}"  token=${token}  version=${version}
+   Should Contain  ${error}  command does not accept input
+
 # ECQ-4298
 User - mcctl help shall show
    [Documentation]

@@ -402,6 +402,7 @@ class MexApp(object):
             logging.debug(f'{protocol} port attempt {attempt}')
             try:
                 if protocol.lower() == 'tcp':
+                    logging.debug(f'sending tcp data to {vm}:{vm_port} data={data}')
                     return_data = self._send_tcp_data(vm, vm_port, data).decode('utf-8')
                 elif protocol.lower() == 'udp':
                     return_data = self._send_udp_data(vm, vm_port, data).decode('utf-8')
