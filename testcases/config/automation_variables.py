@@ -58,7 +58,7 @@ docker_image_facedetection = 'docker-qa.mobiledgex.net/mobiledgex/images/facedet
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/computervision-gpu:2020-11-12'
 docker_image_samsung = 'docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:11.0'
 docker_image_cpu = 'docker-qa.mobiledgex.net/mobiledgex/images/cpu_generator:1.0'
-docker_image_porttest = 'docker-qa.mobiledgex.net/mobiledgex/images/port_test_server:1.0'
+docker_image_porttest = 'docker-qa.mobiledgex.net/mobiledgex/images/port_test_server:2.0'
 
 artifactory_dummy_image_name = 'execJira.py'
 
@@ -120,6 +120,6 @@ slack_api_url = 'https://hooks.slack.com/services/T97USPYUX/B01DAT6GRS4/bQfihiSF
 # pagerduty_key = '8048c9a8e470430dc0ad9605c7fb00a0'  # free account
 pagerduty_key = 'd1bdad0245364905c0e25090ce357f30'  # paid account
 
-trust_policy_server = '35.199.188.102'
+trust_policy_server = '40.113.219.126'  # mexdemo.locsim.mobiledgex.net
 self_federation_id = '13c8f174-eca4-4d01-966e-7f79482d4856'
 partner_federation_name = 'controllerfed'
