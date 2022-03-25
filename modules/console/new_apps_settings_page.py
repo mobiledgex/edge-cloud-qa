@@ -364,7 +364,8 @@ class NewAppsSettingsPage(NewSettingsFullPage):
         e.location_once_scrolled_into_view
         ActionChains(self.driver).click(on_element=e).perform()
 
-    def create_app(self, region=None, developer_name=None, app_name=None, app_version=None, deployment_type=None, flavor_name=None, image_path=None, image_path_docker_default=None, image_path_vm_default=None, image_path_helm_default=None, port_number=None, scale_with_cluster=False, auth_public_key=None, envvar=None, configs_kind=None, official_fqdn=None, android_package=None, access_type=None, skip_hc=None, trusted=False, outbound_connections=[]):
+    def create_app(self, region=None, developer_name=None, app_name=None, app_version=None, deployment_type=None, flavor_name=None, image_path=None, image_path_docker_default=None, image_path_vm_default=None, image_path_helm_default=None, port_number=None, scale_with_cluster=False, auth_public_key=None, envvar=None, configs_kind=None, official_fqdn=None, android_package=None, access_type=None, skip_hc=None,
+                   trusted=False, outbound_connections=[], qos_nw_prioritization=None, qos_session_duration=None):
         logging.info('creating app')
 
         self.region = region
@@ -485,6 +486,27 @@ class NewAppsSettingsPage(NewSettingsFullPage):
                     self.driver.find_element(*AppsPageLocators.outbound_connections_portrangemax_input).send_keys(portvalue)
                 remote_ip = outbound_connections[j]['remote_ip']
                 self.driver.find_element(*AppsPageLocators.outbound_connections_remoteip_input).send_keys(remote_ip)
+
+        if qos_nw_prioritization is not None:
+            self.driver.find_element(*AppsPageLocators.apps_advancedsettings_button).click()
+            e = self.driver.find_element(*AppsPageLocators.qos_network_prioritization_pulldown)
+            e.location_once_scrolled_into_view
+            ActionChains(self.driver).click(on_element=e).perform()
+            value_to_select = f'.//div[@role="listbox"]//span[text()="{qos_nw_prioritization}"]'
+            self.driver.find_element_by_xpath(value_to_select).click()
+
+        if qos_session_duration:
+            if 'hour' in qos_session_duration[0]:
+                e = self.driver.find_element(*AppsPageLocators.qos_session_duration_hours)
+                self.driver.execute_script("arguments[0].value = '';", e)
+                e.send_keys(qos_session_duration[0]['hour'])
+            if 'min' in qos_session_duration[0]:
+                self.driver.find_element(*AppsPageLocators.qos_session_duration_mins).send_keys(
+                    qos_session_duration[0]['min'])
+            if 'sec' in qos_session_duration[0]:
+                self.driver.find_element(*AppsPageLocators.qos_session_duration_seconds).send_keys(
+                    qos_session_duration[0]['sec'])
+
         time.sleep(2)
         self.click_create_app()
         return True
