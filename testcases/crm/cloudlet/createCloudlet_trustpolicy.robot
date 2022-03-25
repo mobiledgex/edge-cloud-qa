@@ -26,8 +26,6 @@ ${cloudlet2}=  automationFrankfurtCloudlet
 ${env_file1}=  openrc_${cloudlet1}.mex
 ${env_file2}=  openrc_${cloudlet2}.mex
 
-${trust_policy_server}=  35.199.188.102
-
 ${username}=   mextester06
 ${password}=   ${mextester06_gmail_password}
 
@@ -292,14 +290,14 @@ CreateCloudlet - shall be able to create/update cloudlet with icmp/tcp/udp trust
    ELSE
        Fail  unknown platform_type_crm ${platform_type_crm}
    END
-  
+    
    # create app/appinst for testing the policy
    &{apprule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=1001  remote_cidr=3.1.1.1/32  #remote_ip=3.9.5.10
    @{app_rulelist}=  Create List  ${apprule1}
    ${app}=  Create App  region=${region}  developer_org_name=${org_name_dev}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image_porttest}  access_ports=tcp:3015  trusted=${True}  required_outbound_connections_list=${app_rulelist}  token=${tokendev}
    ${appInst}=  Create App Instance  region=${region}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app['data']['key']['name']}  token=${tokendev}
    ${fqdn}=  Set Variable  ${appInst['data']['uri']}
-#    ${fqdn}=  Set Variable  reservable0-mobiledgex.cloudlet1646230507-642154-packet.us.mobiledgex.net
+#    ${fqdn}=  Set Variable  reservable0-mobiledgex.cloudlet1648128806-3778172-tdg.us.mobiledgex.net
  
    Verify Original Trust Policy Rules  command=${access_cloudlet_cmd}  num_rules=${num_rules1}
 
@@ -307,7 +305,7 @@ CreateCloudlet - shall be able to create/update cloudlet with icmp/tcp/udp trust
    Egress port should not be accessible  vm=${fqdn}  host=${trust_policy_server}  protocol=tcp  port=2016
 
    # udpdate policy with new policy and verify rules are updated
-   #${policy_name}=  Set Variable  trustpolicy1646266123-812292
+#   ${policy_name}=  Set Variable  trustpolicy1647640186-562648
    Update Trust Policy  region=${region}  policy_name=${policy_name}  rule_list=${rulelist2}  operator_org_name=${operator_name_crm}  token=${tokenop}
    Verify Update Trust Policy Rules  command=${access_cloudlet_cmd}  num_rules=${num_rules2}
 
@@ -329,7 +327,7 @@ CreateCloudlet - shall be able to create/update cloudlet with icmp/tcp/udp trust
    @{rulelistempty}=  Create List  empty
    Update Trust Policy  region=${region}  policy_name=${policy_name}  rule_list=${rulelistempty}  operator_org_name=${operator_name_crm}  token=${tokenop}
 
-   Verify Empty Trust Policy Rules  command=${access_cloudlet_cmd}  num_rules=2
+   Verify Empty Trust Policy Rules  command=${access_cloudlet_cmd} 
 
    Egress port should not be accessible  vm=${fqdn}  host=${trust_policy_server}  protocol=tcp  port=2016
    Egress port should not be accessible  vm=${fqdn}  host=${trust_policy_server}  protocol=tcp  port=2015
@@ -393,7 +391,7 @@ Build Trust Policy Rule Dict
     &{rule9}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=4  remote_cidr=3.3.1.1/32
     &{rule10}=  Create Dictionary  protocol=udp  port_range_minimum=5  port_range_maximum=5  remote_cidr=3.4.1.1/32
     &{rule11}=  Create Dictionary  protocol=udp  port_range_minimum=7  port_range_maximum=9  remote_cidr=3.5.1.1/32
-    &{rule12}=  Create Dictionary  protocol=tcp  port_range_minimum=2015  port_range_maximum=2015  remote_cidr=35.199.188.102/32  # where port server is running
+    &{rule12}=  Create Dictionary  protocol=tcp  port_range_minimum=2015  port_range_maximum=2015  remote_cidr=${trust_policy_server}/32  # where port server is running
     &{rule13}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=0.0.0.0/0     # docker-qa for download of app
  
     #&{rule13}=  Create Dictionary  protocol=tcp  port_range_minimum=22  port_range_maximum=22  remote_cidr=80.187.140.28/32     # docker for download of envoy
@@ -410,7 +408,7 @@ Build Trust Policy Rule Dict
     &{rule81}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=2  remote_cidr=3.2.1.2/32
     &{rule91}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=4  remote_cidr=3.3.1.1/32
     &{rule101}=  Create Dictionary  protocol=udp  port_range_minimum=5  port_range_maximum=5  remote_cidr=3.4.1.1/32
-    &{rule121}=  Create Dictionary  protocol=tcp  port_range_minimum=2016  port_range_maximum=2016  remote_cidr=35.199.188.102/32  # where port server is running
+    &{rule121}=  Create Dictionary  protocol=tcp  port_range_minimum=2016  port_range_maximum=2016  remote_cidr=${trust_policy_server}/32  # where port server is running
     &{rule131}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=0.0.0.0/0     # chef.mobiledgex.net
     #&{rule131}=  Create Dictionary  protocol=tcp  port_range_minimum=22  port_range_maximum=22  remote_cidr=80.187.140.28/32     # docker for download of envoy
     &{rule141}=  Create Dictionary  protocol=udp  port_range_minimum=53  port_range_maximum=53  remote_cidr=0.0.0.0/0  # dns resolution for docker-qa
@@ -422,27 +420,28 @@ Build Trust Policy Rule Dict
 Verify Original Trust Policy Rules
     [Arguments]  ${command}  ${num_rules}
 
-    #${cloudlet_name}=  Set Variable  cloudlet1646266123-812292
+#    ${cloudlet_name}=  Set Variable  reservable0-mobiledgex.cloudlet1648128806-3778172-tdg.us.mobiledgex.net
 
     IF  '${platform_type_crm}' == 'Vcd'
         ${output}=  Access Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_crm}  node_name=${cloudlet_name}.${operator_name_crm_lc}.mobiledgex.net  node_type=sharedrootlb  command=${command}  token=${super_token}
 
+        ${label}=  Set Variable  label trust-policy
         @{actions}=  Create List  FORWARD  OUTPUT
         FOR  ${x}  IN  @{actions}
-            Should Contain  ${output}  -A ${x} -d 3.1.1.1/32 -p udp -m udp --dport 1001:2001 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 1.1.1.1/32 -p icmp -m icmp --icmp-type any -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 0.0.0.0/1 -p tcp -m tcp --dport 100:200 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 2.2.1.1/32 -p tcp -m tcp --dport 101:102 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 2.3.1.1/32 -p tcp -m tcp --dport 500:700 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 2.4.1.1/32 -p tcp -m tcp --dport 1000:2000 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 2.5.1.1/32 -p tcp -m tcp --dport 1:2 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 3.2.1.1/32 -p udp -m udp --dport 1:2 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 3.3.1.1/32 -p udp -m udp --dport 3:4 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 3.4.1.1/32 -p udp -m udp --dport 5 -m comment --comment "label trust-policy" -j ACCEPT 
-            Should Contain  ${output}  -A ${x} -d 3.5.1.1/32 -p udp -m udp --dport 7:9 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 35.199.188.102/32 -p tcp -m tcp --dport 2015 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -p tcp -m tcp --dport 443 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -p udp -m udp --dport 53 -m comment --comment "label trust-policy" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 3.1.1.1/32 -p udp -m udp --dport 1001:2001 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 1.1.1.1/32 -p icmp -m icmp --icmp-type any -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 0.0.0.0/1 -p tcp -m tcp --dport 100:200 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 2.2.1.1/32 -p tcp -m tcp --dport 101:102 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 2.3.1.1/32 -p tcp -m tcp --dport 500:700 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 2.4.1.1/32 -p tcp -m tcp --dport 1000:2000 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 2.5.1.1/32 -p tcp -m tcp --dport 1:2 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 3.2.1.1/32 -p udp -m udp --dport 1:2 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 3.3.1.1/32 -p udp -m udp --dport 3:4 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 3.4.1.1/32 -p udp -m udp --dport 5 -m comment --comment "${label}" -j ACCEPT 
+            Should Contain  ${output}  -A ${x} -d 3.5.1.1/32 -p udp -m udp --dport 7:9 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d ${trust_policy_server}/32 -p tcp -m tcp --dport 2015 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -p tcp -m tcp --dport 443 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -p udp -m udp --dport 53 -m comment --comment "${label}" -j ACCEPT
         END
 
         Should Not Contain  ${output}  --dport 2016
@@ -467,7 +466,7 @@ Verify Original Trust Policy Rules
        Should Match Regexp   ${openstacksecgroup}  .+direction='egress'.+port_range_max='4', port_range_min='3', protocol='udp', remote_ip_prefix='3\.3\.1\.1\/32'
        Should Match Regexp   ${openstacksecgroup}  .+direction='egress'.+port_range_max='5', port_range_min='5', protocol='udp', remote_ip_prefix='3\.4\.1\.1\/32'
        Should Match Regexp   ${openstacksecgroup}  .+direction='egress'.+port_range_max='9', port_range_min='7', protocol='udp', remote_ip_prefix='3\.5\.1\.1\/32'
-       Should Match Regexp   ${openstacksecgroup}  .+direction='egress'.+port_range_max='2015', port_range_min='2015', protocol='tcp', remote_ip_prefix='35.199.188.102/32'
+       Should Match Regexp   ${openstacksecgroup}  .+direction='egress'.+port_range_max='2015', port_range_min='2015', protocol='tcp', remote_ip_prefix='${trust_policy_server}/32'
        Should Not Contain       ${openstacksecgroup}  remote_ip_prefix='0.0.0.0/32
        Should Not Match Regexp  ${openstacksecgroup}  .+direction='egress', ethertype='IPv4', id='.{36}', remote_ip_prefix='0\.0\.0\.0\/0'
 
@@ -480,25 +479,26 @@ Verify Original Trust Policy Rules
 Verify Update Trust Policy Rules
     [Arguments]  ${command}  ${num_rules}
 
-    #${cloudlet_name}=  Set Variable  cloudlet1646266123-812292
+#    ${cloudlet_name}=  Set Variable  cloudlet1648067765-3288891
 
     IF  '${platform_type_crm}' == 'Vcd'
         ${output}=  Access Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_crm}  node_name=${cloudlet_name}.${operator_name_crm_lc}.mobiledgex.net  node_type=sharedrootlb  command=${command}  token=${super_token}
 
+        ${label}=  Set Variable  label trust-policy
         @{actions}=  Create List  FORWARD  OUTPUT
         FOR  ${x}  IN  @{actions} 
-            Should Contain  ${output}  -A ${x} -d 3.1.1.1/32 -p udp -m udp --dport 1001:2001 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 1.1.1.1/32 -p icmp -m icmp --icmp-type any -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 2.1.1.1/32 -p tcp -m tcp --dport 101:201 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 0.0.0.0/1 -p tcp -m tcp --dport 101:102 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 2.3.1.2/32 -p tcp -m tcp --dport 501:701 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 2.5.1.1/32 -p tcp -m tcp --dport 1:21 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 3.2.1.2/32 -p udp -m udp --dport 1:2 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 3.3.1.1/32 -p udp -m udp --dport 3:4 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 3.4.1.1/32 -p udp -m udp --dport 5 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -d 35.199.188.102/32 -p tcp -m tcp --dport 2016 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -p tcp -m tcp --dport 443 -m comment --comment "label trust-policy" -j ACCEPT
-            Should Contain  ${output}  -A ${x} -p udp -m udp --dport 53 -m comment --comment "label trust-policy" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 3.1.1.1/32 -p udp -m udp --dport 1001:2001 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 1.1.1.1/32 -p icmp -m icmp --icmp-type any -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 2.1.1.1/32 -p tcp -m tcp --dport 101:201 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 0.0.0.0/1 -p tcp -m tcp --dport 101:102 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 2.3.1.2/32 -p tcp -m tcp --dport 501:701 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 2.5.1.1/32 -p tcp -m tcp --dport 1:21 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 3.2.1.2/32 -p udp -m udp --dport 1:2 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 3.3.1.1/32 -p udp -m udp --dport 3:4 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d 3.4.1.1/32 -p udp -m udp --dport 5 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -d ${trust_policy_server}/32 -p tcp -m tcp --dport 2016 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -p tcp -m tcp --dport 443 -m comment --comment "${label}" -j ACCEPT
+            Should Contain  ${output}  -A ${x} -p udp -m udp --dport 53 -m comment --comment "${label}" -j ACCEPT
         END
         Should Not Contain  ${output}  --dport 7:9
         Should Not Contain  ${output}  --dport 2015
@@ -528,7 +528,7 @@ Verify Update Trust Policy Rules
        Should Match Regexp   ${openstacksecgroup}  .+direction='egress'.+port_range_max='2', port_range_min='1', protocol='udp', remote_ip_prefix='3\.2\.1\.2\/32'
        Should Match Regexp   ${openstacksecgroup}  .+direction='egress'.+port_range_max='4', port_range_min='3', protocol='udp', remote_ip_prefix='3\.3\.1\.1\/32'
        Should Match Regexp   ${openstacksecgroup}  .+direction='egress'.+port_range_max='5', port_range_min='5', protocol='udp', remote_ip_prefix='3\.4\.1\.1\/32'
-       Should Match Regexp   ${openstacksecgroup}  .+direction='egress'.+port_range_max='2016', port_range_min='2016', protocol='tcp', remote_ip_prefix='35.199.188.102/32'
+       Should Match Regexp   ${openstacksecgroup}  .+direction='egress'.+port_range_max='2016', port_range_min='2016', protocol='tcp', remote_ip_prefix='${trust_policy_server}/32'
        Should Not Contain       ${openstacksecgroup}  remote_ip_prefix='0.0.0.0/32
        Should Not Match Regexp  ${openstacksecgroup}  .+direction='egress', ethertype='IPv4', id='.{36}', remote_ip_prefix='0\.0\.0\.0\/0'
 
@@ -539,21 +539,23 @@ Verify Update Trust Policy Rules
    END
 
 Verify Empty Trust Policy Rules
-    [Arguments]  ${command}  ${num_rules}
+    [Arguments]  ${command} 
 
     #${cloudlet_name}=  Set Variable  cloudlet1646230507-642154
 
     IF  '${platform_type_crm}' == 'Vcd'
         ${output}=  Access Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_crm}  node_name=${cloudlet_name}.${operator_name_crm_lc}.mobiledgex.net  node_type=sharedrootlb  command=${command}  token=${super_token}
 
-        Should Contain  ${output}  -A FORWARD -m comment --comment "label trust-policy" -j ACCEPT
-        Should Contain  ${output}  -A OUTPUT -m comment --comment "label trust-policy" -j ACCEPT
-
         ${lines}=  Split To Lines  ${output}
-        Length Should Be  ${lines}  ${num_rules}
+        Length Should Be  ${lines}  0
    ELSE IF  '${platform_type_crm}' == 'Openstack'
        ${output}=  Run Debug  cloudlet_name=${cloudlet_name}  node_type=crm  command=oscmd  timeout=90s  args=${command}  token=${super_token}
-       ${openstacksecgroup}=  Set Variable  ${output[0]['data']['output']}
+       ${openstacksecgroup}=  Get Lines Containing String  ${output[0]['data']['output']}  egress
+
+       Should Match Regexp  ${openstacksecgroup}  .+direction='egress', ethertype='IPv4', id='.{36}', remote_ip_prefix='0\.0\.0\.0\/32'
+
+       ${lines}=  Split To Lines  ${openstacksecgroup}
+       Length Should Be  ${lines}  3
    ELSE
        Fail  Unknown platform type ${platform_type_crm}
    END
