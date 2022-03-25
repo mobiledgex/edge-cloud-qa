@@ -131,7 +131,11 @@ def start_tcp_ping(thread_name, port):
         conn, addr = ssocket.accept()
         while True:
             # print('waiting for data')
-            data = conn.recv(1024)
+            try:
+                data = conn.recv(1024)
+            except Exception as e:
+                logger.error(f'caught exception receiving data {e}')
+                break
             # print('conn after recv')
             if not data:
                 # print('no data')
