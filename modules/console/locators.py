@@ -389,9 +389,9 @@ class AppsPageLocators(object):
     outbound_connections_portrangemax_input = (By.XPATH, '(//div[@id="requiredOutboundConnectionmulti"]//div[@class="ui input"]/input)[3]')
     outbound_connections_remoteip_input = (By.XPATH, '(//div[@id="requiredOutboundConnectionmulti"]//div[@class="ui input"]/input)[1]')
     qos_network_prioritization_pulldown = (By.XPATH, '//div[@id="qosSessionProfile"]')
-    qos_session_duration_hours = (By.XPATH, '//label[contains(.,"hour")]/preceding-sibling::input')
-    qos_session_duration_mins = (By.XPATH, '//label[contains(.,"min")]/preceding-sibling::input[1]')
-    qos_session_duration_seconds = (By.XPATH, '//label[contains(.,"sec")]/preceding-sibling::input[1]')
+    qos_session_duration_hours = (By.XPATH, '//label[(text()="H")]/preceding-sibling::input')
+    qos_session_duration_mins = (By.XPATH, '//label[(text()="M")]/preceding-sibling::input')
+    qos_session_duration_seconds = (By.XPATH, '//label[(text()="S")]/preceding-sibling::input')
 
 class AppInstancesPageLocators(object):
     app_instances_table_header_region = (By.XPATH, '//div[@id="mex-data-grid"]//span[contains(@class,"textHeader") and contains(text(), "Region")]')
