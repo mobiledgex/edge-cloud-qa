@@ -9,7 +9,7 @@ Library  DateTime
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
 
-Test Timeout  5m
+Test Timeout  10m
 
 *** Variables ***
 ${region}=  US
