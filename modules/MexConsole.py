@@ -1543,7 +1543,8 @@ class MexConsole() :
 
         self.take_screenshot('add_new_autoscalepolicy_post')
 
-    def add_new_app(self, region=None, app_name=None, app_version=None, developer_name=None, deployment_type=None, flavor_name=None, access_ports=None, scale_with_cluster=False, auth_public_key=None, envvar=None, official_fqdn=None, android_package=None, access_type=None, skip_hc=None, trusted=False, outbound_connections=[]):
+    def add_new_app(self, region=None, app_name=None, app_version=None, developer_name=None, deployment_type=None, flavor_name=None, access_ports=None, scale_with_cluster=False, auth_public_key=None, envvar=None, official_fqdn=None, android_package=None, access_type=None, skip_hc=None,
+                    trusted=False, outbound_connections=[], qos_nw_prioritization=None, qos_session_duration=None):
         logging.info(f'list is {outbound_connections}')
         if flavor_name is None: flavor_name = 'automation_api_flavor'    
         self.take_screenshot('add_new_app_pre')
@@ -1567,7 +1568,9 @@ class MexConsole() :
         print('*WARN*', 'image_path_default =', image_path_vm_default)
         logging.info ("image_path_helm_default = " + image_path_helm_default)
         logging.info(f'Adding new app region={region} app_name={app["key"]["name"]} app_version={app["key"]["version"]} developer_org_name={app["key"]["organization"]} flavor_name={app["default_flavor"]["name"]} deployment_type={app["deployment"]} access_ports={port_details} scale_with_cluster={scale_with_cluster} auth_public_key={auth_public_key} official_fqdn={official_fqdn} android_package={android_package} trusted={trusted} outbound_connections={outbound_connections}')
-        if self.new_apps_page.create_app(region=region, app_name=app['key']['name'], app_version=app['key']['version'], developer_name=app['key']['organization'], flavor_name=app['default_flavor']['name'], deployment_type=app['deployment'], image_path=app['image_path'], image_path_docker_default=image_path_docker_default, image_path_vm_default=image_path_vm_default, image_path_helm_default=image_path_helm_default, port_number=port_details, scale_with_cluster=scale_with_cluster, auth_public_key=auth_public_key, envvar=envvar, official_fqdn=official_fqdn, android_package=android_package, access_type=access_type, skip_hc=skip_hc, trusted=trusted, outbound_connections=outbound_connections):
+        if self.new_apps_page.create_app(region=region, app_name=app['key']['name'], app_version=app['key']['version'], developer_name=app['key']['organization'], flavor_name=app['default_flavor']['name'], deployment_type=app['deployment'], image_path=app['image_path'], image_path_docker_default=image_path_docker_default, image_path_vm_default=image_path_vm_default, image_path_helm_default=image_path_helm_default, port_number=port_details, scale_with_cluster=scale_with_cluster, auth_public_key=auth_public_key, envvar=envvar, official_fqdn=official_fqdn, android_package=android_package, access_type=access_type, skip_hc=skip_hc,
+                                         trusted=trusted, outbound_connections=outbound_connections,
+                                         qos_nw_prioritization=qos_nw_prioritization, qos_session_duration=qos_session_duration):
             logging.info('create New App succeeded')
         else:
             raise Exception('create New App did NOT succeed')
