@@ -18,7 +18,7 @@ class ClusterInstance(MexOperation):
         self.metrics_cluster_url = '/auth/metrics/cluster'
         self.delete_idle_url = '/auth/ctrl/DeleteIdleReservableClusterInsts'
 
-    def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, autoscale_policy_name=None, networks_list=[], use_defaults=True, include_fields=False, auto_delete=True):
+    def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, autoscale_policy_name=None, networks=None, use_defaults=True, include_fields=False, auto_delete=True):
 
         _fields_list = []
         _number_nodes_field_number = "14"
@@ -147,17 +147,9 @@ class ClusterInstance(MexOperation):
             for field in _fields_list:
                 clusterinst_dict['fields'].append(field)
 
-        networks_dict_list = []
-
-        if 'empty' not in networks_list:
-            for networks in networks_list:
-                networks_dict = {}
-                if 'networks' in networks_list is not None:
-                    networks_dict['networks'] = networks['networks']
-                if networks_dict:
-                    networks_dict_list.append(networks_dict)
-            clusterinst_dict['networks'] = networks_dict_list
-        else:
+        if networks is not None:
+            clusterinst_dict['networks'] = [networks]
+        if networks == 'empty':
             clusterinst_dict['networks'] = []
 
         return clusterinst_dict
@@ -193,8 +185,8 @@ class ClusterInstance(MexOperation):
 
         return idle_dict
 
-    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, networks_list=None,  json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=600):
-        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, autoscale_policy_name=autoscale_policy_name, reservable=reservable, reservation_ended_at_seconds=reservation_ended_at_seconds, reservation_ended_at_nanoseconds=reservation_ended_at_nanoseconds, auto_delete=auto_delete, networks_list=networks_list,  use_defaults=use_defaults)
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, reservation_ended_at_seconds=None, reservation_ended_at_nanoseconds=None, networks=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=600):
+        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, autoscale_policy_name=autoscale_policy_name, reservable=reservable, reservation_ended_at_seconds=reservation_ended_at_seconds, reservation_ended_at_nanoseconds=reservation_ended_at_nanoseconds, auto_delete=auto_delete, networks=networks, use_defaults=use_defaults)
         msg_dict = {'clusterinst': msg}
 
         thread_name = None
