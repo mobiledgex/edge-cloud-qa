@@ -12,7 +12,7 @@ Test Timeout    ${test_timeout_crm}
 *** Variables ***
 ${app_counter}=  ${0}
 
-${region}=  EU
+${region}=  US
 
 ${ram}=  2000
 ${vcpus}=  5
@@ -201,6 +201,18 @@ UpdateApp - Error shall be received for invalid qos session duration parm
    image_type=ImageTypeQcow  deployment=vm  image_path=${qcow_centos_image}  qos_session_profile=ThroughputDownS  qos_session_duration=s
    image_type=ImageTypeQcow  deployment=vm  image_path=${qcow_centos_image}  qos_session_profile=ThroughputDownM  qos_session_duration=-1
    image_type=ImageTypeQcow  deployment=vm  image_path=${qcow_centos_image}  qos_session_profile=ThroughputDownL  qos_session_duration=999999999999999999999ms
+
+# ECQ-4439
+CreateApp - Error shall be given when setting qos duration without qos profile
+   [Documentation]
+   ...  - send create app with qos session duration but no profile
+   ...  - verify error is received
+
+   [Tags]  qos
+
+   ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=docker  deployment=docker  access_type=loadbalancer  image_path=${docker_image}  access_ports=tcp:2016  qos_session_duration=1h
+
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"QosSessionDuration cannot be specified without setting QosSessionProfile"}')
 
 *** Keywords ***
 Setup
