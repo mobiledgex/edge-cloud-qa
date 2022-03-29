@@ -40,13 +40,15 @@ ${configs_envvars_url}=  http://35.199.188.102/apps/automation_configs_envvars.y
 ${test_timeout_crm}  15 min
 
 ${region}=  EU
+
+${anthos_cluster_ip}=  10.200.30.10
 	
 *** Test Cases ***
 # ECQ-2264
 CreateApp - User shall be able to create k8s IpAccessShared with envVarsYaml Configs parm 
     [Documentation]
-    ...  deploy IpAccessShared k8s app with envVarsYaml Configs parm
-    ...  verify vars are exported in the container 
+    ...  - deploy IpAccessShared k8s app with envVarsYaml Configs parm
+    ...  - verify vars are exported in the container 
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
@@ -54,7 +56,7 @@ CreateApp - User shall be able to create k8s IpAccessShared with envVarsYaml Con
     ${rootlb}=  Catenate  SEPARATOR=.  shared  ${cloudlet_name_crm}-${operator_name_crm}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
  
-    ${config}=  Set Variable  - name: CrmValue${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
+    ${config}=  Set Variable  - name: CrmValue1${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 
     IF  '${platform_type}' != 'K8SBareMetal'
         Log To Console  Creating Cluster Instance
@@ -65,24 +67,35 @@ CreateApp - User shall be able to create k8s IpAccessShared with envVarsYaml Con
     Create App           region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  configs_kind=envVarsYaml  configs_config=${config}  #default_flavor_name=flavor1583873482-5017228
     ${app_name_default}=  Get Default App Name
     log to console  ${app_name_default} 
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
-    ${export1}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue
-    ${export2}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue2
+#    ${export1}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue
+#    ${export2}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue2
 
-    ${openstack_master_name}=    Catenate  SEPARATOR=-  master  ${cloudlet_lowercase}  ${cluster_name_default}
-    ${server_info_node}=    Get Server List  name=${openstack_master_name}
-    ${server_split}=  Split String  ${server_info_node[0]['Networks']}  =   
-    log to console  ${server_info_node} ${server_split[1]}
+    ${export1}=  Run Command  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  cluster_instance_developer_org_name=${appinst['data']['key']['cluster_inst_key']['organization']}  command=bash -c 'env|grep CrmValue1'
+    ${export2}=  Run Command  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  cluster_instance_developer_org_name=${appinst['data']['key']['cluster_inst_key']['organization']}  command=bash -c 'env|grep CrmValue2'
 
-    Should Be Equal  ${export1[0].strip()}  ${server_split[1]} 
-    Should Be Equal  ${export2[0].strip()}  ${server_split[1]} 
+    ${ip1}=  Split String  ${export1}  =
+    ${ip2}=  Split String  ${export2}  =
+
+    IF  '${platform_type}' != 'K8SBareMetal'
+        ${openstack_master_name}=    Catenate  SEPARATOR=-  master  ${cloudlet_lowercase}  ${cluster_name_default}
+        ${server_info_node}=    Get Server List  name=${openstack_master_name}
+        ${server_split}=  Split String  ${server_info_node[0]['Networks']}  =   
+        log to console  ${server_info_node} ${server_split[1]}
+
+        Should Be Equal  ${ip1[1].strip()}  ${server_split[1]} 
+        Should Be Equal  ${ip2[1].strip()}  ${server_split[1]} 
+    ELSE
+        Should Be Equal  ${ip1[1].strip()}  ${anthos_cluster_ip}
+        Should Be Equal  ${ip2[1].strip()}  ${anthos_cluster_ip}
+    END
 
 # ECQ-2265
 CreateApp - User shall be able to create k8s IpAccessShared with envVarsYaml Configs URL parm
     [Documentation]
-    ...  deploy IpAccessShared k8s app with envVarsYaml Configs URL parm
-    ...  verify vars are exported in the container
+    ...  - deploy IpAccessShared k8s app with envVarsYaml Configs URL parm
+    ...  - verify vars are exported in the container
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
@@ -99,18 +112,29 @@ CreateApp - User shall be able to create k8s IpAccessShared with envVarsYaml Con
     Create App           region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  configs_kind=envVarsYaml  configs_config=${configs_envvars_url}  #default_flavor_name=flavor1583873482-5017228
     ${app_name_default}=  Get Default App Name
     log to console  ${app_name_default}
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
+    ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}
 
-    ${export1}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue
-    ${export2}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue2
+#    ${export1}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue  kubeconfig=${kubeconfig}
+#    ${export2}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_crm}  pod_name=${app_name_default}  command=echo \\\$CrmValue2  kubeconfig=${kubeconfig}
 
-    ${openstack_master_name}=    Catenate  SEPARATOR=-  master  ${cloudlet_lowercase}  ${cluster_name_default}
-    ${server_info_node}=    Get Server List  name=${openstack_master_name}
-    ${server_split}=  Split String  ${server_info_node[0]['Networks']}  =
-    log to console  ${server_info_node} ${server_split[1]}
+    ${export1}=  Run Command  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  cluster_instance_developer_org_name=${appinst['data']['key']['cluster_inst_key']['organization']}  command=bash -c 'env|grep CrmValue1'
+    ${export2}=  Run Command  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name_default}  cluster_instance_developer_org_name=${appinst['data']['key']['cluster_inst_key']['organization']}  command=bash -c 'env|grep CrmValue2'
 
-    Should Be Equal  ${export1[0].strip()}  ${server_split[1]}
-    Should Be Equal  ${export2[0].strip()}  ${server_split[1]}
+    ${ip1}=  Split String  ${export1}  =
+    ${ip2}=  Split String  ${export2}  =
+
+    IF  '${platform_type}' != 'K8SBareMetal'
+        ${openstack_master_name}=    Catenate  SEPARATOR=-  master  ${cloudlet_lowercase}  ${cluster_name_default}
+        ${server_info_node}=    Get Server List  name=${openstack_master_name}
+        ${server_split}=  Split String  ${server_info_node[0]['Networks']}  =
+        log to console  ${server_info_node} ${server_split[1]}
+
+        Should Be Equal  ${ip1[1].strip()}  ${server_split[1]}
+        Should Be Equal  ${ip2[1].strip()}  ${server_split[1]}
+    ELSE
+        Should Be Equal  ${ip1[1].strip()}  ${anthos_cluster_ip}
+        Should Be Equal  ${ip2[1].strip()}  ${anthos_cluster_ip}
+    END
 
 CreateApp - User shall be able to create helm IpAccessShared with envVarsYaml Configs parm
     [Documentation]
@@ -230,6 +254,25 @@ Setup
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_crm}
+
+    ${dev_name}=  Get Default Developer Name
+    ${app_name_default}=  Get Default App Name
+    ${app_version_default}=  Get Default App Version
+    ${cluster_name_default}=  Get Default Cluster Name
+
+    ${kubeconfig}=  Set Variable  ${None}
+    IF  '${platform_type}' == 'K8SBareMetal'
+        ${dev_name_hyphen}=  Replace String  ${dev_name}  _  -
+        ${app_version_change}=  Replace String  ${app_version_default}  .  ${EMPTY}
+        ${kubeconfig}=  Set Variable  defaultclust.${operator_name_crm}.${dev_name_hyphen}-${app_name_default}-${app_version_change}-${cluster_name_default}
+        ${kubeconfig}=  Get SubString  ${kubeconfig}  0  83
+        IF  '${kubeconfig}'.endswith('-')
+            ${kubeconfig}=  Get SubString  ${kubeconfig}  0  -1
+        END
+        ${kubeconfig}=  Set Variable  ${kubeconfig}.kubeconfig
+    END
+
+    Set Suite Variable  ${kubeconfig}
 
     Set Suite Variable  ${cloudlet_lowercase}
 
