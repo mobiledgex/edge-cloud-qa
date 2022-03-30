@@ -149,7 +149,7 @@ class ClusterInstance(MexOperation):
 
         if networks is not None:
             clusterinst_dict['networks'] = [networks]
-        if networks == 'empty':
+        if networks == 'networks:empty=true':
             clusterinst_dict['networks'] = []
 
         return clusterinst_dict
