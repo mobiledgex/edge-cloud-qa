@@ -1482,7 +1482,7 @@ class MexConsole() :
     def add_new_trustpolicy(self, region=None, developer_org_name=None, policy_name=None, rule_list=None, full_isolation=None, mode=None, delete_rule=None):
         self.take_screenshot('add_new_privacypolicy_pre')
 
-        self.compute_page.click_new_button()
+        self.compute_page.click_add_button()
 
         if self.new_privacy_policy_page.are_elements_present():
             logging.info('click New Trust Policy button verification succeeded')
@@ -1584,15 +1584,14 @@ class MexConsole() :
 
         self.take_screenshot('add_new_app_post')
 
-    def update_trustpolicy(self, region=None, developer_org_name=None, policy_name=None, rule_list=None, full_isolation=None, delete_rule=None, cloudlets=[]):
+    def update_trustpolicy(self, region=None, developer_org_name=None, policy_name=None, rule_list=None, full_isolation=None, delete_rule=None, cloudlets=[], verify_fields=[]):
         if region is None: region = self._region
         if policy_name is None: policy_name = self._policy['key']['name']
         if developer_org_name is None: developer_org_name = self._policy['key']['organization']
 
         logging.info(f'Updating trust policy policy_name={policy_name} developer_org_name={developer_org_name}')
-
-        self.change_number_of_rows()
-        if self.new_privacy_policy_page.update_policy(policy_name=policy_name, rule_list=rule_list, delete_rule=delete_rule):
+        self.privacy_policy_page.perform_search(policy_name)
+        if self.new_privacy_policy_page.update_policy(policy_name=policy_name, rule_list=rule_list, delete_rule=delete_rule, verify_fields=verify_fields):
             logging.info('Updated trust policy')
         else:
             raise Exception('did NOT update')
@@ -1675,33 +1674,50 @@ class MexConsole() :
     def sort_apps_by_region(self):
         self.apps_page.click_region_heading()
 
-    def trustpolicy_should_not_exist(self, region=None, developer_org_name=None, policy_name=None, rules_count=None, change_rows_per_page=False):
-        if change_rows_per_page:
-            self.change_number_of_rows()
-        self.take_screenshot('privacypolicy_should_exist_pre')
-
+    def open_trust_policy_details(self, region=None, developer_org_name=None, policy_name=None, rules_count=None):
         if region is None: region = self._region
         if policy_name is None: policy_name = self._policy['key']['name']
         if developer_org_name is None: developer_org_name = self._policy['key']['organization']
 
-        if self.privacy_policy_page.wait_for_policy(region=region, developer_org_name=developer_org_name, policy_name=policy_name, rules_count=rules_count):
+        self.privacy_policy_page.perform_search(policy_name)
+        if self.privacy_policy_page.wait_for_policy(region=region, developer_org_name=developer_org_name,
+                                                    policy_name=policy_name, rules_count=rules_count):
             raise Exception('Privacy Policy found')
         else:
             logging.info('Privacy Policy not found')
 
-    def trustpolicy_should_exist(self, region=None, developer_org_name=None, policy_name=None, rules_count=None, change_rows_per_page=False):
-        if change_rows_per_page:
-            self.change_number_of_rows()
+        self.privacy_policy_page.click_trust_policy_row(policy_name=policy_name, region=region)
+
+        details = self.details_page.get_details()
+        print('*WARN*', details)
+
+        return details
+
+    def trustpolicy_should_not_exist(self, region=None, developer_org_name=None, policy_name=None, rules_count=None, change_rows_per_page=False):
         self.take_screenshot('privacypolicy_should_exist_pre')
 
         if region is None: region = self._region
         if policy_name is None: policy_name = self._policy['key']['name']
         if developer_org_name is None: developer_org_name = self._policy['key']['organization']
 
+        self.privacy_policy_page.perform_search(policy_name)
         if self.privacy_policy_page.wait_for_policy(region=region, developer_org_name=developer_org_name, policy_name=policy_name, rules_count=rules_count):
-            logging.info('Policy found')
+            raise Exception('Trust Policy found')
         else:
-            raise Exception('Policy NOT found')
+            logging.info('Trust Policy not found')
+
+    def trustpolicy_should_exist(self, region=None, developer_org_name=None, policy_name=None, rules_count=None, change_rows_per_page=False):
+        self.take_screenshot('privacypolicy_should_exist_pre')
+
+        if region is None: region = self._region
+        if policy_name is None: policy_name = self._policy['key']['name']
+        if developer_org_name is None: developer_org_name = self._policy['key']['organization']
+
+        self.privacy_policy_page.perform_search(policy_name)
+        if self.privacy_policy_page.wait_for_policy(region=region, developer_org_name=developer_org_name, policy_name=policy_name, rules_count=rules_count):
+            logging.info('Trust policy found')
+        else:
+            raise Exception('Trust policy NOT found')
 
     def autoscalepolicy_should_exist(self, region=None, developer_org_name=None, policy_name=None, min_nodes=None, max_nodes=None, change_rows_per_page=False):
         self.take_screenshot('autoscalepolicy_should_exist_pre')
@@ -1818,13 +1834,12 @@ class MexConsole() :
         self.details_page.click_close_button()
 
     def delete_trustpolicy(self, region=None, developer_org_name=None, policy_name=None, change_rows_per_page=False, result='pass', cloudlet_name=None):
-        if change_rows_per_page:
-            self.change_number_of_rows()
         self.take_screenshot('delete_autoscalepolicy_pre')
         if region is None: region = self._region
         if policy_name is None: policy_name = self._policy['key']['name']
         if developer_org_name is None: developer_org_name = self._policy['key']['organization']
 
+        self.privacy_policy_page.perform_search(policy_name)
         self.privacy_policy_page.delete_privacypolicy(region=region, developer_org_name=developer_org_name, policy_name=policy_name)
 
         if result == 'pass':

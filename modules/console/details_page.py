@@ -61,12 +61,17 @@ class DetailsPage(BasePage):
                 table_row =  f'//tbody/tr[{row}]/td'
                 table_column =  f'//tbody/tr[{row}]/td/strong/div'
                 table_column1 = f'//tbody/tr[{row}]/td[2]'
-                key = self.driver.find_element_by_xpath(table_row).text
-                if key == 'Auto Provisioning Policies' or key == 'Created' or key == 'Updated' or key == 'Configs':
-                    value = self.driver.find_element_by_xpath(table_column1).text
-                else:
-                    value = self.driver.find_element_by_xpath(table_column).text
-                data_dict[key] = value
+                try:
+                    key = self.driver.find_element_by_xpath(table_row).text
+                    if key == 'Auto Provisioning Policies' or key == 'Created' or key == 'Updated' or key == 'Configs'\
+                        or key == 'Outbound Security Rules':
+                        value = self.driver.find_element_by_xpath(table_column1).text
+                    else:
+                        value = self.driver.find_element_by_xpath(table_column).text
+                    data_dict[key] = value
+                except Exception as excep:
+                    logging.warning('Caught exception')
+                    print(excep)
 
         return data_dict
 
