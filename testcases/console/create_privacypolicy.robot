@@ -1,10 +1,10 @@
 *** Settings ***
-Documentation   Create new Privacy Policy
+Documentation   Create new Trust Policy
 Library         MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
 Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
 Library         Collections
 Test Setup      Setup
-Test Teardown   Close Browser
+Test Teardown   Teardown
 
 Test Timeout    40 minutes
 
@@ -16,9 +16,9 @@ ${operator_name}  TDG
 ${wait}  200
 
 *** Test Cases ***
-Web UI - User shall be able to create a Privacy Policy with protocol TCP
+Web UI - User shall be able to create a Trust Policy with protocol TCP
     [Documentation]
-    ...  Create a new Privacy Policy with protocol TCP
+    ...  Create a new Trust Policy with protocol TCP
     ...  Verify Policy details in backend
 
     &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=55  remote_cidr=10.10.10.0/24
@@ -36,9 +36,9 @@ Web UI - User shall be able to create a Privacy Policy with protocol TCP
 
     MexConsole.Delete Trustpolicy 
 
-Web UI - User shall be able to create a Privacy Policy with protocol UDP
+Web UI - User shall be able to create a Trust Policy with protocol UDP
     [Documentation]
-    ...  Create a new Privacy Policy with protocol UDP
+    ...  Create a new Trust Policy with protocol UDP
     ...  Verify Policy details in backend
 
     &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=5  port_range_maximum=55  remote_cidr=10.10.10.0/24
@@ -56,12 +56,12 @@ Web UI - User shall be able to create a Privacy Policy with protocol UDP
 
     MexConsole.Delete Trustpolicy
 
-Web UI - User shall be able to create a Privacy Policy with protocol ICMP
+Web UI - User shall be able to create and update a Trust Policy with protocol ICMP
     [Documentation]
-    ...  Create a new Privacy Policy with protocol ICMP
+    ...  Create a new Trust Policy with protocol ICMP
     ...  Verify Policy details in backend
 
-    &{rule1}=  Create Dictionary  protocol=icmp  port_range_minimum=5  port_range_maximum=55  remote_cidr=10.10.10.0/24
+    &{rule1}=  Create Dictionary  protocol=ICMP  remote_cidr=10.10.10.0/24
     @{rulelist}=  Create List  ${rule1}
 
     Add New Trustpolicy  region=EU  developer_org_name=${operator_name}  policy_name=${policy_name}  rule_list=${rulelist}
@@ -69,14 +69,32 @@ Web UI - User shall be able to create a Privacy Policy with protocol ICMP
     Trustpolicy Should Exist  rules_count=1  change_rows_per_page=True
 
     ${policy_details}=    Show Trust Policy  region=EU  policy_name=${policy_name}  operator_org_name=${operator_name}
-    Should Be Equal  ${policy_details[0]['data']['outbound_security_rules'][0]['protocol']}  icmp
+    Should Be Equal  ${policy_details[0]['data']['outbound_security_rules'][0]['protocol']}  ICMP
     Should Be Equal  ${policy_details[0]['data']['outbound_security_rules'][0]['remote_cidr']}  10.10.10.0/24
+
+    ${ui_details}=  Open Trust Policy Details  region=EU  policy_name=${policy_name}
+    Log to Console    ${ui_details}
+    Should Be Equal   ${ui_details['Trust Policy Name']}   ${policy_name}
+    Should Contain    ${ui_details['Outbound Security Rules']}   Protocol
+    Should Contain    ${ui_details['Outbound Security Rules']}   ICMP
+    Should Contain    ${ui_details['Outbound Security Rules']}   Remote CIDR
+    Should Contain    ${ui_details['Outbound Security Rules']}   10.10.10.0/24
+
+    Close Details
+
+    &{rule2}=  Create Dictionary    remote_cidr=10.10.10.0/25
+    @{rulelist2}=  Create List  ${rule2}
+    MexConsole.Update Trustpolicy  region=EU  developer_org_name=${operator_name}  policy_name=${policy_name}  rule_list=${rulelist2}  verify_fields=${rulelist}
+    ${ui_details}=  Open Trust Policy Details  region=EU  policy_name=${policy_name}
+    Should Contain    ${ui_details['Outbound Security Rules']}   10.10.10.0/25
+
+    Close Details
 
     MexConsole.Delete Trustpolicy
 
-Web UI - User shall be able to create a Privacy Policy with full isolation
+Web UI - User shall be able to create a Trust Policy with full isolation
     [Documentation]
-    ...  Create a new Privacy Policy with full isolation
+    ...  Create a new Trust Policy with full isolation
     ...  Verify Policy details in UI
 
     &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=55  remote_cidr=10.10.10.0/24
@@ -91,9 +109,9 @@ Web UI - User shall be able to create a Privacy Policy with full isolation
 
     MexConsole.Delete Trustpolicy
 
-Web UI - User shall be able to cancel a new Privacy Policy 
+Web UI - User shall be able to cancel a new Trust Policy
     [Documentation]
-    ...  Cancel a new Privacy Policy 
+    ...  Cancel a new Trust Policy
     ...  Verify Policy is not present on UI
 
     &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=55  remote_cidr=10.10.10.0/24
@@ -103,9 +121,9 @@ Web UI - User shall be able to cancel a new Privacy Policy
 
     Trustpolicy Should Not Exist  rules_count=1  change_rows_per_page=True
 
-Web UI - User shall be able to create a Privacy Policy with multiple security rules
+Web UI - User shall be able to create a Trust Policy with multiple security rules
     [Documentation]
-    ...  Create a new Privacy Policy with 2 security rules
+    ...  Create a new Trust Policy with 2 security rules
     ...  Verify Policy Details in backend
 
     &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/32
@@ -126,9 +144,9 @@ Web UI - User shall be able to create a Privacy Policy with multiple security ru
 
     MexConsole.Delete Trustpolicy
 
-Web UI - User shall be able to delete a rule while creating Privacy Policy with multiple security rules
+Web UI - User shall be able to delete a rule while creating Trust Policy with multiple security rules
     [Documentation]
-    ...  Create a new Privacy Policy with 2 security rules
+    ...  Create a new Trust Policy with 2 security rules
     ...  Delete one rule and verify Policy Details in backend
 
     &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/32
@@ -161,3 +179,5 @@ Setup
 
 Teardown
     Close Browser
+    Run Keyword and Ignore Error  MexMasterController.Delete Trust Policy  region=EU  policy_name=${policy_name}  operator_org_name=TDG
+

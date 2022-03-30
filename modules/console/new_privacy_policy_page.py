@@ -1,5 +1,6 @@
 from console.base_page import BasePage, BasePageElement, BasePagePulldownElement, BasePagePulldownMultiElement
-from console.locators import NewPageLocators, PrivacyPolicyPageLocators, ComputePageLocators
+from console.compute_page import ComputePage
+from console.locators import NewPageLocators, AppsPageLocators, PrivacyPolicyPageLocators, ComputePageLocators
 from console.new_settings_full_page import NewSettingsFullPage
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
@@ -9,8 +10,9 @@ import time
 
 import logging
 
-class RegionElement(BasePagePulldownElement):
-    locator = NewPageLocators.region_pulldown_option
+class RegionElement(BasePagePulldownMultiElement):
+    locator = AppsPageLocators.apps_region_pulldown
+    locator2 = AppsPageLocators.apps_region_pulldown_options
 
 class DeveloperNameElement(BasePagePulldownElement):
     locator = PrivacyPolicyPageLocators.orgname_pulldown
@@ -35,6 +37,7 @@ class RemoteCidrIcmpElement(BasePageElement):
     locator = PrivacyPolicyPageLocators.remote_cidr_icmp_input
 
 class NewPrivacyPolicyPage(NewSettingsFullPage):
+    region = RegionElement()
     developer_org_name = DeveloperNameElement()
     policy_name = PolicyNameElement()
     protocol = ProtocolElement()
@@ -49,11 +52,11 @@ class NewPrivacyPolicyPage(NewSettingsFullPage):
     def is_region_input_present(self):
         return self.is_element_present(PrivacyPolicyPageLocators.region_input)
 
-    def is_organization_label_present(self):
-        return self.is_element_present(PrivacyPolicyPageLocators.orgname_label)
+    def is_operator_label_present(self):
+        return self.is_element_present(PrivacyPolicyPageLocators.operator_label)
 
-    def is_organization_input_present(self):
-        return self.is_element_present(PrivacyPolicyPageLocators.orgname_input)
+    def is_operator_input_present(self):
+        return self.is_element_present(PrivacyPolicyPageLocators.operator_input)
 
     def is_policyname_label_present(self):
         return self.is_element_present(PrivacyPolicyPageLocators.trustpolicy_name_label)
@@ -103,16 +106,16 @@ class NewPrivacyPolicyPage(NewSettingsFullPage):
             logging.error('Region not present')
             settings_present = False
 
-        if self.is_organization_label_present() and self.is_organization_input_present():
-            logging.info('OrgName present')
+        if self.is_operator_label_present() and self.is_operator_input_present():
+            logging.info('Operator present')
         else:
-            logging.error('OrgName not present')
+            logging.error('Operator not present')
             settings_present = False
 
         if self.is_policyname_label_present() and self.is_policyname_input_present():
-            logging.info('Privacy Policy Name present')
+            logging.info('Trust Policy Name present')
         else:
-            logging.error('Privacy Policy Name not present')
+            logging.error('Trust Policy Name not present')
             settings_present = False
 
         if self.is_security_rules_header_present():
@@ -184,21 +187,26 @@ class NewPrivacyPolicyPage(NewSettingsFullPage):
             e = self.driver.find_element(*PrivacyPolicyPageLocators.security_rules_button)
             ActionChains(self.driver).click(on_element=e).perform()
         if full_isolation is None:
+            # Delete existing empty rule list while leaving 1
+            while len(self.driver.find_elements(By.XPATH,'//div[@id="outboundSecurityRuleMulti"]//button[@class="MuiButtonBase-root MuiIconButton-root"]')) > 1:
+                ele = self.driver.find_element(By.XPATH,'//div[@id="outboundSecurityRuleMulti"]//button[@class="MuiButtonBase-root MuiIconButton-root"]')
+                ele.click()
+                time.sleep(1)
+
             for i in range(len(rule_list)):
-                k = i + 7
                 protocol = rule_list[i]['protocol'].upper()
-                protocol_pulldown = (By.XPATH, f'//div[{k}][@id="outboundSecurityRuleMulti"]/div[1]/div[@id="protocol"]//i[@class="dropdown icon"]')
-                protocol_option = (By.XPATH, f'.//div[@role="listbox"]//span[text()="{protocol}"]')
-                self.driver.find_element(*protocol_pulldown).click()
+                protocol_pulldown = f'(//div[@id="protocol"])[{i+1}]'
+                protocol_option = f'.//div[@role="listbox"]//span[text()="{protocol}"]'
+                self.driver.find_element_by_xpath(protocol_pulldown).click()
                 time.sleep(1)
                 try:
-                    self.driver.find_element(*protocol_option).click()
+                    self.driver.find_element_by_xpath(protocol_option).click()
                 except:
                     logging.info('Error finding element')
-                if rule_list[i]['protocol'] != 'icmp':
-                    port_range_min_input = (By.XPATH, f'//div[{k}][@id="outboundSecurityRuleMulti"]/div[2]//input[@type="number"]')
-                    port_range_max_input = (By.XPATH, f'//div[{k}][@id="outboundSecurityRuleMulti"]/div[3]//input[@type="number"]')
-                    remote_cidr_input = (By.XPATH, f'//div[{k}][@id="outboundSecurityRuleMulti"]/div[4]//input[@type="text"]')
+                if rule_list[i]['protocol'] != 'ICMP':
+                    port_range_min_input = (By.XPATH, f'(//p[text()="Port Range Min *"]/../../../div/following-sibling::div//input)[{i+1}]')
+                    port_range_max_input = (By.XPATH, f'(//p[text()="Port Range Max *"]/../../../div/following-sibling::div//input)[{i+1}]')
+                    remote_cidr_input = (By.XPATH, f'(//p[text()="Remote CIDR *"]/../../../div/following-sibling::div//input)[{i+1}]')
                     self.driver.find_element(*port_range_min_input).send_keys(rule_list[i]['port_range_min'])
                     #self.port_range_min = rule_list[i]['port_range_min']
                     time.sleep(1)
@@ -208,12 +216,14 @@ class NewPrivacyPolicyPage(NewSettingsFullPage):
                     self.driver.find_element(*remote_cidr_input).send_keys(rule_list[i]['remote_cidr'])
                     #self.remote_cidr = rule_list[i]['remote_cidr']
                 else:
-                    remote_cidr_icmp_input = (By.XPATH, f'//div[{k}][@id="outboundSecurityRuleMulti"]/div[2]//input[@type="text"]')
-                    self.driver.find_element(*remote_cidr_icmp_input).send_keys(rule_list[i]['remote_cidr'])
-                    #self.remote_cidr_icmp = rule_list[i]['remote_cidr']                
+                    remote_cidr_icmp_input = (By.XPATH, f'(//p[text()="Remote CIDR *"]/../../../div/following-sibling::div//input)[{i+1}]')
+                    e = self.driver.find_element(*remote_cidr_icmp_input)
+                    e.clear()
+                    e.send_keys(rule_list[i]['remote_cidr'])
         else:
             e = self.driver.find_element(*PrivacyPolicyPageLocators.full_isolation_button)       
             ActionChains(self.driver).click(on_element=e).perform()
+
         time.sleep(1)
         if delete_rule is not None:
             self.driver.find_element(*PrivacyPolicyPageLocators.delete_rules_button).click()
@@ -227,25 +237,68 @@ class NewPrivacyPolicyPage(NewSettingsFullPage):
         e = self.driver.find_element(*PrivacyPolicyPageLocators.update_button)
         ActionChains(self.driver).click(on_element=e).perform()
 
-    def update_policy(self, policy_name=None, rule_list=[], delete_rule=None):
+    def update_policy(self, policy_name=None, rule_list=[], delete_rule=None, verify_fields=[]):
         logging.info(f'Updating trust policy policy_name={policy_name}')
 
-        totals_rows = self.driver.find_elements(*ComputePageLocators.details_row)
-        total_rows_length = len(totals_rows)
-        total_rows_length += 1
-        for row in range(1, total_rows_length):
-            table_column =  f'//tbody/tr[{row}]/td[4]/div'
-            value = self.driver.find_element_by_xpath(table_column).text
-            if value == policy_name:
-                i = row
-                break
-
-        table_action = f'//tbody/tr[{i}]/td[6]//button[@aria-label="Action"]'
-        e = self.driver.find_element_by_xpath(table_action)
+        self.compute_page = ComputePage(self.driver)
+        row = self.compute_page.get_table_row_by_value([(policy_name, 4)])
+        print('*WARN*', 'row = ', row)
+        e = row.find_element(*ComputePageLocators.table_action)
         ActionChains(self.driver).click(on_element=e).perform()
+
         self.driver.find_element(*ComputePageLocators.table_update).click()
         time.sleep(5)
-        logging.info('updating policy')
+
+        ### Verify values of fields before updation
+        if verify_fields:
+            for i in range(len(verify_fields)):
+                if 'protocol' in verify_fields[i]:
+                    elements = self.driver.find_elements(By.XPATH,'//div[@id="protocol"]')
+                    found = False
+                    for ele in elements:
+                        textvalue = ele.get_attribute("innerText")
+                        print(' Textvalue = ', textvalue)
+                        if verify_fields[i]['protocol'] in textvalue:
+                            found = True
+                            break
+                    if not found:
+                        raise Exception("Expected value not found for Protocol before updation")
+
+                if 'remote_cidr' in verify_fields[i]:
+                    elements = self.driver.find_elements(By.XPATH,'//p[text()="Remote CIDR *"]/../../../div/following-sibling::div//input')
+                    found = False
+                    for ele in elements:
+                        textvalue = ele.get_attribute("value")
+                        print(' Textvalue = ', textvalue)
+                        if verify_fields[i]['remote_cidr'] in textvalue:
+                            found = True
+                            break
+                    if not found:
+                        raise Exception("Expected value not found for Remote CIDR before updation")
+
+                if 'port_range_minimum' in verify_fields[i]:
+                    elements = self.driver.find_elements(By.XPATH,'//p[text()="Port Range Min *"]/../../../div/following-sibling::div//input')
+                    found = False
+                    for ele in elements:
+                        textvalue = ele.get_attribute("value")
+                        print(' Textvalue = ', textvalue)
+                        if verify_fields[i]['port_range_minimum'] in textvalue:
+                            found = True
+                            break
+                    if not found:
+                        raise Exception("Expected value not found for Port Range Minimum before updation")
+
+                if 'port_range_maximum' in verify_fields[i]:
+                    elements = self.driver.find_elements(By.XPATH,'//p[text()="Port Range Max *"]/../../../div/following-sibling::div//input')
+                    found = False
+                    for ele in elements:
+                        textvalue = ele.get_attribute("value")
+                        print(' Textvalue = ', textvalue)
+                        if verify_fields[i]['port_range_maximum'] in textvalue:
+                            found = True
+                            break
+                    if not found:
+                        raise Exception("Expected value not found for Port Range Maximum before updation")
 
         if rule_list:
             if 'protocol' in rule_list[0]:
