@@ -19,7 +19,7 @@ Test Timeout     ${test_timeout_crm}
 *** Variables ***
 ${cloudlet_name_openstack_dedicated}  automationBonnCloudlet
 ${operator_name_openstack}  TDG 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 #${cluster_name}=  cluster1556727500-74324
 
 ${test_timeout_crm}  15 min

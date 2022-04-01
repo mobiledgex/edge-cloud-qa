@@ -13,7 +13,7 @@ Test Timeout     ${test_timeout_crm}
 *** Variables ***
 ${cloudlet_name_openstack_shared}     automationBonnCloudlet
 ${operator_name_openstack}            TDG 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 ${test_timeout_crm}  15 min
 	

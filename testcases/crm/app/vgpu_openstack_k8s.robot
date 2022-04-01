@@ -24,7 +24,7 @@ ${operator_name}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 ${docker_compose_url}=  http://35.199.188.102/apps/automation_configs_gpu_compose.yml
 ${k8s_gpu}  docker.mobiledgex.net/mobiledgex-samples/images/computervision-gpu:no-pose-2020-10-28

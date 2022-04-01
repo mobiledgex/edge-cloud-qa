@@ -13,7 +13,7 @@ Test Timeout     ${test_timeout_crm}
 *** Variables ***
 ${cloudlet_name_crm}  automationBonnCloudlet
 ${operator_name_crm}  TDG 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 ${region}             US
 
 ${test_timeout_crm}  15 min

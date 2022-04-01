@@ -21,7 +21,7 @@ ${operator_name_openstack}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 ${docker_command}  ./server_ping_threaded.py
