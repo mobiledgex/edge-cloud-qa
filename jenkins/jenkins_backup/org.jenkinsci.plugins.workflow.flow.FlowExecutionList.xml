@@ -2,30 +2,78 @@
 <list>
   <flow-owner plugin="workflow-job@2.42">
     <job>runRegression</job>
-    <id>321</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
-    <job>runConsoleTestcases</job>
-    <id>72</id>
+    <id>324</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runDmeTestcases</job>
-    <id>112</id>
+    <id>114</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runConsoleTestcases</job>
+    <id>73</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runControllerTestcases</job>
+    <id>150</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runCrmTestcases</job>
-    <id>314</id>
+    <id>316</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runTestcases</job>
-    <id>8701</id>
+    <id>8867</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runTestcases</job>
-    <id>8781</id>
+    <id>8914</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runTestcases</job>
-    <id>8796</id>
+    <id>8918</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>8930</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>8932</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>8917</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>8933</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>8934</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>8906</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>8929</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>8931</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>8961</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>8960</id>
+  </flow-owner>
+  <flow-owner plugin="workflow-job@2.42">
+    <job>runTestcases</job>
+    <id>8959</id>
   </flow-owner>
 </list>
