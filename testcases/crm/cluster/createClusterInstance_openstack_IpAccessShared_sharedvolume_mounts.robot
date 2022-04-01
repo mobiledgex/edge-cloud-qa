@@ -22,7 +22,7 @@ ${operator_name_openstack}  TDG
 
 ${region}  EU
 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 

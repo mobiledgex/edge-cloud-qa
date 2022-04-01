@@ -15,7 +15,7 @@ Suite Teardown  Cleanup
 ${cloudlet1}  automationBonnCloudlet
 ${cloudlet2}  automationVMPoolCloudlet
 ${operator_name}  TDG
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 ${region}      US
 ${flavor}  automation_api_flavor
 ${default_flavor_name}   automation_api_flavor

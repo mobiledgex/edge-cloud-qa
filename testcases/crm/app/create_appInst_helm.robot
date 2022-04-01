@@ -19,7 +19,7 @@ ${cloudlet_name_openstack_dedicated}  automationBonnCloudlet
 ${region}  EU
 ${operator_name_openstack}  TDG
 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 #${rootlb}          automationhamburgcloudlet.tdg.mobiledgex.net
 

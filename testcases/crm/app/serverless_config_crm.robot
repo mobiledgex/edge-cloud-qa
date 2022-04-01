@@ -15,7 +15,7 @@ Test Timeout    ${test_timeout_crm}
 *** Variables ***
 ${region}  EU
 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:8.0
 

@@ -13,7 +13,7 @@ Suite Teardown  Cleanup
 *** Variables ***
 ${cloudlet_name_openstack_dedicated}  automationMunichCloudlet
 ${operator_name_openstack}  TDG
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 ${region}  US
 ${flavor}  automation_api_flavor
 ${default_flavor_name}   automation_api_flavor

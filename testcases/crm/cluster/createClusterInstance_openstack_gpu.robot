@@ -14,7 +14,7 @@ Test Timeout     ${test_timeout_crm}
 ${cloudlet_name_openstack_gpu}  automationDusseldorfCloudlet
 ${operator_name}  TDG 
 ${region}  US
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 ${gpu_resource_name}  mygpuresrouce
  
 ${openstack_flavor_name}  m4.large-gpu
