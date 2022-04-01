@@ -19,7 +19,7 @@ ${cloudlet_name_openstack_dedicated}  automationBuckhornCloudlet
 ${region}  EU
 ${operator_name_openstack}  GDDT
 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 #${rootlb}          automationhawkinscloudlet.gddt.mobiledgex.net
 

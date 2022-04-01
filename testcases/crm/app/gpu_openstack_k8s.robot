@@ -25,7 +25,7 @@ ${operator_name}  GDDT
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 ${k8s_manifest_url}=  http://35.199.188.102/apps/k8s-computervision-gpu.yaml
 ${k8s_gpu}  docker.mobiledgex.net/mobiledgex-samples/images/computervision-gpu:no-pose-2020-10-28
@@ -180,7 +180,7 @@ Setup
     Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name}  mapping=gpu=${gpu_resource_name}
     Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_org_name=${operator_name}  tags=pci=t4gpu:1
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_gpu}  ${operator_name}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_gpu}-${operator_name}  ${region}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_gpu}

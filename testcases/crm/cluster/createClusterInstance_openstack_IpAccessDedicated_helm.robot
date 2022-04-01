@@ -19,7 +19,7 @@ Test Timeout     ${test_timeout_crm}
 *** Variables ***
 ${cloudlet_name_openstack_dedicated}  automationBuckhornCloudlet
 ${operator_name_openstack}  GDDT 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 ${test_timeout_crm}  15 min
 	
