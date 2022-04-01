@@ -16,7 +16,7 @@ ${operator_name_fake}  dmuus
 
 ${developer_org_name}=  MobiledgeX
 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 ${region}=  US
 

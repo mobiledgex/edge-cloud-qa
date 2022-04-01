@@ -25,7 +25,7 @@ ${operator_name_openstack}  GDDT
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 #${rootlb}          automationhawkinscloudlet.gddt.mobiledgex.net
 
