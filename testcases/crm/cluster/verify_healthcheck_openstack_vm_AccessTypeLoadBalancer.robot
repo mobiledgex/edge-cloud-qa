@@ -18,7 +18,7 @@ ${cloudlet_name_openstack_vm}  automationBuckhornCloudlet
 ${operator_name_openstack}  GDDT
 ${latitude}       32.7767
 ${longitude}      -96.7970
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 ${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 ${image_name}    server_ping_threaded_centos7
 ${test_timeout_crm}  30 min

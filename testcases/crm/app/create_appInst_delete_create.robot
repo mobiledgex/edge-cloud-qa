@@ -18,7 +18,7 @@ ${cloudlet_name_openstack_shared}  automationHawkinsCloudlet
 ${operator_name_openstack}  GDDT
 
 #${rootlb}          automationhawkinscloudlet.gddt.mobiledgex.net
-${mobiledgex_domain}  mobiledgex.net
+${mobiledgex_domain}  mobiledgex-qa.net
 
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
