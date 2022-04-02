@@ -33,6 +33,7 @@ vmpool_name = 'automationVMPool'
 app_name_automation = 'automation_api_app'
 app_name_auth_automation = 'automation_api_auth_app'
 app_name_automation_trusted = 'automation_api_app_trusted'
+app_name_automation_real = 'automation-sdk-porttest'
 developer_org_name_automation = 'automation_dev_org'
 flavor_name_automation = 'automation_api_flavor'
 alert_policy_name_automation = 'automation_api_alert_policy_name'
@@ -123,3 +124,5 @@ pagerduty_key = 'd1bdad0245364905c0e25090ce357f30'  # paid account
 trust_policy_server = '40.113.219.126'  # mexdemo.locsim.mobiledgex.net
 self_federation_id = '13c8f174-eca4-4d01-966e-7f79482d4856'
 partner_federation_name = 'controllerfed'
+
+mobiledgex_domain = 'mobiledgex-qa.net'
