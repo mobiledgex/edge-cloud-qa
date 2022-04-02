@@ -74,6 +74,8 @@ AlertReceiver - shall be able to create/receive appname/apporg HealthCheckFailSe
    Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
    ${alerts1}=  Show Alerts  region=${region}  alert_name=AppInstDown  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}
    Length Should Be  ${alerts1}  1
+   Should Be Equal             ${alerts1[0]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts1[0]['data']['labels']['port']}    ${cloudlet['ports'][0]['internal_port']}
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][1]['public_port']}
 
@@ -121,6 +123,8 @@ AlertReceiver - shall be able to create/receive appname/apporg HealthCheckFailSe
    Alert Receiver PagerDuty Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
    ${alerts1}=  Show Alerts  region=${region}  alert_name=AppInstDown  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}
    Length Should Be  ${alerts1}  1
+   Should Be Equal             ${alerts1[0]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts1[0]['data']['labels']['port']}    ${cloudlet['ports'][0]['internal_port']}
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][1]['public_port']}
 
@@ -162,6 +166,8 @@ AlertReceiver - shall be able to create/receive apporg HealthCheckFailServerFail
    Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
    ${alerts1}=  Show Alerts  region=${region}  alert_name=AppInstDown  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}
    Length Should Be  ${alerts1}  1
+   Should Be Equal             ${alerts1[0]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts1[0]['data']['labels']['port']}    ${cloudlet['ports'][0]['internal_port']}
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][2]['public_port']}
 
@@ -198,7 +204,7 @@ AlertReceiver - shall be able to create/receive appname/apporg/appversion/appclo
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
 
-   ${clusterlb}=  Convert To Lowercase  ${cluster_name}-${developer_org_name_automation}.${cloudlet_name_crm}-${operator_name_crm}.${region}.mobiledgex.net
+   ${clusterlb}=  Convert To Lowercase  ${cluster_name}-${developer_org_name_automation}.${cloudlet_name_crm}-${operator_name_crm}.${region}.${mobiledgex_domain}
    ${clusterlb}=  Replace String  ${clusterlb}  _  -
    
    Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
@@ -208,6 +214,8 @@ AlertReceiver - shall be able to create/receive appname/apporg/appversion/appclo
    Alert Receiver Email For Firing AppInstDown HealthCheckFailRootlbOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
    ${alerts1}=  Show Alerts  region=${region}  alert_name=AppInstDown  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
    Length Should Be  ${alerts1}  1
+   Should Be Equal     ${alerts1[0]['data']['labels']['status']}  HealthCheckRootlbOffline
+   Should Not Contain  ${alerts1[0]['data']['labels']}  port
 
    Start Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
@@ -291,19 +299,19 @@ AlertReceiver - shall be able to create/receive email/slack region HealthCheckFa
    Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error  region=${region}  cluster_instance_developer_org_name=${developer}
 
    ${developer_dash}=  Replace String  ${developer}  _  -
-   ${clusterlb}=  Convert To Lowercase  ${app['data']['key']['name']}10-${developer_dash}.${cloudlet_name_crm}-${operator_name_crm}.${region}.mobiledgex.net
+   ${clusterlb}=  Convert To Lowercase  ${app['data']['key']['name']}10-${developer_dash}.${cloudlet_name_crm}-${operator_name_crm}.${region}.${mobiledgex_domain}
    Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
    Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name}
 
+   ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}
+   Length Should Be  ${alerts1}  1
+   Should Be Equal     ${alerts1[0]['data']['labels']['status']}  HealthCheckRootlbOffline
+   Should Not Contain  ${alerts1[0]['data']['labels']}  port
+
    # verify alerts received for EU region app
    Alert Receiver Email For Firing AppInstDown HealthCheckFailRootlbOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
    Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailRootlbOffline Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
-   ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}
-   Length Should Be  ${alerts1}  1
-
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
 
    # verify alerts NOT received for US region app
    Alert Receiver Email For Firing AppInstDown HealthCheckFailRootlbOffline Should Not Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region_packet}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_not_wait}
@@ -357,11 +365,16 @@ AlertReceiver - shall be able to create/receive pagerduty/slack region HealthChe
    Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error  region=${region}  cluster_instance_developer_org_name=${developer}
 
    ${developer_dash}=  Replace String  ${developer}  _  -
-   ${clusterlb}=  Convert To Lowercase  ${app['data']['key']['name']}10-${developer_dash}.${cloudlet_name_crm}-${operator_name_crm}.${region}.mobiledgex.net
+   ${clusterlb}=  Convert To Lowercase  ${app['data']['key']['name']}10-${developer_dash}.${cloudlet_name_crm}-${operator_name_crm}.${region}.${mobiledgex_domain}
 #   ${clusterlb}=  Convert To Lowercase  ${developer_dash}${app_name}10.${cloudlet_name_crm}.${operator_name_crm}.mobiledgex.net
    Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
    Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name}
+
+   ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}
+   Length Should Be  ${alerts1}  1
+   Should Be Equal     ${alerts1[0]['data']['labels']['status']}  HealthCheckRootlbOffline
+   Should Not Contain  ${alerts1[0]['data']['labels']}  port
 
    # verify alerts received for EU region app
    Alert Receiver PagerDuty Email For Firing AppInstDown HealthCheckFailRootlbOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
@@ -415,9 +428,12 @@ AlertReceiver - shall be able to create/receive clusterorg HealthCheckFailServer
 
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
 
-   Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-   ${alerts1}=  Show Alerts  region=${region}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_orgname} 
+   ${alerts1}=  Show Alerts  region=${region}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_orgname}
    Length Should Be  ${alerts1}  1
+   Should Be Equal     ${alerts1[0]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts1[0]['data']['labels']['port']}  ${cloudlet['ports'][0]['internal_port']}
+
+   Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][2]['public_port']}
 
@@ -479,10 +495,13 @@ AlertReceiver - shall be able to create/receive email/slack cluster/clusterorg H
 
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
 
-   Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-   Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}_2  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
    ${alerts1}=  Show Alerts  region=${region}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}
    Length Should Be  ${alerts1}  1
+   Should Be Equal     ${alerts1[0]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts1[0]['data']['labels']['port']}  ${cloudlet['ports'][0]['internal_port']}
+
+   Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
+   Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}_2  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][2]['public_port']}
 
@@ -516,6 +535,8 @@ AlertReceiver - shall be able to create/receive appname/apporg alerts with docke
    Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=2000  wait=${email_wait}
    ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}  developer_org_name=${developer}
    Length Should Be  ${alerts1}  1
+   Should Be Equal     ${alerts1[0]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts1[0]['data']['labels']['port']}  2000
 
 # ECQ-2944 
 AlertReceiver - shall be able to create/receive apporg/appcloudlet slack alerts with docker/dedicated/loadbalancer
@@ -551,6 +572,8 @@ AlertReceiver - shall be able to create/receive apporg/appcloudlet slack alerts 
    Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
    ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}  developer_org_name=${developer}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}
    Length Should Be  ${alerts1}  1
+   Should Be Equal     ${alerts1[0]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts1[0]['data']['labels']['port']}  ${cloudlet['ports'][0]['internal_port']}
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][1]['public_port']}
 
@@ -605,6 +628,8 @@ AlertReceiver - shall be able to create/receive email alerts with email parm and
    Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${cluster_org}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
    ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}  
    Length Should Be  ${alerts1}  1
+   Should Be Equal     ${alerts1[0]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts1[0]['data']['labels']['port']}  ${cloudlet['ports'][0]['internal_port']}
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][2]['public_port']}
 
@@ -656,6 +681,8 @@ AlertReceiver - shall be able to create/receive email/slack alerts for 2 apps on
    Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_0['ports'][0]['internal_port']}  wait=${email_wait}
    ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}
    Length Should Be  ${alerts1}  1
+   Should Be Equal     ${alerts1[0]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts1[0]['data']['labels']['port']}  ${cloudlet_0['ports'][0]['internal_port']}
 
    Stop TCP Port  ${fqdn_1}  ${cloudlet_1['ports'][0]['public_port']}
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}  app_version=2.0
@@ -663,12 +690,18 @@ AlertReceiver - shall be able to create/receive email/slack alerts for 2 apps on
    Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=2.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_1['ports'][0]['internal_port']}  wait=${email_wait}
    ${alerts2}=  Show Alerts  region=${region}  app_name=${app_name}
    Length Should Be  ${alerts2}  2
+   Should Be Equal     ${alerts2[0]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts2[0]['data']['labels']['port']}  ${cloudlet_0['ports'][0]['internal_port']}
+   Should Be Equal     ${alerts2[1]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts2[1]['data']['labels']['port']}  ${cloudlet_1['ports'][0]['internal_port']}
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet_0['ports'][0]['internal_port']}  server_port=${cloudlet_0['ports'][1]['public_port']}
    Alert Receiver Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_0['ports'][0]['internal_port']}  wait=${email_wait}
    Alert Receiver Slack Message For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_0['ports'][0]['internal_port']}  wait=${email_wait}
    ${alerts3}=  Show Alerts  region=${region}  app_name=${app_name}
    Length Should Be  ${alerts3}  1
+   Should Be Equal     ${alerts3[0]['data']['labels']['status']}  HealthCheckServerFail
+   Should Be Equal As Numbers  ${alerts3[0]['data']['labels']['port']}  ${cloudlet_1['ports'][0]['internal_port']}
 
    Start TCP Port  host=${fqdn_1}  port=${cloudlet_1['ports'][0]['internal_port']}  server_port=${cloudlet_1['ports'][1]['public_port']}
    Alert Receiver Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=2.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_1['ports'][0]['internal_port']}  wait=${email_wait}
@@ -792,9 +825,9 @@ AlertReceiver - shall be able to create/receive AppInst CloudletOffline email/sl
 
    Register Client  app_name=${app_name}
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
-   ${fqdn}=  Convert To Lowercase  ${cluster_name}.${cloudlet_name_offline}.${operator_name_crm}.mobiledgex.net
-   Should Be Equal  ${cloudlet['status']}  FIND_FOUND
-   Should Be Equal  ${cloudlet['fqdn']}  ${fqdn}
+   #${fqdn}=  Convert To Lowercase  ${cluster_name}-${cloudlet_name_offline}.${operator_name_crm}.${mobiledgex_domain}
+   Should Be Equal  ${cloudlet['status']}  Found
+   #Should Be Equal  ${cloudlet['fqdn']}  ${fqdn}
 
    Create Alert Receiver  region=${region}  app_name=${app_name}  cluster_instance_developer_org_name=${developer}
    Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error  region=${region}  app_name=${app_name}  cluster_instance_developer_org_name=${developer}
@@ -815,11 +848,12 @@ AlertReceiver - shall be able to create/receive AppInst CloudletOffline email/sl
 
    Register Client  app_name=${app_name}
    ${error}=  Run Keyword and Expect Error  *   Find Cloudlet  latitude=${latitude}  longitude=${longitude}
-   Should Contain  ${error}  FIND_NOTFOUND
+   Should Contain  ${error}  Notfound 
 
    Sleep  30s
    ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_crm}  description=AppInst down due to cloudlet offline
    Length Should Be  ${alerts1}  1
+   Should Be Equal     ${alerts1[0]['data']['labels']['status']}  HealthCheckCloudletOffline
 
    Alert Receiver Email For Firing AppInstDown HealthCheckCloudletOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_crm}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
 
@@ -838,9 +872,9 @@ AlertReceiver - shall be able to create/receive AppInst CloudletOffline email/sl
 
    Register Client  app_name=${app_name}
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
-   ${fqdn}=  Convert To Lowercase  ${cluster_name}.${cloudlet_name_offline}.${operator_name_crm}.mobiledgex.net
-   Should Be Equal  ${cloudlet['status']}  FIND_FOUND
-   Should Be Equal  ${cloudlet['fqdn']}  ${fqdn}
+   #${fqdn}=  Convert To Lowercase  ${cluster_name}.${cloudlet_name_offline}.${operator_name_crm}.${mobiledgex_domain}
+   Should Be Equal  ${cloudlet['status']}  Found
+   #Should Be Equal  ${cloudlet['fqdn']}  ${fqdn}
 
 *** Keywords ***
 Setup
