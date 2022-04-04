@@ -1,15 +1,11 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <list>
   <flow-owner plugin="workflow-job@2.42">
-    <job>runRegression</job>
-    <id>324</id>
-  </flow-owner>
-  <flow-owner plugin="workflow-job@2.42">
     <job>runConsoleTestcases</job>
-    <id>73</id>
+    <id>74</id>
   </flow-owner>
   <flow-owner plugin="workflow-job@2.42">
     <job>runTestcases</job>
-    <id>8867</id>
+    <id>9022</id>
   </flow-owner>
 </list>
