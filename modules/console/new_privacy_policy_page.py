@@ -183,9 +183,10 @@ class NewPrivacyPolicyPage(NewSettingsFullPage):
         time.sleep(1)
         self.policy_name = policy_name
         time.sleep(1)
-        if (len(rule_list) > 1):
-            e = self.driver.find_element(*PrivacyPolicyPageLocators.security_rules_button)
-            ActionChains(self.driver).click(on_element=e).perform()
+
+        rule_list_count = len(rule_list)
+        logging.info('Rules list count = ' + str(rule_list_count))
+
         if full_isolation is None:
             # Delete existing empty rule list while leaving 1
             while len(self.driver.find_elements(By.XPATH,'//div[@id="outboundSecurityRuleMulti"]//button[@class="MuiButtonBase-root MuiIconButton-root"]')) > 1:
@@ -193,33 +194,38 @@ class NewPrivacyPolicyPage(NewSettingsFullPage):
                 ele.click()
                 time.sleep(1)
 
-            for i in range(len(rule_list)):
+            for i in range(rule_list_count):
                 protocol = rule_list[i]['protocol'].upper()
                 protocol_pulldown = f'(//div[@id="protocol"])[{i+1}]'
-                protocol_option = f'.//div[@role="listbox"]//span[text()="{protocol}"]'
+                protocol_option = f'(//div[@id="protocol"])[{i+1}]//div[@role="listbox"]//span[text()="{protocol}"]'
                 self.driver.find_element_by_xpath(protocol_pulldown).click()
                 time.sleep(1)
                 try:
                     self.driver.find_element_by_xpath(protocol_option).click()
-                except:
+                except Exception as e:
                     logging.info('Error finding element')
+                    print(e)
+
                 if rule_list[i]['protocol'] != 'ICMP':
-                    port_range_min_input = (By.XPATH, f'(//p[text()="Port Range Min *"]/../../../div/following-sibling::div//input)[{i+1}]')
-                    port_range_max_input = (By.XPATH, f'(//p[text()="Port Range Max *"]/../../../div/following-sibling::div//input)[{i+1}]')
+                    port_range_min_input = (By.XPATH,
+                    f'(//div[@id="outboundSecurityRuleMulti"])[{i+1}]//p[text()="Port Range Min *"]/../../../div/following-sibling::div//input')
+                    port_range_max_input = (By.XPATH,
+                    f'(//div[@id="outboundSecurityRuleMulti"])[{i + 1}]//p[text()="Port Range Max *"]/../../../div/following-sibling::div//input')
                     remote_cidr_input = (By.XPATH, f'(//p[text()="Remote CIDR *"]/../../../div/following-sibling::div//input)[{i+1}]')
                     self.driver.find_element(*port_range_min_input).send_keys(rule_list[i]['port_range_min'])
-                    #self.port_range_min = rule_list[i]['port_range_min']
                     time.sleep(1)
                     self.driver.find_element(*port_range_max_input).send_keys(rule_list[i]['port_range_max'])
-                    #self.port_range_max = rule_list[i]['port_range_max']
                     time.sleep(1)
                     self.driver.find_element(*remote_cidr_input).send_keys(rule_list[i]['remote_cidr'])
-                    #self.remote_cidr = rule_list[i]['remote_cidr']
                 else:
                     remote_cidr_icmp_input = (By.XPATH, f'(//p[text()="Remote CIDR *"]/../../../div/following-sibling::div//input)[{i+1}]')
                     e = self.driver.find_element(*remote_cidr_icmp_input)
                     e.clear()
                     e.send_keys(rule_list[i]['remote_cidr'])
+
+                if i < (rule_list_count-1):
+                    e = self.driver.find_element(*PrivacyPolicyPageLocators.security_rules_button)
+                    ActionChains(self.driver).click(on_element=e).perform()
         else:
             e = self.driver.find_element(*PrivacyPolicyPageLocators.full_isolation_button)       
             ActionChains(self.driver).click(on_element=e).perform()

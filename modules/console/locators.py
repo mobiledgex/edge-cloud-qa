@@ -255,7 +255,7 @@ class PrivacyPolicyPageLocators(object):
     cancel_button = (By.XPATH, '//div[@id="submitButtonGroup"]//button[contains(.,"Cancel")]')
     table_action = (By.XPATH, '//button[@id="mex-data-grid-row-actions"]')
     full_isolation_button = (By.XPATH, '//div[@class="three column row formRow-4"]//span[@class="MuiIconButton-label"]')
-    security_rules_button = (By.XPATH, '//div[@class="ui grid"]//h3[text()="Outbound Security Rules"]/button[@type="button"]')
+    security_rules_button = (By.XPATH, '//h3[text()="Outbound Security Rules"]//button[@type="button"]')
     delete_rules_button = (By.XPATH, '//div[@id="outboundSecurityRuleMulti"]//button[@class="MuiButtonBase-root MuiIconButton-root"]')
     update_button = (By.XPATH, '//div[@id="submitButtonGroup"]//span[text()="Update Policy"]')
 
