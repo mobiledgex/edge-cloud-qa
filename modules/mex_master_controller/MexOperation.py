@@ -260,7 +260,7 @@ class MexOperation(MexRest):
 
         if use_thread is True:
             thread_name = f'Thread-{thread_name}-{str(time.time())}'
-            t = threading.Thread(target=send_message, name=thread_name, args=(thread_name,))
+            t = threading.Thread(target=send_message, name=thread_name, args=(full_url, thread_name, False,))
             t.start()
             return t
         else:
