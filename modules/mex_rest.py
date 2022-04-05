@@ -18,7 +18,7 @@ class MexRest(WebService):
 
     def post(self, url, data=None, bearer=None, stream=False, stream_timeout=60, connection_timeout=3.05):
         # logging.debug(f'url={url} data={data} cert={self.root_cert}')
-        logger.debug(f'url={url} data={data}')
+        logger.debug(f'url={url} data={data} stream={stream} stream_timeout={stream_timeout}')
         headers = {'Content-type': 'application/json', 'accept': 'application/json'}
         if bearer is not None:
             headers['Authorization'] = 'Bearer ' + bearer
