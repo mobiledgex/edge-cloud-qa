@@ -1286,6 +1286,9 @@ class MexMasterController(MexRest):
     def get_create_app_instance_stream(self):
         return self.app_instance.create_app_instance_stream()
 
+    def get_create_app_instance_output(self):
+        return self.app_instance.create_app_instance_output()
+
     def delete_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         """ Send region DeleteAppInst
         """

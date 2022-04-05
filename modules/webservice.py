@@ -27,7 +27,7 @@ class WebService() :
     stream_output_str = []
     stream_output = []
     resp_text = ''
-    
+
     #def __init__(self, jid = None, password = None, sesid = None, http_or_https = None, output_format = None) :
     def __init__(self, debug = False, http_trace = False) :
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -51,22 +51,24 @@ class WebService() :
         #    self.output_format = output_format
 
     def post(self, url, data=None, verify_cert=False, headers=None, files=None, stream=False, connection_timeout=3.05, stream_timeout=60):
-        logger.debug(f'url={url} data={data} headers={headers} verify_cert={verify_cert} stream={stream} connection_timeout={connection_timeout}, stream_timeout={stream_timeout}')
+        logger.debug(f'post url={url} data={data} headers={headers} verify_cert={verify_cert} stream={stream} connection_timeout={connection_timeout}, stream_timeout={stream_timeout}')
        
         #url_to_use = self._buildUrl(url)
         self.stream_output_bytes = []
         self.stream_output = []
         self.stream_output_str = []
         self.resp_text = ''
-     
+        self.resp_dict = {}
+ 
         timeout = (connection_timeout, stream_timeout)
         #if stream and stream_timeout:
         #    timeout = (3.05, int(stream_timeout))
         
         try:
             self.resp = requests.post(url, data, verify=verify_cert, headers=headers, files=files, stream=stream, timeout=timeout)
-            logger.debug(f'resp={self.resp}')
+            logger.debug(f'post resp={self.resp} stream={stream}')
             if stream:
+                logger.debug('checking for stream output')
                 for line in self.resp.iter_lines():
                     logging.debug(f'stream line={line}')
                     #BuiltIn().log_to_console(f'console stream line={line}')
@@ -76,8 +78,12 @@ class WebService() :
                 logger.debug('stream_output_bytes=' + str(self.stream_output_bytes))
                 self.resp_text = str(self.stream_output_str)
             else:
-                logger.debug('resp=' + str(self.resp.text))
+                logger.debug('resptext=' + str(self.resp.text))
                 self.resp_text = str(self.resp.text)
+                if url in self.resp_dict:
+                    self.resp_dict[url] += self.resp_text
+                else:
+                    self.resp_dict[url] = self.resp_text
         except requests.exceptions.ConnectionError as e:
             if stream and 'Read timed out' in str(e):
                 logging.info(f'Read timeout while steaming:{e}')
@@ -128,6 +134,9 @@ class WebService() :
 
     def get_stream_output(self):
         return self.stream_output
+
+    def get_output(self, key):
+        return self.resp_dict[key]
     
     def _build_parms(self, parms):
         s = ''
