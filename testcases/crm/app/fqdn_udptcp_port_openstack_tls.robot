@@ -282,7 +282,8 @@ Verify Ssl Certificate
     ${epoch_time}=  Get Time  epoch
     ${outfile}=        Catenate  SEPARATOR=  outfile  ${epoch_time}
 
-    Run Process   curl -v https://${URL}/ --cacert letsencrypt-stg-root-x1.pem --max-time 10   shell=True  stdout=${outfile}  stderr=STDOUT
+    #Run Process   curl -v https://${URL}/ --cacert letsencrypt-stg-root-x1.pem --max-time 10   shell=True  stdout=${outfile}  stderr=STDOUT
+    Run Process   curl -v https://${URL}/ --max-time 10   shell=True  stdout=${outfile}  stderr=STDOUT
     ${output}=  Get File  ${outfile}
     Log To Console  ${output}
     Should Contain  ${output}  SSL certificate verify ok
