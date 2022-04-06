@@ -73,6 +73,8 @@ qcow_centos_image_nocloudinit = 'https://artifactory.mobiledgex.net/artifactory/
 server_ping_threaded_cloudconfig = 'http://35.199.188.102/apps/server_ping_threaded_cloudconfig.yml'
 robotnik_manifest = 'http://35.199.188.102/apps/automation_robotnik.yml'
 namespace_manifest = 'http://35.199.188.102/apps/automation_server_ping_threaded_namespaces.yml'
+server_ping_threaded_replicas_manifest = 'http://35.199.188.102/apps/server_ping_threaded_udptcphttp_replicas.yml'
+server_ping_threaded_manifest = 'http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml'
 
 http_port_page = 'automation.html'
 
