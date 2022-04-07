@@ -141,6 +141,7 @@ UpdateApp - apps shall update with qos args
    image_type=ImageTypeHelm    deployment=helm        image_path=${docker_image}       qos_session_profile=ThroughputDownM  qos_session_duration=1h1m1s  qos_session_profile_2=ThroughputDownS  qos_session_duration_2=1s
    image_type=ImageTypeQcow    deployment=vm          image_path=${qcow_centos_image}  qos_session_profile=ThroughputDownL  qos_session_duration=0s      qos_session_profile_2=ThroughputDownL  qos_session_duration_2=1h1m1s
    image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}       qos_session_profile=1                qos_session_duration=300ms   qos_session_profile_2=ThroughputDownL  qos_session_duration_2=300ms
+   image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}       qos_session_profile=ThroughputDownS  qos_session_duration=300ms   qos_session_profile_2=NoPriority       qos_session_duration_2=${None}
 
 # ECQ-4435
 UpdateApp - Error shall be received for invalid qos session profile parm
