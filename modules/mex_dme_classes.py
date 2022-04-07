@@ -1,6 +1,6 @@
-#import app_client_pb2
-#import app_client_pb2_grpc
-#import loc_pb2
+# import app_client_pb2
+# import app_client_pb2_grpc
+# import loc_pb2
 import json
 
 import shared_variables
@@ -9,6 +9,7 @@ auth_token_global = None
 session_cookie_global = None
 token_server_uri_global = None
 token_global = None
+
 
 class RegisterClientObject():
     request = None
@@ -24,15 +25,17 @@ class RegisterClientObject():
         self.unique_id_type = unique_id_type
         self.tags = tags
         global auth_token_global
-        
+
         if use_defaults:
-            if not app_name: self.app_name = shared_variables.app_name_default
-            if not app_version: self.app_vers = shared_variables.app_version_default
-            if not developer_org_name: self.dev_name = shared_variables.developer_name_default
-            if not auth_token: self.auth_token = auth_token_global
-            
-        #if auth_token == 'default':
-        #    self.auth_token = 
+            if not app_name:
+                self.app_name = shared_variables.app_name_default
+            if not app_version:
+                self.app_vers = shared_variables.app_version_default
+            if not developer_org_name:
+                self.dev_name = shared_variables.developer_name_default
+            if not auth_token:
+                self.auth_token = auth_token_global
+
         if self.dev_name is not None:
             client_dict['org_name'] = self.dev_name
         if self.app_name is not None:
@@ -50,15 +53,16 @@ class RegisterClientObject():
         if self.tags is not None:
             client_dict['tags'] = self.tags
 
-        #self.request = app_client_pb2.RegisterClientRequest(**client_dict)
+        # self.request = app_client_pb2.RegisterClientRequest(**client_dict)
         self.request = json.dumps(client_dict)
-        
+
+
 class FindCloudletRequestObject():
     request_dict = None
     request_dict_string = None
     request = None
-    
-    def __init__(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, app_name=None, app_version=None, developer_org_name=None, cell_id=None, timestamp_seconds=None, timestamp_nanos=None, use_defaults=True):
+
+    def __init__(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, app_name=None, app_version=None, developer_org_name=None, cell_id=None, timestamp_seconds=None, timestamp_nanos=None, ip_user_equipment=None, use_defaults=True):
         request_dict = {}
         self.session_cookie = session_cookie
         self.carrier_name = carrier_name
@@ -70,13 +74,14 @@ class FindCloudletRequestObject():
         self.seconds = timestamp_seconds
         self.nanos = timestamp_nanos
         self.cell_id = cell_id
-        
+
         if session_cookie == 'default':
             self.session_cookie = shared_variables.session_cookie_default
-            
+
         if use_defaults:
-            if not session_cookie: self.session_cookie = shared_variables.session_cookie_default
-            if not carrier_name: self.carrier_name = shared_variables.operator_name_default
+            if not session_cookie:
+                self.session_cookie = shared_variables.session_cookie_default
+            # if not carrier_name: self.carrier_name = shared_variables.operator_name_default
 
         time_dict = {}
         if self.seconds is not None:
@@ -90,7 +95,7 @@ class FindCloudletRequestObject():
         if self.longitude is not None:
             loc_dict['longitude'] = float(self.longitude)
         if time_dict:
-            #loc_dict['timestamp'] = loc_pb2.Timestamp(**time_dict)
+            # loc_dict['timestamp'] = loc_pb2.Timestamp(**time_dict)
             loc_dict['timestamp'] = time_dict
 
         if self.session_cookie is not None:
@@ -106,15 +111,22 @@ class FindCloudletRequestObject():
         if self.cell_id is not None:
             request_dict['cell_id'] = int(self.cell_id)
 
+        tags_dict = {}
+        if ip_user_equipment is not None:
+            tags_dict['ip_user_equipment'] = ip_user_equipment
+
+        if tags_dict:
+            request_dict['tags'] = tags_dict
         if loc_dict:
-            #request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
+            # request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
             request_dict['gps_location'] = loc_dict
 
-        #self.request_dict = request_dict
-        #self.request_dict_string = str(request_dict).replace('\n', ',')
-        #self.request = app_client_pb2.FindCloudletRequest(**request_dict)
+        # self.request_dict = request_dict
+        # self.request_dict_string = str(request_dict).replace('\n', ',')
+        # self.request = app_client_pb2.FindCloudletRequest(**request_dict)
         self.request = json.dumps(request_dict)
-        #print('*WARN*', 'aa', str(self.request_dict['GpsLocation'].__dict__))
+        # print('*WARN*', 'aa', str(self.request_dict['GpsLocation'].__dict__))
+
 
 class VerifyLocationRequestObject():
     def __init__(self, session_cookie=None, token=None, carrier_name=None, latitude=None, longitude=None, use_defaults=True):
@@ -132,8 +144,10 @@ class VerifyLocationRequestObject():
             self.token = shared_variables.token_default
 
         if use_defaults:
-            if not session_cookie: self.session_cookie = shared_variables.session_cookie_default
-            if token is None: self.token = shared_variables.token_default
+            if not session_cookie:
+                self.session_cookie = shared_variables.session_cookie_default
+            if token is None:
+                self.token = shared_variables.token_default
 
         loc_dict = {}
         if self.latitude is not None:
@@ -144,22 +158,23 @@ class VerifyLocationRequestObject():
         if self.session_cookie is not None:
             request_dict['session_cookie'] = self.session_cookie
         if self.carrier_name is not None:
-            request_dict['carrier_name'] = self.carrier_name    
+            request_dict['carrier_name'] = self.carrier_name
         if loc_dict:
-            #request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
+            # request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
             request_dict['gps_location'] = loc_dict
         if self.token is not None:
             request_dict['verify_loc_token'] = self.token
 
         print(request_dict)
-        #self.request = app_client_pb2.VerifyLocationRequest(**request_dict)
+        # self.request = app_client_pb2.VerifyLocationRequest(**request_dict)
         self.request = json.dumps(request_dict)
+
 
 class GetQosPositionKpiRequestObject():
     request_dict = None
     request_dict_string = None
     request = None
-    
+
     def __init__(self, session_cookie=None, position_list=[], lte_category=None, band_selection=None, cell_id=None, use_defaults=True):
         request_dict = {}
         self.session_cookie = session_cookie
@@ -167,12 +182,13 @@ class GetQosPositionKpiRequestObject():
         self.lte_category = lte_category
         self.band_selection = band_selection
         self.cell_id = cell_id
-        
+
         if session_cookie == 'default':
             self.session_cookie = shared_variables.session_cookie_default
-            
+
         if use_defaults:
-            if not session_cookie: self.session_cookie = shared_variables.session_cookie_default
+            if not session_cookie:
+                self.session_cookie = shared_variables.session_cookie_default
 
         position_dict_list = []
         for position in position_list:
@@ -186,10 +202,9 @@ class GetQosPositionKpiRequestObject():
                 loc_dict['longitude'] = float(position['longitude'])
             if loc_dict is not None:
                 position_dict['gps_location'] = loc_dict
-                
-            if position_dict:
-                position_dict_list.append(position_dict)    
 
+            if position_dict:
+                position_dict_list.append(position_dict)
 
         if self.session_cookie is not None:
             request_dict['session_cookie'] = self.session_cookie
@@ -202,5 +217,38 @@ class GetQosPositionKpiRequestObject():
 
         if position_dict_list:
             request_dict['positions'] = position_dict_list
+
+        self.request = json.dumps(request_dict)
+
+
+class CreateQosPrioritySessionObject():
+    request_dict = None
+    request_dict_string = None
+    request = None
+
+    def __init__(self, session_cookie=None, profile=None, session_duration=None, ip_user_equipment=None, ip_application_server=None, port_application_server=None, session_id=None, use_defaults=True):
+        request_dict = {}
+
+        if session_cookie == 'default':
+            self.session_cookie = shared_variables.session_cookie_default
+
+        if use_defaults:
+            if not session_cookie:
+                session_cookie = shared_variables.session_cookie_default
+
+        if session_cookie is not None:
+            request_dict['session_cookie'] = session_cookie
+        if profile is not None:
+            request_dict['profile'] = profile
+        if session_duration is not None:
+            request_dict['session_duration'] = int(session_duration)
+        if ip_user_equipment is not None:
+            request_dict['ip_user_equipment'] = ip_user_equipment
+        if ip_application_server is not None:
+            request_dict['ip_application_server'] = ip_application_server
+        if port_application_server is not None:
+            request_dict['port_application_server'] = port_application_server
+        if session_id is not None:
+            request_dict['session_id'] = session_id
 
         self.request = json.dumps(request_dict)
