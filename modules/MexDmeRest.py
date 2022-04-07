@@ -46,6 +46,14 @@ class MexDmeRest(MexRest):
         self._number_verifyLocation_requests_success = 0
         self._number_verifyLocation_requests_fail = 0
 
+        self._number_qosprioritysessioncreate_requests = 0
+        self._number_qosprioritysessioncreate_requests_success = 0
+        self._number_qosprioritysessioncreate_requests_fail = 0
+
+        self._number_qosprioritysessiondelete_requests = 0
+        self._number_qosprioritysessiondelete_requests_success = 0
+        self._number_qosprioritysessiondelete_requests_fail = 0
+
     def number_of_register_requests(self):
         return self._number_register_requests
 
@@ -132,9 +140,9 @@ class MexDmeRest(MexRest):
             resp = send_message()
             return resp
 
-    def find_cloudlet(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, app_name=None, app_version=None, developer_org_name=None, cell_id=None, seconds=None, nanos=None, use_defaults=True, use_thread=False):
+    def find_cloudlet(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, app_name=None, app_version=None, developer_org_name=None, cell_id=None, seconds=None, nanos=None, ip_user_equipment=None, use_defaults=True, use_thread=False):
 
-        client = mex_dme_classes.FindCloudletRequestObject(session_cookie=session_cookie, carrier_name=carrier_name, latitude=latitude, longitude=longitude, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cell_id=cell_id, timestamp_seconds=seconds, timestamp_nanos=nanos, use_defaults=use_defaults)
+        client = mex_dme_classes.FindCloudletRequestObject(session_cookie=session_cookie, carrier_name=carrier_name, latitude=latitude, longitude=longitude, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cell_id=cell_id, timestamp_seconds=seconds, timestamp_nanos=nanos, ip_user_equipment=ip_user_equipment, use_defaults=use_defaults)
 
         url = self.root_url + '/v1/findcloudlet'
         # payload = MessageToJson(client.request)
@@ -222,7 +230,7 @@ class MexDmeRest(MexRest):
 
     def verify_location(self, session_cookie=None, token=None, carrier_name=None, latitude=None, longitude=None, cell_id=None, use_defaults=True, use_thread=False):
 
-        client = mex_dme_classes.VerifyLocationRequestObject(session_cookie=session_cookie, token=token, carrier_name=carrier_name, latitude=latitude, longitude=longitude, cell_id=cell_id, use_defaults=use_defaults)
+        client = mex_dme_classes.VerifyLocationRequestObject(session_cookie=session_cookie, token=token, carrier_name=carrier_name, latitude=latitude, longitude=longitude, use_defaults=use_defaults)
 
         url = self.root_url + '/v1/verifylocation'
         # payload = MessageToJson(client.request)
@@ -290,6 +298,88 @@ class MexDmeRest(MexRest):
                 raise Exception("post failed:", e)
 
             self._number_getappofficialfqdn_requests_success += 1
+
+            return self.decoded_data
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return resp
+
+    def create_qos_priority_session(self, session_cookie=None, profile=None, session_duration=None, ip_user_equipment=None, ip_application_server=None, port_application_server=None, use_defaults=True, use_thread=False):
+
+        client = mex_dme_classes.CreateQosPrioritySessionObject(session_cookie=session_cookie, profile=profile, session_duration=session_duration, ip_user_equipment=ip_user_equipment, ip_application_server=ip_application_server, port_application_server=port_application_server, use_defaults=use_defaults)
+
+        url = self.root_url + '/v1/qosprioritysessioncreate'
+        # payload = MessageToJson(client.request)
+        payload = client.request
+
+        logger.info('qosprioritysessioncreate rest client on {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_qosprioritysessioncreate_requests += 1
+
+            try:
+                self.post(url=url, data=payload)
+
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_qosprioritysessioncreate_requests_fail += 1
+                    logger.error(f'ws did not return a 200 response. responseCode={self.resp.status_code} ResponseBody={str(self.resp.text).rstrip()}')
+                    raise Exception(f'code={self.resp.status_code}', f'error={str(self.resp.text).rstrip()}')
+                    # raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+
+            except Exception as e:
+                self._number_qosprioritysessioncreate_requests_fail += 1
+                raise Exception(f'code={self.resp.status_code}', f'error={str(self.resp.text).rstrip()}')
+                # raise Exception("post failed:", e)
+
+            self._number_qosprioritysessioncreate_requests_success += 1
+
+            return self.decoded_data
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return resp
+
+    def delete_qos_priority_session(self, session_cookie=None, profile=None, session_id=None, use_defaults=True, use_thread=False):
+
+        client = mex_dme_classes.CreateQosPrioritySessionObject(session_cookie=session_cookie, profile=profile, session_id=session_id, use_defaults=use_defaults)
+
+        url = self.root_url + '/v1/qosprioritysessiondelete'
+        # payload = MessageToJson(client.request)
+        payload = client.request
+
+        logger.info('qosprioritysessiondelete rest client on {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_qosprioritysessiondelete_requests += 1
+
+            try:
+                self.post(url=url, data=payload)
+
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_qosprioritysessiondelete_requests_fail += 1
+                    logger.error(f'ws did not return a 200 response. responseCode={self.resp.status_code} ResponseBody={str(self.resp.text).rstrip()}')
+                    raise Exception(f'code={self.resp.status_code}', f'error={str(self.resp.text).rstrip()}')
+                    # raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+
+            except Exception as e:
+                self._number_qosprioritysessiondelete_requests_fail += 1
+                raise Exception(f'code={self.resp.status_code}', f'error={str(self.resp.text).rstrip()}')
+                # raise Exception("post failed:", e)
+
+            self._number_qosprioritysessiondelete_requests_success += 1
 
             return self.decoded_data
 
