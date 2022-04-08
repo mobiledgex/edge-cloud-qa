@@ -118,7 +118,6 @@ UpdateTrustPolicyException - mcctl shall handle update exception
    [Template]  Success Update/Show Trust Policy Via mcctl
       name=${recv_name}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
       name=${recv_name}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:1.protocol=tcp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=tcp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
-      name=${recv_name}  outboundsecurityrules:empty=${True}
 
       # udp
       name=${recv_name}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
@@ -135,6 +134,8 @@ CreatePolicyException - mcctl help shall show
    [Documentation]
    ...  - send TrustPolicyException via mcctl with help for each command
    ...  - verify help is returned
+
+   [Tags]  TrustPolicyException
 
    [Template]  Show Help
    ${Empty}
