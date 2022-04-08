@@ -26,7 +26,7 @@ FindCloudlet - request shall not return appinst for k8s/lb/shared app inst when 
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.${mobiledgex_domain}
 
 # ECQ-2534
 FindCloudlet - request shall not return appinst for k8s/lb/dedicated app inst when cloudlet is maintenance mode
@@ -42,7 +42,7 @@ FindCloudlet - request shall not return appinst for k8s/lb/dedicated app inst wh
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}   cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=${cluster1}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${cluster1}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.${mobiledgex_domain}
 
 # ECQ-2535
 FindCloudlet - request shall not return appinst for docker/lb/dedicated app inst when cloudlet is maintenance mode
@@ -58,7 +58,7 @@ FindCloudlet - request shall not return appinst for docker/lb/dedicated app inst
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=${cluster1}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${cluster1}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.${mobiledgex_domain}
 
 # ECQ-2536
 FindCloudlet - request shall not return appinst for docker/lb/shared app inst when cloudlet is maintenance mode
@@ -74,7 +74,7 @@ FindCloudlet - request shall not return appinst for docker/lb/shared app inst wh
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.${mobiledgex_domain}
 
 # direct no longer supported
 # ECQ-2537
@@ -119,7 +119,7 @@ FindCloudlet - request shall not return appinst for vm/lb app inst when cloudlet
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}    cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=${app_name_default}${version_default}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${app_name_default}${version_default}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.${mobiledgex_domain}
 
 # ECQ-2540
 FindCloudlet - request shall not return appinst for helm/shared/lb app inst when cloudlet is maintenance mode
@@ -135,7 +135,7 @@ FindCloudlet - request shall not return appinst for helm/shared/lb app inst when
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=shared.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.${mobiledgex_domain}
 
 # ECQ-2541
 FindCloudlet - request shall not return appinst for helm/dedicated/lb app inst when cloudlet is maintenance mode
@@ -151,7 +151,7 @@ FindCloudlet - request shall not return appinst for helm/dedicated/lb app inst w
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${developer_org_name_automation}  cluster_instance_name=${cluster1}  cluster_instance_developer_org_name=${developer_org_name_automation}
     App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=${cluster1}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${cluster1}-${developer_org_name_automation}.${cloudlet_name1}-${operator_name_trunc}.${region_lc}.${mobiledgex_domain}
 
 *** Keywords ***
 Setup
