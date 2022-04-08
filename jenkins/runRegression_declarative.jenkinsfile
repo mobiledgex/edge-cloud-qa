@@ -14,7 +14,7 @@ pipeline{
         string(name: 'Version', defaultValue: 'CirrusR3.1')
         string(name: 'MasterController', defaultValue: 'console-qa.mobiledgex.net:443')
         string(name: 'MasterControllerFederation', defaultValue: 'console-dev.mobiledgex.net:443')
-        string(name: 'MasterControllerFederationPassword', defaultValue: 'mexadmin123')
+        string(name: 'MasterControllerFederationPassword', defaultValue: 'dHMcdaVCcACs42k@Xaf4HhRpG_ot7')
         string(name: 'Controller', defaultValue: 'mexplat-qa-us.ctrl.mobiledgex.net:55001')
         string(name: 'DME', defaultValue: 'us-qa.dme.mobiledgex.net:50051')
         string(name: 'DMERest', defaultValue: 'us-qa.dme.mobiledgex.net:38001')
