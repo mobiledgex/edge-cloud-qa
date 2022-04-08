@@ -502,7 +502,7 @@ class MexMasterController(MexRest):
     def show_user_api_key(self, apikey_id=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.user.show_user_api_key(apikey_id=apikey_id, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def new_password(self, password=None, token=None, json_data=None, use_defaults=True):
+    def new_password(self, current_password=None, password=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/newpass'
 
         if use_defaults == True:
@@ -515,7 +515,8 @@ class MexMasterController(MexRest):
             user_dict = {}
             if password != None:
                 user_dict['password'] = password
-
+            if current_password != None:
+                user_dict['currentpassword'] = current_password
             payload = json.dumps(user_dict)
 
         #print('*WARN*',token)

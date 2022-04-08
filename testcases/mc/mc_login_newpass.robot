@@ -8,6 +8,7 @@ Test Teardown	Cleanup Provisioning
 
 *** Variables ***
 ${password}=    H31m8@W8maSfg
+${password2}=  L63l0K%0LSo3@
 ${newpass}=     aI6A8T*BqfkX1
 ${adminpass}=   H31m8@W8maSfgnC
 ${newadminpass}=  kI6h91F!UBH*Xyh	
@@ -21,9 +22,9 @@ MC - Admin user shall be able to change the password
 	...  admin user change their password 
 	...  change the password back to the original password after a successful password change
 
-	New Password    password=${newadminpass}     token=${adminuserToken}     use_defaults=${False}
+	New Password    password=${newadminpass}  current_password=${adminpass}   token=${adminuserToken}     use_defaults=${False}
 	${adminuserToken}=  Login   username=${adminuser}   password=${newadminpass}
-	New Password    password=${adminpass}     token=${adminuserToken}     use_defaults=${False}
+	New Password    password=${adminpass}  current_password=${newadminpass}   token=${adminuserToken}     use_defaults=${False}
 
 
 # ECQ-2746
@@ -32,9 +33,9 @@ MC - Admin user shall be able to login with the new password
 	...  admin user change their password and login
 	...  change the password back to the original password after a successful password change
 
-	New Password    password=${newadminpass}     token=${adminuserToken}     use_defaults=${False}
+	New Password    password=${newadminpass}  current_password=${adminpass}   token=${adminuserToken}     use_defaults=${False}
 	${adminuserToken}=  Login   username=${adminuser}   password=${newadminpass}
-	New Password    password=${adminpass}     token=${adminuserToken}     use_defaults=${False}
+	New Password    password=${adminpass}  current_password=${newadminpass}   token=${adminuserToken}     use_defaults=${False}
 	
 	
 # ECQ-2747
@@ -45,14 +46,14 @@ MC - Admin user shall not be able to login with the old password
 	...  change the password back to the original password after a successful password change
 
 	${adminuserToken}=  Login   username=${adminuser}   password=${adminpass}
-	New Password    password=${newadminpass}     token=${adminuserToken}     use_defaults=${False}
+	New Password    password=${newadminpass}  current_password=${adminpass}   token=${adminuserToken}     use_defaults=${False}
 	${error}=  Run Keyword and Expect Error  *  Login   username=${adminuser}   password=${adminpass}
       	
 	Should Contain    ${error}   code=400	
 	Should Contain    ${error}   Invalid username or password
 
 	${adminuserToken}=  Login   username=${adminuser}   password=${newadminpass}
-	New Password    password=${adminpass}     token=${adminuserToken}     use_defaults=${False}
+	New Password    password=${adminpass}  current_password=${newadminpass}   token=${adminuserToken}     use_defaults=${False}
 	
 
 # ECQ-2748
@@ -62,9 +63,9 @@ MC - User shall be able to change their password
 	...  verify the change is success by logging in
 	...  change the password back to the original password after a successful password change
 
-	New Password  password=${newpass}   token=${epochuserToken1} 
+	New Password  password=${newpass}  current_password=${password}   token=${epochuserToken1} 
 	${epochuserToken1}=  Login   username=${epochuser1}  password=${newpass}
-	New Password  password=${password}   token=${epochuserToken1}
+	New Password  password=${password}  current_password=${newpass}  token=${epochuserToken1}
 	${epochuserToken1}=  Login   username=${epochuser1}  password=${password}
 	
 	
@@ -75,11 +76,11 @@ MC - User shall be able to change to the same password as another user
 	...  verify the change is success by logging in
 	...  change the password back to the original password after a successful password change
 
-        New Password  password=${newpass}   token=${epochuserToken1} 
-	New Password  password=${newpass}   token=${epochuserToken2}
+        New Password  password=${newpass}  current_password=${password}   token=${epochuserToken1} 
+	New Password  password=${newpass}  current_password=${password2}   token=${epochuserToken2}
 	${epochuserToken1}=  Login   username=${epochuser1}  password=${newpass}
 	${epochuserToken2}=  Login   username=${epochuser2}  password=${newpass}
-	New Password  password=${password}   token=${epochuserToken1}
+	New Password  password=${password}  current_password=${newpass}   token=${epochuserToken1}
 	${epochuserToken1}=  Login   username=${epochuser1}  password=${password}
 
 
@@ -90,7 +91,7 @@ MC - User shall not be able to login with the old password
 	...  verify the correct error is returned
 	...  change the password back to the original password after a successful password change
 
-	New Password    password=${newpass}     token=${epochuserToken1}   use_defaults=${False}
+	New Password    password=${newpass}  current_password=${password}   token=${epochuserToken1}   use_defaults=${False}
 
 	${error}=  Run Keyword and Expect Error  *  Login   username=${epochuser1}   password=${password}
 
@@ -98,7 +99,7 @@ MC - User shall not be able to login with the old password
 	Should Contain    ${error}   "message":"Invalid username or password"
 
 	${epochuserToken1}=  Login   username=${epochuser1}  password=${newpass}
-	New Password  password=${password}   token=${epochuserToken1}
+	New Password  password=${password}  current_password=${newpass}  token=${epochuserToken1}
 	${epochuserToken1}=  Login   username=${epochuser1}  password=${password}
 
 
@@ -108,7 +109,7 @@ MC - User shall not be able to change their password without a token
 	...  create a new user change their password without a token
 	...  verify the correct error is returned
 
-	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}     use_defaults=${False}
+	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}  current_password=${password}   use_defaults=${False}
 
 	Should Contain    ${error}   Code = 400	
 	Should Contain    ${error}   Body={"message":"No bearer token found"}
@@ -120,7 +121,7 @@ MC - User shall not be able to change their password with an empty token
 	...  create a new user change their password with an empty token 
 	...  verify the correct error is returned
 
-	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}     token=${EMPTY}    use_defaults=${False}
+	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}  current_password=${password}   token=${EMPTY}    use_defaults=${False}
 
 	Should Contain    ${error}   Code = 400	
 	Should Contain    ${error}   Body={"message":"No bearer token found"}
@@ -132,7 +133,7 @@ MC - User shall not be able to change their password with a bad token
 	...  create a new user change their password with a bad token 
 	...  verify the correct error is returned
 
-	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}     token=thisisabadtoken     use_defaults=${False}
+	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}  current_password=${password}   token=thisisabadtoken     use_defaults=${False}
 
 	Should Contain    ${error}   Code = 401	
 	Should Contain    ${error}   Body={"message":"Invalid or expired jwt"}
@@ -144,7 +145,7 @@ MC - User shall not be able to change their password with an expired token
 	...  create a new user change their password with an expired token 
 	...  verify the correct error is returned
 
-	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}     token=${expToken}     use_defaults=${False}
+	${error}=  Run Keyword and Expect Error  *  New Password    password=${newpass}  current_password=${password}   token=${expToken}     use_defaults=${False}
 
 	Should Contain    ${error}   Code = 401	
 	Should Contain    ${error}   Body={"message":"Invalid or expired jwt"}
@@ -156,7 +157,7 @@ MC - Admin user shall not be able to change to a weak password
 	...  admin user can not change their password to a weak password  
 	...  verify the correct error is returned
 
-	${error}=  Run Keyword and Expect Error  *  New Password    password=aweakone     token=${adminuserToken}     use_defaults=${False}
+	${error}=  Run Keyword and Expect Error  *  New Password    password=aweakone  current_password=${adminpass}   token=${adminuserToken}     use_defaults=${False}
 
 	Should Contain    ${error}   Code = 400	
 	Should Contain    ${error}   Body={"message":"Password too weak, requires crack time 2.0 years but is 12.0 seconds. Please increase length or complexity"}
@@ -168,7 +169,7 @@ MC - User shall not be able to change to a weak password
 	...  admin user can not change their password to a weak password  
 	...  verify the correct error is returned
 
-	${error}=  Run Keyword and Expect Error  *  New Password    password=aweakone     token=${epochuserToken1}     use_defaults=${False}
+	${error}=  Run Keyword and Expect Error  *  New Password    password=aweakone  current_password=${password}   token=${epochuserToken1}     use_defaults=${False}
 
 	Should Contain    ${error}   Code = 400	
 	Should Contain    ${error}   Body={"message":"Password too weak, requires crack time 31.0 days but is 12.0 seconds. Please increase length or complexity"}
@@ -194,10 +195,11 @@ Setup
 	${adduser}=   Adduser Role   username=${adminuser}   role=AdminManager    token=${adminToken}     use_defaults=${False}
 	${adminuserToken}=   Login  username=${adminuser}   password=${adminpass}
 	${epochuserToken1}=  Login  username=${epochuser1}  password=${password}
-	${epochuserToken2}=  Login  username=${epochuser2}   password=L63l0K%0LSo3@
+	${epochuserToken2}=  Login  username=${epochuser2}   password=${password2}  #password=L63l0K%0LSo3@
 	Set Suite Variable  ${adminuser}
         Set Suite Variable  ${adminuserToken}
 	Set Suite Variable  ${epochuser1}
 	Set Suite Variable  ${epochuserToken1}
 	Set Suite Variable  ${epochuser2}
 	Set Suite Variable  ${epochuserToken2}
+        Set Suite Variable  ${adminpass}
