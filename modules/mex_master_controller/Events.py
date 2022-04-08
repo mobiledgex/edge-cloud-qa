@@ -11,12 +11,17 @@ class Events(MexOperation):
 
         self.show_url = '/auth/events/show'
 
-    def _build(self, use_defaults=True):
+    def _build(self, org_name=None, use_defaults=True):
         events_dict = {}
+
+        if org_name is not None:
+            events_dict['orgs'] = [org_name]
 
         return events_dict
 
-    def show_events(self, token=None, region=None, app_name=None, developer_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cellid=None, json_data=None, use_defaults=True, use_thread=False):
-        msg_dict = self._build()
+    def show_events(self, token=None, region=None, org_name=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(org_name=org_name)
+
+        msg_dict = {'match': msg}
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
