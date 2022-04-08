@@ -1,0 +1,26 @@
+VCD-NSX-V setup for QA for additional networks
+
+ConnectToAll             10.62.62.1/24
+ConnectToLoadBalancer    10.42.42.1/24
+ConnectToClusterNodes    10.22.22.1/24
+
+vCD datacentert networks  qa2-vdc qa2org 
+Networks         Gateway CIDR    Network Type   Connected To vCD External Network  
+QA2NODE3         10.62.62.1/24   Direct         QA2NODE3          
+qa2nodenet1      10.42.42.1/24   Direct         qa2nodenet1
+qa2nodenet2-ctn  10.22.22.1/24   Direct         qa2nodenet2
+
+vCD External Networks
+Name    QA2NODE3    vlan 62  vSphere Networks  Destributed Port Group   Name: QA2NODE3   vCenter: vctr-vcd
+Name    qa2nodenet1          vSphere Networks  Destributed Port Group   Name: QA2NODE1   vCenter: vctr-vcd 
+Name    qa2nodenet2          vSphere Networks  Destributed Port Group   Name: QA2NODE2   vCenter: vctr-vcd 
+
+vSphere Client Packet-VCD  Distributed Port Groups
+Distributed switch  ExternalVSwitchVCDQA2   host:vcd-qa2-esxi.mobiledgex.net
+Name           VLAN ID             Port Binding
+QA2NODE1       VLAN access:42      Ephemeral - no binding
+QA2NODE2       VLAN access:22      Static binding (elastic)
+QA2NODE3       VLAN access:62      Ephemeral - no binding
+
+
+
