@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Create new App
+Documentation   Create new App and update it
 Library         MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
 Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
 Test Setup      Setup
@@ -28,11 +28,11 @@ Web UI - User shall be able to update a Kubernetes App for EU Region to include 
 
     Should Be Equal  ${app_details[0]['data']['configs'][0]['config'].replace('\r\n', '\n')}  ${config.replace('\r\n', '\n')}
 
-    ${app_details_ui}=  Open App Details   app_name=${app_name}  region=EU  app_org=${developer_name}   deployment_type=kubernetes   app_version=1.0
+    ${app_details_ui}=   Open App Details   app_name=${app_name}  region=EU  app_org=${developer_name}   deployment_type=kubernetes   app_version=1.0
     Log to Console   ${app_details_ui}
 
     Should Contain   ${app_details_ui['Configs']}   Kind Config\nEnvironment Variables Yaml\n
-    Should Contain   ${app_details_ui['Configs']}   ${config}
+    Should Contain   ${app_details_ui['Configs'].replace('\r\n', '\n')}   ${config.replace('\r\n', '\n')}
 
     Close Details
     MexMasterController.Delete App   region=EU   app_name=${app_name}  app_version=1.0  developer_org_name=${developer_name}  deployment=kubernetes
