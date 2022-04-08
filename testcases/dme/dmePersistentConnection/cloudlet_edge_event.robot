@@ -37,7 +37,7 @@ DmePersistentConnetion - cloudlet in maintenance mode shall not return a new clo
    Should Be Equal As Numbers  ${fcloudlet.status}  1  #FIND_FOUND
    Should Be True  len('${fcloudlet.edge_events_cookie}') > 100
 
-   Create DME Persistent Connection  edge_events_cookie=${fcloudlet.edge_events_cookie}  latitude=36  longitude=-96
+   Create DME Persistent Connection  edge_events_cookie=${fcloudlet.edge_events_cookie}  latitude=36  longitude=-96  #carrier_name=${operator}
 
    Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStart
    Receive Cloudlet Maintenance Event  #state=FAILOVER_REQUESTED
@@ -100,7 +100,7 @@ DmePersistentConnetion - cloudlet in maintenance mode shall return new cloudlet
    ${cloud1}=  Receive Cloudlet Maintenance Event  state=UNDER_MAINTENANCE
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.status}  1  #FIND_FOUND
    Should Be True  len('${cloud1.new_cloudlet.edge_events_cookie}') > 100
-   Should contain  ${cloud1.new_cloudlet.fqdn}  ${cloudlet2}-dmuus.${region_lc}.mobiledgex.net
+   Should contain  ${cloud1.new_cloudlet.fqdn}  ${cloudlet2}-dmuus.${region_lc}.${mobiledgex_domain}
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.ports[0].proto}  1
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.ports[0].internal_port}  1
    Should Be Equal As Numbers  ${cloud1.new_cloudlet.ports[0].public_port}  1
@@ -126,7 +126,7 @@ DmePersistentConnetion - cloudlet in maintenance mode shall return new cloudlet
    ${cloud2}=  Receive Cloudlet Maintenance Event  state=UNDER_MAINTENANCE
    Should Be Equal As Numbers  ${cloud2.new_cloudlet.status}  1  #FIND_FOUND
    Should Be True  len('${cloud2.new_cloudlet.edge_events_cookie}') > 100
-   Should contain  ${cloud2.new_cloudlet.fqdn}  ${cloudlet2}-dmuus.${region_lc}.mobiledgex.net
+   Should contain  ${cloud2.new_cloudlet.fqdn}  ${cloudlet2}-dmuus.${region_lc}.${mobiledgex_domain}
    Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].proto}  1
    Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].internal_port}  1
    Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].public_port}  1
@@ -198,7 +198,7 @@ DmePersistentConnetion - cloudlet state change shall return a new cloudlet
       ${cloud2}=  Receive Cloudlet State Event  state=${state}
       Should Be Equal As Numbers  ${cloud2.new_cloudlet.status}  1  #FIND_FOUND
       Should Be True  len('${cloud2.new_cloudlet.edge_events_cookie}') > 100
-      Should contain  ${cloud2.new_cloudlet.fqdn}  ${cloudlet2}-dmuus.${region_lc}.mobiledgex.net
+      Should contain  ${cloud2.new_cloudlet.fqdn}  ${cloudlet2}-dmuus.${region_lc}.${mobiledgex_domain}
       Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].proto}  1
       Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].internal_port}  1
       Should Be Equal As Numbers  ${cloud2.new_cloudlet.ports[0].public_port}  1
