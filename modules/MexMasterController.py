@@ -2104,8 +2104,8 @@ class MexMasterController(MexRest):
     def unshare_federatorzone(self, token=None, zoneid=None, selfoperatorid=None, federation_name=None, use_defaults=False, use_thread=False):
         return self.federation.unshare_federatorzone(token=token, zoneid=zoneid, selfoperatorid=selfoperatorid, federation_name=federation_name, use_defaults=use_defaults)
 
-    def show_events(self, token=None, region=None, use_defaults=False, use_thread=False):
-        return self.events.show_events(token=token, region=region, use_defaults=use_defaults)
+    def show_events(self, token=None, region=None, org_name=None, use_defaults=False, use_thread=False):
+        return self.events.show_events(token=token, region=region, org_name=org_name, use_defaults=use_defaults)
 
     def show_artifactory_summary(self, token=None, use_thread=False):
         return self.artifactory.show_summary(token=token, use_thread=use_thread)
