@@ -49,9 +49,6 @@ ShowEvents - an org with reused name shall not see events from previous org
     Length Should Be  ${events_op_1_1}  2
     Length Should Be  ${events_op_1_2}  2
 
-    Should Not Be Equal  ${events_op_0_1[0]['timestamp']}  ${events_op_0_2[0]['timestamp']}
-    Should Not Be Equal  ${events_op_1_1[0]['timestamp']}  ${events_op_1_2[0]['timestamp']}
-
 *** Keywords ***
 Setup
     ${super_token}=  Get Super Token
