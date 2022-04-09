@@ -130,6 +130,7 @@ testcase_components1 = [
     dme_components + &quot;GetQosPositionKpi&quot;,
     dme_components + &quot;DMEPersistentConnection&quot;,
     dme_components + &quot;RequestAppInstLatency&quot;,
+    dme_components + &quot;QosPrioritySession&quot;
     ]
 
 testcase_components2 = [
