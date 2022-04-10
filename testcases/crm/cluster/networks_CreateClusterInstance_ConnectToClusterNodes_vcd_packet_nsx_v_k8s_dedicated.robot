@@ -62,15 +62,15 @@ ${ctn-subnet}      10.22.22.
 @{ctn-subnet-range}=  Create List  10.22.22.1  10.22.22.2  10.22.22.3  10.22.22.4  10.22.22.5  10.22.22.6  10.22.22.7  10.22.22.8
 
 *** Test Cases ***
-# ECQ-
-CreateCluster - create ConnectToClusterNodes network with dedicated k8s clusterinst packet vcd
+# ECQ-4451
+CreateCluster - Create ConnectToClusterNodes network with dedicated k8s clusterinst packet vcd
     [Documentation]
     ...  - create an additional network type ConnectToClusterNodes
     ...  - verify if network already exists if not create network
     ...  - create a dedicated k8s clusterinst with networks ConnectToClusterNodes
     ...  - create a app and deploy the appinst on the cluster with additional network
-    ...  - verifiy cluster master node is attached to an additional network
-    ...  - verifiy appinst vm node is attached to an additional network
+    ...  - verify cluster master node is attached to an additional network
+    ...  - verify appinst vm node is attached to an additional network
 
     Run Keyword  Create ConnectToClusterNodes Network Packet VCD
     Run Keyword  Set App Cluster Name 8086
