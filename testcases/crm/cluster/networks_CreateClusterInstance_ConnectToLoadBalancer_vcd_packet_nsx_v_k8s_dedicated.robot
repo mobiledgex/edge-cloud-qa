@@ -64,15 +64,15 @@ ${ctb-subnet}  10.42.42.
 @{ctb-subnet-range}=  Create List  10.42.42.1   10.42.42.2   10.42.42.3   10.42.42.4   10.42.42.5   10.42.42.6   10.42.42.7
 
 *** Test Cases ***
-# ECQ-
-CreateCluster - create ConnectToLoadBalancer network with dedicated k8s clusterinst packet vcd
+# ECQ-4452
+CreateCluster - Create ConnectToLoadBalancer network with dedicated k8s clusterinst packet vcd
     [Documentation]
     ...  - create an additional network type ConnectToLoadBalancer
     ...  - verify if network already exists if not create network
     ...  - create a dedicated k8s clusterinst with networks ConnectToLoadBalancer
     ...  - create a app and deploy the appinst on the cluster with additional network
-    ...  - verifiy the additional network is added and reachable from the load balancer node
-    ...  - verifiy additional network is not reachable from cluster node
+    ...  - verify the additional network is added and reachable from the load balancer node
+    ...  - verify additional network is not reachable from cluster node
 
     Run Keyword  Create Network If Not Existing Packet VCD
     Run Keyword  Set App Cluster Name 8086
