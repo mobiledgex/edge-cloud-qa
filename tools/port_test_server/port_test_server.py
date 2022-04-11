@@ -10,8 +10,8 @@ import time
 #host = '35.199.188.102'
 #tcp_port = 2016
 
-def ping_udp_port(host, port):
-    data = 'ping'
+def ping_udp_port(host, port, hostname=None):
+    data = f'ping:{hostname}'
     exp_return_data = 'pong'
     data_size = sys.getsizeof(bytes(data, 'utf-8'))
     data_to_send = data.encode('ascii')
@@ -28,11 +28,13 @@ def ping_udp_port(host, port):
         logging.info('received this data from {}:{}'.format(addr, return_data.decode('utf-8')))
         client_socket.close()
     except Exception as e:
+        msg = f'error sending udp data host={host} port={port} error={e}'
+        print(msg, flush=True)
         client_socket.close()
-        raise Exception('error=', e)
+        raise Exception(msg)
             
     if return_data.decode('utf-8') != exp_return_data:
-        raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
+        raise Exception('correct udp data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
 def ping_tcp_port(host, port, hostname=None):
     data = f'ping:{hostname}'
@@ -57,7 +59,7 @@ def ping_tcp_port(host, port, hostname=None):
         print('data recevied back:' + return_data.decode('utf-8'), flush=True)
         client_socket.close()
     except Exception as e:
-        msg = f'error sending data host={host} port={port} error={e}'
+        msg = f'error sending tcp data host={host} port={port} error={e}'
         print(msg, flush=True)
         #print(sys.exc_info())
         #e = sys.exc_info()[0]
@@ -65,12 +67,12 @@ def ping_tcp_port(host, port, hostname=None):
         raise Exception(msg)
             
     if return_data.decode('utf-8') != exp_return_data:
-        raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
+        raise Exception('correct tcp data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
-def udp_port_should_be_alive(host, port):
+def udp_port_should_be_alive(host, port, hostname):
     logging.info('host:' + host + ' port:' + str(port))
 
-    ping_udp_port(host, int(port))
+    ping_udp_port(host, int(port), hostname)
 
 def tcp_port_should_be_alive(host, port, hostname=None):
     print(f'host:{host} port:{port} hostname={hostname}', flush=True)

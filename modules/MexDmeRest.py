@@ -334,6 +334,7 @@ class MexDmeRest(MexRest):
                     # raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
             except Exception as e:
+                logger.error(f'exception caught:{e}')
                 self._number_qosprioritysessioncreate_requests_fail += 1
                 raise Exception(f'code={self.resp.status_code}', f'error={str(self.resp.text).rstrip()}')
                 # raise Exception("post failed:", e)
@@ -375,6 +376,7 @@ class MexDmeRest(MexRest):
                     # raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
             except Exception as e:
+                logger.error(f'exception caught:{e}')
                 self._number_qosprioritysessiondelete_requests_fail += 1
                 raise Exception(f'code={self.resp.status_code}', f'error={str(self.resp.text).rstrip()}')
                 # raise Exception("post failed:", e)

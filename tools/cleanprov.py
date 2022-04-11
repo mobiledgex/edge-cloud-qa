@@ -413,6 +413,7 @@ def clean_ratelimitsettingsmaxreqs():
                     print(f'keeping {name} since doesnt match keypattern={key_pattern}')
         mc.update_settings(region=region, token=mc.super_token, disable_rate_limit=True, use_defaults=False)
 
+
 def clean_trustpolicy():
     global key_pattern
 
