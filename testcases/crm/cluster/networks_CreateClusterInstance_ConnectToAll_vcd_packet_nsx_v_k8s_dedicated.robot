@@ -66,14 +66,14 @@ ${cta-subnet}  10.62.62.
 @{cta-subnet-range}=  Create List  10.62.62.1   10.62.62.2   10.62.62.3   10.62.62.4   10.62.62.5   10.62.62.6   10.62.62.7   10.62.62.8
 
 *** Test Cases ***
-#ECQ-
-CreateCluster - create ConnectToAll network with dedicated k8s clusterinst packet vcd
+#ECQ-4450
+CreateCluster - Create ConnectToAll network with dedicated k8s clusterinst packet vcd
     [Documentation]
     ...  - create an additional network type ConnectToAll 
     ...  - verify if network already exists if not create network
     ...  - create a dedicated k8s clusterinst with networks ConnectToAll
     ...  - create a app and deploy the appinst on the cluster with additional network
-    ...  - verifiy the network is attached to both cluster nodes and dedicated load balancer
+    ...  - verify the network is attached to both cluster nodes and dedicated load balancer
 
     Run Keyword  Create ConnectToClusterAll Network Packet VCD
     Run Keyword  Set App Cluster Name 8086
