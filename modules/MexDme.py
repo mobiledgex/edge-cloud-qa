@@ -203,7 +203,7 @@ class StreamEdgeEvent():
             request_dict['device_info_static'] = appcommon_pb2.DeviceInfoStatic(**device_static_dict)
         if device_dynamic_dict:
             request_dict['device_info_dynamic'] = appcommon_pb2.DeviceInfoDynamic(**device_dynamic_dict)
-
+        
         self.request = app_client_pb2.ClientEdgeEvent(**request_dict)
 
 
@@ -524,13 +524,13 @@ class MexDme(MexGrpc):
 
         if not client_edge_event_obj:
             kwargs['event_type'] = 1
-            request = StreamEdgeEvent(**kwargs).request
+            client_edge_event_obj = StreamEdgeEvent(**kwargs).request
 
-        logger.info('stream edge event on {}. \n\t{}'.format(self.address, str(request).replace('\n', '\n\t')))
+        logger.info('stream edge event on {}. \n\t{}'.format(self.address, str(client_edge_event_obj).replace('\n', '\n\t')))
 
         self.edge_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(self.edge_event_queue.get, None))
         logger.info('stream created')
-        self.edge_event_queue.put(request)
+        self.edge_event_queue.put(client_edge_event_obj)
         logger.info('stream in queue')
         # print('*WARN*', self.edge_event_queue)
         try:
