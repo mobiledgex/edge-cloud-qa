@@ -1,0 +1,260 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.42">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.9.2"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.9.2">
+      <jobProperties/>
+      <triggers/>
+      <parameters>
+        <string>App</string>
+        <string>SlaveNode</string>
+        <string>RateLimitSettings</string>
+        <string>Organization</string>
+        <string>User</string>
+        <string>BillingOrganization</string>
+        <string>AppInst</string>
+        <string>Flavor</string>
+        <string>CRMOverride</string>
+        <string>AutoProvPolicy</string>
+        <string>TrustPolicyException</string>
+        <string>CloudletPool</string>
+        <string>AutoScalePolicy</string>
+        <string>TrustPolicy</string>
+        <string>CloudletToClean</string>
+        <string>CloudletPoolInvitation</string>
+        <string>ClusterInst</string>
+        <string>Cloudlet</string>
+      </parameters>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>NEW JOB DESCRIPTION</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.6"/>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>20</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty plugin="build-failure-analyzer@1.27.1">
+      <doNotScan>false</doNotScan>
+    </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>SlaveNode</name>
+          <defaultValue>jenkinsSlave1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>BillingOrganization</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>Organization</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>AppInst</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>App</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>ClusterInst</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>Flavor</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>Cloudlet</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>AutoProvPolicy</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>AutoScalePolicy</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>User</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RateLimitSettings</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>TrustPolicy</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>TrustPolicyException</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>CloudletPool</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>CloudletPoolInvitation</name>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>CRMOverride</name>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CloudletToClean</name>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2633.v6baeedc13805">
+    <script>//currentBuild.displayName = cycle
+slackurl = &apos;https://mobiledgex.slack.com/services/hooks/jenkins-ci/&apos;
+slackcred = &apos;cdda7d70-b701-4983-b287-e3f46dde02e9&apos;
+slackchannel = &apos;#qa-automation&apos;
+
+pipeline{
+    agent { label slavenode }
+    parameters {
+        string(name: &apos;SlaveNode&apos;, defaultValue: &apos;jenkinsSlave1&apos;)
+        booleanParam(name: &apos;BillingOrganization&apos;, defaultValue: true)
+        booleanParam(name: &apos;Organization&apos;, defaultValue: true)
+        booleanParam(name: &apos;AppInst&apos;, defaultValue: true)
+        booleanParam(name: &apos;App&apos;, defaultValue: true)
+        booleanParam(name: &apos;ClusterInst&apos;, defaultValue: true)
+        booleanParam(name: &apos;Flavor&apos;, defaultValue: true)
+        booleanParam(name: &apos;Cloudlet&apos;, defaultValue: true)
+        booleanParam(name: &apos;AutoProvPolicy&apos;, defaultValue: true)
+        booleanParam(name: &apos;AutoScalePolicy&apos;, defaultValue: true)
+        booleanParam(name: &apos;User&apos;, defaultValue: true)
+        //booleanParam(name: &apos;OrgCloudletPool&apos;, defaultValue: true)
+        booleanParam(name: &apos;RateLimitSettings&apos;, defaultValue: true)
+        booleanParam(name: &apos;TrustPolicy&apos;, defaultValue: true)
+        booleanParam(name: &apos;TrustPolicyException&apos;, defaultValue: true)
+        booleanParam(name: &apos;CloudletPool&apos;, defaultValue: true)
+        booleanParam(name: &apos;CloudletPoolInvitation&apos;, defaultValue: true)
+        booleanParam(name: &apos;CRMOverride&apos;, defaultValue: false)
+        string(name: &apos;CloudletToClean&apos;)
+    }
+
+    stages {
+        stage(&apos;Checkout&apos;) {
+            steps {
+                dir(&apos;go/src/github.com/mobiledgex&apos;) {
+                    sh &apos;rm -rf *&apos;
+                    checkout([$class: &apos;GitSCM&apos;,
+                        branches: [[name: &apos;master&apos;]],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [
+                            [$class: &apos;SparseCheckoutPaths&apos;,  sparseCheckoutPaths:[
+                                [$class:&apos;SparseCheckoutPath&apos;, path:&apos;tools/*&apos;],
+                                [$class:&apos;SparseCheckoutPath&apos;, path:&apos;modules/*&apos;]]]
+                        ],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[credentialsId: &apos;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&apos;,
+                        url: &apos;https://github.com/mobiledgex/edge-cloud-qa.git&apos;]]])
+                }
+            }
+        }
+        stage(&quot;Cleanup provisioning&quot;) {
+            steps {
+                slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Cleaning Up Provisioning&quot;
+                dir(&apos;go/src/github.com/mobiledgex/tools&apos;) {
+                    script {
+                        table_list = &apos;&apos;
+                        crmoverride_flag = &apos;&apos;
+                        cloudlet_flag = &apos;&apos;
+                        if (String.valueOf(params.BillingOrganization) == &apos;true&apos;) {
+                            table_list = table_list + &apos;billingorg,&apos;
+                        }
+                        if (String.valueOf(params.Organization) == &apos;true&apos;) {
+                            table_list = table_list + &apos;org,&apos;
+                        }
+                          if (String.valueOf(params.AppInst) == &apos;true&apos;) {
+                            table_list = table_list + &apos;appinst,&apos;
+                        }
+                        if (String.valueOf(params.App) == &apos;true&apos;) {
+                            table_list = table_list + &apos;app,&apos;
+                        }
+                        if (String.valueOf(params.ClusterInst) == &apos;true&apos;) {
+                            table_list = table_list + &apos;clusterinst,&apos;
+                        }
+                        if (String.valueOf(params.Flavor) == &apos;true&apos;) {
+                            table_list = table_list + &apos;flavor,&apos;
+                        }
+                        if (String.valueOf(params.Cloudlet) == &apos;true&apos;) {
+                            table_list = table_list + &apos;cloudlet,&apos;
+                        }
+                        if (String.valueOf(params.AutoProvPolicy) == &apos;true&apos;) {
+                            table_list = table_list + &apos;autoprovpolicy,&apos;
+                        }
+                        if (String.valueOf(params.AutoScalePolicy) == &apos;true&apos;) {
+                            table_list = table_list + &apos;autoscalepolicy,&apos;
+                        }
+                        if (String.valueOf(params.User) == &apos;true&apos;) {
+                            table_list = table_list + &apos;user,&apos;
+                        }
+                        //if (String.valueOf(params.OrgCloudletPool) == &apos;true&apos;) {
+                        //    table_list = table_list + &apos;orgcloudletpool,&apos;
+                        //}
+                        if (String.valueOf(params.RateLimitSettings) == &apos;true&apos;) {
+                            table_list = table_list + &apos;ratelimitsettings,&apos;
+                        }
+                        if (String.valueOf(params.TrustPolicy) == &apos;true&apos;) {
+                            table_list = table_list + &apos;trustpolicy,&apos;
+                        }
+                        if (String.valueOf(params.TrustPolicyException) == &apos;true&apos;) {
+                            table_list = table_list + &apos;trustpolicyexception,&apos;
+                        }
+                        if (String.valueOf(params.CloudletPool) == &apos;true&apos;) {
+                            table_list = table_list + &apos;cloudletpool,&apos;
+                        }
+                        if (String.valueOf(params.CloudletPoolInvitation) == &apos;true&apos;) {
+                            table_list = table_list + &apos;cloudletpoolinvitation,&apos;
+                        }
+                        if (String.valueOf(params.CRMOverride) == &apos;true&apos;) {
+                            crmoverride_flag = &apos; --crmoverride&apos;
+                        }
+                        if (params.CloudletToClean != &apos;&apos;) {
+                            cloudlet_flag = &apos; --cloudlet &apos; + params.CloudletToClean 
+                        }
+                        table_list = table_list.substring(0, table_list.length() - 1)
+                        echo &apos;cleaning up &apos; + table_list
+                        sh &apos;export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 cleanprov.py --tables &apos; + table_list + &apos; --automation &apos; + cloudlet_flag + crmoverride_flag
+                    }
+                }
+            }
+            post {
+                failure { 
+                    echo &quot;run clean failed&quot;
+                    //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;fail&quot;, message: &quot;Finished SDK tests with failure&quot;
+                }
+                success {
+                    echo &quot;run clean tests passed&quot;
+                    //slackSend baseUrl: slackurl, tokenCredentialId: slackcred, channel: slackchannel, color: &quot;good&quot;, message: &quot;Finished SDK tests with success&quot;
+                }
+            }
+        }
+    }
+
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
