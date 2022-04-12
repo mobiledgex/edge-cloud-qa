@@ -1,0 +1,85 @@
+import java.text.SimpleDateFormat
+
+dateParm = "${VersionToDeploy}"
+
+node('jenkinsSlave1'){
+    date = new Date()
+    sdate = new SimpleDateFormat("yyy-MM-dd")
+    Calendar cal = Calendar.getInstance()
+
+    dateValue = "notset"
+    deployOptions = 'notset'
+
+    if(dateParm == "today") {
+       dateValue = sdate.format(date)
+    } else {
+       dateValue = dateParm
+    }
+    //cycle = Version + '_automation_' + dateValue
+    tag = dateValue
+
+    if(Component == 'Everything') {
+       deployOptions = '-s vault-setup -V ' + tag + ' qa'
+    } else if(Component == 'Console') {
+       deployOptions = '-C ' + 'v' + tag + ' -s mc qa console'
+   }
+    currentBuild.displayName = tag
+
+    try {
+       stage('Check Load Exists') {
+           if(Component == 'Everything') {
+               def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + tag + '\\")"'
+               def index  = sh(script: s, returnStdout: true);
+	           int indexnum = index as Integer
+               if(indexnum < 1) {
+                  println "${s} failed"
+                  currentBuild.result = 'FAILURE'
+               }
+           } else {
+               echo 'skipping load check since component is not Everything'
+           }
+       }
+    }  catch (e) {
+       slackMessage.fail('load=' + tag + ' doesnt exist in registry. Aborting')
+       error('Aborting the build')
+    }
+
+    try {
+       stage('Checkout') {
+          dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
+             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*'
+             checkout([$class: 'GitSCM',
+             branches: [[name: 'master']],
+             doGenerateSubmoduleConfigurations: false,
+             extensions: [
+                 [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'ansible/*']]]
+             ],
+             submoduleCfg: [],
+             userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-cloud-infra.git']]])
+          }
+       }
+    }  catch (e) {
+       slackMessage.fail("git checkout failed. Aborting")
+       echo "git failed"
+       error('Aborting the build')
+    }
+
+    try {
+       stage('deploy processes') {
+          dir('go/src/github.com/mobiledgex/edge-cloud-infra/ansible') {
+             // fix known_hosts file since recreating the server causes a mismatch in the file
+             sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationbonncloudlet.tdg.mobiledgex.net"'
+             sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationhamburgcloudlet.tdg.mobiledgex.net"'
+             echo './deploy.sh ' + deployOptions
+             sh 'export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID="22c16b60-1ac5-4a32-cc07-05037475a717";export VAULT_SECRET_ID="67c96872-878e-9442-4440-ff76ce65cea5";./deploy.sh -y ' + deployOptions
+
+             sleep 60  // wait for all pods to come up
+	  }
+       }
+    } catch(e) {
+        slackMessage.fail('deploy for Build ' + tag + ' failed. Aborting')
+        error('Aborting the build')
+    }
+}
+

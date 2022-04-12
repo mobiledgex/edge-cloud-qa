@@ -1,0 +1,30 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.25">
+  <actions/>
+  <description>Clair Docker Image scanning </description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty plugin="build-failure-analyzer@1.27.1">
+      <doNotScan>false</doNotScan>
+    </com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.82">
+    <script>node(&apos;jenkinsSlave1&apos;){  
+  stage(&quot;Clair_Scanning&quot;){
+      sh &apos;&apos;&apos;
+        export PATH=$PATH:/usr/local/bin
+        docker run -d --name db arminc/clair-db
+        sleep 15 # wait for db to come up
+        docker run -p 6060:6060 --link db:postgres -d --name clair arminc/clair-local-scan
+        sleep 1
+        DOCKER_GATEWAY=$(docker network inspect bridge --format &quot;{{range .IPAM.Config}}{{.Gateway}}{{end}}&quot;)
+        wget -qO clair-scanner https://github.com/arminc/clair-scanner/releases/download/v8/clair-scanner_linux_amd64 &amp;&amp; chmod +x clair-scanner
+        ./clair-scanner --ip=&quot;$DOCKER_GATEWAY&quot; registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest || exit 0
+      &apos;&apos;&apos;
+    }
+}    </script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>true</disabled>
+</flow-definition>
