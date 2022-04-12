@@ -2,6 +2,7 @@
 Documentation   CreateClusterInst with cloudlet maintenance failures
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  String
 
 Test Setup  Setup
 Test Teardown  Teardown
@@ -49,6 +50,13 @@ ShowEvents - an org with reused name shall not see events from previous org
     Length Should Be  ${events_op_1_1}  2
     Length Should Be  ${events_op_1_2}  2
 
+    Event Should Be Correct  ${events_admin_1}
+    Event Should Be Correct  ${events_admin_2}
+    Event Should Be Correct  ${events_op_0_1}
+    Event Should Be Correct  ${events_op_1_1}
+    Event Should Be Correct  ${events_op_0_2}
+    Event Should Be Correct  ${events_op_1_2}
+
 *** Keywords ***
 Setup
     ${super_token}=  Get Super Token
@@ -84,3 +92,12 @@ Teardown
     Cleanup Provisioning
     Delete Org  orgname=${op_org}  token=${super_token}
     Delete User  username=${usernameop_epoch0}  token=${super_token}
+
+Event Should Be Correct
+   [Arguments]  ${eventlist}
+
+    FOR  ${event}  IN  @{eventlist}
+        ${tsplit}=  Split String  ${event['timestamp']}  .
+        Should Be True  len('${tsplit[1]}') <= 7
+    END
+
