@@ -34,10 +34,10 @@ ${access_tcp_port}  tcp:9090
 User shall be able to use port 9090 without exposing prometheus service
     [Documentation]
     ...  - deploy k8s app using internal port 9090
-    ...  - verify prometheus external-ip on port 9090 is not the same as the app
-    ...  - Check that a shared appinst can be craeted on same cloudlet with existing port 9090 on an esiting ded k8s clusterinst and check the internal external port 9090
-    ...  - Create second shared appinst Check that a shared appinst check that port 9090 external port is remapped
-    ...  - Check that you cannot create a second appinst dedicated if a shared appinst exists using the same port or if a dedicated appinst already exists
+    ...  - verify prometheus external-ip on port 9090 is not the same as the appinst on a dedicated k8s clusterinst
+    ...  - Check that a shared appinst can be craeted on same cloudlet using port 9090 check internal and external ip 
+    ...  - Create a second shared appinst on the same shared clusterinst using internal port 9090 check the external port is remapped
+    ...  - Check that you will get an error when creating a second appinst on the same dedicated k8s cluster using the same port internal port 9090 ec-6437 
 
 
     Run Keyword  Dedicated Cluster With App 9090
