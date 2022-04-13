@@ -30,7 +30,7 @@ ${access_tcp_port}  tcp:9090
 
 
 *** Test Cases ***
-# ECQ-
+# ECQ-4453
 User shall be able to use port 9090 without exposing prometheus service
     [Documentation]
     ...  - deploy k8s app using internal port 9090
