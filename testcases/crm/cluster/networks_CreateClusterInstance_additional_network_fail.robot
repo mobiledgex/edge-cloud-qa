@@ -65,15 +65,15 @@ ${ctb-subnet}  10.42.42.
 
 # EDGECLOUD-5702
 *** Test Cases ***
-# ECQ-
+# ECQ-4454
 CreateCluster - Verify that platforms that do not support additional networks return error message
     [Documentation]
     ...  - create an additional network type ConnectToLoadBalancer ClusterNodes and All
     ...  - verify if network already exists if not create network
     ...  - create a shared k8s clusterinst with additional networks
-    ...  - verify adding addintional network is not allowed for shared LB on supported platform
-    ...  - verify adding addintional network is not allowed for platform Vsphere
-    ...  - verify adding addintional network is not allowed for platform K8S Bare Metal
+    ...  - verify adding additional network is not allowed for shared LB on supported platform
+    ...  - verify adding additional network is not allowed for platform Vsphere
+    ...  - verify adding additional network is not allowed for platform K8S Bare Metal
 
     Run Keyword  Create Network If Not Existing Vcd
     Run Keyword  Set App Cluster Name 8086
